@@ -90,6 +90,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
+                var iframe = window.parent.document.getElementById("iframe-website")               
+                iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
                 // PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
                 //     that.blogposts = posts;
                 // });
@@ -400,10 +402,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
             });
         };
-
-        window.getCurrentPage = function() {
-            return $scope.currentpage;
-        }
 
         window.saveBlobData = function(iframe) {
             if (iframe) {

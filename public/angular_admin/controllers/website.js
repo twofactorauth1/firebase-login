@@ -53,19 +53,6 @@ define([
                 isopen: false
             };
 
-
-            that.getCurrentPage = function()
-            {
-                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.getCurrentPage)
-                {
-                     var current_page = iFrame.contentWindow.getCurrentPage();
-                     if(current_page)
-                     {
-                        $scope.currentPage = current_page;
-                     }
-                }
-            };
-
             window.getUpdatediFrameRoute = function(data) {
                 // console.log('getUpdatediFrameRoute', data);
             };
@@ -114,6 +101,14 @@ define([
             window.activateSettings = function() {
                 // console.log('Activate Settings!');
             };
+
+            window.updateAdminPageScope =  function(page)
+            {
+                if(page._id !== $scope.currentPage._id)
+                {
+                    $scope.updatePage(page.handle);
+                }
+            }
 
             document.getElementById("iframe-website").onload = function() {
                 ngProgress.complete();
@@ -331,7 +326,6 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                that.getCurrentPage();
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -505,8 +499,6 @@ define([
             };
 
             $scope.addComponent = function() {
-                //that.getCurrentPage();
-                //$scope.components = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var cmpVersion = null;
                 if($scope.selectedTheme)
