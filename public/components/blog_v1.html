@@ -96,7 +96,7 @@
                         <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
                         <ul data-ng-repeat="blogPost in blog.latestposts || control.latestposts |limitTo: 3 track by $index">
                             <li>
-                                <a href="/blog/{{blogPost.post_url}}">
+                                <a href="/page/blog/{{blogPost.post_url}}">
                                     <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
                                 </a>
                                 <span data-ng-if="blogPost.post_author"> by <a

@@ -4,7 +4,7 @@
 
 
 'use strict';
-mainApp.service('userService', function ($http) {
+mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) {
     var baseUrl = '/api/1.0/';
     this.addContact = function (user, fn) {
         var apiUrl = baseUrl + ['contact', 'signupnews'].join('/');
@@ -141,4 +141,4 @@ mainApp.service('userService', function ($http) {
         });
     };
 
-});
+}]);
