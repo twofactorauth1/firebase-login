@@ -15,9 +15,13 @@ var contactDao = require('./contact.dao');
 var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
 
+var mandrillHelper = require('../utils/mandrillhelper');
+var notificationConfig = require('../configs/notification.config');
+var fs = require('fs');
+
 module.exports = {
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, sendWelcomeEmail, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
@@ -83,6 +87,21 @@ module.exports = {
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
                         analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
+
+                        /*
+                         * Send welcome email.  This is done asynchronously.
+                         */
+                        fs.readFile(notificationConfig.WELCOME_HTML, function(err, htmlContent){
+                            if(err) {
+                                log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                            } else {
+                                mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                    notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                    htmlContent, accountId, userId, function(err, result){});
+                            }
+
+                        });
+
                         log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
                             if(err) {

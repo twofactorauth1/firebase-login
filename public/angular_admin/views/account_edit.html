@@ -28,11 +28,12 @@
 							<row>
 							<div class="col-xs-5 col-md-6">
 								<div class="hidden-xs hidden-sm">
-									<div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-photo">Change Photo</div>
+									<div class="btn-link btn-edit-photo media-modal" ng-click = "logo = false" on-insert-mediacb="insertMedia" user='user'>Change Photo</div>
 								</div>
 								<img id="contact-photo"
 									class="img-responsive img-rounded hand btn-edit-photo"
-									src="/assets/icons/blank-user.jpg">
+									ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}"
+									class="img-responsive img-rounded hand btn-edit-photo">
 							</div>
 
 							<div class="col-xs-7 col-md-6">
@@ -130,11 +131,28 @@
 								<i class="icon-main fa fa-map-marker"></i>
 							</div>
 							<div class="col-xs-11">
+								<div class="row" ng-repeat="address in user.details[0].addresses">
 								<div id="edit-addresses-container">
 									<div class="form-group">
-										<input class="form-control input-edit-map input-lg" placeholder="Address" ng-model='user.address' type="text">
+										<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="userSaveFn(address.address1)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Address 2" ng-model='address.address2' type="text" ng-change="userSaveFn(address.address2)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="City" ng-model='address.city' type="text" ng-change="userSaveFn(address.city)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="State" ng-model='address.state' type="text" ng-change="userSaveFn(address.state)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Zip" ng-model='address.zip' type="text" ng-change="userSaveFn(address.zip)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="userSaveFn(address.country)">
 									</div>
 								</div>
+							</div>
 							</div>
 						</div>
 
@@ -175,7 +193,7 @@
 				            <row>
 				                <div class="col-xs-5 col-md-6">
 				                    <div class="hidden-xs hidden-sm">
-				                        <div class="media-modal"  on-insert-mediacb="insertMedia">
+				                        <div class="media-modal" ng-click = "logo = true"  on-insert-mediacb="insertMedia">
                                             <span class="btn-link btn-edit-photo"> Change Logo</span>
                                         </div>
 				                    </div>
@@ -306,18 +324,35 @@
 
 				        </div>
 
-				        <div id="address-row" class="row">
+				        <div id="address-row" class="row"  ng-repeat="address in account.business.addresses">
 				            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
 				            </div>
 				            <div class="col-xs-9">
-				                <div id="edit-addresses-container">
-									<div class="form-group">
-										<input class="form-control input-edit-map input-lg" placeholder="Address" ng-model='user.address' type="text">
-									</div>
-				                </div>
+											<div class="row">
+												<div id="edit-addresses-container">
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="accountSaveFn(address.address1)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Address 2" ng-model='address.address2' type="text" ng-change="accountSaveFn(address.address2)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="City" ng-model='address.city' type="text" ng-change="accountSaveFn(address.city)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="State" ng-model='address.state' type="text" ng-change="accountSaveFn(address.state)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Zip" ng-model='address.zip' type="text" ng-change="accountSaveFn(address.zip)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="accountSaveFn(address.country)">
+													</div>
+												</div>
+											</div>
 				            </div>
 				            <div class="col-xs-2">
-		                		<div id="btn-new-address" class="btn btn-primary btn-lg pull-right"><i class="fa fa-plus"></i></div>
+											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessAddressFn()"><i class="fa fa-plus"></i></button>
 		                	</div>
 				        </div>
 					</div>

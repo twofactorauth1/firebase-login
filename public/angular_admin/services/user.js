@@ -1,5 +1,5 @@
-define(['app', 'toasterService'], function (app) {
-	app.register.service('UserService', ['$http', 'ToasterService', function ($http, ToasterService) {
+define(['app'], function (app) {
+	app.register.service('UserService', function ($http) {
 		var account, that = this;
 		var baseUrl = '/api/1.0/';
 		this.getUser = function (fn) {
@@ -14,6 +14,7 @@ define(['app', 'toasterService'], function (app) {
 			var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
 			$http.put(apiUrl, user)
 			.success(function (data, status, headers, config) {
+				// ToasterService.show('success', 'User update.');
 				fn(data);
 			});
 		};
@@ -72,6 +73,18 @@ define(['app', 'toasterService'], function (app) {
 			});
 		};
 
+        this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+            var apiUrl = baseUrl + ['integrations', 'payments','indigenous', 'plans', planId, 'subscribe'].join('/');
+            var params = {customerId: stripeCustomerId};
+            if(accountId) {
+                params.accountId = accountId;
+            }
+            $http.post(apiUrl, params)
+                .success(function(data, status, headers, config){
+                    fn(data);
+                });
+        };
+
 		this.postUserSubscriptions = function (stripeCustomerId, planId, fn) {
 			var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeCustomerId, 'subscriptions'].join('/');
 			$http.post(apiUrl, {plan: planId})
@@ -125,11 +138,11 @@ define(['app', 'toasterService'], function (app) {
 			$http.post(apiUrl, preferences)
 			.success(function (data, status, headers, config) {
 				if (showToaster) {
-					ToasterService.show('success', 'Preferences Updated.');
+					//ToasterService.show('success', 'Preferences Updated.');
 				}
 				fn(data);
 			});
 		};
 
-	}]);
+	});
 });

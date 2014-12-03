@@ -4,13 +4,13 @@
             <div>
                 <img ng-if="layout.account.business.logo" ng-src="{{layout.account.business.logo}}" alt="Logo" class="logo">
                 <h1 class="heading">
-                    <div class="editable" data-class="title" ng-bind-html="component.title"></div>
+                    <div class="editable" data-class="title" ng-bind-html="component.title | unsafe"></div>
                 </h1>
                 <h5 class="heading">
-                    <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle"></div>
+                    <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe"></div>
                 </h5>
                 <div class="text">
-                    <div class="editable" data-class="text" ng-bind-html="component.text"></div>
+                    <div class="editable" data-class="text" ng-bind-html="component.text | unsafe"></div>
                 </div>
                 <div class="row">
                     <!--div id="countdown"></div-->

@@ -4,10 +4,12 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
-
+var jade = require('jade');
 var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
+var subscriptionDao = require('./dao/subscription.dao.js');
+var notificationConfig = require('../configs/notification.config.js');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
 var eventQ = async.queue(function(event, fn){
@@ -39,6 +41,7 @@ var eventHandler =  {
             accountId: 0
         });
         eventDao.saveOrUpdate(iEvent, function(err, value){
+            console.dir(value);
             if(err) {
                 log.error('Error saving indigenous event: ' + err);
                 fn(err, null);
@@ -87,6 +90,7 @@ var eventHandler =  {
                 self.onChargeSucceeded(iEvent, fn);
                 break;
             case 'charge.failed':
+                self.onChargeFailed(iEvent, fn);
                 break;
             case 'charge.refunded':
                 break;
@@ -95,6 +99,7 @@ var eventHandler =  {
             case 'charge.updated':
                 break;
             case 'charge.dispute.created':
+              self.onChargeDisputeCreated(iEvent, fn);
                 break;
             case 'charge.dispute.updated':
                 break;
@@ -117,6 +122,7 @@ var eventHandler =  {
             case 'customer.subscription.updated':
                 break;
             case 'customer.subscription.deleted':
+                self.onCustomerSubscriptionDeleted(iEvent, fn);
                 break;
             case 'customer.subscription.trial_will_end':
                 break;
@@ -136,6 +142,7 @@ var eventHandler =  {
             case 'invoice.payment_succeeded':
                 break;
             case 'invoice.payment_failed':
+                self.onInvoicePaymentFailed(iEvent, fn);
                 break;
             case 'invoiceitem.created':
                 break;
@@ -173,6 +180,24 @@ var eventHandler =  {
             default:
                 self.onUnknownEvent(iEvent, fn);
         }
+
+
+    },
+
+    sendEmailToOperationFn: function(iEvent, fn) {
+        var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
+        var emailBody = jade.renderFile('templates/emails/stripe/common.jade', context);
+        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function (err, value) {
+            if(err) {
+                log.error('Error sending notification');
+            }
+            eventDao.updateStripeEventState(iEvent.id(), 'PROCESSED', function(err, value){
+                //err or not... we're done here.
+                log.debug('<< ' + iEvent.get('type'));
+                fn(err, value);
+            });
+        });
+
 
 
     },
@@ -237,12 +262,8 @@ var eventHandler =  {
     },
 
     onChargeFailed: function(iEvent, fn) {
-        /*
-         * Look for payment record.
-         * - if found, update it
-         * - if missing, create it
-         * Notify customer.
-         */
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeRefunded: function(iEvent, fn) {
@@ -271,7 +292,8 @@ var eventHandler =  {
     },
 
     onChargeDisputeCreated: function(iEvent, fn) {
-
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeDisputeUpdated: function(iEvent, fn) {
@@ -315,7 +337,12 @@ var eventHandler =  {
     },
 
     onCustomerSubscriptionDeleted: function(iEvent, fn) {
-
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
+            log.error('Subscription deletion failed:' % err.message);
+        });
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onCustomerSubscriptionTrialWillEnd: function(iEvent, fn) {
@@ -335,7 +362,8 @@ var eventHandler =  {
     },
 
     onInvoicePaymentFailed: function(iEvent, fn) {
-
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onInvoiceItemCreated: function(iEvent, fn) {

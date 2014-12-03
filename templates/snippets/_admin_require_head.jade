@@ -9,16 +9,13 @@ include standardhead
 script(data-main="/angular_admin/main", src="/js/libs/requirejs/require.js")
 script(type="text/javascript").
     window.location="/admin#/" + (function(){
-        var single_view, last, user_preferences = !{JSON.stringify(userPreferences)};
-        single_view = user_preferences.single_view;
-        last        = user_preferences.last;
-
-        if ( single_view === "last_tab_visited" ) {
+        var single_view = "#{user.user_preferences.single_view}"
+        , last = "#{user.user_preferences.last}";
+        if (single_view === "last_tab_visited") {
             return last;
         }
-        return single_view || "website";
+        return single_view
     }());
-
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
         return function () {
             var a = Array.prototype.slice.call(arguments);

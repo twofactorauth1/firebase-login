@@ -9,10 +9,7 @@
 
 <div class="image-gallery-title">
     <div class="editable" data-class="maintitle" data-index="{{$index}}">
-        <div data-ng-bind-html="component.maintitle" data-ng-show="component.maintitle"></div>
-        <div ng-show="!component.maintitle">
-            <h1>Image Gallery Title</h1>
-        </div>
+        <div ng-bind-html="component.maintitle | unsafe"></div>
     </div>
 </div>
 
@@ -26,8 +23,8 @@
 
 <div class=" clearfix mb20"></div>
 
-<div class="">
-    <div ng-cloak class="row">
+<div>
+    <div ng-cloak>
         <div ng-repeat="image in component.images track by $index">
             <div class="col-sm-3 col-xs-12">
                 <div class="thumbnail imgHeight single-image">

@@ -437,7 +437,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var label = req.params.label;
 
                 cmsManager.deletePage(pageId, function (err, value) {
-                    self.log.debug('<< deletePage', err);
+                    self.log.debug('<< deletePage');
                     self.sendResultOrError(res, err, value, "Error deleting Page");
                     self = null;
                 });
@@ -782,7 +782,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     component = new component({
                         _id: temp,
                         anchor: temp,
-                        title: componentObj.title,
+                        // title: componentObj.title,
                         visibility : true
                     });
                     if(componentObj.cmpVersion && componentObj.cmpVersion !== null) {
@@ -984,9 +984,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var blogPost = new $$.m.BlogPost(req.body);
         var postId = req.params.postId;
         var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
 
-        var accountId = self.accountId(req);
-        blogPost.set('accountId', parseInt(accountId));
+        blogPost.set('accountId', accountId);
         blogPost.set('_id', postId);
         blogPost.set('pageId', pageId);
 
@@ -996,7 +996,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                blogPost.set('accountId', accountId.toString());
+                blogPost.set('accountId', accountId);
                 blogPost.set('_id', postId);
                 blogPost.set('pageId', pageId);
 

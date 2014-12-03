@@ -644,13 +644,13 @@ font-weight: 900;
     top: 0;
     width: 100%;
     z-index: 99999;
-    background: #29b87f;
-    display: none;
+    background: #29b87f!important;
+    display: none!important;
     right: 0;
     height: 50px;
 
     &.editing {
-        display: block;
+        display: block!important;
     }
 
     .btn-group {
@@ -672,6 +672,12 @@ font-weight: 900;
             background: rgba(255,255,255,0.2);
         }
     }
+}
+
+.aloha-editable {
+    max-width: 100%!important;
+    margin: 0!important;
+    padding: 0!important;
 }
 
 .aloha-link-toolbar {

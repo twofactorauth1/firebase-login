@@ -60,7 +60,6 @@ _.extend(baseView.prototype, {
             data.serverProps[$$.constants.server_props.USER_ID] = this.req.user.id();
             data.serverProps[$$.constants.server_props.IS_LOGGED_IN] = true;
             data.user = this.req.user.toJSON();
-            data.userPreferences=data.user.user_preferences;
             data.isLoggedIn = true;
             data.photo = this.req.user.getDefaultPhoto();
         } else {
@@ -89,8 +88,6 @@ _.extend(baseView.prototype, {
         if (this.req.isAuthenticated()) {
             data.authenticated = true;
             data.user = this.req.user.toJSON();
-            data.userPreferences=data.user.user_preferences;
-
         } else {
             data.authenticated = false;
         }

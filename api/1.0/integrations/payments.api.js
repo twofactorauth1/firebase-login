@@ -10,6 +10,8 @@ var stripeDao = require('../../../payments/dao/stripe.dao.js');
 var userDao = require('../../../dao/user.dao.js');
 var customerLinkDao = require('../../../payments/dao/customer_link.dao.js');
 var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
+var appConfig = require('../../../configs/app.config');
+var accountDao = require('../../../dao/account.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -33,8 +35,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('customers/:id'), this.isAuthApi, this.deleteCustomer.bind(this));
 
         //Plans
-        app.get(this.url('plans'), this.isAuthApi, this.listPlans.bind(this));
-        app.get(this.url('plans/:id'), this.isAuthApi, this.getPlan.bind(this));
+        app.get(this.url('plans'), this.setup, this.listPlans.bind(this));
+        app.get(this.url('plans/:id'), this.setup, this.getPlan.bind(this));
         app.post(this.url('plans'), this.isAuthApi, this.createPlan.bind(this));
         app.post(this.url('plans/:id'), this.isAuthApi, this.updatePlan.bind(this));
         app.delete(this.url('plans/:id'), this.isAuthApi, this.deletePlan.bind(this));
@@ -73,9 +75,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.getInvoice.bind(this));
         app.get(this.url('customers/:id/upcomingInvoice'), this.isAuthApi, this.getUpcomingInvoice.bind(this));
         app.post(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.updateInvoice.bind(this));
+        app.get(this.url('customers/all/invoices'), this.isAuthApi, this.listAllInvoices.bind(this));
         app.get(this.url('customers/:id/invoices'), this.isAuthApi, this.listInvoices.bind(this));
-        app.get(this.url('invoices'), this.isAuthApi, this.listAllInvoices.bind(this));
+
         app.post(this.url('customers/:id/invoices/:invoiceId/pay'), this.isAuthApi, this.payInvoice.bind(this));
+
+        //Special operations for main account
+        app.get(this.url('upcomingInvoice'), this.isAuthApi, this.getMyUpcomingInvoice.bind(this));
+        app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
+        app.get(this.url('account/invoices'), this.isAuthApi, this.getInvoicesForAccount.bind(this));
+        app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
+        app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
 
         //Coupons
         //Discounts
@@ -93,6 +103,68 @@ _.extend(api.prototype, baseApi.prototype, {
         // ------------------------------------------------
         app.post('stripe/webhook', this.verifyEvent.bind(this), this.handleEvent.bind(this));
 
+    },
+
+    listIndigenousPlans: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listIndigenousPlans');
+        stripeDao.listStripePlans(null, function(err, value){
+            self.log.debug('<< listIndigenousPlans');
+            return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
+        });
+
+    },
+
+    /**
+     * This method creates a subscription to an indigenous plan, and then updates the account billing information
+     * @param req
+     * @param resp
+     */
+    subscribeToIndigenous: function(req, resp) {
+        var self = this;
+        self.log.debug('>> subscribeToIndigenous');
+
+        var customerId = req.body.customerId; //REQUIRED
+        var planId = req.params.planId;//REQUIRED
+        var coupon = req.body.coupon;
+        var trial_end = req.body.trial_end;
+        var card = req.body.card;//this will overwrite customer default card if specified
+        var quantity = req.body.quanity;
+        var application_fee_percent = req.body.application_fee_percent;
+        var metadata = req.body.metadata;
+        var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
+        var contactId = req.body.contactId;
+        var userId = req.userId;
+
+        if(!planId || planId.length < 1) {
+            return self.wrapError(resp, 400, null, "Invalid planId parameter.");
+        }
+
+        if(!customerId || customerId.length < 1) {
+            return self.wrapError(resp, 400, null, "Invalid customerId parameter.");
+        }
+
+        if(!accountId || accountId===0) {
+            return self.wrapError(resp, 400, null, 'Invalid accountId parameter');
+        }
+
+        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
+                if(err) {
+                    self.log.error('Error subscribing to Indigenous: ' + err);
+                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                } else {
+                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                        if(err) {
+                            self.log.error('Error adding billing info to account: ' + err);
+                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                        }
+                        self.log.debug('<< subscribeToIndigenous');
+                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                    });
+                }
+
+            });
     },
 
     listCustomers: function(req, resp) {
@@ -338,13 +410,16 @@ _.extend(api.prototype, baseApi.prototype, {
     listPlans: function(req, resp) {
         var self = this;
         self.log.debug('>> listPlans');
-        //var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.accountId(req));
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 stripeDao.listStripePlans(accessToken, function(err, value){
                     self.log.debug('<< listPlans');
                     return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
@@ -365,6 +440,9 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var planId = req.params.id;
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 stripeDao.getStripePlan(planId, accessToken, function(err, value){
                     self.log.debug('<< getPlan');
                     return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
@@ -378,13 +456,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> createPlan');
-        //var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.accountId(req));
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
 
                 var planId = req.body.planId;
                 var amount = req.body.amount;
@@ -434,6 +515,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 //validate params
                 var needsUpdate = false;
                 var planId = req.params.id;//REQUIRED
@@ -469,6 +553,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 //validate params
                 var planId = req.params.id;//REQUIRED
                 if(!planId || planId.length < 1) {
@@ -491,6 +578,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
 
         var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var customerId = req.params.id;
         var limit = req.body.limit;
 
@@ -519,6 +609,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var planId = req.body.plan;//REQUIRED
                 var coupon = req.body.coupon;
@@ -557,7 +650,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getSubscription');
+        var accountId = parseInt(self.accountId(req));
         var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
@@ -578,7 +675,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> updateSubscription');
+        var accountId = parseInt(self.accountId(req));
         var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
 
@@ -609,11 +710,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> cancelSubscription');
+        var accountId = parseInt(self.accountId(req));
         var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var customerId = req.params.id;
         var subscriptionId = req.params.subId;
         var at_period_end = req.body.at_period_end;
-        var accountId = self.accountId(req);
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -632,7 +736,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> createCard');
+        var accountId = parseInt(self.accountId(req));
         var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var customerId = req.params.id;
 
         var cardToken = req.params.cardToken;
@@ -656,7 +764,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getCard');
+        var accountId = parseInt(self.accountId(req));
         var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var customerId = req.params.id;
         var cardId = req.params.cardId;
 
@@ -681,7 +793,11 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
+                var accountId = parseInt(self.accountId(req));
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
@@ -723,7 +839,11 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
+                var accountId = parseInt(self.accountId(req));
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
 
                 stripeDao.listStripeCards(customerId, function(err, value){
@@ -743,7 +863,11 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
+                var accountId = parseInt(self.accountId(req));
                 var accessToken = self._getAccessToken(req);
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
@@ -766,7 +890,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
-
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var created = req.body.created;
                 var customerId = req.body.customerId;
                 var ending_before = req.body.ending_before;
@@ -792,12 +919,16 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var amount = req.body.amount;//REQUIRED
                 var currency = req.body.currency || 'usd';//REQUIRED
                 var card = req.body.card; //card or customer REQUIRED
                 var customerId = req.body.customerId; //card or customer REQUIRED
                 var contactId = req.body.contactId;//contact or user REQUIRED
-                var userId = req.body.userId; //contact or user REQUIRED
+                var userId = req.body.userId || req.user.id();//contact or user REQUIRED
                 var description = req.body.description;
                 var metadata = req.body.metadata;
                 var capture = req.body.capture;
@@ -839,7 +970,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
-
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var chargeId = req.params.chargeId;
 
                 stripeDao.getStripeCharge(chargeId, accessToken, function(err, value){
@@ -860,7 +994,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
-
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var chargeId = req.params.chargeId;
                 var description = req.body.description;
                 var metadata = req.body.metadata;
@@ -885,7 +1022,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
-
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var chargeId = req.params.chargeId;
                 var amount = req.body.amount;
                 var application_fee = req.body.application_fee;
@@ -912,7 +1052,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
-
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var amount = req.body.amount;//REQUIRED
                 var currency = req.body.currency || 'usd';//REQUIRED
@@ -947,7 +1090,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
-
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var created = req.body.created;
                 var customerId = req.body.customerId;
                 var ending_before = req.body.ending_before;
@@ -972,6 +1118,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var invoiceItemId = req.params.itemId;
 
                 stripeDao.getInvoiceItem(invoiceItemId, accessToken, function(err, value){
@@ -992,6 +1142,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var invoiceItemId = req.params.itemId;
 
                 var amount = req.body.amount;
@@ -1016,6 +1170,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var invoiceItemId = req.params.itemId;
 
                 stripeDao.deleteInvoiceItem(invoiceItemId, accessToken, function(err, value){
@@ -1038,6 +1196,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var application_fee = req.body.application_fee;
                 var description = req.body.description;
@@ -1064,6 +1226,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var invoiceId = req.params.invoiceId;
 
@@ -1085,6 +1251,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var subscriptionId = req.body.subscriptionId;
 
@@ -1093,6 +1263,62 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
                 });
             }
+        });
+
+    },
+
+    getMyUpcomingInvoice: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getMyUpcomingInvoice');
+        var customerId = self.customerId(req);
+        var subscriptionId = req.body.subscriptionId;
+        stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
+            self.log.debug('<< getMyUpcomingInvoice');
+            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+        });
+    },
+
+    getMyInvoices: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getMyInvoices');
+        var customerId = self.customerId(req);
+
+        var dateFilter = req.body.dateFilter;
+        var ending_before = req.body.ending_before;
+        var limit = req.body.limit;
+        var starting_after = req.body.starting_after;
+
+        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
+            function(err, value){
+                self.log.debug('<< getMyInvoices');
+                return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+            });
+
+    },
+
+    getInvoicesForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getInvoicesForAccount');
+        accountDao.getAccountByHost(req.host, function(err, account){
+            if(err || account==null) {
+                self.log.error('Error getting account: ' + err);
+                return self.wrapError(resp, 500, 'Could not find account.');
+            }
+            var customerId = account.get('billing').stripeCustomerId;
+            if(!customerId || customerId === '') {
+                self.log.error('No stripe customerId found for account: ' + account.id());
+                return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');
+            }
+            var dateFilter = req.body.dateFilter;
+            var ending_before = req.body.ending_before;
+            var limit = req.body.limit;
+            var starting_after = req.body.starting_after;
+
+            stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
+                function(err, value){
+                    self.log.debug('<< getInvoicesForAccount');
+                    return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                });
         });
 
     },
@@ -1106,6 +1332,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 //var customerId = req.params.id;
                 var invoiceId = req.params.invoiceId;
 
@@ -1164,7 +1394,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> ' + methodName);
         var accessToken = self._getAccessToken(req);
-
+        var accountId = parseInt(self.accountId(req));
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
         var dateFilter = req.body.dateFilter;
         var ending_before = req.body.ending_before;
         var limit = req.body.limit;
@@ -1187,6 +1420,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var invoiceId = req.params.invoiceId;
 
@@ -1208,6 +1445,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
@@ -1229,6 +1470,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var tokenId = req.params.id;
 
                 stripeDao.getToken(tokenId, function(err, value){
@@ -1249,6 +1494,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
                 var eventId = req.params.id;
 
                 stripeDao.getEvent(eventId, accessToken, function(err, value){
@@ -1269,6 +1518,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
 
                 var created = req.body.created;
                 var ending_before = req.body.ending_before;

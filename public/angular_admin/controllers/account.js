@@ -1,19 +1,12 @@
-define([
-    'app',
-    'userService',
-    'paymentService',
-    'skeuocardDirective',
-    'ngProgress',
-    'mediaDirective',
-    'stateNavDirective',
-    'toasterService',
-    'accountService',
-    'navigationService'], function(app) {
-  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService',function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
     ngProgress.start();
     NavigationService.updateNavigation();
     $scope.showToaster = false;
+
     $scope.invoicePageLimit = 5;
+
+    $scope.selectPlanView = 'card';
 
     $scope.tabList = [
       {v:'last_tab_visited',n:'Last Tab Visited'},
@@ -24,6 +17,7 @@ define([
       {v:'dashboard',n:'Dashboard'},
       {v:'account',n:'Account'}
     ];
+
     $scope.$watch('activeTab', function (newValue, oldValue) {
       console.log('watch activeTab >> ', newValue);
       if($scope.userPreferences){
@@ -34,6 +28,7 @@ define([
 
     $scope.updateStripeIdFn = function(billing) {
       $scope.user.stripeId = billing.billing.stripeCustomerId;
+      $scope.selectPlanView = 'plan';
     };
 
     $scope.invoicePageChangeFn = function(invoiceCurrentPage, invoiceTotalPages) {
@@ -43,6 +38,24 @@ define([
     };
 
     $scope.switchPlanFn = function(planId) {
+        if($scope.user.stripeId) {
+            PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription){
+                $scope.cancelOldSubscriptionsFn();
+                $scope.subscription = subscription;
+                PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice){
+                    $scope.upcomingInvoice = upcomingInvoice;
+                });
+                PaymentService.getInvoicesForAccount(function(invoices){
+                    $scope.invoices = invoices;
+                    $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+                });
+                ToasterService.setPending('success', 'Subscribed to new plan.');
+
+            });
+        } else {
+            ToasterService.setPending('error', 'No Stripe customer ID.');
+        }
+        /*
       PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
         $scope.cancelOldSubscriptionsFn();
         $scope.subscription = subscription;
@@ -55,6 +68,8 @@ define([
         });
         ToasterService.setPending('success', 'Subscribed to new plan.');
       });
+      */
+        $scope.selectPlanView = 'card';
     };
 
     $scope.cancelOldSubscriptionsFn = function() {
@@ -80,12 +95,22 @@ define([
       $scope.account = account;
     });
 
+    /*
     PaymentService.getAllInvoices(function(invoices) {
       $scope.invoices = invoices;
       $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
       ngProgress.complete();
       $scope.showToaster = true;
       ToasterService.processPending();
+    });
+    */
+
+    PaymentService.getInvoicesForAccount(function(invoices){
+        $scope.invoices = invoices;
+        $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+        ngProgress.complete();
+        $scope.showToaster = true;
+        ToasterService.processPending();
     });
 
     $scope.setActiveTab = function (tab){
@@ -98,14 +123,15 @@ define([
         if(activeTab)
           $scope.activeTab = activeTab;
         else
-          $scope.activeTab = AccountService.getActiveTab();        
+          $scope.activeTab = AccountService.getActiveTab();
     });
 
     $scope.savePreferencesFn = function() {
       UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(){})
     };
-    $scope.updateDefaultTab = function (preferences){
-        NavigationService.updateNavigation2(preferences);
+
+    $scope.updateDefaultTab = function (user){
+        NavigationService.updateNavigation2(user);
     };
 
   }]);

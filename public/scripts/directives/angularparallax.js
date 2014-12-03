@@ -37,6 +37,10 @@ angular.module('angular-parallax', [
     },
     link: function($scope, elem, attrs) {
       var setPosition = function () {
+         // Fix for smaller resolutions
+        var win_width = $(window).width();
+        if(win_width < 750)
+          $scope.parallaxRatio = 0.02;
         var calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
         // horizontal positioning
         elem.css('background-position', "50% " + calcValY + "px");

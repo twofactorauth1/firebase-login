@@ -204,7 +204,8 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
                     'public/js/libs/purl/purl.js',
                     'public/js/libs/ua-parser-js/dist/ua-parser.min.js',
-                    'public/js/libs_misc/uuid.js'
+                    'public/js/libs_misc/uuid.js',
+                    'public/js/libs_misc/angular-file-upload/angular-file-upload.js'
 
                 ],
                 /*src: wiredepJSAry,*/
@@ -238,10 +239,12 @@ module.exports = function(grunt) {
                         'public/scripts/directives/convertHtml.js',
                         'public/scripts/directives/coursePreview.js',
                         'public/scripts/directives/dmStyle.js',
+                        'public/scripts/directives/last.js',
                         'public/scripts/directives/ngEnter.js',
 			            'public/scripts/directives/scrollTo.js',
                         'public/scripts/directives/skeuocard.js',
                         'public/scripts/services/accountService.js',
+                        'public/scripts/services/analyticsService.js',
                         'public/scripts/services/courseService.js',
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/paymentService.js',
@@ -254,10 +257,12 @@ module.exports = function(grunt) {
                         'public/scripts/filters/CreateUrlFilter.js',
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
+                        'public/scripts/filters/getByType.js',
+                        'public/scripts/filters/trustHtml.js',
                         'public/scripts/controllers/blogCtrl.js',
                         'public/scripts/controllers/CourseSubscribeModalController.js',
                         'public/scripts/controllers/layoutCtrl.js',
-                        'public/scripts/controllers/mainCtrl.js',
+                        'public/scripts/controllers/mainCtrl.js'
                     ]
                 }
             }
@@ -279,9 +284,11 @@ module.exports = function(grunt) {
         nodeunit: {
             all:['test/**/*_test.js'],
             analytics: ['analytics/tests/*_test.js'],
+            analyticsCollater: ['analytics/tests/analytics_collater_test.js'],
             api:['api/test/*_test.js'],
             assets:['assets/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            campaign:['campaign/test/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
             contactActivities: ['contactactivities/test/*_test.js'],
@@ -289,6 +296,7 @@ module.exports = function(grunt) {
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
             payments: ['payments/tests/*_test.js'],
+            paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
             products: ['products/tests/*_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
@@ -428,7 +436,8 @@ module.exports = function(grunt) {
      * This task is run by CI.
      */
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments']);
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
+            'nodeunit:analyticsCollater']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
@@ -449,6 +458,10 @@ module.exports = function(grunt) {
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
     grunt.registerTask('testPayments', ['nodeunit:payments']);
     grunt.registerTask('testFunctionalPayments', ['nodeunit:functionalPayments']);
+    grunt.registerTask('testCampaigns', ['nodeunit:campaign']);
+    grunt.registerTask('testPaymentEvents', ['nodeunit:paymentEvents']);
+    grunt.registerTask('testCollater', ['nodeunit:analyticsCollater']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
+
     
 };

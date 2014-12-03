@@ -35,7 +35,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
-        //app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
+
+        //visit
+        app.post(this.url('session/:id/sessionStart'), this.storeSessionInfo.bind(this));
+        app.post(this.url('session/:id/pageStart'), this.storePageInfo.bind(this));
+        app.post(this.url('session/:id/ping'), this.storePingInfo.bind(this));
+
 
     },
 
@@ -222,6 +227,52 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    storeSessionInfo: function(req, res) {
+        var self = this;
+        var sessionEvent = new $$.m.SessionEvent(req.body);
+        sessionEvent.set('session_id', req.params.id);
+        console.log('Storing Session API >>> ', new Date().getTime());
+        sessionEvent.set('server_time', new Date().getTime());
+        sessionEvent.set('ip_address', self.ip(req));
+        var geoInfo = self.geo(req);
+        sessionEvent.set('ip_geo_info', geoInfo);
+        analyticsManager.storeSessionEvent(sessionEvent, function(err){
+            if(err) {
+                self.log.error('Error saving session event: ' + err);
+            }
+        });
+
+        return self.send200(res);
+    },
+
+    storePageInfo: function(req, res) {
+        var self = this;
+        var pageEvent = new $$.m.PageEvent(req.body);
+        pageEvent.set('session_id', req.params.id);
+        pageEvent.set('server_time', new Date().getTime());
+        analyticsManager.storePageEvent(pageEvent, function(err){
+            if(err) {
+                self.log.error('Error saving page event: ' + err);
+            }
+        });
+
+        self.send200(res);
+    },
+
+    storePingInfo: function(req, res) {
+        var self = this;
+        var pingEvent = new $$.m.PingEvent(req.body);
+        pingEvent.set('session_id', req.params.id);
+        pingEvent.set('server_time', new Date().getTime());
+        analyticsManager.storePingEvent(pingEvent, function(err){
+            if(err) {
+                self.log.error('Error saving ping event: ' + err);
+            }
+        });
+
+        self.send200(res);
     }
 });
 

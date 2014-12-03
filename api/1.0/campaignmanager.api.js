@@ -7,6 +7,7 @@
 
 var baseApi = require('../base.api');
 var campaignManager = require('../../campaign/campaign_manager');
+var accountDao = require('../../dao/account.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -28,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('campaign/:id'), this.getCampaign.bind(this));
         //pipeshift
         app.post(this.url('pipeshift/courses/:courseId/subscribe'), this.subscribeToVARCourse.bind(this));
+        app.post(this.url('courses/:id/subscribe'), this.subscribeToVARCourse.bind(this));//better URL
         app.get(this.url('pipeshift/templates'), this.getPipeshiftTemplates.bind(this));
     },
 
@@ -188,22 +190,37 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    /**
+     * No security.  This is a public API
+     * @param req
+     * @param resp
+     */
     subscribeToVARCourse: function (req, resp) {
         var self = this;
-        var accountId = parseInt(self.accountId(req));
-        //TODO: add security - MODIFY_CAMPAIGN
+        self.log.debug('>> subscribeToVARCourse');
+        var accountId = 0;
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                if (value === true) {
+                    accountId = 0;
+                } else {
+                    accountId = value.id();
+                }
+            }
+            var toEmail = req.body.email;
+            var course = req.body.course;
+            var timezoneOffset = req.body.timezoneOffset;
 
-        var toEmail = req.body.email;
-        var course = req.body.course;
-        var timezoneOffset = req.body.timezoneOffset;
+            if (!course) {
+                self.wrapError(resp,400,"","No course provided","");
+            } else {
+                campaignManager.subscribeToCourse(toEmail, course, accountId, timezoneOffset, function(err, result){
+                    self.log.debug('<< subscribeToVARCourse');
+                    self.sendResultOrError(resp, err, result, "Could not send the course-scheduled emails.", 500);
+                });
+            }
+        });
 
-        if (!course) {
-            self.wrapError(resp,500,"","No course provided","");
-        } else {
-            campaignManager.subscribeToVARCourse(toEmail, course, timezoneOffset, this.userId(req), function (err, result) {
-                self.sendResultOrError(resp, err, result, "Could not send videoautoresponder scheduled emails.", 400);
-            });
-        }
     },
 
     getPipeshiftTemplates: function (req, resp) {

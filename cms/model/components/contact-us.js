@@ -43,6 +43,30 @@ var component = $$.m.ModelBase.extend({
             version: 1,
 
             /**
+             *
+             *
+             */
+            title: "<h3>CONTACT US</h3>",
+
+            /**
+             *
+             *
+             */
+            subtitle: "<h5>We will be happy to assist you!</h5>",
+
+            /**
+             *
+             *
+             */
+            text: "",
+
+            /**
+             *
+             *
+             */
+            imgurl: "",
+
+            /**
              * The hours a business is open, array
              *[
              *  "mon-friday: 8-5",
@@ -79,15 +103,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: null,
-
-            title: "Title",
-
-            subtitle: "subtitle",
-
-            text: "",
-
-            imgurl: "",
+            txtcolor: "#888888",
 
             /**
              *
@@ -101,7 +117,7 @@ var component = $$.m.ModelBase.extend({
                     parallax : false,
                     blur : false
                 },
-                color : ""
+                color : "#FFFFFF"
             }
         }
     },

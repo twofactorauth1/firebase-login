@@ -46,25 +46,25 @@ var component = $$.m.ModelBase.extend({
              * The Title of the component that shows up on the top
              * (optional)
              */
-            maintitle:"<h1>Feature Block Title</h1>",
+            title:"<h1>Feature Block Title</h1>",
 
             /**
              *
              *
              */
-            subtitle:"<h3>This is the subtitle.</h3>",
+            subtitle:"<h3>This is the feature block subtitle.</h3>",
 
             /**
              *
              *
              */
-            text: "<p>This is the main text for the feature block.</p>",
+            text: "<h5>The Feature Block component is great for a quick testimonial or a list of <br> features for a single product. It works great with an image background and parallax.</h5>",
 
             /**
              *
              *
              */
-            txtcolor: "#444",
+            txtcolor: "#ffffff",
 
             /**
              *
@@ -72,10 +72,10 @@ var component = $$.m.ModelBase.extend({
              */
             bg: {
                 img : {
-                    url : "",
-                    width : null,
-                    height : null,
-                    parallax : false,
+                    url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/feature-block_1416870905848.jpg",
+                    width : 838,
+                    height : 470,
+                    parallax : true,
                     blur : false
                 },
                 color : "#f7f7f7"

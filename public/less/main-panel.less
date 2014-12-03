@@ -31,6 +31,10 @@
                 margin: 0 10px 0 5px;
                 color: #ccc;
             }
+            .div-header
+            {
+              display: inline;
+            }
         }
         .glyphicon {
             font-size: 24px;
@@ -72,7 +76,6 @@
             &:last-child {
                 margin-right: 10px;
             }
-
         }
         .breadcrumb-wrapper {
             position: absolute;
@@ -84,17 +87,6 @@
                 font-size: 11px;
                 font-weight: normal;
                 display: inline-block;
-            }
-        }
-        .breadcrumb {
-            background: none;
-            display: inline-block;
-            padding: 0;
-            li {
-                font-size: 12px;
-            }
-            li.active {
-                color: #333;
             }
         }
         .pages {
@@ -115,6 +107,17 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+            }
+        }
+        .breadcrumb {
+            background: none;
+            display: inline-block;
+            padding: 0;
+            li {
+                font-size: 12px;
+            }
+            li.active {
+                color: #333;
             }
         }
     }

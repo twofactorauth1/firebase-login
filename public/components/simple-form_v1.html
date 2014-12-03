@@ -1,0 +1,53 @@
+<style>
+    .simple-form-v1 .simple-form-title {
+        color:{{component.txtcolor || 'white'}};
+    }
+</style>
+<div ng-class="component.type+'-v'+component.version">
+    <div id="error-msg" class="alert alert-danger hidden">
+        <button type="button" aria-hidden="true" class="close">×</button>
+        <span class="message"></span>
+    </div>
+    <div>
+
+    <div class="component-body">
+            <div class="inner-page row">
+
+                <div class="simple-form-title">
+                    <div class="editable" data-class="title" data-index="{{$index}}">
+                        <span ng-bind-html="component.title | unsafe"/>
+                    </div>
+                </div>
+
+                <div class="simple-form-subtitle">
+                    <div class="editable" data-class="subtitle" data-index="{{$index}}">
+                        <span ng-bind-html="component.subtitle"></span>
+                    </div>
+                </div>
+
+                <div class="clearfix mb15"></div>
+
+                <div id="user_email" class="col-sm-9 form-group">
+                    <div class="left-inner-addon">
+                        <span><i class="fa fa-envelope"></i></span>
+                        <input type="email" ng-model="user.email" placeholder="Email" />
+                    </div>
+                    <span class="error help-block" />
+                </div>
+                <div class="clearfix mb15 visible-xs"></div>
+                <div class="col-sm-3">
+                    <div class="clear">
+                        <button class="btn btn-outline pull-right btn-block" ng-click="createUser(user, $event)">I'M INTERESTED <i class="fa fa-arrow-circle-o-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="clearfix mb15"></div>
+
+                <div class="row thank-you animated" ng-class="{fadeOut: !user.success, tada: user.success}">
+                    <h3 class="center mb20">Thank You for Submitting!</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

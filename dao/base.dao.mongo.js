@@ -8,6 +8,7 @@
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
 var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe: true});
+var async = require('async');
 
 $$.g.mongos = $$.g.monogs || [];
 var mongodao = {
@@ -417,6 +418,7 @@ var mongodao = {
         //db.thiscollection.find().sort({"thisfieldname":-1}).limit(1)
         var self = this;
         var collection = this.getTable(type);
+        console.dir(query);
         this.mongo(collection).find(query).sort({fieldName: -1}).limit(1).toArray(function (err, values) {
             if (err) {
                 self.log.error('An error occurred: #getMaxValueMongo. ', err);
@@ -499,6 +501,65 @@ var mongodao = {
             }
         );
     },
+
+    _batchUpdateMongo: function(list, type, fn) {
+        var self = this;
+        /*
+         * This is where an actual batch update method should go.
+         */
+        var collection = this.getTable(type);
+
+        async.each(list, function(obj, callback){
+            self.mongo(collection).save(obj.toJSON('db'), function(err, result){
+                if(err) {
+                    self.log.error('error saving object in batchUpdate: ' + err);
+                    callback(err);
+                } else {
+                    callback();
+                }
+            });
+        }, function(err){
+            if(err) {
+                self.log.error('error saving object in batchUpdate: ', err);
+                fn(err, null);
+            } else {
+                fn(null, 'OK');
+            }
+        });
+
+        /*
+
+        var collection = this.getTable(type);
+        console.log('collection: ' + collection);
+        this.mongodatabase.collection(collection, function(err, mongoCollection){
+            console.dir(mongoCollection);
+            var bulk = mongoCollection.initialzeUnorderedBulkOp();
+            var count = 0;
+            for (var i = 0; i < list.length; i++) {
+                bulk.insert({number: i});
+                bulk.find({'_id': list[i].id()}).upsert().replaceOne(list[i].toJSON("db"));
+                count++;
+
+                if ( count % 1000 == 0 )
+                    bulk.execute(function(err,result) {
+                        // maybe do something with results
+                        bulk = collection.initializeUnorderedBulkOp(); // reset after execute
+                    });
+
+            }
+
+            // If your loop was not a round divisor of 1000
+            if ( count % 1000 != 0 ) {
+                bulk.execute(function(err,result) {
+                    fn(null, "OK");
+                });
+            } else {
+                fn(null, "OK");
+            }
+        });
+        */
+    },
+
     //endregion PROTECTED
 
     //region PRIVATE

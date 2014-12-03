@@ -4,7 +4,7 @@
 
 
 'use strict';
-mainApp.service('userService', function ($http) {
+mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) {
     var baseUrl = '/api/1.0/';
     this.addContact = function (user, fn) {
         var apiUrl = baseUrl + ['contact', 'signupnews'].join('/');
@@ -15,10 +15,11 @@ mainApp.service('userService', function ($http) {
         })
         .success(function (data, status, headers, config) {
             console.log('success created ', data);
-            fn(data);
+            fn(data, null);
         })
         .error(function (err) {
             console.log('END:userService with ERROR');
+            fn(null, err)
         });
     };
 
@@ -38,6 +39,8 @@ mainApp.service('userService', function ($http) {
     };
 
     this.initializeUser = function(user, fn) {
+        user.session_permanent = ipCookie("permanent_cookie");
+        user.fingerprint = new Fingerprint().get();
         var apiUrl = baseUrl + ['user', 'initialize'].join('/');
         $http({
             url: apiUrl,
@@ -122,4 +125,20 @@ mainApp.service('userService', function ($http) {
             });
     };
 
-});
+    this.addContactActivity = function (activity, fn) {
+        var apiUrl = baseUrl + ['contact', 'activity'].join('/');
+        $http({
+            url: apiUrl,
+            method: "POST",
+            data: angular.toJson(activity)
+        })
+        .success(function (data, status, headers, config) {
+            console.log('success created ', data);
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:userService with ERROR');
+        });
+    };
+
+}]);

@@ -783,7 +783,10 @@ var dao = {
             metadata = {};
         }
         metadata.paymentId = paymentId;
-        params.capture = capture || false;
+        if(capture === false) {
+            params.capture = false;
+        }
+
         if(statement_description && statement_description.length>0) {params.statement_description = statement_description;}
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
         if(application_fee && application_fee > 0) {params.application_fee = application_fee;}

@@ -13,8 +13,8 @@ define([
     'mediaDirective',
     'confirmClick2',
     'confirmClickDirective',
-    'navigationService',
-    'courseServiceAdmin'
+    'courseServiceAdmin',
+    'navigationService'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -25,10 +25,9 @@ define([
         'toaster',
         'ngProgress',
         '$rootScope',
-        'NavigationService',
         'CourseService',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, NavigationService, CourseService) {
-
+        'NavigationService',
+        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
             ngProgress.start();
             NavigationService.updateNavigation();
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -52,6 +51,10 @@ define([
 
             $scope.status = {
                 isopen: false
+            };
+
+            window.getUpdatediFrameRoute = function(data) {
+                // console.log('getUpdatediFrameRoute', data);
             };
 
             $scope.spectrum = {
@@ -85,9 +88,10 @@ define([
             UserService.getUser(function(user) {
                 $scope.user = user;
                 that.user = user;
-                if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' )
-                     $scope.updatePage(that.user.user_preferences.lastPageHandle)
-
+                console.log('that.user.user_preferences.lastPageHandle >> ');
+                if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
+                     $scope.updatePage(that.user.user_preferences.lastPageHandle);
+                }
             });
 
             window.getUpdatediFrameRoute = function(data) {
@@ -97,6 +101,14 @@ define([
             window.activateSettings = function() {
                 // console.log('Activate Settings!');
             };
+
+            window.updateAdminPageScope =  function(page)
+            {
+                if(page._id !== $scope.currentPage._id)
+                {
+                    $scope.updatePage(page.handle);
+                }
+            }
 
             document.getElementById("iframe-website").onload = function() {
                 ngProgress.complete();
@@ -110,58 +122,83 @@ define([
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
                 //wait for iframe to load completely
+                //TODO: get trigger instead of timeout
                 $timeout(function() {
                     //unhide no-component
+                    if (iframeDoc.getElementById('body')) {
 
+                            if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
+                                iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
+                                iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+                            }
 
-                    if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
-                        iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
-                        iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
+                            //add media modal click events to all images
+                            var images = iframeDoc.getElementById('body').querySelectorAll('img');
+
+                            for (var i = 0; i < images.length; i++) {
+                                if (typeof images[i].addEventListener != "undefined") {
+                                    images[i].removeEventListener("click");
+                                    images[i].addEventListener("click", function(e) {
+                                        $("#media-manager-modal").modal('show');
+                                        $scope.imageChange = true;
+                                        $scope.componentArrTarget = e.currentTarget;
+                                        $scope.componentEditing = _.findWhere($scope.components, {
+                                            _id: $(e.currentTarget).closest('.component').data('id')
+                                        });
+                                    });
+                                } else if (typeof images.attachEvent != "undefined") {
+                                    images[i].removeEvent("onclick");
+                                    images[i].attachEvent("onclick", iframeClickHandler);
+                                }
+                            };
+
+                            //add click events for all the settings buttons
+                            var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
+                            for (var i = 0; i < settingsBtns.length; i++) {
+                                if (typeof settingsBtns[i].addEventListener != "undefined") {
+                                    settingsBtns[i].removeEventListener("click");
+                                    settingsBtns[i].addEventListener("click", function(e) {
+                                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                                    });
+                                } else if (typeof settingsBtns.attachEvent != "undefined") {
+                                    settingsBtns[i].removeEvent("onclick");
+                                    settingsBtns[i].attachEvent("onclick", iframeClickHandler);
+                                }
+                            };
+
+                            //add click events for all the add component buttons
+                            var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
+                            for (var i = 0; i < addComponentBtns.length; i++) {
+                                if (typeof addComponentBtns[i].addEventListener != "undefined") {
+                                    addComponentBtns[i].removeEventListener("click");
+                                    addComponentBtns[i].addEventListener("click", function(e) {
+                                    $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                                    var element = angular.element('#add-component-modal');
+                                        element.modal('show');
+                                        //get the current index of the component pressed
+                                    });
+                                } else if (typeof addComponentBtns.attachEvent != "undefined") {
+                                    addComponentBtns[i].removeEvent("onclick");
+                                    addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
+                                }
+                            };
+
+                            //TODO get event from stop
+
+                            iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
+                                setTimeout(function(){
+                                    $scope.$apply(function() {
+                                        $scope.editPage;
+                                    });
+                                });
+                            }, false);
+
+                            iframeDoc.addEventListener("dblclick", function(e) {
+                                $scope.editPage();
+                            }, false);
                     }
 
-                    //add click events for all the settings buttons
-                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
-                    for (var i = 0; i < settingsBtns.length; i++) {
-                        if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].addEventListener("click", function(e) {
-                                console.log('e.currentTarget.attributes >>> ', e.currentTarget.attributes);
-                                $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                            });
-                        } else if (typeof settingsBtns.attachEvent != "undefined") {
-                            settingsBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
-
-                    //add click events for all the add component buttons
-                    var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
-                    for (var i = 0; i < addComponentBtns.length; i++) {
-                        if (typeof addComponentBtns[i].addEventListener != "undefined") {
-				addComponentBtns[i].addEventListener("click", function(e) {
-				$scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-				var element = angular.element('#add-component-modal');
-                                element.modal('show');
-                                //get the current index of the component pressed
-                            });
-                        } else if (typeof addComponentBtns.attachEvent != "undefined") {
-                            addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
-
-                    //TODO get event from stop
-
-                    iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
-                        setTimeout(function(){
-                            $scope.$apply(function() {
-                                $scope.editPage;
-                            });
-                        });
-                    }, false);
-
-                    iframeDoc.addEventListener("dblclick", function(e) {
-                        $scope.editPage();
-                    }, false);
-
-                }, 5000);
+                }, 100);
             };
 
             UserService.getAccount(function(account) {
@@ -215,7 +252,7 @@ define([
                 WebsiteService.getThemes(function(themes) {
                     $scope.themes = themes;
                     $scope.currentTheme = _.findWhere($scope.themes, {
-                        name: account.website.themeId
+                        _id: account.website.themeId
                     });
                 });
             });
@@ -247,14 +284,14 @@ define([
                     iframe.contentWindow.copyPostMode();
                 }
                 // var src = iframe.src;
-                // iframe.setAttribute("src", src+"/?editor=true");
+                // iframe.setAttribute("src", src+"/?editor=true");`
+
                 $scope.backup['website'] = angular.copy($scope['website']);
                 UserService.getUserPreferences(function(preferences){
                    preferences.lastPageHandle = $scope.pageSelected;
 
                     UserService.updateUserPreferences(preferences, false, function(){} );
                 });
-
             };
 
             $scope.cancelPage = function() {
@@ -289,7 +326,6 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -319,6 +355,7 @@ define([
                             if (span) {
                                 var spanParent = span.parentNode;
                                 var spanInner = span.innerHTML;
+                                console.log('spanParent.classList >>> ', spanParent.classList);
                                 if (spanParent.classList.contains('editable')) {
                                     componentVarContents = spanInner;
                                 } else {
@@ -372,15 +409,11 @@ define([
                 WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
+                    //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
-
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
-
-               //     document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
-
-
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
+                    //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 });
                 //$scope.deactivateAloha();
                 var data = {
@@ -390,7 +423,7 @@ define([
                 };
 
                 WebsiteService.updateWebsite(data, function(data) {
-                    // console.log('updated website settings', data);
+                    console.log('updated website settings', data);
                 });
 
                 //website service - save page data
@@ -400,7 +433,6 @@ define([
                 $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
-
                 var route;
                 var sPage = $scope.pageSelected;
                 if (sPage === 'index') {
@@ -415,34 +447,55 @@ define([
 
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
-                UserService.getAccount(function(account) {
-                    WebsiteService.getPages(account.website.websiteId, function (pages) {
-                        var currentPage = $scope.pageSelected;
-                        var parsed = angular.fromJson(pages);
-                        var arr = [];
 
-                        for (var x in parsed) {
-                            arr.push(parsed[x]);
-                        }
-                        $scope.allPages = arr;
-                        that.allPages = arr;
-                        $scope.currentPage = _.findWhere(pages, {
-                            handle: currentPage
-                        });
+                WebsiteService.getPages(that.account.website.websiteId, function(pages) {
+                    var currentPage = $scope.pageSelected;
+                    var parsed = angular.fromJson(pages);
+                    var arr = [];
 
-                        var localPage = _.findWhere(pages, {
-                            handle: currentPage
-                        });
-                        //get components from page
-                        if ($scope.currentPage && $scope.currentPage.components) {
-                            $scope.components = $scope.currentPage.components;
-                        } else {
-                            $scope.components = [];
-                        }
-
-                        that.originalCurrentPageComponents = localPage.components;
+                    for (var x in parsed) {
+                        arr.push(parsed[x]);
+                    }
+                    $scope.allPages = arr;
+                    that.allPages = arr;
+                    $scope.currentPage = _.findWhere(that.allPages, {
+                        handle: currentPage
                     });
+
+                    var localPage = _.findWhere(pages, {
+                        handle: currentPage
+                    });
+                    //get components from page
+                    if ($scope.currentPage && $scope.currentPage.components) {
+                        $scope.components = $scope.currentPage.components;
+                    } else {
+                        $scope.components = [];
+                    }
+
+                    that.originalCurrentPageComponents = localPage.components;
                 });
+            };
+            $scope.addSocialLink = function(social) {
+                if(social && social.name && social.url)
+                {
+                    var selectedName = _.findWhere($scope.componentEditing.networks, {
+                        name: social.name
+                    });
+                    if(selectedName)
+                    {
+                        return;
+                    }
+
+                    $scope.componentEditing.networks.push({
+                    name : social.name,
+                    url : social.url,
+                    icon : social.name,
+                    class_name : social.name
+                    }); 
+                    social.name = ""; 
+                    social.url = ""; 
+                    $scope.saveComponent();
+                }            
             };
 
             $scope.addComponent = function() {
@@ -459,12 +512,13 @@ define([
                     }
                 }
                 WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion,  function(data) {
-                    if (data.components) { 
-                        var newComponent = data.components[data.components.length - 1];                       
+                    if (data.components) {
+                        var newComponent = data.components[data.components.length - 1];
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
+                       // $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
 
@@ -477,7 +531,6 @@ define([
             };
 
             $scope.deleteComponent = function(componentId) {
-                console.log('deleting component');
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
@@ -491,13 +544,17 @@ define([
                     }
                     $scope.updateIframeComponents();
                     $scope.componentEditing = null;
-                    toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                    //toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };
 
-            $scope.updateIframeComponents = function() {
+            $scope.updateIframeComponents = function(fn) {
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
+                if(fn) {
+                    fn();
+                }
+                $scope.bindEvents();
             };
 
             $scope.scrollToIframeComponent = function(section) {
@@ -516,6 +573,7 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
+                console.log('editComponent >>> ');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -536,6 +594,7 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
                   $scope.componentEditingVersions = versions;
+                  $scope.versionSelected = $scope.componentEditing.version;
                 });
             };
 
@@ -547,8 +606,10 @@ define([
                         $scope.components[i] = $scope.componentEditing
                     }
                 }
-
-                $scope.updateIframeComponents();
+                $scope.currentPage.components = $scope.components;
+                $scope.updateIframeComponents(function() {
+                     $scope.bindEvents();
+                });
                 $scope.isEditing = true;
 
                 //update the scope as the temppage until save
@@ -560,7 +621,27 @@ define([
                 // });
             };
 
+            $scope.createPageValidated = false;
+
+             $scope.validateCreatePage = function(page) {
+                console.log('page ', page);
+               if (page.handle == '') { $scope.handleError = true } else { $scope.handleError = false }
+               if (page.title == '') { $scope.titleError = true } else { $scope.titleError = false }
+                 console.log('$scope.titleError ', $scope.titleError);
+              console.log('$scope.handleError  ', $scope.handleError );
+               if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+                console.log('page validated');
+                $scope.createPageValidated = true;
+               }
+            };
+
             $scope.createPage = function(page, $event) {
+
+                console.log('$scope.createPageValidated ', $scope.createPageValidated);
+
+                if (!$scope.createPageValidated) {
+                    return false;
+                }
 
                 var websiteId = $scope.currentPage.websiteId;
 
@@ -585,6 +666,7 @@ define([
                         document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
                         $scope.currentPage = newpage;
                         $scope.pageSelected = newpage.handle;
+                        $('#create-page-modal').modal('hide');
                         //get components from page
                         if ($scope.currentPage && $scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
@@ -607,7 +689,7 @@ define([
 
                 WebsiteService.deletePage(pageId, websiteId, title, function(data) {
                     toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
-                    document.getElementById("iframe-website").setAttribute("src", "/");
+                    $scope.updatePage("index");
                 });
             };
 
@@ -625,7 +707,6 @@ define([
             };
 
             $scope.changeSelectedTheme = function(theme) {
-                console.log("selected" + theme)
                 $scope.selectedTheme = theme;
             };
 
@@ -652,7 +733,9 @@ define([
                 };
                 $scope.components = $scope.currentPage.components;
                 $scope.updateIframeComponents();
-                $scope.updateThemeSettings();
+                WebsiteService.setWebsiteTheme($scope.currentTheme._id, $scope.website._id, function(data) {
+                   toaster.pop('success', "Theme saved successfully");
+                });
             };
 
             CourseService.getAllCourses(function(data) {
@@ -664,109 +747,149 @@ define([
                 {
                     title: 'Blog',
                     type: 'blog',
-                    icon: 'custom blog'
+                    icon: 'custom blog',
+                    enabled: false
                 },
                 {
                     title: 'Masthead',
                     type: 'masthead',
-                    icon: 'custom masthead'
+                    icon: 'custom masthead',
+                    enabled: true
                 },
                 {
                     title: 'Feature List',
                     type: 'feature-list',
-                    icon: 'fa fa-list-ul'
+                    icon: 'fa fa-list-ul',
+                    enabled: true
                 },
                 {
                     title: 'Campaign',
                     type: 'campaign',
-                    icon: 'fa fa-bullhorn'
+                    icon: 'fa fa-bullhorn',
+                    enabled: true
                 },
                 {
                     title: 'Contact Us',
                     type: 'contact-us',
-                    icon: 'fa fa-map-marker'
+                    icon: 'fa fa-map-marker',
+                    enabled: false
                 },
                 {
                     title: 'Coming Soon',
                     type: 'coming-soon',
-                    icon: 'fa fa-clock-o'
+                    icon: 'fa fa-clock-o',
+                    enabled: true
                 },
                 {
                     title: 'Feature block',
                     type: 'feature-block',
-                    icon: 'custom feature-block'
+                    icon: 'custom feature-block',
+                    enabled: true
                 },
                 {
                     title: 'Footer',
                     type: 'footer',
-                    icon: 'custom footer'
+                    icon: 'custom footer',
+                    enabled: true
                 },
                 {
                     title: 'Image Gallery',
                     type: 'image-gallery',
-                    icon: 'fa fa-image'
+                    icon: 'fa fa-image',
+                    enabled: true
                 },
                 {
                     title: 'Image Slider',
                     type: 'image-slider' ,
-                    icon: 'custom image-slider'
+                    icon: 'custom image-slider',
+                    enabled: false
                 },
                 {
                     title: 'Image Text',
                     type: 'image-text',
-                    icon: 'custom image-text'
+                    icon: 'custom image-text',
+                    enabled: true
                 },
                 {
                     title: 'Logo List',
                     type: 'logo-list',
-                    icon: 'custom logo-list'
+                    icon: 'custom logo-list',
+                    enabled: false
                 },
                 {
                     title: 'Meet Team',
                     type: 'meet-team',
-                    icon: 'fa fa-users'
+                    icon: 'fa fa-users',
+                    enabled: true
                 },
                 {
                     title: 'Navigation',
                     type: 'navigation',
-                    icon: 'fa fa-location-arrow'
+                    icon: 'fa fa-location-arrow',
+                    enabled: true
                 },
                 {
-                    title: 'Sign Up form',
-                    type: 'signup-form',
-                    icon: 'custom sign-up-form'
+                    title: 'Products',
+                    type: 'products',
+                    icon: 'fa fa-money',
+                    enabled: false
+                },
+                {
+                    title: 'Simple form',
+                    type: 'simple-form',
+                    icon: 'custom simple-form',
+                    enabled: true
                 },
                 {
                     title: 'Single Post',
                     type: 'single-post',
-                    icon: 'custom single-post'
+                    icon: 'custom single-post',
+                    enabled: false
                 },
                 {
                     title: 'Social Links',
-                    type: 'social-feed',
-                    icon: 'custom social-links'
-                }
+                    type: 'social',
+                    icon: 'custom social-links',
+                    enabled: false
+                },
+                {
+                    title: 'Video',
+                    type: 'video',
+                    icon: 'fa fa-video',
+                    enabled: true
+                },
+                {
+                    title: 'Social Links',
+                    type: 'social-link',
+                    icon: 'custom social-links',
+                    enabled: true
+                },
             ];
 
             $scope.selectComponent = function(type) {
-                console.log('selectComponent', type);
-                $scope.selectedComponent = type;
+                if (type.enabled) {
+                    $scope.selectedComponent = type;
+                }
             };
 
-            $scope.insertMedia=function(asset, type){
-                switch(type){
-                    case "mast_head_bg_image":
-                        $scope.componentEditing.bg.img.url=asset.url;
-                        break;
-                    case "image_gallery_add_image":
-                        if ( !$scope.componentEditing.images ) {
-                            $scope.componentEditing.images = [];
-                        }
-                        $scope.componentEditing.images.push({url: asset.url});
-                        break;
-                    case "image_gallery_delete_image":
-                        $scope.componentEditing.images.splice(asset,1);
-                        break;
+            $scope.insertMedia=function(asset){
+                if ($scope.imageChange) {
+                    $scope.imageChange = false;
+                    var type = $scope.componentEditing.type;
+                    //if image/text component
+                    if(type == 'image-text') {
+                        $scope.componentEditing.imgurl = asset.url;
+                    } else if(type == 'feature-list') {
+                        var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
+                        $scope.componentEditing.features[targetIndex].imgurl = asset.url;
+                    } else if(type == 'simple-form') {
+                        $scope.componentEditing.imgurl = asset.url;
+                    } else {
+                        console.log('unknown component or image location');
+                    }
+                    $scope.bindEvents();
+                } else {
+                    $scope.componentEditing.bg.img.url=asset.url;
                 }
                 $scope.updateIframeComponents();
             };
@@ -775,27 +898,26 @@ define([
                 var parent_div = $('div.form-group.subdomain');
                     UserService.checkDuplicateSubdomain($scope.account.subdomain,$scope.account._id, function(result){
                     if(result === "true")
-                    {  
+                    {
                         parent_div.addClass('has-error');
                         parent_div.find('span.error').remove();
                         parent_div.append("<span class='error help-block'>Domain already exists</span>");
                     }
                     else
-                    {                        
+                    {
                         UserService.putAccount($scope.account, function (account) {
                         parent_div.removeClass('has-error');
                         parent_div.find('span.error').remove(); 
                         });
                     }
-                });               
+                });
             }
-
 
             var offFn = $rootScope.$on('$locationChangeStart', function () {
                 if(!$scope.backup['website']){
 
                 }
-                else if ( confirm("are you want to save?") ) {
+                else if ( confirm("Do you want to Save your changes?") ) {
                     $scope.savePage();
 
                 } else {
@@ -803,9 +925,43 @@ define([
                 }
 
                 offFn();
-
-
             });
+
+            $scope.updateLinkList = function(linkLists)
+            {
+                var linkLabelsArr = [];
+                var editedLinksLists = document.getElementById("reorderNavBarModal").querySelectorAll('.head-menu-links');
+                for (var i = 0; i < editedLinksLists.length; i++) {
+                    var linkLabel = editedLinksLists[i].attributes['data-label'].value;
+                    if(linkLabel)
+                        linkLabelsArr.push(linkLabel);
+                }              
+                if(linkLabelsArr.length)
+                {
+                   $scope.website.linkLists.forEach(function(value, index) {
+                     if(value.handle === "head-menu")
+                     {
+                        var newLinkListOrder = [];
+                        for (var i = 0; i < editedLinksLists.length; i++) {
+                            var matchedLinkList = _.findWhere(value.links, {
+                                label: linkLabelsArr[i]
+                            });
+                            newLinkListOrder.push(matchedLinkList);
+                        };
+                        if(newLinkListOrder.length)
+                        {
+                            $scope.website.linkLists[index].links = newLinkListOrder;
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                            console.log('updated website navigation link list', data);
+                            toaster.pop('success', "Navigation updated successfully.");
+                        });
+                        }  
+                        
+                     }
+                 });  
+                }
+                         
+            }
         }
     ]);
 });

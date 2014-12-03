@@ -51,13 +51,13 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            subtitle : "<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </h4>",
+            subtitle : "<h4>A Great place for a subtitle. </h4>",
 
             /**
              *
              *
              */
-            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
+            text : "<p>This is where you describe something about your business or product that get the user to scroll or press a button.</p>",
 
             /**
              *

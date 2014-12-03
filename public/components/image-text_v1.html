@@ -7,8 +7,8 @@
 -->
 <div ng-class="component.type+'-v'+component.version">
     <div ng-show="component.title" class="image-text-title col-xs-12 mb30">
-        <span class="editable" data-class="title" data-ng-bind-html="component.title">
-        </span>
+        <div class="editable" data-class="title" data-ng-bind-html="component.title">
+        </div>
     </div>
 
     <div class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
@@ -24,10 +24,10 @@
         <div class="image-text-text">
             <div id="para" class="editable" data-class="text">
                 <convert-html contents="{{component.text}}"></convert-html>
-                <button ng-show="component.btn.url" class="btn btn-primary btn-lg" href="{{component.btn.url}}">
+                <a ng-show="component.btn.url && component.btn.visibility != false" class="btn btn-success btn-lg" href="{{component.btn.url}}">
                     <i class="{{component.btn.icon}}"></i>
                     {{component.btn.text}}
-                </button>
+                </a>
             </div>
         </div>
 

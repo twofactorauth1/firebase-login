@@ -23,7 +23,7 @@ define(['app'], function (app) {
 				fn(data);
 			})
 			.error(function (err) {
-                console.log('END:Website Service with ERROR');
+                console.log('END:Website Service with ERROR', err);
                 fn(err, null);
             });
 		};
@@ -176,6 +176,7 @@ define(['app'], function (app) {
 			})
 			.error(function (err) {
                 console.log('END:Delete Page with ERROR', err);
+                fn(err);
             });
 		};
 
@@ -201,6 +202,30 @@ define(['app'], function (app) {
 			.success(function (data, status, headers, config) {
 				fn(data);
 			})
+		};
+
+		this.setWebsiteTheme = function (themeId, websiteId, fn) {
+			var apiUrl = baseUrl + ['cms', 'theme', themeId, 'website', websiteId].join('/');
+			$http.post(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+		this.updateLinkList = function(data, websiteId, handle, fn) {
+			console.log('updateLinkList >>>');
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'linklists', handle].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: data
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR', err);
+                fn(err, null);
+            });
 		};
 
 	});

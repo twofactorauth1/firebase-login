@@ -1,11 +1,11 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img'], function(angularAMD) {
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment'], function(angularAMD) {
   var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
   //routes
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
-    //$urlRouterProvider.otherwise("/website");
+      $urlRouterProvider.otherwise("/website");
 
       $stateProvider
         .state('dashboard', angularAMD.route({
@@ -127,7 +127,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
-          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit'];
+          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,

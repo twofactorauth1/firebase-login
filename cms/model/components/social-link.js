@@ -6,9 +6,10 @@
  */
 
 /**
- * Logo list component
+ * The Social Component
  *
- * Stores data that represents a list of logos used for marketing purposes.
+ * Stores data that represents information required
+ * to dispaly Social information
  */
 require('../../../models/base.model.js');
 
@@ -22,33 +23,50 @@ var component = $$.m.ModelBase.extend({
              */
             _id: null,
 
+
             /**
              * Some themes may use this anchor to create
              * navigation directly to thise component
              */
             anchor: null,
 
+
             /**
              * The type of component this is
              */
-            type: "signup-form",
+            type: "social-link",
+
 
             /**
-             * The label for the component
-             * (optional)
+             * The version of the component
+             *
              */
-            label:"",
+            version: 1,
 
             /**
-             * A description that appears at the top of the component
-             * (optional)
+             *
+             *
              */
-            description:"",
+            txtcolor: null,
 
-            value:"",
 
-            posts: "",
-            title:""
+            networks: [],
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false
+                },
+                color : ""
+            }
+
         }
     },
 
@@ -67,6 +85,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.SignupForm = component;
+$$.m.cms.modules.SocialLink = component;
 
 module.exports = component;

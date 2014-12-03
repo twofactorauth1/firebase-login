@@ -43,7 +43,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleAccount = function () {
                     return {
-                        'height': (newValue.h)-108 + 'px',
+                        'height': (newValue.h)-110 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
