@@ -819,7 +819,7 @@ define([
                     title: 'Meet Team',
                     type: 'meet-team',
                     icon: 'fa fa-users',
-                    enabled: false
+                    enabled: true
                 },
                 {
                     title: 'Navigation',
