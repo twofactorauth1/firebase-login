@@ -25,35 +25,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.courses = data;
         });
 
-                // setNavigation = function (data) {
-                //     var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
-                //     tempPageComponents = data['index'].components;
-                //     indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
+        // setNavigation = function (data) {
+        //     var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
+        //     tempPageComponents = data['index'].components;
+        //     indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
 
-                //     // indexNavComponent._id = null;
-                //     // indexNavComponent.anchor = null;
-                //     // indexNavComponent.visibility = null;
-                //     if (indexNavComponent !== null) {
-                //         ['_id', 'anchor', 'visibility'].forEach(function (v){
-                //             indexNavComponent[v] = null;
-                //         })
+        //     // indexNavComponent._id = null;
+        //     // indexNavComponent.anchor = null;
+        //     // indexNavComponent.visibility = null;
+        //     if (indexNavComponent !== null) {
+        //         ['_id', 'anchor', 'visibility'].forEach(function (v){
+        //             indexNavComponent[v] = null;
+        //         })
 
-                //         for ( page in data ) {
-                //             if ( data.hasOwnProperty(page) && page != 'index' ) {
-                //                 tempPageComponents = data[page].components;
-                //                 pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
-                //             }
-                //             if (pageNavComponent !== null){
-                //                 for (setting in indexNavComponent) {
-                //                     if (indexNavComponent[setting] !== null) {
-                //                         pageNavComponent[setting] = indexNavComponent[setting];
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }
+        //         for ( page in data ) {
+        //             if ( data.hasOwnProperty(page) && page != 'index' ) {
+        //                 tempPageComponents = data[page].components;
+        //                 pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
+        //             }
+        //             if (pageNavComponent !== null){
+        //                 for (setting in indexNavComponent) {
+        //                     if (indexNavComponent[setting] !== null) {
+        //                         pageNavComponent[setting] = indexNavComponent[setting];
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
 
-                // };
+        // };
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -503,7 +503,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             $scope.subscriptionPlans = [];
                             if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                                 $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
-                                    promises.push(PaymentService.getPlanPromise(value));
+                                    if (value.active)
+                                        promises.push(PaymentService.getPlanPromise(value.id));
                                 });
                                 $q.all(promises)
                                     .then(function(data) {
@@ -907,10 +908,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         // };
 
-        $scope.addImage = function (component) {
+        $scope.addImage = function(component) {
             parent.$('body').trigger('add_image');
         };
-        $scope.deleteImage = function (component, index) {
+        $scope.deleteImage = function(component, index) {
             parent.$('body').trigger('delete_image', [index]);
         };
     }
