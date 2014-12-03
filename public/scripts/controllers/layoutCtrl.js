@@ -401,6 +401,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
         };
 
+        window.getCurrentPage = function()
+        {
+            return $scope.currentpage;
+        }
+
+        window.saveBlobData = function(iframe)
+        {
+            if(iframe)
+            {
+                var posts = iframe.body.querySelectorAll('.blog-entry');
+                for (var i = 0; i < posts.length; i++) {
+                   var blog_id = posts[i].attributes['data-id'].value;
+                   var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
+                   var post_title_div = posts[i].querySelectorAll('.post_title');
+                   var post_excerpt = post_excerpt_div[0].outerText;
+                   var post_title = post_title_div[0].outerText;
+                   var matching_post = _.find(that.blogposts, function(item) {
+                        return item._id === blog_id
+                    })
+                   if(matching_post)
+                   {
+                    matching_post.post_excerpt = post_excerpt;
+                    matching_post.post_title = post_title;
+                    PostService.updatePost($scope.currentpage._id, blog_id, matching_post, function(data) {});
+                   }
+                }
+            }
+        }
+
         $scope.resfeshIframe = function() {
             //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
         };
