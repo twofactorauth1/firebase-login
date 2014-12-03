@@ -15,12 +15,13 @@ var mandrillHelper =  {
 
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, fn) {
         var self = this;
-
+        //console.log('Sending mail from ' + fromName + ' with address ' + fromAddress);
+        //console.dir(htmlContent);
         var message = {
             'html': htmlContent,
             'subject': subject,
-            'fromEmail':fromAddress,
-            'fromName': fromName,
+            'from_email':fromAddress,
+            'from_name': fromName,
             'to': [
                 {
                     'email': toAddress,
@@ -28,8 +29,9 @@ var mandrillHelper =  {
                     'type': 'to'
                 }
             ],
-
-
+            "headers": {
+                'encoding': 'UTF8'
+            },
             "important": false,
             "track_opens": true,
             "track_clicks": true,
@@ -69,6 +71,7 @@ var mandrillHelper =  {
         var async = false;
         var ip_pool = "Main Pool";
         var send_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+        //console.dir(message);
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
             console.log(result);
             /*

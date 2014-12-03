@@ -391,12 +391,13 @@ _.extend(api.prototype, baseApi.prototype, {
                             /*
                              * Send welcome email.  This is done asynchronously.
                              */
-                            fs.readFile(notificationConfig.WELCOME_HTML, function(err, htmlContent){
+                            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
                                 if(err) {
-                                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                                    self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
                                 } else {
-                                    var contactEmail = savedContact.getEmails()[0];
+                                    var contactEmail = savedContact.getEmails()[0].email;
                                     var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                    self.log.debug('sending email to: ',contactEmail);
                                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                                         notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                         htmlContent, value.id(), savedContact.id(), function(err, result){});
