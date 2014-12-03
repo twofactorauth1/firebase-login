@@ -53,9 +53,21 @@ define([
                 isopen: false
             };
 
-            $scope.addSocialLink = function(social, component ) {
-                 console.log('social', social);
-                 console.log('component', component);
+
+            that.getCurrentPage = function()
+            {
+                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.getCurrentPage)
+                {
+                     var current_page = iFrame.contentWindow.getCurrentPage();
+                     if(current_page)
+                     {
+                        $scope.currentPage = current_page;
+                     }
+                }
+            };
+
+            window.getUpdatediFrameRoute = function(data) {
+                // console.log('getUpdatediFrameRoute', data);
             };
 
             $scope.spectrum = {
@@ -101,11 +113,6 @@ define([
 
             window.activateSettings = function() {
                 // console.log('Activate Settings!');
-            };
-
-            window.checkIfExists = function(component)
-            {
-                alert(1)
             };
 
             document.getElementById("iframe-website").onload = function() {
@@ -324,7 +331,7 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-
+                that.getCurrentPage();
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -408,11 +415,10 @@ define([
                 WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
+                    //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
                     //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 });
                 //$scope.deactivateAloha();
@@ -499,6 +505,8 @@ define([
             };
 
             $scope.addComponent = function() {
+                //that.getCurrentPage();
+                //$scope.components = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var cmpVersion = null;
                 if($scope.selectedTheme)
@@ -518,6 +526,7 @@ define([
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
+                       // $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
 
