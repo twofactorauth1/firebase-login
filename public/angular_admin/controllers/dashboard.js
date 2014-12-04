@@ -60,9 +60,11 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.pageviews = data.currentTotalPageviews;
             $scope.pageviewsData = data.pageviewsData;
             $scope.pageviewsPercent = data.pageviewsPercent;
+            $scope.visitorsPercent = data.visitorsPercent;
             $scope.pageviewsPreviousData = data.pageviewsPreviousData;
             $scope.sessions = data.totalSessions;
             $scope.sessionsData = data.sessionData;
+            $scope.sessionsPercent = data.sessionsPercent;
             $scope.bounces = data.totalBounces;
             $scope.bouncesData = data.bouncesData;
             $scope.bouncesPercent = data.bouncesPercent;
