@@ -467,13 +467,26 @@
                         <ul class="smart-timeline-list">
                             <li ng-repeat="activity in activities | filter : activityTypeFilter">
                                 <div class="smart-timeline-icon">
-                                    <img src="../comps/images/theme-1/woman-1.jpg" width="32" height="32">
+                                    <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32">
                                 </div>
                                 <div class="smart-timeline-time">
                                     <small>{{activity.start | date:'d MMM, yyyy'}}</small>
                                 </div>
                                 <div class="smart-timeline-content">
                                     <div ng-switch on="activity.activityType">
+                                        <div ng-switch-when="CONTACT_CREATED">
+                                            <p>
+                                                <span class="label label-info">CONTACT CREATED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.
+                                            </p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                        </div>
+                                            <div ng-switch-when="ACCOUNT_CREATED">
+                                                <p>
+                                                    <span class="label label-info">CONTACT CREATED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                            </div>
                                         <div ng-switch-when="EMAIL">
                                             <p>
                                                 <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
