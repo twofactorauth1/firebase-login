@@ -149,6 +149,9 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             };
 
             $scope.saveProductFn = function() {
+                $scope.product.variantSettings.variants.forEach(function(value, index) {
+                    $scope.product.variantSettings.variants[index].save = true;
+                });
                 console.log('$scope.product >>> ', $scope.product);
                 ProductService.saveProduct($scope.product, function(product) {
                     console.log('Save Product >>> ', product);
@@ -241,6 +244,11 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             tmpList.push(tag.text);
                         });
                         args.push(tmpList);
+                    });
+                    $scope.product.variantSettings.variants.forEach(function(value, index) {
+                        if (value.save === undefined) {
+                            $scope.product.variantSettings.variants.splice(index, 1);
+                        }
                     });
                     Combinatorics.cartesianProduct.apply(this, args).toArray().forEach(function(value, index) {
                         $scope.product.variantSettings.variants.push({
