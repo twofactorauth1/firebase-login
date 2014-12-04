@@ -251,7 +251,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Option Values</label>
-                        <tags-input ng-model="option.values" replace-spaces-with-dashes="false" placeholder="Add comma seperated values" add-on-comma='true'></tags-input>
+                        <tags-input ng-model="option.values" replace-spaces-with-dashes="false" placeholder="Add comma seperated values"
+                        add-on-comma='true'></tags-input>
                     </div>
                 </div>
             </div>
@@ -275,18 +276,24 @@
                         <input type="text" placeholder="Price" ng-model="variant.price" />
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="form-group">
                         <label>SKU</label>
                         <input type="text" placeholder="SKU" ng-model="variant.sku" />
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="form-group">
                         <label>Barcode</label>
                         <input type="text" placeholder="Barcode" ng-model="variant.barcode" />
                     </div>
                 </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <input bs-switch ng-model="variant.create" type="checkbox" switch-label="Create">
+                    </div>
+                </div>
+
             </div>
             <div class="row">
                 <button ng-click="addVariantFn()">Add Variant</button>
