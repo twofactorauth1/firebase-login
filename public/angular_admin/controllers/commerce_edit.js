@@ -28,6 +28,15 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 if (angular.isDefined($scope.product.icon) && !$scope.product.is_image)
                     $('#convert').iconpicker('setIcon', $scope.product.icon);
 
+                if (product.variantSettings === undefined)
+                    $scope.product.variantSettings = {
+                        options: [{
+                            type: null,
+                            values: []
+                        }],
+                        variants: []
+                    };
+
                 if ('stripePlans' in $scope.product.product_attributes) {
                     $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
                         promises.push(PaymentService.getPlanPromise(value.id));
@@ -187,6 +196,13 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     }
                 });
                 $scope.saveProductFn();
+            };
+
+            $scope.addOptionFn = function() {
+                $scope.product.variantSettings.options.push({
+                    type: null,
+                    values: []
+                });
             };
 
             $scope.insertMedia = function(asset) {

@@ -233,35 +233,30 @@
         </div>
         <div class="row" ng-show="product.hasVariants">
             <h4>Variants</h4>
-            <div class="col-sm-6">
-<tags-input ng-model="tags"></tags-input>
-    <p>Model: {{tags}}</p>
-                <div class="form-group">
-                    <label>Allow Product View</label>
-                    <select class="form-control input-lg" ng-model="product.externalLinkAllowProductView">
-                        <option value=true>Yes</option>
-                        <option value=false>No</option>
-                    </select>
+            <div class="row" ng-repeat="option in product.variantSettings.options">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Option Type</label>
+                        <input bs-switch ng-model="customOption" type="checkbox" switch-label="Custom">
+                        <select class="form-control input-lg" ng-model="option.type" ng-hide='customOption'>
+                            <option value='size'>Size</option>
+                            <option value='color'>Color</option>
+                            <option value='material'>Material</option>
+                            <option value='style'>Style</option>
+                        </select>
+                        <input type="text" placeholder="Custom Option" ng-model="option.type" ng-show='customOption'
+                        />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Link Text</label>
-                    <input class="form-control input-lg mb20" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Option Values</label>
+                        <tags-input ng-model="option.values" replace-spaces-with-dashes="false" placeholder="Add a value and hit return"></tags-input>
+                    </div>
                 </div>
-
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label>Link Url</label>
-                    <input class="form-control input-lg mb20" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
-                </div>
-                <div class="form-group">
-                    <label>openIn</label>
-                    <select class="form-control input-lg" ng-model="product.externalLinkOpenIn">
-                        <option value='new'>New Window</option>
-                        <option value='same'>Same Window</option>
-                    </select>
-                </div>
-
+            <div class="row">
+                <button ng-click="addOptionFn()">Add Option</button>
             </div>
         </div>
         <hr>
