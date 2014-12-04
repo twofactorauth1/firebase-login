@@ -11,6 +11,7 @@
 			body{margin:0; padding:0;}
 			img{border:0; height:auto; line-height:100%; outline:none; text-decoration:none;}
 			table td{border-collapse:collapse;}
+			.center{text-align: center!important;margin:0 auto;}
 			#backgroundTable{height:100% !important; margin:0; padding:0; width:100% !important;}
 			body, #backgroundTable{
 				/*@editable*/ background-color:#FAFAFA;
@@ -74,6 +75,18 @@
 				/*@editable*/ text-align:left;
 			}
 
+			.btn {
+				color: white!important;
+				background: #336699;
+				padding: 10px;
+				border-radius: 5px;
+				text-decoration: none!important;
+				margin: 15px auto;
+				max-width: 150px;
+				display: block;
+				text-align: center;
+			}
+
 			#templateHeader{
 				/*@editable*/ background-color:#FFFFFF;
 				/*@editable*/ border-bottom:0;
@@ -85,9 +98,11 @@
 				/*@editable*/ font-size:34px;
 				/*@editable*/ font-weight:bold;
 				/*@editable*/ line-height:100%;
-				/*@editable*/ padding:0;
+				/*@editable*/ padding:15px;
 				/*@editable*/ text-align:center;
 				/*@editable*/ vertical-align:middle;
+				/*@editable*/ background-color:#cfecf5;
+				/*@editable*/ border:1px solid #bbe3f0;
 			}
 
 			.headerContent a:link, .headerContent a:visited, /* Yahoo! Mail Override */ .headerContent a .yshortcuts /* Yahoo! Mail Override */{
@@ -178,6 +193,11 @@
 			#monkeyRewards img{
 				max-width:190px;
 			}
+
+			.date {
+				color: #4bafca;
+				text-shadow: 1px 1px 1px #ffffff;
+			}
 		</style>
 	</head>
     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
@@ -188,17 +208,14 @@
                     	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
                         	<tr>
                             	<td align="center" valign="top">
-                                    <!-- // Begin Template Header \\ -->
                                 	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
                                         <tr>
                                             <td class="headerContent">
-                                            	<!-- // Begin Module: Standard Header Image \\ -->
-                                            	<img src="http://gallery.mailchimp.com/653153ae841fd11de66ad181a/images/placeholder_600.gif" style="max-width:600px;" id="headerImage campaign-icon" mc:label="header_image" mc:edit="header_image" mc:allowdesigner mc:allowtext />
-                                            	<!-- // End Module: Standard Header Image \\ -->
+                                            	<img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" style="max-width:200px;float:left;" id="logo" />
+                                            	<h3 class="h3 date" style="float:right">*|DATE:M jS, Y|*</h3>
                                             </td>
                                         </tr>
                                     </table>
-                                    <!-- // End Template Header \\ -->
                                 </td>
                             </tr>
                         	<tr>
@@ -212,72 +229,48 @@
                                                     <tr>
                                                         <td valign="top" class="bodyContent">
                                                             <div mc:edit="std_content00">
-                                                                <h1 class="h1">Heading 1</h1>
-                                                                <h2 class="h2">Heading 2</h2>
-                                                                <h3 class="h3">Heading 3</h3>
-                                                                <h4 class="h4">Heading 4</h4>
-                                                                <strong>Getting started:</strong> Transactional emails serve a defined and simple purpose. They differ from traditional mass-emails because they're generally sent on a user-by-user basis, instead of large list of users, and are generally used to deliver purchase receipts, account updates, security notifications, and more.
-                                                                <br />
-                                                                <br />
-                                                                Where <a href="http://www.mailchimp.com/" target="_blank">MailChimp</a> can be used to send newsletters to several subscribers in one large blast, <a href="http://www.mandrill.com/" target="_blank">Mandrill</a> is specifically positioned to send transactional emails, and offers relevant tracking and metrics that isn't necessarily available through a traditional email platform.
+                                                                <h2 class="h2 center">Thanks for checking us out!</h2>
+																</br>
+																We're excited to show you how Indigenous will take your business, whether it's still an idea or you're already making a name for yourself, to the next level.
+																</br>
+																</br>
+																Our current clients have helped us develop a business software platform that is going to wow you and your customers with its simplicity and power, and even more importantly, give you a lot more time to do what you love, whatever it is and wherever you are.
+																</br>
+																</br>
+																Imagine catching that golden hour surf sesh instead of going through your client list and trying to determine who's fallen through the cracks, taking your kids to the ball game instead of working on the fourteenth draft of that newsletter you're not sure anyone reads that was supposed to go out a week ago, or being able to say yes to that impromptu trip to Bali because your workshops and lecture series are already scheduled and filled for the year.
+																</br>
+																</br>
+																Sounds good, right? Please stay tuned. In the meantime, check out our blog to learn more.
+																</br>
+																<a href="http://www.indigenous.io/page/blog" target="_blank" class="btn">Visit Our Blog</a>
+																</br>
+																We’re looking forward to helping you tell your story.
+																</br>
+																</br>
+																<strong>Your team at Indigenous</strong>
+
                                                             </div>
 														</td>
                                                     </tr>
-                                                    <tr>
+                                                    <!-- <tr>
                                                     	<td align="center" valign="top" style="padding-top:0;">
                                                         	<table border="0" cellpadding="15" cellspacing="0" class="templateButton">
                                                             	<tr>
                                                                 	<td valign="middle" class="templateButtonContent">
                                                                     	<div mc:edit="std_content01">
-                                                                        	<a href="http://www.mandrill.com/" target="_blank">See What Mandrill Can Do</a>
+                                                                        	<a href="http://www.indigenous.io/page/blog" target="_blank">Visit Our Blog</a>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
                                                             </table>
                                                         </td>
-                                                    </tr>
+                                                    </tr> -->
                                                 </table>
                                                 <!-- // End Module: Standard Content \\ -->
                                             </td>
                                         </tr>
                                     </table>
                                     <!-- // End Template Body \\ -->
-                                </td>
-                            </tr>
-                        	<tr>
-                            	<td align="center" valign="top">
-                                    <!-- // Begin Template Footer \\ -->
-                                	<table border="0" cellpadding="10" cellspacing="0" width="600" id="templateFooter">
-                                    	<tr>
-                                        	<td valign="top" class="footerContent">
-                                                <!-- // Begin Module: Transactional Footer \\ -->
-                                                <table border="0" cellpadding="10" cellspacing="0" width="100%">
-                                                    <tr>
-                                                        <td valign="top">
-                                                            <div mc:edit="std_footer">
-																<em>Copyright &copy; *|CURRENT_YEAR|* *|LIST:COMPANY|*, All rights reserved.</em>
-																<br />
-																*|IFNOT:ARCHIVE_PAGE|* *|LIST:DESCRIPTION|*
-																<br />
-																<strong>Our mailing address is:</strong>
-																<br />
-																*|HTML:LIST_ADDRESS_HTML|**|END:IF|* 
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td valign="middle" id="utility">
-                                                            <div mc:edit="std_utility">
-                                                                &nbsp;<a href="*|ARCHIVE|*" target="_blank">view this in your browser</a> | <a href="*|UNSUB|*">unsubscribe from this list</a> | <a href="*|UPDATE_PROFILE|*">update subscription preferences</a>&nbsp;
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <!-- // End Module: Transactional Footer \\ -->
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!-- // End Template Footer \\ -->
                                 </td>
                             </tr>
                         </table>
