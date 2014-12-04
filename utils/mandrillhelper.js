@@ -17,11 +17,12 @@ var mandrillHelper =  {
         var self = this;
         //console.log('Sending mail from ' + fromName + ' with address ' + fromAddress);
         //console.dir(htmlContent);
+
         var message = {
             'html': htmlContent,
             'subject': subject,
             'from_email':fromAddress,
-            'from_name': fromName,
+            //'from_name': fromName,
             'to': [
                 {
                     'email': toAddress,
@@ -46,6 +47,12 @@ var mandrillHelper =  {
             "signing_domain": null,
             "return_path_domain": null,
             "merge": false,
+            'global_merge_vars': [
+                {
+                   'name': 'send_date',
+                   'content': new Date()
+                }
+            ],
             //"global_merge_vars": mergeVarsArray,
             //"merge_vars": null,
 
@@ -68,10 +75,13 @@ var mandrillHelper =  {
             "attachments": null,
             "images": null
         };
+        if(fromName && fromName.length > 0) {
+            message.from_name = fromName;
+        }
         var async = false;
         var ip_pool = "Main Pool";
         var send_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
-        //console.dir(message);
+        //gconsole.dir(message);
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
             console.log(result);
             /*
