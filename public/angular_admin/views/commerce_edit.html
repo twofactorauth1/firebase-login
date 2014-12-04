@@ -258,6 +258,40 @@
             <div class="row">
                 <button ng-click="addOptionFn()">Add Option</button>
             </div>
+            <div class="row">
+                <input bs-switch ng-model="autoGenerateVariant" type="checkbox" switch-label="Auto">
+                <p>Can auto generate <strong>{{autoGenerateVariantCount}}</strong> variants.</p>
+            </div>
+            <div class="row" ng-repeat="variant in product.variantSettings.variants">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Name" ng-model="variant.name" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" placeholder="Price" ng-model="variant.price" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>SKU</label>
+                        <input type="text" placeholder="SKU" ng-model="variant.sku" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Barcode</label>
+                        <input type="text" placeholder="Barcode" ng-model="variant.barcode" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button ng-click="addVariantFn()">Add Variant</button>
+            </div>
+
         </div>
         <hr>
         <div class="row product-sections">
@@ -374,7 +408,7 @@
                                         <div class="form-group">
                                             <label for="trial_period_days">Trial Period Days</label>
 
-                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter trial period days for plan" ><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter trial period days for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="trial_period_days" placeholder="Enter trial period days for plan"
                                                 ng-model='newSubscription.trial_period_days'
@@ -384,7 +418,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="statement_description">Statement Description</label>
-                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="statement_description" placeholder="Enter statement description for plan"
                                                 ng-model='newSubscription.statement_description'

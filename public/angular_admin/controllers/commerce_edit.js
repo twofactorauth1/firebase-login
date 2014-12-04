@@ -34,7 +34,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             type: null,
                             values: []
                         }],
-                        variants: []
+                        variants: [{}]
                     };
 
                 if ('stripePlans' in $scope.product.product_attributes) {
@@ -205,12 +205,39 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 });
             };
 
+            $scope.addVariantFn = function() {
+                $scope.product.variantSettings.variants.push({});
+            };
+
             $scope.insertMedia = function(asset) {
                 $scope.product.icon = asset.url;
             };
 
             UserService.getUser(function(user) {
                 $scope.user = user;
+            });
+
+            $scope.$watch('product.variantSettings.options', function(newValue, oldValue) {
+                if (newValue) {
+                    $scope.autoGenerateVariantCount = 0;
+                    newValue.forEach(function(value, index) {
+                        if ($scope.autoGenerateVariantCount) {
+                            $scope.autoGenerateVariantCount *= value.values.length;
+                        } else {
+                            $scope.autoGenerateVariantCount = value.values.length;
+                        }
+                    });
+                } else {
+                    $scope.autoGenerateVariantCount = 0;
+                }
+            }, true);
+
+            $scope.$watch('autoGenerateVariant', function(newValue, oldValue) {
+                if (newValue) {
+
+                } else {
+
+                }
             });
         }
     ]);
