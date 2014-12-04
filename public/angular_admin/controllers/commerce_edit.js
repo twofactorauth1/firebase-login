@@ -149,6 +149,14 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             };
 
             $scope.saveProductFn = function() {
+                var variants = [];
+                $scope.product.variantSettings.variants.forEach(function(value, index) {
+                    if (value.create == true) {
+                        variants.push(value);
+                    }
+                });
+                $scope.product.variantSettings.variants = variants;
+
                 console.log('$scope.product >>> ', $scope.product);
                 ProductService.saveProduct($scope.product, function(product) {
                     console.log('Save Product >>> ', product);
