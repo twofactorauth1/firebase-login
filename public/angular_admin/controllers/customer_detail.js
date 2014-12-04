@@ -17,7 +17,13 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       $scope.contactLabel = CustomerService.contactLabel(customer);
     });
     CustomerService.getCustomerActivities($scope.customerId, function(activities) {
-      $scope.activities = activities;
+       for (var i = 0; i < activities.length; i++) {
+            activities[i]['customer'] = $scope.customer;
+            activities[i]['activityType'] = activities[i]['activityType'];
+        };
+        $scope.activities = _.sortBy(activities, function(o) {
+            return o.start;
+        }).reverse();
       // $scope.activities.push(
       // {
       //     "contactId": $scope.customerId,
@@ -38,6 +44,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       ngProgress.complete();
       ToasterService.processPending();
     });
+
     CustomerService.getActivityTypes(function(activity_types) {
       $scope.activity_types = activity_types;
     });

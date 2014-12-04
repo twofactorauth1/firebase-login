@@ -1,4 +1,4 @@
-define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker'], function(app) {
+define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker', 'angularMoney', 'combinatorics'], function(app) {
     app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', 'ToasterService', '$state',
         function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService, ToasterService, $state) {
             ngProgress.start();
@@ -27,6 +27,15 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 var promises = [];
                 if (angular.isDefined($scope.product.icon) && !$scope.product.is_image)
                     $('#convert').iconpicker('setIcon', $scope.product.icon);
+
+                if ($scope.product.variantSettings === undefined)
+                    $scope.product.variantSettings = {
+                        options: [{
+                            type: null,
+                            values: []
+                        }],
+                        variants: [{}]
+                    };
 
                 if ('stripePlans' in $scope.product.product_attributes) {
                     $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
@@ -140,6 +149,14 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             };
 
             $scope.saveProductFn = function() {
+                var variants = [];
+                $scope.product.variantSettings.variants.forEach(function(value, index) {
+                    if (value.create == true) {
+                        variants.push(value);
+                    }
+                });
+                $scope.product.variantSettings.variants = variants;
+
                 console.log('$scope.product >>> ', $scope.product);
                 ProductService.saveProduct($scope.product, function(product) {
                     console.log('Save Product >>> ', product);
@@ -189,12 +206,71 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 $scope.saveProductFn();
             };
 
+            $scope.addOptionFn = function() {
+                $scope.product.variantSettings.options.push({
+                    type: null,
+                    values: []
+                });
+            };
+
+            $scope.addVariantFn = function() {
+                $scope.product.variantSettings.variants.push({});
+            };
+
             $scope.insertMedia = function(asset) {
                 $scope.product.icon = asset.url;
             };
 
             UserService.getUser(function(user) {
                 $scope.user = user;
+            });
+
+            $scope.$watch('product.variantSettings.options', function(newValue, oldValue) {
+                if (newValue) {
+                    $scope.autoGenerateVariantCount = 0;
+                    newValue.forEach(function(value, index) {
+                        if ($scope.autoGenerateVariantCount) {
+                            if (value.values.length) {
+                                $scope.autoGenerateVariantCount *= value.values.length;
+                            }
+                        } else {
+                            $scope.autoGenerateVariantCount = value.values.length;
+                        }
+                    });
+                } else {
+                    $scope.autoGenerateVariantCount = 0;
+                }
+            }, true);
+
+            $scope.$watch('autoGenerateVariant', function(newValue, oldValue) {
+                if (newValue) {
+                    var args = [];
+                    $scope.product.variantSettings.options.forEach(function(value, index) {
+                        if (value.values.length) {
+                            var tmpList = [];
+                            value.values.forEach(function(tag, index) {
+                                tmpList.push(tag.text);
+                            });
+                            args.push(tmpList);
+                        }
+                    });
+
+                    Combinatorics.cartesianProduct.apply(this, args).toArray().forEach(function(value, index) {
+                        $scope.product.variantSettings.variants.push({
+                            name: value.join(' / ')
+                        });
+                    });
+                } else {
+                    if ($scope.product !== undefined && $scope.product.variantSettings !== undefined) {
+                        var variants = [];
+                        $scope.product.variantSettings.variants.forEach(function(value, index) {
+                            if (value.create == true) {
+                                variants.push(value);
+                            }
+                        });
+                        $scope.product.variantSettings.variants = variants;
+                    }
+                }
             });
         }
     ]);

@@ -15,12 +15,14 @@ var mandrillHelper =  {
 
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, fn) {
         var self = this;
+        //console.log('Sending mail from ' + fromName + ' with address ' + fromAddress);
+        //console.dir(htmlContent);
 
         var message = {
             'html': htmlContent,
             'subject': subject,
-            'fromEmail':fromAddress,
-            'fromName': fromName,
+            'from_email':fromAddress,
+            //'from_name': fromName,
             'to': [
                 {
                     'email': toAddress,
@@ -28,8 +30,9 @@ var mandrillHelper =  {
                     'type': 'to'
                 }
             ],
-
-
+            "headers": {
+                'encoding': 'UTF8'
+            },
             "important": false,
             "track_opens": true,
             "track_clicks": true,
@@ -44,9 +47,17 @@ var mandrillHelper =  {
             "signing_domain": null,
             "return_path_domain": null,
             "merge": false,
-            //"global_merge_vars": mergeVarsArray,
-            //"merge_vars": null,
-
+            "merge_vars": [
+                {
+                    "rcpt": toAddress,
+                    "vars": [
+                         {
+                            "name": "send_date",
+                            "content": new Date()
+                        }
+                    ]
+                }
+            ],
             "subaccount": null,
             "google_analytics_domains": [
                 "indigenous.io" //TODO: This should be dynamic
@@ -66,9 +77,13 @@ var mandrillHelper =  {
             "attachments": null,
             "images": null
         };
+        if(fromName && fromName.length > 0) {
+            message.from_name = fromName;
+        }
         var async = false;
         var ip_pool = "Main Pool";
         var send_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
+        //gconsole.dir(message);
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
             console.log(result);
             /*

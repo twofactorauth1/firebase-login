@@ -40,7 +40,7 @@
             <!--<span class="hidden-xs">Media</span>-->
 
             <a class="btn btn-success pull-right media-modal"
-                    user='user' data-main='true'>
+                  on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
@@ -224,9 +224,14 @@
 
                                 <div class="bgimg" id="bgimg">
                                     <i class="fa fa-close" ng-click="componentEditing.bg.img.url=null"></i>
-                                    <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url"
-                                    data-toggle="modal" data-target="#media-manager-modal"
-                                    ng-change="saveComponent()" class="img-thumbnail">
+                                    <img
+                                        ng-src="{{componentEditing.bg.img.url}}"
+                                        ng-model="componentEditing.bg.img.url"
+                                        media-modal-show-insert="true"
+                                        data-toggle="modal"
+                                        data-target="#media-manager-modal"
+                                        ng-change="saveComponent()"
+                                        class="img-thumbnail">
                                 </div>
 
                             </div>

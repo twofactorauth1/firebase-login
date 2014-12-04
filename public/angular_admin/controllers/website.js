@@ -53,9 +53,8 @@ define([
                 isopen: false
             };
 
-            $scope.addSocialLink = function(social, component ) {
-                 console.log('social', social);
-                 console.log('component', component);
+            window.getUpdatediFrameRoute = function(data) {
+                // console.log('getUpdatediFrameRoute', data);
             };
 
             $scope.spectrum = {
@@ -89,10 +88,10 @@ define([
             UserService.getUser(function(user) {
                 $scope.user = user;
                 that.user = user;
-                console.log('that.user.user_preferences.lastPageHandle >> ');
-                if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
-                     $scope.updatePage(that.user.user_preferences.lastPageHandle);
-                }
+                // console.log('that.user.user_preferences.lastPageHandle >> ');
+                // if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
+                //      $scope.updatePage(that.user.user_preferences.lastPageHandle);
+                // }
             });
 
             window.getUpdatediFrameRoute = function(data) {
@@ -103,10 +102,13 @@ define([
                 // console.log('Activate Settings!');
             };
 
-            window.checkIfExists = function(component)
+            window.updateAdminPageScope =  function(page)
             {
-                alert(1)
-            };
+                if(page._id !== $scope.currentPage._id)
+                {
+                    $scope.updatePage(page.handle);
+                }
+            }
 
             document.getElementById("iframe-website").onload = function() {
                 ngProgress.complete();
@@ -324,7 +326,6 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
                 var iFrame = document.getElementById("iframe-website");
@@ -343,14 +344,18 @@ define([
 
                     //get all the editable variables and replace the ones in view with variables in DB
                     var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
-
-                    if (componentEditable.length > 1) {
+                    console.log('length ', componentEditable.length);
+                    if (componentEditable.length >= 1) {
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
                             var componentVar = componentEditable[i2].attributes['data-class'].value;
                             var componentVarContents = componentEditable[i2].innerHTML;
+                            console.log('componentVar ', componentVar);
+                            console.log('componentVarContents ', componentVarContents);
 
                             //if innerhtml contains a span with the class ng-binding then remove it
                             var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                            console.log('span ', span);
+
                             if (span) {
                                 var spanParent = span.parentNode;
                                 var spanInner = span.innerHTML;
@@ -364,6 +369,8 @@ define([
                             }
                             //remove "/n"
                             componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                            console.log('componentVarContents ', componentVarContents);
 
                             var setterKey, pa;
                             //if contains an array of variables
@@ -408,11 +415,10 @@ define([
                 WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
+                    //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                     //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById('iframe-website').contentWindow.location.reload(true);
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
                     //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 });
                 //$scope.deactivateAloha();
@@ -430,6 +436,7 @@ define([
             };
 
             $scope.updatePage = function(handle) {
+                console.log('update page');
                 $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
@@ -518,6 +525,7 @@ define([
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
+                       // $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
 

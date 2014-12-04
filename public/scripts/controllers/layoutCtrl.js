@@ -25,35 +25,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.courses = data;
         });
 
-                // setNavigation = function (data) {
-                //     var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
-                //     tempPageComponents = data['index'].components;
-                //     indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
+        // setNavigation = function (data) {
+        //     var tempPageComponents, indexNavComponent, page, pageNavComponent, setting;
+        //     tempPageComponents = data['index'].components;
+        //     indexNavComponent = angular.copy($filter('getByType')(tempPageComponents, 'navigation'));
 
-                //     // indexNavComponent._id = null;
-                //     // indexNavComponent.anchor = null;
-                //     // indexNavComponent.visibility = null;
-                //     if (indexNavComponent !== null) {
-                //         ['_id', 'anchor', 'visibility'].forEach(function (v){
-                //             indexNavComponent[v] = null;
-                //         })
+        //     // indexNavComponent._id = null;
+        //     // indexNavComponent.anchor = null;
+        //     // indexNavComponent.visibility = null;
+        //     if (indexNavComponent !== null) {
+        //         ['_id', 'anchor', 'visibility'].forEach(function (v){
+        //             indexNavComponent[v] = null;
+        //         })
 
-                //         for ( page in data ) {
-                //             if ( data.hasOwnProperty(page) && page != 'index' ) {
-                //                 tempPageComponents = data[page].components;
-                //                 pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
-                //             }
-                //             if (pageNavComponent !== null){
-                //                 for (setting in indexNavComponent) {
-                //                     if (indexNavComponent[setting] !== null) {
-                //                         pageNavComponent[setting] = indexNavComponent[setting];
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }
+        //         for ( page in data ) {
+        //             if ( data.hasOwnProperty(page) && page != 'index' ) {
+        //                 tempPageComponents = data[page].components;
+        //                 pageNavComponent = $filter('getByType')(tempPageComponents, 'navigation');
+        //             }
+        //             if (pageNavComponent !== null){
+        //                 for (setting in indexNavComponent) {
+        //                     if (indexNavComponent[setting] !== null) {
+        //                         pageNavComponent[setting] = indexNavComponent[setting];
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
 
-                // };
+        // };
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -90,6 +90,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
+                var iframe = window.parent.document.getElementById("iframe-website")               
+                iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
                 // PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
                 //     that.blogposts = posts;
                 // });
@@ -401,6 +403,27 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
         };
 
+        window.saveBlobData = function(iframe) {
+            if (iframe) {
+                var posts = iframe.body.querySelectorAll('.blog-entry');
+                for (var i = 0; i < posts.length; i++) {
+                    var blog_id = posts[i].attributes['data-id'].value;
+                    var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
+                    var post_title_div = posts[i].querySelectorAll('.post_title');
+                    var post_excerpt = post_excerpt_div[0].outerText;
+                    var post_title = post_title_div[0].outerText;
+                    var matching_post = _.find(that.blogposts, function(item) {
+                        return item._id === blog_id
+                    })
+                    if (matching_post) {
+                        matching_post.post_excerpt = post_excerpt;
+                        matching_post.post_title = post_title;
+                        PostService.updatePost($scope.currentpage._id, blog_id, matching_post, function(data) {});
+                    }
+                }
+            }
+        }
+
         $scope.resfeshIframe = function() {
             //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
         };
@@ -503,7 +526,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             $scope.subscriptionPlans = [];
                             if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                                 $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
-                                    promises.push(PaymentService.getPlanPromise(value));
+                                    if (value.active)
+                                        promises.push(PaymentService.getPlanPromise(value.id));
                                 });
                                 $q.all(promises)
                                     .then(function(data) {
@@ -907,10 +931,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         // };
 
-        $scope.addImage = function (component) {
+        $scope.addImage = function(component) {
             parent.$('body').trigger('add_image');
         };
-        $scope.deleteImage = function (component, index) {
+        $scope.deleteImage = function(component, index) {
             parent.$('body').trigger('delete_image', [index]);
         };
     }
