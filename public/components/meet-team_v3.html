@@ -5,37 +5,57 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<h3 class="title">
-    <div class="editable" data-class="title">
-        {{component.title}}
+<style>
+    .position {
+        color:{{component.txtcolor}};
+    }
+</style>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="title">
+        <div class="editable" data-class="title">
+            <span ng-bind-html="component.title" />
+        </div>
     </div>
-</h3>
-<div class="section-title-border"></div>
 
-<div class="row">
-    <div class="col-sm-3 col-xs-12 text-center team-member-container wow fadeInDown animated" ng-repeat="teamMember in component.teamMembers">
-        <div class="team-member">
-            <div class="team-member-img" style="background: url('{{teamMember.profilepic}}') center center;">
-            </div>
-            <div class="team-member-meta">
-                <h4>Mike Trevino</h4>
-                <span class="team-member-profession">
-                    <div class="editable" data-class="position">
-                        {{teamMember.position}}
+    <div class="subtitle">
+        <div class="editable" data-class="subtitle">
+            <span ng-bind-html="component.subtitle" />
+        </div>
+    </div>
+
+    <div class="mb30"></div>
+
+    <div class="row">
+        <div class="col-sm-3 col-xs-12 text-center team-member-container wow fadeInDown animated" ng-repeat="teamMember in component.teamMembers">
+            <div class="team-member">
+                <div class="profile-img" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: cover;width: 220px;height: 220px;"></div>
+                <div class="team-member-meta">
+                    <div class="name">
+                    <div class="editable" data-class="teamMember.item.name">
+                        <span ng-bind-html="teamMember.name"/>
                     </div>
-                </span>
-                <div class="editable" data-class="bio">
-                    <p>{{teamMember.bio}}</p>
                 </div>
-                <ul class="social">
-                    <li ng-repeat="(val, key) in teamMember.social">
-                        <a href="{{key}}" target="_blank">
-                            <span class="fa fa-{{val}}"></span>
-                        </a>
-                    </li>
-                </ul>
+
+                <div class="position">
+                    <div class="editable" data-class="teamMember.item.position">
+                        <span ng-bind-html="teamMember.position"/>
+                    </div>
+                </div>
+
+                <div class="bio">
+                    <div class="editable" data-class="teamMember.item.bio">
+                        <span ng-bind-html="teamMember.bio"/>
+                    </div>
+                </div>
+                    <ul class="social">
+                        <li ng-repeat="(val, key) in teamMember.social">
+                            <a href="{{key}}" target="_blank">
+                                <span class="fa fa-{{val}}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
