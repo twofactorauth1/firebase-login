@@ -106,7 +106,8 @@
     "angular-input-date": "1.0.4",
     "ngInfiniteScroll": "1.0.0",
     "skeuocard": "https://github.com/jessepollak/card.git",
-    "ua-parser-js": "0.7.3"
+    "ua-parser-js": "0.7.3",
+    "js-combinatorics": "https://github.com/dankogai/js-combinatorics.git#0.3.0"
   },
   "resolutions": {
     "angular": "1.2.27",

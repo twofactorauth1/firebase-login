@@ -7,7 +7,7 @@
                     <!--ng-if="!component.bg.img.url"-->
                     <!--style='background: {{component.bg.color}};color: {{component.txtcolor||primaryTextColor}};'>-->
             <div
-                    ng-if="!component.bg.img.url"
+                    ng-if="!component.bg.img.url && component.type != 'email'"
                     ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}">
 
             <div class="component-inner">
@@ -24,8 +24,12 @@
 
             </div>
 
+            <div ng-if="component.type == 'email'">
+                 <div ng-include="'/templates/email/welcome-aboard.html'"></div>
+            </div>
 
-            <div    ng-if="component.bg.img.url"
+
+            <div    ng-if="component.bg.img.url && component.type != 'email'"
                     ng-class="{parallax:component.bg.img.parallax}"
                     parallax-background
                     parallax-ratio="0.4"

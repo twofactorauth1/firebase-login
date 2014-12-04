@@ -58,6 +58,8 @@ require.config({
         'highcharts-funnel': 'libs/highcharts/modules/funnel',
         'highmaps-us': 'libs_misc/highmaps/us-all',
         'highmaps-data': 'libs/highmaps/modules/map',
+        'ngTagsInput': 'libs/ng-tags-input/ng-tags-input.min',
+        'combinatorics': 'libs/js-combinatorics/combinatorics',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -196,7 +198,8 @@ require.config({
         "bootstrap-confirmation" : {deps: ['bootstrap']},
         'jdfontselect': {deps: ['angular','webfontloader']},
         'ngInfiniteScroll': {deps: ['angular']},
-        'timeAgoFilter': {deps: ['moment']}
+        'timeAgoFilter': {deps: ['moment']},
+        'ngTagsInput': ['angular']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

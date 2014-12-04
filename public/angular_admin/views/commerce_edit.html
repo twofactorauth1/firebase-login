@@ -228,6 +228,72 @@
             </div>
         </div>
         <hr>
+        <div class="row">
+            <input bs-switch ng-model="product.hasVariants" type="checkbox" switch-label="Variant">
+        </div>
+        <div class="row" ng-show="product.hasVariants">
+            <h4>Variants</h4>
+            <div class="row" ng-repeat="option in product.variantSettings.options">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Option Type</label>
+                        <input bs-switch ng-model="customOption" type="checkbox" switch-label="Custom">
+                        <select class="form-control input-lg" ng-model="option.type" ng-hide='customOption'>
+                            <option value='size'>Size</option>
+                            <option value='color'>Color</option>
+                            <option value='material'>Material</option>
+                            <option value='style'>Style</option>
+                        </select>
+                        <input type="text" placeholder="Custom Option" ng-model="option.type" ng-show='customOption'
+                        />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Option Values</label>
+                        <tags-input ng-model="option.values" replace-spaces-with-dashes="false" placeholder="Add comma seperated values" add-on-comma='true'></tags-input>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button ng-click="addOptionFn()">Add Option</button>
+            </div>
+            <div class="row">
+                <input bs-switch ng-model="autoGenerateVariant" type="checkbox" switch-label="Auto">
+                <p>Can auto generate <strong>{{autoGenerateVariantCount}}</strong> variants.</p>
+            </div>
+            <div class="row" ng-repeat="variant in product.variantSettings.variants">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Name" ng-model="variant.name" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" placeholder="Price" ng-model="variant.price" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>SKU</label>
+                        <input type="text" placeholder="SKU" ng-model="variant.sku" />
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label>Barcode</label>
+                        <input type="text" placeholder="Barcode" ng-model="variant.barcode" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button ng-click="addVariantFn()">Add Variant</button>
+            </div>
+
+        </div>
+        <hr>
         <div class="row product-sections">
             <ul>
                 <li id="subscription-section" class="panel panel-message" ng-show="product.type == 'subscription'">
@@ -294,17 +360,18 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="amount">Amount</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter amount for the plan"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter the amount for the plan."><i class="fa fa-info-circle" /></span>
                                             <div class="input-group">
-                                                <span class="input-group-addon">$</span>   
+                                                <span class="input-group-addon">$</span> 
                                                 <input type="text" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan"
-                                                ng-model='newSubscription.amount' />
-                                                
+                                                ng-model='newSubscription.amount'
+                                                />
+
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="interval">Interval</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Select time interval"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Select time interval"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <select id="interval" ng-model="newSubscription.interval" class="form-control input-lg">
                                                     <option value="day">Day</option>
@@ -312,17 +379,17 @@
                                                     <option value="month">Month</option>
                                                     <option value="year">Year</option>
                                                 </select>
-                                             
+
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="interval_count">Interval Count</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type"
                                                 ng-model='newSubscription.interval_count'
                                                 />
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -331,49 +398,51 @@
                                     <div class="p20">
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter name for plan"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter name for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="name" placeholder="Enter name for plan"
-                                                ng-model='newSubscription.name' />           
+                                                ng-model='newSubscription.name'
+                                                />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="trial_period_days">Trial Period Days</label>
-                                             <span data-toggle="tooltip" data-placement="left" title="Enter trial period days for plan" ><i class="fa fa-info-circle" /></span>
+
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter trial period days for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="trial_period_days" placeholder="Enter trial period days for plan"
                                                 ng-model='newSubscription.trial_period_days'
                                                 />
-                                                
+
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="statement_description">Statement Description</label>
-                                             <span data-toggle="tooltip" data-placement="left" title="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="statement_description" placeholder="Enter statement description for plan"
                                                 ng-model='newSubscription.statement_description'
                                                 maxlength="15" />
-                                                
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                   <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()"
+                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()"
                                     ng-hide="planEdit">
-                                        <span class="fa fa-plus"></span>Add</button> 
+                                        <span class="fa fa-plus"></span>Add</button>
                                 </div>
-                                <div class="col-sm-12">                                    
+                                <div class="col-sm-12">
                                     <div class="col-sm-6">
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)"
-                                    ng-show="planEdit">
-                                        <span class="fa fa-plus"></span>Update</button>
+                                        <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)"
+                                        ng-show="planEdit">
+                                            <span class="fa fa-plus"></span>Update</button>
                                     </div>
                                     <div class="col-sm-6">
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit">
-                                        <span class="fa fa-plus"></span>Cancel</button>
-                                    </div>    
+                                        <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit">
+                                            <span class="fa fa-plus"></span>Cancel</button>
+                                    </div>
                                 </div>
                             </form>
 
