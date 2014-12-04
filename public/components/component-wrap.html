@@ -1,14 +1,14 @@
 <div class="component-wrap" ng-if="component.visibility">
     <div class="component" data-id="{{component._id}}" data-type="{{component.type}}">
 
-        <div id="{{component.anchor}}">
+        <div id="{{component.anchor}}"
+             ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}">
 
             <!--<div-->
                     <!--ng-if="!component.bg.img.url"-->
                     <!--style='background: {{component.bg.color}};color: {{component.txtcolor||primaryTextColor}};'>-->
             <div
-                    ng-if="!component.bg.img.url"
-                    ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}">
+                    ng-if="!component.bg.img.url">
 
             <div class="component-inner">
 
@@ -32,10 +32,7 @@
                     style='
                         background: url("{{component.bg.img.url}}") no-repeat fixed;
                         background-size: cover;
-                        background: {{component.bg.img.url}};
-                        color: {{component.txtcolor||primaryTextColor}};
-                    '
-                   >
+                        background: {{component.bg.img.url}};'>
                 <div>
                     <div class="component-inner">
                         <div class="blur-image" ng-if="component.bg.img.blur"></div>
