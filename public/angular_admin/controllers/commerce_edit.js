@@ -222,7 +222,9 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     $scope.autoGenerateVariantCount = 0;
                     newValue.forEach(function(value, index) {
                         if ($scope.autoGenerateVariantCount) {
-                            $scope.autoGenerateVariantCount *= value.values.length;
+                            if (value.values.length) {
+                                $scope.autoGenerateVariantCount *= value.values.length;
+                            }
                         } else {
                             $scope.autoGenerateVariantCount = value.values.length;
                         }
@@ -236,11 +238,13 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 if (newValue) {
                     var args = [];
                     $scope.product.variantSettings.options.forEach(function(value, index) {
-                        var tmpList = [];
-                        value.values.forEach(function(tag, index) {
-                            tmpList.push(tag.text);
-                        });
-                        args.push(tmpList);
+                        if (value.values.length) {
+                            var tmpList = [];
+                            value.values.forEach(function(tag, index) {
+                                tmpList.push(tag.text);
+                            });
+                            args.push(tmpList);
+                        }
                     });
                     $scope.product.variantSettings.variants.forEach(function(value, index) {
                         if (value.create == false) {
