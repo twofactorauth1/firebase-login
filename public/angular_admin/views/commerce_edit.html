@@ -292,17 +292,19 @@
                                             <input type="text" class="form-control input-lg" id="planId" placeholder="Enter a unique ID for the plan"
                                             ng-model='newSubscription.planId' />
                                         </div>
-                                        <div class="form-group has-feedback">
+                                        <div class="form-group">
                                             <label for="amount">Amount</label>
+                                            <span data-toggle="tooltip" data-placement="left" title="Enter amount for the plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>   
                                                 <input type="text" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan"
                                                 ng-model='newSubscription.amount' />
-                                                <span data-toggle="tooltip" data-placement="left" title="Enter Amount" class="glyphicon form-control-feedback"><i class="fa fa-info" /></span>
+                                                
                                             </div>
                                         </div>
-                                        <div class="form-group has-feedback">
+                                        <div class="form-group">
                                             <label for="interval">Interval</label>
+                                            <span data-toggle="tooltip" data-placement="left" title="Select time interval"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <select id="interval" ng-model="newSubscription.interval" class="form-control input-lg">
                                                     <option value="day">Day</option>
@@ -310,46 +312,49 @@
                                                     <option value="month">Month</option>
                                                     <option value="year">Year</option>
                                                 </select>
-                                             <span data-toggle="tooltip" data-placement="left" title="Select time interval" class="glyphicon form-control-feedback"><i class="fa fa-info" /></span>
+                                             
                                             </div>
                                         </div>
-                                        <div class="form-group has-feedback">
+                                        <div class="form-group">
                                             <label for="interval_count">Interval Count</label>
+                                            <span data-toggle="tooltip" data-placement="left" title="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type"
                                                 ng-model='newSubscription.interval_count'
                                                 />
-                                                <span data-toggle="tooltip" data-placement="left" title="Interval Count" class="glyphicon form-control-feedback"><i class="fa fa-info" /></span>
+                                                
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="p20">
-                                        <div class="form-group has-feedback">
+                                        <div class="form-group">
                                             <label for="name">Name</label>
+                                            <span data-toggle="tooltip" data-placement="left" title="Enter name for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="name" placeholder="Enter name for plan"
-                                                ng-model='newSubscription.name' />
-                                                <span data-toggle="tooltip" data-placement="left" title="Plan Name" class="glyphicon form-control-feedback"><i class="fa fa-info" /></span>
+                                                ng-model='newSubscription.name' />           
                                             </div>
                                         </div>
-                                        <div class="form-group has-feedback">
+                                        <div class="form-group">
                                             <label for="trial_period_days">Trial Period Days</label>
+                                             <span data-toggle="tooltip" data-placement="left" title="Enter trial period days for plan" ><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="trial_period_days" placeholder="Enter trial period days for plan"
                                                 ng-model='newSubscription.trial_period_days'
                                                 />
-                                                 <span data-toggle="tooltip" data-placement="left" title="Trial Period Days" class="glyphicon form-control-feedback"><i class="fa fa-info" /></span>
+                                                
                                             </div>
                                         </div>
-                                        <div class="form-group has-feedback">
+                                        <div class="form-group">
                                             <label for="statement_description">Statement Description</label>
+                                             <span data-toggle="tooltip" data-placement="left" title="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="statement_description" placeholder="Enter statement description for plan"
                                                 ng-model='newSubscription.statement_description'
                                                 maxlength="15" />
-                                                 <span data-toggle="tooltip" data-placement="left" title="Statement Description" class="glyphicon form-control-feedback"><i class="fa fa-info" /></span>
+                                                
                                             </div>
                                         </div>
                                     </div>
