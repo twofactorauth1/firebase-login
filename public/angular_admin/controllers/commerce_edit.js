@@ -28,7 +28,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 if (angular.isDefined($scope.product.icon) && !$scope.product.is_image)
                     $('#convert').iconpicker('setIcon', $scope.product.icon);
 
-                if (product.variantSettings === undefined)
+                if ($scope.product.variantSettings === undefined)
                     $scope.product.variantSettings = {
                         options: [{
                             type: null,
@@ -246,18 +246,22 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             args.push(tmpList);
                         }
                     });
-                    $scope.product.variantSettings.variants.forEach(function(value, index) {
-                        if (value.create == false) {
-                            $scope.product.variantSettings.variants.splice(index, 1);
-                        }
-                    });
+
                     Combinatorics.cartesianProduct.apply(this, args).toArray().forEach(function(value, index) {
                         $scope.product.variantSettings.variants.push({
                             name: value.join(' / ')
                         });
                     });
                 } else {
-
+                    if ($scope.product !== undefined && $scope.product.variantSettings !== undefined) {
+                        var variants = [];
+                        $scope.product.variantSettings.variants.forEach(function(value, index) {
+                            if (value.create == true) {
+                                variants.push(value);
+                            }
+                        });
+                        $scope.product.variantSettings.variants = variants;
+                    }
                 }
             });
         }
