@@ -228,6 +228,43 @@
             </div>
         </div>
         <hr>
+        <div class="row">
+            <input bs-switch ng-model="product.hasVariants" type="checkbox" switch-label="Variant">
+        </div>
+        <div class="row" ng-show="product.hasVariants">
+            <h4>Variants</h4>
+            <div class="col-sm-6">
+<tags-input ng-model="tags"></tags-input>
+    <p>Model: {{tags}}</p>
+                <div class="form-group">
+                    <label>Allow Product View</label>
+                    <select class="form-control input-lg" ng-model="product.externalLinkAllowProductView">
+                        <option value=true>Yes</option>
+                        <option value=false>No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Link Text</label>
+                    <input class="form-control input-lg mb20" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Link Url</label>
+                    <input class="form-control input-lg mb20" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                </div>
+                <div class="form-group">
+                    <label>openIn</label>
+                    <select class="form-control input-lg" ng-model="product.externalLinkOpenIn">
+                        <option value='new'>New Window</option>
+                        <option value='same'>Same Window</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <hr>
         <div class="row product-sections">
             <ul>
                 <li id="subscription-section" class="panel panel-message" ng-show="product.type == 'subscription'">
@@ -296,10 +333,11 @@
                                             <label for="amount">Amount</label>
                                             <span data-toggle="tooltip" data-placement="left" title="Enter amount for the plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-group">
-                                                <span class="input-group-addon">$</span>   
+                                                <span class="input-group-addon">$</span> 
                                                 <input type="text" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan"
-                                                ng-model='newSubscription.amount' />
-                                                
+                                                ng-model='newSubscription.amount'
+                                                />
+
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -312,7 +350,7 @@
                                                     <option value="month">Month</option>
                                                     <option value="year">Year</option>
                                                 </select>
-                                             
+
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -322,7 +360,7 @@
                                                 <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type"
                                                 ng-model='newSubscription.interval_count'
                                                 />
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -334,46 +372,47 @@
                                             <span data-toggle="tooltip" data-placement="left" title="Enter name for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="name" placeholder="Enter name for plan"
-                                                ng-model='newSubscription.name' />           
+                                                ng-model='newSubscription.name'
+                                                />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="trial_period_days">Trial Period Days</label>
-                                             <span data-toggle="tooltip" data-placement="left" title="Enter trial period days for plan" ><i class="fa fa-info-circle" /></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Enter trial period days for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="trial_period_days" placeholder="Enter trial period days for plan"
                                                 ng-model='newSubscription.trial_period_days'
                                                 />
-                                                
+
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="statement_description">Statement Description</label>
-                                             <span data-toggle="tooltip" data-placement="left" title="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
+                                            <span data-toggle="tooltip" data-placement="left" title="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="statement_description" placeholder="Enter statement description for plan"
                                                 ng-model='newSubscription.statement_description'
                                                 maxlength="15" />
-                                                
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                   <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()"
+                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn()"
                                     ng-hide="planEdit">
-                                        <span class="fa fa-plus"></span>Add</button> 
+                                        <span class="fa fa-plus"></span>Add</button>
                                 </div>
-                                <div class="col-sm-12">                                    
+                                <div class="col-sm-12">
                                     <div class="col-sm-6">
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)"
-                                    ng-show="planEdit">
-                                        <span class="fa fa-plus"></span>Update</button>
+                                        <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)"
+                                        ng-show="planEdit">
+                                            <span class="fa fa-plus"></span>Update</button>
                                     </div>
                                     <div class="col-sm-6">
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit">
-                                        <span class="fa fa-plus"></span>Cancel</button>
-                                    </div>    
+                                        <button class="btn btn-lg btn-block btn-success" ng-click="editCancelFn()" ng-show="planEdit">
+                                            <span class="fa fa-plus"></span>Cancel</button>
+                                    </div>
                                 </div>
                             </form>
 
