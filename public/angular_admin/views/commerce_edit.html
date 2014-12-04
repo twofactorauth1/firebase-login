@@ -326,7 +326,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="amount">Amount</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter amount for the plan"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter the amount for the plan."><i class="fa fa-info-circle" /></span>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span> 
                                                 <input type="text" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan"
@@ -337,7 +337,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="interval">Interval</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Select time interval"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Select time interval"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <select id="interval" ng-model="newSubscription.interval" class="form-control input-lg">
                                                     <option value="day">Day</option>
@@ -350,7 +350,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="interval_count">Interval Count</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type"
                                                 ng-model='newSubscription.interval_count'
@@ -364,7 +364,7 @@
                                     <div class="p20">
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter name for plan"><i class="fa fa-info-circle" /></span>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Enter name for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="name" placeholder="Enter name for plan"
                                                 ng-model='newSubscription.name'
@@ -373,7 +373,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="trial_period_days">Trial Period Days</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter trial period days for plan"><i class="fa fa-info-circle" /></span>
+
+                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter trial period days for plan" ><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="trial_period_days" placeholder="Enter trial period days for plan"
                                                 ng-model='newSubscription.trial_period_days'
@@ -383,7 +384,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="statement_description">Statement Description</label>
-                                            <span data-toggle="tooltip" data-placement="left" title="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
+                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter statement description for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
                                                 <input type="text" class="form-control input-lg" id="statement_description" placeholder="Enter statement description for plan"
                                                 ng-model='newSubscription.statement_description'
