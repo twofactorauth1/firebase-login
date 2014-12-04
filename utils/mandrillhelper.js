@@ -47,15 +47,17 @@ var mandrillHelper =  {
             "signing_domain": null,
             "return_path_domain": null,
             "merge": false,
-            'global_merge_vars': [
+            "merge_vars": [
                 {
-                   'name': 'send_date',
-                   'content': new Date()
+                    "rcpt": toAddress,
+                    "vars": [
+                         {
+                            "name": "send_date",
+                            "content": new Date()
+                        }
+                    ]
                 }
             ],
-            //"global_merge_vars": mergeVarsArray,
-            //"merge_vars": null,
-
             "subaccount": null,
             "google_analytics_domains": [
                 "indigenous.io" //TODO: This should be dynamic
