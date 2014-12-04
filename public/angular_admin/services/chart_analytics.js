@@ -1000,14 +1000,16 @@ define(['app', 'keenService'], function(app) {
                     }
                 },
                 series: [{
-                    name: 'Pageviews',
-                    data: readyPageviewsData
-                }, {
-                    name: 'Visits',
-                    data: sessionsData
-                }, {
                     name: 'Visitors',
                     data: readyVisitorsData
+                },
+                {
+                    name: 'Visits',
+                    data: sessionsData
+                },
+                {
+                    name: 'Pageviews',
+                    data: readyPageviewsData
                 }],
                 credits: {
                     enabled: false
