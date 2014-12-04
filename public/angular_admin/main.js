@@ -59,6 +59,7 @@ require.config({
         'highmaps-us': 'libs_misc/highmaps/us-all',
         'highmaps-data': 'libs/highmaps/modules/map',
         'ngTagsInput': 'libs/ng-tags-input/ng-tags-input.min',
+        'combinatorics': 'libs/js-combinatorics/combinatorics',
 
         //application related
         'storageutils': 'utils/storageutils',

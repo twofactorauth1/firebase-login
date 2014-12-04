@@ -1,4 +1,4 @@
-define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker', 'angularMoney'], function(app) {
+define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker', 'angularMoney', 'combinatorics'], function(app) {
     app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', 'ToasterService', '$state',
         function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService, ToasterService, $state) {
             ngProgress.start();
@@ -234,7 +234,19 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
 
             $scope.$watch('autoGenerateVariant', function(newValue, oldValue) {
                 if (newValue) {
-
+                    var args = [];
+                    $scope.product.variantSettings.options.forEach(function(value, index) {
+                        var tmpList = [];
+                        value.values.forEach(function(tag, index) {
+                            tmpList.push(tag.text);
+                        });
+                        args.push(tmpList);
+                    });
+                    Combinatorics.cartesianProduct.apply(this, args).toArray().forEach(function(value, index) {
+                        $scope.product.variantSettings.variants.push({
+                            name: value.join(' / ')
+                        });
+                    });
                 } else {
 
                 }
