@@ -88,10 +88,10 @@ define([
             UserService.getUser(function(user) {
                 $scope.user = user;
                 that.user = user;
-                console.log('that.user.user_preferences.lastPageHandle >> ');
-                if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
-                     $scope.updatePage(that.user.user_preferences.lastPageHandle);
-                }
+                // console.log('that.user.user_preferences.lastPageHandle >> ');
+                // if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
+                //      $scope.updatePage(that.user.user_preferences.lastPageHandle);
+                // }
             });
 
             window.getUpdatediFrameRoute = function(data) {
@@ -344,14 +344,18 @@ define([
 
                     //get all the editable variables and replace the ones in view with variables in DB
                     var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
-
-                    if (componentEditable.length > 1) {
+                    console.log('length ', componentEditable.length);
+                    if (componentEditable.length >= 1) {
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
                             var componentVar = componentEditable[i2].attributes['data-class'].value;
                             var componentVarContents = componentEditable[i2].innerHTML;
+                            console.log('componentVar ', componentVar);
+                            console.log('componentVarContents ', componentVarContents);
 
                             //if innerhtml contains a span with the class ng-binding then remove it
                             var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                            console.log('span ', span);
+
                             if (span) {
                                 var spanParent = span.parentNode;
                                 var spanInner = span.innerHTML;
@@ -365,6 +369,8 @@ define([
                             }
                             //remove "/n"
                             componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                            console.log('componentVarContents ', componentVarContents);
 
                             var setterKey, pa;
                             //if contains an array of variables
@@ -430,6 +436,7 @@ define([
             };
 
             $scope.updatePage = function(handle) {
+                console.log('update page');
                 $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
