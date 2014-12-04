@@ -424,7 +424,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             }
             var toEmail = req.body.email;
-            var course = req.body.course;
+            var courseObj = req.body.course;
+            courseObj._id = req.params.id;
+            var course = new $$.m.Course(courseObj);
+            
             var timezoneOffset = req.body.timezoneOffset;
 
             if (!course) {
