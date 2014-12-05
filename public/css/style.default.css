@@ -6961,6 +6961,9 @@ small.media-desc {
   .visible-inline-xs {
     display: inline !important;
   }
+  .navbar .nav > li {
+    float: none !important;
+  }
 }
 /*! jQuery UI - v1.10.3 - 2013-11-20
 * http://jqueryui.com
@@ -22278,20 +22281,23 @@ div[data-type='campaign'] .inner-page {
 .contact-us-v5 input[type="radio"] {
   margin-right: 5px;
 }
-.component-wrap .blur-image {
+.component-wrap .component > [id] .bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+.component-wrap .component > [id] .blur-image {
   -webkit-filter: blur(5px);
   -moz-filter: blur(5px);
   -o-filter: blur(5px);
   -ms-filter: blur(5px);
   filter: blur(5px);
 }
-.component-wrap .component > [id] > div.bgimg {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: -1;
+.component-wrap .component > [id] .bg-overlay {
+  background: rgba(0, 0, 0, 0.58) !important;
 }
 .inner-page {
   padding: 50px 0;
@@ -22748,6 +22754,9 @@ ul.nav {
   border: none;
 }
 /********** Feature Block **********/
+.feature-block-v1 {
+  position: relative;
+}
 .feature-block-v1 .feature-block-title {
   text-align: center;
 }
@@ -23411,6 +23420,7 @@ div[data-class='image-text'] p {
   height: 100%;
   overflow: hidden;
   background-size: cover!important;
+  position: relative;
 }
 .masthead-v1 h4 div {
   float: left;

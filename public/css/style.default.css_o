@@ -6951,6 +6951,9 @@ small.media-desc {
   .visible-inline-xs {
     display: inline !important;
   }
+  .navbar .nav > li {
+    float: none !important;
+  }
 }
 /*! jQuery UI - v1.10.3 - 2013-11-20
 * http://jqueryui.com

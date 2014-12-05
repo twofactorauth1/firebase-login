@@ -254,6 +254,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
     ///api/1.0/analytics/session/{sessionId}/ping
     this.pagePing = function() {
+        console.log('ipCookie("session_cookie")["id"] >>> ', ipCookie("session_cookie")["id"]);
         var _pageProperties = pageProperties;
         _pageProperties.ping_time = new Date().getTime();
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
