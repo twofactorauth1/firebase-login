@@ -1,37 +1,37 @@
 <!-- <div>
-	<div ng-repeat="component in currentpage.components | createUrlFilter track by $index" class="fragment {{transitionState}}">
-	    <div ng-include src="component.url"></div>
-	</div>
+    <div ng-repeat="component in currentpage.components | createUrlFilter track by $index" class="fragment {{transitionState}}">
+        <div ng-include src="component.url"></div>
+    </div>
 </div> -->
 <div ng-show="isEditing"></div>
 <ul ui-sortable="sortableOptions">
-	<li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
-		<div class="componentActions">
-			<span class="reorder fa fa-arrows"></span>
+    <li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
+        <div class="componentActions">
+            <span class="reorder fa fa-arrows"></span>
             <span class="" ng-if="!component.visibility">Hidden</span>
-			<h4 class="pull-left">{{component.type}}</h4>
-			<span class="settings fa fa-cogs" data-id="{{component._id}}"></span>
-		</div>
-	    <div ng-include="'/components/component-wrap.html'"></div>
-	    <div ng-class="{'zee-blur': !component.visibility}"></div>
-	    <div class="add-component" data-index = "{{$index + 1}}">
-	    	<a href="">
-	    	<i class="fa fa-plus-circle"></i>
-	    	</a>
-	    </div>
-	</li>
-	<li ng-if="(currentpage.components.length===0)" class="no-component">
-		<div class="well empty-page">
-			<h1 class="center">This Page is Empty.</h1>
-			<h4 class="center">Add some components and start editing!</h4>
-		</div>
-		<div class="clearfix mb15"></div>
-		<div class="add-component" data-index = 1>
-	    	<a href="">
-	    		<i class="fa fa-plus-circle"></i>
-	    	</a>
-	    </div>
-	</li>
+            <h4 class="pull-left">{{component.type}}</h4>
+            <span class="settings fa fa-cogs" data-id="{{component._id}}"></span>
+        </div>
+        <div ng-include="'/components/component-wrap.html'"></div>
+        <div ng-class="{'zee-blur': !component.visibility}"></div>
+        <div class="add-component" data-index = "{{$index + 1}}">
+            <a href="">
+            <i class="fa fa-plus-circle"></i>
+            </a>
+        </div>
+    </li>
+    <li ng-if="(currentpage.components.length===0)" class="no-component">
+        <div class="well empty-page">
+            <h1 class="center">This Page is Empty.</h1>
+            <h4 class="center">Add some components and start editing!</h4>
+        </div>
+        <div class="clearfix mb15"></div>
+        <div class="add-component" data-index = 1>
+            <a href="">
+                <i class="fa fa-plus-circle"></i>
+            </a>
+        </div>
+    </li>
 </ul>
 
 <style>
@@ -44,4 +44,37 @@
         opacity: .4;
         background-color: black;
     }
+    .sticking{position: fixed;
+        top: 0;
+    }
 </style>
+<script type="text/javascript">
+$(document).ready(function() {
+    function makeSticky(container, element) {
+        scrollTop = $(document).scrollTop();
+        sectionHeight = container.height();
+        offsetTop = container.offset().top;
+        if (scrollTop + headerHeight < offsetTop) {
+            $(element).removeClass("sticking");
+        } else {
+            if (scrollTop - offsetTop - sectionHeight + headerHeight > 0)
+                $(element).removeClass("sticking");
+            else
+                $(element).addClass("sticking");
+        }
+}
+
+    $(window).scroll(function() {
+            headerHeight = 0;    
+            currentHeader = null;        
+            $(".fragment").each(function() {
+                currentHeader = $(this).find(".componentActions");            
+                if (currentHeader.length == 0)
+                    return;
+                makeSticky($(this), currentHeader);
+            });
+    });
+})
+
+
+</script>
