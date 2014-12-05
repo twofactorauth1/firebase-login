@@ -986,9 +986,10 @@ module.exports = {
 
             //TODO: comment out this line.
             //serverUrl = 'http://www.indigenous.io';
-
+            var name = new Date().getTime() + '.png';
             var tempFile = {
-                path: 'tmp/' + new Date().getTime() + '.png'
+                name: name,
+                path: 'tmp/' + name
             };
             var tempFileName = tempFile.path;
             var ssURL = urlboxhelper.getUrl(serverUrl, options);
