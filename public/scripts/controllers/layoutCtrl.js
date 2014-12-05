@@ -105,14 +105,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 //                    }
                 //
                 //                })
-
-
                 /*PostService.getAllPosts(function(posts) {
                     that.blogposts = posts;
                 });*/
-
-                //setNavigation(data);
-
             }
         });
 
