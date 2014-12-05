@@ -8,10 +8,10 @@
     /*
      * These are the keys for the test project.
      */
-var keenProjectId = process.env.KEEN_PROJECT_ID || '54528c1380a7bd6a92e17d29';
-var keenWriteKey = process.env.KEEN_WRITE_KEY || 'c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
-var keenReadKey = process.env.KEEN_READ_KEY || 'bc102d9d256d3110db7ccc89a2c7efeb6ac37f1ff07b0a1f421516162522a972443b3b58ff6120ea6bd4d9dd469acc83b1a7d8a51cbb82caa89e590492e0579c8b7c65853ec1c6d6ce6f76535480f8c2f17fcb66dca14e699486efb02b83084744c68859b89f71f37ad846f7088ff96b';
-var keenMasterKey = process.env.KEEN_MASTER_KEY || 'A801B35BED00093C423DC948055760F5';
+var keenProjectId = process.env.KEEN_PROJECT_ID || '547edcea46f9a776b6579e2c';
+var keenWriteKey = process.env.KEEN_WRITE_KEY || '98f22da64681d5b81e2abb7323493526d8d258f0d355e95f742335b4ff1b75af2709baa51d16b60f168158fe7cfd8d1de89d637ddf8a9ca721859b009c4b004d443728df52346307e456f0511b3e82be4a96efaa9f6dcb7f847053e97eee2b796fc3e2d1a57bb1a86fb07d2e00894966';
+var keenReadKey = process.env.KEEN_READ_KEY || '16348ac352e49c12881e5a32ee37fdd6167ead382071330af9788d9c9e6cae41a8b3fb663bc59bb19e0ec0968bf1c4bdd9f62f29d6545663863932805ff6eac7df34c9202db4f294c0d8cd70d9c9846a99ea00d85f973dfa41e6448e9d05e9ecad9f9ffcb7a7e146dba7de20642e892a';
+var keenMasterKey = process.env.KEEN_MASTER_KEY || '400E23A715A403D70E10AAA8B4572109';
 
 
 module.exports = {

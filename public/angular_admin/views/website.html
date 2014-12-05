@@ -250,19 +250,24 @@
                                         value="Add BG Image">
                             </div>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                <label for="colorpicker">Blur BG</label>
-                                <input bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right"
+                                <label for="bg_blur">Blur BG</label>
+                                <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right"
                                 ng-change="saveComponent()">
                             </div>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                <label for="colorpicker">Show BG</label>
-                                <input bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right"
+                                <label for="bg_hide">Show BG</label>
+                                <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right"
                                 ng-change="saveComponent()">
                             </div>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
-                                <label for="colorpicker" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
-                                <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right"
+                                <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
+                                <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right"
                                 ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <label for="bg_overlay">Add Overlay</label>
+                                <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right"
+                                       ng-change="saveComponent()">
                             </div>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation'">
                                 <label for="colorpicker">Button:</label>
