@@ -45,7 +45,8 @@ module.exports = {
         CONTACT_PHOTOS: "indigenous-contact-photos",
         THEMES: "indigenous-themes",
         ACCOUNT_WEBSITES: "indigenous-account-websites",
-        ASSETS: 'indigenous-digital-assets'
+        ASSETS: 'indigenous-digital-assets',
+        SCREENSHOTS: 'indigenous-screenshots'
     },
     "accessKeyId":AWS_ACCESS_KEY,
     "secretAccessKey":AWS_SECRET_ACCESS_KEY,

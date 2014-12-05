@@ -4,6 +4,13 @@ var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
+var urlboxhelper = require('../utils/urlboxhelper');
+var s3dao = require('../dao/integrations/s3.dao');
+var fs = require('fs');
+var request = require('request');
+var tmp = require('temporary');
+var awsConfig = require('../configs/aws.config');
+
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -952,6 +959,54 @@ module.exports = {
         });
     },
 
+    generateScreenshot: function(accountId, pageHandle, fn) {
+        var self = this;
+        log.debug('>> generateScreenshot');
+        /*
+         * Get the URL for the page.
+         * Generate URLBox URL
+         * Download URLBox image
+         * Upload image to S3
+         * Return URL for S3 image
+         */
+        accountDao.getServerUrlByAccount(accountId, function(err, serverUrl){
+            if(err) {
+                log.error('Error getting server url: ' + err);
+                return fn(err, null);
+            }
+            log.debug('got server url');
+            if(pageHandle !== 'index') {
+                serverUrl +='/page/' + pageHandle;
+            }
+            var options = {
+                width: 800,
+                height: 600,
+                full_page: true
+            };
+
+
+            var tempFile = new tmp.File();
+            var tempFileName = tempFile.path + '.png';
+            var ssURL = urlboxhelper.getUrl(serverUrl, options);
+            var bucket = awsConfig.BUCKETS.SCREENSHOTS;
+            var subdir = 'account_' + accountId;
+
+            self._download(ssURL, tempFileName, function(){
+                log.debug('stored screenshot at ' + tempFileName);
+                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+                    if(err) {
+                        log.error('Error uploading to s3: ' + err);
+                        fn(err, null);
+                    } else {
+                        log.debug('Got the following from S3', value);
+                        log.debug('<< generateScreenshot');
+                        fn(null, value.url);
+                    }
+                });
+            });
+        });
+    },
+
 
 
     _addPostIdToBlogComponentPage: function(postId, page) {
@@ -999,5 +1054,14 @@ module.exports = {
 
         return postsAry;
 
+    },
+
+    _download: function(uri, filename, callback){
+        request.head(uri, function(err, res, body){
+            //console.log('content-type:', res.headers['content-type']);
+            //console.log('content-length:', res.headers['content-length']);
+
+            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+        });
     }
 };
