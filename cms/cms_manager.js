@@ -983,7 +983,8 @@ module.exports = {
                 height: 600,
                 full_page: true
             };
-            
+
+            //TODO: comment out this line.
             //serverUrl = 'http://www.indigenous.io';
 
             var tempFile = new tmp.File();
@@ -1058,12 +1059,18 @@ module.exports = {
 
     },
 
+    //TODO: Remove this console logs
     _download: function(uri, filename, callback){
+        console.log('calling download');
         request.head(uri, function(err, res, body){
-            //console.log('content-type:', res.headers['content-type']);
-            //console.log('content-length:', res.headers['content-length']);
-
-            request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
+            if(err) {
+                console.log('err getting the head for ' + uri);
+            }
+            request(uri).on('error', function(err) {
+                console.log('error getting screenshot: ' + err);
+            }).pipe(fs.createWriteStream(filename)).on('close', callback);
         });
     }
 };
