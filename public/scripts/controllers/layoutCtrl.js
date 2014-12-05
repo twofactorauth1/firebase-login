@@ -86,7 +86,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 } else {
                     route = $scope.$location.$$path.replace('/page/', '');
-                    console.log('route ', route);
+
                     that.pages = data[route];
                 }
                 $scope.currentpage = that.pages;
