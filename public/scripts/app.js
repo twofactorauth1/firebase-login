@@ -99,9 +99,16 @@ var mainApp = angular
                 analyticsService.pagePing();
                 clearInterval(runningInterval);
 
+                var counter = 0;
                 //every 15 seconds send page tracking data
                 runningInterval = setInterval(function(){
                     analyticsService.pagePing();
+                    counter++;
+
+                    if (counter >= (1000 * 60 * 60))
+                    {
+                        clearInterval(runningInterval);
+                    }
                 }, 15000);
             });
         });
