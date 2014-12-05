@@ -8,6 +8,7 @@
 var baseApi = require('../base.api');
 var accountDao = require('../../dao/account.dao');
 var contactDao = require('../../dao/contact.dao');
+var cmsDao = require('../../cms/dao/cms.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager.js');
 var cookies = require('../../utils/cookieutil');
 var Contact = require('../../models/contact');
@@ -390,20 +391,65 @@ _.extend(api.prototype, baseApi.prototype, {
                         } else {
                             /*
                              * Send welcome email.  This is done asynchronously.
+                             *
+                             * Here are the steps... maybe this should go somewhere else?
+                             *
+                             * 1. Get the account from session
+                             * 2. Get Page with page_type:email (if it does not exist, goto: 8)
+                             * 3. Get the HTML from the email component
+                             * 4. Set it as data.content
+                             * 5. Call app.render('email/base_email', data...
+                             * 6. Pass it to mandrillHelper
+                             * 7. RETURN
+                             * 8. Get the default welcome html if no page exists
+                             * 9. Call mandrillHelper
                              */
-                            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
-                                if(err) {
-                                    self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
-                                } else {
-                                    var contactEmail = savedContact.getEmails()[0].email;
-                                    var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
-                                    self.log.debug('sending email to: ',contactEmail);
-                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
-                                        notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                        htmlContent, value.id(), savedContact.id(), function(err, result){});
-                                }
 
+                            accountDao.getAccountByID(query.accountId, function(err, account){
+                                if(err) {
+                                    self.log.error('Error getting account: ' + err);
+                                    self.log.error('No email will be sent.');
+                                } else {
+                                    cmsDao.getPageByType(query.accountId, null, 'email', function(err, emailPage){
+                                        if(err || emailPage === null) {
+                                            self.log.debug('Could not get email page.  Using default.');
+                                            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
+                                                if(err) {
+                                                    self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
+                                                } else {
+                                                    var contactEmail = savedContact.getEmails()[0].email;
+                                                    var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                    self.log.debug('sending email to: ',contactEmail);
+                                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                                        notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                                        htmlContent, value.id(), savedContact.id(), function(err, result){});
+                                                }
+
+                                            });
+                                        } else {
+                                            var component = emailPage.get('components')[0];
+                                            self.log.debug('Using this for data', component);
+                                            app.render('emails/base_email', component, function(err, html){
+                                                if(err) {
+                                                    self.log.error('error rendering html: ' + err);
+                                                    self.log.warn('email will not be sent.');
+                                                } else {
+                                                    var contactEmail = savedContact.getEmails()[0].email;
+                                                    var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                    self.log.debug('sending email to: ',contactEmail);
+                                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                                        notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                                        html, value.id(), savedContact.id(), function(err, result){});
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             });
+
+
+
+
                             //req.flash("info", "Thank you for subscribing.");
                             return self.sendResult(resp, savedContact);
                         }

@@ -952,6 +952,8 @@ module.exports = {
         });
     },
 
+
+
     _addPostIdToBlogComponentPage: function(postId, page) {
         var self = this;
         var componentAry = page.get('components') || [];
