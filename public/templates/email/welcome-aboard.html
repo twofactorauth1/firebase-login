@@ -215,7 +215,7 @@
                                 	<table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
                                         <tr>
                                             <td class="headerContent">
-                                            	<img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" style="max-width:200px;float:left;" id="logo" />
+                                            	<img src="{{component.logourl}}" style="max-width:200px;float:left;max-height: 60px;" id="logo" />
                                             	<h3 class="h3 date" style="float:right">*|DATE:M jS, Y|*</h3>
                                             </td>
                                         </tr>
@@ -233,7 +233,9 @@
                                                     <tr>
                                                         <td valign="top" class="bodyContent">
                                                             <div mc:edit="std_content00">
-                                                                <span ng-bind-html="component.title | unsafe"></span>
+                                                                <div class="editable" data-class="title" data-index="{{$index}}">
+																	<span ng-bind-html="component.title | unsafe"></span>
+																</div>
 																</br>
 																<div class="editable" data-class="text" data-index="{{$index}}">
 																	<span ng-bind-html="component.text | unsafe"></span>
