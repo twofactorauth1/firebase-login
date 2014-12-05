@@ -64,7 +64,7 @@ define([
                     showInitial: true,
                     showInput: true,
                     showButtons: false,
-                    allowEmpty:true,
+                    allowEmpty: true,
                     hideAfterPaletteSelect: false,
                     showPaletteOnly: true,
                     togglePaletteOnly: true,
@@ -102,10 +102,8 @@ define([
                 // console.log('Activate Settings!');
             };
 
-            window.updateAdminPageScope =  function(page)
-            {
-                if(page._id !== $scope.currentPage._id)
-                {
+            window.updateAdminPageScope = function(page) {
+                if (page._id !== $scope.currentPage._id) {
                     $scope.updatePage(page.handle);
                 }
             }
@@ -123,82 +121,92 @@ define([
 
                 //wait for iframe to load completely
                 //TODO: get trigger instead of timeout
-                $timeout(function() {
+                var elementBindingFn = function() {
                     //unhide no-component
-                    if (iframeDoc.getElementById('body')) {
-
-                            if(iframeDoc.body.querySelectorAll('.no-component')[0]) {
-                                iframeDoc.body.querySelectorAll('.no-component')[0].style.display="block";
-                                iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility="visible";
-                            }
-
-                            //add media modal click events to all images
-                            var images = iframeDoc.getElementById('body').querySelectorAll('img');
-
-                            for (var i = 0; i < images.length; i++) {
-                                if (typeof images[i].addEventListener != "undefined") {
-                                    images[i].removeEventListener("click");
-                                    images[i].addEventListener("click", function(e) {
-                                        $("#media-manager-modal").modal('show');
-                                        $scope.imageChange = true;
-                                        $scope.componentArrTarget = e.currentTarget;
-                                        $scope.componentEditing = _.findWhere($scope.components, {
-                                            _id: $(e.currentTarget).closest('.component').data('id')
-                                        });
-                                    });
-                                } else if (typeof images.attachEvent != "undefined") {
-                                    images[i].removeEvent("onclick");
-                                    images[i].attachEvent("onclick", iframeClickHandler);
-                                }
-                            };
-
-                            //add click events for all the settings buttons
-                            var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
-                            for (var i = 0; i < settingsBtns.length; i++) {
-                                if (typeof settingsBtns[i].addEventListener != "undefined") {
-                                    settingsBtns[i].removeEventListener("click");
-                                    settingsBtns[i].addEventListener("click", function(e) {
-                                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                                    });
-                                } else if (typeof settingsBtns.attachEvent != "undefined") {
-                                    settingsBtns[i].removeEvent("onclick");
-                                    settingsBtns[i].attachEvent("onclick", iframeClickHandler);
-                                }
-                            };
-
-                            //add click events for all the add component buttons
-                            var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
-                            for (var i = 0; i < addComponentBtns.length; i++) {
-                                if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                                    addComponentBtns[i].removeEventListener("click");
-                                    addComponentBtns[i].addEventListener("click", function(e) {
-                                    $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-                                    var element = angular.element('#add-component-modal');
-                                        element.modal('show');
-                                        //get the current index of the component pressed
-                                    });
-                                } else if (typeof addComponentBtns.attachEvent != "undefined") {
-                                    addComponentBtns[i].removeEvent("onclick");
-                                    addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
-                                }
-                            };
-
-                            //TODO get event from stop
-
-                            iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
-                                setTimeout(function(){
-                                    $scope.$apply(function() {
-                                        $scope.editPage;
-                                    });
-                                });
-                            }, false);
-
-                            iframeDoc.addEventListener("dblclick", function(e) {
-                                $scope.editPage();
-                            }, false);
+                    if (iframeDoc.body.querySelectorAll('.no-component')[0]) {
+                        iframeDoc.body.querySelectorAll('.no-component')[0].style.display = "block";
+                        iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
                     }
 
-                }, 100);
+                    //add media modal click events to all images
+                    var images = iframeDoc.getElementById('body').querySelectorAll('img');
+
+                    for (var i = 0; i < images.length; i++) {
+                        if (typeof images[i].addEventListener != "undefined") {
+                            images[i].removeEventListener("click");
+                            images[i].addEventListener("click", function(e) {
+                                $("#media-manager-modal").modal('show');
+                                $scope.imageChange = true;
+                                $scope.componentArrTarget = e.currentTarget;
+                                $scope.componentEditing = _.findWhere($scope.components, {
+                                    _id: $(e.currentTarget).closest('.component').data('id')
+                                });
+                            });
+                        } else if (typeof images.attachEvent != "undefined") {
+                            images[i].removeEvent("onclick");
+                            images[i].attachEvent("onclick", iframeClickHandler);
+                        }
+                    };
+
+                    //add click events for all the settings buttons
+                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
+                    for (var i = 0; i < settingsBtns.length; i++) {
+                        if (typeof settingsBtns[i].addEventListener != "undefined") {
+                            settingsBtns[i].removeEventListener("click");
+                            settingsBtns[i].addEventListener("click", function(e) {
+                                $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                            });
+                        } else if (typeof settingsBtns.attachEvent != "undefined") {
+                            settingsBtns[i].removeEvent("onclick");
+                            settingsBtns[i].attachEvent("onclick", iframeClickHandler);
+                        }
+                    };
+
+                    //add click events for all the add component buttons
+                    var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
+                    for (var i = 0; i < addComponentBtns.length; i++) {
+                        if (typeof addComponentBtns[i].addEventListener != "undefined") {
+                            addComponentBtns[i].removeEventListener("click");
+                            addComponentBtns[i].addEventListener("click", function(e) {
+                                $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                                var element = angular.element('#add-component-modal');
+                                element.modal('show');
+                                //get the current index of the component pressed
+                            });
+                        } else if (typeof addComponentBtns.attachEvent != "undefined") {
+                            addComponentBtns[i].removeEvent("onclick");
+                            addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
+                        }
+                    };
+
+                    //TODO get event from stop
+
+                    iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $scope.editPage;
+                            });
+                        });
+                    }, false);
+
+                    iframeDoc.addEventListener("dblclick", function(e) {
+                        $scope.editPage();
+                    }, false);
+                };
+
+                var binded = false;
+                var count = 0;
+                while (binded == false) {
+                    count += 1;
+                    if (iframeDoc.getElementById('body')) {
+                       elementBindingFn();
+                       binded = true;
+                    } else {
+                        binded = false;
+                    }
+                    console.info('Bind attempt : ' + count);
+                }
+
             };
 
             UserService.getAccount(function(account) {
@@ -280,17 +288,17 @@ define([
                 var iframe = document.getElementById("iframe-website");
                 iframe.contentWindow.triggerEditMode();
 
-                if ( iframe.contentWindow.copyPostMode ) {
+                if (iframe.contentWindow.copyPostMode) {
                     iframe.contentWindow.copyPostMode();
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");`
 
                 $scope.backup['website'] = angular.copy($scope['website']);
-                UserService.getUserPreferences(function(preferences){
-                   preferences.lastPageHandle = $scope.pageSelected;
+                UserService.getUserPreferences(function(preferences) {
+                    preferences.lastPageHandle = $scope.pageSelected;
 
-                    UserService.updateUserPreferences(preferences, false, function(){} );
+                    UserService.updateUserPreferences(preferences, false, function() {});
                 });
             };
 
@@ -299,7 +307,7 @@ define([
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
                 $scope.deactivateAloha();
-                WebsiteService.getPageComponents(pageId,function(components) {
+                WebsiteService.getPageComponents(pageId, function(components) {
                     $scope.components = components;
 
                     $scope.updateIframeComponents && $scope.updateIframeComponents();
@@ -408,11 +416,11 @@ define([
                 };
 
 
-                 $scope.currentPage.components = newComponentOrder;
+                $scope.currentPage.components = newComponentOrder;
 
 
 
-                WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id,  $scope.currentPage, function(data) {
+                WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                     toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                     $scope.isEditing = false;
                     //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
@@ -483,49 +491,45 @@ define([
                 });
             };
             $scope.addSocialLink = function(social) {
-                if(social && social.name && social.url)
-                {
+                if (social && social.name && social.url) {
                     var selectedName = _.findWhere($scope.componentEditing.networks, {
                         name: social.name
                     });
-                    if(selectedName)
-                    {
+                    if (selectedName) {
                         return;
                     }
 
                     $scope.componentEditing.networks.push({
-                    name : social.name,
-                    url : social.url,
-                    icon : social.name,
-                    class_name : social.name
-                    }); 
-                    social.name = ""; 
-                    social.url = ""; 
+                        name: social.name,
+                        url: social.url,
+                        icon: social.name,
+                        class_name: social.name
+                    });
+                    social.name = "";
+                    social.url = "";
                     $scope.saveComponent();
-                }            
+                }
             };
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 var cmpVersion = null;
-                if($scope.selectedTheme)
-                {
+                if ($scope.selectedTheme) {
                     var selectedType = _.findWhere($scope.selectedTheme.config.components, {
                         type: $scope.selectedComponent.type
                     });
-                    if(selectedType)
-                    {
-                        cmpVersion  = selectedType.version;
+                    if (selectedType) {
+                        cmpVersion = selectedType.version;
                     }
                 }
-                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion,  function(data) {
+                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion, function(data) {
                     if (data.components) {
                         var newComponent = data.components[data.components.length - 1];
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
-                       // $scope.components = $scope.currentPage.components;
+                        // $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
 
@@ -558,7 +562,7 @@ define([
             $scope.updateIframeComponents = function(fn) {
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
-                if(fn) {
+                if (fn) {
                     fn();
                 }
                 $scope.bindEvents();
@@ -599,9 +603,9 @@ define([
                 var last = nodes[nodes.length - 1];
                 angular.element(last).triggerHandler('click');
 
-                WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
-                  $scope.componentEditingVersions = versions;
-                  $scope.versionSelected = $scope.componentEditing.version;
+                WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
+                    $scope.componentEditingVersions = versions;
+                    $scope.versionSelected = $scope.componentEditing.version;
                 });
             };
 
@@ -615,7 +619,7 @@ define([
                 }
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents(function() {
-                     $scope.bindEvents();
+                    $scope.bindEvents();
                 });
                 $scope.isEditing = true;
 
@@ -630,16 +634,24 @@ define([
 
             $scope.createPageValidated = false;
 
-             $scope.validateCreatePage = function(page) {
+            $scope.validateCreatePage = function(page) {
                 console.log('page ', page);
-               if (page.handle == '') { $scope.handleError = true } else { $scope.handleError = false }
-               if (page.title == '') { $scope.titleError = true } else { $scope.titleError = false }
-                 console.log('$scope.titleError ', $scope.titleError);
-              console.log('$scope.handleError  ', $scope.handleError );
-               if (page && page.title && page.title != '' && page.handle && page.handle != '') {
-                console.log('page validated');
-                $scope.createPageValidated = true;
-               }
+                if (page.handle == '') {
+                    $scope.handleError = true
+                } else {
+                    $scope.handleError = false
+                }
+                if (page.title == '') {
+                    $scope.titleError = true
+                } else {
+                    $scope.titleError = false
+                }
+                console.log('$scope.titleError ', $scope.titleError);
+                console.log('$scope.handleError  ', $scope.handleError);
+                if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+                    console.log('page validated');
+                    $scope.createPageValidated = true;
+                }
             };
 
             $scope.createPage = function(page, $event) {
@@ -659,14 +671,14 @@ define([
                 };
 
                 var hasHandle = false;
-                $scope.allPages.forEach(function (v, i) {
-                    if ( page.handle === v.handle ) {
+                $scope.allPages.forEach(function(v, i) {
+                    if (page.handle === v.handle) {
                         hasHandle = true;
                     }
                 });
 
                 if (!hasHandle) {
-                    WebsiteService.createPage(websiteId, pageData, function (newpage) {
+                    WebsiteService.createPage(websiteId, pageData, function(newpage) {
                         toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
                         $scope.page = null;
                         $scope.allPages.push(newpage);
@@ -741,7 +753,7 @@ define([
                 $scope.components = $scope.currentPage.components;
                 $scope.updateIframeComponents();
                 WebsiteService.setWebsiteTheme($scope.currentTheme._id, $scope.website._id, function(data) {
-                   toaster.pop('success', "Theme saved successfully");
+                    toaster.pop('success', "Theme saved successfully");
                 });
             };
 
@@ -750,128 +762,107 @@ define([
             });
 
             //an array of component types and icons for the add component modal
-            $scope.componentTypes = [
-                {
-                    title: 'Blog',
-                    type: 'blog',
-                    icon: 'custom blog',
-                    enabled: false
-                },
-                {
-                    title: 'Masthead',
-                    type: 'masthead',
-                    icon: 'custom masthead',
-                    enabled: true
-                },
-                {
-                    title: 'Feature List',
-                    type: 'feature-list',
-                    icon: 'fa fa-list-ul',
-                    enabled: true
-                },
-                {
-                    title: 'Campaign',
-                    type: 'campaign',
-                    icon: 'fa fa-bullhorn',
-                    enabled: true
-                },
-                {
-                    title: 'Contact Us',
-                    type: 'contact-us',
-                    icon: 'fa fa-map-marker',
-                    enabled: false
-                },
-                {
-                    title: 'Coming Soon',
-                    type: 'coming-soon',
-                    icon: 'fa fa-clock-o',
-                    enabled: true
-                },
-                {
-                    title: 'Feature block',
-                    type: 'feature-block',
-                    icon: 'custom feature-block',
-                    enabled: true
-                },
-                {
-                    title: 'Footer',
-                    type: 'footer',
-                    icon: 'custom footer',
-                    enabled: true
-                },
-                {
-                    title: 'Image Gallery',
-                    type: 'image-gallery',
-                    icon: 'fa fa-image',
-                    enabled: true
-                },
-                {
-                    title: 'Image Slider',
-                    type: 'image-slider' ,
-                    icon: 'custom image-slider',
-                    enabled: false
-                },
-                {
-                    title: 'Image Text',
-                    type: 'image-text',
-                    icon: 'custom image-text',
-                    enabled: true
-                },
-                {
-                    title: 'Logo List',
-                    type: 'logo-list',
-                    icon: 'custom logo-list',
-                    enabled: false
-                },
-                {
-                    title: 'Meet Team',
-                    type: 'meet-team',
-                    icon: 'fa fa-users',
-                    enabled: true
-                },
-                {
-                    title: 'Navigation',
-                    type: 'navigation',
-                    icon: 'fa fa-location-arrow',
-                    enabled: true
-                },
-                {
-                    title: 'Products',
-                    type: 'products',
-                    icon: 'fa fa-money',
-                    enabled: false
-                },
-                {
-                    title: 'Simple form',
-                    type: 'simple-form',
-                    icon: 'custom simple-form',
-                    enabled: true
-                },
-                {
-                    title: 'Single Post',
-                    type: 'single-post',
-                    icon: 'custom single-post',
-                    enabled: false
-                },
-                {
-                    title: 'Social Links',
-                    type: 'social',
-                    icon: 'custom social-links',
-                    enabled: false
-                },
-                {
-                    title: 'Video',
-                    type: 'video',
-                    icon: 'fa fa-video',
-                    enabled: true
-                },
-                {
-                    title: 'Social Links',
-                    type: 'social-link',
-                    icon: 'custom social-links',
-                    enabled: true
-                },
-            ];
+            $scope.componentTypes = [{
+                title: 'Blog',
+                type: 'blog',
+                icon: 'custom blog',
+                enabled: false
+            }, {
+                title: 'Masthead',
+                type: 'masthead',
+                icon: 'custom masthead',
+                enabled: true
+            }, {
+                title: 'Feature List',
+                type: 'feature-list',
+                icon: 'fa fa-list-ul',
+                enabled: true
+            }, {
+                title: 'Campaign',
+                type: 'campaign',
+                icon: 'fa fa-bullhorn',
+                enabled: true
+            }, {
+                title: 'Contact Us',
+                type: 'contact-us',
+                icon: 'fa fa-map-marker',
+                enabled: false
+            }, {
+                title: 'Coming Soon',
+                type: 'coming-soon',
+                icon: 'fa fa-clock-o',
+                enabled: true
+            }, {
+                title: 'Feature block',
+                type: 'feature-block',
+                icon: 'custom feature-block',
+                enabled: true
+            }, {
+                title: 'Footer',
+                type: 'footer',
+                icon: 'custom footer',
+                enabled: true
+            }, {
+                title: 'Image Gallery',
+                type: 'image-gallery',
+                icon: 'fa fa-image',
+                enabled: true
+            }, {
+                title: 'Image Slider',
+                type: 'image-slider',
+                icon: 'custom image-slider',
+                enabled: false
+            }, {
+                title: 'Image Text',
+                type: 'image-text',
+                icon: 'custom image-text',
+                enabled: true
+            }, {
+                title: 'Logo List',
+                type: 'logo-list',
+                icon: 'custom logo-list',
+                enabled: false
+            }, {
+                title: 'Meet Team',
+                type: 'meet-team',
+                icon: 'fa fa-users',
+                enabled: true
+            }, {
+                title: 'Navigation',
+                type: 'navigation',
+                icon: 'fa fa-location-arrow',
+                enabled: true
+            }, {
+                title: 'Products',
+                type: 'products',
+                icon: 'fa fa-money',
+                enabled: false
+            }, {
+                title: 'Simple form',
+                type: 'simple-form',
+                icon: 'custom simple-form',
+                enabled: true
+            }, {
+                title: 'Single Post',
+                type: 'single-post',
+                icon: 'custom single-post',
+                enabled: false
+            }, {
+                title: 'Social Links',
+                type: 'social',
+                icon: 'custom social-links',
+                enabled: false
+            }, {
+                title: 'Video',
+                type: 'video',
+                icon: 'fa fa-video',
+                enabled: true
+            }, {
+                title: 'Social Links',
+                type: 'social-link',
+                icon: 'custom social-links',
+                enabled: true
+            }, ];
 
             $scope.selectComponent = function(type) {
                 if (type.enabled) {
@@ -879,52 +870,48 @@ define([
                 }
             };
 
-            $scope.insertMedia=function(asset){
+            $scope.insertMedia = function(asset) {
                 if ($scope.imageChange) {
                     $scope.imageChange = false;
                     var type = $scope.componentEditing.type;
                     //if image/text component
-                    if(type == 'image-text') {
+                    if (type == 'image-text') {
                         $scope.componentEditing.imgurl = asset.url;
-                    } else if(type == 'feature-list') {
+                    } else if (type == 'feature-list') {
                         var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
                         $scope.componentEditing.features[targetIndex].imgurl = asset.url;
-                    } else if(type == 'simple-form') {
+                    } else if (type == 'simple-form') {
                         $scope.componentEditing.imgurl = asset.url;
                     } else {
                         console.log('unknown component or image location');
                     }
                     $scope.bindEvents();
                 } else {
-                    $scope.componentEditing.bg.img.url=asset.url;
+                    $scope.componentEditing.bg.img.url = asset.url;
                 }
                 $scope.updateIframeComponents();
             };
 
-            $scope.checkIfSubdomainExists = function () {
+            $scope.checkIfSubdomainExists = function() {
                 var parent_div = $('div.form-group.subdomain');
-                    UserService.checkDuplicateSubdomain($scope.account.subdomain,$scope.account._id, function(result){
-                    if(result === "true")
-                    {
+                UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function(result) {
+                    if (result === "true") {
                         parent_div.addClass('has-error');
                         parent_div.find('span.error').remove();
                         parent_div.append("<span class='error help-block'>Domain already exists</span>");
-                    }
-                    else
-                    {
-                        UserService.putAccount($scope.account, function (account) {
-                        parent_div.removeClass('has-error');
-                        parent_div.find('span.error').remove(); 
+                    } else {
+                        UserService.putAccount($scope.account, function(account) {
+                            parent_div.removeClass('has-error');
+                            parent_div.find('span.error').remove();
                         });
                     }
                 });
             }
 
-            var offFn = $rootScope.$on('$locationChangeStart', function () {
-                if(!$scope.backup['website']){
+            var offFn = $rootScope.$on('$locationChangeStart', function() {
+                if (!$scope.backup['website']) {
 
-                }
-                else if ( confirm("Do you want to Save your changes?") ) {
+                } else if (confirm("Do you want to Save your changes?")) {
                     $scope.savePage();
 
                 } else {
@@ -934,40 +921,36 @@ define([
                 offFn();
             });
 
-            $scope.updateLinkList = function(linkLists)
-            {
+            $scope.updateLinkList = function(linkLists) {
                 var linkLabelsArr = [];
                 var editedLinksLists = document.getElementById("reorderNavBarModal").querySelectorAll('.head-menu-links');
                 for (var i = 0; i < editedLinksLists.length; i++) {
                     var linkLabel = editedLinksLists[i].attributes['data-label'].value;
-                    if(linkLabel)
+                    if (linkLabel)
                         linkLabelsArr.push(linkLabel);
-                }              
-                if(linkLabelsArr.length)
-                {
-                   $scope.website.linkLists.forEach(function(value, index) {
-                     if(value.handle === "head-menu")
-                     {
-                        var newLinkListOrder = [];
-                        for (var i = 0; i < editedLinksLists.length; i++) {
-                            var matchedLinkList = _.findWhere(value.links, {
-                                label: linkLabelsArr[i]
-                            });
-                            newLinkListOrder.push(matchedLinkList);
-                        };
-                        if(newLinkListOrder.length)
-                        {
-                            $scope.website.linkLists[index].links = newLinkListOrder;
-                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                            console.log('updated website navigation link list', data);
-                            toaster.pop('success', "Navigation updated successfully.");
-                        });
-                        }  
-                        
-                     }
-                 });  
                 }
-                         
+                if (linkLabelsArr.length) {
+                    $scope.website.linkLists.forEach(function(value, index) {
+                        if (value.handle === "head-menu") {
+                            var newLinkListOrder = [];
+                            for (var i = 0; i < editedLinksLists.length; i++) {
+                                var matchedLinkList = _.findWhere(value.links, {
+                                    label: linkLabelsArr[i]
+                                });
+                                newLinkListOrder.push(matchedLinkList);
+                            };
+                            if (newLinkListOrder.length) {
+                                $scope.website.linkLists[index].links = newLinkListOrder;
+                                WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                    console.log('updated website navigation link list', data);
+                                    toaster.pop('success', "Navigation updated successfully.");
+                                });
+                            }
+
+                        }
+                    });
+                }
+
             }
         }
     ]);
