@@ -26,6 +26,7 @@ var mainApp = angular
         'iso.directives',
         'timer',
         'ui',
+        'ui.bootstrap',
         "com.2fdevs.videogular",
         "com.2fdevs.videogular.plugins.controls",
         "com.2fdevs.videogular.plugins.overlayplay",
