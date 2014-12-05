@@ -27,6 +27,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
+        //Contacts
+        app.post(this.url('contacts/:id/charge'), this.setup, this.createChargeForContact.bind(this));
+
         //Customers
         app.get(this.url('customers'), this.isAuthApi, this.listCustomers.bind(this));
         app.get(this.url('customers/:id'), this.isAuthApi, this.getCustomer.bind(this));
@@ -957,6 +960,81 @@ _.extend(api.prototype, baseApi.prototype, {
                         return self.sendResultOrError(resp, err, value, "Error creating a charge.");
                     });
             }
+        });
+
+    },
+
+    /**
+     * This method is used to charge an unauthenticated user.
+     * @param req
+     * @param resp
+     */
+    createChargeForContact: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createChargeForContact');
+
+        /*
+         * Get the access token based on the accountId of the session
+         */
+        var accessToken = null;
+        var p1 = $.Deferred();
+
+        var accountId = self.accountId(req);
+        if(accountId === appConfig.mainAccountID) {
+            //no need to use an access token
+        } else if(req.session.stripeAccessToken) {
+            accessToken = req.session.stripeAccessToken;
+            p1.resolve();
+        } else {
+            accountDao.getAccountByID(accountId, function(err, account){
+                if(err) {
+                    self.log.error('Error getting account: ' + err);
+                    return self.wrapError(resp, 500, null, err);
+                }
+                var accountBilling = account.get('billing');
+                if(!accountBilling.accessToken || accountBilling.accessToken.length < 1) {
+                    self.log.warn('Account has not been connected to Stripe');
+                    return self.wrapError(resp, 400, 'Bad Request', 'No Stripe accessToken found.');
+                }
+                req.session.stripeAccessToken = accountBilling.accessToken;
+                accessToken = req.session.stripeAccessToken;
+                p1.resolve();
+            });
+        }
+
+        $.when(p1).done(function(){
+            var amount = req.body.amount;//REQUIRED
+            var currency = req.body.currency || 'usd';//REQUIRED
+            var card = req.body.card; //card or customer REQUIRED
+            var customerId = req.body.customerId; //card or customer REQUIRED
+            var contactId = req.params.id;
+            var description = req.body.description;
+            var metadata = req.body.metadata;
+            var capture = req.body.capture;
+            var statement_description = req.body.statement_description;
+            var receipt_email = req.body.receipt_email;
+            var application_fee = req.body.application_fee;
+
+            //validate params
+            if(!amount) {
+                return self.wrapError(resp, 400, null, "Invalid amount parameter.");
+            }
+            if(!currency) {
+                return self.wrapError(resp, 400, null, "Invalid currency parameter.");
+            }
+            if(!card && !customerId) {
+                return self.wrapError(resp, 400, null, "Missing card or customer parameter.");
+            }
+
+            if(!contactId) {
+                return self.wrapError(resp, 400, null, "Invalid contact parameter.");
+            }
+
+            stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
+                statement_description, receipt_email, application_fee, null, accessToken, function(err, value){
+                    self.log.debug('<< createChargeForContact');
+                    return self.sendResultOrError(resp, err, value, "Error creating a charge.");
+                });
         });
 
     },

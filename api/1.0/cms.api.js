@@ -46,6 +46,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
         app.put(this.url('page'), this.isAuthApi, this.saveOrUpdatePage.bind(this));
+        app.get(this.url('page/:handle/screenshot'), this.isAuthApi, this.generateScreenshot.bind(this));
 
 
         //consistent URLs
@@ -1216,6 +1217,30 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    /**
+     *
+     * @param req
+     * @param res
+     */
+    generateScreenshot: function(req, res) {
+        var self = this;
+        self.log.debug('>> generateScreenshot');
+        var accountId = parseInt(self.accountId(req));
+        var pageHandle = req.params.handle;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.generateScreenshot(accountId, pageHandle, function(err, url){
+                    self.log.debug('<< generateScreenshot');
+                    self.sendResultOrError(res, err, url, "Error generating screenshot.");
+                    self = null;
+                });
+            }
+        });
     }
 
 });

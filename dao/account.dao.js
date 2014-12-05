@@ -334,6 +334,33 @@ var dao = {
                 }
             });
         });
+    },
+
+    addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
+        var self=this;
+        self.log.debug('>> addStripeTokensToAccount');
+
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account: ' + err);
+                return fn(err, null);
+            }
+            var billing = account.get('billing');
+            billing.accessToken = accessToken;
+            billing.refreshToken = refreshToken;
+            account.set('billing', billing);
+            self.saveOrUpdate(account, function(err, updatedAccount){
+                if(err) {
+                    self.log.error('Error updating account: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< addStripeTokensToAccount');
+                    return fn(null, updatedAccount);
+                }
+
+            });
+        });
+
     }
 };
 

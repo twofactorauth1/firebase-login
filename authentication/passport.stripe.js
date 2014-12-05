@@ -14,6 +14,7 @@ var passportUtil = require('./passport.socialutil');
 var userDao = require('../dao/user.dao');
 var log = $$.g.getLogger('passport.stripe');
 var connect = require('connect');
+var accountDao = require('../dao/account.dao');
 
 passport.use(new StripeStrategy({
         clientID: stripeConfig.STRIPE_CLIENT_ID,
@@ -61,7 +62,12 @@ passport.use(new StripeStrategy({
             var user = value;
 
             user._setCredentials(stripeAccount, false);
-
+            // add accessToken to account.
+            accountDao.addStripeTokensToAccount(stripeAccount.baggage.accountId, accessToken, refreshToken, function(err, value){
+                if(err) {
+                    log.error('Error saving Stripe Tokens to account: ' + err);
+                }
+            });
             userDao.saveOrUpdate(user, function(err, value){
                 if(value==null) {
                     log.error("Error during saveOrUpdate of user: (" + err + ")");

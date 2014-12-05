@@ -349,11 +349,11 @@ if (process.env.NODE_ENV != "testing") {
 //-----------------------------------------------------
 //  SETUP ANALYTICS PROCESSING JOB
 //-----------------------------------------------------
-if (process.env.NODE_ENV != "testing") {
+//if (process.env.NODE_ENV != "testing") {
     var analyticsTimerConfig = require('./configs/analyticstimer.config');
     log.info('Starting analytics job to run every ' + analyticsTimerConfig.ANALYTICS_JOB_MS + 'ms');
     analyticsTimerConfig.startJob();
-}
+//}
 //-----------------------------------------------------
 //  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------

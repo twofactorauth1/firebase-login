@@ -26,7 +26,7 @@ var mandrillHelper =  {
             'to': [
                 {
                     'email': toAddress,
-                    'name': toName,
+                    //'name': toName,
                     'type': 'to'
                 }
             ],
@@ -79,6 +79,9 @@ var mandrillHelper =  {
         };
         if(fromName && fromName.length > 0) {
             message.from_name = fromName;
+        }
+        if(toName && toName.length > 0) {
+            message.to.name = toName;
         }
         var async = false;
         var ip_pool = "Main Pool";

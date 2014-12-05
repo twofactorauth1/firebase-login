@@ -122,7 +122,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             ip_address : "${keen.ip}",
             fingerprint: fingerprint,
             session_start: start,
-            session_end: 0,
             session_length: 0,
             new_visitor: new_visitor,
             entrance: parsedEntranceUrl.attr("path")

@@ -76,7 +76,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-6 top-four">
-                                    <div class="metric center">Cancelations</div>
+                                    <div class="metric center">Cancellations</div>
                                     <div class="title center">
                                         {{totalCanceledSubscriptions}}
                                         <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
@@ -173,7 +173,7 @@
                             <div class="clearfix"></div>
                             <div>
                                 <div class="col-xs-6 top-four">
-                                    <div class="metric center">Cancelations</div>
+                                    <div class="metric center">Cancellations</div>
                                     <div class="title center">
                                         {{filtered = (activities | filter: { activityType: 'SUBSCRIBE_CANCEL' }); filtered.length}}
                                     </div>
@@ -291,12 +291,13 @@
                             </div>
                             <div>
                                 <div class="col-xs-4 top-four">
-                                    <div class="metric center">Pageviews</div>
+                                    <div class="metric center">Visitors</div>
                                     <div class="title center">
-                                        <span count-to="{{pageviews}}" value="0" duration="1"></span>
+                                        <span count-to="{{visitors}}" value="0" duration="1"></span>
                                         <div class="clearfix visible-xs"></div>
-                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> 
-                                            <span count-to="{{pageviewsPercent}}" value="0" duration="1"></span>%
+                                        <span class="percent nopadding" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }">
+                                            <i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i>
+                                            <span count-to="{{visitorsPercent}}" value="0" duration="1"></span>%
                                         </span>
                                     </div>
                                 </div>
@@ -305,19 +306,18 @@
                                     <div class="title center">
                                         <span count-to="{{sessions}}" value="0" duration="1"></span>
                                         <div class="clearfix visible-xs"></div>
-                                        <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> 
-                                            <span count-to="{{visitDurationPercent}}" value="0" duration="1"></span>%
+                                        <span class="percent" ng-class="{'decrease': sessionsPercent < 0, 'increase': sessionsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': sessionsPercent < 0, 'fa fa-chevron-up': sessionsPercent > 0 }"></i>
+                                            <span count-to="{{sessionsPercent}}" value="0" duration="1"></span>%
                                             </span>
                                     </div>
                                 </div>
                                 <div class="col-xs-4 top-four">
-                                    <div class="metric center">Visitors</div>
+                                    <div class="metric center">Pageviews</div>
                                     <div class="title center">
-                                        <span count-to="{{visitors}}" value="0" duration="1"></span>
+                                        <span count-to="{{pageviews}}" value="0" duration="1"></span>
                                         <div class="clearfix visible-xs"></div>
-                                        <span class="percent nopadding" ng-class="{'decrease': visitorsPercent < 0, 'increase': visitorsPercent > 0 }">
-                                            <i ng-class="{'fa fa-chevron-down': visitorsPercent < 0, 'fa fa-chevron-up': visitorsPercent > 0 }"></i>
-                                            <span count-to="{{visitorsPercent}}" value="0" duration="1"></span>%
+                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> 
+                                            <span count-to="{{pageviewsPercent}}" value="0" duration="1"></span>%
                                         </span>
                                     </div>
                                 </div>
@@ -690,7 +690,7 @@
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" style="background-color: #97cffe; width:345px;" ng-if="customers">
                         <span class="keen-metric-value">2</span>
-                        <span class="keen-metric-title">Cancelations</span>
+                        <span class="keen-metric-title">Cancellations</span>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">

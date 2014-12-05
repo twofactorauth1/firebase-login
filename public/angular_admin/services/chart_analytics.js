@@ -14,9 +14,12 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.calculatePercentage = function(oldval, newval) {
+            console.log('Calculating Percentage >>>');
             var result;
             oldval = parseInt(oldval);
             newval = parseInt(newval);
+            console.log('oldval >>> ', oldval);
+            console.log('newval >>> ', newval);
             if(oldval == 0 && newval == 0) {
                 return 0;
             }
@@ -29,6 +32,8 @@ define(['app', 'keenService'], function(app) {
             if (newval === oldval) {
                 result = 100;
             }
+            console.log('result >>> ', result);
+            console.log('formated >>> ', Math.round(result * 100) / 100);
             return Math.round(result * 100) / 100;
         };
 
@@ -344,10 +349,10 @@ define(['app', 'keenService'], function(app) {
 
         //local variables
         var client;
-        var timeframeStart = '2014-11-01T23:05:20.075Z';
-        var timeframeEnd = '2014-11-30T23:05:20.075Z';
-        var timeframePreviousStart = '2014-10-02T23:05:20.075Z';
-        var timeframePreviousEnd = '2014-10-31T23:05:20.075Z';
+        var timeframeStart = '2014-11-15T23:05:20.075Z';
+        var timeframeEnd = '2014-12-14T23:05:20.075Z';
+        var timeframePreviousStart = '2014-10-15T23:05:20.075Z';
+        var timeframePreviousEnd = '2014-11-14T23:05:20.075Z';
         var interval = "daily";
         var firstQuery = true;
         var totalVisitors = 0;
@@ -357,9 +362,11 @@ define(['app', 'keenService'], function(app) {
         this.queryReports = function() {
             var queryData = {};
 
+            console.log('window.location.hostname >>> ', window.location.hostname);
+
 
                 queryData.visitorLocations = new Keen.Query("count", {
-                    eventCollection: "pageviews",
+                    eventCollection: "page_data",
                     timeframe: {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
@@ -375,7 +382,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframeEnd
                     },
                     groupBy: "user_agent.device",
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.userReport = new Keen.Query("count_unique", {
@@ -386,7 +393,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframeEnd
                     },
                     interval: interval,
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.userReportPreviousMonth = new Keen.Query("count_unique", {
@@ -397,7 +404,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframePreviousEnd
                     },
                     interval: interval,
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.pageviewsReport = new Keen.Query("count", {
@@ -428,7 +435,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframeEnd
                     },
                     interval: interval,
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.sessionsPreviousReport = new Keen.Query("count_unique", {
@@ -439,7 +446,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframePreviousEnd
                     },
                     interval: interval,
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.sessionLengthReport = new Keen.Query("count", {
@@ -450,7 +457,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframeEnd
                     },
                     interval: interval,
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                   });
 
                 queryData.sessionAvgLengthReport = new Keen.Query("average", {
@@ -460,7 +467,7 @@ define(['app', 'keenService'], function(app) {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
                     },
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                   });
 
                 queryData.bouncesReport = new Keen.Query("count_unique", {
@@ -472,7 +479,7 @@ define(['app', 'keenService'], function(app) {
                         "end" : timeframeEnd
                     },
                     interval: interval,
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.bouncesPreviousReport = new Keen.Query("count_unique", {
@@ -483,7 +490,7 @@ define(['app', 'keenService'], function(app) {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
                     },
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.trafficSources = new Keen.Query("count_unique", {
@@ -494,7 +501,7 @@ define(['app', 'keenService'], function(app) {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
                     },
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
                 });
 
                 queryData.returningVisitors = new Keen.Query("count_unique", {
@@ -504,7 +511,7 @@ define(['app', 'keenService'], function(app) {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
                     },
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}, {"property_name":"new_visitor","operator":"eq","property_value":false}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}, {"property_name":"new_visitor","operator":"eq","property_value":false}]
                 });
 
                 queryData.newVisitors = new Keen.Query("count_unique", {
@@ -514,7 +521,7 @@ define(['app', 'keenService'], function(app) {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
                     },
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname}, {"property_name":"new_visitor","operator":"eq","property_value":true}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}, {"property_name":"new_visitor","operator":"eq","property_value":true}]
                 });
 
                 queryData.visitorLocations = new Keen.Query("count", {
@@ -525,7 +532,7 @@ define(['app', 'keenService'], function(app) {
                         "start" : timeframeStart,
                         "end" : timeframeEnd
                     },
-                    filters: [{"property_name":"entrance","operator":"eq","property_value": window.location.hostname},{"property_name":"ip_geo_info","operator":"ne","property_value":"null"}]
+                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname},{"property_name":"ip_geo_info","operator":"ne","property_value":"null"}]
                 });
 
                 queryData.pageDepth = new Keen.Query("count", {
@@ -662,7 +669,11 @@ define(['app', 'keenService'], function(app) {
                         vistorsPreviousData += value;
                     };
 
-                    var visitorsPercent = self.calculatePercentage(currentTotalVisitors, vistorsPreviousData);
+                    console.log('currentTotalVisitors >>> ', currentTotalVisitors);
+
+                    console.log('vistorsPreviousData >>> ', vistorsPreviousData);
+
+                    var visitorsPercent = self.calculatePercentage(vistorsPreviousData, currentTotalVisitors);
 
                     // ----------------------------------------
                     // Pageviews Metric
@@ -720,6 +731,14 @@ define(['app', 'keenService'], function(app) {
                     //         $scope.analyticsOverviewConfig.series[1].data = _sessionsData;
                     //     }
                     // }
+
+                    var sessionsPreviousData = 0;
+                    for (var w = 0; w < results[7].result.length; w++) {
+                        var value = results[7].result[w].value || 0;
+                        sessionsPreviousData += value;
+                    };
+
+                    var sessionsPercent = self.calculatePercentage(_totalSessions, sessionsPreviousData);
 
                     var visitDuration = self.secToTime(results[9].result / 1000);
 
@@ -864,6 +883,7 @@ define(['app', 'keenService'], function(app) {
                     reportData.currentTotalPageviews = currentTotalPageviews;
                     reportData.pageviewsData = pageviewsData;
                     reportData.sessionData = _sessionsData;
+                    reportData.sessionsPercent = sessionsPercent;
                     reportData.totalSessions = _totalSessions;
                     reportData.pageviewsPreviousData = pageviewsPreviousData;
                     reportData.pageviewsPercent = pageviewsPercent;
@@ -980,14 +1000,16 @@ define(['app', 'keenService'], function(app) {
                     }
                 },
                 series: [{
-                    name: 'Pageviews',
-                    data: readyPageviewsData
-                }, {
-                    name: 'Visits',
-                    data: sessionsData
-                }, {
                     name: 'Visitors',
                     data: readyVisitorsData
+                },
+                {
+                    name: 'Visits',
+                    data: sessionsData
+                },
+                {
+                    name: 'Pageviews',
+                    data: readyPageviewsData
                 }],
                 credits: {
                     enabled: false

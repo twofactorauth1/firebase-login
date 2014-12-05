@@ -28,7 +28,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                    // console.log($scope.$parent)
             }
         });
-        console.log('BlogCtrl: postsService >>> ');
         postsService(function(err, data){
             console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
