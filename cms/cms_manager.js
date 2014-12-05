@@ -983,7 +983,8 @@ module.exports = {
                 height: 600,
                 full_page: true
             };
-
+            
+            //serverUrl = 'http://www.indigenous.io';
 
             var tempFile = new tmp.File();
             var tempFileName = tempFile.path + '.png';
@@ -993,6 +994,7 @@ module.exports = {
 
             self._download(ssURL, tempFileName, function(){
                 log.debug('stored screenshot at ' + tempFileName);
+                tempFile.type = 'image/png';
                 s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
                     if(err) {
                         log.error('Error uploading to s3: ' + err);
