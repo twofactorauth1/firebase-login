@@ -742,7 +742,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     //get the token
                     PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
                         if (error) {
-                            console.info(error);
+                            console.info(error); 
+                            $scope.$apply(function() {
+                                $scope.isFormValid = false;
+                             })                           
                             switch (error.param) {
                                 case "number":
                                     $("#card_number .error").html(error.message);
@@ -758,16 +761,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                     break;
                             }
                         }
-                        $scope.isFormValid = false;
-                        newUser.cardToken = token;
-                        newUser.plan = $scope.selectedPlan;
-                        newUser.anonymousId = window.analytics.user().anonymousId();
-                        newUser.permanent_cookie = ipCookie("permanent_cookie");
-                        newUser.fingerprint = new Fingerprint().get();
-                        userService.initializeUser(newUser, function(data) {
-                            window.location = data.accountUrl;
-                        });
-
+                        else
+                        {
+                            newUser.cardToken = token;
+                            newUser.plan = $scope.selectedPlan;
+                            newUser.anonymousId = window.analytics.user().anonymousId();
+                            newUser.permanent_cookie = ipCookie("permanent_cookie");
+                            newUser.fingerprint = new Fingerprint().get();
+                            userService.initializeUser(newUser, function(data) {
+                            if(data)
+                                window.location = data.accountUrl;
+                            else
+                              $scope.isFormValid = false;
+                        });  
+                        }
+                        
                     });
 
 
