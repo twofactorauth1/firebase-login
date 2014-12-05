@@ -113,7 +113,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 });
             };
 
-            $scope.addSubscriptionFn = function() {
+            $scope.addSubscriptionFn = function(showToast) {
                 if ($scope.user.stripeId === undefined || $scope.user.stripeId === null || $scope.user.stripeId == '') {
                     ToasterService.setPending('error', 'Need to add a stripe account first.');
                     $scope.userPreferences.account_default_tab = 'integrations';
@@ -139,13 +139,14 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     $scope.newSubscription = {
                         planId: $$.u.idutils.generateUniqueAlphaNumericShort()
                     };
-                });
+                }, showToast);
             };
 
             $scope.editSubscriptionFn = function(planId) {
-                $scope.planDeleteFn(planId);
-                $scope.addSubscriptionFn();
+                $scope.planDeleteFn(planId, false);
+                $scope.addSubscriptionFn(false);
                 $scope.editCancelFn();
+                ToasterService.show('success', 'Plan updated.');
             };
 
             $scope.saveProductFn = function() {
@@ -180,8 +181,8 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 };
             };
 
-            $scope.planDeleteFn = function(planId) {
-                PaymentService.deletePlan(planId, function() {});
+            $scope.planDeleteFn = function(planId, showToast) {
+                PaymentService.deletePlan(planId, function() {}, showToast);
                 $scope.plans.forEach(function(value, index) {
                     if (value.id == planId) {
                         $scope.plans.splice(index, 1);
