@@ -169,8 +169,8 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 $scope.planEdit = true;
                 $scope.plans.forEach(function(value, index) {
                     if (value.id == planId) {
-                        $scope.newSubscription = value;
-                        $scope.newSubscription.amount = value.amount / 100;
+                        $scope.newSubscription = angular.copy(value);
+                        $scope.newSubscription.amount = $scope.newSubscription.amount / 100;
                         $scope.newSubscription.planId = value.id;
                     }
                 });
