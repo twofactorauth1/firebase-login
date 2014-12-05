@@ -121,6 +121,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     $state.go('account');
                 }
                 console.log('$scope.newSubscription >>> ', $scope.newSubscription);
+                $scope.newSubscription.amount = $scope.newSubscription.amount * 100;
                 PaymentService.postCreatePlan($scope.newSubscription, function(subscription) {
                     $scope.plans.push(subscription);
                     if ('stripePlans' in $scope.product.product_attributes) {
@@ -168,7 +169,8 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 $scope.planEdit = true;
                 $scope.plans.forEach(function(value, index) {
                     if (value.id == planId) {
-                        $scope.newSubscription = value;
+                        $scope.newSubscription = angular.copy(value);
+                        $scope.newSubscription.amount = $scope.newSubscription.amount / 100;
                         $scope.newSubscription.planId = value.id;
                     }
                 });

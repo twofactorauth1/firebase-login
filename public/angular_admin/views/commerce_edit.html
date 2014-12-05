@@ -477,7 +477,7 @@
                                     </td>
                                     <td>{{plan.name}}</td>
                                     <td>{{plan.interval_count}}</td>
-                                    <td>${{plan.amount}}</td>
+                                    <td>${{(plan.amount/100).toFixed(2)}}</td>
                                     <td class="table-action">
                                         <a ng-click="planEditFn(plan.id)"><i class="fa fa-pencil"></i></a>
                                         <a ng-click="planDeleteFn(plan.id, true)" class="delete-row"><i class="fa fa-trash-o"></i></a>
