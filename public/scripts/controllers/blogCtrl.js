@@ -142,7 +142,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post =  that.post;
             post.post_tags.forEach(function(v,i) {
                 if(v.text)
-                    that.post.post_tags[i] = v.text;
+                    post.post.post_tags[i] = v.text;
             });
             var post_content_container = $('.post_content_div .post_content');
             if(post_content_container.length > 0)
