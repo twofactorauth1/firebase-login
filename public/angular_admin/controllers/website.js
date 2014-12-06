@@ -586,6 +586,7 @@ define([
 
             $scope.activateAloha = function() {
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
+                $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
             };
 
