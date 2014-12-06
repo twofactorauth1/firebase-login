@@ -525,6 +525,7 @@ define([
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
+                $scope.components = $scope.currentPage.components;
                 var cmpVersion = null;
                 if ($scope.selectedTheme) {
                     var selectedType = _.findWhere($scope.selectedTheme.config.components, {
@@ -541,7 +542,7 @@ define([
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
                         //$scope.components.push(newComponent);
-                        // $scope.components = $scope.currentPage.components;
+                        $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
 
@@ -692,18 +693,9 @@ define([
                 if (!hasHandle) {
                     WebsiteService.createPage(websiteId, pageData, function(newpage) {
                         toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
-                        $scope.page = null;
-                        $scope.allPages.push(newpage);
-                        document.getElementById("iframe-website").setAttribute("src", "/page/" + newpage.handle);
-                        $scope.currentPage = newpage;
-                        $scope.pageSelected = newpage.handle;
+                        $scope.page = null;                       
                         $('#create-page-modal').modal('hide');
-                        //get components from page
-                        if ($scope.currentPage && $scope.currentPage.components) {
-                            $scope.components = $scope.currentPage.components;
-                        } else {
-                            $scope.components = [];
-                        }
+                        $scope.updatePage(newpage.handle);
                     });
                 } else {
                     toaster.pop('error', "Page URL " + page.handle, "Already exists");
