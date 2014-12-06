@@ -1,5 +1,5 @@
 define(['app', 'constants', 'importContactService'], function(app) {
-  app.register.service('CustomerService', ['$http', '$cacheFactory', function($http, $cacheFactory, ImportContactService) {
+  app.register.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService', function($http, $cacheFactory, ImportContactService) {
     var baseUrl = '/api/1.0/';
 
     this.getCache = function() {
