@@ -975,7 +975,7 @@ module.exports = {
                 return fn(err, null);
             }
             log.debug('got server url');
-            if(pageHandle !== 'index') {
+            if(pageHandle !== 'index' && pageHandle.indexOf('blog/') == -1) {
                 serverUrl +='/page/' + pageHandle;
             }
             var options = {

@@ -20,6 +20,7 @@ define([
         '$scope',
         '$window',
         '$timeout',
+        '$location',
         'WebsiteService',
         'UserService',
         'toaster',
@@ -27,9 +28,15 @@ define([
         '$rootScope',
         'CourseService',
         'NavigationService',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
+        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
             ngProgress.start();
+            var pageId = $location.$$search['pageId'];
+
             NavigationService.updateNavigation();
+            $scope.$back = function() {
+              window.history.back();
+            };
+
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
@@ -224,9 +231,23 @@ define([
                         arr.push(parsed[x]);
                     }
                     $scope.allPages = arr;
-                    $scope.currentPage = _.findWhere(pages, {
-                        handle: currentPage
-                    });
+
+                    if (pageId) {
+                        console.log('pageId >>> ', pageId);
+                        $scope.currentPage = _.findWhere(pages, {
+                            _id: pageId
+                        });
+                        if ($scope.currentPage && $scope.currentPage.components) {
+                            $scope.components = $scope.currentPage.components;
+                        } else {
+                            $scope.components = [];
+                        }
+                        console.log('$scope.currentPage >>> ', $scope.currentPage);
+                    } else {
+                        $scope.currentPage = _.findWhere(pages, {
+                            handle: currentPage
+                        });
+                    }
                     //get components from page
                     if ($scope.currentPage) {
                         if ($scope.currentPage.components) {

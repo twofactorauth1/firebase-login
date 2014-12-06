@@ -99,8 +99,14 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'CustomerEditCtrl',
           controllerUrl: '/angular_admin/controllers/customer_edit.js'
         }))
-        .state('website', angularAMD.route({
+        .state('websiteManage', angularAMD.route({
           url: '/website',
+          templateUrl: '/angular_admin/views/website-manage.html',
+          controller: 'WebsiteManageCtrl',
+          controllerUrl: '/angular_admin/controllers/website_manage.js'
+        }))
+        .state('website', angularAMD.route({
+          url: '/website-editor',
           templateUrl: '/angular_admin/views/website.html',
           controller: 'WebsiteCtrl',
           controllerUrl: '/angular_admin/controllers/website.js'

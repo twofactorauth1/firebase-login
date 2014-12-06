@@ -2,9 +2,12 @@
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-5 pages-editing">
+            <button ng-click="$back()" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
+            </button>
             <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Editing {{currentPage.title || 'Home'}}</div></h2>
             <h2 class="pull-left" style="margin-right: 15px;" ng-show="!isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Website</div></h2>
-            <div class="btn-group pull-left" dropdown is-open="status.isopen">
+            <!-- <div class="btn-group pull-left" dropdown is-open="status.isopen">
                 <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled"
                 ng-show="!isEditing">
                     <div class="hidden-xs div-header">
@@ -15,7 +18,7 @@
                     <li ng-repeat="page in allPages track by $index"><a href="" ng-click="updatePage(page.handle)">{{page.title}}</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
         <div class="col-xs-7">
 
@@ -54,7 +57,7 @@
                 <span> Post</span>
             </a> -->
 
-            <div class="btn-group pull-right btn-add" ng-show="!isEditing">
+            <!-- <div class="btn-group pull-right btn-add" ng-show="!isEditing">
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs">Add</span>
@@ -68,7 +71,7 @@
                     <li><a href="" data-toggle="modal" data-target="#create-post-modal"> Post</a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
 
             <div class="clearfix"></div>
         </div>
@@ -80,7 +83,7 @@
 
     <div class="rightpanel rightpanel-website">
         <tabset>
-            <tab>
+            <!-- <tab>
                 <tab-heading>
                     <i class="fa fa-paint-brush" tooltip-placement="bottom" tooltip="Theme"></i>
                 </tab-heading>
@@ -137,14 +140,12 @@
                         ng-change="checkIfSubdomainExists()">
                     </div>
                 </div>
-            </tab>
+            </tab> -->
             <tab>
                 <tab-heading>
-                    <i class="fa fa-file-text-o" tooltip-placement="bottom" tooltip="Page"></i>
+                    Settings
                 </tab-heading>
                 <div class="rightpanelinner">
-                    <h5 class="sidebartitle">Page</h5>
-                    <hr/>
                     <div class="form-group">
                         <label>Title:</label>
                         <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">

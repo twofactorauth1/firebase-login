@@ -65,6 +65,14 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleWebsiteManage = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
             }, true);
 
             w.bind('resize', function () {
