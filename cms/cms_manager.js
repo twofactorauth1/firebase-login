@@ -1009,7 +1009,7 @@ module.exports = {
                     } else {
                         log.debug('Got the following from S3', value);
                         log.debug('<< generateScreenshot');
-                        fn(null, value.url);
+                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
                     }
                 });
             });
