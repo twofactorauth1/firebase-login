@@ -123,6 +123,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
+                        var iframe = window.parent.document.getElementById("iframe-website")               
+                        iframe && iframe.contentWindow && iframe.contentWindow.parent.checkIfSinglePost && iframe.contentWindow.parent.checkIfSinglePost(found);
                     }
                     return;
                 }
@@ -134,16 +136,21 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         window.copyPostMode=function(){
             console.log(that.post);
             that.tempPost=angular.copy(that.post);
-
-
         };
 
         window.savePostMode=function(){
-            that.post.post_tags.forEach(function(v,i) {
-                that.post.post_tags[i] = v.text;
-            },that.post.post_tags);
-            PostService.updatePost($scope.$parent.currentpage._id, that.post._id,that.post,function(data){
+            var post =  that.post;
+            post.post_tags.forEach(function(v,i) {
+                if(v.text)
+                    post.post_tags[i] = v.text;
+            });
+            var post_content_container = $('.post_content_div .post_content');
+            if(post_content_container.length > 0)
+                post.post_content = post_content_container.html();
 
+            PostService.updatePost($scope.$parent.currentpage._id, post._id,post,function(data){
+                console.log(data);
+                console.log("Post Saved");
             });
         };
 
