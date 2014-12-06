@@ -4,6 +4,13 @@ var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
+var urlboxhelper = require('../utils/urlboxhelper');
+var s3dao = require('../dao/integrations/s3.dao');
+var fs = require('fs');
+var request = require('request');
+var tmp = require('temporary');
+var awsConfig = require('../configs/aws.config');
+
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -952,6 +959,64 @@ module.exports = {
         });
     },
 
+    generateScreenshot: function(accountId, pageHandle, fn) {
+        var self = this;
+        log.debug('>> generateScreenshot');
+        /*
+         * Get the URL for the page.
+         * Generate URLBox URL
+         * Download URLBox image
+         * Upload image to S3
+         * Return URL for S3 image
+         */
+        accountDao.getServerUrlByAccount(accountId, function(err, serverUrl){
+            if(err) {
+                log.error('Error getting server url: ' + err);
+                return fn(err, null);
+            }
+            log.debug('got server url');
+            if(pageHandle !== 'index') {
+                serverUrl +='/page/' + pageHandle;
+            }
+            var options = {
+                width: 800,
+                height: 600,
+                full_page: true
+            };
+
+            //TODO: comment out this line.
+            //serverUrl = 'http://www.indigenous.io';
+            var name = new Date().getTime() + '.png';
+            var tempFile = {
+                name: name,
+                path: 'tmp/' + name
+            };
+            var tempFileName = tempFile.path;
+            var ssURL = urlboxhelper.getUrl(serverUrl, options);
+            var bucket = awsConfig.BUCKETS.SCREENSHOTS;
+            var subdir = 'account_' + accountId;
+
+
+
+            self._download(ssURL, tempFile, function(){
+                log.debug('stored screenshot at ' + tempFileName);
+                tempFile.type = 'image/png';
+                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+                    fs.unlink(tempFile.path, function(err, value){});
+                    if(err) {
+                        log.error('Error uploading to s3: ' + err);
+                        fn(err, null);
+                    } else {
+                        log.debug('Got the following from S3', value);
+                        log.debug('<< generateScreenshot');
+                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
+                    }
+                });
+            });
+
+        });
+    },
+
 
 
     _addPostIdToBlogComponentPage: function(postId, page) {
@@ -999,5 +1064,32 @@ module.exports = {
 
         return postsAry;
 
+    },
+
+    //TODO: Remove this console logs
+    _download: function(uri, file, callback){
+        console.log('calling download.  Saving to: ' + file.path);
+        request.head(uri, function(err, res, body){
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
+            file.type = res.headers['content-type'];
+            file.size = res.headers['content-length'];
+            if(err) {
+                console.log('err getting the head for ' + uri);
+            }
+            request(uri).on('error', function(err) {
+                console.log('error getting screenshot: ' + err);
+            }).pipe(fs.createWriteStream(file.path)).on('close', callback);
+        });
+    },
+
+    _downloadToS3: function(uri,bucket,subdir, callback) {
+        var resourceName = subdir + '/' + new Date().getTime() + '.png';
+        var s3Url = s3dao.getSignedRequest(bucket, resourceName, 3600);
+        request(uri).on('error', function(err){
+            console.log('error getting screenshot: ' + err);
+        }).pipe(request.put(s3Url).on('error', function(err){
+            console.log('error during put: ' + err);
+        }).on('close', callback));
     }
 };

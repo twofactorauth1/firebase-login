@@ -49,6 +49,7 @@
     "request": "^2.34.0",
     "requirejs": "2.1.10",
     "stripe": "~2.4.0",
+    "temporary": "0.0.8",
     "tldtools": "0.0.9",
     "underscore": ">=1.6.0",
     "wiredep": "^1.8.6"

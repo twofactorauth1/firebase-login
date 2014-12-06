@@ -114,6 +114,7 @@ var dao = {
             var s3 = new AWS.S3({params: {Bucket: bucket}});
 
             var params = {Key: key, Body: data, ContentType:type};
+            console.dir(params);
             s3.putObject(params, function (err, data) {
                 if (!err) {
                     fn(null, {name: name, url: "http://s3.amazonaws.com/" + bucket + "/" + key, resource: key, size: size});

@@ -26,6 +26,7 @@ var mainApp = angular
         'iso.directives',
         'timer',
         'ui',
+        'ui.bootstrap',
         "com.2fdevs.videogular",
         "com.2fdevs.videogular.plugins.controls",
         "com.2fdevs.videogular.plugins.overlayplay",
@@ -98,9 +99,16 @@ var mainApp = angular
                 analyticsService.pagePing();
                 clearInterval(runningInterval);
 
+                var counter = 0;
                 //every 15 seconds send page tracking data
                 runningInterval = setInterval(function(){
                     analyticsService.pagePing();
+                    counter++;
+
+                    if (counter >= (1000 * 60 * 60))
+                    {
+                        clearInterval(runningInterval);
+                    }
                 }, 15000);
             });
         });
