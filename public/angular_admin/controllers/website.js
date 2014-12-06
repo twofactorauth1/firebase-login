@@ -20,6 +20,7 @@ define([
         '$scope',
         '$window',
         '$timeout',
+        '$location',
         'WebsiteService',
         'UserService',
         'toaster',
@@ -27,9 +28,15 @@ define([
         '$rootScope',
         'CourseService',
         'NavigationService',
-        function($scope, $window, $timeout, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
+        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
             ngProgress.start();
+            $scope.editingPageId = $location.$$search['pageId'];
+
             NavigationService.updateNavigation();
+            $scope.$back = function() {
+              window.history.back();
+            };
+
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
@@ -218,6 +225,7 @@ define([
             UserService.getAccount(function(account) {
                 $scope.account = account;
                 that.account = account;
+                console.log('account ', account);
                 //get pages and find this page
                 WebsiteService.getPages(account.website.websiteId, function(pages) {
                     //TODO should be dynamic based on the history
@@ -230,9 +238,25 @@ define([
                         arr.push(parsed[x]);
                     }
                     $scope.allPages = arr;
-                    $scope.currentPage = _.findWhere(pages, {
-                        handle: currentPage
-                    });
+
+                    if ($scope.editingPageId) {
+                        console.log('pageId >>> ', $scope.editingPageId);
+                        $scope.currentPage = _.findWhere(pages, {
+                            _id: $scope.editingPageId
+                        });
+                        // if ($scope.currentPage && $scope.currentPage.components) {
+                        //     $scope.components = $scope.currentPage.components;
+                        // } else {
+                        //     $scope.components = [];
+                        // }
+                        // console.log('$scope.currentPage >>> ', $scope.currentPage);
+                        // $scope.resfeshIframe();
+                    } else {
+                        console.log('current');
+                        $scope.currentPage = _.findWhere(pages, {
+                            handle: currentPage
+                        });
+                    }
                     //get components from page
                     if ($scope.currentPage) {
                         if ($scope.currentPage.components) {

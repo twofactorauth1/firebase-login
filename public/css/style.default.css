@@ -19210,6 +19210,16 @@ div.error label.error:before {
   margin-right: 10px;
   width: 16px;
 }
+.website-manage .screenshot-wrap {
+  height: 155px;
+  overflow: hidden;
+}
+.website-manage .screenshot-wrap img {
+  width: 260px;
+}
+.website-manage .template-btns {
+  margin-bottom: 0px;
+}
 .dataTables_length .chosen-container {
   min-width: 75px;
 }
