@@ -2,13 +2,16 @@ define([
     'app',
     'userService',
     'websiteService',
-    'colorpicker'
+    'colorpicker',
+    'ngProgress'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
         'UserService',
         'WebsiteService',
-        function($scope, UserService, WebsiteService) {
+        'ngProgress',
+        function($scope, UserService, WebsiteService, ngProgress) {
+            ngProgress.start();
             var account;
             $scope.activeTab = 'pages';
             UserService.getAccount(function(account) {
@@ -48,6 +51,8 @@ define([
 
                     $scope.primaryFontStack = $scope.website.settings.font_family;
                     $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+
+                    ngProgress.complete();
                 });
             });
 

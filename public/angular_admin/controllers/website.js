@@ -30,7 +30,7 @@ define([
         'NavigationService',
         function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
             ngProgress.start();
-            var pageId = $location.$$search['pageId'];
+            $scope.editingPageId = $location.$$search['pageId'];
 
             NavigationService.updateNavigation();
             $scope.$back = function() {
@@ -225,6 +225,7 @@ define([
             UserService.getAccount(function(account) {
                 $scope.account = account;
                 that.account = account;
+                console.log('account ', account);
                 //get pages and find this page
                 WebsiteService.getPages(account.website.websiteId, function(pages) {
                     //TODO should be dynamic based on the history
@@ -238,18 +239,20 @@ define([
                     }
                     $scope.allPages = arr;
 
-                    if (pageId) {
-                        console.log('pageId >>> ', pageId);
+                    if ($scope.editingPageId) {
+                        console.log('pageId >>> ', $scope.editingPageId);
                         $scope.currentPage = _.findWhere(pages, {
-                            _id: pageId
+                            _id: $scope.editingPageId
                         });
-                        if ($scope.currentPage && $scope.currentPage.components) {
-                            $scope.components = $scope.currentPage.components;
-                        } else {
-                            $scope.components = [];
-                        }
-                        console.log('$scope.currentPage >>> ', $scope.currentPage);
+                        // if ($scope.currentPage && $scope.currentPage.components) {
+                        //     $scope.components = $scope.currentPage.components;
+                        // } else {
+                        //     $scope.components = [];
+                        // }
+                        // console.log('$scope.currentPage >>> ', $scope.currentPage);
+                        // $scope.resfeshIframe();
                     } else {
+                        console.log('current');
                         $scope.currentPage = _.findWhere(pages, {
                             handle: currentPage
                         });
