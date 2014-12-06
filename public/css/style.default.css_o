@@ -6954,6 +6954,10 @@ small.media-desc {
   .navbar .nav > li {
     float: none !important;
   }
+  .feature-list-v4 .col-xs-height {
+    display: block !important;
+    margin: 10px auto !important;
+  }
 }
 /*! jQuery UI - v1.10.3 - 2013-11-20
 * http://jqueryui.com

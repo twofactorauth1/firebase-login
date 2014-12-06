@@ -6964,6 +6964,10 @@ small.media-desc {
   .navbar .nav > li {
     float: none !important;
   }
+  .feature-list-v4 .col-xs-height {
+    display: block !important;
+    margin: 10px auto !important;
+  }
 }
 /*! jQuery UI - v1.10.3 - 2013-11-20
 * http://jqueryui.com
@@ -22955,6 +22959,16 @@ contenthover a {
   margin-left: 40px;
   margin-right: 40px;
   height: 1px;
+}
+.meet-team-v1 .c {
+  display: table;
+  height: 72%;
+  font-family: 'Open Sans';
+}
+.meet-team-v1 .c > div {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
 }
 /********** Meet Team  v2**********/
 .meet-team-v2 .title {

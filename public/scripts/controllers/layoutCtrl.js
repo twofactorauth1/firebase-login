@@ -38,8 +38,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 for (  page in data  ) {
                     if ( data.hasOwnProperty(  page  ) && page !== 'index' ) {
                         tempPageComponents = data[page].components;
-                        pageNavComponents = $filter( 'getByType' )( tempPageComponents, 'navigation' );
+                        //pageNavComponents = $filter( 'getByType' )( tempPageComponents, 'navigation' );
+                        pageNavComponents = [];
+                        for (var i = 0; i < tempPageComponents.length; i++) {
+                            if(tempPageComponents[i].type === 'navigation') {
+                                pageNavComponents.push(tempPageComponents[i]);
+                            }
+                        };
                     }
+                    if (!pageNavComponents) {pageNavComponents = []};
+                    console.log('pageNavComponents >>> ', pageNavComponents);
                     pageNavComponents.forEach(function (pageNavComponent) {
                         for ( setting in indexNavComponents[  0  ] ) {
                             if ( indexNavComponents[  0  ][  setting  ] !== null ) {
