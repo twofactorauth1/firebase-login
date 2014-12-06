@@ -103,9 +103,15 @@ define([
             };
 
             window.updateAdminPageScope = function(page) {
+                $scope.singlePost = false;
                 if (page._id !== $scope.currentPage._id) {
                     $scope.updatePage(page.handle);
                 }
+            }
+
+            window.checkIfSinglePost = function(post) {
+                if(post)
+                    $scope.singlePost = true;
             }
 
             document.getElementById("iframe-website").onload = function() {
@@ -334,115 +340,121 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                var componentJSON = $scope.currentPage.components;
-                var pageId = $scope.currentPage._id;
-                var iFrame = document.getElementById("iframe-website");
-                var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
-                var componentIdArr = [];
+                var iFrame = document.getElementById("iframe-website");                
+                if($scope.singlePost)
+                {
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    $scope.isEditing = false;
+                }
+                else
+                {
+                    var componentJSON = $scope.currentPage.components;
+                    var pageId = $scope.currentPage._id;
+                    
+                    var componentIdArr = [];
 
-                //foreach components by class .component
-                var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
-                for (var i = 0; i < editedPageComponents.length; i++) {
-                    var componentId = editedPageComponents[i].attributes['data-id'].value;
-                    componentIdArr.push(componentId);
-                    var componentType = editedPageComponents[i].attributes['data-type'].value;
-                    var matchingComponent = _.findWhere($scope.currentPage.components, {
-                        _id: componentId
-                    });
+                        //foreach components by class .component
+                        var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+                        for (var i = 0; i < editedPageComponents.length; i++) {
+                            var componentId = editedPageComponents[i].attributes['data-id'].value;
+                            componentIdArr.push(componentId);
+                            var componentType = editedPageComponents[i].attributes['data-type'].value;
+                            var matchingComponent = _.findWhere($scope.currentPage.components, {
+                                _id: componentId
+                            });
 
-                    //get all the editable variables and replace the ones in view with variables in DB
-                    var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
-                    console.log('length ', componentEditable.length);
-                    if (componentEditable.length >= 1) {
-                        for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                            var componentVar = componentEditable[i2].attributes['data-class'].value;
-                            var componentVarContents = componentEditable[i2].innerHTML;
-                            console.log('componentVar ', componentVar);
-                            console.log('componentVarContents ', componentVarContents);
+                            //get all the editable variables and replace the ones in view with variables in DB
+                            var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
+                            console.log('length ', componentEditable.length);
+                            if (componentEditable.length >= 1) {
+                                for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                                    var componentVar = componentEditable[i2].attributes['data-class'].value;
+                                    var componentVarContents = componentEditable[i2].innerHTML;
+                                    console.log('componentVar ', componentVar);
+                                    console.log('componentVarContents ', componentVarContents);
 
-                            //if innerhtml contains a span with the class ng-binding then remove it
-                            var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
-                            console.log('span ', span);
+                                    //if innerhtml contains a span with the class ng-binding then remove it
+                                    var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                                    console.log('span ', span);
 
-                            if (span) {
-                                var spanParent = span.parentNode;
-                                var spanInner = span.innerHTML;
-                                console.log('spanParent.classList >>> ', spanParent.classList);
-                                if (spanParent.classList.contains('editable')) {
-                                    componentVarContents = spanInner;
-                                } else {
-                                    spanParent.innerHTML = spanInner;
-                                    componentVarContents = spanParent.parentNode.innerHTML;
+                                    if (span) {
+                                        var spanParent = span.parentNode;
+                                        var spanInner = span.innerHTML;
+                                        console.log('spanParent.classList >>> ', spanParent.classList);
+                                        if (spanParent.classList.contains('editable')) {
+                                            componentVarContents = spanInner;
+                                        } else {
+                                            spanParent.innerHTML = spanInner;
+                                            componentVarContents = spanParent.parentNode.innerHTML;
+                                        }
+                                    }
+                                    //remove "/n"
+                                    componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                                    console.log('componentVarContents ', componentVarContents);
+
+                                    var setterKey, pa;
+                                    //if contains an array of variables
+                                    if (componentVar.indexOf('.item') > 0) {
+                                        //get index in array
+                                        var first = componentVar.split(".")[0];
+                                        var second = componentEditable[i2].attributes['data-index'].value;
+                                        var third = componentVar.split(".")[2];
+                                        matchingComponent[first][second][third] = componentVarContents;
+                                    }
+                                    //if needs to traverse a single
+                                    if (componentVar.indexOf('-') > 0) {
+                                        var first = componentVar.split("-")[0];
+                                        var second = componentVar.split("-")[1];
+                                        matchingComponent[first][second] = componentVarContents;
+                                    }
+                                    //simple
+                                    if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                        matchingComponent[componentVar] = componentVarContents;
+                                    }
                                 }
                             }
-                            //remove "/n"
-                            componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+                            $scope.backup = {};
+                         };
 
-                            console.log('componentVarContents ', componentVarContents);
+                        //sort the components in currentPage to match iframe
 
-                            var setterKey, pa;
-                            //if contains an array of variables
-                            if (componentVar.indexOf('.item') > 0) {
-                                //get index in array
-                                var first = componentVar.split(".")[0];
-                                var second = componentEditable[i2].attributes['data-index'].value;
-                                var third = componentVar.split(".")[2];
-                                matchingComponent[first][second][third] = componentVarContents;
-                            }
-                            //if needs to traverse a single
-                            if (componentVar.indexOf('-') > 0) {
-                                var first = componentVar.split("-")[0];
-                                var second = componentVar.split("-")[1];
-                                matchingComponent[first][second] = componentVarContents;
-                            }
-                            //simple
-                            if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                matchingComponent[componentVar] = componentVarContents;
-                            }
-                        }
-                    }
-                    $scope.backup = {};
-                };
+                        var newComponentOrder = [];
 
-                //sort the components in currentPage to match iframe
-
-                var newComponentOrder = [];
-
-                for (var i = 0; i < componentIdArr.length; i++) {
-                    var matchedComponent = _.findWhere($scope.currentPage.components, {
-                        _id: componentIdArr[i]
-                    });
-                    newComponentOrder.push(matchedComponent);
-                };
+                        for (var i = 0; i < componentIdArr.length; i++) {
+                            var matchedComponent = _.findWhere($scope.currentPage.components, {
+                                _id: componentIdArr[i]
+                            });
+                            newComponentOrder.push(matchedComponent);
+                        };
 
 
-                $scope.currentPage.components = newComponentOrder;
+                        $scope.currentPage.components = newComponentOrder;
 
 
 
-                WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                    toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                    $scope.isEditing = false;
-                    //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
-                    //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
-                    //document.getElementById('iframe-website').contentWindow.location.reload(true);
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-                    //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
-                });
-                //$scope.deactivateAloha();
-                var data = {
-                    _id: $scope.website._id,
-                    accountId: $scope.website.accountId,
-                    settings: $scope.website.settings
-                };
-
-                WebsiteService.updateWebsite(data, function(data) {
-                    console.log('updated website settings', data);
-                });
-
-                //website service - save page data
+                        WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
+                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                            $scope.isEditing = false;
+                            //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
+                            //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
+                            //document.getElementById('iframe-website').contentWindow.location.reload(true);
+                            iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
+                            //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+                        });
+                        //$scope.deactivateAloha();
+                        var data = {
+                            _id: $scope.website._id,
+                            accountId: $scope.website.accountId,
+                            settings: $scope.website.settings
+                        };
+                        //website service - save page data
+                        WebsiteService.updateWebsite(data, function(data) {
+                            console.log('updated website settings', data);
+                        }); 
+                }                
             };
-
+           
             $scope.updatePage = function(handle) {
                 console.log('update page');
                 $scope.isEditing = false;
