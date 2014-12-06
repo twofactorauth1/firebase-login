@@ -367,7 +367,7 @@ define([
                 var iFrame = document.getElementById("iframe-website");                
                 if($scope.singlePost)
                 {
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = false;
                 }
                 else
@@ -489,9 +489,7 @@ define([
                 if (sPage === 'index') {
                     route = '';
                 }
-                if (sPage === 'single-post') {
-                    route = '';
-                } else {
+                else {
                     route = '/page/' + sPage;
                 }
 
@@ -612,6 +610,7 @@ define([
 
             $scope.activateAloha = function() {
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
+                $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
             };
 
