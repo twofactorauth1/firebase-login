@@ -343,7 +343,7 @@ define([
                 var iFrame = document.getElementById("iframe-website");                
                 if($scope.singlePost)
                 {
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode();
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = false;
                 }
                 else
