@@ -465,9 +465,7 @@ define([
                 if (sPage === 'index') {
                     route = '';
                 }
-                if (sPage === 'single-post') {
-                    route = '';
-                } else {
+                else {
                     route = '/page/' + sPage;
                 }
 
