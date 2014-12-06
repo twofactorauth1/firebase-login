@@ -981,7 +981,9 @@ module.exports = {
             var options = {
                 width: 1280,
                 height: 1024,
-                full_page: true
+                full_page: true,
+                delay: 1000,
+                force: true
             };
 
             //TODO: comment out this line.

@@ -14,6 +14,24 @@ define([
             ngProgress.start();
             var account;
             $scope.activeTab = 'pages';
+            $scope.showToaster = false; 
+
+            $scope.$watch('activeTab', function (newValue, oldValue) {
+              if($scope.userPreferences){
+                  $scope.userPreferences.website_default_tab = newValue;
+                  $scope.savePreferencesFn();
+                }
+            });
+
+            UserService.getUserPreferences(function(preferences) {
+                $scope.userPreferences = preferences;
+                $scope.activeTab = preferences.website_default_tab;
+            });
+
+            $scope.savePreferencesFn = function() {
+              UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(){})
+            };
+
             UserService.getAccount(function(account) {
                 $scope.account = account;
                 this.account = account;
