@@ -102,23 +102,41 @@ define(['app',
 
         $scope.checkAddressLatLng($scope.customer.details[0].addresses, function(addresses) {
           $scope.customer.details[0].addresses = addresses;
-            CustomerService.saveCustomer($scope.customer, function(customer) {
-            $scope.customer = customer;
-            if ($scope.currentState == 'customerAdd') {
-              ToasterService.setPending('success', 'Contact Created.');
-              $state.go('customerDetail', {
-                id: $scope.customer._id
-              });
-            } else {
-              ToasterService.setPending('success', 'Contact Saved.');
-              $state.go('customerDetail', {
-                id: $scope.customerId
-              });
+            if($scope.checkContactValidity())
+            {
+              CustomerService.saveCustomer($scope.customer, function(customer) {
+              $scope.customer = customer;
+              if ($scope.currentState == 'customerAdd') {
+                ToasterService.setPending('success', 'Contact Created.');
+                $state.go('customerDetail', {
+                  id: $scope.customer._id
+                });
+              } else {
+                ToasterService.setPending('success', 'Contact Saved.');
+                $state.go('customerDetail', {
+                  id: $scope.customerId
+                });
+              }
+            });
             }
-          });
+            else
+              ToasterService.show("warning", "Contact Name OR Email is required");            
         });
 
       };
+      $scope.checkContactValidity = function()
+      {
+        var fullName =  $scope.fullName;
+        var emails = $scope.customer.details[0].emails;
+         var email = _.filter($scope.customer.details[0].emails, function(mail) {
+            return mail.email !== "";
+          });
+         if((angular.isDefined(fullName) && fullName !== "") ||  email.length > 0)
+           return true;
+         else
+           return false;
+      }
+
       $scope.addDeviceFn = function() {
         $scope.customer.devices.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
