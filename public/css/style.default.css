@@ -19220,6 +19220,7 @@ div.error label.error:before {
 }
 .website-manage .template-btns {
   margin-bottom: 0px;
+  padding: 0;
 }
 .dataTables_length .chosen-container {
   min-width: 75px;
@@ -20656,6 +20657,7 @@ input[type='file'] {
 }
 .indi-assistant .template-btns {
   padding: 0!important;
+  margin-bottom: 0;
 }
 .indi-assistant .getting-started-section .panel-info h3 {
   margin: 0;

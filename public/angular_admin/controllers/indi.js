@@ -7,6 +7,8 @@ define(['app', 'userService'], function(app) {
     		};
     	};
 
+        $scope.initialWelcome = true;
+
     	$scope.$watch('activeTab', function(newValue, oldValue) {
             if ($scope.userPreferences) {
                 $scope.userPreferences.indi_default_tab = newValue;
@@ -16,12 +18,22 @@ define(['app', 'userService'], function(app) {
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
+            console.log('preferences >>> ', preferences);
             $scope.activeTab = preferences.indi_default_tab || 'getting-started';
             console.log('$scope.activeTab >>> ', $scope.activeTab);
+            $scope.initialWelcome = preferences.welcome_alert.initial;
         });
 
         $scope.savePreferencesFn = function() {
-            UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {})
+            UserService.updateUserPreferences($scope.userPreferences, false, function() {})
+        };
+
+        $scope.clearWelcome = function() {
+        	$scope.initialWelcome = true;
+        	if ($scope.userPreferences) {
+                $scope.userPreferences.welcome_alert.initial = true;
+                $scope.savePreferencesFn();
+            }
         };
   }]);
 });
