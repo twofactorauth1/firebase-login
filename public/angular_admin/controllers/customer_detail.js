@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive'], function(app) {
   app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
     ngProgress.start();
     $scope.$back = function() {
@@ -43,6 +43,23 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       //$scope.activities = activities;
       ngProgress.complete();
       ToasterService.processPending();
+    });
+
+    angular.extend($scope, {
+      london: {
+          lat: 51,
+          lng: 0,
+          zoom: 10
+      },
+      markers: {
+          mainMarker: {
+              lat: 51,
+              lng: 0,
+              focus: true,
+              //message: "Here",
+              draggable: false
+          }
+      }
     });
 
     CustomerService.getActivityTypes(function(activity_types) {
