@@ -62,6 +62,7 @@ require.config({
         'combinatorics': 'libs/js-combinatorics/combinatorics',
         'leaflet': 'libs/leaflet/dist/leaflet',
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
+        'truncate': 'libs/angular-truncate/src/truncate',
 
         //application related
         'storageutils': 'utils/storageutils',
