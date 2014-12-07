@@ -60,6 +60,9 @@ require.config({
         'highmaps-data': 'libs/highmaps/modules/map',
         'ngTagsInput': 'libs/ng-tags-input/ng-tags-input.min',
         'combinatorics': 'libs/js-combinatorics/combinatorics',
+        'leaflet': 'libs/leaflet/dist/leaflet',
+        'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
+        'truncate': 'libs/angular-truncate/src/truncate',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -71,6 +74,7 @@ require.config({
         'paymentService': '/angular_admin/services/payment',
         'twoNetService': '/angular_admin/services/two_net',
         'assetsService': '/angular_admin/services/assets',
+        'geocodeService': '/angular_admin/services/geocode',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
         'mediaDirective': '/angular_admin/directives/mediadirective',
         'indi-datatable': '/angular_admin/directives/datatable',
@@ -171,6 +175,7 @@ require.config({
         'highmaps-us': {deps: ['highcharts']},
         'highmaps-data': {deps: ['highcharts']},
         'angularFileUpload': {deps: ['angular']},
+        'leaflet-directive': {deps: ['leaflet', 'angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},
         'ngFileUpload': {deps: ['angular']},

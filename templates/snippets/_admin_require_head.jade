@@ -37,5 +37,7 @@ script(type="text/javascript").
             window.analytics.load('#{segmentIOWriteKey}');
     window.analytics.page('admin', {accountId:#{account._id}});
 
+script(type="text/javascript", src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false")
+
 script(type="text/javascript").
     (function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}}; js=d.createElement(s);fs=d.getElementsByTagName(s)[0]; js.src='https://apis.google.com/js/platform.js'; fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};}(window,document,'script'));

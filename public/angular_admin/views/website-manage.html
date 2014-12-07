@@ -56,7 +56,7 @@
                             <img ng-if="!page.screenshot" src="http://placehold.it/500x300" alt="">
                         </div>
                         <div class="caption">
-                            <h4>{{page.title}}</h4>
+                            <h4>{{page.title | characters:25 }}</h4>
                             <p><a href="/admin#/website-editor?pageId={{page._id}}" class="btn btn-info btn-block" role="button">Edit</a>
                             </p>
                         </div>
@@ -78,7 +78,7 @@
                             <img ng-if="!post.screenshot" src="http://placehold.it/500x300" alt="">
                         </div>
                         <div class="caption">
-                            <h4>{{post.post_title}}</h4>
+                            <h4>{{post.post_title | characters:25 }}</h4>
                             <p><a href="#" class="btn btn-info btn-block" role="button">Edit</a>
                             </p>
                         </div>
@@ -95,14 +95,14 @@
                         <h3 class="panel-title">Current Theme</h3>
                     </div>
                     <div class="panel-body">
-                        <div ng-if="selectedTheme">
+                        <div ng-if="currentTheme">
                             <div class="col-xs-6">
-                                <img class="img-thumbnail" ng-src="{{selectedTheme.previewUrl}}">
+                                <img class="img-thumbnail" ng-src="{{currentTheme.previewUrl}}">
                             </div>
                             <div class="col-xs-6">
                                 <div class="caption">
-                                    <h4>{{selectedTheme.name}}</h4>
-                                    <p><b>{{selectedTheme.description}}</b></p>
+                                    <h4>{{currentTheme.name}}</h4>
+                                    <p><b>{{currentTheme.description}}</b></p>
                                     <hr>
                                      <div class="mb30"></div>
                                         <div class="col-xs-6">
@@ -142,12 +142,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-if="!selectedTheme">
+                        <div ng-if="!currentTheme">
                             <h3 class="center">Select a Theme From Below</h3>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 theme" ng-class="{selected: theme.name == currentTheme.name, success: theme.name == selectedTheme.name}" ng-repeat="theme in themes" ng-click="changeSelectedTheme(theme)">
+                <div class="col-sm-4 theme" ng-class="{success: theme.name == currentTheme.name, selected: theme.name == selectedTheme.name}" ng-repeat="theme in themes">
                     <div class="thumbnail" data-themeid="">
                         <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i>
                         </div>
@@ -155,6 +155,8 @@
                         <div class="caption">
                             <h5>{{theme.name}}</h5>
                             <p>{{theme.description}}</p>
+                            <button class="btn btn-primary btn-lg btn-block" ng-if="theme.name != currentTheme.name" ng-click="changeTheme(theme)">Switch Theme</button>
+                            <h1 class="center" ng-if="theme.name == currentTheme.name" style="height:47px"><span class="label label-success">CURRENT THEME</span></h1>
                         </div>
                     </div>
                 </div>
@@ -178,3 +180,43 @@
         </div>
     </div>
 </div>
+
+<!-- Create Page Modal -->
+    <div class="modal fade" id="create-page-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Page</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="new_page">
+                        <div class="form-group" ng-class="{ 'has-error': titleError}">
+                            <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                            <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title"
+                            ng-change="validateCreatePage(page)">
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': handleError}">
+                            <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                            <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle"
+                            ng-change="validateCreatePage(page)">
+                        </div>
+                        <div class="clearfix mb15"></div>
+                        <div class="form-group">
+                            <div class="ckbox ckbox-success">
+                                <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
+                                <label for="add-to-menu">Add to Main Menu?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)">Create Page</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->

@@ -668,64 +668,6 @@ define([
                 // });
             };
 
-            $scope.createPageValidated = false;
-
-            $scope.validateCreatePage = function(page) {
-                console.log('page ', page);
-                if (page.handle == '') {
-                    $scope.handleError = true
-                } else {
-                    $scope.handleError = false
-                }
-                if (page.title == '') {
-                    $scope.titleError = true
-                } else {
-                    $scope.titleError = false
-                }
-                console.log('$scope.titleError ', $scope.titleError);
-                console.log('$scope.handleError  ', $scope.handleError);
-                if (page && page.title && page.title != '' && page.handle && page.handle != '') {
-                    console.log('page validated');
-                    $scope.createPageValidated = true;
-                }
-            };
-
-            $scope.createPage = function(page, $event) {
-
-                console.log('$scope.createPageValidated ', $scope.createPageValidated);
-
-                if (!$scope.createPageValidated) {
-                    return false;
-                }
-
-                var websiteId = $scope.currentPage.websiteId;
-
-                var pageData = {
-                    title: page.title,
-                    handle: page.handle,
-                    mainmenu: page.mainmenu
-                };
-
-                var hasHandle = false;
-                $scope.allPages.forEach(function(v, i) {
-                    if (page.handle === v.handle) {
-                        hasHandle = true;
-                    }
-                });
-
-                if (!hasHandle) {
-                    WebsiteService.createPage(websiteId, pageData, function(newpage) {
-                        toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
-                        $scope.page = null;                       
-                        $('#create-page-modal').modal('hide');
-                        $scope.updatePage(newpage.handle);
-                    });
-                } else {
-                    toaster.pop('error', "Page URL " + page.handle, "Already exists");
-                    $event.preventDefault();
-                    $event.stopPropagation();
-                }
-            };
 
             $scope.deletePage = function() {
 

@@ -24,7 +24,8 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         "property_name": "type",
                         "operator": "eq",
                         "property_value": "invoice.payment_succeeded"
-                    }]
+                    },
+                    {"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}]
                 });
 
                 queryData.activeSubscriptions = new Keen.Query("count", {
@@ -38,7 +39,8 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         "property_name": "data.object.status",
                         "operator": "eq",
                         "property_value": "active"
-                    }]
+                    },
+                    {"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}]
                 });
 
                 queryData.canceledSubscriptions = new Keen.Query("count", {
@@ -49,7 +51,8 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         "property_name": "type",
                         "operator": "eq",
                         "property_value": "customer.subscription.deleted"
-                    }]
+                    },
+                    {"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}]
                 });
 
                 // =========================================
@@ -69,7 +72,8 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         'property_name': 'data.object.total',
                         'operator': 'gt',
                         'property_value': 0
-                    }]
+                    },
+                    {"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}]
                 });
 
                 // ======================================
@@ -80,12 +84,14 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                     eventCollection: "Stripe_Events",
                     targetProperty: "data.object.fee",
                     timeframe: 'last_30_days',
+                    filters: [{"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}],
                 });
 
                 queryData.feesPreviousMonth = new Keen.Query("sum", {
                     eventCollection: "Stripe_Events",
                     targetProperty: "data.object.fee",
                     timeframe: 'previous_30_days',
+                    filters: [{"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}],
                 });
 
                 // ======================================
@@ -101,7 +107,8 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                     'property_name': 'type',
                     'operator': 'eq',
                     'property_value': 'charge.succeeded'
-                }]
+                },
+                {"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}]
             });
 
             queryData.netRevenuePreviousMonth = new Keen.Query("sum", {
@@ -112,7 +119,8 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                     'property_name': 'type',
                     'operator': 'eq',
                     'property_value': 'charge.succeeded'
-                }]
+                },
+                {"property_name":"accountId","operator":"eq","property_value":$$.server.accountId}]
             });
 
             return queryData;
