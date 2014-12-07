@@ -239,24 +239,28 @@ define([
                     }
                     $scope.allPages = arr;
 
-                    if ($scope.editingPageId) {
-                        console.log('pageId >>> ', $scope.editingPageId);
-                        $scope.currentPage = _.findWhere(pages, {
-                            _id: $scope.editingPageId
-                        });
-                        // if ($scope.currentPage && $scope.currentPage.components) {
-                        //     $scope.components = $scope.currentPage.components;
-                        // } else {
-                        //     $scope.components = [];
-                        // }
-                        // console.log('$scope.currentPage >>> ', $scope.currentPage);
-                        // $scope.resfeshIframe();
-                    } else {
-                        console.log('current');
-                        $scope.currentPage = _.findWhere(pages, {
+                    $scope.currentPage = _.findWhere(pages, {
                             handle: currentPage
                         });
-                    }
+
+                    // if ($scope.editingPageId) {
+                    //     console.log('pageId >>> ', $scope.editingPageId);
+                    //     $scope.currentPage = _.findWhere(pages, {
+                    //         _id: $scope.editingPageId
+                    //     });
+                    //     // if ($scope.currentPage && $scope.currentPage.components) {
+                    //     //     $scope.components = $scope.currentPage.components;
+                    //     // } else {
+                    //     //     $scope.components = [];
+                    //     // }
+                    //     // console.log('$scope.currentPage >>> ', $scope.currentPage);
+                    //     // $scope.resfeshIframe();
+                    // } else {
+                    //     console.log('current');
+                    //     $scope.currentPage = _.findWhere(pages, {
+                    //         handle: currentPage
+                    //     });
+                    // }
                     //get components from page
                     if ($scope.currentPage) {
                         if ($scope.currentPage.components) {
@@ -692,38 +696,6 @@ define([
                     iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                     //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
                 }
-            };
-
-            $scope.changeSelectedTheme = function(theme) {
-                $scope.selectedTheme = theme;
-            };
-
-            $scope.changeTheme = function() {
-
-                $scope.currentTheme = $scope.selectedTheme;
-
-                $scope.website.settings = $scope.selectedTheme.config.settings;
-
-                //change all components to the themes versions
-                var theme = $scope.selectedTheme.config.components;
-                for (var i = 0; i < $scope.currentPage.components.length; i++) {
-                    var matching = _.findWhere(theme, {
-                        type: $scope.currentPage.components[i].type
-                    });
-                    var current = $scope.currentPage.components[i];
-                    if (matching) {
-                        current.version = matching.version;
-                        if (current.bg.img.url == '') {
-                            current.bg.color = matching.bg.color;
-                            current.txtcolor = matching.txtcolor;
-                        }
-                    }
-                };
-                $scope.components = $scope.currentPage.components;
-                $scope.updateIframeComponents();
-                WebsiteService.setWebsiteTheme($scope.currentTheme._id, $scope.website._id, function(data) {
-                    toaster.pop('success', "Theme saved successfully");
-                });
             };
 
             CourseService.getAllCourses(function(data) {
