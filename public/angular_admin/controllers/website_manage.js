@@ -10,14 +10,49 @@ define([
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
+        '$location',
         'UserService',
         'WebsiteService',
         'ngProgress',
         'toaster',
-        function($scope, UserService, WebsiteService, ngProgress, toaster) {
+        function($scope, $location, UserService, WebsiteService, ngProgress, toaster) {
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+            console.log("$location.$$search['onboarding'] >>> ", $location.$$search['onboarding']);
+            if ($location.$$search['onboarding']) {
+                $scope.startOnboarding
+            }
+
+            $scope.startOnboarding = function() {
+                console.log('starting onboarding');
+                $scope.stepIndex = 0
+                $scope.showOnboarding = true;
+            };
+
+            $scope.onboardingSteps = [
+              {
+                overlay: true,
+                title: 'Task: Select A Theme',
+                description: "Choosing a theme will automatically create a website for your visitors to go, so you can capture them as leads.",
+                position: 'centered'
+              },
+              {
+                attachTo: '.btn-view-themes',
+                position: 'bottom',
+                overlay: false,
+                title: 'Themes Tab',
+                width: 400,
+                description: "This is the theme tab where you can change or modify your theme after you choose one."
+              },
+              {
+                attachTo: '.themes',
+                position: 'top',
+                overlay: false,
+                title: 'Select A Theme',
+                description: 'Choose one of the themes from below by clicking the switch button.'
+              }
+            ];
 
             $scope.$watch('activeTab', function(newValue, oldValue) {
                 if ($scope.userPreferences) {
@@ -151,35 +186,6 @@ define([
                 }
             };
 
-            $scope.startOnboarding = function() {
-              $scope.stepIndex = 0
-              $scope.showOnboarding = true;
-            };
-            $scope.onboardingSteps = [
-              {
-                overlay: true,
-                title: 'Task: Select A Theme',
-                description: "Choosing a theme will automatically create a website for your visitors to go, so you can capture them as leads.",
-                position: 'centered'
-              },
-              {
-                attachTo: '.btn-view-themes',
-                position: 'bottom',
-                overlay: false,
-                title: 'Themes Tab',
-                width: 400,
-                description: "This is the theme tab where you can change or modify your theme after you choose one."
-              },
-              {
-                attachTo: '.themes',
-                position: 'top',
-                overlay: false,
-                title: 'Select A Theme',
-                description: 'Choose one of the themes from below by clicking the switch button.'
-              }
-            ];
-            $scope.showOnboarding = true;
-            $scope.stepIndex = 0
         }
     ]);
 });
