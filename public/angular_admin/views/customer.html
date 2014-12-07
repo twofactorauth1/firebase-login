@@ -67,7 +67,7 @@
                 <div class="col-sm-4">
                     <div class="mb0">
                         <select class="form-control chosen-select input-lg" ng-model="customerFilter.type">
-                            <option value="" selected>Customer Type</option>
+                            <option value="" selected>All Contacts</option>
                             <option value="cu">Customer</option>
                             <option value="co">Colleague</option>
                             <option value="fr">Friend</option>
@@ -142,7 +142,7 @@
                                         <div ng-if="userPreferences.customerSettings.showEmail && checkBestEmail(customer) && email">
                                             <i class="fa fa-envelope-o pull-left title"></i>
                                             <span
-                                               class="pull-right value">{{email}}</span>
+                                               class="pull-right value"><a href="mailto:{{email}}">{{email}}</a></span>
                                         </div>
                                     </li>
                                     <li>

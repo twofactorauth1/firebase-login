@@ -65,6 +65,30 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleWebsiteManage = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleIndi = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleIndiWelcome = function () {
+                    return {
+                        'height': (newValue.h)-55 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
             }, true);
 
             w.bind('resize', function () {

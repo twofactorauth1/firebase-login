@@ -40,21 +40,37 @@ define(['app'], function (app) {
             });
 		};
 
-		// website/:websiteId/page/:id
-		this.updatePage = function(websiteId, pageId, pagedata, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
-			$http({
-			    url: apiUrl,
-			    method: "POST",
-			    data: angular.toJson(pagedata)
-			})
+		this.getPosts = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
+			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
 			})
 			.error(function (err) {
-                console.log('END:Website Service updatePage with ERROR');
+                console.log('END:Get Posts with ERROR');
                 fn(err, null);
             });
+		};
+
+		// website/:websiteId/page/:id
+		this.updatePage = function(websiteId, pageId, pagedata, fn) {
+			var self = this;
+			self.createPageScreenshot(pagedata.handle, function(screenshot) {
+					pagedata.screenshot = screenshot;
+					var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
+					$http({
+					    url: apiUrl,
+					    method: "POST",
+					    data: angular.toJson(pagedata)
+					})
+					.success(function (data, status, headers, config) {
+						fn(data);
+					})
+					.error(function (err) {
+		                console.log('END:Website Service updatePage with ERROR');
+		                fn(err, null);
+		            });
+			});
 		};
 
 		//page/:id/components/all
@@ -151,6 +167,7 @@ define(['app'], function (app) {
 
 		//website/:websiteId/page
 		this.createPage = function(websiteId, pagedata, fn) {
+			var self = this;
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
 			$http({
 			    url: apiUrl,
@@ -158,7 +175,28 @@ define(['app'], function (app) {
 			    data: angular.toJson(pagedata)
 			})
 			.success(function (data, status, headers, config) {
+				console.log('data >>> ', data);
+				self.createPageScreenshot(data.handle, function(screenshot) {
+					data.screenshot = screenshot;
+					console.log('data >>> ', data);
+					fn(data);
+				});
+			})
+			.error(function (err) {
+                console.log('END:Create Page with ERROR');
+            });
+		};
+
+		//api/1.0/cms/page/{handle}/screenshot
+		this.createPageScreenshot = function(handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', handle, 'screenshot'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "GET"
+			})
+			.success(function (data, status, headers, config) {
 				fn(data);
+				console.log('END:Create Screenshot with Success ', data);
 			})
 			.error(function (err) {
                 console.log('END:Create Page with ERROR');

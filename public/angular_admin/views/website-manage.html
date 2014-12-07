@@ -1,0 +1,225 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
+<div class="website-manage">
+    <div class="pageheader row">
+        <div class="col-xs-7">
+            <h2><i class="fa fa-desktop"></i> Website</h2>
+        </div>
+
+        <div class="col-xs-5">
+            <a class="btn btn-success pull-right media-modal"
+                  on-insert-mediacb="insertMedia" user='user' data-main='true'>
+                <i class="fa fa fa-image"></i>
+                <span class="hidden-xs">Media</span>
+            </a>
+             <div class="btn-group pull-right btn-add" ng-show="!isEditing">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs">Add</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="" data-toggle="modal" data-target="#create-page-modal"> Page</a></li>
+                    <li><a href="" data-toggle="modal" data-target="#create-post-modal"> Post</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        <div class="btn-group col-xs-12 template-btns">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-pages" ng-class="{'active': activeTab === 'pages'}" ng-click="showToaster = false; activeTab = 'pages'">
+                <i class="fa fa-file-text-o"></i>
+                <span class="hidden-xs">Pages
+                </span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-posts" ng-class="{'active': activeTab === 'posts'}" ng-click="showToaster = false; activeTab = 'posts'">
+                <i class="fa fa-newspaper-o"></i>
+                <span class="hidden-xs">Posts</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-themes" ng-class="{'active': activeTab === 'themes'}" ng-click="showToaster = false; activeTab = 'themes'">
+                <i class="fa fa-paint-brush"></i>
+                <span class="hidden-xs">Themes</span>
+            </button>
+        </div>
+    </div>
+
+    <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
+        <div class="pages-section" ng-switch-when="pages">
+
+            <div class="row">
+
+                <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages">
+                    <div class="thumbnail">
+                        <div class="screenshot-wrap">
+                            <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});width: 260px;height: 160px;background-size: cover;border: 1px solid #dddddd;"></div>
+                            <img ng-if="!page.screenshot" src="http://placehold.it/500x300" alt="">
+                        </div>
+                        <div class="caption">
+                            <h4>{{page.title | characters:25 }}</h4>
+                            <p><a href="/admin#/website-editor?pageId={{page._id}}" class="btn btn-info btn-block" role="button">Edit</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End row -->
+
+        </div>
+
+        <div class="posts-section" ng-switch-when="posts">
+            <div class="row">
+
+                <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="post in posts">
+                    <div class="thumbnail">
+                        <div class="screenshot-wrap">
+                            <div class="screenshot" ng-if="post.screenshot" style="background-image: url({{post.screenshot}});width: 260px;height: 160px;background-size: cover;"></div>
+                            <img ng-if="!post.screenshot" src="http://placehold.it/500x300" alt="">
+                        </div>
+                        <div class="caption">
+                            <h4>{{post.post_title | characters:25 }}</h4>
+                            <p><a href="#" class="btn btn-info btn-block" role="button">Edit</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="theme-section" ng-switch-when="themes">
+            <div class="row">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Current Theme</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-if="currentTheme">
+                            <div class="col-xs-6">
+                                <img class="img-thumbnail" ng-src="{{currentTheme.previewUrl}}">
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="caption">
+                                    <h4>{{currentTheme.name}}</h4>
+                                    <p><b>{{currentTheme.description}}</b></p>
+                                    <hr>
+                                     <div class="mb30"></div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label for="colorpicker">Color Primary:</label>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primary_color"
+                                                class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="colorpicker">Color Secondary:</label>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.secondaryColor"
+                                                class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="colorpicker">Highlight Primary:</label>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryHighlight"
+                                                class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="colorpicker">Text Color Primary:</label>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryTextColor"
+                                                class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="form-group">
+                                                <label for="colorpicker">Font Family Primary:</label>
+                                                <jd-fontselect on-open="editPage()" stack="primaryFontStack" on-change="updatePrimaryFont(font)"
+                                                rawText="{ toggleOpenLabel: 'Mach uff!' }"></jd-fontselect>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="colorpicker">Font Family Secondary:</label>
+                                                <jd-fontselect stack="secondaryFontStack" rawText="{ toggleOpenLabel: 'Mach uff!' }"></jd-fontselect>
+                                            </div>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="!currentTheme">
+                            <h3 class="center">Select a Theme From Below</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="themes">
+                    <div class="col-sm-4 theme" ng-class="{success: theme.name == currentTheme.name, selected: theme.name == selectedTheme.name}" ng-repeat="theme in themes">
+                        <div class="thumbnail" data-themeid="">
+                            <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i>
+                            </div>
+                            <img ng-src="{{theme.previewUrl}}">
+                            <div class="caption">
+                                <h5>{{theme.name}}</h5>
+                                <p>{{theme.description}}</p>
+                                <button class="btn btn-primary btn-lg btn-block" ng-if="theme.name != currentTheme.name" ng-click="changeTheme(theme)">Switch Theme</button>
+                                <h1 class="center" ng-if="theme.name == currentTheme.name" style="height:47px"><span class="label label-success">CURRENT THEME</span></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End container -->
+    </div>
+
+    <div class="rightpanel rightpanel-website">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-settings">
+            </div>
+            <!-- tab-pane -->
+        </div>
+    </div>
+</div>
+
+<!-- Create Page Modal -->
+    <div class="modal fade" id="create-page-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Create Page</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="new_page">
+                        <div class="form-group" ng-class="{ 'has-error': titleError}">
+                            <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                            <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title"
+                            ng-change="validateCreatePage(page)">
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': handleError}">
+                            <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                            <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle"
+                            ng-change="validateCreatePage(page)">
+                        </div>
+                        <div class="clearfix mb15"></div>
+                        <div class="form-group">
+                            <div class="ckbox ckbox-success">
+                                <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
+                                <label for="add-to-menu">Add to Main Menu?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)">Create Page</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->

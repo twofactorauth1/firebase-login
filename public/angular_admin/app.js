@@ -99,11 +99,23 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'CustomerEditCtrl',
           controllerUrl: '/angular_admin/controllers/customer_edit.js'
         }))
-        .state('website', angularAMD.route({
+        .state('websiteManage', angularAMD.route({
           url: '/website',
+          templateUrl: '/angular_admin/views/website-manage.html',
+          controller: 'WebsiteManageCtrl',
+          controllerUrl: '/angular_admin/controllers/website_manage.js'
+        }))
+        .state('website', angularAMD.route({
+          url: '/website-editor',
           templateUrl: '/angular_admin/views/website.html',
           controller: 'WebsiteCtrl',
           controllerUrl: '/angular_admin/controllers/website.js'
+        }))
+        .state('indi', angularAMD.route({
+          url: '/indi',
+          templateUrl: '/angular_admin/views/indi.html',
+          controller: 'IndiCtrl',
+          controllerUrl: '/angular_admin/controllers/indi.js'
         }));
 
       var authInterceptor =
@@ -124,6 +136,8 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
     .run(['$rootScope', function($rootScope) {
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
         , includeList = ['account', 'commerce', 'customer', 'website', 'marketing', 'dashboard'];
+
+      console.log('first route');
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {

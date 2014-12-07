@@ -1,0 +1,157 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div class="indi-assistant">
+
+    <div class="pageheader row">
+        <div class="col-xs-7">
+            <h2><i class="indi-sm"></i>  &nbsp; Indi Assistant</h2>
+        </div>
+
+        <div class="col-xs-5">
+        </div>
+    </div>
+
+    <div class="initial-screen" ng-if="!initialWelcome" ng-style="styleIndiWelcome()" indigeweb-resize>
+        <div class="mb40"></div>
+        <div class="row">
+            <div class="col-xs-7">
+                <div class="bubble pull-right">
+                    <h2>Hi, I’m Indi!</h2>
+
+                    <h4>Thank You for Signing Up.</h4>
+                    <p>I’m here to assist you with setting up your business and answering any questions you may have.
+                        <br>
+                        <br> Press the Get Started button below and I can have you ready to go in no time!</p>
+
+                    <button class="btn btn-primary btn-lg btn-block" ng-click="clearWelcome()">GET STARTED <i class="fa fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <img style="margin-left: 40px;" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-full.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="initialWelcome">
+        <div>
+            <div class="btn-group col-xs-12 template-btns">
+                <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-pages" ng-class="{'active': activeTab === 'getting-started'}" ng-click="showToaster = false; activeTab = 'getting-started'">
+                    <i class="fa fa-file-text-o"></i>
+                    <span class="hidden-xs">Getting Started
+                    </span>
+                </button>
+                <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-posts" ng-class="{'active': activeTab === 'help-topics'}" ng-click="showToaster = false; activeTab = 'help-topics'">
+                    <i class="fa fa-newspaper-o"></i>
+                    <span class="hidden-xs">Help Topics</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="contentpanel" ng-style="styleIndi()" indigeweb-resize>
+
+            <div ng-switch="activeTab">
+                 <div class="getting-started-section" ng-switch-when="getting-started">
+                    <div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="avatar col-xs-1 col-xs-offset-2">
+                                    <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-lg-avatar.png">
+                                </div>
+                                <div class="content col-xs-7">
+                                    <h3>Getting the Most Out of Indigenous</h3>
+                                    <p>Complete the tasks below and your business will will truly be launched and ready to accept customers. Complete all 9 tasks and recieve a 30min Phone Consultation worth $75!</p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default widget-messaging">
+                        <div class="profile panel-body ">
+                            <ul class="task-list">
+                                <li class="complete">
+                                    <h1 class="pull-left"><i class="fa fa-check-circle-o"></i></h1>
+                                    <small class="pull-right done">COMPLETE</small>
+                                    <h3 class="pull-left">Sign Up For Indigenous</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>You completed the most difficult task of starting to take control of your business.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li ng-click="startTask('select-theme')">
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Select A Theme</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Select a theme for your front facing website where your customers can visit.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li ng-click="startTask('connect-social')">
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Connect Social Accounts</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Connect your social account so you can import contacts and create marketing campaigns.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li ng-click="startTask('create-contact')">
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Import / Create Contacts</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Import your contact from your various accounts or create them.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li>
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Create First Campaign</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Create your first campaign to start getting vistors.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li>
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Import / Create Products</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Import or create new products to start selling and creating revenue.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                 <li>
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Create First Blog Post</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Keep everyone up to date and informed with a regular blog.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li>
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Discover the Dashboard</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>Now evetything is set up, its time to start trakcing.</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                                <li>
+                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                    <small class="pull-right"></small>
+                                    <h3 class="pull-left">Learn Actions</h3>
+                                    <div class="clearfix mb5"></div>
+                                    <div class="task-desc"><p><b>What do you do with all the new data from you first campaigns?</b><p></div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-topics-section" ng-switch-when="help-topics">
+                </div>
+            </div>
+        </div>
+
+        <div class="rightpanel rightpanel-website">
+        </div>
+    </div>
+</div>
+
+</div>
