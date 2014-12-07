@@ -63,6 +63,7 @@ require.config({
         'leaflet': 'libs/leaflet/dist/leaflet',
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
         'truncate': 'libs/angular-truncate/src/truncate',
+        'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
 
         //application related
         'storageutils': 'utils/storageutils',

@@ -5,6 +5,7 @@
 @import '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css';
 @import '../js/libs/animate.css/animate.min.css';
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
+@import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -20652,6 +20653,93 @@ input[type='file'] {
   padding: 3px 8px;
   line-height: normal;
   border-radius: 2px;
+}
+.indi-assistant .template-btns {
+  padding: 0!important;
+}
+.indi-assistant .getting-started-section .panel-info h3 {
+  margin: 0;
+  color: white;
+  text-align: left;
+}
+.indi-assistant .getting-started-section .panel-info p {
+  color: white;
+  opacity: 1;
+}
+.indi-assistant .bubble {
+  position: relative;
+  width: 500px;
+  height: auto;
+  padding: 25px;
+  background: #edfafe;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.indi-assistant .bubble:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 15px 0 15px 15px;
+  border-color: transparent #edfafe;
+  display: block;
+  width: 0;
+  z-index: 1;
+  right: -15px;
+  top: 84px;
+}
+.indi-assistant .bubble h2 {
+  margin-top: 0;
+}
+.indi-assistant .task-list h1 {
+  margin: 0;
+}
+.indi-assistant .task-list h3 {
+  margin: 0 0 0 15px;
+  line-height: 38px;
+}
+.indi-assistant .task-list .done {
+  display: none;
+}
+.indi-assistant .task-list li:hover .task-desc {
+  display: block!important;
+}
+.indi-assistant .task-list .task-desc {
+  display: none;
+}
+.indi-assistant .task-list .complete .fa-check-circle-o {
+  color: #27ae60;
+}
+.indi-assistant .task-list .complete h3 {
+  text-decoration: line-through;
+  color: #27ae60;
+}
+.indi-assistant .task-list .complete .done {
+  line-height: 40px;
+  color: #27ae60;
+  font-size: 20px;
+  font-weight: bold;
+  display: block;
+}
+i.indi-sm {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-sm-avatar.png');
+  display: block;
+  height: 35px;
+  width: 35px;
+  margin-left: -5px;
+  bottom: 0;
+  float: left;
+}
+.onboarding-popover-title {
+  background: #ed9f22;
+  color: white;
+}
+.onboarding-close-button,
+.onboarding-close-button:hover,
+.onboarding-close-button:visited {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
 }
 .rightmenu-open #social_dashboard_rightbar {
   display: block!important;

@@ -16,6 +16,9 @@ script(type="text/javascript").
     //-     }
     //-     return single_view
     //- }());
+    if(#{user.welcome_alert.initial} == false) {
+        window.location="/admin#/indi";
+    }
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
         return function () {
             var a = Array.prototype.slice.call(arguments);
