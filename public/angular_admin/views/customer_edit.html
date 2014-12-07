@@ -160,62 +160,23 @@
           <div class="panel-heading">
             <h3 class="panel-title">Contact Information</h3>
           </div>
-          <div class="panel-body">
-
-            <div id="phone-row" class="row">
-              <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
+          <div class="panel-body">            
+            <div id="email-row" class="row">
+              <div class="col-xs-1"><i class="icon-main fa fa-envelope"></i>
               </div>
               <div class="col-xs-11">
-                <div id="edit-phones-container">
+                <div id="edit-emails-container">
 
-
-                  <!-- ADD NEW PHONE -->
-
-                  <div class="row edit-phone-container" data-id="" style="margin-top:8px;" ng-repeat="phone in customer.details[0].phones">
-
-                    <div class="form-group col-xs-12 col-sm-8 col-md-10">
-                      <div class="input-group input-group-lg">
-                        <div class="input-group-addon">+1</div>
-                        <input class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields value="" type="text" ng-model="phone.number">
-                        <div class="input-group-btn">
-                          <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
-                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
-                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
-                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'w'">work</span>
-
-                          </button>
-
-                          <ul class="dropdown-menu pull-right">
-
-                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'm')"><a>mobile</a>
-                            </li>
-
-                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'h')"><a>home</a>
-                            </li>
-
-                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'w')"><a>work</a>
-                            </li>
-
-                          </ul>
-                        </div>
-                      </div>
+                  <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
+                    <div class="form-group col-md-10">
+                      <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">
                     </div>
-                    <div ng-click="removeItem($index, customer.details[0].phones)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+                    <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
-
-
                 </div>
-                <span style="margin-top:-15px;" class="col-xs-10">
-                                    <small>e.g. (303-555-5555)</small>
-                                </span>
-
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-xs-11">
-              <div ng-click="addCustomerContactFn()" class="btn btn-primary btn-sm pull-right" id="btn-new-device">Add Contact</div>
-              </div>
-            </div>
+                <div class="btn btn-primary btn-sm" id="btn-new-address" ng-click="customerAddEmailFn()">Add Email</div>
+              </div>             
+            </div>            
             <hr>
 
             <div class="row" id="address-row">
@@ -286,21 +247,59 @@
 
             <hr>
 
-            <div id="email-row" class="row">
-              <div class="col-xs-1"><i class="icon-main fa fa-envelope"></i>
+            <div id="phone-row" class="row">
+              <div class="col-xs-1"><i class="icon-main fa fa-phone"></i>
               </div>
               <div class="col-xs-11">
-                <div id="edit-emails-container">
+                <div id="edit-phones-container">
 
-                  <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
-                    <div class="form-group col-md-10">
-                      <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">
+
+                  <!-- ADD NEW PHONE -->
+
+                  <div class="row edit-phone-container" data-id="" style="margin-top:8px;" ng-repeat="phone in customer.details[0].phones">
+
+                    <div class="form-group col-xs-12 col-sm-8 col-md-10">
+                      <div class="input-group input-group-lg">
+                        <div class="input-group-addon">+1</div>
+                        <input class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields value="" type="text" ng-model="phone.number">
+                        <div class="input-group-btn">
+                          <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
+                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>
+                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'h'">home</span>
+                            <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'w'">work</span>
+
+                          </button>
+
+                          <ul class="dropdown-menu pull-right">
+
+                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'm')"><a>mobile</a>
+                            </li>
+
+                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'h')"><a>home</a>
+                            </li>
+
+                            <li class="li-edit-phone-type" ng-click="customerPhoneTypeSaveFn($index, 'w')"><a>work</a>
+                            </li>
+
+                          </ul>
+                        </div>
+                      </div>
                     </div>
-                    <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
+                    <div ng-click="removeItem($index, customer.details[0].phones)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
+
+
                 </div>
-                <div class="btn btn-primary btn-sm" id="btn-new-address" ng-click="customerAddEmailFn()">Add Email</div>
-              </div>             
+                <span style="margin-top:-15px;" class="col-xs-10">
+                                    <small>e.g. (303-555-5555)</small>
+                                </span>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-11">
+              <div ng-click="addCustomerContactFn()" class="btn btn-primary btn-sm pull-right" id="btn-new-device">Add Contact</div>
+              </div>
             </div>
             <div class="clearfix mb30"></div>
             <div class="col-md-12">
