@@ -2,7 +2,7 @@
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-5 pages-editing">
-            <a class="btn btn-success pull-left" type="button" href="/admin#/website">
+            <a class="btn btn-success pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
                 <span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
             </a>
             <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Editing {{currentPage.title || 'Home'}}</div></h2>
