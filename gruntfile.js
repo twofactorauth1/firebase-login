@@ -239,6 +239,7 @@ module.exports = function(grunt) {
                         'public/scripts/directives/convertHtml.js',
                         'public/scripts/directives/coursePreview.js',
                         'public/scripts/directives/dmStyle.js',
+                        'public/scripts/directives/fileChange.js',
                         'public/scripts/directives/last.js',
                         'public/scripts/directives/ngEnter.js',
                         'public/scripts/directives/skeuocard.js',
@@ -434,7 +435,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('production',['clean:prebuild','less','concat', 'uglify', 'ngAnnotate','clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild','less','concat', 'ngAnnotate','clean:postbuild']);//TODO: add back in uglify',
 
     /*
      * This task is run by CI.

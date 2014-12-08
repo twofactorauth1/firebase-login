@@ -25,39 +25,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.courses = data;
         });
 
-        setNavigation = function (data) {
-            var tempPageComponents, indexNavComponents, page, pageNavComponents, setting;
-            $scope.indexPage = $scope.indexPage || data['index'];
-            tempPageComponents = $scope.indexPage.components;
-            indexNavComponents = angular.copy( $filter(  'getByType'  )(  tempPageComponents,  'navigation'  ) );
-            if (  indexNavComponents.length > 0  ) {
-                [ '_id', 'anchor', 'visibility' ].forEach(function (  v  ) {
-                    indexNavComponents[  0  ][  v  ] = null;
-                });
+        // setNavigation = function (data) {
+        //     var tempPageComponents, indexNavComponents, page, pageNavComponents, setting;
+        //     $scope.indexPage = $scope.indexPage || data['index'];
+        //     tempPageComponents = $scope.indexPage.components;
+        //     indexNavComponents = angular.copy( $filter(  'getByType'  )(  tempPageComponents,  'navigation'  ) );
+        //     if (  indexNavComponents.length > 0  ) {
+        //         [ '_id', 'anchor', 'visibility' ].forEach(function (  v  ) {
+        //             indexNavComponents[  0  ][  v  ] = null;
+        //         });
 
-                for (  page in data  ) {
-                    if ( data.hasOwnProperty(  page  ) && page !== 'index' ) {
-                        tempPageComponents = data[page].components;
-                        //pageNavComponents = $filter( 'getByType' )( tempPageComponents, 'navigation' );
-                        pageNavComponents = [];
-                        for (var i = 0; i < tempPageComponents.length; i++) {
-                            if(tempPageComponents[i].type === 'navigation') {
-                                pageNavComponents.push(tempPageComponents[i]);
-                            }
-                        };
-                    }
-                    if (!pageNavComponents) {pageNavComponents = []};
+        //         for (  page in data  ) {
+        //             if ( data.hasOwnProperty(  page  ) && page !== 'index' ) {
+        //                 tempPageComponents = data[page].components;
+        //                 //pageNavComponents = $filter( 'getByType' )( tempPageComponents, 'navigation' );
+        //                 pageNavComponents = [];
+        //                 for (var i = 0; i < tempPageComponents.length; i++) {
+        //                     if(tempPageComponents[i].type === 'navigation') {
+        //                         pageNavComponents.push(tempPageComponents[i]);
+        //                     }
+        //                 };
+        //             }
+        //             if (!pageNavComponents) {pageNavComponents = []};
 
-                    pageNavComponents.forEach(function (pageNavComponent) {
-                        for ( setting in indexNavComponents[  0  ] ) {
-                            if ( indexNavComponents[  0  ][  setting  ] !== null ) {
-                                pageNavComponent[  setting  ] = indexNavComponents[  0  ][  setting  ];
-                            }
-                        }
-                    });
-                }
-            }
-        };
+        //             pageNavComponents.forEach(function (pageNavComponent) {
+        //                 for ( setting in indexNavComponents[  0  ] ) {
+        //                     if ( indexNavComponents[  0  ][  setting  ] !== null ) {
+        //                         pageNavComponent[  setting  ] = indexNavComponents[  0  ][  setting  ];
+        //                     }
+        //                 }
+        //             });
+        //         }
+        //     }
+        // };
 
         $scope.getCourse = function(campaignId) {
             console.log('campaign Id ', campaignId);
@@ -84,7 +84,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-                setNavigation(data);
+                // setNavigation(data);
                 if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                     route = 'index';
                     route = route.replace('/', '');
@@ -430,11 +430,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         window.updateComponents = function(data) {
             $scope.$apply(function() {
-                setNavigation({
-                    currentPage: {
-                        components: data
-                    }
-                });
+                // setNavigation({
+                //     currentPage: {
+                //         components: data
+                //     }
+                // });
                 $scope.currentpage.components = data;
                 for (var i = 0; i < $scope.currentpage.components.length; i++) {
                     if ($scope.currentpage.components[i].type == 'navigation') {
