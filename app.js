@@ -5,6 +5,10 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+if (process.env.ENABLE_MONITORING == "true") {
+	require('./configs/newrelicjs.config');
+}
+
 /*
  //Do not delete this
  //requires: "nodetime": "~0.8.15" to run
