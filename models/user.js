@@ -146,14 +146,6 @@ var user = $$.m.ModelBase.extend({
              */
             details: [],
             stripeId: "",           //stripe CustomerID if available.  This is separate from login credentials
-            welcome_alert: {
-                editwebsite: true,
-                commerce: true,
-                contact: true,
-                dashboard: true,
-                marketing: true,
-                marketingsingle: true
-            },
             user_preferences: {
                 default_contact_address: {
                     address1:'',
@@ -162,11 +154,22 @@ var user = $$.m.ModelBase.extend({
                     state:'',
                     zip:'',
                     country:''
+                },
+                website_default_tab : '',
+                indi_default_tab : '',
+                welcome_alert : {
+                    initial : false,
+                    editwebsite : false,
+                    commerce : false,
+                    contact : false,
+                    dashboard : false,
+                    marketing : false,
+                    marketingsingle : false
                 }
             },
-            "app_preferences": {
-                "account":{
-                    "default_tab": "account_information" //"account_information", "billing", "integration"
+            app_preferences: {
+                account:{
+                    default_tab: "account_information"
                 }
             }
         };

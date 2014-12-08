@@ -145,6 +145,23 @@
                     </div>
                 </div>
                 <div class="help-topics-section" ng-switch-when="help-topics">
+                    <div class="panel-group" id="accordion" ng-repeat="topic in topics">
+                        <div class="panel pane-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="topic[$index]= !topic[$index]" ng-style="{'background-color':'#5BC0DE', 'color':'white'}" class="collapsed">
+                                        <span class="glyphicon glyphicon-plus-sign" ng-hide="topic[$index]">{{flag}}</span>
+                                        <span ng-show="topic[$index]" class="glyphicon glyphicon-minus-sign">{{flag}}</span> {{topic.title}}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse{{$index}}" class="panel-collapse collapse" ng-style="{'background-color':topic[$index]?component.bg.color:''}">
+                                <div class="panel-body">
+                                    {{topic.text}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

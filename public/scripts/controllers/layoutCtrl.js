@@ -47,7 +47,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         };
                     }
                     if (!pageNavComponents) {pageNavComponents = []};
-                    console.log('pageNavComponents >>> ', pageNavComponents);
+
                     pageNavComponents.forEach(function (pageNavComponent) {
                         for ( setting in indexNavComponents[  0  ] ) {
                             if ( indexNavComponents[  0  ][  setting  ] !== null ) {
