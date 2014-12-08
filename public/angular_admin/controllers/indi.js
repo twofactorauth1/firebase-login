@@ -9,6 +9,17 @@ define(['app', 'userService'], function(app) {
 
         $scope.initialWelcome = true;
 
+        $scope.topics = [
+            {
+                "title" : "Can I use my own domain name?",
+                "text" : "Yes! If you already have a domain registered you can point your domain to the Indigenous Servers."
+            },
+            {
+                "title" : "Do I need a designer to change my website?",
+                "text" : "Not at all. Choose from one of our many professionally designed templates and use the graphical user interface to modify and edit the details of the site."
+            }
+        ];
+
     	$scope.$watch('activeTab', function(newValue, oldValue) {
             if ($scope.userPreferences) {
                 $scope.userPreferences.indi_default_tab = newValue;
