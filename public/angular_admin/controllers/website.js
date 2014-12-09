@@ -528,26 +528,67 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
-            $scope.addSocialLink = function(social) {
-                if (social && social.name && social.url) {
-                    var selectedName = _.findWhere($scope.componentEditing.networks, {
-                        name: social.name
+            
+            window.updateSocialNetworks = function(old_value,mode,new_value)
+            {
+               var selectedName;
+               switch(mode) {
+                case "add":
+                if (new_value && new_value.name && new_value.url) {
+                    selectedName = _.findWhere($scope.componentEditing.networks, {
+                         name: new_value.name
                     });
                     if (selectedName) {
                         return;
                     }
-
                     $scope.componentEditing.networks.push({
-                        name: social.name,
-                        url: social.url,
-                        icon: social.name,
-                        class_name: social.name
+                        name: new_value.name,
+                        url: new_value.url,
+                        icon: new_value.icon
                     });
-                    social.name = "";
-                    social.url = "";
-                    $scope.saveComponent();
+                    $scope.saveSocialComponent();
                 }
-            };
+                break;
+                case "update":
+                if (new_value && new_value.name && new_value.url) {
+                    var networks = angular.copy($scope.componentEditing.networks);
+                    selectedName = _.findWhere(networks, {
+                         name: old_value.name
+                    });
+                    selectedName.name = new_value.name;
+                    selectedName.url = new_value.url;
+                    selectedName.icon = new_value.icon;
+
+                    var exitingName = _.where(networks, {
+                         name: new_value.name
+                    });
+                    if (exitingName.length > 1) {
+                        return;
+                    }
+                    else
+                      $scope.componentEditing.networks = networks; 
+                }
+                break;
+                case "delete":
+                    selectedName = _.findWhere($scope.componentEditing.networks, {
+                         name: old_value.name
+                    });
+                    $scope.componentEditing.networks.pop({
+                        name: old_value.name,
+                        url: old_value.url
+                    })
+                break;
+                }
+                $scope.saveSocialComponent();
+            }
+
+            window.getSocialNetworks = function(componentId)
+            {
+               $scope.componentEditing = _.findWhere($scope.components, {
+                        _id: componentId
+                });
+               return $scope.componentEditing.networks;
+            }
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
@@ -670,6 +711,19 @@ define([
                 //     toaster.pop('success', "Component Saved", "The component was saved successfully.");
                 //     $scope.updateIframeComponents();
                 // });
+            };
+
+            $scope.saveSocialComponent = function() {
+                var componentId = $scope.componentEditing._id;
+                var componentIndex;
+                for (var i = 0; i < $scope.components.length; i++) {
+                    if ($scope.components[i]._id === componentId) {
+                        $scope.components[i] = $scope.componentEditing
+                    }
+                }
+                $scope.currentPage.components = $scope.components;                
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateSocialComponent && iFrame.contentWindow.updateSocialComponent($scope.components, $scope.componentEditing.networks);
+                
             };
 
 

@@ -358,17 +358,66 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** CMS RELATED **********/
 
+        $scope.social_links = [
+        {name:"adn",icon:"adn"},
+        {name:"bitbucket",icon:"bitbucket"},
+        {name:"dropbox",icon:"dropbox"},
+        {name:"facebook",icon:"facebook"},
+        {name:"flickr",icon:"flickr"},
+        {name:"foursquare",icon:"foursquare"},
+        {name:"github",icon:"github"},
+        {name:"google-plus",icon:"google-plus"},
+        {name:"microsoft",icon:"windows"},
+        {name:"openid",icon:"openid"},
+        {name:"pinterest",icon:"pinterest"},
+        {name:"reddit",icon:"reddit"},
+        {name:"soundcloud",icon:"soundcloud"},
+        {name:"twitter",icon:"twitter"},
+        {name:"vimeo",icon:"vimeo-square"},
+        {name:"vk",icon:"vk"},
+        {name:"yahoo",icon:"yahoo"}] 
+
+        $scope.setSelectedSocialLink = function(link, id, update )
+        {           
+            if(!$scope.social)
+                $scope.social = {};
+            if(update)
+            {
+                $scope.social.selectedLink = link.name;
+                $scope.social.name = link.name;
+                $scope.social.icon = link.icon;
+                $scope.social.url = link.url;    
+            }  
+            else
+            {
+                $scope.social = {};              
+            }  
+            $scope.networks = window.parent.getSocialNetworks(id);
+        }
+        $scope.setSelectedLink = function(social_link)
+        {          
+            $scope.social.name = social_link.name;
+            $scope.social.icon = social_link.icon;
+        }
+        $scope.saveSocialLink = function(social, id, mode) {
+            var old_value = _.findWhere($scope.networks, {
+                name: $scope.social.selectedLink
+            });
+            window.parent.updateSocialNetworks(old_value,mode,social);      
+            $(".modal-backdrop").remove();
+        };
+
         window.activateAloha = function() {
             $('.editable').aloha();
             // aloha.dom.query('.editable', document).forEach(aloha);
-            // $('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
+             //$('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
         };
 
         window.deactivateAloha = function() {
             $('.editable').mahalo();
             // if (aloha.editor && aloha.editor.selection) {
-            //     // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
-            //     // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
+                 // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+                 // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
             // }
             // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
@@ -444,6 +493,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     }
                 };
             });
+        };
+        window.updateSocialComponent = function(data,networks) {            
+                $scope.currentpage.components = data;
+                $scope.networks = networks;
         };
 
         window.triggerEditMode = function() {
