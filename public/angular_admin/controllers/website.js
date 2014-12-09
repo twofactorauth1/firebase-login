@@ -29,15 +29,29 @@ define([
         'CourseService',
         'NavigationService',
         function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
+            var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             ngProgress.start();
-            $scope.editingPageId = $location.$$search['pageId'];
+
+            //get user
+            // UserService.getUser(function(user) {
+            //     $scope.user = user;
+            //     that.user = user;
+            //     console.log('that.user.user_preferences.lastPageHandle >> ', that.user.user_preferences.lastPageHandle);
+            //     if(that.user.user_preferences.lastPageHandle) {
+            //         document.getElementById("iframe-website").setAttribute("src", '/page/'+that.user.user_preferences.lastPageHandle+'?editor=true');
+            //         $scope.updatePage(that.user.user_preferences.lastPageHandle);
+            //     }
+            // });
+
+            if ($location.$$search['pagehandle']) {
+                document.getElementById("iframe-website").setAttribute("src", '/page/'+$location.$$search['pagehandle']+'?editor=true');
+            }
 
             NavigationService.updateNavigation();
             $scope.$back = function() {
               window.history.back();
             };
 
-            var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
             var subdomainCharLimit = 4;
@@ -89,17 +103,7 @@ define([
                         ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6"]
                     ]
                 }
-            };
-
-            //get user
-            UserService.getUser(function(user) {
-                $scope.user = user;
-                that.user = user;
-                // console.log('that.user.user_preferences.lastPageHandle >> ');
-                // if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
-                //      $scope.updatePage(that.user.user_preferences.lastPageHandle);
-                // }
-            });
+            }
 
             window.getUpdatediFrameRoute = function(data) {
                 // console.log('getUpdatediFrameRoute', data);
@@ -219,7 +223,6 @@ define([
                     }
                     console.info('Bind attempt : ' + count);
                 }
-
             };
 
             UserService.getAccount(function(account) {
@@ -243,24 +246,24 @@ define([
                             handle: currentPage
                         });
 
-                    // if ($scope.editingPageId) {
-                    //     console.log('pageId >>> ', $scope.editingPageId);
-                    //     $scope.currentPage = _.findWhere(pages, {
-                    //         _id: $scope.editingPageId
-                    //     });
-                    //     // if ($scope.currentPage && $scope.currentPage.components) {
-                    //     //     $scope.components = $scope.currentPage.components;
-                    //     // } else {
-                    //     //     $scope.components = [];
-                    //     // }
-                    //     // console.log('$scope.currentPage >>> ', $scope.currentPage);
-                    //     // $scope.resfeshIframe();
-                    // } else {
-                    //     console.log('current');
-                    //     $scope.currentPage = _.findWhere(pages, {
-                    //         handle: currentPage
-                    //     });
-                    // }
+                    if ($scope.editingPageId) {
+                        console.log('pageId >>> ', $scope.editingPageId);
+                        $scope.currentPage = _.findWhere(pages, {
+                            _id: $scope.editingPageId
+                        });
+                        // if ($scope.currentPage && $scope.currentPage.components) {
+                        //     $scope.components = $scope.currentPage.components;
+                        // } else {
+                        //     $scope.components = [];
+                        // }
+                        // console.log('$scope.currentPage >>> ', $scope.currentPage);
+                        // $scope.resfeshIframe();
+                    } else {
+                        console.log('current');
+                        $scope.currentPage = _.findWhere(pages, {
+                            handle: currentPage
+                        });
+                    }
                     //get components from page
                     if ($scope.currentPage) {
                         if ($scope.currentPage.components) {
@@ -302,7 +305,6 @@ define([
             $scope.toggled = function(open) {
 
                 //console.log('Dropdown is now: ', open);
-
             };
 
             $scope.toggleDropdown = function($event) {
@@ -482,7 +484,7 @@ define([
                         }); 
                 }                
             };
-           
+
             $scope.updatePage = function(handle) {
                 console.log('update page');
                 $scope.isEditing = false;
@@ -528,6 +530,7 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
+
             $scope.addSocialLink = function(social) {
                 if (social && social.name && social.url) {
                     var selectedName = _.findWhere($scope.componentEditing.networks, {
@@ -671,7 +674,6 @@ define([
                 //     $scope.updateIframeComponents();
                 // });
             };
-
 
             $scope.deletePage = function() {
 
