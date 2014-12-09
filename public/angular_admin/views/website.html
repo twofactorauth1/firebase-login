@@ -304,6 +304,9 @@
                                     <option value="img-circle">Circle</option>
                                 </select>
                             </div>
+                            <div class="form-group" ng-if = "componentEditing.type == 'meet-team'">
+                                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#meetTeamModal">Add Team Member</button>
+                            </div>
                             <div class="well">
                                 <p>Danger Zone</p>
                                 <!-- <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)" data-original-title="" title=""><i class="fa fa-trash"></i> Delete Component</button> -->
@@ -581,6 +584,80 @@
     </div>
 
     <!-- /.modal -->
+     <!-- Add meet Team Modal -->
+
+    <div class="modal fade" id="meetTeamModal" tabindex="-1" role="dialog" aria-labelledby="teamModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="teamModalLabel">Add Team Member</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="new_page">
+                        <div class="form-group">
+                            <label for="member-name">Name </label>
+                                 <input id="member-name" class="form-control input-lg" type="text" ng-model="team.name">
+                        </div> 
+                        <div class="form-group">
+                            <label for="member-position">Position </label>
+                            <input id="member-position" class="form-control input-lg" type="text" ng-model="team.position">
+                        </div> 
+                        <div class="form-group">
+                            <label for="member-bio">Bio Data </label>
+                            <input id="member-position" class="form-control input-lg" type="textarea" ng-model="team.bio">
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <img id="member-photo" style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="btn-link">
+                                <a class="btn btn-success btn-block media-modal" media-modal-show-insert="true" on-insert-mediacb="addProfilePic" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Add Profile Picture</span> </a>
+                            </div>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="addTeamMember(team, component._id)" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
     <div id="model_container"></div>
 </div>
