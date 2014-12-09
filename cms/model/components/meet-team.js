@@ -30,6 +30,12 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
+            title: '',
+
+            teamMembers: [],
+
+            version: 1,
+
 
             /**
              * The type of component this is

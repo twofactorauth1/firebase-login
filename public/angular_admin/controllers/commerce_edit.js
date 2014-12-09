@@ -144,10 +144,11 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             };
 
             $scope.editSubscriptionFn = function(planId) {
-                $scope.planDeleteFn(planId, false);
-                $scope.addSubscriptionFn(false);
-                $scope.editCancelFn();
-                ToasterService.show('success', 'Plan updated.');
+                $scope.planDeleteFn(planId, false, function() {
+                    $scope.addSubscriptionFn(false);
+                    $scope.editCancelFn();
+                    ToasterService.show('success', 'Plan updated.');
+                });
             };
 
             $scope.saveProductFn = function() {
@@ -183,21 +184,28 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 };
             };
 
-            $scope.planDeleteFn = function(planId, showToast) {
-                PaymentService.deletePlan(planId, function() {}, showToast);
-                $scope.plans.forEach(function(value, index) {
-                    if (value.id == planId) {
-                        $scope.plans.splice(index, 1);
-                    }
-                });
+            $scope.planDeleteFn = function(planId, showToast, fn) {
+                var fn = fn || false;
+                PaymentService.deletePlan(planId, function() {
+                    $scope.plans.forEach(function(value, index) {
+                        if (value.id == planId) {
+                            $scope.plans.splice(index, 1);
+                        }
+                    });
 
-                $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
-                    if (value.id == planId) {
-                        $scope.product.product_attributes.stripePlans.splice(index, 1);
-                    }
-                });
+                    $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
+                        if (value.id == planId) {
+                            $scope.product.product_attributes.stripePlans.splice(index, 1);
+                        }
+                    });
 
-                $scope.saveProductFn();
+                    if (fn) {
+                        fn();
+                    }
+
+                    $scope.saveProductFn();
+
+                }, showToast);
             };
 
             $scope.planToggleActiveFn = function(planId, active) {
