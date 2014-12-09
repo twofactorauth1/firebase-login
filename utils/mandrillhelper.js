@@ -52,8 +52,8 @@ var mandrillHelper =  {
                     "rcpt": toAddress,
                     "vars": [
                          {
-                            "name": "send_date",
-                            "content": new Date()
+                            "name": "SENDDATE",
+                            "content": moment().format('MMM Do, YYYY')
                         }
                     ]
                 }
