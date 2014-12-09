@@ -143,6 +143,14 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       });
     });
 
+      $scope.$watch('account.business.nonProfit', function(newValue, oldValue) {
+        if (angular.isDefined(newValue)) {
+          UserService.putAccount($scope.account, function(account) {
+            //$scope.account = account;
+          });
+        }
+      });
+
     $scope.userPhoneTypeSaveFn = function(index, type) {
       var typeLabel = null;
       if (type == 'm')
