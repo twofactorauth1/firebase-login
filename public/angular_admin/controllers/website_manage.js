@@ -19,6 +19,7 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+
             console.log("$location.$$search['onboarding'] >>> ", $location.$$search['onboarding']);
             if ($location.$$search['onboarding']) {
                 $scope.startOnboarding
