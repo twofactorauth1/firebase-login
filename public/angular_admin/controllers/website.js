@@ -531,10 +531,14 @@ define([
                 });
             };
 
-            $scope.addSocialLink = function(social) {
-                if (social && social.name && social.url) {
-                    var selectedName = _.findWhere($scope.componentEditing.networks, {
-                        name: social.name
+            window.updateSocialNetworks = function(old_value,mode,new_value)
+            {
+               var selectedName;
+               switch(mode) {
+                case "add":
+                if (new_value && new_value.name && new_value.url) {
+                    selectedName = _.findWhere($scope.componentEditing.networks, {
+                         name: new_value.name
                     });
                     if (selectedName) {
                         return;
@@ -575,9 +579,10 @@ define([
                         name: old_value.name,
                         url: old_value.url
                     })
+                    $scope.saveSocialComponent();
                 break;
                 }
-                $scope.saveSocialComponent();
+                
             }
 
             window.getSocialNetworks = function(componentId)
