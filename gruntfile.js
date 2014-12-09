@@ -239,6 +239,7 @@ module.exports = function(grunt) {
                         'public/scripts/directives/convertHtml.js',
                         'public/scripts/directives/coursePreview.js',
                         'public/scripts/directives/dmStyle.js',
+                        'public/scripts/directives/fileChange.js',
                         'public/scripts/directives/last.js',
                         'public/scripts/directives/ngEnter.js',
 			            'public/scripts/directives/scrollTo.js',

@@ -12,7 +12,7 @@
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
-             <div class="btn-group pull-right btn-add" ng-show="!isEditing">
+             <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs">Add</span>
@@ -76,7 +76,7 @@
                     <div class="thumbnail">
                         <div class="screenshot-wrap">
                             <div class="screenshot" ng-if="post.screenshot" style="background-image: url({{post.screenshot}});width: 260px;height: 160px;background-size: cover;"></div>
-                            <img ng-if="!post.screenshot" src="http://placehold.it/500x300" alt="">
+                            <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt="">
                         </div>
                         <div class="caption">
                             <h4>{{post.post_title | characters:25 }}</h4>

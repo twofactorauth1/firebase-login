@@ -90,17 +90,21 @@ module.exports = {
 
                         /*
                          * Send welcome email.  This is done asynchronously.
+                         * But only do this if we are not in the "testing" env.
                          */
-                        fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
-                            if(err) {
-                                log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
-                            } else {
-                                mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
-                                    notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                    htmlContent, accountId, userId, function(err, result){});
-                            }
+                        if (process.env.NODE_ENV != "testing") {
+                            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
+                                if (err) {
+                                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                                } else {
+                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                        notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                        htmlContent, accountId, userId, function (err, result) {
+                                        });
+                                }
 
-                        });
+                            });
+                        }
 
                         log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
