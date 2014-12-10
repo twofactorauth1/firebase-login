@@ -7,6 +7,9 @@ define([
     'toaster',
     'truncate',
     'ngOnboarding',
+    'timeAgoFilter',
+    'reverse',
+    'jquery',
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -70,6 +73,25 @@ define([
             $scope.savePreferencesFn = function() {
                 UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {})
             };
+
+            // var xH;
+            // $('.scrollhover').hover(
+            //     function() {
+            //         console.log('scrollhover');
+            //         xH = $(this).children("img").css("height");
+            //         xH = parseInt(xH);
+            //         console.log('xh ', xh);
+            //         xH = xH - 150;
+            //         xH = "-" + xH + "px";
+            //         $(this).children( "img" ).css("top",xH);
+            //     }, function() {
+            //         $(this).children( "img" ).css("top","0px");
+            //     }
+            // );
+
+            $('.scrollhover').on('hover', function() {
+                console.log('hovering');
+            });
 
             UserService.getAccount(function(account) {
                 $scope.account = account;

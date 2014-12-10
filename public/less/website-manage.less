@@ -1,14 +1,80 @@
 .website-manage {
-	.screenshot-wrap {
-		height: 155px;
-		overflow: hidden;
-		img {
-			width: 260px;
-			
-		}
-	}
-	.template-btns {
-		margin-bottom: 0px;
-		padding: 0;
-	}
+    .screenshot-wrap {
+        height: 155px;
+        overflow: hidden;
+        border: 1px solid #dddddd;
+        img {
+            width: 260px;
+            height: auto;
+        }
+    }
+    .template-btns {
+        margin-bottom: 0px;
+        padding: 0;
+    }
+    .pages-section .thumbnail {
+        padding: 10px;
+        .caption {
+            padding: 10px 0 0 0;
+        }
+        .scrollhover {
+            overflow: hidden;
+            position: relative;
+        }
+        img {
+            position: absolute;
+            transition: all 0.2s ease 0s;
+        }
+        .scrollhover:hover >img {
+            -moz-animation: border-bounce 3000ms linear;
+            -webkit-animation: border-bounce 3000ms linear;
+        }
+        @-moz-keyframes border-bounce {
+            0% {
+                margin-top: -10px;
+            }
+            25% {
+                margin-top: -50px;
+            }
+            50% {
+                margin-top: -100px;
+            }
+            75% {
+                margin-top: -50px;
+            }
+            100% {
+                margin-top: -0px;
+            }
+        }
+        @-webkit-keyframes border-bounce {
+            0% {
+                margin-top: -10px;
+            }
+            25% {
+                margin-top: -50px;
+            }
+            50% {
+                margin-top: -100px;
+            }
+            75% {
+                margin-top: -50px;
+            }
+            100% {
+                margin-top: -0px;
+            }
+        }
+    }
 }
+// .website-manage {
+// 	.screenshot-wrap {
+// 		height: 155px;
+// 		overflow: hidden;
+// 		img {
+// 			width: 260px;
+// 		}
+// 	}
+// 	.template-btns {
+// 		margin-bottom: 0px;
+// 		padding: 0;
+// 	}
+// }

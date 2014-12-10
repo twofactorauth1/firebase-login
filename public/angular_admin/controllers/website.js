@@ -593,6 +593,18 @@ define([
                return $scope.componentEditing.networks;
             }
 
+            $scope.addTeamMember = function(team){
+                if (team && team.name) {
+                    $scope.componentEditing.teamMembers.push({
+                        name: team.name,
+                        position: team.position,
+                        bio: team.bio,
+                        profilepic : team.profilepic
+                    });
+                    $scope.saveComponent();
+                }
+            }
+
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 $scope.components = $scope.currentPage.components;
@@ -870,6 +882,15 @@ define([
             };
 
             $scope.insertMedia = function(asset) {
+                if($scope.componentEditing && $scope.componentEditing.type == "meet-team")
+                {
+                    if(!$scope.team)
+                    {
+                        $scope.team = {}
+                    }
+                    $scope.team.profilepic = asset.url;
+                 return;
+                }
                 if ($scope.imageChange) {
                     $scope.imageChange = false;
                     var type = $scope.componentEditing.type;

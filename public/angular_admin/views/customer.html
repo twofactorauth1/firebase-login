@@ -7,116 +7,79 @@
         </div>
 
         <div class="col-xs-5">
-            <div indigeweb-state-nav="customerAdd" class="btn btn-success pull-right btn-create-contact"
-                                                   type="button">
+            <div indigeweb-state-nav="customerAdd" class="btn btn-success pull-right btn-create-contact" type="button">
                 <i class="fa fa-plus"></i>
                 <span class="hidden-xs">Add</span>
             </div>
-
         </div>
     </div>
 
-    <div style="display: none;" class="alert alert-info fade in">
-        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-        <h4 class="center">Hi Robin, Welcome to Customers!</h4>
-        <p class="center">Okay, it's time to start managing your products. If you need assitance
-        use any of the three ways below.</p>
-        <hr class="mb30">
-        <div class="col-sm-6">
-            <h4><i class="fa fa-youtube-play"></i> Watch this 30 second video about managing customers.</h4>
-            <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-        </div>
-        <div class="mb30"></div>
-        <div class="col-sm-6">
-            <h4><i class="fa fa-compass"></i> Schedule a Demo</h4>
-            <p>Schedule a personal demo with one of our customer support representatives
-            who can show you via screen share how to manage your contacts.</p>
-            <button class="btn btn-primary btn-lg">Schedule Now <i class="fa fa-caret-right"></i>
-            </button>
-            <hr class="mb30">
-            <h4><i class="fa fa-file-text-o"></i> Read the Documentation</h4>
-            <p>If you prefer a list of steps to read, then head over to our detailed
-            documentation about all the aspects of managing your contacts.</p>
-            <button class="btn btn-primary btn-lg">View Docs <i class="fa fa-caret-right"></i>
-            </button>
-        </div>
-        <div class="clearfix mb30"></div>
-    </div>
+    <div style="background: #e7e7e7;" id="scrollTop" class="contentpanel" ng-style="styleCustomers()" indigeweb-resize indiscroller indiscroller-update='saveScrollFn'>
 
-    <div style="background: #e7e7e7;" id="scrollTop" class="contentpanel" ng-style="styleCustomers()"
-                                                                          indigeweb-resize indiscroller indiscroller-update='saveScrollFn'>
-
-        <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel'
-                  classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="col-sm-4">
-                    <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts"
-                                                                               type="text">
-                </div>
-                <div class="col-sm-4">
-                    <div class="mb0">
-                        <select class="form-control chosen-select input-lg" ng-model="sortOrder">
-                            <option value="" disabled selected>Sort Contacts</option>
-                            <option value="1">A to Z</option>
-                            <option value="2">Z to A</option>
-                            <option value="3">Date Added</option>
-                        </select>
+        <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-sm-4">
+                        <input ng-model="searchBar" placeholder="Search Customers" class="form-control input-lg  search-contacts" type="text">
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="mb0">
+                            <select class="form-control chosen-select input-lg" ng-model="sortOrder">
+                                <option value="" disabled selected>Sort Contacts</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="mb0">
+                            <select class="form-control chosen-select input-lg" ng-model="customerFilter.type">
+                                <option value="" selected>All Contacts</option>
+                                <option value="cu">Customer</option>
+                                <option value="co">Colleague</option>
+                                <option value="fr">Friend</option>
+                                <option value="mb">Member</option>
+                                <option value="fa">Family</option>
+                                <option value="ad">Admin</option>
+                                <option value="ld">Lead</option>
+                                <option value="ot">Other</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="mb0">
-                        <select class="form-control chosen-select input-lg" ng-model="customerFilter.type">
-                            <option value="" selected>All Contacts</option>
-                            <option value="cu">Customer</option>
-                            <option value="co">Colleague</option>
-                            <option value="fr">Friend</option>
-                            <option value="mb">Member</option>
-                            <option value="fa">Family</option>
-                            <option value="ad">Admin</option>
-                            <option value="ld">Lead</option>
-                            <option value="ot">Other</option>
-                        </select>
-                    </div>
+
+                <div style="width:100%; text-align:center">
+                    <ul class="pagination hidden-xs letter-list">
+
+                        <li ng-show="alphaList.length"><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
+                        </li>
+                        <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
+
+                            <a class="btn-letter" ng-click="alphaFilter(alpha)" ng-if="alphaFilterStatus[alpha]" ng-class="{'active': alphaSelected == alpha}">{{alpha}}</a>
+                            <a class="btn-letter" ng-if="!alphaFilterStatus[alpha]" tooltip="No Contact with {{alpha}}">{{alpha}}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
-            <div style="width:100%; text-align:center">
-                <ul class="pagination hidden-xs letter-list">
-
-                    <li ng-show="alphaList.length"><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
-                    </li>
-                    <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
-
-                        <a class="btn-letter" ng-click="alphaFilter(alpha)" ng-if="alphaFilterStatus[alpha]"
-                                                                            ng-class="{'active': alphaSelected == alpha}">{{alpha}}</a>
-                        <a class="btn-letter" ng-if="!alphaFilterStatus[alpha]" tooltip="No Contact with {{alpha}}">{{alpha}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- panel -->
+            <!-- panel -->
         </headroom>
 
         <div ng-switch on="userPreferences.customerSettings.gridViewDisplay" class="people-list">
             <div ng-switch-when="true" class="row">
                 <div>
                     <div ng-repeat="customer in renderedCustomers" class="col-xs-12 col-sm-4 col-md-3">
-                        <div data-contactid="{{customer._id}}" class="people-item btn-view-contact-details contact-item"
-                                                               style="opacity:1">
-                            <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip"
-                                                                                                        class="important-star tooltips">
+                        <div data-contactid="{{customer._id}}" class="people-item btn-view-contact-details contact-item" style="opacity:1">
+                            <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips">
                                 <i class="fa fa-star-o" ng-hide="customer.starred" ng-click="setImportantContact(customer, true)"></i>
                                 <i class="fa fa-star" ng-show="customer.starred" ng-click="setImportantContact(customer, false)"></i>
                             </span>
                             <span class="label label-info contact-cat" ng-show="userPreferences.customerSettings.showContactLabel">{{contactLabel(customer)}}</span>
 
-                            <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}"
-                                                                      class="media">
+                            <div indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" class="media">
                                 <div class="col-xs-12">
                                     <!--//  //  // -->
-                                    <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}"
-                                         class="img-circle media-object thumbnail standard">
+                                    <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}" class="img-circle media-object thumbnail standard">
                                     <!-- //  //  -->
 
                                     <span class="name visible-xs">
@@ -129,10 +92,8 @@
                                 <div class="media-body col-xs-12 hidden-xs" ng-switch on="userPreferences.customerSettings.customerDisplayFormat">
 
 
-                                    <h4 class="person-name center" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]"
-                                                                                                             truncate-limit=20 truncate-symbol="'...'"></h4>
-                                    <h4 class="person-name center" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]"
-                                                                                                            truncate-limit=20 truncate-symbol="'...'"></h4>
+                                    <h4 class="person-name center" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                                    <h4 class="person-name center" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
 
                                 </div>
 
@@ -141,8 +102,7 @@
                                     <li>
                                         <div ng-if="userPreferences.customerSettings.showEmail && checkBestEmail(customer) && email">
                                             <i class="fa fa-envelope-o pull-left title"></i>
-                                            <span
-                                               class="pull-right value"><a href="mailto:{{email}}">{{email}}</a></span>
+                                            <span class="pull-right value"><a href="mailto:{{email}}">{{email}}</a></span>
                                         </div>
                                     </li>
                                     <li>
@@ -155,8 +115,7 @@
                                     <li>
                                         <div ng-if="customer.details[0].phones[0].number">
                                             <i class="fa fa-mobile pull-left title"></i>
-                                            <span
-                                               class="pull-right value">{{customer.details[0].phones[0].number}}</span>
+                                            <span class="pull-right value">{{customer.details[0].phones[0].number}}</span>
                                         </div>
                                     </li>
                                     <li class="socialList">
@@ -179,21 +138,19 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <div class="pull-right">
+                                <!-- <div class="pull-right">
                                     <span class="visible-inline-xs">
                                         type:  |
                                     </span>
 
-                                    <span data-original-title="Sources where this contact information came from" title=""
-                                                                                                                 data-placement="top" data-toggle="tooltip"
-                                                                                                                                      class="tooltips hidden">sources:</span>
+                                    <span data-original-title="Sources where this contact information came from" title="" data-placement="top" data-toggle="tooltip" class="tooltips hidden">sources:</span>
 
                                     <span><i class=""></i>
                                     </span>
 
 
 
-                                </div>
+                                </div> -->
                                 <div class="clear clearfix"></div>
                             </div>
                         </div>
@@ -205,25 +162,20 @@
                     <div class="container-fluid tb-row" ng-repeat="customer in renderedCustomers">
                         <div class="tb-col col-md-1">
                             <div class="people-item" style="opacity:1">
-                                <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip"
-                                                                                                            class="important-star tooltips"><i class="fa fa-star-o" ng-hide="customer.starred" ng-click="setImportantContact(customer, true)"></i>
+                                <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip" class="important-star tooltips"><i class="fa fa-star-o" ng-hide="customer.starred" ng-click="setImportantContact(customer, true)"></i>
                                                                                                             <i class="fa fa-star" ng-show="customer.starred" ng-click="setImportantContact(customer, false)"></i></span>
                             </div>
                         </div>
                         <div class="tb-col col-md-3">
-                            <div class="people-item btn-view-contact-details contact-item" indigeweb-state-nav="customerDetail"
-                                                                                           indigeweb-state-id="{{customer._id}}" style="opacity:1">
+                            <div class="people-item btn-view-contact-details contact-item" indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customer._id}}" style="opacity:1">
                                 <div class="media">
                                     <div class="col-xs-4 vcenter">
-                                        <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}"
-                                             class="img-circle media-object thumbnail standard">
+                                        <img ng-src="{{ customer.photo ? customer.photo : '/assets/icons/blank-user.jpg' }}" class="img-circle media-object thumbnail standard">
                                         <span class="name visible-xs"> <h4 class="person-name" indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4> </span>
                                     </div>
                                     <div class="media-body vcenter col-xs-7 hidden-xs" ng-switch on="userPreferences.customerSettings.customerDisplayFormat">
-                                        <h4 class="person-name" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]"
-                                                                                                          truncate-limit=20 truncate-symbol="'...'"></h4>
-                                        <h4 class="person-name" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]"
-                                                                                                         truncate-limit=20 truncate-symbol="'...'"></h4>
+                                        <h4 class="person-name" ng-switch-when="first" indigeweb-truncate truncate-list=" [customer.first, customer.middle, customer.last]" truncate-limit=20 truncate-symbol="'...'"></h4>
+                                        <h4 class="person-name" ng-switch-when="last" indigeweb-truncate truncate-list=" [customer.last, customer.middle, customer.first]" truncate-limit=20 truncate-symbol="'...'"></h4>
                                     </div>
                                 </div>
                             </div>
@@ -231,8 +183,7 @@
                         <div class="tb-col col-md-1">
                             <div class="people-item" ng-if="userPreferences.customerSettings.showEmail && checkBestEmail(customer) && email">
                                 <i class="fa fa-envelope-o pull-left title"></i>
-                                <span
-                                   class="pull-right value">{{email}}</span>
+                                <span class="pull-right value">{{email}}</span>
                             </div>
                         </div>
                         <div class="tb-col col-md-2">
@@ -245,14 +196,13 @@
                         <div class="tb-col col-md-1">
                             <div class="people-item" ng-if="customer.details[0].phones[0].number">
                                 <i class="fa fa-mobile pull-left title"></i>
-                                <span
-                                   class="pull-right value">{{customer.details[0].phones[0].number}}</span>
+                                <span class="pull-right value">{{customer.details[0].phones[0].number}}</span>
                             </div>
                         </div>
                         <div class="tb-col col-md-2">
                             <div class="people-item" ng-if="userPreferences.customerSettings.showSocial && (checkFacebookId(customer) || checkTwitterId(customer) || checkLinkedInId(customer))">
                                 <p class="pull-left title">
-                                Social Accounts:
+                                    Social Accounts:
                                 </p>
                                 <ul class="pull-right social-list value">
                                     <li ng-if="checkFacebookId(customer)">
@@ -322,13 +272,11 @@
                 <div class="form-group">
                     <label>Default View</label>
                     <div class="btn-group">
-                        <button type="button" ng-click="setDefaultView('true')" class="btn btn-default"
-                                                                                ng-class="{'active': gridViewDisplay
+                        <button type="button" ng-click="setDefaultView('true')" class="btn btn-default" ng-class="{'active': gridViewDisplay
                                                                                 === 'true'}">
                             <span class="fa fa-th"></span> Grid
                         </button>
-                        <button type="button" ng-click="setDefaultView('false')" class="btn btn-default"
-                                                                                 ng-class="{'active': gridViewDisplay === 'false'}">
+                        <button type="button" ng-click="setDefaultView('false')" class="btn btn-default" ng-class="{'active': gridViewDisplay === 'false'}">
                             <span class="fa fa-list"></span> List
                         </button>
                     </div>
@@ -337,8 +285,7 @@
                 <div class="form-group row">
                     <label class="col-xs-12 control-label">Contacts List Display</label>
                     <div class="col-xs-12">
-                        <select class=" form-control chosen-select sort-display" ng-model='changeDisplayFormat'
-                                data-placeholder="Sort Contacts" name="one">
+                        <select class=" form-control chosen-select sort-display" ng-model='changeDisplayFormat' data-placeholder="Sort Contacts" name="one">
                             <option value="1">first, last</option>
                             <option value="2">last, first</option>
                         </select>
@@ -348,8 +295,7 @@
                 <div class="form-group row">
                     <label class="col-xs-12 control-label">Contacts List Ordering</label>
                     <div class="col-xs-12">
-                        <select class=" form-control chosen-select sort-ordering" ng-model="sortOrderSettings"
-                                                                                  data-placeholder="Sort Contacts" name="two">
+                        <select class=" form-control chosen-select sort-ordering" ng-model="sortOrderSettings" data-placeholder="Sort Contacts" name="two">
                             <option value="1">A to Z</option>
                             <option value="2">Z to A</option>
                             <option value="3">Date Added</option>
@@ -363,28 +309,23 @@
                     <label class="col-xs-12 control-label">Show / Hide Attributes</label>
 
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="contact-cat" ng-checked="userPreferences.customerSettings.showContactLabel"
-                                                                ng-model="toggleCategory">
+                        <input type="checkbox" id="contact-cat" ng-checked="userPreferences.customerSettings.showContactLabel" ng-model="toggleCategory">
                         <label for="contact-cat">Category</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="email_id" ng-checked="userPreferences.customerSettings.showEmail"
-                                                             ng-model="toggleEmail">
+                        <input type="checkbox" id="email_id" ng-checked="userPreferences.customerSettings.showEmail" ng-model="toggleEmail">
                         <label for="email_id">Email</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="social_id" ng-checked="scope.userPreferences.customerSettings.showSocial"
-                                                              ng-model="toggleSocial">
+                        <input type="checkbox" id="social_id" ng-checked="scope.userPreferences.customerSettings.showSocial" ng-model="toggleSocial">
                         <label for="social_id">Social</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="address_id" ng-checked="userPreferences.customerSettings.showAddress"
-                                                               ng-model="toggleAddress">
+                        <input type="checkbox" id="address_id" ng-checked="userPreferences.customerSettings.showAddress" ng-model="toggleAddress">
                         <label for="address_id">Address</label>
                     </div>
                     <div class="col-xs-12 ckbox ckbox-success">
-                        <input type="checkbox" id="customer_since_id" ng-checked="userPreferences.customerSettings.showCustomerSince"
-                                                                      ng-model="toggleCustomerSince">
+                        <input type="checkbox" id="customer_since_id" ng-checked="userPreferences.customerSettings.showCustomerSince" ng-model="toggleCustomerSince">
                         <label for="customer_since_id">Created</label>
                     </div>
                 </div>
@@ -405,15 +346,15 @@
                 <div class="duplicates-list">
                     <p>Select from the list of similar contacts to merge</p>
                     <ul>
-                        <li><span class="name">John Doe</span>  <span class="similar">2 Similar</span>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span>
                         </li>
-                        <li><span class="name">John Doe</span>  <span class="similar">2 Similar</span>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span>
                         </li>
-                        <li><span class="name">John Doe</span>  <span class="similar">2 Similar</span>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span>
                         </li>
-                        <li><span class="name">John Doe</span>  <span class="similar">2 Similar</span>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span>
                         </li>
-                        <li><span class="name">John Doe</span>  <span class="similar">2 Similar</span>
+                        <li><span class="name">John Doe</span> <span class="similar">2 Similar</span>
                         </li>
                     </ul>
                 </div>
@@ -443,22 +384,19 @@
                     <div class="clearfix mb30"></div>
                     <ul>
                         <li>
-                            <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook"
-                                                                                                  ng-click="importFacebookFriends()"><span class="fa fa-facebook"></span>
+                            <button type="button" class="btn fb-color btn-lg btn-import-facebook" data-import-source="facebook" ng-click="importFacebookFriends()"><span class="fa fa-facebook"></span>
                             </button>
                             <div class="clearfix mb5"></div>
                             Facebook
                         </li>
                         <li>
-                            <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin"
-                                                                                                        ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span>
+                            <button type="button" class="btn linkedin-color btn-lg btn-import-linkedin" data-import-source="linkedin" ng-click="importLinkedInConnections()"><span class="fa fa-linkedin"></span>
                             </button>
                             <div class="clearfix mb5"></div>
                             LinkedIn
                         </li>
                         <li>
-                            <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus"
-                                                                                                   ng-click="importGmailContacts()"><span class="fa fa-google"></span>
+                            <button type="button" class="btn google-color btn-lg btn-import-gmail" data-import-source="googleplus" ng-click="importGmailContacts()"><span class="fa fa-google"></span>
                             </button>
                             <div class="clearfix mb5"></div>
                             Gmail

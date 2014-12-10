@@ -19214,13 +19214,67 @@ div.error label.error:before {
 .website-manage .screenshot-wrap {
   height: 155px;
   overflow: hidden;
+  border: 1px solid #dddddd;
 }
 .website-manage .screenshot-wrap img {
   width: 260px;
+  height: auto;
 }
 .website-manage .template-btns {
   margin-bottom: 0px;
   padding: 0;
+}
+.website-manage .pages-section .thumbnail {
+  padding: 10px;
+}
+.website-manage .pages-section .thumbnail .caption {
+  padding: 10px 0 0 0;
+}
+.website-manage .pages-section .thumbnail .scrollhover {
+  overflow: hidden;
+  position: relative;
+}
+.website-manage .pages-section .thumbnail img {
+  position: absolute;
+  transition: all 0.2s ease 0s;
+}
+.website-manage .pages-section .thumbnail .scrollhover:hover > img {
+  -moz-animation: border-bounce 3000ms linear;
+  -webkit-animation: border-bounce 3000ms linear;
+}
+@-moz-keyframes border-bounce {
+  0% {
+    margin-top: -10px;
+  }
+  25% {
+    margin-top: -50px;
+  }
+  50% {
+    margin-top: -100px;
+  }
+  75% {
+    margin-top: -50px;
+  }
+  100% {
+    margin-top: 0px;
+  }
+}
+@-webkit-keyframes border-bounce {
+  0% {
+    margin-top: -10px;
+  }
+  25% {
+    margin-top: -50px;
+  }
+  50% {
+    margin-top: -100px;
+  }
+  75% {
+    margin-top: -50px;
+  }
+  100% {
+    margin-top: 0px;
+  }
 }
 .dataTables_length .chosen-container {
   min-width: 75px;
@@ -24156,29 +24210,46 @@ div[data-type="social"] .inner-page {
   position: relative;
   max-width: 200px;
 }
-.footer-after {
-  background: #292929;
-  padding: 20px 20px 0 20px;
-  font-size: 12px;
+@media only screen and (min-width: 700px) and (max-width: 1500px) {
+  .footer-after {
+    background: #292929;
+    padding: 20px 20px 0 20px;
+    font-size: 12px;
+  }
+  .footer-after p {
+    color: #fff;
+    margin: 0;
+  }
+  .footer-after a {
+    color: #FFF;
+    float: right;
+  }
+  .footer-after a:hover {
+    color: #7f8c8d;
+    text-decoration: none;
+  }
+  .footer-logo {
+    margin: -35px 5px 0 0;
+    float: right;
+  }
+  #footer {
+    font-family: Helvetica;
+  }
 }
-.footer-after p {
-  color: #fff;
-  margin: 0;
-}
-.footer-after a {
-  color: #FFF;
-  float: right;
-}
-.footer-after a:hover {
-  color: #7f8c8d;
-  text-decoration: none;
-}
-.footer-logo {
-  margin: -35px 5px 0 0;
-  float: right;
-}
-#footer {
-  font-family: Helvetica;
+@media only screen and (max-width: 700px) {
+  .footer-after {
+    background: #292929;
+    text-align: center;
+    padding: 20px 20px 0 20px;
+    font-size: 12px;
+  }
+  .footer-after a {
+    color: #FFF;
+  }
+  .footer-logo {
+    margin: 0 auto;
+    display: block;
+  }
 }
 /********** Single Blog ***********/
 div[data-type=single-post] .container {

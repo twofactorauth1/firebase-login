@@ -148,6 +148,15 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                                     $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
                                         if (elem.first) {
                                             return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                        } else {
+                                            elem.details[0].emails.forEach(function(value, index) {
+                                                if (value.email === undefined) {
+                                                    var email = value;
+                                                } else {
+                                                    var email = value.email;
+                                                }
+                                                return email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                            });
                                         }
                                     });
                                 } else {
