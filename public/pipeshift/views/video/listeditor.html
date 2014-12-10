@@ -44,9 +44,9 @@
                       </div>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="panel-body" ng-style="styleMarketing()" resize>
                         <div class="videos-search-wrap">
-                            <div when-ui-scrolled="loadMore()" class="col-md-12 video-list" ng-style="styleMarketing()" resize>
+                            <div when-ui-scrolled="loadMore()" class="col-md-12 video-list">
                                 <div ng-include src="'/pipeshift/views/video/videos.html'"></div>
                             </div>
                         </div>
@@ -71,8 +71,8 @@
                             </div>
                         </div>
 
-                        <div class="panel-body">
-                            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort" ng-style="styleMarketing()" resize>
+                        <div class="panel-body" ng-style="styleMarketing()" resize>
+                            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort">
                             </div>
                         </div>
                     </div>
