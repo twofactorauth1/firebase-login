@@ -982,7 +982,7 @@ module.exports = {
                 width: 1280,
                 height: 1024,
                 full_page: true,
-                delay: 1500,
+                delay: 2500,
                 force: true
             };
 
