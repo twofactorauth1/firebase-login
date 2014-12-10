@@ -1,6 +1,8 @@
 define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive'], function(app) {
   app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService) {
     ngProgress.start();
+     $scope.lat = 51;
+     $scope.lng = 0;
     $scope.$back = function() {
       console.log('$scope.lastState.state ', $scope.lastState.state);
       console.log('$scope.lastState.params ', $scope.lastState.params);
@@ -15,7 +17,16 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       $scope.customer = customer;
       $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
       $scope.contactLabel = CustomerService.contactLabel(customer);
+    CustomerService.getGeoSearchAddress($scope.displayAddressFormat($scope.customer.details[0].addresses[0]), function(data) {
+            if (data.error === undefined) {
+              $scope.london.lat = parseFloat(data.lat);
+              $scope.london.lng = parseFloat(data.lon);
+              $scope.markers.mainMarker.lat = parseFloat(data.lat);
+              $scope.markers.mainMarker.lng = parseFloat(data.lon);
+            }
+      });
     });
+   
     CustomerService.getCustomerActivities($scope.customerId, function(activities) {
        for (var i = 0; i < activities.length; i++) {
             activities[i]['customer'] = $scope.customer;
@@ -45,16 +56,18 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       ToasterService.processPending();
     });
 
+  
+
     angular.extend($scope, {
       london: {
           lat: 51,
-          lng: 0,
+          lng: 0, 
           zoom: 10
       },
       markers: {
           mainMarker: {
               lat: 51,
-              lng: 0,
+              lng: 0, 
               focus: true,
               //message: "Here",
               draggable: false
@@ -89,6 +102,8 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
       })
       return arrAddress.length > 0;
     };
+    
+
     $scope.setImportantContact = function(customer, value) {
         customer.starred = value;
         CustomerService.saveCustomer(customer, function(customers) {
