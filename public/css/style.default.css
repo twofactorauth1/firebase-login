@@ -19218,16 +19218,63 @@ div.error label.error:before {
 }
 .website-manage .screenshot-wrap img {
   width: 260px;
+  height: auto;
 }
 .website-manage .template-btns {
   margin-bottom: 0px;
   padding: 0;
 }
-.website-manage .thumbnail {
+.website-manage .pages-section .thumbnail {
   padding: 10px;
 }
-.website-manage .thumbnail .caption {
+.website-manage .pages-section .thumbnail .caption {
   padding: 10px 0 0 0;
+}
+.website-manage .pages-section .thumbnail .scrollhover {
+  overflow: hidden;
+  position: relative;
+}
+.website-manage .pages-section .thumbnail img {
+  position: absolute;
+  transition: all 0.2s ease 0s;
+}
+.website-manage .pages-section .thumbnail .scrollhover:hover > img {
+  -moz-animation: border-bounce 3000ms linear;
+  -webkit-animation: border-bounce 3000ms linear;
+}
+@-moz-keyframes border-bounce {
+  0% {
+    margin-top: -10px;
+  }
+  25% {
+    margin-top: -50px;
+  }
+  50% {
+    margin-top: -100px;
+  }
+  75% {
+    margin-top: -50px;
+  }
+  100% {
+    margin-top: 0px;
+  }
+}
+@-webkit-keyframes border-bounce {
+  0% {
+    margin-top: -10px;
+  }
+  25% {
+    margin-top: -50px;
+  }
+  50% {
+    margin-top: -100px;
+  }
+  75% {
+    margin-top: -50px;
+  }
+  100% {
+    margin-top: 0px;
+  }
 }
 .dataTables_length .chosen-container {
   min-width: 75px;
