@@ -7,6 +7,8 @@ define([
     'toaster',
     'truncate',
     'ngOnboarding',
+    'timeAgoFilter',
+    'reverse',
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',

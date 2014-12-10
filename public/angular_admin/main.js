@@ -107,6 +107,7 @@ require.config({
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
+        'reverse':'/angular_admin/filters/reverse',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
         'timeAgoFilter':'/angular_admin/filters/time_ago',
