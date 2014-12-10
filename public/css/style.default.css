@@ -19214,6 +19214,7 @@ div.error label.error:before {
 .website-manage .screenshot-wrap {
   height: 155px;
   overflow: hidden;
+  border: 1px solid #dddddd;
 }
 .website-manage .screenshot-wrap img {
   width: 260px;
@@ -19221,6 +19222,12 @@ div.error label.error:before {
 .website-manage .template-btns {
   margin-bottom: 0px;
   padding: 0;
+}
+.website-manage .thumbnail {
+  padding: 10px;
+}
+.website-manage .thumbnail .caption {
+  padding: 10px 0 0 0;
 }
 .dataTables_length .chosen-container {
   min-width: 75px;
@@ -24156,29 +24163,46 @@ div[data-type="social"] .inner-page {
   position: relative;
   max-width: 200px;
 }
-.footer-after {
-  background: #292929;
-  padding: 20px 20px 0 20px;
-  font-size: 12px;
+@media only screen and (min-width: 700px) and (max-width: 1500px) {
+  .footer-after {
+    background: #292929;
+    padding: 20px 20px 0 20px;
+    font-size: 12px;
+  }
+  .footer-after p {
+    color: #fff;
+    margin: 0;
+  }
+  .footer-after a {
+    color: #FFF;
+    float: right;
+  }
+  .footer-after a:hover {
+    color: #7f8c8d;
+    text-decoration: none;
+  }
+  .footer-logo {
+    margin: -35px 5px 0 0;
+    float: right;
+  }
+  #footer {
+    font-family: Helvetica;
+  }
 }
-.footer-after p {
-  color: #fff;
-  margin: 0;
-}
-.footer-after a {
-  color: #FFF;
-  float: right;
-}
-.footer-after a:hover {
-  color: #7f8c8d;
-  text-decoration: none;
-}
-.footer-logo {
-  margin: -35px 5px 0 0;
-  float: right;
-}
-#footer {
-  font-family: Helvetica;
+@media only screen and (max-width: 700px) {
+  .footer-after {
+    background: #292929;
+    text-align: center;
+    padding: 20px 20px 0 20px;
+    font-size: 12px;
+  }
+  .footer-after a {
+    color: #FFF;
+  }
+  .footer-logo {
+    margin: 0 auto;
+    display: block;
+  }
 }
 /********** Single Blog ***********/
 div[data-type=single-post] .container {
