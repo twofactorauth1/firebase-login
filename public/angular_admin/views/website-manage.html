@@ -246,4 +246,46 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
+
+    <!-- Post Modal -->
+    <div class="modal fade" id="create-post-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Add Post</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="new_page">
+                        <div class="form-group">
+                            <label for="page-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
+                            <input id="page-author" class="form-control input-lg" type="text" ng-model="post.post_author">
+                        </div>
+                        <div class="form-group">
+                            <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
+                            <input id="page-title" class="form-control input-lg" type="text" ng-model="post.post_title">
+                        </div>
+                        <div class="form-group">
+                            <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
+                            <input id="post-url" class="form-control input-lg" type="text" ng-model="post.post_url">
+                        </div>
+                        <div class="clearfix mb15"></div>
+                        <div class="form-group">
+                            <div class="ckbox ckbox-success">
+                                <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
+                                <label for="comment_status">Comment Status On?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)" data-dismiss="modal">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.modal -->
 </div>
