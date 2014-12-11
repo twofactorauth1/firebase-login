@@ -733,7 +733,7 @@ module.exports = {
             var video = videos[i];
             message.subject = video.subject || course.get('title');
             // adjust values for current video
-            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/?videoId=" + video._id);
+            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/" + video.videoId);
             self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
             self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
             self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
@@ -747,6 +747,7 @@ module.exports = {
             // if time is in the past mandrill sends email immediately
             sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
             // send template
+            console.dir(sendObj);
             mandrill_client.messages.sendTemplate(sendObj, function (result) {
                 self.log.debug(result);
                 //
