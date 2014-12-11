@@ -190,6 +190,14 @@ define(['app'], function (app) {
 
 		this.createPost = function (pageId, postdata, fn) {
 			postdata.post_tags = null;
+			if(!postdata.created)
+			{
+				postdata.created = {};	
+			}
+			if(!postdata.modified)
+			{
+				postdata.modified = {};	
+			}
 			postdata.created.date = new Date().getTime();
 			postdata.modified.date = new Date().getTime();
 	        var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog'].join('/');
