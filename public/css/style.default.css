@@ -19226,6 +19226,7 @@ div.error label.error:before {
 }
 .website-manage .title {
   margin-top: -5px;
+  margin-bottom: 0;
 }
 .website-manage .timeago {
   margin-top: 0;
@@ -19282,6 +19283,11 @@ div.error label.error:before {
   100% {
     margin-top: 0px;
   }
+}
+.website-manage .pages-section .layered-paper {
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 10px 0 -5px #ffffff, 0 10px 1px -4px rgba(0, 0, 0, 0.15), 0 20px 0 -10px #ffffff, 0 20px 1px -9px rgba(0, 0, 0, 0.15);
+  padding: 15px;
 }
 .website-manage .posts-section {
   /* This is the selector of the fourteenth box, here’s where we establish the measures, background colors, borders and shadows */
@@ -19411,13 +19417,6 @@ div.error label.error:before {
   margin: -36px 0 10px 9px;
   width: 255px;
 }
-.website-manage .posts-section .red-line {
-  height: 250px;
-  width: 1px;
-  background-color: #ef8b8b;
-  float: left;
-  margin-left: 4px;
-}
 .website-manage .posts-section ul#lines {
   margin-top: 40px;
   padding-left: 0;
@@ -19457,11 +19456,16 @@ div.error label.error:before {
   -o-transform: rotate(-2deg) skew(0, 0) translate(0%, -5px);
   transform: rotate(-2deg) skew(0, 0) translate(0%, -5px);
 }
+.website-manage .paper-wrap {
+  max-width: 275px;
+  margin: 0 auto;
+  position: relative;
+}
 .website-manage .paper-wrap .left-shadow {
   width: 140px;
   height: 140px;
-  bottom: 10px;
-  left: -2px;
+  bottom: -9px;
+  left: -16px;
   position: absolute;
   z-index: 1;
   display: inline-block;
@@ -19477,8 +19481,8 @@ div.error label.error:before {
 .website-manage .paper-wrap .right-shadow {
   width: 140px;
   height: 140px;
-  bottom: 1px;
-  right: 5px;
+  bottom: -18px;
+  right: -5px;
   position: absolute;
   z-index: 1;
   display: inline-block;

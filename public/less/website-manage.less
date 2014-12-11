@@ -14,61 +14,74 @@
     }
     .title {
        margin-top: -5px;
+       margin-bottom: 0;
     }
     .timeago {
         margin-top:0;
         color: #999;
     }
-    .pages-section .thumbnail {
-        padding: 10px;
-        .caption {
-            padding: 10px 0 0 0;
+    .pages-section {
+        .thumbnail {
+            padding: 10px;
+            .caption {
+                padding: 10px 0 0 0;
+            }
+            .scrollhover {
+                overflow: hidden;
+                position: relative;
+            }
+            img {
+                position: absolute;
+                transition: all 0.2s ease 0s;
+            }
+            .scrollhover:hover >img {
+                -moz-animation: border-bounce 3000ms linear;
+                -webkit-animation: border-bounce 3000ms linear;
+            }
+            @-moz-keyframes border-bounce {
+                0% {
+                    margin-top: -10px;
+                }
+                25% {
+                    margin-top: -50px;
+                }
+                50% {
+                    margin-top: -100px;
+                }
+                75% {
+                    margin-top: -50px;
+                }
+                100% {
+                    margin-top: -0px;
+                }
+            }
+            @-webkit-keyframes border-bounce {
+                0% {
+                    margin-top: -10px;
+                }
+                25% {
+                    margin-top: -50px;
+                }
+                50% {
+                    margin-top: -100px;
+                }
+                75% {
+                    margin-top: -50px;
+                }
+                100% {
+                    margin-top: -0px;
+                }
+            }
         }
-        .scrollhover {
-            overflow: hidden;
-            position: relative;
-        }
-        img {
-            position: absolute;
-            transition: all 0.2s ease 0s;
-        }
-        .scrollhover:hover >img {
-            -moz-animation: border-bounce 3000ms linear;
-            -webkit-animation: border-bounce 3000ms linear;
-        }
-        @-moz-keyframes border-bounce {
-            0% {
-                margin-top: -10px;
-            }
-            25% {
-                margin-top: -50px;
-            }
-            50% {
-                margin-top: -100px;
-            }
-            75% {
-                margin-top: -50px;
-            }
-            100% {
-                margin-top: -0px;
-            }
-        }
-        @-webkit-keyframes border-bounce {
-            0% {
-                margin-top: -10px;
-            }
-            25% {
-                margin-top: -50px;
-            }
-            50% {
-                margin-top: -100px;
-            }
-            75% {
-                margin-top: -50px;
-            }
-            100% {
-                margin-top: -0px;
-            }
+        .layered-paper {
+            background: #fff;
+            box-shadow:
+                0 1px 1px rgba(0,0,0,0.15),
+                0 10px 0 -5px #fff,
+                0 10px 1px -4px rgba(0,0,0,0.15),
+                0 20px 0 -10px #fff,
+                0 20px 1px -9px rgba(0,0,0,0.15);
+            padding: 15px;
         }
     }
     .posts-section {
@@ -211,15 +224,6 @@
             }
         }
 
-        .red-line {
-            height:250px;
-            width:1px;
-            background-color:#ef8b8b;
-            float:left;
-            margin-left:4px;
-        }
-
-
         ul#lines {
             margin-top:40px;
             padding-left: 0;
@@ -264,11 +268,14 @@
     }
 
     .paper-wrap {
+        max-width: 275px;
+        margin: 0 auto;
+        position: relative;
         .left-shadow{
             width: 140px;
             height: 140px;
-            bottom: 10px;
-            left: -2px;
+            bottom: -9px;
+            left: -16px;
             position:absolute;
             z-index:1;
             display: inline-block;
@@ -285,8 +292,8 @@
         .right-shadow{
             width: 140px;
             height: 140px;
-            bottom: 1px;
-            right: 5px;
+            bottom: -18px;
+            right: -5px;
             position:absolute;
             z-index:1;
             display: inline-block;
