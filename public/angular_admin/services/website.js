@@ -188,6 +188,24 @@ define(['app'], function (app) {
             });
 		};
 
+		this.createPost = function (pageId, postdata, fn) {
+			postdata.post_tags = null;
+			postdata.created.date = new Date().getTime();
+			postdata.modified.date = new Date().getTime();
+	        var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog'].join('/');
+	        $http({
+	            url: apiUrl,
+	            method: "POST",
+	            data: angular.toJson(postdata)
+	        })
+	            .success(function (data, status, headers, config) {
+	                fn(data);
+	            })
+	            .error(function (err) {
+	                console.log('END:Create Page with ERROR', err);
+	            });
+	    };
+
 		//api/1.0/cms/page/{handle}/screenshot
 		this.createPageScreenshot = function(handle, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', handle, 'screenshot'].join('/');
