@@ -7,6 +7,12 @@
 include standardhead
 
 script(data-main="/angular_admin/main", src="/js/libs/requirejs/require.js")
+
+script(type="text/javascript", src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false")
+
+script(type="text/javascript").
+    (function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}}; js=d.createElement(s);fs=d.getElementsByTagName(s)[0]; js.src='https://apis.google.com/js/platform.js'; fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};}(window,document,'script'));
+
 script(type="text/javascript").
     //- window.location="/admin#/" + (function(){
     //-     var single_view = "#{user.user_preferences.single_view}"
@@ -16,9 +22,6 @@ script(type="text/javascript").
     //-     }
     //-     return single_view
     //- }());
-    if(#{user.user_preferences.welcome_alert.initial} == false) {
-        window.location="/admin#/indi";
-    }
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
         return function () {
             var a = Array.prototype.slice.call(arguments);
@@ -40,7 +43,6 @@ script(type="text/javascript").
             window.analytics.load('#{segmentIOWriteKey}');
     window.analytics.page('admin', {accountId:#{account._id}});
 
-script(type="text/javascript", src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false")
-
-script(type="text/javascript").
-    (function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}}; js=d.createElement(s);fs=d.getElementsByTagName(s)[0]; js.src='https://apis.google.com/js/platform.js'; fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};}(window,document,'script'));
+    if(!#{user.user_preferences.welcome_alert.initial}) {
+        window.location="/admin#/indi";
+    }
