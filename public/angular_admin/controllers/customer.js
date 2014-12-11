@@ -11,6 +11,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             $scope.customerScrollLimit = 20;
             $scope.customerScrollOffset = 0;
             $scope.renderedCustomers = [];
+
+            $scope.searchBarType = 'name';
             //$scope.gridViewDisplay = "true";
 
             $scope.saveScrollFn = function(pos) {
@@ -144,26 +146,35 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
                             console.log('$scope.customerOrder >>> ', $scope.customerOrder);
                             if ($scope.customerFilter) {
-                                if ($scope.customerOrder === 'first') {
-                                    $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
-                                        if (elem.first) {
-                                            return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
-                                        } else {
-                                            elem.details[0].emails.forEach(function(value, index) {
-                                                if (value.email === undefined) {
-                                                    var email = value;
-                                                } else {
-                                                    var email = value.email;
-                                                }
-                                                return email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
-                                            });
-                                        }
-                                    });
+                                console.log($scope.searchBarType);
+                                if ($scope.searchBarType == 'name') {
+                                    console.log('Search by name');
+                                    if ($scope.customerOrder === 'first') {
+                                        $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
+                                            if (elem.first) {
+                                                return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                            }
+                                        });
+                                    } else {
+                                        $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
+                                            if (elem.last) {
+                                                return elem.last.toLowerCase().indexOf($scope.customerFilter.last.toLowerCase()) != -1;
+                                            }
+                                        });
+                                    }
                                 } else {
+                                    console.info('Search by email');
                                     $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
-                                        if (elem.last) {
-                                            return elem.last.toLowerCase().indexOf($scope.customerFilter.last.toLowerCase()) != -1;
-                                        }
+                                        var match = false;
+                                        elem.details[0].emails.forEach(function(value, index) {
+                                            if (value.email === undefined) {
+                                                var email = value;
+                                            } else {
+                                                var email = value.email;
+                                            }
+                                            match = email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                        });
+                                        return match;
                                     });
                                 }
                                 console.log('$scope.fetchedCustomers >>> ', $scope.fetchedCustomers);

@@ -216,7 +216,7 @@ define([
                 console.log('$scope.blogId ', $scope.blogId);
                 WebsiteService.createPost($scope.blogId, postData, function(data) {
                     console.log('successfully created post ', data);
-                    toaster.pop('success', "Post Created", "The " + data.title + " post was created successfully.");
+                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                     $('#create-post-modal').modal('hide');
                     $scope.posts.push(data);
                 });

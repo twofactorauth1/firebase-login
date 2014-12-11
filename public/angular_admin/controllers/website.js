@@ -866,6 +866,12 @@ define([
                 type: 'social-link',
                 icon: 'custom social-links',
                 enabled: true
+            },
+            {
+                title: 'Text Only',
+                type: 'text-only',
+                icon: 'fa fa-file-text',
+                enabled: true
             }, ];
 
             $scope.selectComponent = function(type) {

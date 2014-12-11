@@ -39,7 +39,9 @@ angular.module('angular-parallax', [
       var setPosition = function () {
          // Fix for smaller resolutions
         var win_width = $(window).width();
-        if(win_width < 750)
+        var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+        
+        if(win_width < 750 || iOS)
           $scope.parallaxRatio = 0.02;
         var calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
         // horizontal positioning
