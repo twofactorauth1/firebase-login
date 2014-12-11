@@ -536,13 +536,7 @@ define([
                var selectedName;
                switch(mode) {
                 case "add":
-                if (new_value && new_value.name && new_value.url) {
-                    selectedName = _.findWhere($scope.componentEditing.networks, {
-                         name: new_value.name
-                    });
-                    if (selectedName) {
-                        return;
-                    }
+                if (new_value && new_value.name && new_value.url) {                    
                     $scope.componentEditing.networks.push({
                         name: new_value.name,
                         url: new_value.url,
@@ -552,34 +546,26 @@ define([
                 }
                 break;
                 case "update":
-                if (new_value && new_value.name && new_value.url) {
-                    var networks = angular.copy($scope.componentEditing.networks);
-                    selectedName = _.findWhere(networks, {
+                if (new_value && new_value.name && new_value.url) {                   
+                    selectedName = _.findWhere($scope.componentEditing.networks, {
                          name: old_value.name
                     });
                     selectedName.name = new_value.name;
                     selectedName.url = new_value.url;
                     selectedName.icon = new_value.icon;
-
-                    var exitingName = _.where(networks, {
-                         name: new_value.name
-                    });
-                    if (exitingName.length > 1) {
-                        return;
-                    }
-                    else
-                      $scope.componentEditing.networks = networks; 
+                    $scope.saveSocialComponent();
                 }
                 break;
                 case "delete":
                     selectedName = _.findWhere($scope.componentEditing.networks, {
                          name: old_value.name
                     });
-                    $scope.componentEditing.networks.pop({
-                        name: old_value.name,
-                        url: old_value.url
-                    })
-                    $scope.saveSocialComponent();
+                    if(selectedName)
+                    {
+                        var index = $scope.componentEditing.networks.indexOf(selectedName)
+                        $scope.componentEditing.networks.splice(index, 1);                        
+                        $scope.saveSocialComponent();
+                    }                    
                 break;
                 }
                 

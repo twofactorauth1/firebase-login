@@ -377,7 +377,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         {name:"vk",icon:"vk"},
         {name:"yahoo",icon:"yahoo"}] 
 
-        $scope.setSelectedSocialLink = function(link, id, update )
+       $scope.setSelectedSocialLink = function(link, id, update )
         {           
             if(!$scope.social)
                 $scope.social = {};
@@ -391,7 +391,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             else
             {
                 $scope.social = {};              
-            }  
+            } 
+            $("#social-link-name .error").html("");
+            $("#social-link-name").removeClass('has-error');
+            $("#social-link-url .error").html("");
+            $("#social-link-url").removeClass('has-error');
             $scope.networks = window.parent.getSocialNetworks(id);
         }
         $scope.setSelectedLink = function(social_link)
@@ -399,12 +403,66 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $scope.social.name = social_link.name;
             $scope.social.icon = social_link.icon;
         }
-        $scope.saveSocialLink = function(social, id, mode) {
+        $scope.saveSocialLink = function(social, id, mode) {  
             var old_value = _.findWhere($scope.networks, {
                 name: $scope.social.selectedLink
             });
-            window.parent.updateSocialNetworks(old_value,mode,social);      
-            $(".modal-backdrop").remove();
+            var selectedName;
+               switch(mode) {
+                case "add":
+                if (social && social.name && social.url) {
+                    selectedName = _.findWhere($scope.networks, {
+                         name: social.name
+                    });
+                    if (selectedName) {
+                        $("#social-link-name .error").html("Link icon already exists");
+                        $("#social-link-name").addClass('has-error');
+                        return;
+                    }
+                    var selectedUrl = _.findWhere($scope.networks, {
+                         url: social.url
+                    });
+                    if (selectedUrl) {
+                        $("#social-link-url .error").html("Link url already exists");
+                        $("#social-link-url").addClass('has-error');
+                        return;
+                    }
+                }
+                break;
+                case "update":
+                if (social && social.name && social.url) {
+                    var networks = angular.copy($scope.networks);
+                   
+                    selectedName = _.findWhere(networks, {
+                         name: old_value.name
+                    });
+                    selectedName.name = social.name;
+                    selectedName.url = social.url;
+                    selectedName.icon = social.icon;
+
+
+                    var existingName = _.where(networks, {
+                         name: social.name
+                    });
+                    var existingUrl = _.where(networks, {
+                         url: social.url
+                    });
+                    if (existingName.length > 1) {
+                        $("#social-link-name .error").html("Link icon already exists");
+                        $("#social-link-name").addClass('has-error');
+                        return;
+                    }
+                    else if (existingUrl.length > 1) {
+                        $("#social-link-url .error").html("Link url already exists");
+                        $("#social-link-url").addClass('has-error');
+                        return;
+                    }
+                }
+                break;                
+                }
+                window.parent.updateSocialNetworks(old_value,mode,social);
+                $("#socialComponentModal").modal("hide");
+                $(".modal-backdrop").remove();
         };
 
         window.activateAloha = function() {
