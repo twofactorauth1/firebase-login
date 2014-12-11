@@ -104,6 +104,9 @@ define([
                         if (pages.hasOwnProperty(i)){
                            _pages.unshift(pages[i]);
                         }
+                        if (pages[i].handle == 'blog') {
+                            $scope.blogId = pages[i]._id;
+                        }
                     }
                     $scope.pages = _pages;
                 });
@@ -207,6 +210,16 @@ define([
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
+            };
+
+            $scope.createPost = function(postData) {
+                console.log('$scope.blogId ', $scope.blogId);
+                WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    console.log('successfully created post ', data);
+                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                    $('#create-post-modal').modal('hide');
+                    $scope.posts.push(data);
+                });
             };
 
         }
