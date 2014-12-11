@@ -22461,6 +22461,11 @@ div[data-type='campaign'] .inner-page {
 .component-wrap .component > [id] .bg-overlay {
   background: rgba(0, 0, 0, 0.58) !important;
 }
+@media only screen and (max-device-width: 1024px) {
+  .component-wrap .component > [id] .ipad-bg {
+    background-attachment: scroll !important;
+  }
+}
 .inner-page {
   padding: 50px 0;
   max-width: 1000px;
