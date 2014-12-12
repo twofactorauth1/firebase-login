@@ -2,8 +2,8 @@ define(['app', 'userService'], function(app) {
     app.register.controller('IndiCtrl', ['$scope', 'UserService', function($scope, UserService) {
     	$scope.startTask = function(task) {
     		console.log('starting task >>> ', task);
-    		if (task === 'select-theme') {
-    			window.location = '/admin#/website'
+    		if (task) {
+    			window.location = '/admin#/website?onboarding='+task
     		};
     	};
 
