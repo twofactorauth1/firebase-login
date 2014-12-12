@@ -10,6 +10,7 @@ define([
     'timeAgoFilter',
     'reverse',
     'jquery',
+    'mediaDirective',
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -221,6 +222,10 @@ define([
                     $scope.posts.push(data);
                 });
             };
+
+             $scope.insertMedia = function(asset) {
+                $scope.website.settings.favicon = asset.url;
+             };
 
         }
     ]);
