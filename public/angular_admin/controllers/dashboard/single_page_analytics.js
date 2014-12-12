@@ -1,5 +1,5 @@
 define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'dashboardService'], function(app) {
-    app.register.controller('SinglePageAnalyticsCtrl', ['$scope','$location', 'ngProgress', 'dashboardService', function($scope, $location, ngProgress, dashboardService) {
+    app.register.controller('SinglePageAnalyticsCtrl', ['$scope','$location', 'ngProgress', 'dashboardService', 'ENV', function($scope, $location, ngProgress, dashboardService, ENV) {
         ngProgress.start();
         $scope.$back = function() { window.history.back(); };
 
@@ -15,8 +15,8 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'd
         };
 
         var topPageViews = $scope.query({
-                                ids: 'ga:82461709',
-                                metrics: 'ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews',
+                                ids: ENV.googleAnalyticsId,
+                                metrics: ENV.googleAnalyticsScope,
                                 dimensions: 'ga:date',
                                 'start-date': '30daysAgo',
                                 'end-date': 'yesterday',

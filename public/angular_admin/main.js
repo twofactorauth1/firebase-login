@@ -145,6 +145,7 @@ require.config({
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
+        'angularConfig' : 'scripts/config' 
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -206,7 +207,8 @@ require.config({
         'jdfontselect': {deps: ['angular','webfontloader']},
         'ngInfiniteScroll': {deps: ['angular']},
         'timeAgoFilter': {deps: ['moment']},
-        'ngTagsInput': ['angular']
+        'ngTagsInput': ['angular'],
+        'angularConfig': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

@@ -1,10 +1,10 @@
 define(['app'], function (app) {
-	app.register.service('TwoNetService', function ($http) {
+	app.register.service('TwoNetService', function ($http, ENV) {
 		this.postBodyMeasurement = function (startDate, endDate, fn) {
 			var query = {
 				measureRequest: {
-					guid: '50f97bb9-a38d-46eb-8e5a-d1716aed1da3',
-					trackGuid: 'b64d7234-2398-021d-2b64-b5999a31aaff',
+					guid: ENV.twonetUserGuid,
+					trackGuid: ENV.twonetTrackGuid,
 					filter: {
 						startDate: startDate,
 						endDate: endDate

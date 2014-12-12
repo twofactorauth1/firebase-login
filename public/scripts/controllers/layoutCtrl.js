@@ -662,15 +662,30 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     }
                     if(value.type === 'thumbnail-slider')
                     {
-                        var number_of_arr = 4;
+                        var w = angular.element($window);
                         var check_if_mobile = mobilecheck();
-                        if(check_if_mobile)
-                            number_of_arr = 1;
-                        $scope.thumbnailCollection = partition(value.collections, number_of_arr);                      
+                        $scope.thumbnailSliderCollection = angular.copy(value.images);
+                        var winWidth = w.width();  
+                        $scope.bindThumbnailSlider(winWidth, check_if_mobile);                     
+                        w.bind('resize', function () {
+                             $scope.$apply(function() {
+                                $scope.bindThumbnailSlider(w.width(), check_if_mobile);    
+                            });                  
+                        });             
                     }
                 });
             }
         });
+
+        $scope.bindThumbnailSlider = function(width, is_mobile)
+        {
+            var number_of_arr = 4;
+            if(width <= 750 || is_mobile)
+            {
+               number_of_arr = 1; 
+            }
+            $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
+        }
 
         window.mobilecheck = function() {
           var check = false;

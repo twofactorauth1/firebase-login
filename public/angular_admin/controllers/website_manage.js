@@ -10,6 +10,7 @@ define([
     'timeAgoFilter',
     'reverse',
     'jquery',
+    'mediaDirective',
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -221,6 +222,20 @@ define([
                     $scope.posts.push(data);
                 });
             };
+
+             $scope.insertMedia = function(asset) {
+                $scope.website.settings.favicon = asset.url;
+                        var data = {
+                           _id: $scope.website._id,
+                           accountId: $scope.website.accountId,
+                           settings: $scope.website.settings
+                        };
+                        //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                            console.log('updated website settings', data);
+                    });
+
+             };
 
         }
     ]);
