@@ -4,7 +4,7 @@
 angular.module('var.directives', []);
 var app = angular.module('courseVideoApp', ['var.directives',
     'app.modules.coursevideo',
-    'app.constants',
+    //'app.constants',
     "com.2fdevs.videogular",
     "com.2fdevs.videogular.plugins.controls",
     "com.2fdevs.videogular.plugins.overlayplay",
