@@ -1,0 +1,36 @@
+<div class="pageheader row">
+    <div class="col-xs-7">
+        <h2><i class="fa fa-bullhorn"></i> Marketing</h2>
+    </div>
+    <div class="col-xs-5">
+        <a class="btn btn-success pull-right btn-add-course" type="button" ng-click="!courseBlocked && showAddCourseModal()">
+            <span class="fa fa-plus"></span>
+            <span class="hidden-xs">Add Campaign</span>
+        </a>
+    </div>
+</div>
+
+<div id="pipeshiftDiv" class="contentpanel" ng-style="styleMarketing()" indigeweb-resize>
+    <div class="tb-main table">
+        <div class="container-fluid tb-row" ng-repeat="course in courses">
+            <div class="tb-col col-md-1"></div>
+            <div class="tb-col col-md-2">{{course.title}}</div>
+            <div class="tb-col col-md-9">{{course.subscribers.length}} PEOPLE REACHED</div>
+        </div>
+    </div>
+</div>
+
+<div id="rightpanel">
+    <div class="rightpanel rightpanel-marketing">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-settings">
+                <h4>No Settings Avaliable</h4>
+            </div>
+        </div>
+    </div>
+</div>
