@@ -115,6 +115,7 @@ require.config({
         'secTotime': '/angular_admin/filters/sec2time',
         'formatPercentage': '/angular_admin/filters/formatPercentage',
         'formatText': '/angular_admin/filters/format_text',
+        'draggableModalDirective': '/angular_admin/directives/draggable_modal',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

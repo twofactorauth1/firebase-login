@@ -389,6 +389,134 @@
     </div>
     <!-- /.modal -->
 
+    <!-- Add Component Modal -->
+   <div class="modal fade" id="component-setting-modal" indigeweb-draggable-modal tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+              <h4 class="modal-title">Compnent Settings</h4>
+            </div>
+            <div class="modal-body">
+             <div class="rightpanelinner">
+                    <h5>Currently Editing</h5>
+                    <div class="thumbnail">
+                        <div class="check-component" style="display:none"><i class="fa fa-check-circle"></i>
+                        </div>
+                        <div class="component-icon"><i class="{{componentEditing.icon}}"></i>
+                        </div>
+                        <div class="caption">
+                            <h5 class="center">{{componentEditing.title}}</h5>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'campaign'">
+                        <label>Campaign ID:</label>
+                        <select ng-model="componentEditing.campaignId" ng-change="saveComponent()" class="form-control input-lg">
+                            <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'payment-form'">
+                        <label>Product ID:</label>
+                        <input ng-model="componentEditing.productId" type="text" class="form-control input-lg" ng-change="saveComponent()" value="Add Product ID">
+                    </div>
+                    <accordion close-others="true">
+
+                        <accordion-group is-open="status3.open">
+                            <accordion-heading>
+                                Basic <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                            </accordion-heading>
+                            <div class="form-group" ng-if="componentEditing.type === 'navigation'">
+                                <label>Nav BG Color:</label>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                            <div class="form-group">
+                                <label for="colorpicker">Text Color:</label>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
+                                <label for="colorpicker">Background Color:</label>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group" ng-if="componentEditing.bg.img.url">
+                                <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+
+                                <div class="bgimg" id="bgimg">
+                                    <i class="fa fa-close" ng-click="componentEditing.bg.img.url=null"></i>
+                                    <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
+                                </div>
+
+                            </div>
+
+                            <div class="form-group" ng-if="!componentEditing.bg.img.url">
+                                <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <label for="bg_blur">Blur BG</label>
+                                <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <label for="bg_hide">Show BG</label>
+                                <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
+                                <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
+                                <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <label for="bg_overlay">Add Overlay</label>
+                                <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <label for="colorpicker">Button:</label>
+                                <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                        </accordion-group>
+                        <accordion-group is-open="status4.open">
+                            <accordion-heading>
+                                Advanced <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+                            </accordion-heading>
+                            <div class="form-group">
+                                <label for="colorpicker">Visibility:</label>
+                                <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
+                                <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
+                            </div>
+                            <div class="form-group">
+                                <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
+                                <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
+                                </select>
+
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type == 'image-text'">
+                                <label for="colorpicker">Image Style:</label>
+                                <select ng-model="componentEditing.imagestyle" ng-change="saveComponent()" class="form-control input-lg">
+                                    <option value="">Square</option>
+                                    <option value="img-rounded">Rounded Square</option>
+                                    <option value="img-thumbnail">Square with Border</option>
+                                    <option value="img-circle">Circle</option>
+                                </select>
+                            </div>
+                            <div class="well">
+                                <p>Danger Zone</p>                               
+                                <button aria-hidden="true" class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
+                            </div>
+                        </accordion-group>
+                    </accordion>
+
+                    <div class="clearfix mb15"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- /.modal -->
+
     <!-- Create Page Modal -->
     <div class="modal fade" id="create-page-modal">
         <div class="modal-dialog">
