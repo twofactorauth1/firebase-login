@@ -717,6 +717,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.createUser = function(user) {
             console.log('user', user);
+            var fingerprint = new Fingerprint().get();
+            var sessionId = ipCookie("session_cookie")["id"];
+
             if (!user || !user.email) {
                 $("#user_email .error").html("Email Required");
                 $("#user_email").addClass('has-error');
@@ -725,6 +728,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
             if (user.email) {
                 var formatted = {
+                    fingerprint: fingerprint,
+                    sessionId: sessionId,
                     details: [{
                         emails: []
                     }]
