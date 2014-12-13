@@ -1,5 +1,5 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService'], function(app) {
-  app.register.controller('AccountCtrl', ['$scope', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', function($scope, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding'], function(app) {
+  app.register.controller('AccountCtrl', ['$scope', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', function($scope, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
     ngProgress.start();
     NavigationService.updateNavigation();
     $scope.showToaster = false;
@@ -7,6 +7,38 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     $scope.invoicePageLimit = 5;
 
     $scope.selectPlanView = 'card';
+
+    $scope.beginOnboarding = function(type) {
+      if (type == 'connect-social') {
+          $scope.stepIndex = 0
+          $scope.showOnboarding = true;
+          $scope.activeTab = 'integrations';
+          $scope.onboardingSteps = [
+            {
+              overlay: true,
+              title: 'Task: Connect Social Accounts',
+              description: "Connect your social media accounts to start marketing campaigns and track your customers.",
+              position: 'centered'
+            },
+            {
+              attachTo: '#connect-google-plus',
+              position: 'left',
+              overlay: false,
+              title: 'Click Connect Button',
+              width: 400,
+              description: "Click the connect button on Facebook, Twitter, or Google Plus. You will be redirected to the login screen where you will approve Indigenous for access."
+            }
+          ];
+      }
+    };
+
+    $scope.finishOnboarding = function() {
+      console.log('were finished');
+    };
+
+  if ($location.$$search['onboarding']) {
+      $scope.beginOnboarding($location.$$search['onboarding']);
+  }
 
     $scope.tabList = [
       {v:'last_tab_visited',n:'Last Tab Visited'},
@@ -21,7 +53,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     $scope.$watch('activeTab', function (newValue, oldValue) {
       console.log('watch activeTab >> ', newValue);
       if($scope.userPreferences){
-          $scope.userPreferences.account_default_tab = newValue;
+          if (!$location.$$search['onboarding']) {
+            $scope.userPreferences.account_default_tab = newValue;
+          }
           $scope.savePreferencesFn();
         }
     });
@@ -119,11 +153,13 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
     };
     UserService.getUserPreferences(function(preferences) {
         $scope.userPreferences = preferences;
-         var activeTab = $scope.userPreferences.account_default_tab;
-        if(activeTab)
-          $scope.activeTab = activeTab;
-        else
-          $scope.activeTab = AccountService.getActiveTab();
+         if (!$location.$$search['onboarding']) {
+           var activeTab = $scope.userPreferences.account_default_tab;
+          if(activeTab)
+            $scope.activeTab = activeTab;
+          else
+            $scope.activeTab = AccountService.getActiveTab();
+        }
     });
 
     $scope.savePreferencesFn = function() {

@@ -24,40 +24,69 @@ define([
             var account;
             $scope.showToaster = false;
 
-            console.log("$location.$$search['onboarding'] >>> ", $location.$$search['onboarding']);
-            if ($location.$$search['onboarding']) {
-                $scope.startOnboarding
-            }
-
-            $scope.startOnboarding = function() {
-                console.log('starting onboarding');
-                $scope.stepIndex = 0
-                $scope.showOnboarding = true;
+            $scope.beginOnboarding = function(type) {
+                if (type == 'select-theme') {
+                    $scope.stepIndex = 0
+                    $scope.showOnboarding = true;
+                    $scope.activeTab = 'themes';
+                    $scope.onboardingSteps = [
+                      {
+                        overlay: true,
+                        title: 'Task: Select A Theme',
+                        description: "Choosing a theme will automatically create a website for your visitors to go, so you can capture them as leads.",
+                        position: 'centered'
+                      },
+                      {
+                        attachTo: '.btn-view-themes',
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Themes Tab',
+                        width: 400,
+                        description: "This is the theme tab where you can change or modify your theme after you choose one."
+                      },
+                      {
+                        attachTo: '.themes',
+                        position: 'top',
+                        overlay: false,
+                        title: 'Select A Theme',
+                        description: 'Choose one of the themes from below by clicking the switch button.'
+                      }
+                    ];
+                }
+                if (type == 'add-post') {
+                    $scope.stepIndex = 0
+                    $scope.showOnboarding = true;
+                    $scope.activeTab = 'posts';
+                    $scope.onboardingSteps = [
+                      {
+                        overlay: true,
+                        title: 'Task: Create First Blog Post',
+                        description: "Keep everyone up to date and informed with a regular blog.",
+                        position: 'centered'
+                      },
+                      {
+                        attachTo: '.btn-view-posts',
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Posts Tab',
+                        width: 400,
+                        description: "This is the posts tab where you can manage all your blog posts past, and future."
+                      },
+                      {
+                        attachTo: '.btn-add',
+                        position: 'bottom',
+                        xOffset: -60,
+                        overlay: false,
+                        title: 'Add Post Button',
+                        description: 'Select Add Post from the drop down and you will be greeted with a pop-up to add your basic post information.'
+                      }
+                    ];
+                }
             };
 
-            $scope.onboardingSteps = [
-              {
-                overlay: true,
-                title: 'Task: Select A Theme',
-                description: "Choosing a theme will automatically create a website for your visitors to go, so you can capture them as leads.",
-                position: 'centered'
-              },
-              {
-                attachTo: '.btn-view-themes',
-                position: 'bottom',
-                overlay: false,
-                title: 'Themes Tab',
-                width: 400,
-                description: "This is the theme tab where you can change or modify your theme after you choose one."
-              },
-              {
-                attachTo: '.themes',
-                position: 'top',
-                overlay: false,
-                title: 'Select A Theme',
-                description: 'Choose one of the themes from below by clicking the switch button.'
-              }
-            ];
+            if ($location.$$search['onboarding']) {
+                $scope.beginOnboarding($location.$$search['onboarding']);
+            }
 
             $scope.$watch('activeTab', function(newValue, oldValue) {
                 if ($scope.userPreferences) {
@@ -68,7 +97,9 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                $scope.activeTab = preferences.website_default_tab || 'pages';
+                if (!$location.$$search['onboarding']) {
+                    $scope.activeTab = preferences.website_default_tab || 'pages';
+                }
             });
 
             $scope.savePreferencesFn = function() {

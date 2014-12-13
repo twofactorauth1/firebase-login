@@ -1,9 +1,9 @@
 define(['app', 'userService'], function(app) {
     app.register.controller('IndiCtrl', ['$scope', 'UserService', function($scope, UserService) {
-    	$scope.startTask = function(task) {
+    	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
-    		if (task) {
-    			window.location = '/admin#/website?onboarding='+task
+    		if (section && task) {
+    			window.location = '/admin#/'+section+'?onboarding='+task
     		};
     	};
 
