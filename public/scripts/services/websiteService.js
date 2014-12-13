@@ -11,7 +11,6 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
     var self = this;
 
     return function (callback) {
-        console.log('website ', website);
         if (Object.getOwnPropertyNames(website).length != 0) {
             //console.log('Historical');
             callback(null,website);
@@ -26,7 +25,6 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)
                     .success(function (data) {
                         website = data;
-                        console.log('website ', website);
                         callback(null, data)
                     })
                     .error(function (err) {
