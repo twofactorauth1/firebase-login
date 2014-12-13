@@ -6,19 +6,25 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         $scope.activeTab = 'analytics';
 
         $scope.date = {
-            startDate: null,
-            endDate: null
+            startDate: moment().subtract('days', 29).format(),
+            endDate: moment().format()
         };
 
+        $scope.$watch('date', function() {
+           console.log('$scope.date ', $scope.date);
+           //update user preferences
+           $scope.runAnalyticsReports;
+        });
+
         $scope.pickerOptions = {
-            // ranges: {
-            //    'Today': [moment(), moment()],
-            //    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            //    'Last 7 Days': [moment().subtract('days', 6), moment()],
-            //    'Last 30 Days': [moment().subtract('days', 29), moment()],
-            //    'This Month': [moment().startOf('month'), moment().endOf('month')],
-            //    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            // }
+            ranges: {
+               'Today': [moment(), moment()],
+               'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+               'Last 7 Days': [moment().subtract('days', 6), moment()],
+               'Last 30 Days': [moment().subtract('days', 29), moment()],
+               'This Month': [moment().startOf('month'), moment().endOf('month')],
+               'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
         };
 
         CustomerService.getCustomers(function(customers) {
@@ -52,9 +58,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             }, 100);
         });
 
-        $scope.runAnalyticsReports = ChartAnalyticsService.runReports(function(data) {
+        $scope.runAnalyticsReports = ChartAnalyticsService.runReports($scope.date, function(data) {
 
             $scope.desktop = data.desktop;
+            $scope.mobile = data.mobile;
             $scope.visitorsData = data.visitorsData;
             $scope.visitors = data.currentTotalVisitors;
             $scope.pageviews = data.currentTotalPageviews;
@@ -75,6 +82,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.formattedTopPages = data.formattedTopPages;
             $scope.pagedformattedTopPages = data.pagedformattedTopPages;
             $scope.visitDuration = data.visitDuration;
+            $scope.visitDurationPercent = data.visitDurationPercent;
             $scope.avgSessionData = data.avgSessionData;
 
             $scope.renderAnalyticsCharts();
@@ -108,7 +116,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                     clearTimeout(resizeTimer);
 
                 resizeTimer = setTimeout(function() {
-                    if($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
+                    if ($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
                         $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
                         $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
                     }
@@ -125,8 +133,6 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         };
 
         $scope.runCommerceReports = ChartCommerceService.runReports(function(data) {
-            console.log('data', data);
-
             $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
             $scope.avgRevenue = data.avgRevenue;
             $scope.annualRunRate = data.annualRunRate;
@@ -143,6 +149,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.netRevenue = data.netRevenue;
             $scope.totalCustomerData = data.totalCustomerData;
             $scope.customerStart = data.customerStart;
+            $scope.totalPayingCustomers = data.totalPayingCustomers;
 
             $scope.renderCommerceCharts();
         });

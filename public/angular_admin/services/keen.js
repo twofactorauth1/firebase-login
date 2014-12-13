@@ -18,9 +18,9 @@ define(['app'], function(app) {
         this.keenClient = function(fn) {
             Keen.ready(function() {
 
-                console.log('readKey >>> ', readKey);
-                console.log('writeKey >>> ', writeKey);
-                console.log('projectId >>> ', projectId);
+                // console.log('readKey >>> ', readKey);
+                // console.log('writeKey >>> ', writeKey);
+                // console.log('projectId >>> ', projectId);
 
                 var client = new Keen({
                     projectId: projectId,

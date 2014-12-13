@@ -1,11 +1,13 @@
 define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'dashboardService'], function(app) {
-    app.register.controller('SinglePageAnalyticsCtrl', ['$scope','$location', 'ngProgress', 'dashboardService', 'ENV', function($scope, $location, ngProgress, dashboardService, ENV) {
+    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'dashboardService', 'ENV', function($scope, $location, ngProgress, dashboardService, ENV) {
         ngProgress.start();
-        $scope.$back = function() { window.history.back(); };
+        $scope.$back = function() {
+            window.history.back();
+        };
 
         console.log('$route.current.params.postname >>> ', $location.$$search['pageurl']);
 
-         $scope.query = function(params) {
+        $scope.query = function(params) {
             return new Promise(function(resolve, reject) {
                 dashboardService.queryGoogleAnalytics(params, function(data) {
                     resolve(data);
@@ -15,13 +17,13 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'd
         };
 
         var topPageViews = $scope.query({
-                                ids: ENV.googleAnalyticsId,
-                                metrics: ENV.googleAnalyticsScope,
-                                dimensions: 'ga:date',
-                                'start-date': '30daysAgo',
-                                'end-date': 'yesterday',
-                                filter: 'ga:pagePath=~/admin*'
-                            });
+            ids: ENV.googleAnalyticsId,
+            metrics: ENV.googleAnalyticsScope,
+            dimensions: 'ga:date',
+            'start-date': '30daysAgo',
+            'end-date': 'yesterday',
+            filter: 'ga:pagePath=~/admin*'
+        });
 
         Promise.all([topPageViews]).then(function(results) {
             console.log('results >>> ', results);
