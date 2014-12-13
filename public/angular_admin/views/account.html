@@ -1,4 +1,5 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' onFinishCallback='finishOnboarding'></onboarding-popover>
 <div class="account">
 
     <div class="pageheader row">
@@ -404,7 +405,7 @@
                             <h3>Google +</h3>
                             <p>Import customers, plan posts in advance.</p>
                             <p>
-                            <a href="#" class="btn btn-orange btn-lg btn-block" role="button">
+                            <a href="#" class="btn btn-orange btn-lg btn-block" role="button" id="connect-google-plus">
                                 <span class="fa fa-plug"></span>Connect</a>
                             </p>
                             <div class="toggle-modern">
