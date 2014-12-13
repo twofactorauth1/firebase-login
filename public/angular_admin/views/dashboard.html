@@ -4,10 +4,12 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
-        <h2 class="col-xs-7"><i class="fa fa-bar-chart"></i> Dashboard</h2>
+        <div class="col-xs-10">
+            <h2><i class="fa fa-bar-chart"></i> Dashboard</h2>
+        </div>
 
-        <div class="col-xs-4">
-            <!-- <input date-range-picker class="form-control date-picker" type="text" ng-model="date" options="pickerOptions"/> -->
+        <div class="col-xs-2">
+            <input date-range-picker class="form-control date-picker" type="text" ng-model="selectedDate" options="pickerOptions"/>
         </div>
     </div>
 
@@ -72,14 +74,14 @@
                                     <div class="metric center">New Customers</div>
                                     <div class="title center">
                                         {{totalPayingCustomers}}
-                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> {{pageviewsPercent}}%</span>
+                                        <span class="percent" ng-class="{'decrease': totalPayingCustomerPercent < 0, 'increase': totalPayingCustomerPercent > 0 }"><i ng-class="{'fa fa-chevron-down': totalPayingCustomerPercent < 0, 'fa fa-chevron-up': totalPayingCustomerPercent > 0 }"></i> {{totalPayingCustomerPercent}}%</span>
                                     </div>
                                 </div>
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">Cancellations</div>
                                     <div class="title center">
                                         {{totalCanceledSubscriptions}}
-                                        <span class="percent" ng-class="{'decrease': visitDurationPercent < 0, 'increase': visitDurationPercent > 0 }"><i ng-class="{'fa fa-chevron-down': visitDurationPercent < 0, 'fa fa-chevron-up': visitDurationPercent > 0 }"></i> {{visitDurationPercent}}%</span>
+                                        <span class="percent" ng-class="{'decrease': cancelSubscriptionPercent < 0, 'increase': cancelSubscriptionPercent > 0 }"><i ng-class="{'fa fa-chevron-down': cancelSubscriptionPercent < 0, 'fa fa-chevron-up': cancelSubscriptionPercent > 0 }"></i> {{cancelSubscriptionPercent}}%</span>
                                     </div>
                                 </div>
                             </div>
