@@ -565,6 +565,7 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.runReports = function(date, fn) {
+            console.log('running analytics reports >>> ');
             var self = this;
 
             var reportData = {};
@@ -635,8 +636,8 @@ define(['app', 'keenService'], function(app) {
                 reportData.pagedformattedTopPages = pagedformattedTopPages;
             });
 
-            keenService.keenClient(date, function(client) {
-                var queryData = self.queryReports();
+            keenService.keenClient(function(client) {
+                var queryData = self.queryReports(date);
                 client.run([
                     queryData.visitorLocations,
                     queryData.deviceReportByCategory,

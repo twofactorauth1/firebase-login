@@ -4,6 +4,25 @@ define(['app', 'paymentService', 'keenService'], function(app) {
         //local variables
         var customers, totalCustomers;
 
+        this.calculatePercentage = function(oldval, newval) {
+            var result;
+            oldval = parseInt(oldval);
+            newval = parseInt(newval);
+            if (oldval == 0 && newval == 0) {
+                return 0;
+            }
+            if (newval < oldval) {
+                result = ((oldval - newval) / oldval) * 100;
+            } else {
+                result = ((newval - oldval) / newval) * 100;
+            }
+
+            if (newval === oldval) {
+                result = 100;
+            }
+            return Math.round(result * 100) / 100;
+        };
+
 
         this.queryReports = function() {
             var queryData = {};
@@ -64,6 +83,21 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                 }]
             });
 
+            queryData.canceledSubscriptionsPrevious = new Keen.Query("count", {
+                eventCollection: "Stripe_Events",
+                timeframe: "previous_30_days",
+                interval: 'daily',
+                filters: [{
+                    "property_name": "type",
+                    "operator": "eq",
+                    "property_value": "customer.subscription.deleted"
+                }, {
+                    "property_name": "accountId",
+                    "operator": "eq",
+                    "property_value": $$.server.accountId
+                }]
+            });
+
             // =========================================
             // Create Unique Paying Customers Line Chart
             // =========================================
@@ -71,6 +105,26 @@ define(['app', 'paymentService', 'keenService'], function(app) {
             queryData.payingCustomersSeries = new Keen.Query('count_unique', {
                 eventCollection: 'Stripe_Events',
                 timeframe: 'last_30_days',
+                targetProperty: 'data.object.customer',
+                interval: 'daily',
+                filters: [{
+                    'property_name': 'type',
+                    'operator': 'eq',
+                    'property_value': 'invoice.payment_succeeded'
+                }, {
+                    'property_name': 'data.object.total',
+                    'operator': 'gt',
+                    'property_value': 0
+                }, {
+                    "property_name": "accountId",
+                    "operator": "eq",
+                    "property_value": $$.server.accountId
+                }]
+            });
+
+            queryData.previousPayingCustomersSeries = new Keen.Query('count_unique', {
+                eventCollection: 'Stripe_Events',
+                timeframe: 'previous_30_days',
                 targetProperty: 'data.object.customer',
                 interval: 'daily',
                 filters: [{
@@ -177,7 +231,9 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         queryData.feesThisMonth,
                         queryData.feesPreviousMonth,
                         queryData.netRevenueThisMonth,
-                        queryData.netRevenuePreviousMonth
+                        queryData.netRevenuePreviousMonth,
+                        queryData.canceledSubscriptionsPrevious,
+                        queryData.previousPayingCustomersSeries
                     ], function(response) {
                         var totalRevenue = this.data[0].result;
                         var numOfCustomers = totalCustomers;
@@ -219,6 +275,17 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                             totalCanceledSubscriptions += parseInt(this.data[2].result[i].value);
                         };
                         var cancelStart = this.data[2].result[0].timeframe.start;
+
+                        //previous canceled subscriptions
+                        var cancelPreviousSubscriptionData = [];
+                        var totalPreviousCanceledSubscriptions = 0;
+                        for (var i = 0; i < this.data[7].result.length; i++) {
+                            cancelPreviousSubscriptionData.push(this.data[7].result[i].value);
+                            totalPreviousCanceledSubscriptions += parseInt(this.data[7].result[i].value);
+                        };
+
+                        var cancelSubscriptionPercent = self.calculatePercentage(totalCanceledSubscriptions, totalPreviousCanceledSubscriptions);
+
                         //TODO: get average of monthly subscription price instead of $97
                         var potentialMRRLoss = cancelSubscriptionData.length * 97;
 
@@ -238,6 +305,16 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                             totalCustomerData.push(this.data[3].result[i].value);
                             totalPayingCustomers += this.data[3].result[i].value;
                         };
+
+                        //previous customers
+                        var previousTotalCustomerData = [];
+                        var previousTotalPayingCustomers = 0;
+                        for (var i = 0; i < this.data[8].result.length; i++) {
+                            previousTotalCustomerData.push(this.data[8].result[i].value);
+                            previousTotalPayingCustomers += this.data[8].result[i].value;
+                        };
+
+                        var payingCustomerPercent = self.calculatePercentage(totalPayingCustomers, previousTotalPayingCustomers);
 
                         var customerStart = this.data[3].result[0].timeframe.start;
 
@@ -263,6 +340,7 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         reportData.arpu = arpu;
                         reportData.totalCanceledSubscriptions = totalCanceledSubscriptions;
                         reportData.cancelSubscriptionData = cancelSubscriptionData;
+                        reportData.cancelSubscriptionPercent = cancelSubscriptionPercent;
                         reportData.cancelStart = cancelStart;
                         reportData.potentialMRRLoss = potentialMRRLoss;
                         reportData.userChurn = userChurn;
@@ -276,6 +354,7 @@ define(['app', 'paymentService', 'keenService'], function(app) {
                         reportData.totalRevenuePercent = totalRevenuePercent;
                         reportData.totalCustomerData = totalCustomerData;
                         reportData.totalPayingCustomers = totalPayingCustomers;
+                        reportData.totalPayingCustomerPercent = payingCustomerPercent;
                         reportData.customerStart = customerStart;
 
                         fn(reportData);

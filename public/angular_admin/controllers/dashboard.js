@@ -6,14 +6,19 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         $scope.activeTab = 'analytics';
 
         $scope.date = {
-            startDate: moment().subtract('days', 29).format(),
-            endDate: moment().format()
+            startDate: moment().subtract('days', 29).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
+            endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
         };
 
-        $scope.$watch('date', function() {
-           console.log('$scope.date ', $scope.date);
+        $scope.selectedDate = $scope.date;
+
+        $scope.$watch('selectedDate', function() {
+           console.log('$scope.selectedDate ', $scope.selectedDate);
+           $scope.date.startDate = moment($scope.selectedDate.startDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+           $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+           console.log('$scope.date >>> ', $scope.date);
            //update user preferences
-           $scope.runAnalyticsReports;
+           $scope.runAnalyticsReports();
         });
 
         $scope.pickerOptions = {
@@ -58,37 +63,39 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             }, 100);
         });
 
-        $scope.runAnalyticsReports = ChartAnalyticsService.runReports($scope.date, function(data) {
+        $scope.runAnalyticsReports = function() {
+            ChartAnalyticsService.runReports($scope.date, function(data) {
 
-            $scope.desktop = data.desktop;
-            $scope.mobile = data.mobile;
-            $scope.visitorsData = data.visitorsData;
-            $scope.visitors = data.currentTotalVisitors;
-            $scope.pageviews = data.currentTotalPageviews;
-            $scope.pageviewsData = data.pageviewsData;
-            $scope.pageviewsPercent = data.pageviewsPercent;
-            $scope.visitorsPercent = data.visitorsPercent;
-            $scope.pageviewsPreviousData = data.pageviewsPreviousData;
-            $scope.sessions = data.totalSessions;
-            $scope.sessionsData = data.sessionData;
-            $scope.sessionsPercent = data.sessionsPercent;
-            $scope.bounces = data.totalBounces;
-            $scope.bouncesData = data.bouncesData;
-            $scope.bouncesPercent = data.bouncesPercent;
-            $scope.totalTypes = data.totalTypes;
-            $scope.trafficSourceData = data.trafficSourceData;
-            $scope.newVsReturning = data.newVsReturning;
-            $scope.locationData = data.locationData;
-            $scope.formattedTopPages = data.formattedTopPages;
-            $scope.pagedformattedTopPages = data.pagedformattedTopPages;
-            $scope.visitDuration = data.visitDuration;
-            $scope.visitDurationPercent = data.visitDurationPercent;
-            $scope.avgSessionData = data.avgSessionData;
+                $scope.desktop = data.desktop;
+                $scope.mobile = data.mobile;
+                $scope.visitorsData = data.visitorsData;
+                $scope.visitors = data.currentTotalVisitors;
+                $scope.pageviews = data.currentTotalPageviews;
+                $scope.pageviewsData = data.pageviewsData;
+                $scope.pageviewsPercent = data.pageviewsPercent;
+                $scope.visitorsPercent = data.visitorsPercent;
+                $scope.pageviewsPreviousData = data.pageviewsPreviousData;
+                $scope.sessions = data.totalSessions;
+                $scope.sessionsData = data.sessionData;
+                $scope.sessionsPercent = data.sessionsPercent;
+                $scope.bounces = data.totalBounces;
+                $scope.bouncesData = data.bouncesData;
+                $scope.bouncesPercent = data.bouncesPercent;
+                $scope.totalTypes = data.totalTypes;
+                $scope.trafficSourceData = data.trafficSourceData;
+                $scope.newVsReturning = data.newVsReturning;
+                $scope.locationData = data.locationData;
+                $scope.formattedTopPages = data.formattedTopPages;
+                $scope.pagedformattedTopPages = data.pagedformattedTopPages;
+                $scope.visitDuration = data.visitDuration;
+                $scope.visitDurationPercent = data.visitDurationPercent;
+                $scope.avgSessionData = data.avgSessionData;
 
-            $scope.renderAnalyticsCharts();
-        });
+                $scope.renderAnalyticsCharts();
+            });
+        };
 
-        $scope.runAnalyticsReports;
+        $scope.runAnalyticsReports();
 
         $scope.renderAnalyticsCharts = function() {
 
@@ -138,6 +145,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.annualRunRate = data.annualRunRate;
             $scope.arpu = data.arpu;
             $scope.totalCanceledSubscriptions = data.totalCanceledSubscriptions;
+            $scope.cancelSubscriptionPercent = data.cancelSubscriptionPercent;
             $scope.cancelSubscriptionData = data.cancelSubscriptionData;
             $scope.cancelStart = data.cancelStart;
             $scope.potentialMRRLoss = data.potentialMRRLoss;
@@ -148,6 +156,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.totalRevenuePercent = data.totalRevenuePercent;
             $scope.netRevenue = data.netRevenue;
             $scope.totalCustomerData = data.totalCustomerData;
+            $scope.totalPayingCustomerPercent = data.totalPayingCustomerPercent;
             $scope.customerStart = data.customerStart;
             $scope.totalPayingCustomers = data.totalPayingCustomers;
 
