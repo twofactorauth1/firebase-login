@@ -14,7 +14,8 @@ define([
     'confirmClick2',
     'confirmClickDirective',
     'courseServiceAdmin',
-    'navigationService'
+    'navigationService',
+    'draggableModalDirective'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -138,6 +139,8 @@ define([
 
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
+                if(!iframe)
+                    return;
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
                 //wait for iframe to load completely
@@ -176,6 +179,8 @@ define([
                             settingsBtns[i].removeEventListener("click");
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                                var element = angular.element('#component-setting-modal');
+                                element.modal('show');
                             });
                         } else if (typeof settingsBtns.attachEvent != "undefined") {
                             settingsBtns[i].removeEvent("onclick");
@@ -643,6 +648,7 @@ define([
                     }
                     $scope.updateIframeComponents();
                     $scope.componentEditing = null;
+                    $(".modal-backdrop").remove();
                     //toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };

@@ -6645,10 +6645,10 @@ h4,
   opacity: 0.65;
 }
 .modal {
-  z-index: 9999999;
+  z-index: 9999;
 }
 .modal-backdrop {
-  z-index: 9999998;
+  z-index: 9998;
 }
 .modal-footer {
   background: #eeeeee;
@@ -16067,6 +16067,9 @@ strong {
 .nopadding {
   padding: 0!important;
 }
+#component-setting-modal .bootstrap-switch {
+  float: right;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -17502,7 +17505,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   overflow-x: hidden;
   top: 0;
   right: -240px;
-  z-index: 999999;
+  z-index: 9997;
   display: none;
 }
 .rightpanel .nav-tabs {
@@ -22553,7 +22556,7 @@ hr {
   position: absolute;
   margin-top: -25px;
   left: 50%;
-  z-index: 100000;
+  z-index: 9998;
   /*
       99999 is for
         .componentActions
