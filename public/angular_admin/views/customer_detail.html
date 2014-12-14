@@ -537,6 +537,12 @@
                                                 {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} submitted a form with the message: "{{extraFields.message}}".</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                         </div>
+                                        <div ng-switch-when="FORM_SUBMISSION">
+                                            <p>
+                                                    <span class="label label-info">FORM SUBMITTED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
                                     </div>
                                 </div>
                             </li>

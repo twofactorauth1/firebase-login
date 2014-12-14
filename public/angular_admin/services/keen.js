@@ -7,6 +7,7 @@ define(['app'], function(app) {
 
         this.multiAnalysis = function(params, fn) {
             var apiUrl = baseUrl + [projectId, 'queries', 'multi_analysis'].join('/') + '?api_key='+readKey;
+            params.filters = JSON.stringify(params.filters);
             $http.get( apiUrl,{
                 params: params
             })
