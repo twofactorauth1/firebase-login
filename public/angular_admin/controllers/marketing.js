@@ -1,12 +1,7 @@
 define(['app', 'ngProgress', 'courseServiceAdmin', 'userService', 'toasterService'], function(app) {
-    app.register.controller('MarketingCtrl', ['$scope', 'ngProgress', 'UserService', 'ToasterService', 'CourseService', 'Subscriber', '$state',
-        function($scope, ngProgress, UserService, ToasterService, CourseService, Subscriber, $state) {
+    app.register.controller('MarketingCtrl', ['$scope', 'ngProgress', 'UserService', 'ToasterService', 'CourseService', 'Subscriber',
+        function($scope, ngProgress, UserService, ToasterService, CourseService, Subscriber) {
             ngProgress.start();
-
-            $scope.courseEditFn = function(id) {
-                $state.go('marketingEdit');
-            };
-
             UserService.getUser(function(user) {
                 $scope.user = user;
             });

@@ -12,7 +12,7 @@
 
 <div id="pipeshiftDiv" class="contentpanel" ng-style="styleMarketing()" indigeweb-resize>
     <div class="tb-main table">
-        <div class="container-fluid tb-row" ng-repeat="course in courses" ng-click="courseEditFn(course._id)">
+        <div class="container-fluid tb-row" ng-repeat="course in courses">
             <div class="tb-col col-md-1"></div>
             <div class="tb-col col-md-2">{{course.title}}</div>
             <div class="tb-col col-md-9">{{course.subscribers.length}} PEOPLE REACHED</div>
