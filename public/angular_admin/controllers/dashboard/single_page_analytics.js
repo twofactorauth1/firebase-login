@@ -1,44 +1,23 @@
-define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'dashboardService'], function(app) {
-    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'dashboardService', 'ENV', function($scope, $location, ngProgress, dashboardService, ENV) {
+define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'websiteService', 'userService'], function(app) {
+    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', function($scope, $location, ngProgress, WebsiteService, UserService) {
         ngProgress.start();
-        $scope.$back = function() {
-            window.history.back();
-        };
 
         console.log('$route.current.params.postname >>> ', $location.$$search['pageurl']);
-
-        $scope.query = function(params) {
-            return new Promise(function(resolve, reject) {
-                dashboardService.queryGoogleAnalytics(params, function(data) {
-                    resolve(data);
-                });
-            });
-
-        };
-
-        var topPageViews = $scope.query({
-            ids: ENV.googleAnalyticsId,
-            metrics: ENV.googleAnalyticsScope,
-            dimensions: 'ga:date',
-            'start-date': '30daysAgo',
-            'end-date': 'yesterday',
-            filter: 'ga:pagePath=~/admin*'
-        });
-
-        Promise.all([topPageViews]).then(function(results) {
-            console.log('results >>> ', results);
-        });
-
-
-
-        //dimensions
-        //ga:date
-
-        //metrics
-        //ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews
-
-        //filter
-        //ga:pagePath=~/admin*
+        var pageurl = $location.$$search['pageurl'];
+        if (pageurl.indexOf('/page/') != -1  && pageurl.indexOf('blog') == -1) {
+        	var handle = pageurl.replace('/page/', '');
+        }
+        //determine if page or post
+        //get single page object
+        UserService.getAccount(function(account) {
+	        WebsiteService.getSinglePage(account.website.websiteId, handle, function(data) {
+	        	console.log('data >>> ', data);
+	        	$scope.page = data;
+	        	ngProgress.complete();
+	        });
+		});
+        //get single page analytics
+        //show heatmap
 
     }]);
 });
