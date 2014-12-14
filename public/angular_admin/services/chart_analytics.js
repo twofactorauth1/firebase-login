@@ -659,7 +659,6 @@ define(['app', 'keenService'], function(app) {
                     queryData.trafficSources,
                     queryData.returningVisitors,
                     queryData.newVisitors,
-                    queryData.visitorLocations,
                     // queryData.pageDepth,
                     queryData.sessionPreviousAvgLengthReport
                 ], function(results) {
@@ -896,6 +895,7 @@ define(['app', 'keenService'], function(app) {
                         var subObj = {};
                         subObj.code = self.stateToAbbr(results[0].result[i]['ip_geo_info.province']);
                         subObj.value = results[0].result[i].result;
+                        console.log('subObj >>> ', subObj);
                         locationData.push(subObj);
                     };
 
@@ -1214,6 +1214,7 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.visitorLocations = function(locationData, highchartsData) {
+            console.log('locationData >>> ', locationData);
             var data = [{
                 "value": 438,
                 "code": "NJ"

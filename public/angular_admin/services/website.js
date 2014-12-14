@@ -28,6 +28,19 @@ define(['app'], function (app) {
             });
 		};
 
+		//website/:websiteid/page/:handle
+		this.getSinglePage = function (websiteID, handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'page', handle].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:getSinglePage with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPages = function (accountId, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)

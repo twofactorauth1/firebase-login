@@ -11,7 +11,7 @@
 		</div>
 		<div class="col-xs-6">
 			<h2 class="center">
-				This PAge
+				{{page.title}}
 			</h2>
 		</div>
 		<div class="col-xs-3">
@@ -24,7 +24,16 @@
 	</div>
 
 	<div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
-
+		<div class="col-xs-6">
+			<h3>Screenshot</h3>
+			<hr>
+			<img src="{{page.screenshot}}" class="img-thumbnail">
+		</div>
+		<div class="col-xs-6">
+			<h3>Page Info</h3>
+			<hr>
+			<p>Page Title: {{page.title}}</p>
+		</div>
 	</div>
 
 	<div class="rightpanel rightpanel-commerce">
