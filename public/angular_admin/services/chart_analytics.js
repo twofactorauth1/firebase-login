@@ -600,7 +600,12 @@ define(['app', 'keenService'], function(app) {
                     "start": date.startDate,
                     "end": date.endDate
                 },
-                group_by: 'url.path'
+                group_by: 'url.path',
+                filters: [{
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
             };
 
             keenService.multiAnalysis(params2, function(multidata) {

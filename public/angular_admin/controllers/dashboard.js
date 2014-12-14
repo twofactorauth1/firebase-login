@@ -13,15 +13,15 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         $scope.selectedDate = $scope.date;
 
         $scope.$watch('selectedDate', function() {
-           console.log('$scope.selectedDate ', $scope.selectedDate);
            $scope.date.startDate = moment($scope.selectedDate.startDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
            $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
-           console.log('$scope.date >>> ', $scope.date);
            //update user preferences
            $scope.runAnalyticsReports();
         });
 
         $scope.pickerOptions = {
+            format: 'MMMM D, YYYY',
+            opens: 'left',
             ranges: {
                'Today': [moment(), moment()],
                'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
