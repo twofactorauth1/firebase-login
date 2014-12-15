@@ -220,18 +220,10 @@ define([
                     }, false);
                 };
 
-                var binded = false;
-                var count = 0;
-                while (binded == false) {
-                    count += 1;
+               
                     if (iframeDoc.getElementById('body')) {
                        elementBindingFn();
-                       binded = true;
-                    } else {
-                        binded = false;
                     }
-                    console.info('Bind attempt : ' + count);
-                }
             };
 
             UserService.getAccount(function(account) {
