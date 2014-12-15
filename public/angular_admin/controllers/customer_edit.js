@@ -10,7 +10,8 @@ define(['app',
   'mediaDirective',
   'userService',
   'geocodeService',
-  'fingerPrint'
+  'keenService',
+  'fingerprint'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -20,12 +21,32 @@ define(['app',
     'ToasterService',
     'UserService',
     'GeocodeService',
-    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService) {
+    'keenService',
+    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService, keenService) {
       ngProgress.start();
       var displayAddressCharLimit = 2;
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
+
+      var keenParams = {
+          event_collection: 'session_data',
+          analyses: {
+              "sessions_data": {
+                  "analysis_type": "extraction"
+              }
+          },
+          filters: [{
+              "property_name": "fingerprint",
+              "operator": "eq",
+              "property_value": 4077985626
+          }]
+      };
+
+    keenService.multiAnalysis(keenParams, function(multidata) {
+        console.log(multidata);
+    });
+
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,

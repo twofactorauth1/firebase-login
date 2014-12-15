@@ -66,7 +66,7 @@ require.config({
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
         'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
-        'fingerPrint': 'libs/fingerprint/fingerprint',
+        'fingerprint': 'libs/fingerprint/fingerprint',
 
         //application related
         'storageutils': 'utils/storageutils',
