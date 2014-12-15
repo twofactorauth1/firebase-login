@@ -16,7 +16,7 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
             callback(null,website);
         } else {
             accountService(function (err, data) {
-                if (err) {
+                if (err || !data) {
                     console.log('Method:accountService Error: ' + err);
                     callback(err, null);
                 }
@@ -29,7 +29,9 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)
                     .success(function (data) {
-                        website = data;
+                        if (data) {
+                            website = data;
+                        }
                         callback(null, data)
                     })
                     .error(function (err) {
