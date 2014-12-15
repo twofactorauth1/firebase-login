@@ -188,7 +188,9 @@ _.extend(apiBase.prototype, {
 
             if(Array.isArray(ip)) {
                 return ip[0];
-            } else {
+            } else if(ip.indexOf(',') !== -1){
+                return ip.split(',')[0].trim();
+            } else{
                 return ip;
             }
         } catch(exception) {
@@ -310,7 +312,7 @@ _.extend(apiBase.prototype, {
     },
 
     checkPermissionForAccountAndUser: function(userId, accountId, priv, cb) {
-        console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
+        //console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
         this.sm.hasPermission(userId, accountId, priv, cb);
     },
 

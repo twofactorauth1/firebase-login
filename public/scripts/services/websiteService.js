@@ -19,8 +19,12 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                 if (err || !data) {
                     console.log('Method:accountService Error: ' + err);
                     callback(err, null);
-                } else {
-                    console.log('account ', data);
+                }
+                else if(!data)
+                {
+                	callback("data is null", null);
+                }
+                else {
                     //console.log('Not Historical ', data);
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
                     $http.get('/api/1.0/cms/website/' + data.website.websiteId)

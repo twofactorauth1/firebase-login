@@ -13,10 +13,15 @@ define(['angularAMD'], function(angularAMD) {'use strict';
       element.on('mousedown', function (event) {
         // Prevent default dragging of selected content
         //event.preventDefault();
-        startX = event.screenX - x;
-        startY = event.screenY - y;
-        $document.on('mousemove', mousemove);
-        $document.on('mouseup', mouseup);
+        if(angular.isDefined(element.attr('indigeweb-draggable-modal')))
+        {
+        	startX = event.screenX - x;
+	        startY = event.screenY - y;
+	        
+	        $document.on('mousemove', mousemove);
+	        $document.on('mouseup', mouseup);
+        }  
+        
       });
 
       function mousemove(event) {

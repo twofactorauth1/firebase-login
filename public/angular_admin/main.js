@@ -27,6 +27,7 @@ require.config({
         'spectrum': 'libs/spectrum/spectrum',
         'colorpicker': 'libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min',
         'angularAMD': 'libs/angularAMD/angularAMD.min',
+        'ngload': 'libs/angularAMD/ngload.min',
         'underscore': 'libs/underscore/underscore',
         'skeuocard': 'libs/skeuocard/lib/js/card',
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
@@ -65,6 +66,7 @@ require.config({
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
         'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
+        'fingerprint': 'libs/fingerprint/fingerprint',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -147,7 +149,7 @@ require.config({
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
-        'angularConfig' : 'scripts/config' 
+        'angularConfig' : 'scripts/config'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -210,7 +212,8 @@ require.config({
         'ngInfiniteScroll': {deps: ['angular']},
         'timeAgoFilter': {deps: ['moment']},
         'ngTagsInput': ['angular'],
-        'angularConfig': {deps: ['angular']}
+        'angularConfig': {deps: ['angular']},
+        'ngload': ['angularAMD']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
