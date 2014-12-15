@@ -19,6 +19,7 @@
     "angular-carousel": "~0.2.5",
     "angular-cookies": "1.2.16",
     "angular-cookie": "4.0.5",
+    "angular-daterangepicker": "0.1.10",
     "angular-file-upload": "~1.1.1",
     "angular-isotope": "*",
     "angular-mocks": "~1.2.0",
