@@ -42,7 +42,8 @@ script(type="text/javascript").
     }, window.analytics.SNIPPET_VERSION = "2.0.9",
             window.analytics.load('#{segmentIOWriteKey}');
     window.analytics.page('admin', {accountId:#{account._id}});
-
-    if(!#{user.user_preferences.welcome_alert.initial}) {
+    
+    var initialAlert =  "#{user.user_preferences.welcome_alert.initial}";
+    if(initialAlert == 'true') {
         window.location="/admin#/indi";
     }

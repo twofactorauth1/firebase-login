@@ -45,6 +45,7 @@ define([
             // });
 
             if ($location.$$search['pagehandle']) {
+                console.log('page handle detected');
                 document.getElementById("iframe-website").setAttribute("src", '/page/'+$location.$$search['pagehandle']+'?editor=true');
             }
 
@@ -515,7 +516,7 @@ define([
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
 
-                WebsiteService.getPages(that.account.website.websiteId, function(pages) {
+                WebsiteService.getPages($scope.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
                     var parsed = angular.fromJson(pages);
                     var arr = [];
