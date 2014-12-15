@@ -508,7 +508,7 @@
                             <accordion-heading>
                                 Reorder <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
                             </accordion-heading>                           
-                            <div class="form-group" ng-onmouseover = "$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" ng-onmouseout = "$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
+                            <div class="form-group" onmouseover = "$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout = "$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
                                 <ul ui-sortable="sortableOptions" class="nav-bar" style="list-style: none;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                                     <li data-ng-repeat="link in mainMenu.links track by $index">
                                         <div class="head-menu-links" data-label="{{link.label}}">
