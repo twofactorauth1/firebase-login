@@ -600,7 +600,12 @@ define(['app', 'keenService'], function(app) {
                     "start": date.startDate,
                     "end": date.endDate
                 },
-                group_by: 'url.path'
+                group_by: 'url.path',
+                filters: [{
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
             };
 
             keenService.multiAnalysis(params2, function(multidata) {
@@ -654,7 +659,6 @@ define(['app', 'keenService'], function(app) {
                     queryData.trafficSources,
                     queryData.returningVisitors,
                     queryData.newVisitors,
-                    queryData.visitorLocations,
                     // queryData.pageDepth,
                     queryData.sessionPreviousAvgLengthReport
                 ], function(results) {
@@ -891,6 +895,7 @@ define(['app', 'keenService'], function(app) {
                         var subObj = {};
                         subObj.code = self.stateToAbbr(results[0].result[i]['ip_geo_info.province']);
                         subObj.value = results[0].result[i].result;
+                        console.log('subObj >>> ', subObj);
                         locationData.push(subObj);
                     };
 
@@ -1209,6 +1214,7 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.visitorLocations = function(locationData, highchartsData) {
+            console.log('locationData >>> ', locationData);
             var data = [{
                 "value": 438,
                 "code": "NJ"

@@ -33,7 +33,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controllerUrl: '/angular_admin/controllers/dashboard/other_revenue.js'
         }))
         .state('singlePageAnalytics', angularAMD.route({
-          url: '/dashboard/single-page/:pageId',
+          url: '/dashboard/single-page',
           templateUrl: '/angular_admin/views/dashboard/single-page-analytics.html',
           controller: 'SinglePageAnalyticsCtrl',
           controllerUrl: '/angular_admin/controllers/dashboard/single_page_analytics.js'

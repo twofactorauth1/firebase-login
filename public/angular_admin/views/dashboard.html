@@ -4,12 +4,15 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div class="dashboard">
     <div class="pageheader row">
-        <div class="col-xs-10">
-            <h2><i class="fa fa-bar-chart"></i> Dashboard</h2>
-        </div>
-
-        <div class="col-xs-2">
-            <input date-range-picker class="form-control date-picker" type="text" ng-model="selectedDate" options="pickerOptions"/>
+        <h2 class="pull-left"><i class="fa fa-bar-chart"></i> Dashboard</h2>
+        <div class="form-inline">
+          <div class="form-group pull-right">
+            <div class="input-group" style="width:330px">
+              <label class="sr-only">Date Range</label>
+              <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+              <input date-range-picker class="form-control date-picker " type="text" ng-model="selectedDate" options="pickerOptions"/>
+            </div>
+          </div>
         </div>
     </div>
 
@@ -268,6 +271,12 @@
                                                 </ul>
                                             </p>
                                         </div>
+                                        <div ng-switch-when="FORM_SUBMISSION">
+                                            <p>
+                                                    <span class="label label-info">FORM SUBMITTED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -456,7 +465,7 @@
                                         <tbody>
 
                                             <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
-                                                <td><a href="/admin#/dashboard/single-page/?pageurl={{topPage.page}}" class="truncate">{{topPage.page}}</a>
+                                                <td><a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate">{{topPage.page}}</a>
                                                 </td>
                                                 <td>{{topPage.pageviews}}</td>
                                                 <td>{{topPage.uniquePageviews}}</td>

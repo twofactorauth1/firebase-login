@@ -42,7 +42,7 @@ require.config({
         date: 'libs/datejs/build/production/date.min',
         d3: 'libs/d3/d3',
         moment: 'libs/moment/min/moment.min',
-        daterangepicker: 'libs/bootstrap-daterangepicker/daterangepicker',
+        daterangepicker: 'libs_misc/angular-daterangepicker/angular-daterangepicker.min',
         jquerydragdrop: 'libs_misc/jquery/jquery.drag-drop.plugin',
         jqueryFileUpload: 'libs_misc/jqueryfileupload/js/jquery.fileupload.view',
 
