@@ -64,6 +64,7 @@ require.config({
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
+        'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
 
         //application related
         'storageutils': 'utils/storageutils',
