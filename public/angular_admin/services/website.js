@@ -28,6 +28,19 @@ define(['app'], function (app) {
             });
 		};
 
+		//website/:websiteid/page/:handle
+		this.getSinglePage = function (websiteID, handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'page', handle].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:getSinglePage with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPages = function (accountId, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)
@@ -57,6 +70,7 @@ define(['app'], function (app) {
 			var self = this;
 			self.createPageScreenshot(pagedata.handle, function(screenshot) {
 					pagedata.screenshot = screenshot;
+					pagedata.modified.date = new Date().getTime();
 					var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
 					$http({
 					    url: apiUrl,
@@ -186,6 +200,32 @@ define(['app'], function (app) {
                 console.log('END:Create Page with ERROR');
             });
 		};
+
+		this.createPost = function (pageId, postdata, fn) {
+			postdata.post_tags = null;
+			if(!postdata.created)
+			{
+				postdata.created = {};	
+			}
+			if(!postdata.modified)
+			{
+				postdata.modified = {};	
+			}
+			postdata.created.date = new Date().getTime();
+			postdata.modified.date = new Date().getTime();
+	        var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog'].join('/');
+	        $http({
+	            url: apiUrl,
+	            method: "POST",
+	            data: angular.toJson(postdata)
+	        })
+	            .success(function (data, status, headers, config) {
+	                fn(data);
+	            })
+	            .error(function (err) {
+	                console.log('END:Create Page with ERROR', err);
+	            });
+	    };
 
 		//api/1.0/cms/page/{handle}/screenshot
 		this.createPageScreenshot = function(handle, fn) {

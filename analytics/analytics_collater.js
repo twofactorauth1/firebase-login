@@ -171,7 +171,7 @@ var collator = {
 
                     sessionEvent.set('page_depth', pageList.length);
                     //send to keen unless test environment
-                    if (process.env.NODE_ENV !== "testing") {
+                    // if (process.env.NODE_ENV !== "testing") {
                         client.addEvents({
                             "session_data": [sessionEvent],
                             "page_data": pageList
@@ -182,9 +182,9 @@ var collator = {
                                 log.info('Successfully sent events to keen.');
                             }
                         });
-                    } else {
-                        log.info('skipping keen because of testing environment.');
-                    }
+                    // } else {
+                    //     log.info('skipping keen because of testing environment.');
+                    // }
                     dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
                         if(err) {
                             log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));

@@ -3,10 +3,10 @@
  *
  * */
 'use strict';
-mainApp.service('paymentService', ['$http',
-    function($http) {
+mainApp.service('paymentService', ['$http', 'ENV',
+    function($http, ENV) {
         var baseUrl = '/api/1.0/';
-        Stripe.setPublishableKey('pk_test_EuZhZHVourE3RaRxELJaYEya');
+        Stripe.setPublishableKey(ENV.stripeKey);
 
         this.getStripeCardToken = function(cardInput, fn) {
             Stripe.card.createToken(cardInput, function(status, response) {

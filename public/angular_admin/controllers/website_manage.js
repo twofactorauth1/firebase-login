@@ -7,6 +7,10 @@ define([
     'toaster',
     'truncate',
     'ngOnboarding',
+    'timeAgoFilter',
+    'reverse',
+    'jquery',
+    'mediaDirective',
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -19,40 +23,70 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
-            console.log("$location.$$search['onboarding'] >>> ", $location.$$search['onboarding']);
-            if ($location.$$search['onboarding']) {
-                $scope.startOnboarding
-            }
 
-            $scope.startOnboarding = function() {
-                console.log('starting onboarding');
-                $scope.stepIndex = 0
-                $scope.showOnboarding = true;
+            $scope.beginOnboarding = function(type) {
+                if (type == 'select-theme') {
+                    $scope.stepIndex = 0
+                    $scope.showOnboarding = true;
+                    $scope.activeTab = 'themes';
+                    $scope.onboardingSteps = [
+                      {
+                        overlay: true,
+                        title: 'Task: Select A Theme',
+                        description: "Choosing a theme will automatically create a website for your visitors to go, so you can capture them as leads.",
+                        position: 'centered'
+                      },
+                      {
+                        attachTo: '.btn-view-themes',
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Themes Tab',
+                        width: 400,
+                        description: "This is the theme tab where you can change or modify your theme after you choose one."
+                      },
+                      {
+                        attachTo: '.themes',
+                        position: 'top',
+                        overlay: false,
+                        title: 'Select A Theme',
+                        description: 'Choose one of the themes from below by clicking the switch button.'
+                      }
+                    ];
+                }
+                if (type == 'add-post') {
+                    $scope.stepIndex = 0
+                    $scope.showOnboarding = true;
+                    $scope.activeTab = 'posts';
+                    $scope.onboardingSteps = [
+                      {
+                        overlay: true,
+                        title: 'Task: Create First Blog Post',
+                        description: "Keep everyone up to date and informed with a regular blog.",
+                        position: 'centered'
+                      },
+                      {
+                        attachTo: '.btn-view-posts',
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Posts Tab',
+                        width: 400,
+                        description: "This is the posts tab where you can manage all your blog posts past, and future."
+                      },
+                      {
+                        attachTo: '.btn-add',
+                        position: 'bottom',
+                        xOffset: -60,
+                        overlay: false,
+                        title: 'Add Post Button',
+                        description: 'Select Add Post from the drop down and you will be greeted with a pop-up to add your basic post information.'
+                      }
+                    ];
+                }
             };
 
-            $scope.onboardingSteps = [
-              {
-                overlay: true,
-                title: 'Task: Select A Theme',
-                description: "Choosing a theme will automatically create a website for your visitors to go, so you can capture them as leads.",
-                position: 'centered'
-              },
-              {
-                attachTo: '.btn-view-themes',
-                position: 'bottom',
-                overlay: false,
-                title: 'Themes Tab',
-                width: 400,
-                description: "This is the theme tab where you can change or modify your theme after you choose one."
-              },
-              {
-                attachTo: '.themes',
-                position: 'top',
-                overlay: false,
-                title: 'Select A Theme',
-                description: 'Choose one of the themes from below by clicking the switch button.'
-              }
-            ];
+            if ($location.$$search['onboarding']) {
+                $scope.beginOnboarding($location.$$search['onboarding']);
+            }
 
             $scope.$watch('activeTab', function(newValue, oldValue) {
                 if ($scope.userPreferences) {
@@ -63,12 +97,33 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                $scope.activeTab = preferences.website_default_tab || 'pages';
+                if (!$location.$$search['onboarding']) {
+                    $scope.activeTab = preferences.website_default_tab || 'pages';
+                }
             });
 
             $scope.savePreferencesFn = function() {
                 UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {})
             };
+
+            // var xH;
+            // $('.scrollhover').hover(
+            //     function() {
+            //         console.log('scrollhover');
+            //         xH = $(this).children("img").css("height");
+            //         xH = parseInt(xH);
+            //         console.log('xh ', xh);
+            //         xH = xH - 150;
+            //         xH = "-" + xH + "px";
+            //         $(this).children( "img" ).css("top",xH);
+            //     }, function() {
+            //         $(this).children( "img" ).css("top","0px");
+            //     }
+            // );
+
+            $('.scrollhover').on('hover', function() {
+                console.log('hovering');
+            });
 
             UserService.getAccount(function(account) {
                 $scope.account = account;
@@ -80,6 +135,9 @@ define([
                     for( var i in pages ) {
                         if (pages.hasOwnProperty(i)){
                            _pages.unshift(pages[i]);
+                        }
+                        if (pages[i].handle == 'blog') {
+                            $scope.blogId = pages[i]._id;
                         }
                     }
                     $scope.pages = _pages;
@@ -185,6 +243,30 @@ define([
                     $event.stopPropagation();
                 }
             };
+
+            $scope.createPost = function(postData) {
+                console.log('$scope.blogId ', $scope.blogId);
+                WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    console.log('successfully created post ', data);
+                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                    $('#create-post-modal').modal('hide');
+                    $scope.posts.push(data);
+                });
+            };
+
+             $scope.insertMedia = function(asset) {
+                $scope.website.settings.favicon = asset.url;
+                        var data = {
+                           _id: $scope.website._id,
+                           accountId: $scope.website.accountId,
+                           settings: $scope.website.settings
+                        };
+                        //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                            console.log('updated website settings', data);
+                    });
+
+             };
 
         }
     ]);

@@ -14,7 +14,8 @@ define([
     'confirmClick2',
     'confirmClickDirective',
     'courseServiceAdmin',
-    'navigationService'
+    'navigationService',
+    'draggableModalDirective'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -29,15 +30,33 @@ define([
         'CourseService',
         'NavigationService',
         function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
+            var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             ngProgress.start();
-            $scope.editingPageId = $location.$$search['pageId'];
+
+            //get user
+            // UserService.getUser(function(user) {
+            //     $scope.user = user;
+            //     that.user = user;
+            //     console.log('that.user.user_preferences.lastPageHandle >> ', that.user.user_preferences.lastPageHandle);
+            //     if(that.user.user_preferences.lastPageHandle) {
+            //         document.getElementById("iframe-website").setAttribute("src", '/page/'+that.user.user_preferences.lastPageHandle+'?editor=true');
+            //         $scope.updatePage(that.user.user_preferences.lastPageHandle);
+            //     }
+            // });
+
+            if ($location.$$search['pagehandle']) {
+                document.getElementById("iframe-website").setAttribute("src", '/page/'+$location.$$search['pagehandle']+'?editor=true');
+            }
+
+            if ($location.$$search['posthandle']) {
+                document.getElementById("iframe-website").setAttribute("src", '/page/blog/'+$location.$$search['posthandle']+'?editor=true');
+            }
 
             NavigationService.updateNavigation();
-            $scope.$back = function() {
-              window.history.back();
+                $scope.$back = function() {
+                window.history.back();
             };
 
-            var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             var iFrame = document.getElementById("iframe-website");
             var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
             var subdomainCharLimit = 4;
@@ -89,17 +108,7 @@ define([
                         ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6"]
                     ]
                 }
-            };
-
-            //get user
-            UserService.getUser(function(user) {
-                $scope.user = user;
-                that.user = user;
-                // console.log('that.user.user_preferences.lastPageHandle >> ');
-                // if(that.user.user_preferences.lastPageHandle && that.user.user_preferences.lastPageHandle!='index' ) {
-                //      $scope.updatePage(that.user.user_preferences.lastPageHandle);
-                // }
-            });
+            }
 
             window.getUpdatediFrameRoute = function(data) {
                 // console.log('getUpdatediFrameRoute', data);
@@ -130,6 +139,8 @@ define([
 
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
+                if(!iframe)
+                    return;
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
                 //wait for iframe to load completely
@@ -168,6 +179,8 @@ define([
                             settingsBtns[i].removeEventListener("click");
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                                var element = angular.element('#component-setting-modal');
+                                element.modal('show');
                             });
                         } else if (typeof settingsBtns.attachEvent != "undefined") {
                             settingsBtns[i].removeEvent("onclick");
@@ -219,7 +232,6 @@ define([
                     }
                     console.info('Bind attempt : ' + count);
                 }
-
             };
 
             UserService.getAccount(function(account) {
@@ -243,28 +255,31 @@ define([
                             handle: currentPage
                         });
 
-                    // if ($scope.editingPageId) {
-                    //     console.log('pageId >>> ', $scope.editingPageId);
-                    //     $scope.currentPage = _.findWhere(pages, {
-                    //         _id: $scope.editingPageId
-                    //     });
-                    //     // if ($scope.currentPage && $scope.currentPage.components) {
-                    //     //     $scope.components = $scope.currentPage.components;
-                    //     // } else {
-                    //     //     $scope.components = [];
-                    //     // }
-                    //     // console.log('$scope.currentPage >>> ', $scope.currentPage);
-                    //     // $scope.resfeshIframe();
-                    // } else {
-                    //     console.log('current');
-                    //     $scope.currentPage = _.findWhere(pages, {
-                    //         handle: currentPage
-                    //     });
-                    // }
+                    if ($scope.editingPageId) {
+                        console.log('pageId >>> ', $scope.editingPageId);
+                        $scope.currentPage = _.findWhere(pages, {
+                            _id: $scope.editingPageId
+                        });
+                        // if ($scope.currentPage && $scope.currentPage.components) {
+                        //     $scope.components = $scope.currentPage.components;
+                        // } else {
+                        //     $scope.components = [];
+                        // }
+                        // console.log('$scope.currentPage >>> ', $scope.currentPage);
+                        // $scope.resfeshIframe();
+                    } else {
+                        console.log('current');
+                        $scope.currentPage = _.findWhere(pages, {
+                            handle: currentPage
+                        });
+                    }
                     //get components from page
                     if ($scope.currentPage) {
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
+                            if ($location.$$search['posthandle']) {
+                                $scope.updatePage("blog");
+                            }
                         }
                     } else {
                         console.error('Falied to retrieve Page');
@@ -302,7 +317,6 @@ define([
             $scope.toggled = function(open) {
 
                 //console.log('Dropdown is now: ', open);
-
             };
 
             $scope.toggleDropdown = function($event) {
@@ -482,7 +496,7 @@ define([
                         }); 
                 }                
             };
-           
+
             $scope.updatePage = function(handle) {
                 console.log('update page');
                 $scope.isEditing = false;
@@ -528,26 +542,66 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
-            $scope.addSocialLink = function(social) {
-                if (social && social.name && social.url) {
-                    var selectedName = _.findWhere($scope.componentEditing.networks, {
-                        name: social.name
-                    });
-                    if (selectedName) {
-                        return;
-                    }
 
+            window.updateSocialNetworks = function(old_value,mode,new_value)
+            {
+               var selectedName;
+               switch(mode) {
+                case "add":
+                if (new_value && new_value.name && new_value.url) {                    
                     $scope.componentEditing.networks.push({
-                        name: social.name,
-                        url: social.url,
-                        icon: social.name,
-                        class_name: social.name
+                        name: new_value.name,
+                        url: new_value.url,
+                        icon: new_value.icon
                     });
-                    social.name = "";
-                    social.url = "";
+                    $scope.saveSocialComponent();
+                }
+                break;
+                case "update":
+                if (new_value && new_value.name && new_value.url) {                   
+                    selectedName = _.findWhere($scope.componentEditing.networks, {
+                         name: old_value.name
+                    });
+                    selectedName.name = new_value.name;
+                    selectedName.url = new_value.url;
+                    selectedName.icon = new_value.icon;
+                    $scope.saveSocialComponent();
+                }
+                break;
+                case "delete":
+                    selectedName = _.findWhere($scope.componentEditing.networks, {
+                         name: old_value.name
+                    });
+                    if(selectedName)
+                    {
+                        var index = $scope.componentEditing.networks.indexOf(selectedName)
+                        $scope.componentEditing.networks.splice(index, 1);                        
+                        $scope.saveSocialComponent();
+                    }                    
+                break;
+                }
+                
+            }
+
+            window.getSocialNetworks = function(componentId)
+            {
+               $scope.componentEditing = _.findWhere($scope.components, {
+                        _id: componentId
+                });
+               return $scope.componentEditing.networks;
+            }
+
+            $scope.addTeamMember = function(team){
+                if (team && team.name) {
+                    $scope.componentEditing.teamMembers.push({
+                        name: team.name,
+                        position: team.position,
+                        bio: team.bio,
+                        profilepic : team.profilepic
+                    });
                     $scope.saveComponent();
                 }
-            };
+            }
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
@@ -594,6 +648,7 @@ define([
                     }
                     $scope.updateIframeComponents();
                     $scope.componentEditing = null;
+                    $(".modal-backdrop").remove();
                     //toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };
@@ -670,6 +725,20 @@ define([
                 //     toaster.pop('success', "Component Saved", "The component was saved successfully.");
                 //     $scope.updateIframeComponents();
                 // });
+            };
+
+
+            $scope.saveSocialComponent = function() {
+                var componentId = $scope.componentEditing._id;
+                var componentIndex;
+                for (var i = 0; i < $scope.components.length; i++) {
+                    if ($scope.components[i]._id === componentId) {
+                        $scope.components[i] = $scope.componentEditing
+                    }
+                }
+                $scope.currentPage.components = $scope.components;                
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateSocialComponent && iFrame.contentWindow.updateSocialComponent($scope.components, $scope.componentEditing.networks);
+
             };
 
 
@@ -803,6 +872,12 @@ define([
                 type: 'social-link',
                 icon: 'custom social-links',
                 enabled: true
+            },
+            {
+                title: 'Text Only',
+                type: 'text-only',
+                icon: 'fa fa-file-text',
+                enabled: true
             }, ];
 
             $scope.selectComponent = function(type) {
@@ -812,6 +887,15 @@ define([
             };
 
             $scope.insertMedia = function(asset) {
+                if($scope.componentEditing && $scope.componentEditing.type == "meet-team")
+                {
+                    if(!$scope.team)
+                    {
+                        $scope.team = {}
+                    }
+                    $scope.team.profilepic = asset.url;
+                 return;
+                }
                 if ($scope.imageChange) {
                     $scope.imageChange = false;
                     var type = $scope.componentEditing.type;

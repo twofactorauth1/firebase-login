@@ -53,7 +53,8 @@ var account = $$.m.ModelBase.extend({
                 "size" : '',
                 "phones" : [],
                 "addresses" : [],
-                "type" :''
+                "type" :'',
+                "nonProfit" : false
             },
 
             "billing" : {

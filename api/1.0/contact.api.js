@@ -367,14 +367,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 req.flash("error", value.toString());
                 return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
             } else {
+                console.dir(req.body);
                 self.log.debug('signing up contact with account: ' + value.get('token'));
                 //TODO: check if contact exists
-                var query = req.body;
+                var query = {};
                 query.accountId = value.id();
+                query['details.emails.email'] = req.body.details[0].emails[0].email;
+                
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error checking for existing contact: ' + err);
-                        return self.wrapError(resp, 500, "There was a problem signign up.  Please try again later")
+                        return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later")
                     }
                     if(list.length > 0) {
                         return self.wrapError(resp, 409, "This user already exists for this account.");
@@ -448,11 +451,22 @@ _.extend(api.prototype, baseApi.prototype, {
                                 }
                             });
 
+                            //create contact activity
+                            var activity = new $$.m.ContactActivity({
+                                accountId: query.accountId,
+                                contactId: savedContact.id(),
+                                activityType: $$.m.ContactActivity.types.FORM_SUBMISSION,
+                                start:new Date()
+                            });
+                            contactActivityManager.createActivity(activity, function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating subscribe activity: ' + err);
+                                    //if we can't create the activity... that's fine.  We have already created the contact.
+                                }
+                                return self.sendResult(resp, savedContact);
+                            });
 
 
-
-                            //req.flash("info", "Thank you for subscribing.");
-                            return self.sendResult(resp, savedContact);
                         }
                     });
                 });

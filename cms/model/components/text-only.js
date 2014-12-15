@@ -6,10 +6,10 @@
  */
 
 /**
- * The Contact Us Component
+ * The Social Component
  *
  * Stores data that represents information required
- * to dispaly Contact Us information
+ * to dispaly Social information
  */
 require('../../../models/base.model.js');
 
@@ -30,17 +30,28 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
-            title: '',
-
-            teamMembers: [],
-
-            version: 1,
-
 
             /**
              * The type of component this is
              */
-            type: "meet-team",
+            type: "text-only",
+
+
+            /**
+             * The version of the component
+             *
+             */
+            version: 1,
+
+            /**
+             *
+             *
+             */
+            txtcolor: null,
+
+
+            text: null
+
 
         }
     },
@@ -60,6 +71,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.MeetTeam = component;
+$$.m.cms.modules.TextOnly = component;
 
 module.exports = component;

@@ -9,6 +9,7 @@ var baseApi = require('../base.api');
 var cookies = require('../../utils/cookieutil');
 var analyticsDao = require('../../analytics/dao/analytics.dao.js');
 var analyticsManager = require('../../analytics/analytics_manager.js');
+var keenConfig = require('../../configs/keen.config');
 var async = require('async');
 
 var api = function() {
@@ -78,11 +79,10 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         //self.log.info('Sending the following to keen:');
         //console.dir(messagesToSend);
-        var url = "https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/";
-        var api_key = "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a";
+        var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/";
+        var api_key = keenConfig.keenWriteKey;
         async.eachSeries(messagesToSend, function(message, callback){
-            //var url = 'https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/mandrill_events?api_key=c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
-
+            console.log('url ', url + message.collection + '?api_key=' + api_key);
             var newrequest = request.post(url + message.collection + '?api_key=' + api_key)
                 .send(message.value)
                 .end(function(error, result){

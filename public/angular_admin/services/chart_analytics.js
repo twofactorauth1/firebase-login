@@ -4,23 +4,20 @@ define(['app', 'keenService'], function(app) {
         //common functions
 
         this.secToTime = function(duration) {
-                var minutes = parseInt(Math.floor(duration / 60));
-                var seconds = parseInt(duration - minutes * 60);
+            var minutes = parseInt(Math.floor(duration / 60));
+            var seconds = parseInt(duration - minutes * 60);
 
-                minutes = (minutes < 10) ? "0" + minutes : minutes;
-                seconds = (seconds < 10) ? "0" + seconds : seconds;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-                return minutes + ":" + seconds;
+            return minutes + ":" + seconds;
         };
 
         this.calculatePercentage = function(oldval, newval) {
-            console.log('Calculating Percentage >>>');
             var result;
             oldval = parseInt(oldval);
             newval = parseInt(newval);
-            console.log('oldval >>> ', oldval);
-            console.log('newval >>> ', newval);
-            if(oldval == 0 && newval == 0) {
+            if (oldval == 0 && newval == 0) {
                 return 0;
             }
             if (newval < oldval) {
@@ -32,258 +29,196 @@ define(['app', 'keenService'], function(app) {
             if (newval === oldval) {
                 result = 100;
             }
-            console.log('result >>> ', result);
-            console.log('formated >>> ', Math.round(result * 100) / 100);
             return Math.round(result * 100) / 100;
         };
 
         this.stateToAbbr = function(strInput) {
-            if(strInput) {
+            if (strInput) {
                 var strOutput;
-                var arrStates = [
-                        {
-                            "name": "Alabama",
-                            "abbreviation": "AL"
-                        },
-                        {
-                            "name": "Alaska",
-                            "abbreviation": "AK"
-                        },
-                        {
-                            "name": "American Samoa",
-                            "abbreviation": "AS"
-                        },
-                        {
-                            "name": "Arizona",
-                            "abbreviation": "AZ"
-                        },
-                        {
-                            "name": "Arkansas",
-                            "abbreviation": "AR"
-                        },
-                        {
-                            "name": "California",
-                            "abbreviation": "CA"
-                        },
-                        {
-                            "name": "Colorado",
-                            "abbreviation": "CO"
-                        },
-                        {
-                            "name": "Connecticut",
-                            "abbreviation": "CT"
-                        },
-                        {
-                            "name": "Delaware",
-                            "abbreviation": "DE"
-                        },
-                        {
-                            "name": "District Of Columbia",
-                            "abbreviation": "DC"
-                        },
-                        {
-                            "name": "Federated States Of Micronesia",
-                            "abbreviation": "FM"
-                        },
-                        {
-                            "name": "Florida",
-                            "abbreviation": "FL"
-                        },
-                        {
-                            "name": "Georgia",
-                            "abbreviation": "GA"
-                        },
-                        {
-                            "name": "Guam",
-                            "abbreviation": "GU"
-                        },
-                        {
-                            "name": "Hawaii",
-                            "abbreviation": "HI"
-                        },
-                        {
-                            "name": "Idaho",
-                            "abbreviation": "ID"
-                        },
-                        {
-                            "name": "Illinois",
-                            "abbreviation": "IL"
-                        },
-                        {
-                            "name": "Indiana",
-                            "abbreviation": "IN"
-                        },
-                        {
-                            "name": "Iowa",
-                            "abbreviation": "IA"
-                        },
-                        {
-                            "name": "Kansas",
-                            "abbreviation": "KS"
-                        },
-                        {
-                            "name": "Kentucky",
-                            "abbreviation": "KY"
-                        },
-                        {
-                            "name": "Louisiana",
-                            "abbreviation": "LA"
-                        },
-                        {
-                            "name": "Maine",
-                            "abbreviation": "ME"
-                        },
-                        {
-                            "name": "Marshall Islands",
-                            "abbreviation": "MH"
-                        },
-                        {
-                            "name": "Maryland",
-                            "abbreviation": "MD"
-                        },
-                        {
-                            "name": "Massachusetts",
-                            "abbreviation": "MA"
-                        },
-                        {
-                            "name": "Michigan",
-                            "abbreviation": "MI"
-                        },
-                        {
-                            "name": "Minnesota",
-                            "abbreviation": "MN"
-                        },
-                        {
-                            "name": "Mississippi",
-                            "abbreviation": "MS"
-                        },
-                        {
-                            "name": "Missouri",
-                            "abbreviation": "MO"
-                        },
-                        {
-                            "name": "Montana",
-                            "abbreviation": "MT"
-                        },
-                        {
-                            "name": "Nebraska",
-                            "abbreviation": "NE"
-                        },
-                        {
-                            "name": "Nevada",
-                            "abbreviation": "NV"
-                        },
-                        {
-                            "name": "New Hampshire",
-                            "abbreviation": "NH"
-                        },
-                        {
-                            "name": "New Jersey",
-                            "abbreviation": "NJ"
-                        },
-                        {
-                            "name": "New Mexico",
-                            "abbreviation": "NM"
-                        },
-                        {
-                            "name": "New York",
-                            "abbreviation": "NY"
-                        },
-                        {
-                            "name": "North Carolina",
-                            "abbreviation": "NC"
-                        },
-                        {
-                            "name": "North Dakota",
-                            "abbreviation": "ND"
-                        },
-                        {
-                            "name": "Northern Mariana Islands",
-                            "abbreviation": "MP"
-                        },
-                        {
-                            "name": "Ohio",
-                            "abbreviation": "OH"
-                        },
-                        {
-                            "name": "Oklahoma",
-                            "abbreviation": "OK"
-                        },
-                        {
-                            "name": "Oregon",
-                            "abbreviation": "OR"
-                        },
-                        {
-                            "name": "Palau",
-                            "abbreviation": "PW"
-                        },
-                        {
-                            "name": "Pennsylvania",
-                            "abbreviation": "PA"
-                        },
-                        {
-                            "name": "Puerto Rico",
-                            "abbreviation": "PR"
-                        },
-                        {
-                            "name": "Rhode Island",
-                            "abbreviation": "RI"
-                        },
-                        {
-                            "name": "South Carolina",
-                            "abbreviation": "SC"
-                        },
-                        {
-                            "name": "South Dakota",
-                            "abbreviation": "SD"
-                        },
-                        {
-                            "name": "Tennessee",
-                            "abbreviation": "TN"
-                        },
-                        {
-                            "name": "Texas",
-                            "abbreviation": "TX"
-                        },
-                        {
-                            "name": "Utah",
-                            "abbreviation": "UT"
-                        },
-                        {
-                            "name": "Vermont",
-                            "abbreviation": "VT"
-                        },
-                        {
-                            "name": "Virgin Islands",
-                            "abbreviation": "VI"
-                        },
-                        {
-                            "name": "Virginia",
-                            "abbreviation": "VA"
-                        },
-                        {
-                            "name": "Washington",
-                            "abbreviation": "WA"
-                        },
-                        {
-                            "name": "West Virginia",
-                            "abbreviation": "WV"
-                        },
-                        {
-                            "name": "Wisconsin",
-                            "abbreviation": "WI"
-                        },
-                        {
-                            "name": "Wyoming",
-                            "abbreviation": "WY"
-                        }
-                    ];
+                var arrStates = [{
+                    "name": "Alabama",
+                    "abbreviation": "AL"
+                }, {
+                    "name": "Alaska",
+                    "abbreviation": "AK"
+                }, {
+                    "name": "American Samoa",
+                    "abbreviation": "AS"
+                }, {
+                    "name": "Arizona",
+                    "abbreviation": "AZ"
+                }, {
+                    "name": "Arkansas",
+                    "abbreviation": "AR"
+                }, {
+                    "name": "California",
+                    "abbreviation": "CA"
+                }, {
+                    "name": "Colorado",
+                    "abbreviation": "CO"
+                }, {
+                    "name": "Connecticut",
+                    "abbreviation": "CT"
+                }, {
+                    "name": "Delaware",
+                    "abbreviation": "DE"
+                }, {
+                    "name": "District Of Columbia",
+                    "abbreviation": "DC"
+                }, {
+                    "name": "Federated States Of Micronesia",
+                    "abbreviation": "FM"
+                }, {
+                    "name": "Florida",
+                    "abbreviation": "FL"
+                }, {
+                    "name": "Georgia",
+                    "abbreviation": "GA"
+                }, {
+                    "name": "Guam",
+                    "abbreviation": "GU"
+                }, {
+                    "name": "Hawaii",
+                    "abbreviation": "HI"
+                }, {
+                    "name": "Idaho",
+                    "abbreviation": "ID"
+                }, {
+                    "name": "Illinois",
+                    "abbreviation": "IL"
+                }, {
+                    "name": "Indiana",
+                    "abbreviation": "IN"
+                }, {
+                    "name": "Iowa",
+                    "abbreviation": "IA"
+                }, {
+                    "name": "Kansas",
+                    "abbreviation": "KS"
+                }, {
+                    "name": "Kentucky",
+                    "abbreviation": "KY"
+                }, {
+                    "name": "Louisiana",
+                    "abbreviation": "LA"
+                }, {
+                    "name": "Maine",
+                    "abbreviation": "ME"
+                }, {
+                    "name": "Marshall Islands",
+                    "abbreviation": "MH"
+                }, {
+                    "name": "Maryland",
+                    "abbreviation": "MD"
+                }, {
+                    "name": "Massachusetts",
+                    "abbreviation": "MA"
+                }, {
+                    "name": "Michigan",
+                    "abbreviation": "MI"
+                }, {
+                    "name": "Minnesota",
+                    "abbreviation": "MN"
+                }, {
+                    "name": "Mississippi",
+                    "abbreviation": "MS"
+                }, {
+                    "name": "Missouri",
+                    "abbreviation": "MO"
+                }, {
+                    "name": "Montana",
+                    "abbreviation": "MT"
+                }, {
+                    "name": "Nebraska",
+                    "abbreviation": "NE"
+                }, {
+                    "name": "Nevada",
+                    "abbreviation": "NV"
+                }, {
+                    "name": "New Hampshire",
+                    "abbreviation": "NH"
+                }, {
+                    "name": "New Jersey",
+                    "abbreviation": "NJ"
+                }, {
+                    "name": "New Mexico",
+                    "abbreviation": "NM"
+                }, {
+                    "name": "New York",
+                    "abbreviation": "NY"
+                }, {
+                    "name": "North Carolina",
+                    "abbreviation": "NC"
+                }, {
+                    "name": "North Dakota",
+                    "abbreviation": "ND"
+                }, {
+                    "name": "Northern Mariana Islands",
+                    "abbreviation": "MP"
+                }, {
+                    "name": "Ohio",
+                    "abbreviation": "OH"
+                }, {
+                    "name": "Oklahoma",
+                    "abbreviation": "OK"
+                }, {
+                    "name": "Oregon",
+                    "abbreviation": "OR"
+                }, {
+                    "name": "Palau",
+                    "abbreviation": "PW"
+                }, {
+                    "name": "Pennsylvania",
+                    "abbreviation": "PA"
+                }, {
+                    "name": "Puerto Rico",
+                    "abbreviation": "PR"
+                }, {
+                    "name": "Rhode Island",
+                    "abbreviation": "RI"
+                }, {
+                    "name": "South Carolina",
+                    "abbreviation": "SC"
+                }, {
+                    "name": "South Dakota",
+                    "abbreviation": "SD"
+                }, {
+                    "name": "Tennessee",
+                    "abbreviation": "TN"
+                }, {
+                    "name": "Texas",
+                    "abbreviation": "TX"
+                }, {
+                    "name": "Utah",
+                    "abbreviation": "UT"
+                }, {
+                    "name": "Vermont",
+                    "abbreviation": "VT"
+                }, {
+                    "name": "Virgin Islands",
+                    "abbreviation": "VI"
+                }, {
+                    "name": "Virginia",
+                    "abbreviation": "VA"
+                }, {
+                    "name": "Washington",
+                    "abbreviation": "WA"
+                }, {
+                    "name": "West Virginia",
+                    "abbreviation": "WV"
+                }, {
+                    "name": "Wisconsin",
+                    "abbreviation": "WI"
+                }, {
+                    "name": "Wyoming",
+                    "abbreviation": "WY"
+                }];
 
                 for (var i = 0; i < arrStates.length; i++) {
                     if ((arrStates[i]['name']).toLowerCase() == (strInput).toLowerCase()) {
-                                strOutput = arrStates[i]['abbreviation'];
-                            break;
-                        }
+                        strOutput = arrStates[i]['abbreviation'];
+                        break;
+                    }
                 };
             }
 
@@ -349,8 +284,8 @@ define(['app', 'keenService'], function(app) {
 
         //local variables
         var client;
-        var timeframeStart = '2014-11-15T23:05:20.075Z';
-        var timeframeEnd = '2014-12-14T23:05:20.075Z';
+        var timeframeStart = '2014-11-12T23:05:20.075Z';
+        var timeframeEnd = '2014-12-12T23:05:20.075Z';
         var timeframePreviousStart = '2014-10-15T23:05:20.075Z';
         var timeframePreviousEnd = '2014-11-14T23:05:20.075Z';
         var interval = "daily";
@@ -359,214 +294,321 @@ define(['app', 'keenService'], function(app) {
 
         //reports
 
-        this.queryReports = function() {
+        this.queryReports = function(date) {
             var queryData = {};
 
-            console.log('window.location.hostname >>> ', window.location.hostname);
+            queryData.visitorLocations = new Keen.Query("count", {
+                eventCollection: "session_data",
+                groupBy: "ip_geo_info.province",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }, {
+                    "property_name": "ip_geo_info",
+                    "operator": "ne",
+                    "property_value": "null"
+                }]
+            });
+
+            queryData.deviceReportByCategory = new Keen.Query("count", {
+                eventCollection: "session_data",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                groupBy: "user_agent.device",
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.userReport = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "fingerprint",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.userReportPreviousMonth = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "fingerprint",
+                timeframe: {
+                    "start": timeframePreviousStart,
+                    "end": timeframePreviousEnd
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.pageviewsReport = new Keen.Query("count", {
+                eventCollection: "page_data",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.pageviewsPreviousReport = new Keen.Query("count", {
+                eventCollection: "page_data",
+                timeframe: {
+                    "start": timeframePreviousStart,
+                    "end": timeframePreviousEnd
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.sessionsReport = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "session_id",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.sessionsPreviousReport = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "session_id",
+                timeframe: {
+                    "start": timeframePreviousStart,
+                    "end": timeframePreviousEnd
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.sessionLengthReport = new Keen.Query("count", {
+                eventCollection: "session_data",
+                targetProperty: "session_length",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.sessionAvgLengthReport = new Keen.Query("average", {
+                eventCollection: "session_data",
+                targetProperty: "session_length",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.bouncesReport = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "session_id",
+                filters: [{
+                    "property_name": "page_length",
+                    "operator": "eq",
+                    "property_value": 1
+                }],
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                interval: interval,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.bouncesPreviousReport = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "session_id",
+                filters: [{
+                    "property_name": "page_length",
+                    "operator": "eq",
+                    "property_value": 1
+                }],
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.trafficSources = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "session_id",
+                groupBy: "source_type",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
+
+            queryData.returningVisitors = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "permanent_tracker",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }, {
+                    "property_name": "new_visitor",
+                    "operator": "eq",
+                    "property_value": false
+                }]
+            });
+
+            queryData.newVisitors = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "permanent_tracker",
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }, {
+                    "property_name": "new_visitor",
+                    "operator": "eq",
+                    "property_value": true
+                }]
+            });
 
 
-                queryData.visitorLocations = new Keen.Query("count", {
-                    eventCollection: "page_data",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    interval: interval,
-                    groupBy: "ip_geo_info.city"
-                });
+            queryData.sessionPreviousAvgLengthReport = new Keen.Query("average", {
+                eventCollection: "session_data",
+                targetProperty: "session_length",
+                timeframe: {
+                    "start": timeframePreviousStart,
+                    "end": timeframePreviousEnd
+                },
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
+            });
 
-                queryData.deviceReportByCategory = new Keen.Query("count", {
-                    eventCollection: "session_data",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    groupBy: "user_agent.device",
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.userReport = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "fingerprint",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.userReportPreviousMonth = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "fingerprint",
-                    timeframe: {
-                        "start" : timeframePreviousStart,
-                        "end" : timeframePreviousEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.pageviewsReport = new Keen.Query("count", {
-                    eventCollection: "page_data",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.pageviewsPreviousReport = new Keen.Query("count", {
-                    eventCollection: "page_data",
-                    timeframe: {
-                        "start" : timeframePreviousStart,
-                        "end" : timeframePreviousEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.sessionsReport = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_id",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.sessionsPreviousReport = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_id",
-                    timeframe: {
-                        "start" : timeframePreviousStart,
-                        "end" : timeframePreviousEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.sessionLengthReport = new Keen.Query("count", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_length",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                  });
-
-                queryData.sessionAvgLengthReport = new Keen.Query("average", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_length",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                  });
-
-                queryData.bouncesReport = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_id",
-                    filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    interval: interval,
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.bouncesPreviousReport = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_id",
-                    filters: [{"property_name":"page_length","operator":"eq","property_value":1}],
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.trafficSources = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "session_id",
-                    groupBy: "source_type",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}]
-                });
-
-                queryData.returningVisitors = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "permanent_tracker",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}, {"property_name":"new_visitor","operator":"eq","property_value":false}]
-                });
-
-                queryData.newVisitors = new Keen.Query("count_unique", {
-                    eventCollection: "session_data",
-                    targetProperty: "permanent_tracker",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname}, {"property_name":"new_visitor","operator":"eq","property_value":true}]
-                });
-
-                queryData.visitorLocations = new Keen.Query("count", {
-                    eventCollection: "session_data",
-                    targetProperty: "permanent_tracker",
-                    groupBy: "ip_geo_info.province",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"referrer.domain","operator":"eq","property_value": window.location.hostname},{"property_name":"ip_geo_info","operator":"ne","property_value":"null"}]
-                });
-
-                queryData.pageDepth = new Keen.Query("count", {
-                    eventCollection: "page_data",
-                    groupBy: "session_id",
-                    timeframe: {
-                        "start" : timeframeStart,
-                        "end" : timeframeEnd
-                    },
-                    filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
-                });
+            // queryData.pageDepth = new Keen.Query("count", {
+            //     eventCollection: "page_data",
+            //     groupBy: "session_id",
+            //     timeframe: {
+            //         "start" : timeframeStart,
+            //         "end" : timeframeEnd
+            //     },
+            //     filters: [{"property_name":"url.domain","operator":"eq","property_value": window.location.hostname}]
+            // });
 
             return queryData;
         };
 
-        this.runReports = function(fn) {
+        this.runReports = function(date, fn) {
+            console.log('running analytics reports >>> ');
             var self = this;
 
             var reportData = {};
             var params2 = {
                 event_collection: 'page_data',
                 analyses: {
-                    "pageviews":{"analysis_type":"count"},
-                    "uniquePageviews":{"analysis_type":"count_unique","target_property":"session_id"},
-                    "timeOnPage":{"analysis_type":"sum","target_property":"timeOnPage"},
-                    "avgTimeOnPage":{"analysis_type":"average","target_property":"timeOnPage"},
-                    "entrances":{"analysis_type":"count","target_property":"entrance"},
-                    "exits":{"analysis_type":"count","target_property":"exit"}
+                    "pageviews": {
+                        "analysis_type": "count"
+                    },
+                    "uniquePageviews": {
+                        "analysis_type": "count_unique",
+                        "target_property": "session_id"
+                    },
+                    "timeOnPage": {
+                        "analysis_type": "sum",
+                        "target_property": "timeOnPage"
+                    },
+                    "avgTimeOnPage": {
+                        "analysis_type": "average",
+                        "target_property": "timeOnPage"
+                    },
+                    "entrances": {
+                        "analysis_type": "count",
+                        "target_property": "entrance"
+                    },
+                    "exits": {
+                        "analysis_type": "count",
+                        "target_property": "exit"
+                    }
                 },
-                timeframe: {"start":timeframeStart,"end":timeframeEnd},
-                group_by: 'url.path'
+                timeframe: {
+                    "start": date.startDate,
+                    "end": date.endDate
+                },
+                group_by: 'url.path',
+                filters: [{
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                }]
             };
 
-            keenService.multiAnalysis(params2, function(multidata){
+            keenService.multiAnalysis(params2, function(multidata) {
                 var formattedTopPages = [];
                 var pagedformattedTopPages;
 
@@ -581,7 +623,7 @@ define(['app', 'keenService'], function(app) {
                     if (singleRow['url.path']) {
                         subObj.page = singleRow['url.path'];
                         subObj.pageviews = singleRow['pageviews'];
-                        subObj.avgTime = Math.abs(singleRow['avgTimeOnPage'])/1000;
+                        subObj.avgTime = Math.abs(singleRow['avgTimeOnPage']) / 1000;
                         subObj.uniquePageviews = singleRow['uniquePageviews'];
                         //TODO
                         //subObj.entrances = singleRow['entrances'];
@@ -600,7 +642,7 @@ define(['app', 'keenService'], function(app) {
             });
 
             keenService.keenClient(function(client) {
-                var queryData = self.queryReports();
+                var queryData = self.queryReports(date);
                 client.run([
                     queryData.visitorLocations,
                     queryData.deviceReportByCategory,
@@ -617,8 +659,8 @@ define(['app', 'keenService'], function(app) {
                     queryData.trafficSources,
                     queryData.returningVisitors,
                     queryData.newVisitors,
-                    queryData.visitorLocations,
-                    queryData.pageDepth
+                    // queryData.pageDepth,
+                    queryData.sessionPreviousAvgLengthReport
                 ], function(results) {
 
                     // ----------------------------------------
@@ -634,6 +676,8 @@ define(['app', 'keenService'], function(app) {
                         }
                         if (category === 'mobile') {
                             mobile = results[1].result[i].result;
+                        } else {
+                            mobile = 0;
                         }
                     };
 
@@ -668,10 +712,6 @@ define(['app', 'keenService'], function(app) {
                         var value = results[3].result[h].value || 0;
                         vistorsPreviousData += value;
                     };
-
-                    console.log('currentTotalVisitors >>> ', currentTotalVisitors);
-
-                    console.log('vistorsPreviousData >>> ', vistorsPreviousData);
 
                     var visitorsPercent = self.calculatePercentage(vistorsPreviousData, currentTotalVisitors);
 
@@ -740,14 +780,19 @@ define(['app', 'keenService'], function(app) {
 
                     var sessionsPercent = self.calculatePercentage(_totalSessions, sessionsPreviousData);
 
-                    var visitDuration = self.secToTime(results[9].result / 1000);
+                    var visitDuration = self.secToTime(results[9].result);
+
+                    if (results[15].result == null) {
+                        results[15].result = 0;
+                    }
+
+                    var previousVisitDuration = results[15].result;
+
+                    var visitDurationPercent = self.calculatePercentage(results[9].result, previousVisitDuration);
 
                     // ----------------------------------------
                     // Average Visit Duration
                     // ----------------------------------------
-
-                    console.log('previous session >>> ', results[7]);
-                    console.log('avg session length >>> ', results[8]);
 
                     var avgSessionData = [];
                     for (var b = 0; b < results[8].result.length; b++) {
@@ -844,13 +889,13 @@ define(['app', 'keenService'], function(app) {
                     // ======================================
                     // Visitor Locations
                     // ======================================
-
                     var locationData = [];
 
-                    for (var i = 0; i < results[15].result.length; i++) {
+                    for (var i = 0; i < results[0].result.length; i++) {
                         var subObj = {};
-                        subObj.code = self.stateToAbbr( results[15].result[i]['ip_geo_info.province'] );
-                        subObj.value = results[15].result[i].result;
+                        subObj.code = self.stateToAbbr(results[0].result[i]['ip_geo_info.province']);
+                        subObj.value = results[0].result[i].result;
+                        console.log('subObj >>> ', subObj);
                         locationData.push(subObj);
                     };
 
@@ -895,6 +940,7 @@ define(['app', 'keenService'], function(app) {
                     reportData.newVsReturning = newVsReturning;
                     reportData.locationData = locationData;
                     reportData.visitDuration = visitDuration;
+                    reportData.visitDurationPercent = visitDurationPercent;
                     reportData.avgSessionData = avgSessionData;
 
                     fn(reportData);
@@ -1002,12 +1048,10 @@ define(['app', 'keenService'], function(app) {
                 series: [{
                     name: 'Visitors',
                     data: readyVisitorsData
-                },
-                {
+                }, {
                     name: 'Visits',
                     data: sessionsData
-                },
-                {
+                }, {
                     name: 'Pageviews',
                     data: readyPageviewsData
                 }],
@@ -1081,7 +1125,7 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.trafficSources = function(trafficSourceData, fn) {
-        	var trafficSourcesConfig = {
+            var trafficSourcesConfig = {
                 options: {
                     chart: {
                         plotBackgroundColor: null,
@@ -1122,15 +1166,14 @@ define(['app', 'keenService'], function(app) {
                 credits: {
                     enabled: false
                 }
-        	};
-        	fn(trafficSourcesConfig);
+            };
+            fn(trafficSourcesConfig);
         };
 
         this.newVsReturning = function(newVsReturning, fn) {
-        	var newVsReturningConfig = {
+            var newVsReturningConfig = {
                 options: {
-                    chart: {
-                    },
+                    chart: {},
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                     title: {
                         text: ''
@@ -1171,62 +1214,213 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.visitorLocations = function(locationData, highchartsData) {
-        	var data = [{"value":438,"code":"NJ"},{"value":387.35,"code":"RI"},{"value":312.68,"code":"MA"},{"value":271.4,"code":"CT"},{"value":209.23,"code":"MD"},{"value":195.18,"code":"NY"},{"value":154.87,"code":"DE"},{"value":114.43,"code":"FL"},{"value":107.05,"code":"OH"},{"value":105.8,"code":"PA"},{"value":86.27,"code":"IL"},{"value":83.85,"code":"CA"},{"value":72.83,"code":"HI"},{"value":69.03,"code":"VA"},{"value":67.55,"code":"MI"},{"value":65.46,"code":"IN"},{"value":63.8,"code":"NC"},{"value":54.59,"code":"GA"},{"value":53.29,"code":"TN"},{"value":53.2,"code":"NH"},{"value":51.45,"code":"SC"},{"value":39.61,"code":"LA"},{"value":39.28,"code":"KY"},{"value":38.13,"code":"WI"},{"value":34.2,"code":"WA"},{"value":33.84,"code":"AL"},{"value":31.36,"code":"MO"},{"value":30.75,"code":"TX"},{"value":29,"code":"WV"},{"value":25.41,"code":"VT"},{"value":23.86,"code":"MN"},{"value":23.42,"code":"MS"},{"value":20.22,"code":"IA"},{"value":19.82,"code":"AR"},{"value":19.4,"code":"OK"},{"value":17.43,"code":"AZ"},{"value":16.01,"code":"CO"},{"value":15.95,"code":"ME"},{"value":13.76,"code":"OR"},{"value":12.69,"code":"KS"},{"value":10.5,"code":"UT"},{"value":8.6,"code":"NE"},{"value":7.03,"code":"NV"},{"value":6.04,"code":"ID"},{"value":5.79,"code":"NM"},{"value":3.84,"code":"SD"},{"value":3.59,"code":"ND"},{"value":2.39,"code":"MT"},{"value":1.96,"code":"WY"},{"value":0.42,"code":"AK"}];
+            console.log('locationData >>> ', locationData);
+            var data = [{
+                "value": 438,
+                "code": "NJ"
+            }, {
+                "value": 387.35,
+                "code": "RI"
+            }, {
+                "value": 312.68,
+                "code": "MA"
+            }, {
+                "value": 271.4,
+                "code": "CT"
+            }, {
+                "value": 209.23,
+                "code": "MD"
+            }, {
+                "value": 195.18,
+                "code": "NY"
+            }, {
+                "value": 154.87,
+                "code": "DE"
+            }, {
+                "value": 114.43,
+                "code": "FL"
+            }, {
+                "value": 107.05,
+                "code": "OH"
+            }, {
+                "value": 105.8,
+                "code": "PA"
+            }, {
+                "value": 86.27,
+                "code": "IL"
+            }, {
+                "value": 83.85,
+                "code": "CA"
+            }, {
+                "value": 72.83,
+                "code": "HI"
+            }, {
+                "value": 69.03,
+                "code": "VA"
+            }, {
+                "value": 67.55,
+                "code": "MI"
+            }, {
+                "value": 65.46,
+                "code": "IN"
+            }, {
+                "value": 63.8,
+                "code": "NC"
+            }, {
+                "value": 54.59,
+                "code": "GA"
+            }, {
+                "value": 53.29,
+                "code": "TN"
+            }, {
+                "value": 53.2,
+                "code": "NH"
+            }, {
+                "value": 51.45,
+                "code": "SC"
+            }, {
+                "value": 39.61,
+                "code": "LA"
+            }, {
+                "value": 39.28,
+                "code": "KY"
+            }, {
+                "value": 38.13,
+                "code": "WI"
+            }, {
+                "value": 34.2,
+                "code": "WA"
+            }, {
+                "value": 33.84,
+                "code": "AL"
+            }, {
+                "value": 31.36,
+                "code": "MO"
+            }, {
+                "value": 30.75,
+                "code": "TX"
+            }, {
+                "value": 29,
+                "code": "WV"
+            }, {
+                "value": 25.41,
+                "code": "VT"
+            }, {
+                "value": 23.86,
+                "code": "MN"
+            }, {
+                "value": 23.42,
+                "code": "MS"
+            }, {
+                "value": 20.22,
+                "code": "IA"
+            }, {
+                "value": 19.82,
+                "code": "AR"
+            }, {
+                "value": 19.4,
+                "code": "OK"
+            }, {
+                "value": 17.43,
+                "code": "AZ"
+            }, {
+                "value": 16.01,
+                "code": "CO"
+            }, {
+                "value": 15.95,
+                "code": "ME"
+            }, {
+                "value": 13.76,
+                "code": "OR"
+            }, {
+                "value": 12.69,
+                "code": "KS"
+            }, {
+                "value": 10.5,
+                "code": "UT"
+            }, {
+                "value": 8.6,
+                "code": "NE"
+            }, {
+                "value": 7.03,
+                "code": "NV"
+            }, {
+                "value": 6.04,
+                "code": "ID"
+            }, {
+                "value": 5.79,
+                "code": "NM"
+            }, {
+                "value": 3.84,
+                "code": "SD"
+            }, {
+                "value": 3.59,
+                "code": "ND"
+            }, {
+                "value": 2.39,
+                "code": "MT"
+            }, {
+                "value": 1.96,
+                "code": "WY"
+            }, {
+                "value": 0.42,
+                "code": "AK"
+            }];
 
             var chart1 = new Highcharts.Map({
-                 chart : {
-                        renderTo: 'visitor_locations',
-                        height: 385
-                    },
+                chart: {
+                    renderTo: 'visitor_locations',
+                    height: 385
+                },
 
-                    title : {
-                        text : ''
-                    },
+                title: {
+                    text: ''
+                },
 
-                    exporting: {
+                exporting: {
+                    enabled: false
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                mapNavigation: {
+                    buttonOptions: {
+                        align: 'right',
+                        verticalAlign: 'bottom'
+                    },
+                    enableButtons: true,
+                    enableDoubleClickZoomTo: true,
+                    enableDoubleClickZoom: true,
+                    enableTouchZoom: false
+                },
+
+                colorAxis: {
+                    min: 1,
+                    type: 'logarithmic',
+                    minColor: '#4cb0ca',
+                    maxColor: '#224f5b'
+                },
+
+                series: [{
+                    animation: {
+                        duration: 1000
+                    },
+                    data: locationData,
+                    mapData: highchartsData,
+                    joinBy: ['postal-code', 'code'],
+                    dataLabels: {
                         enabled: false
                     },
-
-                    legend: {
-                        enabled: false
-                    },
-
-                    mapNavigation: {
-                        buttonOptions: {
-                            align: 'right',
-                            verticalAlign: 'bottom'
-                        },
-                        enableButtons: true,
-                        enableDoubleClickZoomTo: true,
-                        enableDoubleClickZoom: true,
-                        enableTouchZoom: false
-                    },
-
-                    colorAxis: {
-                        min: 1,
-                        type: 'logarithmic',
-                        minColor: '#4cb0ca',
-                        maxColor: '#224f5b'
-                    },
-
-                    series : [{
-                        animation: {
-                            duration: 1000
-                        },
-                        data : locationData,
-                        mapData: highchartsData,
-                        joinBy: ['postal-code', 'code'],
-                        dataLabels: {
-                            enabled: false
-                        },
-                        name: '# of Visitors',
-                        tooltip: {
-                            pointFormat: '{point.code}: {point.value}'
-                        }
-                    }],
-                    credits: {
-                        enabled: false
+                    name: '# of Visitors',
+                    tooltip: {
+                        pointFormat: '{point.code}: {point.value}'
                     }
+                }],
+                credits: {
+                    enabled: false
+                }
             });
         };
 

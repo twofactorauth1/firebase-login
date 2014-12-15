@@ -6,19 +6,30 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         $scope.activeTab = 'analytics';
 
         $scope.date = {
-            startDate: null,
-            endDate: null
+            startDate: moment().subtract('days', 29).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
+            endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
         };
 
+        $scope.selectedDate = $scope.date;
+
+        $scope.$watch('selectedDate', function() {
+           $scope.date.startDate = moment($scope.selectedDate.startDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+           $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+           //update user preferences
+           $scope.runAnalyticsReports();
+        });
+
         $scope.pickerOptions = {
-            // ranges: {
-            //    'Today': [moment(), moment()],
-            //    'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-            //    'Last 7 Days': [moment().subtract('days', 6), moment()],
-            //    'Last 30 Days': [moment().subtract('days', 29), moment()],
-            //    'This Month': [moment().startOf('month'), moment().endOf('month')],
-            //    'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            // }
+            format: 'MMMM D, YYYY',
+            opens: 'left',
+            ranges: {
+               'Today': [moment(), moment()],
+               'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+               'Last 7 Days': [moment().subtract('days', 6), moment()],
+               'Last 30 Days': [moment().subtract('days', 29), moment()],
+               'This Month': [moment().startOf('month'), moment().endOf('month')],
+               'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            }
         };
 
         CustomerService.getCustomers(function(customers) {
@@ -52,35 +63,39 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             }, 100);
         });
 
-        $scope.runAnalyticsReports = ChartAnalyticsService.runReports(function(data) {
+        $scope.runAnalyticsReports = function() {
+            ChartAnalyticsService.runReports($scope.date, function(data) {
 
-            $scope.desktop = data.desktop;
-            $scope.visitorsData = data.visitorsData;
-            $scope.visitors = data.currentTotalVisitors;
-            $scope.pageviews = data.currentTotalPageviews;
-            $scope.pageviewsData = data.pageviewsData;
-            $scope.pageviewsPercent = data.pageviewsPercent;
-            $scope.visitorsPercent = data.visitorsPercent;
-            $scope.pageviewsPreviousData = data.pageviewsPreviousData;
-            $scope.sessions = data.totalSessions;
-            $scope.sessionsData = data.sessionData;
-            $scope.sessionsPercent = data.sessionsPercent;
-            $scope.bounces = data.totalBounces;
-            $scope.bouncesData = data.bouncesData;
-            $scope.bouncesPercent = data.bouncesPercent;
-            $scope.totalTypes = data.totalTypes;
-            $scope.trafficSourceData = data.trafficSourceData;
-            $scope.newVsReturning = data.newVsReturning;
-            $scope.locationData = data.locationData;
-            $scope.formattedTopPages = data.formattedTopPages;
-            $scope.pagedformattedTopPages = data.pagedformattedTopPages;
-            $scope.visitDuration = data.visitDuration;
-            $scope.avgSessionData = data.avgSessionData;
+                $scope.desktop = data.desktop;
+                $scope.mobile = data.mobile;
+                $scope.visitorsData = data.visitorsData;
+                $scope.visitors = data.currentTotalVisitors;
+                $scope.pageviews = data.currentTotalPageviews;
+                $scope.pageviewsData = data.pageviewsData;
+                $scope.pageviewsPercent = data.pageviewsPercent;
+                $scope.visitorsPercent = data.visitorsPercent;
+                $scope.pageviewsPreviousData = data.pageviewsPreviousData;
+                $scope.sessions = data.totalSessions;
+                $scope.sessionsData = data.sessionData;
+                $scope.sessionsPercent = data.sessionsPercent;
+                $scope.bounces = data.totalBounces;
+                $scope.bouncesData = data.bouncesData;
+                $scope.bouncesPercent = data.bouncesPercent;
+                $scope.totalTypes = data.totalTypes;
+                $scope.trafficSourceData = data.trafficSourceData;
+                $scope.newVsReturning = data.newVsReturning;
+                $scope.locationData = data.locationData;
+                $scope.formattedTopPages = data.formattedTopPages;
+                $scope.pagedformattedTopPages = data.pagedformattedTopPages;
+                $scope.visitDuration = data.visitDuration;
+                $scope.visitDurationPercent = data.visitDurationPercent;
+                $scope.avgSessionData = data.avgSessionData;
 
-            $scope.renderAnalyticsCharts();
-        });
+                $scope.renderAnalyticsCharts();
+            });
+        };
 
-        $scope.runAnalyticsReports;
+        $scope.runAnalyticsReports();
 
         $scope.renderAnalyticsCharts = function() {
 
@@ -108,7 +123,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                     clearTimeout(resizeTimer);
 
                 resizeTimer = setTimeout(function() {
-                    if($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
+                    if ($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
                         $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
                         $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
                     }
@@ -125,13 +140,12 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
         };
 
         $scope.runCommerceReports = ChartCommerceService.runReports(function(data) {
-            console.log('data', data);
-
             $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
             $scope.avgRevenue = data.avgRevenue;
             $scope.annualRunRate = data.annualRunRate;
             $scope.arpu = data.arpu;
             $scope.totalCanceledSubscriptions = data.totalCanceledSubscriptions;
+            $scope.cancelSubscriptionPercent = data.cancelSubscriptionPercent;
             $scope.cancelSubscriptionData = data.cancelSubscriptionData;
             $scope.cancelStart = data.cancelStart;
             $scope.potentialMRRLoss = data.potentialMRRLoss;
@@ -142,7 +156,9 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.totalRevenuePercent = data.totalRevenuePercent;
             $scope.netRevenue = data.netRevenue;
             $scope.totalCustomerData = data.totalCustomerData;
+            $scope.totalPayingCustomerPercent = data.totalPayingCustomerPercent;
             $scope.customerStart = data.customerStart;
+            $scope.totalPayingCustomers = data.totalPayingCustomers;
 
             $scope.renderCommerceCharts();
         });

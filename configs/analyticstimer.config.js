@@ -5,8 +5,8 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-var analyticsJobMS = process.env.ANALYTICS_JOB_MS || 1000 * 60 * 60;//1 hour
-var secondsSinceLastPingThreshold = process.env.ANALYTICS_LAST_PING_SECONDS || 60*30;//30 minutes
+var analyticsJobMS = process.env.ANALYTICS_JOB_MS || 1000 * 60 * 2;//1 hour
+var secondsSinceLastPingThreshold = process.env.ANALYTICS_LAST_PING_SECONDS || 60*1;//30 minutes
 var runJob = 'true' || process.env.ANALYTICS_RUN_JOB;
 
 var collater = require('../analytics/analytics_collater');

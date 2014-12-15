@@ -64,6 +64,7 @@ require.config({
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
+        'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -107,6 +108,7 @@ require.config({
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
+        'reverse':'/angular_admin/filters/reverse',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
         'img':'/angular_admin/directives/img_adv',
         'timeAgoFilter':'/angular_admin/filters/time_ago',
@@ -114,6 +116,7 @@ require.config({
         'secTotime': '/angular_admin/filters/sec2time',
         'formatPercentage': '/angular_admin/filters/formatPercentage',
         'formatText': '/angular_admin/filters/format_text',
+        'draggableModalDirective': '/angular_admin/directives/draggable_modal',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -144,6 +147,7 @@ require.config({
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
+        'angularConfig' : 'scripts/config' 
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -205,7 +209,8 @@ require.config({
         'jdfontselect': {deps: ['angular','webfontloader']},
         'ngInfiniteScroll': {deps: ['angular']},
         'timeAgoFilter': {deps: ['moment']},
-        'ngTagsInput': ['angular']
+        'ngTagsInput': ['angular'],
+        'angularConfig': {deps: ['angular']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

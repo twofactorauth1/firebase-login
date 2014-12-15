@@ -276,7 +276,9 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
             link: function (scope, element) {
                 scope.assets = [];
                 AssetsService.getAssetsByAccount(function(data) {
-                    scope.assets = data;
+                    if (data instanceof Array) {
+                        scope.assets = data;
+                    }
                 });
                 element.attr("data-toggle", "modal");
                 element.attr("data-target", "#media-manager-modal");

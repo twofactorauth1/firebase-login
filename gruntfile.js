@@ -7,6 +7,8 @@
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var KEEN_CONFIG = require('./configs/keen.config');
+var GOOGLE_CONFIG = require('./configs/google.config');
+var TWONET_CONFIG = require('./configs/twonet.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
@@ -334,7 +336,16 @@ module.exports = function(grunt) {
                         segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
                         keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
                         keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
-                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID
+                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID,
+                        googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
+                        googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
+                        googleClientId: GOOGLE_CONFIG.CLIENT_ID,
+                        googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
+                        googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
+                        twonetKey: TWONET_CONFIG.TWONET_KEY,
+                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
+                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
+                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID
                     }
                 }
             },
@@ -349,7 +360,16 @@ module.exports = function(grunt) {
                         segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
                         keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
                         keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
-                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID
+                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID,
+                        googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
+                        googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
+                        googleClientId: GOOGLE_CONFIG.CLIENT_ID,
+                        googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
+                        googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
+                        twonetKey: TWONET_CONFIG.TWONET_KEY,
+                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
+                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
+                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID
                     }
                 }
             }

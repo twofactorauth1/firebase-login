@@ -19,7 +19,6 @@
     "angular-carousel": "~0.2.5",
     "angular-cookies": "1.2.16",
     "angular-cookie": "4.0.5",
-    "angular-daterangepicker": "~0.1.10",
     "angular-file-upload": "~1.1.1",
     "angular-isotope": "*",
     "angular-mocks": "~1.2.0",
@@ -68,6 +67,7 @@
     "highcharts": "latest",
     "highmaps": "latest",
     "highcharts-ng": "latest",
+    "heatmap.js-amd": "https://github.com/pa7/heatmap.js.git",
     "isotope": "2.0.0",
     "jquery": "~2.1.1",
     "jquery-cookie": "~1.4.1",
@@ -110,7 +110,8 @@
     "ngInfiniteScroll": "1.0.0",
     "skeuocard": "https://github.com/jessepollak/card.git",
     "ua-parser-js": "0.7.3",
-    "js-combinatorics": "https://github.com/dankogai/js-combinatorics.git#0.3.0"
+    "js-combinatorics": "https://github.com/dankogai/js-combinatorics.git#0.3.0",
+    "bootstrap-social": "https://github.com/lipis/bootstrap-social.git"
   },
   "resolutions": {
     "angular": "1.2.27",
