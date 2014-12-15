@@ -310,7 +310,7 @@ _.extend(apiBase.prototype, {
     },
 
     checkPermissionForAccountAndUser: function(userId, accountId, priv, cb) {
-        console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
+        //console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
         this.sm.hasPermission(userId, accountId, priv, cb);
     },
 
