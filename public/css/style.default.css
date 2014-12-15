@@ -23673,7 +23673,7 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .masthead-subtitle {
   max-width: 80%;
-  margin: 0 auto;
+  margin: 15px auto;
 }
 .masthead-v1 .masthead-title {
   font-size: 32px;
@@ -23877,6 +23877,10 @@ div[data-type="social"] .inner-page {
 }
 .simple-form-v2 .btn {
   text-transform: uppercase;
+}
+/********** Simple Form v3 **********/
+.simple-form-v3 input[type='radio'] {
+  margin-right: 5px;
 }
 /********** Products v1 component **********/
 .products-v1 {
