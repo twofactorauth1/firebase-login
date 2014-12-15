@@ -390,7 +390,7 @@
     <!-- /.modal -->
 
     <!-- Add Component Modal -->
-   <div class="modal fade" id="component-setting-modal" indigeweb-draggable-modal tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal" id="component-setting-modal" tabindex="-1" role="dialog" indigeweb-draggable-modal aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -504,10 +504,62 @@
                                 <button aria-hidden="true" class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
                             </div>
                         </accordion-group>
+                        <accordion-group is-open="status5.open"  ng-if="componentEditing.type === 'navigation'">
+                            <accordion-heading>
+                                Reorder <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+                            </accordion-heading>                           
+                            <div class="form-group" ng-onmouseover = "$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" ng-onmouseout = "$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
+                                <ul ui-sortable="sortableOptions" class="nav-bar" style="list-style: none;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                                    <li data-ng-repeat="link in mainMenu.links track by $index">
+                                        <div class="head-menu-links" data-label="{{link.label}}">
+                                            <span style="margin:5px;float: left" class="reorder fa fa-arrows"></span>
+                                            <h4>{{link.label}}</h4>
+                                        </div>
+                                    </li>
+                                </ul> 
+                            </div> 
+                            <div class="footer">
+                                <button type="button" class="btn btn-primary" ng-click="updateLinkList()" data-dismiss="modal">Save changes</button>
+                            </div>
+                        </accordion-group>
+                        <accordion-group is-open="status5.open" ng-if="componentEditing.type === 'meet-team'">
+                            <accordion-heading>
+                                Add Team Member <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status2.open, 'glyphicon-chevron-right': !status2.open}"></i>
+                            </accordion-heading>                           
+                            <div class="form-group">
+                                
+                    
+                            <div class="form-group">
+                                <label for="member-name">Name </label>
+                                <input id="member-name" class="form-control input-lg" type="text" ng-model="team.name">
+                            </div>
+                            <div class="form-group">
+                                <label for="member-position">Position </label>
+                                <input id="member-position" class="form-control input-lg" type="text" ng-model="team.position">
+                            </div>
+                            <div class="form-group">
+                                <label for="member-bio">Bio Data </label>
+                                <input id="member-position" class="form-control input-lg" type="textarea" ng-model="team.bio">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <img style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="btn-link">
+                                        <a class="btn btn-success btn-block media-modal" media-modal-show-insert="true" on-insert-mediacb="addProfilePic" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Add Profile Picture</span> </a>
+                                        </div>
+                                     </div>
+                                </div>
+                            </div>                           
+                            <div class="footer">
+                                <button type="button" class="btn btn-primary" ng-click="addTeamMember(team, component._id)" data-dismiss="modal">Save changes</button>
+                            </div>
+                        </accordion-group>
                     </accordion>
 
                     <div class="clearfix mb15"></div>
-                </div>
+             </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
@@ -693,7 +745,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-6">
-                                <img id="member-photo" style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
+                                <img  style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
                             </div>
                             <div class="col-sm-6">
                                 <div class="btn-link">
@@ -701,7 +753,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer">
