@@ -930,7 +930,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         else
                         {
                             newUser.cardToken = token;
-                            newUser.plan = $scope.selectedPlan;
+                            newUser.plan = $scope.newAccount.membership;
                             newUser.anonymousId = window.analytics.user().anonymousId();
                             newUser.permanent_cookie = ipCookie("permanent_cookie");
                             newUser.fingerprint = new Fingerprint().get();
