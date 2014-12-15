@@ -26,6 +26,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('social'), this.isAuthApi, this.getLoggedInUserSocialCredentials.bind(this));
+        app.delete(this.url('social/:type'), this.isAuthApi, this.removeSocialCredentials.bind(this));
 
         app.get(this.url('security'), this.isAuthApi, this.initializeSecurity.bind(this));
 
@@ -61,6 +63,60 @@ _.extend(api.prototype, baseApi.prototype, {
                return self.wrapError(resp, 500, null, err, value);
            }
         });
+    },
+
+    getLoggedInUserSocialCredentials: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getLoggedInUserSocialCredentials');
+        var user = req.user;
+
+        userDao.getById(user.id(), function(err, value) {
+            if (!err) {
+                var userObj = value.toJSON('public');
+                self.log.debug('<< getLoggedInUserSocialCredentials');
+                return resp.send(userObj.credentials);
+            } else {
+                self.log.error('Error getting user by id: ' + err);
+                return self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+    removeSocialCredentials: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeSocialCredentials');
+
+        var type = req.params.type;
+        if(!type || type.length < 1) {
+            return self.wrapError(resp, 400, 'Bad Request', 'Invalid type parameter.');
+        }
+
+        userDao.getById(req.user.id(), $$.m.User, function(err, user){
+            if(err) {
+                self.log.error('Error occurred loading user: ' + err);
+                return self.wrapError(resp, 500, null, err);
+            }
+            var targetIndex = -1;
+            var credentials = user.get('credentials');
+            for(var i=0; i<credentials.length; i++) {
+                if(credentials[i].type === type) {
+                    targetIndex = i;
+                }
+            }
+            if(targetIndex !== -1) {
+                credentials.splice(targetIndex, 1);
+            }
+            user.set('credentials', credentials);
+            //user.removeCredentials(type);
+            userDao.saveOrUpdate(user, function(err, value){
+                if(err) {
+                    self.log.error('Error occurred removing social credentials: ' + err);
+                    return self.wrapError(resp, 500, null, err);
+                }
+                return resp.send(value.toJSON('public'));
+            });
+        });
+
     },
 
     /**
