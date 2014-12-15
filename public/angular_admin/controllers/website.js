@@ -510,6 +510,10 @@ define([
                 else {
                     route = '/page/' + sPage;
                 }
+                
+                if ($location.$$search['posthandle']) {
+					route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';                	
+            	}
 
 
                 //TODO - replace with sending route through scope to update without iframe refresh
