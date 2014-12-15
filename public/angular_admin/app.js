@@ -137,8 +137,6 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
         , includeList = ['account', 'commerce', 'customer', 'website', 'marketing', 'dashboard'];
 
-      console.log('first route');
-
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];

@@ -29,9 +29,7 @@ define(['app', 'userService'], function(app) {
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            console.log('preferences >>> ', preferences);
             $scope.activeTab = preferences.indi_default_tab || 'getting-started';
-            console.log('$scope.activeTab >>> ', $scope.activeTab);
             $scope.initialWelcome = preferences.welcome_alert.initial;
         });
 
