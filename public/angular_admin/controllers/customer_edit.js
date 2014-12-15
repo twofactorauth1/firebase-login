@@ -10,6 +10,7 @@ define(['app',
   'mediaDirective',
   'userService',
   'geocodeService',
+  'fingerPrint'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -120,7 +121,7 @@ define(['app',
             });
             }
             else
-              ToasterService.show("warning", "Contact Name OR Email is required");            
+              ToasterService.show("warning", "Contact Name OR Email is required");
         });
 
       };
@@ -279,7 +280,7 @@ define(['app',
           if ($scope.customer.details[0].emails.length == 0)
           {
             $scope.customerAddEmailFn();
-          }         
+          }
           UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.restoreFn();
