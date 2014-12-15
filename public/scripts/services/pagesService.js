@@ -12,7 +12,12 @@ mainApp.factory('pagesService', ['websiteService','$http', function (websiteServ
             if (err) {
                 console.log(err, "PageService >> WebsiteService ERROR");
                 callback(err, null)
-            } else {
+            }
+	        else if(!data)
+	            {
+	            	callback("data is null", null);
+	            }
+            else {
                 if (pages.length != 0) {
                     callback(null, pages);
                 } else {
