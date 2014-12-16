@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig'], function(angularAMD) {
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload'], function(angularAMD) {
   var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
@@ -135,7 +135,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
     })
     .run(['$rootScope', function($rootScope) {
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
-        , includeList = ['account', 'commerce', 'customer', 'website', 'marketing', 'dashboard'];
+        , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'indi'];
 
       console.log('first route');
 
@@ -152,9 +152,10 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           // update active tab
           if (includeList.indexOf(toState.name) >= 0) {
             p = p || $('.nav.nav-pills.nav-stacked.nav-bracket');
-
-            $('[href="#/' + toState.name + '"]', p).parent().addClass('active')
-            $('[href="#/' + fromState.name + '"]', p).parent().removeClass('active')
+            toName = toState.name.split(/[A-Z]/g);
+            fromName = fromState.name.split(/[A-Z]/g);
+            $('[href="#/' + toName[0] + '"]', p).parent().addClass('active')
+            $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active')
           }
         });
     }]);

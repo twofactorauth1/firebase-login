@@ -45,6 +45,7 @@ define([
             // });
 
             if ($location.$$search['pagehandle']) {
+                console.log('page handle detected');
                 document.getElementById("iframe-website").setAttribute("src", '/page/'+$location.$$search['pagehandle']+'?editor=true');
             }
 
@@ -220,18 +221,10 @@ define([
                     }, false);
                 };
 
-                var binded = false;
-                var count = 0;
-                while (binded == false) {
-                    count += 1;
+               
                     if (iframeDoc.getElementById('body')) {
                        elementBindingFn();
-                       binded = true;
-                    } else {
-                        binded = false;
                     }
-                    console.info('Bind attempt : ' + count);
-                }
             };
 
             UserService.getAccount(function(account) {
@@ -510,12 +503,16 @@ define([
                 else {
                     route = '/page/' + sPage;
                 }
+                
+                if ($location.$$search['posthandle']) {
+					route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';                	
+            	}
 
 
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
 
-                WebsiteService.getPages(that.account.website.websiteId, function(pages) {
+                WebsiteService.getPages($scope.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
                     var parsed = angular.fromJson(pages);
                     var arr = [];
@@ -948,7 +945,7 @@ define([
 
             $scope.updateLinkList = function(linkLists) {
                 var linkLabelsArr = [];
-                var editedLinksLists = document.getElementById("reorderNavBarModal").querySelectorAll('.head-menu-links');
+                var editedLinksLists = document.getElementById("reorderNavBarContainer").querySelectorAll('.head-menu-links');
                 for (var i = 0; i < editedLinksLists.length; i++) {
                     var linkLabel = editedLinksLists[i].attributes['data-label'].value;
                     if (linkLabel)

@@ -31,6 +31,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         //GET
+        app.get(this.url('myip'), this.getMyIp.bind(this));
         app.get(this.url('activities'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
         app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
@@ -64,6 +65,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi.bind(this), this.mergeDuplicates.bind(this));
     },
 
+    getMyIp: function(req, resp) {
+        var self = this;
+        var ip = self.ip(req);
+        self.sendResult(resp, ip);
+    },
 
     //region CONTACT
     getContactById: function(req,resp) {

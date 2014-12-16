@@ -183,6 +183,7 @@ var user = $$.m.ModelBase.extend({
                 json.credentials.forEach(function(creds) {
                     delete creds.password;
                     delete creds.accessToken;
+                    delete creds.refreshToken;
                 });
             }
 
@@ -610,6 +611,19 @@ var user = $$.m.ModelBase.extend({
             }
         }
         return null;
+    },
+
+    removeCredentials: function(type) {
+        var credentials = this.get('credentials');
+        var targetIndex = -1;
+        for(var i=0; i<credentials.length; i++) {
+            if(credentials[i].type === type) {
+                targetIndex = i;
+            }
+        }
+        if(targetIndex !== -1) {
+            credentials.splice(targetIndex, 1);
+        }
     },
 
 

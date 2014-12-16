@@ -25,6 +25,7 @@ define(['app',
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
+
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,
@@ -120,7 +121,7 @@ define(['app',
             });
             }
             else
-              ToasterService.show("warning", "Contact Name OR Email is required");            
+              ToasterService.show("warning", "Contact Name OR Email is required");
         });
 
       };
@@ -279,7 +280,7 @@ define(['app',
           if ($scope.customer.details[0].emails.length == 0)
           {
             $scope.customerAddEmailFn();
-          }         
+          }
           UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.restoreFn();

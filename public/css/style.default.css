@@ -16692,11 +16692,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: fixed;
   z-index: 10;
   right: 16px;
-  left: 241px;
+  left: 53px;
   top: 63px;
-}
-.rightmenu-open .header--fixed {
-  right: 256px;
 }
 .leftpanel-collapsed .header--fixed {
   left: 53px;
@@ -17183,6 +17180,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   top: 0;
   left: 0;
   z-index: 200;
+  height: 100%;
 }
 .leftpanel .searchform {
   display: none;
@@ -17252,6 +17250,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanelinner {
   padding: 5px 15px;
   margin-top: 15px;
+  background: #fff;
+  height: 100%;
 }
 .sidebartitle {
   font-size: 11px;
@@ -17392,6 +17392,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel-collapsed .logopanel {
   display: none;
 }
+.leftpanel-collapsed .header-right {
+  margin-right: 0;
+}
 .leftpanel-collapsed .headerbar {
   margin-left: -50px;
 }
@@ -17484,9 +17487,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .sticky-leftpanel {
   overflow-y: visible;
-}
-.rightmenu-open {
-  margin-right: 240px;
 }
 .rightmenu-open .rightpanel {
   display: block;
@@ -17611,7 +17611,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-top: 5px;
 }
 .mainpanel {
-  margin-left: 240px;
+  margin-left: 52px;
   height: auto;
 }
 .mainpanel .alert {
@@ -17766,6 +17766,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-bottom: 10px;
 }
 @media (max-width: 767px) {
+  .leftpanel-show .header-right {
+    margin-right: 240px;
+  }
   .leftpanel-show .mainpanel .pageheader {
     margin-left: 0px;
   }
@@ -23673,7 +23676,7 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .masthead-subtitle {
   max-width: 80%;
-  margin: 0 auto;
+  margin: 15px auto;
 }
 .masthead-v1 .masthead-title {
   font-size: 32px;
@@ -23877,6 +23880,10 @@ div[data-type="social"] .inner-page {
 }
 .simple-form-v2 .btn {
   text-transform: uppercase;
+}
+/********** Simple Form v3 **********/
+.simple-form-v3 input[type='radio'] {
+  margin-right: 5px;
 }
 /********** Products v1 component **********/
 .products-v1 {

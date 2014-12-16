@@ -188,7 +188,9 @@ _.extend(apiBase.prototype, {
 
             if(Array.isArray(ip)) {
                 return ip[0];
-            } else {
+            } else if(ip.indexOf(',') !== -1){
+                return ip.split(',')[0].trim();
+            } else{
                 return ip;
             }
         } catch(exception) {
