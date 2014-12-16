@@ -170,6 +170,30 @@ var collator = {
                     });
 
                     sessionEvent.set('page_depth', pageList.length);
+                    /*
+                     * Add this to sessionEvent:
+                     * "keen" : {
+                            "addons" : [
+                            {
+                                "name" : "keen:ip_to_geo",
+                                "input" : {
+                                    "ip" : "ip_address"
+                                },
+                                "output" : "ip_geo_info"
+                            }
+                            ]
+                     },
+                     */
+                    var keen = {};
+                    keen.addons = [];
+                    keen.addons[0]={
+                        'name': 'keen:ip_to_geo',
+                        'input':{
+                            'ip':'ip_address'
+                        },
+                        'output': 'ip_geo_info'
+                    };
+                    sessionEvent.set('keen', keen);
                     //send to keen unless test environment
                     // if (process.env.NODE_ENV !== "testing") {
                         client.addEvents({
