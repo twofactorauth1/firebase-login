@@ -360,20 +360,20 @@
                         </div>
                         <div class="caption">
                             <h3>Facebook</h3>
-                            <div class="clearfix mb5"></div>
-                            <div class="connected">
+                            <p>Connect with your friends</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
                                 <img src="/assets/icons/blank-user.jpg" class="img-circle" />
-                                <span>{{user.first}} {{user.last}}</span>
+                                <span>{{userSocial[credentialTypes.FACEBOOK]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
-                                <div class="btn-group">
-                                    <button class="btn btn-success btn-lg" role="button" data-toggle="modal" data-target="#facebookSettingsModal">
-                                        <span class="fa fa-wrench"></span>Settings</button>
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK]">
+                                    <a href="/login/facebook" class="btn btn-orange btn-lg btn-block" role="button">
+                                <span class="fa fa-plug"></span>Connect</a>
                                 </div>
-                                <div class="btn-group">
-                                    <button class="btn btn-danger btn-lg" role="button">
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK]">
+                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.FACEBOOK)">
                                         <span class="fa fa-trash-o"></span>Delete</button>
                                 </div>
                             </div>
