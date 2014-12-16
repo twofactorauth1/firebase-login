@@ -16692,11 +16692,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: fixed;
   z-index: 10;
   right: 16px;
-  left: 241px;
+  left: 53px;
   top: 63px;
-}
-.rightmenu-open .header--fixed {
-  right: 256px;
 }
 .leftpanel-collapsed .header--fixed {
   left: 53px;
@@ -17252,6 +17249,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanelinner {
   padding: 5px 15px;
   margin-top: 15px;
+  background: #fff;
 }
 .sidebartitle {
   font-size: 11px;
@@ -17392,6 +17390,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel-collapsed .logopanel {
   display: none;
 }
+.leftpanel-collapsed .header-right {
+  margin-right: 0;
+}
 .leftpanel-collapsed .headerbar {
   margin-left: -50px;
 }
@@ -17484,9 +17485,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .sticky-leftpanel {
   overflow-y: visible;
-}
-.rightmenu-open {
-  margin-right: 240px;
 }
 .rightmenu-open .rightpanel {
   display: block;
@@ -17611,7 +17609,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-top: 5px;
 }
 .mainpanel {
-  margin-left: 240px;
+  margin-left: 52px;
   height: auto;
 }
 .mainpanel .alert {
@@ -17766,6 +17764,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-bottom: 10px;
 }
 @media (max-width: 767px) {
+  .leftpanel-show .header-right {
+    margin-right: 240px;
+  }
   .leftpanel-show .mainpanel .pageheader {
     margin-left: 0px;
   }
