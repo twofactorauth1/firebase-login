@@ -10,7 +10,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$location = $location;
         $scope.$routeParams = $routeParams;
         $scope.$url = $location.$$url;
-        
+        $scope.tagCloud = [];
+        $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
+            if (newValue !== undefined && newValue.length) {
+                newValue.forEach(function(value, index) {
+                    $scope.tagCloud.push({text: value, weight: Math.floor((Math.random() * newValue.length) + 1), link: '/tag/' + value})
+                });
+            }
+        });
 
         //var config = angular.module('config');
         //that.segmentIOWriteKey = ENV.segmentKey;
@@ -98,7 +105,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
                 $scope.currentpage = that.pages;
 
-                var iframe = window.parent.document.getElementById("iframe-website")               
+                var iframe = window.parent.document.getElementById("iframe-website")
                 iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
                 // PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
                 //     that.blogposts = posts;
@@ -378,10 +385,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         {name:"twitter",icon:"twitter"},
         {name:"vimeo",icon:"vimeo-square"},
         {name:"vk",icon:"vk"},
-        {name:"yahoo",icon:"yahoo"}] 
+        {name:"yahoo",icon:"yahoo"}]
 
        $scope.setSelectedSocialLink = function(link, id, update )
-        {           
+        {
             if(!$scope.social)
                 $scope.social = {};
             if(update)
@@ -389,12 +396,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $scope.social.selectedLink = link.name;
                 $scope.social.name = link.name;
                 $scope.social.icon = link.icon;
-                $scope.social.url = link.url;    
-            }  
+                $scope.social.url = link.url;
+            }
             else
             {
-                $scope.social = {};              
-            } 
+                $scope.social = {};
+            }
             $("#social-link-name .error").html("");
             $("#social-link-name").removeClass('has-error');
             $("#social-link-url .error").html("");
@@ -402,11 +409,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $scope.networks = window.parent.getSocialNetworks(id);
         }
         $scope.setSelectedLink = function(social_link)
-        {          
+        {
             $scope.social.name = social_link.name;
             $scope.social.icon = social_link.icon;
         }
-        $scope.saveSocialLink = function(social, id, mode) {  
+        $scope.saveSocialLink = function(social, id, mode) {
             var old_value = _.findWhere($scope.networks, {
                 name: $scope.social.selectedLink
             });
@@ -435,7 +442,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 case "update":
                 if (social && social.name && social.url) {
                     var networks = angular.copy($scope.networks);
-                   
+
                     selectedName = _.findWhere(networks, {
                          name: old_value.name
                     });
@@ -461,7 +468,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         return;
                     }
                 }
-                break;                
+                break;
                 }
                 window.parent.updateSocialNetworks(old_value,mode,social);
                 $("#socialComponentModal").modal("hide");
@@ -555,7 +562,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 };
             });
         };
-        window.updateSocialComponent = function(data,networks) {            
+        window.updateSocialComponent = function(data,networks) {
                 $scope.currentpage.components = data;
                 $scope.networks = networks;
         };
@@ -665,13 +672,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         var w = angular.element($window);
                         var check_if_mobile = mobilecheck();
                         $scope.thumbnailSliderCollection = angular.copy(value.images);
-                        var winWidth = w.width();  
-                        $scope.bindThumbnailSlider(winWidth, check_if_mobile);                     
+                        var winWidth = w.width();
+                        $scope.bindThumbnailSlider(winWidth, check_if_mobile);
                         w.bind('resize', function () {
                              $scope.$apply(function() {
-                                $scope.bindThumbnailSlider(w.width(), check_if_mobile);    
-                            });                  
-                        });             
+                                $scope.bindThumbnailSlider(w.width(), check_if_mobile);
+                            });
+                        });
                     }
                 });
             }
@@ -682,7 +689,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var number_of_arr = 4;
             if(width <= 750 || is_mobile)
             {
-               number_of_arr = 1; 
+               number_of_arr = 1;
             }
             $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
         }
@@ -908,10 +915,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     //get the token
                     PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
                         if (error) {
-                            console.info(error); 
+                            console.info(error);
                             $scope.$apply(function() {
                                 $scope.isFormValid = false;
-                             })                           
+                             })
                             switch (error.param) {
                                 case "number":
                                     $("#card_number .error").html(error.message);
@@ -939,9 +946,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 window.location = data.accountUrl;
                             else
                               $scope.isFormValid = false;
-                        });  
+                        });
                         }
-                        
+
                     });
 
 
