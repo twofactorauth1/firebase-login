@@ -11,6 +11,8 @@ var analyticsDao = require('../../analytics/dao/analytics.dao.js');
 var analyticsManager = require('../../analytics/analytics_manager.js');
 var keenConfig = require('../../configs/keen.config');
 var async = require('async');
+var contactDao = require('../../dao/contact.dao');
+var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -35,7 +37,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEvent.bind(this));
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
-        app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
+        app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
 
         //visit
         app.post(this.url('session/:id/sessionStart'), this.storeSessionInfo.bind(this));
@@ -80,7 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //self.log.info('Sending the following to keen:');
         //console.dir(messagesToSend);
         var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/";
-        var api_key = keenConfig.keenWriteKey;
+        var api_key = keenConfig.KEEN_WRITE_KEY;
         async.eachSeries(messagesToSend, function(message, callback){
             console.log('url ', url + message.collection + '?api_key=' + api_key);
             var newrequest = request.post(url + message.collection + '?api_key=' + api_key)
@@ -107,6 +109,74 @@ _.extend(api.prototype, baseApi.prototype, {
     verifyEvent: function(req, res, next) {
         //TODO: verify event comes from segment
         next();
+    },
+
+    filterMandrillEvents: function(req, res, next) {
+        //TODO: create customActivities
+        var self = this;
+        self.log.debug('>> filterMandrillEvents');
+        var msg = null;
+        var objArray = [];
+        if(req.body.mandrill_events) {
+            try {
+                msg = JSON.parse(req.body.mandrill_events);
+                if(_.isArray(msg)) {
+                    _.each(msg, function (value, key, list) {
+                        var type = value.event;
+                        var obj = {};
+                        obj.email = value.msg.email;
+                        obj.sender = value.msg.sender;
+                        obj.ts = value.ts;
+                        if (type === 'send') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                            objArray.push(obj);
+                        } else if (type === 'open') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                            objArray.push(obj);
+                        } else if (type === 'click') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                            objArray.push(obj);
+                        } else if (type === 'unsub') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
+                            objArray.push(obj);
+                        }
+                    });
+                }
+            } catch(err) {
+                self.log.debug('error parsing events: ' + err);
+                msg = req.body;
+            }
+
+        }
+
+        self.log.debug('<< filterMandrillEvents');
+        next();
+        //create contactActivities from events.
+        _.each(objArray, function(value, key, list){
+            var query = {};
+            //TODO: get contactId from sender Email
+            //query.accountId = value.id();
+            query['details.emails.email'] = value.email;
+
+            contactDao.findMany(query, $$.m.Contact, function(err, list){
+                if(err) {
+                    self.log.error('Error finding contacts by email: ' + err);
+                } else if(!list || list.length < 1) {
+                    self.log.warn('Contact could not be found for email address: ' + value.email);
+                } else if(list.length > 1) {
+                    self.log.warn('Too many contacts found for email address: ' + value.email);
+                } else {
+                    var contact = list[0];
+                    var activity = new $$.m.ContactActivity({
+                        accountId: contact.get('accountId'),
+                        contactId: contact.id(),
+                        activityType: value.activityType,
+                        start: value.ts
+                    });
+                    contactActivityManager.createActivity(activity, function(err, value){});
+                }
+            });
+        });
     },
 
     saveAnalyticEvent: function(req, res) {
