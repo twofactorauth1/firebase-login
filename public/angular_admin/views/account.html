@@ -1,5 +1,6 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' onFinishCallback='finishOnboarding'></onboarding-popover>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+onFinishCallback='finishOnboarding'></onboarding-popover>
 <div class="account">
 
     <div class="pageheader row">
@@ -24,16 +25,19 @@
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info" ng-class="{'active': activeTab === 'account_information'}" ng-click="showToaster = false; activeTab = 'account_information'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info"
+            ng-class="{'active': activeTab === 'account_information'}" ng-click="showToaster = false; activeTab = 'account_information'">
                 <i class="fa fa-user"></i>
                 <span class="hidden-xs">Account Information
                 </span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="showToaster = false; activeTab = 'billing'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing"
+            ng-class="{'active': activeTab === 'billing'}" ng-click="showToaster = false; activeTab = 'billing'">
                 <i class="fa fa-credit-card"></i>
                 <span class="hidden-xs">Billing</span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="showToaster = false; activeTab = 'integrations'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations"
+            ng-class="{'active': activeTab === 'integrations'}" ng-click="showToaster = false; activeTab = 'integrations'">
                 <i class="fa fa-rocket"></i>
                 <span class="hidden-xs">Integrations</span>
             </button>
@@ -56,7 +60,8 @@
                             </div>
                         -->
                         <div class="col-xs-12">
-                            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+                            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object"
+                            data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
                             <div class="clear"></div>
                         </div>
                         <div class="col-xs-12">
@@ -88,8 +93,8 @@
 
                                 <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:jaideep.jdof@gmail.com"> jaideep.jdof@gmail.com</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
                                 </div> -->
-                                <ul class="social-list right row">
-                                    <!--
+                            <ul class="social-list right row">
+                                <!--
                                         <li class="col-xs-12">
 
                                         <div class="col-xs-2">
@@ -107,7 +112,7 @@
                                     -->
 
 
-                                    <!--
+                                <!--
                                         <li class="col-xs-12">
                                         <div class="col-xs-2">
                                         <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
@@ -126,7 +131,7 @@
 
 
 
-                                    <!--
+                                <!--
                                         <li class="col-xs-12">
                                         <div class="col-xs-2">
                                         <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
@@ -145,24 +150,26 @@
 
 
 
-                                    <li class="col-xs-12">
-                                        <div class="col-xs-2">
-                                            <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-envelope"> </i>
-                                            </a>
-                                        </div>
-                                        <div class="col-xs-8">
-                                            <p>{{user.email}}</p>
-                                        </div>
-                                        <div class="col-xs-2"></div>
+                                <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                        <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip"
+                                        data-placement="top" title="" data-original-title="Email"
+                                        target="_blank"> <i class="fa fa-envelope"> </i>
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <p>{{user.email}}</p>
+                                    </div>
+                                    <div class="col-xs-2"></div>
 
-                                    </li>
+                                </li>
 
 
 
 
-                                </ul>
+                            </ul>
 
-                                <div class="mb20"></div>
+                            <div class="mb20"></div>
 
                         </div>
                         <div class="clearfix"></div>
@@ -178,7 +185,8 @@
                     <div class="profile panel-body">
 
                         <div class="col-xs-12">
-                            <img src="{{account.business.logo}}" class="thumbnail thumb-lg media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+                            <img src="{{account.business.logo}}" class="thumbnail thumb-lg media-object" data-img-src=""
+                            data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
                             <div class="clear"></div>
                         </div>
                         <div class="col-xs-12">
@@ -197,7 +205,7 @@
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
                                         <p>
-                                        <strong>Name:</strong>
+                                            <strong>Name:</strong>
                                         </p>
                                     </div>
                                     <div class="col-xs-8">
@@ -209,7 +217,7 @@
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
                                         <p>
-                                        <strong>Size:</strong>
+                                            <strong>Size:</strong>
                                         </p>
                                     </div>
                                     <div class="col-xs-8">
@@ -225,7 +233,7 @@
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
                                         <p>
-                                        <strong>Description:</strong>
+                                            <strong>Description:</strong>
                                         </p>
                                     </div>
                                     <div class="col-xs-8">
@@ -237,7 +245,7 @@
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
                                         <p>
-                                        <strong>Cateogry:</strong>
+                                            <strong>Cateogry:</strong>
                                         </p>
                                     </div>
                                     <div class="col-xs-8">
@@ -271,12 +279,14 @@
                                 <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
                                     <span>/{{subscription.plan.interval}}</span>
                                 </h2>
-                                <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
+                                <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000
+                                    | date : 'longDate'}}</p>
                             </div>
                             <div class="no-plan well" ng-hide="user.stripeId">
                                 <h3 class="center">No Subscription Plan Selected</h3>
                                 <div class="cleatfix mb15"></div>
-                                <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
+                                <p class="center">To continue using the Indigenous Platform you must
+                                    choose a subscription plan below.</p>
                                 <div class="cleatfix mb30"></div>
                                 <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#selectPlanModal">Choose Plan</a>
                             </div>
@@ -310,43 +320,45 @@
                     </div>
                     </div> -->
 
-                    <div class="col-xs-12">
-                        <div class="panel panel-default row">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Transactions</h3>
-                            </div>
+                <div class="col-xs-12">
+                    <div class="panel panel-default row">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Transactions</h3>
+                        </div>
 
-                            <div class="table-responsive">
-                                <table class="table mb30">
-                                    <thead>
-                                        <tr class="info">
-                                            <th>#</th>
-                                            <th>Date</th>
-                                            <th>Amount</th>
-                                            <!--<th>Card</th>-->
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="invoice in pagedInvoices">
-                                            <td>{{$index + 1}}</td>
-                                            <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
-                                            <td>${{(invoice.total/100).toFixed( 2 )}}</td>
-                                            <!--<td>Visa - 8943</td>-->
-                                            <td ng-show="invoice.paid">PAID</td>
-                                            <td ng-hide="invoice.paid">NOT PAID</td>
-                                            <td class="table-action">
-                                                <a href="" data-toggle="modal" data-target="#viewTransactionModal-{{invoice.id}}"><i class="fa fa-eye"></i></a>
-                                            </td>
-                                        </tr>
-                                </table>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="table mb30">
+                                <thead>
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <!--<th>Card</th>-->
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="invoice in pagedInvoices">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
+                                        <td>${{(invoice.total/100).toFixed( 2 )}}</td>
+                                        <!--<td>Visa - 8943</td>-->
+                                        <td ng-show="invoice.paid">PAID</td>
+                                        <td ng-hide="invoice.paid">NOT PAID</td>
+                                        <td class="table-action">
+                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal-{{invoice.id}}"><i class="fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)" items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
-                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)"
+                    items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
+                </div>
             </div>
         </div>
 
@@ -370,7 +382,7 @@
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK]">
                                     <a href="/login/facebook" class="btn btn-orange btn-lg btn-block" role="button">
-                                <span class="fa fa-plug"></span>Connect</a>
+                                        <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK]">
                                     <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.FACEBOOK)">
@@ -384,14 +396,16 @@
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg" alt="Reveille">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg"
+                            alt="Reveille">
                         </div>
                         <div class="caption">
                             <h3>Reveille</h3>
                             <p>Find it first. Fix it fast</p>
                             <p>
-                            <a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button">
-                                <span class="fa fa-plug"></span>Connect</a>
+                                <a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block"
+                                role="button">
+                                    <span class="fa fa-plug"></span>Connect</a>
                             </p>
                         </div>
                     </div>
@@ -399,17 +413,27 @@
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="...">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg"
+                            alt="...">
                         </div>
                         <div class="caption">
                             <h3>Google +</h3>
                             <p>Import customers, plan posts in advance.</p>
-                            <p>
-                            <a href="#" class="btn btn-orange btn-lg btn-block" role="button" id="connect-google-plus">
-                                <span class="fa fa-plug"></span>Connect</a>
-                            </p>
-                            <div class="toggle-modern">
-                                <div class="toggles on"></div>
+                            <div class="connected" ng-show="userSocial[credentialTypes.GOOGLE]">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.GOOGLE]}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.GOOGLE]">
+                                    <a href="/login/google" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
+                                </div>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.GOOGLE]">
+                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.GOOGLE)">
+                                        <span class="fa fa-trash-o"></span>Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -417,17 +441,27 @@
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="...">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg"
+                            alt="...">
                         </div>
                         <div class="caption">
                             <h3>LinkedIn</h3>
                             <p>Import contacts</p>
-                            <p>
-                            <a href="#" class="btn btn-orange btn-lg btn-block" role="button">
-                                <span class="fa fa-plug"></span>Connect</a>
-                            </p>
-                            <div class="toggle-modern">
-                                <div class="toggles on"></div>
+                            <div class="connected" ng-show="userSocial[credentialTypes.LINKEDIN]">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.LINKEDIN]}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.LINKEDIN]">
+                                    <a href="/login/linkedin" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
+                                </div>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.LINKEDIN]">
+                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.LINKEDIN)">
+                                        <span class="fa fa-trash-o"></span>Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -439,25 +473,38 @@
                         </div>
                         <div class="caption">
                             <h3>Twitter</h3>
-                            <p>Tweet with customers, plan tweets in advance.</p>
-                            <p>
-                            <a href="#" class="btn btn-orange btn-lg btn-block" role="button">
-                                <span class="fa fa-plug"></span>Connect</a>
-                            </p>
+                            <p>Import followers</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.TWITTER]">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.TWITTER]}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.TWITTER]">
+                                    <a href="/login/twitter" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
+                                </div>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.TWITTER]">
+                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.TWITTER)">
+                                        <span class="fa fa-trash-o"></span>Delete</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="...">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg"
+                            alt="...">
                         </div>
                         <div class="caption">
                             <h3>Stripe</h3>
                             <p>Stripe Allows you to recieve payments on your website.</p>
                             <p>
-                            <a href="/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
-                                <span class="fa fa-plug"></span>Connect</a>
+                                <a href="/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
+                                    <span class="fa fa-plug"></span>Connect</a>
                             </p>
                             <div class="toggle-modern">
                                 <div class="toggles on"></div>
@@ -484,17 +531,22 @@
                     <div id="current-settings">
                         <div class="radio">
                             <label>
-                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('account_information')">Account Information
+                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'"
+                                ng-model="userPreferences.account_default_tab"
+                                ng-change="setActiveTab('account_information')">Account Information
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('billing')">Billing
+                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="userPreferences.account_default_tab"
+                                ng-change="setActiveTab('billing')">Billing
                             </label>
                         </div>
                         <div class="radio disabled">
                             <label>
-                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('integrations')">Integration
+                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'"
+                                ng-model="userPreferences.account_default_tab"
+                                ng-change="setActiveTab('integrations')">Integration
                             </label>
                         </div>
                     </div>
@@ -503,7 +555,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -580,7 +633,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -621,7 +675,8 @@
                     <!-- <h4>Amount: <span class="pull-right">$99.98</span></h4> -->
                 </div>
                 <div class="modal-footer">
-                    <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
+                    <label class="col-xs-9">Please verify the information above and click "Submit" to authorize
+                        us to complete your payment.</label>
                     <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal">
                         <span class="fa fa-lock"></span>Submit</button>
                 </div>
@@ -629,7 +684,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
+    <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1"
+    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -665,7 +721,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="facebookSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="facebookSettingsModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -711,7 +768,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -775,7 +833,8 @@
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block"
+                                    data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
@@ -831,7 +890,8 @@
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block"
+                                    data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
@@ -841,7 +901,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -852,12 +913,14 @@
                     <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
                 </div>
                 <div class="card-wrapper-change"></div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true
+                wrapper-div="'card-wrapper-change'"></div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="selectPlanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="selectPlanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -868,7 +931,8 @@
                     <h4 class="modal-title" id="myModalLabel">Select Plan</h4>
                 </div>
                 <div class="card-wrapper-add" ng-show="selectPlanView=='card'"></div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=false ng-show="selectPlanView=='card'" wrapper-div="'card-wrapper-add'"></div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=false
+                ng-show="selectPlanView=='card'" wrapper-div="'card-wrapper-add'"></div>
                 <div class="modal-body" ng-show="selectPlanView=='plan'">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
@@ -923,7 +987,8 @@
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block"
+                                    data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
@@ -979,7 +1044,8 @@
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block"
+                                    data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
