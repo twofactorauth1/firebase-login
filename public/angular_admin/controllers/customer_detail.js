@@ -14,6 +14,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 }
             };
             $scope.customerId = $stateParams.id;
+            $scope.ip_geo_address = '';
             CustomerService.getCustomer($scope.customerId, function(customer) {
                 $scope.customer = customer;
                 console.log(customer.fingerprint);
@@ -31,12 +32,6 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                             return (str !== "" || str !== undefined || str !== null);
                         }).join(",");
 
-                        if ($scope.customer.details.length !== 0 && scope.customer.details[0].addresses.length !== 0) {
-                            $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
-                        }
-
-                        console.log($scope.ip_geo_address);
-
                         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
                             if (data.error === undefined) {
                                 $scope.london.lat = parseFloat(data.lat);
@@ -45,6 +40,18 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                 $scope.markers.mainMarker.lng = parseFloat(data.lon);
                             }
                         });
+                    });
+                } else {
+                    if ($scope.customer.details.length !== 0 && scope.customer.details[0].addresses.length !== 0) {
+                        $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
+                    }
+                    CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                        if (data.error === undefined) {
+                            $scope.london.lat = parseFloat(data.lat);
+                            $scope.london.lng = parseFloat(data.lon);
+                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                        }
                     });
                 }
 
