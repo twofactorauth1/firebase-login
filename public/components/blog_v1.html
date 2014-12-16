@@ -90,6 +90,7 @@
                         <ul class="tag-cloud">
                             <li ng-repeat="tag in blog.postTags || control.postTags track by $index"><a href="/tag/{{tag}}">{{tag}}</a></li>
                         </ul>
+                        <jqcloud words="blog.postTags || control.postTags" width="500" height="350" steps="7"></jqcloud>
                     </div>
 
                     <div class="posts" ng-if="blog.latestposts || control.latestposts">
