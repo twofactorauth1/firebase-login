@@ -207,7 +207,9 @@ module.exports = function(grunt) {
                     'public/js/libs/purl/purl.js',
                     'public/js/libs/ua-parser-js/dist/ua-parser.min.js',
                     'public/js/libs_misc/uuid.js',
-                    'public/js/libs_misc/angular-file-upload/angular-file-upload.js'
+                    'public/js/libs_misc/angular-file-upload/angular-file-upload.js',
+                    'public/js/libs/jqcloud2/dist/jqcloud.min.js',
+                    'public/js/libs/angular-jqcloud/angular-jqcloud.js'
 
                 ],
                 /*src: wiredepJSAry,*/
