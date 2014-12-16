@@ -48,7 +48,11 @@ var contactActivity = $$.m.ModelBase.extend({
         PHONECALL: 'PHONECALL',
         FACEBOOK_LIKE: 'FACEBOOK_LIKE',
         TWEET: 'TWEET',
-        FORM_SUBMISSION: 'FORM_SUBMISSION'
+        FORM_SUBMISSION: 'FORM_SUBMISSION',
+        EMAIL_DELIVERED: 'EMAIL_DELIVERED',
+        EMAIL_OPENED: 'EMAIL_OPENED',
+        EMAIL_CLICKED: 'EMAIL_CLICKED',
+        EMAIL_UNSUB: 'EMAIL_UNSUB'
     }
 });
 
