@@ -438,7 +438,6 @@ define(['app', 'paymentService', 'keenService'], function(app) {
             var customerOverviewConfig = {
                 options: {
                     chart: {
-                        height: 250,
                         spacing: [25, 25, 25, 25]
                     },
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49'],

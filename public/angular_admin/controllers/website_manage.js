@@ -143,6 +143,12 @@ define([
                     $scope.pages = _pages;
                 });
 
+                UserService.getUserPreferences(function(preferences) {
+                    $scope.preferences = preferences;
+                    console.log('preferences ', preferences);
+                    // UserService.updateUserPreferences(preferences, false, function() {});
+                });
+
                 WebsiteService.getPosts(function(posts) {
                     console.log('posts ', posts);
                     $scope.posts = posts;
@@ -177,6 +183,12 @@ define([
             });
 
             $scope.changeTheme = function(theme) {
+
+                //if theme doesn;t exist, set task complete
+                if ($scope.preferences.tasks.select_theme == false) {
+                    $scope.preferences.tasks.select_theme = true;
+                    UserService.updateUserPreferences($scope.preferences, false, function() {});
+                };
 
                 $scope.currentTheme = theme;
 
