@@ -20,33 +20,37 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 if (customer.fingerprint !== undefined) {
                     var keenParams = {
                         event_collection: 'session_data',
-                        analyses: {
-                            "sessions_data": {
-                                "analysis_type": "extraction"
-                            }
-                        },
                         filters: [{
                             "property_name": "fingerprint",
                             "operator": "eq",
                             "property_value": customer.fingerprint
                         }]
                     };
+                    keenService.singleExtraction(keenParams, function(data) {
+                        $scope.ip_geo_address = _.filter([data.ip_geo_info.city, data.ip_geo_info.province, data.ip_geo_info.country, data.ip_geo_info.continent, data.ip_geo_info.postal_code], function(str) {
+                            return (str !== "" || str !== undefined || str !== null);
+                        }).join(",");
 
-                    keenService.multiAnalysis(keenParams, function(multidata) {
-                        console.log(multidata);
+                        if ($scope.customer.details.length !== 0 && scope.customer.details[0].addresses.length !== 0) {
+                            $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
+                        }
+
+                        console.log($scope.ip_geo_address);
+
+                        CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                            if (data.error === undefined) {
+                                $scope.london.lat = parseFloat(data.lat);
+                                $scope.london.lng = parseFloat(data.lon);
+                                $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                                $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                            }
+                        });
                     });
                 }
 
                 $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
                 $scope.contactLabel = CustomerService.contactLabel(customer);
-                CustomerService.getGeoSearchAddress($scope.displayAddressFormat($scope.customer.details[0].addresses[0]), function(data) {
-                    if (data.error === undefined) {
-                        $scope.london.lat = parseFloat(data.lat);
-                        $scope.london.lng = parseFloat(data.lon);
-                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                    }
-                });
+
             });
 
             CustomerService.getCustomerActivities($scope.customerId, function(activities) {
