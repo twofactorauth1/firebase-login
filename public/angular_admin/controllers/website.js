@@ -945,7 +945,7 @@ define([
 
             $scope.updateLinkList = function(linkLists) {
                 var linkLabelsArr = [];
-                var editedLinksLists = document.getElementById("reorderNavBarModal").querySelectorAll('.head-menu-links');
+                var editedLinksLists = document.getElementById("reorderNavBarContainer").querySelectorAll('.head-menu-links');
                 for (var i = 0; i < editedLinksLists.length; i++) {
                     var linkLabel = editedLinksLists[i].attributes['data-label'].value;
                     if (linkLabel)
