@@ -20541,6 +20541,12 @@ div.error label.error:before {
 .screen-type li .fa-mobile {
   font-size: 24px;
 }
+#component-setting-modal .modal-body {
+  padding: 0;
+}
+#component-setting-modal ul.nav {
+  margin-top: 0!important;
+}
 .add_section {
   padding: 10px;
   border-radius: 5px;

@@ -690,10 +690,10 @@ define([
                 });
                 $scope.bindEvents();
                 //open right sidebar and component tab
-                document.body.className += ' leftpanel-collapsed rightmenu-open';
-                var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
-                var last = nodes[nodes.length - 1];
-                angular.element(last).triggerHandler('click');
+                // document.body.className += ' leftpanel-collapsed rightmenu-open';
+                // var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
+                // var last = nodes[nodes.length - 1];
+                // angular.element(last).triggerHandler('click');
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
