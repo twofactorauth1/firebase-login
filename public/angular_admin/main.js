@@ -36,7 +36,7 @@ require.config({
         'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'daterangepicker': 'libs/bootstrap-daterangepicker/daterangepicker',
-        'angular-daterangepicker': 'libs/angular-daterangepicker/js/angular-daterangepicker.min',
+        'angular-daterangepicker': 'libs_misc/angular-daterangepicker/angular-daterangepicker',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
         'angularFileUpload': 'libs_misc/angular-file-upload/angular-file-upload',

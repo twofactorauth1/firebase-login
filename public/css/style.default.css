@@ -18173,6 +18173,66 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard {
   background: #e7e7e7;
 }
+.dashboard .customer-overview-wrap {
+  height: 300px;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+.dashboard .customer-overview-wrap #customerOverviewChart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .time-on-site-wrap {
+  height: 265px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .time-on-site-wrap #timeonSiteConfig {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .traffic-source-wrap {
+  height: 400px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .traffic-source-wrap #traffic-source-chart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .new-vs-returning-wrap {
+  height: 400px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .new-vs-returning-wrap #new-vs-returning-chart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .analytics-overview-wrap {
+  height: 400px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .analytics-overview-wrap #analytics-overview-chart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
 .dashboard .smart-timeline-list > li {
   padding: 15px 5px 15px 5px;
   min-height: 85px;
@@ -20487,6 +20547,12 @@ div.error label.error:before {
 }
 .screen-type li .fa-mobile {
   font-size: 24px;
+}
+#component-setting-modal .modal-body {
+  padding: 0;
+}
+#component-setting-modal ul.nav {
+  margin-top: 0!important;
 }
 .add_section {
   padding: 10px;
