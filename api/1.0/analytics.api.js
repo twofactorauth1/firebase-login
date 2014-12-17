@@ -126,7 +126,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         var obj = {};
                         obj.email = value.msg.email;
                         obj.sender = value.msg.sender;
-                        obj.ts = moment.utc(value.ts);
+                        obj.ts = moment.utc(value.ts).toDate();
                         if (type === 'send') {
                             obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
                             objArray.push(obj);
