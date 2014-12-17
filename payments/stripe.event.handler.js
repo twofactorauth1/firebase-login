@@ -10,6 +10,7 @@ var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
 var subscriptionDao = require('./dao/subscription.dao.js');
 var notificationConfig = require('../configs/notification.config.js');
+var contactActivytManager = require('../contactactivities/contactactivity_manager');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
 var eventQ = async.queue(function(event, fn){
@@ -118,6 +119,7 @@ var eventHandler =  {
             case 'customer.card.deleted':
                 break;
             case 'customer.subscription.created':
+
                 break;
             case 'customer.subscription.updated':
                 break;
@@ -337,11 +339,31 @@ var eventHandler =  {
     },
 
     onCustomerSubscriptionDeleted: function(iEvent, fn) {
+
         var self = this;
         var subId = iEvent.get('body').id;
-        subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
-            log.error('Subscription deletion failed:' % err.message);
+        subscriptionDao.getSubscriptionBySubId(subId, function(err, sub){
+            if(err) {
+                log.error('Could not get subscription from invoice payment event: ' + err);
+            } else {
+                var contactId = sub.get('contactId');
+                var contactActivity = new $$.m.ContactActivity({
+                    accountId: iEvent.get('accountId'),
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.SUBSCRIBE_CANCEL,
+                    start: new Date()
+                });
+                contactActivytManager.createActivity(contactActivity, function(err, activity){
+                    if(err) {
+                        log.error('Could not create activity for invoice payment event: ' + err);
+                    }
+                });
+            }
+            subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
+                log.error('Subscription deletion failed:' % err.message);
+            });
         });
+
         self.sendEmailToOperationFn(iEvent, fn);
     },
 
@@ -358,6 +380,27 @@ var eventHandler =  {
     },
 
     onInvoicePaymentSucceeded: function(iEvent, fn) {
+
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.getSubscriptionBySubId(subId, function(err, sub){
+            if(err) {
+                log.error('Could not get subscription from invoice payment event: ' + err);
+            } else {
+                var contactId = sub.get('contactId');
+                var contactActivity = new $$.m.ContactActivity({
+                    accountId: iEvent.get('accountId'),
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.SUBCRIPTION_PAID,
+                    start: new Date()
+                });
+                contactActivytManager.createActivity(contactActivity, function(err, activity){
+                    if(err) {
+                        log.error('Could not create activity for invoice payment event: ' + err);
+                    }
+                });
+            }
+        });
 
     },
 
