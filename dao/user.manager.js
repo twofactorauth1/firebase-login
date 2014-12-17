@@ -21,7 +21,7 @@ var fs = require('fs');
 
 module.exports = {
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, sendWelcomeEmail, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
@@ -33,7 +33,7 @@ module.exports = {
             if (err) {
                 return fn(err, value);
             }
-            //TODO: handle multiple users
+
             if (value != null) {
                 //return fn(true, "An account with this username already exists");
                 user = value;
@@ -111,7 +111,7 @@ module.exports = {
                         }
 
                         log.debug('Creating customer contact for main account.');
-                        contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
+                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
                             if(err) {
                                 log.error('Error creating customer for user: ' + userId);
                             } else {
