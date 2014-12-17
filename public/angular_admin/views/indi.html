@@ -76,9 +76,9 @@
                                     <div class="task-desc"><p><b>You completed the most difficult task of starting to take control of your business.</b><p></div>
                                     <div class="clearfix"></div>
                                 </li>
-                                <li ng-click="startTask('website', 'select-theme')">
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
+                                <li ng-click="startTask('website', 'select-theme')" ng-class="{complete: userPreferences.tasks.select_theme }">
+                                    <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.select_theme , 'fa-circle-o' : !userPreferences.tasks.select_theme }"></i></h1>
+                                    <small class="pull-right done" ng-if="userPreferences.tasks.select_theme">COMPLETE</small>
                                     <h3 class="pull-left">Select A Theme</h3>
                                     <div class="clearfix mb5"></div>
                                     <div class="task-desc"><p><b>Select a theme for your front facing website where your customers can visit.</b><p></div>

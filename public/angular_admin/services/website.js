@@ -70,6 +70,7 @@ define(['app'], function (app) {
 			var self = this;
 			self.createPageScreenshot(pagedata.handle, function(screenshot) {
 					pagedata.screenshot = screenshot;
+					if (!pagedata.modified) {pagedata.modified = {}}
 					pagedata.modified.date = new Date().getTime();
 					var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
 					$http({

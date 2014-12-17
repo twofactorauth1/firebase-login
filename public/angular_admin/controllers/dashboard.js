@@ -5,6 +5,11 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
         $scope.activeTab = 'analytics';
 
+        $scope.$watch('activeTab', function() {
+            console.log('tab changed');
+            //$(window).trigger('resize');
+        });
+
         $scope.date = {
             startDate: moment().subtract('days', 29).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
             endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
@@ -117,18 +122,18 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
 
             ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
 
-            var resizeTimer = 0;
-            window.onresize = function() {
-                if (resizeTimer)
-                    clearTimeout(resizeTimer);
+            // var resizeTimer = 0;
+            // window.onresize = function() {
+            //     if (resizeTimer)
+            //         clearTimeout(resizeTimer);
 
-                resizeTimer = setTimeout(function() {
-                    if ($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
-                        $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
-                        $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
-                    }
-                }, 100);
-            };
+            //     resizeTimer = setTimeout(function() {
+            //         if ($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
+            //             $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
+            //             $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
+            //         }
+            //     }, 100);
+            // };
 
             ngProgress.complete();
         };
