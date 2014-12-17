@@ -261,6 +261,7 @@ _.extend(api.prototype, baseApi.prototype, {
             }
             self.log.debug('Created user[' + user.id() + '] and account[' + user.getAllAccountIds()[0] + '] objects.');
             var accountId = user.getAllAccountIds()[0];
+            //TODO: create balance to account for signup fee.
             paymentsManager.createStripeCustomerForUser(cardToken, user, accountId, function(err, stripeCustomer){
                 if(err) {
                     self.log.error('Error creating Stripe customer: ' + err);

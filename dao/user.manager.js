@@ -28,17 +28,19 @@ module.exports = {
             accountToken = null;
         }
         log.debug('>> createAccountAndUser');
+        var user = null;
         dao.getUserByUsername(username, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
-
+            //TODO: handle multiple users
             if (value != null) {
-                return fn(true, "An account with this username already exists");
+                //return fn(true, "An account with this username already exists");
+                user = value;
             }
 
-            var deferred = $.Deferred();
 
+            var deferred = $.Deferred();
 
             accountDao.convertTempAccount(accountToken, function(err, value) {
                 if (!err) {
@@ -61,21 +63,23 @@ module.exports = {
                     }
 
 
+                    if(user === null) {
+                        user = new $$.m.User({
 
-                    var user = new $$.m.User({
+                            username:username,
+                            email:email,
+                            created: {
+                                date: new Date().getTime(),
+                                strategy: $$.constants.user.credential_types.LOCAL,
+                                by: null, //self-created
+                                isNew: true
+                            }
+                        });
+                        user.createOrUpdateLocalCredentials(password);
 
-                        username:username,
-                        email:email,
-                        created: {
-                            date: new Date().getTime(),
-                            strategy: $$.constants.user.credential_types.LOCAL,
-                            by: null, //self-created
-                            isNew: true
-                        }
-                    });
+                    }
 
 
-                    user.createOrUpdateLocalCredentials(password);
                     var roleAry = ["super","admin","member"];
                     user.createUserAccount(accountId, username, password, roleAry);
 
