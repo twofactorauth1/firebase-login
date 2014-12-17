@@ -23,7 +23,6 @@ define(['app', 'paymentService', 'keenService'], function(app) {
             return Math.round(result * 100) / 100;
         };
 
-
         this.queryReports = function() {
             var queryData = {};
             // ======================================

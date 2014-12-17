@@ -185,9 +185,15 @@ define([
             $scope.changeTheme = function(theme) {
 
                 //if theme doesn;t exist, set task complete
-                if ($scope.preferences.tasks.select_theme == false) {
+                if (!$scope.preferences.tasks) {
+                    $scope.preferences.tasks = {};
+                }
+
+                if (!$scope.preferences.tasks.select_theme || $scope.preferences.tasks.select_theme == false) {
                     $scope.preferences.tasks.select_theme = true;
-                    UserService.updateUserPreferences($scope.preferences, false, function() {});
+                    UserService.updateUserPreferences($scope.preferences, false, function() {
+                        toaster.pop('success', "You selected you first theme!");
+                    });
                 };
 
                 $scope.currentTheme = theme;
