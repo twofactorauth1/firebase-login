@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $('.toggle-menu').jPushMenu();
+
 	function openLeftMenu() {
 	    var body = $('body');
 	    var bodypos = body.css('position');
@@ -24,6 +26,7 @@ $(document).ready(function () {
     function closeLeftMenu () {
             var body = $('body');
             var bodypos = body.css('position');
+            body.addClass('leftpanel-collapsed');
             if (bodypos != 'relative') {
                 body.addClass('leftpanel-collapsed');
                 $('.nav-bracket ul').attr('style', '');
@@ -87,6 +90,11 @@ $(document).ready(function () {
 	$('.menutoggle').click(function () {
 		toggleLeftMenu();
 	});
+
+    $(document).click(function() {
+        closeLeftMenu();
+        $('body').removeClass('rightmenu-open');
+     });
 	
 	$('.menutoggle-right').click(function () {
 		toggleRightMenu();

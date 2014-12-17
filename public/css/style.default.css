@@ -16692,7 +16692,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: fixed;
   z-index: 10;
   right: 16px;
-  left: 53px;
+  left: 242px;
   top: 63px;
 }
 .leftpanel-collapsed .header--fixed {
@@ -17487,6 +17487,21 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .sticky-leftpanel {
   overflow-y: visible;
+}
+.cbp-spmenu {
+  background: #fff !important;
+}
+.cbp-spmenu-vertical a {
+  border-bottom: 0px !important;
+}
+.cbp-spmenu-push-toright .mainpanel {
+  margin-left: 0px;
+}
+.cbp-spmenu-push #leftnav {
+  left: 0;
+}
+.cbp-spmenu-vertical {
+  z-index: 200 !important;
 }
 .rightmenu-open .rightpanel {
   display: block;
