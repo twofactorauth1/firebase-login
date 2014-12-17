@@ -277,6 +277,36 @@
                                                 <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                         </div>
+                                        <div ng-switch-when="EMAIL_DELIVERED">
+                                            <p>
+                                                <span class="label label-info">EMAIL DELIVERED</span> to <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="EMAIL_OPENED">
+                                            <p>
+                                                <span class="label label-info">EMAIL OPENED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="EMAIL_CLICKED">
+                                            <p>
+                                                <span class="label label-info">EMAIL CLICKED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="EMAIL_UNSUB">
+                                            <p>
+                                                <span class="label label-info">EMAIL UNSUBSCRIBE</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="SUBSCRIPTION_PAID">
+                                            <p>
+                                                <span class="label label-info">SUBSCRIPTION PAID</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
                                     </div>
                                 </div>
                             </li>

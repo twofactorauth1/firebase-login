@@ -49,6 +49,13 @@ var dao = {
         self.log.debug(">> getSubscriptionByAccountAndId");
         var query = {accountId: accountId, stripeSubscriptionId: stripeSubscriptionId};
         this.findOne(query, fn);
+    },
+
+    getSubscriptionBySubId: function(stripeSubscriptionId, fn) {
+        var self = this;
+        self.log.debug('>> getSubscriptionBySubId');
+        var query = {stripeSubscriptionId: stripeSubscriptionId};
+        this.findOne(query, fn);
     }
 
 };
