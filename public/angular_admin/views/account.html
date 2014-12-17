@@ -60,8 +60,9 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                             </div>
                         -->
                         <div class="col-xs-12">
-                            <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object"
+                            <img ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}" class="img-responsive thumbnail thumb-lg img-circle media-object"
                             data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+
                             <div class="clear"></div>
                         </div>
                         <div class="col-xs-12">
