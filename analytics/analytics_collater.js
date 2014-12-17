@@ -152,7 +152,7 @@ var collator = {
                             page.set('end_time', lastSeenMS);
                             page.set('exit', true);
                         }
-                        var timeOnPage = page.get('start_time') - page.get('end_time');
+                        var timeOnPage = page.get('end_time') - page.get('start_time');
                         page.set('timeOnPage', timeOnPage);
                     });
                     _.each(pingList, function (ping, index, list) {
@@ -170,6 +170,30 @@ var collator = {
                     });
 
                     sessionEvent.set('page_depth', pageList.length);
+                    /*
+                     * Add this to sessionEvent:
+                     * "keen" : {
+                            "addons" : [
+                            {
+                                "name" : "keen:ip_to_geo",
+                                "input" : {
+                                    "ip" : "ip_address"
+                                },
+                                "output" : "ip_geo_info"
+                            }
+                            ]
+                     },
+                     */
+                    var keen = {};
+                    keen.addons = [];
+                    keen.addons[0]={
+                        'name': 'keen:ip_to_geo',
+                        'input':{
+                            'ip':'ip_address'
+                        },
+                        'output': 'ip_geo_info_gen'
+                    };
+                    sessionEvent.set('keen', keen);
                     //send to keen unless test environment
                     // if (process.env.NODE_ENV !== "testing") {
                         client.addEvents({
@@ -216,7 +240,9 @@ var collator = {
         var serverTimeMS = serverTime.valueOf();
         //console.log('comparing ' + now + ' to ' + serverTimeMS +' is ' + (now - serverTimeMS));
         if(moment().valueOf() - moment(serverTime).valueOf() > (collator.secondsThreshold*1000)) {
-            sessionEvent.set('session_end', moment().valueOf());
+            //calculate end time as start time + threshold in seconds.
+            var endTime = sessionEvent.get('session_start') + collator.secondsThreshold*1000;
+            sessionEvent.set('session_end', endTime);
             sessionEvent.set('session_length', collator.secondsThreshold*1000);
             sessionEvent.set('page_depth', 1);
 

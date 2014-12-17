@@ -15,7 +15,7 @@ mainApp.factory('accountService', ['$location', '$http', function ($location, $h
         } else {
             console.log('calling account ');
             // API URL: http://yoursubdomain.indigenous.local/api/1.0/account
-            $http.get('/api/1.0/account')
+            $http.get('/api/1.0/account', { cache: true})
             .success(function (data) {
                 account = data;
                 callback(null, data)

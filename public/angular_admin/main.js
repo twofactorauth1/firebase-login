@@ -67,6 +67,7 @@ require.config({
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
         'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
+        'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -213,7 +214,8 @@ require.config({
         'timeAgoFilter': {deps: ['moment']},
         'ngTagsInput': ['angular'],
         'angularConfig': {deps: ['angular']},
-        'ngload': ['angularAMD']
+        'ngload': ['angularAMD'],
+        'jPushMenu' : {deps: ['jquery']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

@@ -342,7 +342,13 @@
                                 </div>
 
                             </div>
+                        </div>                        
+                        
+                         <div class="col-xs-12" ng-if="customer.created.date">
+                            <p class="pull-left title">Created:</p>
+                            <span class="pull-right value">{{customer.created.date | timeAgoFilter}}</span>
                         </div>
+                        
                         <div class="clearfix mb20"></div>
                         <div class="col-xs-12">
                             <ul class="social-list right row">
@@ -392,7 +398,7 @@
                                     </div>
                                 </li>
                                 <li ng-class="{hidden: !($first), more: !($first)}" class="col-xs-12 li-email" ng-repeat="email in customer.details[0].emails">
-                                    <div>
+                                    <div ng-if="checkBestEmail && email.email ">
                                         <div class="col-xs-2">
                                             <a target="_blank" data-original-title="Email" title="" data-placement="top" data-toggle="tooltip" class="tooltips pull-left" href="mailto:{{email.email}}">
                                                 <i class="fa fa-envelope">
@@ -407,7 +413,7 @@
 
                                             <button class="btn btn-sm btn-warning btn-more-emails" href="#" ng-show="$first" ng-click="moreToggleFn('email')">
                                                 <i class="fa fa-chevron-down"></i>
-                                                <span class="hidden-xs">2 More</span>
+                                                <span class="hidden-xs">{{customer.details[0].emails.length - 1}} More</span>
                                             </button>
 
 

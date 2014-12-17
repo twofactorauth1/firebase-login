@@ -697,6 +697,8 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
+                    if($scope.componentEditing.version)
+                        $scope.componentEditing.version = $scope.componentEditing.version.toString();
                     $scope.versionSelected = $scope.componentEditing.version;
                 });
             };
