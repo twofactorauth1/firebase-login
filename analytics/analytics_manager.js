@@ -165,6 +165,22 @@ module.exports = {
 
     },
 
+    findSessionEventsByFingerprint: function(fingerprint, fn) {
+        _log.debug('>> findSessionEventsByFingerprint');
+        var query = {
+            fingerprint: fingerprint
+        };
+        dao.findMany(query, $$.m.SessionEvent, function(err, value){
+            if(err) {
+                _log.error('Error finding session events: ' + err);
+                fn(err, null);
+            } else {
+                _log.debug('<< findSessionEventsByFingerprint');
+                fn(null, value);
+            }
+        });
+    },
+
     storePageEvent: function(pageEvent, fn) {
         _log.debug('>> storePageEvent');
         dao.saveOrUpdate(pageEvent, fn);

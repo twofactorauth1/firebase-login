@@ -9,6 +9,7 @@ var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 var userDao = require('./user.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
+var analyticsManager = require('../analytics/analytics_manager');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
@@ -796,7 +797,13 @@ var dao = {
                             self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
                         }
                     });
-
+                    self._createHistoricActivities(savedContact.get('accountId'), savedContact.id(), savedContact.get('fingerprint'), function(err, val){
+                        if(err) {
+                            self.log.error('Error creating historic activities for new contact: ' + err);
+                        } else {
+                            self.log.error('Successfully created historic activities for new contact');
+                        }
+                    });
                     self.log.debug('<< saveOrUpdateContact');
                     fn(null, savedContact);
                 }
@@ -808,8 +815,38 @@ var dao = {
 
     },
 
-    createHistoricActivities: function(contactId, fingerprint, fn) {
+    _createHistoricActivities: function(accountId, contactId, fingerprint, fn) {
+        //create PAGE_VIEW activities
+        var self = this;
+        self.log.debug('>> _createHistoricActivities');
 
+        analyticsManager.findSessionEventsByFingerprint(fingerprint, function(err, list){
+            if(err) {
+                self.log.error('Error finding session events: ' + err);
+                return fn(err, null);
+            }
+
+            async.each(list, function(sessionEvent, cb){
+                var activity = new $$.m.ContactActivity({
+                    accountId: accountId,
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.PAGE_VIEW,
+                    start: sessionEvent.get('session_start')
+                });
+                contactActivityManager.createActivity(activity, function(err, val){
+                    if(err) {
+                        self.log.error('Error creating activity: ' + err);
+                        cb(err);
+                    } else {
+                        cb();
+                    }
+                });
+
+            }, function(err){
+                fn(err, null);
+            });
+
+        });
     }
 
 
