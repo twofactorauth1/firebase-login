@@ -268,97 +268,126 @@
     <!-- /.modal -->
 
     <!-- Add Component Modal -->
-   <div class="modal" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" indigeweb-draggable-modal aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" indigeweb-draggable-modal aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
-              <h4 class="modal-title">Component Settings</h4>
-            </div>
-            <div class="modal-body">
-            	<h5>Currently Editing</h5>
-                    <div class="thumbnail">
-                        <div class="check-component" style="display:none"><i class="fa fa-check-circle"></i>
-                        </div>
-                        <div class="component-icon"><i class="{{componentEditing.icon}}"></i>
-                        </div>
-                        <div class="caption">
-                            <h5 class="center">{{componentEditing.title}}</h5>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-if="componentEditing.type === 'campaign'">
-                        <label>Campaign ID:</label>
-                        <select ng-model="componentEditing.campaignId" ng-change="saveComponent()" class="form-control input-lg">
-                            <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group" ng-if="componentEditing.type === 'payment-form'">
-                        <label>Product ID:</label>
-                        <input ng-model="componentEditing.productId" type="text" class="form-control input-lg" ng-change="saveComponent()" value="Add Product ID">
-                    </div>
-		 <tabset>
-            <tab ng-show="componentEditing">
-                <tab-heading>
-                    <span>Basic</span>
-                </tab-heading>
-                <div class="righstpanelinner">
-                            <div class="form-group" ng-if="componentEditing.type === 'navigation'">
-                                <label>Nav BG Color:</label>
-                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
-                            </div>
-                            <div class="form-group">
-                                <label for="colorpicker">Text Color:</label>
-                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
-                                <label for="colorpicker">Background Color:</label>
-                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="form-group" ng-if="componentEditing.bg.img.url">
-                                <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                    <h4 class="modal-title">Component Settings</h4>
+                </div>
+                <div class="modal-body" style="padding:0;">
+                    <tabset>
+                        <tab ng-show="componentEditing">
+                            <tab-heading>
+                                <span>Basic</span>
+                            </tab-heading>
+                            <div class="righstpanelinner">
+                                <div class="form-group" ng-if="componentEditing.type === 'navigation'">
+                                    <label>Nav BG Color:</label>
+                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                <div class="form-group">
+                                    <label for="colorpicker">Text Color:</label>
+                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
+                                    <label for="colorpicker">Background Color:</label>
+                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                <div class="clearfix"></div>
+                                <label>Logo Settings:</label>
+                                </hr>
+                                <div class="form-horizontal" ng-if="componentEditing.type === 'navigation'">
+                                    <label>Margin:</label>
+                                    <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                                <label>Top:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.t" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                                <label>Right:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.r" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                           <div class="col-xs-2">
+                                                <label>Bottom:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.b" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                                <label>Left:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.l" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                <div class="bgimg" id="bgimg">
-                                    <i class="fa fa-close" ng-click="componentEditing.bg.img.url=null"></i>
-                                    <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
+
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type === 'navigation'">
+                                    <label>Padding:</label>
+                                    <input type="text" placeholder="10px" ng-model="componentEditing.logo.padding">
                                 </div>
 
-                            </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group" ng-if="componentEditing.bg.img.url">
+                                    <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
 
-                            <div class="form-group" ng-if="!componentEditing.bg.img.url">
-                                <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                <label for="bg_blur">Blur BG</label>
-                                <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                <label for="bg_hide">Show BG</label>
-                                <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
-                                <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
-                                <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                <label for="bg_overlay">Add Overlay</label>
-                                <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                <label for="colorpicker">Button:</label>
-                                <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                            </div>
-                       
-                        
+                                    <div class="bgimg" id="bgimg">
+                                        <i class="fa fa-close" ng-click="componentEditing.bg.img.url=null"></i>
+                                        <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
+                                    </div>
 
-                    <div class="clearfix mb15"></div>
-                </div>
-            </tab>
-            <tab>
-            	 <tab-heading>
-                    <span>Advanced</span>
-                </tab-heading>
-            	
+                                </div>
+
+                                <div class="form-group" ng-if="!componentEditing.bg.img.url">
+                                    <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                    <label for="bg_blur">Blur BG</label>
+                                    <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                    <label for="bg_hide">Show BG</label>
+                                    <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
+                                    <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
+                                    <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                    <label for="bg_overlay">Add Overlay</label>
+                                    <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                    <label for="colorpicker">Button:</label>
+                                    <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                </div>
+
+
+
+                                <div class="clearfix mb15"></div>
+                            </div>
+                        </tab>
+                        <tab>
+                            <tab-heading>
+                                <span>Advanced</span>
+                            </tab-heading>
                             <div class="form-group">
                                 <label for="colorpicker">Visibility:</label>
                                 <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
@@ -384,83 +413,94 @@
                             </div>
 
                             <div class="well">
-                                <p>Danger Zone</p>                               
+                                <p>Danger Zone</p>
                                 <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
                             </div>
-                        
-            </tab>
-		<tab ng-if="componentEditing.type === 'navigation'">
-			<tab-heading>
-                    <span>Reorder</span>
-                </tab-heading>
-			<div id="reorderNavBarContainer" class="form-group" onmouseover = "$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout = "$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
-					<ul ui-sortable="sortableOptions" class="nav-bar" style="list-style: none;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
-						<li data-ng-repeat="link in mainMenu.links track by $index">
-							<div class="head-menu-links col-sm-12" data-label="{{link.label}}">
-								<div class="col-sm-6">
-                                    <h4>
-                                         <span ng-show="!edit[$index]">{{link.label}}</span>
-                                         <input ng-show="edit[$index]" type="text" ng-model="link.label">
-                                     </h4>
+                        </tab>
+                        <tab>
+                            <tab-heading>
+                                <span>Info</span>
+                            </tab-heading>
+                            <h5>Currently Editing</h5>
+                            <div class="thumbnail">
+                                <div class="check-component" style="display:none"><i class="fa fa-check-circle"></i>
                                 </div>
-                                <div class="col-sm-6 pull-left" style="cursor:auto">
-                                <h4>                               
-                                    <i ng-show="!edit[$index]" class="fa fa-pencil-square-o" ng-click="edit[$index]=true"></i>                                    
-                                    <i ng-show="edit[$index]" class="fa fa-times" ng-click="edit[$index]= false"></i>
-                                    <i class="fa fa-trash-o" ng-click="mainMenu.links.splice($index,1)"></i>
-                                </h4>
+                                <div class="component-icon"><i class="{{componentEditing.icon}}"></i>
                                 </div>
-                                
-							</div>
-						</li>
-					</ul>
-				</div>
-				<div class="footer">
-					<button type="button" class="btn btn-primary pull-right" ng-click="updateLinkList()" data-dismiss="modal">
-						Save changes
-					</button>
-				</div>
-		</tab>
-		<tab ng-if="componentEditing.type === 'meet-team'">
-			<tab-heading>
-                    <span>Add Team Member</span>
-                </tab-heading>
-				<div class="form-group">
-					<label for="member-name">Name </label>
-					<input id="member-name" class="form-control input-lg" type="text" ng-model="team.name">
-				</div>
-				<div class="form-group">
-					<label for="member-position">Position </label>
-					<input id="member-position" class="form-control input-lg" type="text" ng-model="team.position">
-				</div>
-				<div class="form-group">
-					<label for="member-bio">Bio Data </label>
-					<input id="member-position" class="form-control input-lg" type="textarea" ng-model="team.bio">
-				</div>
-				<div class="form-group">
-					<div class="col-sm-6">
-						<img style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
-					</div>
-					<div class="col-sm-6">
-						<div class="btn-link">
-							<a class="btn btn-success btn-block media-modal" media-modal-show-insert="true" on-insert-mediacb="addProfilePic" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Add Profile Picture</span> </a>
-						</div>
-					</div>
-				</div>
-				<div class="footer">
-					<button type="button" class="btn btn-primary pull-right" ng-click="addTeamMember(team, component._id)" data-dismiss="modal">
-						Save changes
-					</button>
-				</div>
-		</tab>
-        </tabset>
-		</div>
-            <div class="modal-footer">
-              <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                                <div class="caption">
+                                    <h5 class="center">{{componentEditing.title}}</h5>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type === 'campaign'">
+                                <label>Campaign ID:</label>
+                                <select ng-model="componentEditing.campaignId" ng-change="saveComponent()" class="form-control input-lg">
+                                    <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group" ng-if="componentEditing.type === 'payment-form'">
+                                <label>Product ID:</label>
+                                <input ng-model="componentEditing.productId" type="text" class="form-control input-lg" ng-change="saveComponent()" value="Add Product ID">
+                            </div>
+                        </tab>
+                        <tab ng-if="componentEditing.type === 'navigation'">
+                            <tab-heading>
+                                <span>Reorder</span>
+                            </tab-heading>
+                            <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
+                                <ul ui-sortable="sortableOptions" class="nav-bar" style="list-style: none;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                                    <li data-ng-repeat="link in mainMenu.links track by $index">
+                                        <div class="head-menu-links" data-label="{{link.label}}">
+                                            <h4>{{link.label}}</h4>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="footer">
+                                <button type="button" class="btn btn-primary pull-right" ng-click="updateLinkList()" data-dismiss="modal">
+                                    Save changes
+                                </button>
+                            </div>
+                        </tab>
+                        <tab ng-if="componentEditing.type === 'meet-team'">
+                            <tab-heading>
+                                <span>Add Team Member</span>
+                            </tab-heading>
+                            <div class="form-group">
+                                <label for="member-name">Name </label>
+                                <input id="member-name" class="form-control input-lg" type="text" ng-model="team.name">
+                            </div>
+                            <div class="form-group">
+                                <label for="member-position">Position </label>
+                                <input id="member-position" class="form-control input-lg" type="text" ng-model="team.position">
+                            </div>
+                            <div class="form-group">
+                                <label for="member-bio">Bio Data </label>
+                                <input id="member-position" class="form-control input-lg" type="textarea" ng-model="team.bio">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <img style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="btn-link">
+                                        <a class="btn btn-success btn-block media-modal" media-modal-show-insert="true" on-insert-mediacb="addProfilePic" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Add Profile Picture</span> </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer">
+                                <button type="button" class="btn btn-primary pull-right" ng-click="addTeamMember(team, component._id)" data-dismiss="modal">
+                                    Save changes
+                                </button>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
     <!-- /.modal -->
 
     <!-- Create Page Modal -->
