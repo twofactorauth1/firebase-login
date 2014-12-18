@@ -213,6 +213,31 @@
 
             <div class="tab-content">
                 <div class="tab-pane pane-settings active" id="rp-settings">
+                    <div class="rightpanelinner">
+                    <div id="current-settings">
+                        <h3>Default Tab</h3>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="pages" ng-value="'pages'"
+                                ng-model="userPreferences.website_default_tab"
+                                ng-change="showToaster = true; activeTab = 'pages'">Pages
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="posts" ng-value="'posts'" ng-model="userPreferences.website_default_tab"
+                                ng-change="showToaster = true; activeTab = 'posts'">Posts
+                            </label>
+                        </div>
+                        <div class="radio disabled">
+                            <label>
+                                <input type="radio" name="default_tab" id="themes" ng-value="'themes'"
+                                ng-model="userPreferences.website_default_tab"
+                                ng-change="showToaster = true; activeTab = 'themes'">Themes
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 </div>
                 <!-- tab-pane -->
             </div>
