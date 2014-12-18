@@ -136,12 +136,15 @@ define([
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 $scope.bindEvents();
+                // to do need to check when iframe content is loaded properly
                 if($scope.isEditing)
                 {
-                  if (iframeDoc.getElementById('body')) {
-                        $scope.editPage();
-                } 
-                }                
+                  if($("#iframe-website").contents().find("body").length) {
+                        setTimeout(function() {
+                           $scope.editPage();
+                        }, 5000)
+                     }
+                }               
                 
             }
 
