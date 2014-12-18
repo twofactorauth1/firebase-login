@@ -14,6 +14,11 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 }
             };
             $scope.customerId = $stateParams.id;
+            $scope.newActivity = {
+                contactId: parseInt($stateParams.id),
+                start: new Date(),
+                end: new Date()
+            };
             $scope.ip_geo_address = '';
             CustomerService.getCustomer($scope.customerId, function(customer) {
                 $scope.customer = customer;
@@ -58,7 +63,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
                 $scope.contactLabel = CustomerService.contactLabel(customer);
                 $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
-            });            
+            });
 
             CustomerService.getCustomerActivities($scope.customerId, function(activities) {
                 for (var i = 0; i < activities.length; i++) {
@@ -124,6 +129,22 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                     console.info(data);
                 });
             };
+
+            $scope.addActivityFn = function() {
+                CustomerService.postCustomerActivity($scope.newActivity, function(activity) {
+                    $scope.activities.push(activity);
+                    $scope.activities = _.sortBy($scope.activities, function(o) {
+                        return o.start;
+                    }).reverse();
+                    $scope.newActivity = {
+                        contactId: parseInt($stateParams.id),
+                        start: new Date(),
+                        end: new Date()
+                    };
+
+                });
+            };
+
             $scope.displayAddressFormat = function(address) {
                 return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
                     return str !== "";
