@@ -81,6 +81,7 @@
                         <span ng-bind-html="teamMember.position" />
                     </div>
                 </div>
+                <button ng-if="isEditing" ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
             </div>
         </div>
     </div>

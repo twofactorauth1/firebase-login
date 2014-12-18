@@ -474,6 +474,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 $("#socialComponentModal").modal("hide");
                 $(".modal-backdrop").remove();
         };
+        $scope.deleteTeamMember = function(componentId,index)
+        {
+             window.parent.deleteTeamMember(componentId,index);
+        }
 
         window.activateAloha = function() {
             $('.editable').aloha();

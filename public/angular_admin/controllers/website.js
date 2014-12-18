@@ -539,7 +539,14 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
-
+            window.deleteTeamMember = function(componentId, index)
+            {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.teamMembers.splice(index, 1);                    
+                $scope.saveComponent();             
+            }
             window.updateSocialNetworks = function(old_value,mode,new_value)
             {
                var selectedName;
