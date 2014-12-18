@@ -539,7 +539,14 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
-
+            window.deleteTeamMember = function(componentId, index)
+            {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.teamMembers.splice(index, 1);                    
+                $scope.saveEditableComponent();
+            }
             window.updateSocialNetworks = function(old_value,mode,new_value)
             {
                var selectedName;
@@ -551,7 +558,7 @@ define([
                         url: new_value.url,
                         icon: new_value.icon
                     });
-                    $scope.saveSocialComponent();
+                    $scope.saveEditableComponent();
                 }
                 break;
                 case "update":
@@ -562,7 +569,7 @@ define([
                     selectedName.name = new_value.name;
                     selectedName.url = new_value.url;
                     selectedName.icon = new_value.icon;
-                    $scope.saveSocialComponent();
+                    $scope.saveEditableComponent();
                 }
                 break;
                 case "delete":
@@ -573,7 +580,7 @@ define([
                     {
                         var index = $scope.componentEditing.networks.indexOf(selectedName)
                         $scope.componentEditing.networks.splice(index, 1);                        
-                        $scope.saveSocialComponent();
+                        $scope.saveEditableComponent();
                     }                    
                 break;
                 }
@@ -727,7 +734,7 @@ define([
             };
 
 
-            $scope.saveSocialComponent = function() {
+            $scope.saveEditableComponent = function() {
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -736,7 +743,7 @@ define([
                     }
                 }
                 $scope.currentPage.components = $scope.components;                
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateSocialComponent && iFrame.contentWindow.updateSocialComponent($scope.components, $scope.componentEditing.networks);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateEditableComponent && iFrame.contentWindow.updateEditableComponent($scope.components, $scope.componentEditing.networks);
 
             };
 
@@ -877,7 +884,13 @@ define([
                 type: 'text-only',
                 icon: 'fa fa-file-text',
                 enabled: true
-            }, ];
+            },
+            {
+                title: 'Thumbnail Slider',
+                type: 'text-only',
+                icon: 'fa fa-like',
+                enabled: true
+            } ];
 
             $scope.selectComponent = function(type) {
                 if (type.enabled) {

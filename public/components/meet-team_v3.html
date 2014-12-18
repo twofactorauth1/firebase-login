@@ -47,6 +47,9 @@
                         <span ng-bind-html="teamMember.bio"/>
                     </div>
                 </div>
+                <div ng-if="isEditing" class="delete-team-member center">
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+                </div>
                     <ul class="social">
                         <li ng-repeat="(val, key) in teamMember.social">
                             <a href="{{key}}" target="_blank">
@@ -55,6 +58,7 @@
                         </li>
                     </ul>
                 </div>
+                
             </div>
         </div>
     </div>
