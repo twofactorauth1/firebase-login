@@ -25106,12 +25106,8 @@ div[data-type="coming-soon"] .component-inner {
   text-indent: 17px;
   line-height: 18px;
 }
-.video-block .video-title {
-  text-align: center;
-}
 .video-block .video-subtitle {
   margin: 0 auto;
-  text-align: center;
 }
 .video-block .btn {
   width: 200px;
