@@ -880,7 +880,7 @@ define([
             },
             {
                 title: 'Thumbnail Slider',
-                type: 'text-only',
+                type: 'thumbnail-slider',
                 icon: 'fa fa-like',
                 enabled: true
             } ];
