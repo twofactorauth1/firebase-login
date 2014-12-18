@@ -877,7 +877,13 @@ define([
                 type: 'text-only',
                 icon: 'fa fa-file-text',
                 enabled: true
-            }, ];
+            },
+            {
+                title: 'Thumbnail Slider',
+                type: 'text-only',
+                icon: 'fa fa-like',
+                enabled: true
+            } ];
 
             $scope.selectComponent = function(type) {
                 if (type.enabled) {

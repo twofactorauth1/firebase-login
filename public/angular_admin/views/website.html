@@ -295,6 +295,56 @@
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="clearfix"></div>
+                                <label>Logo Settings:</label>
+                                </hr>
+                                <div class="form-horizontal" ng-if="componentEditing.type === 'navigation'">
+                                    <label>Margin:</label>
+                                    <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                                <label>Top:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.t" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                                <label>Right:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.r" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                           <div class="col-xs-2">
+                                                <label>Bottom:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.b" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-2">
+                                                <label>Left:</label>
+                                            </div>
+                                            <div class="col-xs-10">
+                                                <input type="number" placeholder="10px" ng-model="componentEditing.logo.margin.l" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type === 'navigation'">
+                                    <label>Padding:</label>
+                                    <input type="text" placeholder="10px" ng-model="componentEditing.logo.padding">
+                                </div>
+
+                                <div class="clearfix"></div>
                                 <div class="form-group" ng-if="componentEditing.bg.img.url">
                                     <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
 
