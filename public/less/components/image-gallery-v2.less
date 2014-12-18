@@ -15,6 +15,9 @@
 
   .thumbnail {
     position: relative;
+    width: 240px;
+    height: 240px;
+    overflow: hidden;
   }
 
   a.thumbnail .caption {
@@ -69,8 +72,16 @@
   }
 
   .thumbnail img {
-    height: 240px;
-    width: 310px
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    width: auto;
+    max-width: none;
+    padding: 5px;
+    -webkit-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
   }
 
   .imgHeight {

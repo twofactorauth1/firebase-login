@@ -68,7 +68,7 @@ define([
             $scope.backup = {};
             $scope.components = [];
 
-            $scope.isEditing = false;
+            $scope.isEditing = true;
 
             $scope.isMobile = false;
 
@@ -122,7 +122,7 @@ define([
             window.updateAdminPageScope = function(page) {
                 $scope.singlePost = false;
                 if (page._id !== $scope.currentPage._id) {
-                    $scope.updatePage(page.handle);
+                    $scope.updatePage(page.handle, true);
                 }
             }
 
@@ -136,6 +136,16 @@ define([
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 $scope.bindEvents();
+                // to do need to check when iframe content is loaded properly
+                if($scope.isEditing)
+                {
+                  if($("#iframe-website").contents().find("body").length) {
+                        setTimeout(function() {
+                           $scope.editPage();
+                        }, 5000)
+                     }
+                }               
+                
             }
 
             $scope.bindEvents = function() {
@@ -490,9 +500,10 @@ define([
                 }                
             };
 
-            $scope.updatePage = function(handle) {
+            $scope.updatePage = function(handle, editing) {
                 console.log('update page');
-                $scope.isEditing = false;
+                if(!angular.isDefined(editing))
+                    $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
                 var route;
@@ -887,7 +898,7 @@ define([
             },
             {
                 title: 'Thumbnail Slider',
-                type: 'thumbnail-slider',
+                type: 'text-only',
                 icon: 'fa fa-like',
                 enabled: true
             } ];

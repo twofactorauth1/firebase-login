@@ -22493,19 +22493,18 @@ body.editing .fragment {
 body.editing .fragment.dragging {
   z-index: 999999!important;
 }
-body.editing .fragment .componentActions {
+body.editing .fragment:hover .component-inner {
+  border: 2px dashed #34495e;
+  padding: 0px;
+}
+body.editing .fragment:hover .componentActions {
   display: block;
   line-height: 39px;
   visibility: visible;
 }
-body.editing .fragment .add-component {
+body.editing .fragment:hover .add-component {
   display: block;
   visibility: visible;
-}
-body.editing .fragment .component-inner {
-  border: 2px dashed #34495e;
-  border-top: none;
-  padding: 0px;
 }
 .ui-sortable {
   margin-bottom: 0;
@@ -25216,6 +25215,9 @@ div[data-class='image-text'] p {
 }
 .image-gallery-v2 .thumbnail {
   position: relative;
+  width: 240px;
+  height: 240px;
+  overflow: hidden;
 }
 .image-gallery-v2 a.thumbnail .caption {
   display: block;
@@ -25265,8 +25267,16 @@ div[data-class='image-text'] p {
   transition: all 0.2s ease-in-out;
 }
 .image-gallery-v2 .thumbnail img {
-  height: 240px;
-  width: 310px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  padding: 5px;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .image-gallery-v2 .imgHeight {
   height: 285px;

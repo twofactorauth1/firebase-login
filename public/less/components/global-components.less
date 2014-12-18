@@ -161,7 +161,12 @@ body.editing {
     &.dragging {
       z-index: 999999!important;
     }
-    .componentActions {
+    &:hover {
+      .component-inner {
+        border: 2px dashed #34495e;
+        padding: 0px;
+      }
+      .componentActions {
         display: block;
         line-height: 39px;
         visibility: visible;
@@ -170,11 +175,7 @@ body.editing {
         display: block;
         visibility: visible;
       }
-       .component-inner {
-        border: 2px dashed #34495e;
-        border-top: none;
-        padding: 0px;
-      }     
+    }
   }
 }
 
