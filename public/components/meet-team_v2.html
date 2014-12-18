@@ -46,7 +46,9 @@
                         <span ng-bind-html="teamMember.bio"/>
                     </div>
                 </div>
-
+                <div ng-if="isEditing" class="delete-team-member">
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+                </div>
             </div>
         </div>
     </div>

@@ -566,9 +566,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 };
             });
         };
-        window.updateSocialComponent = function(data,networks) {
+        window.updateCustomComponent = function(data,networks) {
                 $scope.currentpage.components = data;
-                $scope.networks = networks;
+                if(networks)
+                    $scope.networks = networks;
         };
 
         window.triggerEditMode = function() {
