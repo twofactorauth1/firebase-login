@@ -7,10 +7,13 @@ define(['angularAMD'], function(angularAMD) {'use strict';
         x = 0,
         y = 0;
       element.css({
-        position: 'fixed',
+        position: 'fixed'
+      });
+      var modalHeader = element[0].querySelector('.modal-header');
+      angular.element(modalHeader).css({
         cursor: 'move'
       });
-      element.on('mousedown', function (event) {
+      angular.element(modalHeader).on('mousedown', function (event) {
         // Prevent default dragging of selected content
         //event.preventDefault();
         if(angular.isDefined(element.attr('indigeweb-draggable-modal')))

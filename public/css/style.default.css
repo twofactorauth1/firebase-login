@@ -15465,9 +15465,6 @@ strong {
 .mainpanel {
   background: #e7e7e7;
 }
-.ng-scope {
-  height: 100%;
-}
 #main-viewport {
   height: auto;
 }
@@ -20556,6 +20553,10 @@ div.error label.error:before {
 }
 #component-setting-modal .modal-body {
   padding: 0;
+}
+#component-setting-modal .modal-body .tab-content {
+  height: 300px;
+  overflow-y: scroll;
 }
 #component-setting-modal ul.nav {
   margin-top: 0!important;
