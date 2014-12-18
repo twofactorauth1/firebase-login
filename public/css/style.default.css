@@ -16892,6 +16892,20 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   text-align: center;
   margin: 5px 0;
 }
+#bussiness_logo_container {
+  background-color: #eee;
+  display: table;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  border-radius: 6px;
+  padding: 15px;
+}
+#bussiness_logo_container > div {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;
