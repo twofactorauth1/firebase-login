@@ -545,7 +545,7 @@ define([
                     _id: componentId
                 });
                 $scope.componentEditing.teamMembers.splice(index, 1);                    
-                $scope.saveEditableComponent();
+                $scope.saveCustomComponent();
             }
             window.updateSocialNetworks = function(old_value,mode,new_value)
             {
@@ -558,7 +558,7 @@ define([
                         url: new_value.url,
                         icon: new_value.icon
                     });
-                    $scope.saveEditableComponent();
+                    $scope.saveCustomComponent();
                 }
                 break;
                 case "update":
@@ -569,7 +569,7 @@ define([
                     selectedName.name = new_value.name;
                     selectedName.url = new_value.url;
                     selectedName.icon = new_value.icon;
-                    $scope.saveEditableComponent();
+                    $scope.saveCustomComponent();
                 }
                 break;
                 case "delete":
@@ -580,7 +580,7 @@ define([
                     {
                         var index = $scope.componentEditing.networks.indexOf(selectedName)
                         $scope.componentEditing.networks.splice(index, 1);                        
-                        $scope.saveEditableComponent();
+                        $scope.saveCustomComponent();
                     }                    
                 break;
                 }
@@ -734,7 +734,7 @@ define([
             };
 
 
-            $scope.saveEditableComponent = function() {
+            $scope.saveCustomComponent = function() {
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -743,7 +743,7 @@ define([
                     }
                 }
                 $scope.currentPage.components = $scope.components;                
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateEditableComponent && iFrame.contentWindow.updateEditableComponent($scope.components, $scope.componentEditing.networks);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, $scope.componentEditing.networks);
 
             };
 
