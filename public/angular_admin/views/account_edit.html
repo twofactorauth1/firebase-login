@@ -1,4 +1,7 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div ng-if="showOnboarding">
+    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
+</div>
 <div style="">
 	<div class="pageheader">
 		<div class="col-xs-7">
@@ -26,14 +29,16 @@
 						<!-- UPDATE PHOTO -->
 						<div id="contact-photo-container" class="row">
 							<row>
-							<div class="col-xs-5 col-md-6">
-								<div class="hidden-xs hidden-sm">
-									<div class="btn-link btn-edit-photo media-modal" ng-click = "logo = false" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user'>Change Photo</div>
-								</div>
+							<div class="col-xs-12">
 								<img id="contact-photo"
 									class="img-responsive img-rounded hand btn-edit-photo"
 									ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}"
-									class="img-responsive img-rounded hand btn-edit-photo">
+									class="img-responsive img-rounded hand btn-edit-photo"
+									style="max-width:200px;margin:0 auto;">
+									<div class="clearfix mb15"></div>
+									<div class="col-xs-12 text-center">
+										<a class="btn btn-primary btn-edit-photo media-modal" ng-click = "logo = false" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user'>Change Photo</a>
+									</div>
 							</div>
 
 							<div class="col-xs-7 col-md-6">
@@ -192,11 +197,6 @@
 				        <div id="contact-photo-container" class="row">
 				            <row>
 				                <div class="col-xs-5 col-md-6">
-				                    <div class="hidden-xs hidden-sm">
-				                        <div class="media-modal" ng-click = "logo = true"  media-modal-show-insert="true" on-insert-mediacb="insertMedia">
-                                            <span class="btn-link btn-edit-photo"> Change Logo</span>
-                                        </div>
-				                    </div>
                                     <div id="bussiness_logo_container" >
                                         <div>
                                             <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" />
@@ -215,6 +215,11 @@
                                             }
                                         </style>
                                     </div>
+                                    <div class="col-xs-12 text-center">
+				                        <a class="media-modal btn btn-primary" ng-click = "logo = true"  media-modal-show-insert="true" on-insert-mediacb="insertMedia">
+                                            <span class="btn-link btn-edit-photo"> Change Logo</span>
+                                        </a>
+				                    </div>
 
 
 				                </div>
