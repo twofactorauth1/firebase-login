@@ -28,6 +28,12 @@
 
                 </div>
             </div>
+            <div ng-if="isEditing" class="row">
+                <div class="delete-team-member center">
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+                </div>
+            </div>
+            
         </div>
     </div>
     <div class="col-md-2">&nbsp;</div>
