@@ -432,7 +432,7 @@ var dao = {
         });
     },
 
-    createCustomerContact: function(user, accountId, fn) {
+    createCustomerContact: function(user, accountId, fingerprint, fn) {
         var self = this;
         self.log.debug('>> createCustomerContact');
         self.getContactByEmailAndAccount(user.get('email'), accountId, function(err, existingContact){
@@ -446,6 +446,7 @@ var dao = {
                 self.log.info('Attempted to create a new customer for an existing contact');
                 var oldType = existingContact.get('type');
                 existingContact.set('type', 'cu');//set type to customer
+                existingContact.set('fingerprint', fingerprint);
                 self.saveOrUpdate(existingContact, function(err, savedContact){
                     if(err) {
                         self.log.error('Error saving contact: ' + err);
@@ -461,10 +462,11 @@ var dao = {
                     accountId: accountId,           //int
                     first:user.get('first'),             //string,
                     last:user.get('last'),              //string,
-                    type:"cu"              //contact_types
+                    type:"cu",              //contact_types,
+                    fingerprint:fingerprint
 
                 });
-                newContact.createOrUpdateDetails('user', null, null, null, null, null, user.get('email'), null);
+                newContact.createOrUpdateDetails('emails', null, null, null, null, null, user.get('email'), null);
                 self.saveOrUpdate(newContact, function(err, savedContact){
                     if(err) {
                         self.log.error('Error saving contact: ' + err);
@@ -794,6 +796,7 @@ var dao = {
                             self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
                         }
                     });
+
                     self.log.debug('<< saveOrUpdateContact');
                     fn(null, savedContact);
                 }
@@ -802,6 +805,10 @@ var dao = {
             // just an update
             self.saveOrUpdate(contact, fn);
         }
+
+    },
+
+    createHistoricActivities: function(contactId, fingerprint, fn) {
 
     }
 
