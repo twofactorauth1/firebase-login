@@ -75,11 +75,12 @@
 			</div>
 		</headroom>
 		<div class="products-list" ng-switch on="commerceSettings.gridViewDisplay">
-			<div ng-switch-when="true" class="row">
-
-        <div class="hidden col-xs-10">
-          <h3>No Products Available</h3>
+       <div ng-if="products.length <= 0" class="empty">
+            <h1 class="center"><span class="fa fa-shopping-cart"></span></h1>
+            <h3 class="center">No Products Yet</h3>
+            <h5 class="center">Add products for them to appear here.</h5>
         </div>
+			<div ng-switch-when="true" class="row">
 
         <div class="col-xs-12 col-sm-4" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
           <div class="commerce-item btn-view-product-details" data-productid="1">

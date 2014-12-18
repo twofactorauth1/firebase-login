@@ -17503,6 +17503,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .cbp-spmenu-vertical {
   z-index: 200 !important;
 }
+.indi-li a {
+  height: 42px;
+}
+.indi-li a i {
+  margin: -8px 0 0 -7px;
+}
 .rightmenu-open .rightpanel {
   display: block;
   right: 0;
