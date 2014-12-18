@@ -24398,6 +24398,12 @@ div[data-type="social"] .inner-page {
     margin: 0 auto;
     display: block;
   }
+  .footer-container {
+    margin-top: 40px;
+  }
+  .powered-by {
+    margin-top: -52px;
+  }
 }
 /********** Single Blog ***********/
 div[data-type=single-post] .container {
