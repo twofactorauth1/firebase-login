@@ -114,7 +114,8 @@
     "bootstrap-social": "https://github.com/lipis/bootstrap-social.git",
     "angular-jqcloud": "~1.0.0",
     "jPushMenu": "https://github.com/takien/jPushMenu.git",
-    "jqcloud2": "~2.0.1"
+    "jqcloud2": "~2.0.1",
+    "angular-slugify": "~1.0.0"
   },
   "resolutions": {
     "angular": "1.3.7",

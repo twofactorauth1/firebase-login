@@ -150,7 +150,8 @@ require.config({
         "psEditableDirective": "/pipeshift/js/modules/video/directive/psEditable",
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
-        'angularConfig' : 'scripts/config'
+        'angularConfig' : 'scripts/config',
+        'angularSlugifier': 'libs/angular-slugify/angular-slugify'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -215,7 +216,8 @@ require.config({
         'ngTagsInput': ['angular'],
         'angularConfig': {deps: ['angular']},
         'ngload': ['angularAMD'],
-        'jPushMenu' : {deps: ['jquery']}
+        'jPushMenu' : {deps: ['jquery']},
+        'angularSlugifier': ['angular']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

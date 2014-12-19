@@ -260,6 +260,7 @@
                             <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title" ng-change="validateCreatePage(page)">
                         </div>
                         <div class="form-group" ng-class="{ 'has-error': handleError}">
+                            <slug from="page.title" to="page.handle"></slug>
                             <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
                             <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle" ng-change="validateCreatePage(page)">
                         </div>
@@ -303,6 +304,7 @@
                             <input id="page-title" class="form-control input-lg" type="text" ng-model="post.post_title">
                         </div>
                         <div class="form-group">
+                            <slug from="post.post_title" to="post.post_url"></slug>
                             <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
                             <input id="post-url" class="form-control input-lg" type="text" ng-model="post.post_url">
                         </div>
