@@ -21,24 +21,26 @@ var fs = require('fs');
 
 module.exports = {
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, sendWelcomeEmail, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
             accountToken = null;
         }
         log.debug('>> createAccountAndUser');
+        var user = null;
         dao.getUserByUsername(username, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
             if (value != null) {
-                return fn(true, "An account with this username already exists");
+                //return fn(true, "An account with this username already exists");
+                user = value;
             }
 
-            var deferred = $.Deferred();
 
+            var deferred = $.Deferred();
 
             accountDao.convertTempAccount(accountToken, function(err, value) {
                 if (!err) {
@@ -61,21 +63,23 @@ module.exports = {
                     }
 
 
+                    if(user === null) {
+                        user = new $$.m.User({
 
-                    var user = new $$.m.User({
+                            username:username,
+                            email:email,
+                            created: {
+                                date: new Date().getTime(),
+                                strategy: $$.constants.user.credential_types.LOCAL,
+                                by: null, //self-created
+                                isNew: true
+                            }
+                        });
+                        user.createOrUpdateLocalCredentials(password);
 
-                        username:username,
-                        email:email,
-                        created: {
-                            date: new Date().getTime(),
-                            strategy: $$.constants.user.credential_types.LOCAL,
-                            by: null, //self-created
-                            isNew: true
-                        }
-                    });
+                    }
 
 
-                    user.createOrUpdateLocalCredentials(password);
                     var roleAry = ["super","admin","member"];
                     user.createUserAccount(accountId, username, password, roleAry);
 
@@ -107,7 +111,7 @@ module.exports = {
                         }
 
                         log.debug('Creating customer contact for main account.');
-                        contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
+                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
                             if(err) {
                                 log.error('Error creating customer for user: ' + userId);
                             } else {

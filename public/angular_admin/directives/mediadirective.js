@@ -31,8 +31,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                         {
                             name: "SizeLimit",
                             fn: function (item) {
+                                console.log('item ', item);
                                 switch (item.type.substring(0, item.type.indexOf('/'))) {
                                     case "image":
+                                        console.log('image type');
                                     case "video":
                                         if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
                                             return true;
@@ -62,6 +64,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                     }
                 });
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                    console.log('success upload >>> ');
+                    console.log('fileItem >>> ', fileItem);
+                    console.log('response >>> ', response);
+                    console.log('response >>> ', response);
                     $scope.uploadComplete = false;
                     response.files[0].filename = fileItem.file.name;
                     response.files[0].mimeType = fileItem.file.type;
@@ -276,6 +282,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
             link: function (scope, element) {
                 scope.assets = [];
                 AssetsService.getAssetsByAccount(function(data) {
+                    console.log('asset service data ', data);
                     if (data instanceof Array) {
                         scope.assets = data;
                     }

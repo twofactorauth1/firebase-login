@@ -68,7 +68,7 @@ define([
             $scope.backup = {};
             $scope.components = [];
 
-            $scope.isEditing = false;
+            $scope.isEditing = true;
 
             $scope.isMobile = false;
 
@@ -122,7 +122,7 @@ define([
             window.updateAdminPageScope = function(page) {
                 $scope.singlePost = false;
                 if (page._id !== $scope.currentPage._id) {
-                    $scope.updatePage(page.handle);
+                    $scope.updatePage(page.handle, true);
                 }
             }
 
@@ -136,6 +136,16 @@ define([
                 var iframe = document.getElementById("iframe-website");
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 $scope.bindEvents();
+                // to do need to check when iframe content is loaded properly
+                if($scope.isEditing)
+                {
+                  if($("#iframe-website").contents().find("body").length) {
+                        setTimeout(function() {
+                           $scope.editPage();
+                        }, 5000)
+                     }
+                }               
+                
             }
 
             $scope.bindEvents = function() {
@@ -490,9 +500,10 @@ define([
                 }                
             };
 
-            $scope.updatePage = function(handle) {
+            $scope.updatePage = function(handle, editing) {
                 console.log('update page');
-                $scope.isEditing = false;
+                if(!angular.isDefined(editing))
+                    $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
                 var route;
@@ -539,7 +550,14 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
-
+            window.deleteTeamMember = function(componentId, index)
+            {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.teamMembers.splice(index, 1);                    
+                $scope.saveCustomComponent();
+            }
             window.updateSocialNetworks = function(old_value,mode,new_value)
             {
                var selectedName;
@@ -551,7 +569,7 @@ define([
                         url: new_value.url,
                         icon: new_value.icon
                     });
-                    $scope.saveSocialComponent();
+                    $scope.saveCustomComponent();
                 }
                 break;
                 case "update":
@@ -562,7 +580,7 @@ define([
                     selectedName.name = new_value.name;
                     selectedName.url = new_value.url;
                     selectedName.icon = new_value.icon;
-                    $scope.saveSocialComponent();
+                    $scope.saveCustomComponent();
                 }
                 break;
                 case "delete":
@@ -573,7 +591,7 @@ define([
                     {
                         var index = $scope.componentEditing.networks.indexOf(selectedName)
                         $scope.componentEditing.networks.splice(index, 1);                        
-                        $scope.saveSocialComponent();
+                        $scope.saveCustomComponent();
                     }                    
                 break;
                 }
@@ -690,13 +708,15 @@ define([
                 });
                 $scope.bindEvents();
                 //open right sidebar and component tab
-                document.body.className += ' leftpanel-collapsed rightmenu-open';
-                var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
-                var last = nodes[nodes.length - 1];
-                angular.element(last).triggerHandler('click');
+                // document.body.className += ' leftpanel-collapsed rightmenu-open';
+                // var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
+                // var last = nodes[nodes.length - 1];
+                // angular.element(last).triggerHandler('click');
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
+                    if($scope.componentEditing.version)
+                        $scope.componentEditing.version = $scope.componentEditing.version.toString();
                     $scope.versionSelected = $scope.componentEditing.version;
                 });
             };
@@ -725,7 +745,7 @@ define([
             };
 
 
-            $scope.saveSocialComponent = function() {
+            $scope.saveCustomComponent = function() {
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -734,7 +754,7 @@ define([
                     }
                 }
                 $scope.currentPage.components = $scope.components;                
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateSocialComponent && iFrame.contentWindow.updateSocialComponent($scope.components, $scope.componentEditing.networks);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, $scope.componentEditing.networks);
 
             };
 
@@ -875,7 +895,13 @@ define([
                 type: 'text-only',
                 icon: 'fa fa-file-text',
                 enabled: true
-            }, ];
+            },
+            {
+                title: 'Thumbnail Slider',
+                type: 'text-only',
+                icon: 'fa fa-like',
+                enabled: true
+            } ];
 
             $scope.selectComponent = function(type) {
                 if (type.enabled) {

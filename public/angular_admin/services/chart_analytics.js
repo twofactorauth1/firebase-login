@@ -565,7 +565,7 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.runReports = function(date, fn) {
-            console.log('running analytics reports >>> ');
+
             var self = this;
 
             var reportData = {};
@@ -895,7 +895,6 @@ define(['app', 'keenService'], function(app) {
                         var subObj = {};
                         subObj.code = self.stateToAbbr(results[0].result[i]['ip_geo_info.province']);
                         subObj.value = results[0].result[i].result;
-                        console.log('subObj >>> ', subObj);
                         locationData.push(subObj);
                     };
 
@@ -1004,7 +1003,6 @@ define(['app', 'keenService'], function(app) {
             var analyticsOverviewConfig = {
                 options: {
                     chart: {
-                        height: 300,
                         spacing: [25, 25, 25, 25]
                     },
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
@@ -1069,7 +1067,6 @@ define(['app', 'keenService'], function(app) {
             var timeonSiteConfig = {
                 options: {
                     chart: {
-                        height: 265,
                         spacing: [25, 25, 25, 25]
                     },
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
@@ -1214,7 +1211,7 @@ define(['app', 'keenService'], function(app) {
         };
 
         this.visitorLocations = function(locationData, highchartsData) {
-            console.log('locationData >>> ', locationData);
+
             var data = [{
                 "value": 438,
                 "code": "NJ"
@@ -1369,8 +1366,7 @@ define(['app', 'keenService'], function(app) {
 
             var chart1 = new Highcharts.Map({
                 chart: {
-                    renderTo: 'visitor_locations',
-                    height: 385
+                    renderTo: 'visitor_locations'
                 },
 
                 title: {

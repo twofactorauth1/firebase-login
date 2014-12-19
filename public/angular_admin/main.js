@@ -36,7 +36,7 @@ require.config({
         'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'daterangepicker': 'libs/bootstrap-daterangepicker/daterangepicker',
-        'angular-daterangepicker': 'libs/angular-daterangepicker/js/angular-daterangepicker.min',
+        'angular-daterangepicker': 'libs_misc/angular-daterangepicker/angular-daterangepicker',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
         'angularFileUpload': 'libs_misc/angular-file-upload/angular-file-upload',
@@ -67,6 +67,7 @@ require.config({
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
         'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
+        'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -213,7 +214,8 @@ require.config({
         'timeAgoFilter': {deps: ['moment']},
         'ngTagsInput': ['angular'],
         'angularConfig': {deps: ['angular']},
-        'ngload': ['angularAMD']
+        'ngload': ['angularAMD'],
+        'jPushMenu' : {deps: ['jquery']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

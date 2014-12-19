@@ -16692,7 +16692,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: fixed;
   z-index: 10;
   right: 16px;
-  left: 53px;
+  left: 242px;
   top: 63px;
 }
 .leftpanel-collapsed .header--fixed {
@@ -17488,6 +17488,27 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel-collapsed .sticky-leftpanel {
   overflow-y: visible;
 }
+.cbp-spmenu {
+  background: #fff !important;
+}
+.cbp-spmenu-vertical a {
+  border-bottom: 0px !important;
+}
+.cbp-spmenu-push-toright .mainpanel {
+  margin-left: 0px;
+}
+.cbp-spmenu-push #leftnav {
+  left: 0;
+}
+.cbp-spmenu-vertical {
+  z-index: 200 !important;
+}
+.indi-li a {
+  height: 42px;
+}
+.indi-li a i {
+  margin: -8px 0 0 -7px;
+}
 .rightmenu-open .rightpanel {
   display: block;
   right: 0;
@@ -18152,14 +18173,71 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .profile .social-list li > div {
   padding-left: 0;
 }
-.social-list .li-email {
-  display: none;
-}
 .social-list .li-email.first {
   display: block;
 }
 .dashboard {
   background: #e7e7e7;
+}
+.dashboard .customer-overview-wrap {
+  height: 300px;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+.dashboard .customer-overview-wrap #customerOverviewChart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .time-on-site-wrap {
+  height: 265px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .time-on-site-wrap #timeonSiteConfig {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .traffic-source-wrap {
+  height: 400px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .traffic-source-wrap #traffic-source-chart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .new-vs-returning-wrap {
+  height: 400px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .new-vs-returning-wrap #new-vs-returning-chart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.dashboard .analytics-overview-wrap {
+  height: 400px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.dashboard .analytics-overview-wrap #analytics-overview-chart {
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 .dashboard .smart-timeline-list > li {
   padding: 15px 5px 15px 5px;
@@ -19744,19 +19822,11 @@ div.error label.error:before {
   }
 }
 .social-list li a {
-  font-size: 16px;
-  border: 1px solid #ddd;
-  display: block;
   text-align: center;
-  border-radius: 2px;
   color: #666;
 }
 .social-list li a .fa {
   margin-right: 0;
-}
-.social-list li a:hover {
-  background-color: #00aeef;
-  color: #ffffff;
 }
 .social-list::after {
   clear: both;
@@ -20483,6 +20553,12 @@ div.error label.error:before {
 }
 .screen-type li .fa-mobile {
   font-size: 24px;
+}
+#component-setting-modal .modal-body {
+  padding: 0;
+}
+#component-setting-modal ul.nav {
+  margin-top: 0!important;
 }
 .add_section {
   padding: 10px;
@@ -22926,8 +23002,6 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-collapse {
   background: rgba(0, 0, 0, 0.7);
-  /*box-shadow: 0px 5px 5px rgba(0,0,0,0.4);*/
-  box-shadow: inset 0 2px 4px 0px rgba(50, 50, 50, 0.4);
 }
 .navigation-v2 .navbar .navbar-brand {
   float: none;
@@ -24328,6 +24402,12 @@ div[data-type="social"] .inner-page {
     margin: 0 auto;
     display: block;
   }
+  .footer-container {
+    margin-top: 40px;
+  }
+  .powered-by {
+    margin-top: -52px;
+  }
 }
 /********** Single Blog ***********/
 div[data-type=single-post] .container {
@@ -25036,12 +25116,8 @@ div[data-type="coming-soon"] .component-inner {
   text-indent: 17px;
   line-height: 18px;
 }
-.video-block .video-title {
-  text-align: center;
-}
 .video-block .video-subtitle {
   margin: 0 auto;
-  text-align: center;
 }
 .video-block .btn {
   width: 200px;
@@ -25139,6 +25215,9 @@ div[data-class='image-text'] p {
 }
 .image-gallery-v2 .thumbnail {
   position: relative;
+  width: 240px;
+  height: 240px;
+  overflow: hidden;
 }
 .image-gallery-v2 a.thumbnail .caption {
   display: block;
@@ -25188,8 +25267,16 @@ div[data-class='image-text'] p {
   transition: all 0.2s ease-in-out;
 }
 .image-gallery-v2 .thumbnail img {
-  height: 240px;
-  width: 310px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  padding: 5px;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .image-gallery-v2 .imgHeight {
   height: 285px;

@@ -12,7 +12,13 @@ var log = $$.g.getLogger("payments_manager");
 module.exports = {
     createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
         log.debug('>> createStripeCustomerForUser');
-        stripeDao.createStripeCustomerForUser(cardToken, user, accountId, fn);
+        //check for customer first.
+        var customerId = user.get('stripeId');
+        if(customerId && customerId.length >0){
+            stripeDao.getStripeCustomer(customerId, fn);
+        } else {
+            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, fn);
+        }
     },
 
     createStripeSubscription: function(customerId, planId, accountId, userId, coupon, fn) {    	

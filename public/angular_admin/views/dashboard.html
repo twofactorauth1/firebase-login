@@ -10,7 +10,8 @@
             <div class="input-group" style="width:330px">
               <label class="sr-only">Date Range</label>
               <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-              <input date-range-picker class="form-control date-picker " type="text" ng-model="selectedDate" options="pickerOptions"/>
+              <input date-range-picker class="form-control date-picker hidden-xs" type="text" ng-model="selectedDate" options="pickerOptions"/>
+              <span class="input-group-addon"><i class="fa fa-chevron-down fa-fw"></i></span>
             </div>
           </div>
         </div>
@@ -71,7 +72,9 @@
                             <h3 class="panel-title">Customer Overview</h3>
                         </div>
                         <div class="panel-body" style="overflow: hidden;">
-                            <highchart config="customerOverviewConfig" id="customerOverviewChart"></highchart>
+                            <div class="customer-overview-wrap">
+                                <highchart config="customerOverviewConfig" id="customerOverviewChart"></highchart>
+                            </div>
                             <div>
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">New Customers</div>
@@ -277,6 +280,36 @@
                                                 <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                         </div>
+                                        <div ng-switch-when="EMAIL_DELIVERED">
+                                            <p>
+                                                <span class="label label-info">EMAIL DELIVERED</span> to <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="EMAIL_OPENED">
+                                            <p>
+                                                <span class="label label-info">EMAIL OPENED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="EMAIL_CLICKED">
+                                            <p>
+                                                <span class="label label-info">EMAIL CLICKED</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="EMAIL_UNSUB">
+                                            <p>
+                                                <span class="label label-info">EMAIL UNSUBSCRIBE</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
+                                        <div ng-switch-when="SUBSCRIPTION_PAID">
+                                            <p>
+                                                <span class="label label-info">SUBSCRIPTION PAID</span> for <span ng-if="activity.customer.first != null">{{activity.customer.first+' '+activity.customer.last}} </span>
+                                                <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
+                                            <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                        </div>
                                     </div>
                                 </div>
                             </li>
@@ -297,8 +330,8 @@
                             <h3 class="panel-title">Visitor Overview</h3>
                         </div>
                         <div class="panel-body">
-                            <div class="chart-wrap analytics-overview">
-                                <highchart config="analyticsOverviewConfig"></highchart>
+                            <div class="analytics-overview-wrap">
+                                <highchart config="analyticsOverviewConfig" id="analytics-overview-chart"></highchart>
                             </div>
                             <div>
                                 <div class="col-xs-4 top-four">
@@ -361,7 +394,9 @@
                             <h3 class="panel-title">Content Interaction</h3>
                         </div>
                         <div class="panel-body">
-                            <highchart ng-show="timeonSiteConfig" config="timeonSiteConfig"></highchart>
+                            <div class="time-on-site-wrap">
+                                <highchart ng-show="timeonSiteConfig" config="timeonSiteConfig" id="timeonSiteConfig"></highchart>
+                            </div>
                             <div>
                                 <div class="col-xs-6 top-four">
                                     <div class="metric center">Time on Site</div>
@@ -425,7 +460,9 @@
                             <h3 class="panel-title">New vs. Returning</h3>
                         </div>
                         <div class="panel-body">
-                            <highchart config="newVsReturningConfig"></highchart>
+                            <div class="new-vs-returning-wrap">
+                                <highchart config="newVsReturningConfig" id="new-vs-returning-chart"></highchart>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -435,7 +472,9 @@
                             <h3 class="panel-title">Traffic Sources</h3>
                         </div>
                         <div class="panel-body">
-                            <highchart config="trafficSourcesConfig"></highchart>
+                            <div class="traffic-source-wrap">
+                                <highchart config="trafficSourcesConfig" id="traffic-source-chart"></highchart>
+                            </div>
                         </div>
                     </div>
                 </div>

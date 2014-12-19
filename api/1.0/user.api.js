@@ -230,6 +230,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
         var coupon = req.body.coupon;
+        var fingerprint = req.body.fingerprint;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
@@ -254,13 +255,14 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
         self.log.debug('>> coupon', coupon);
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, sendWelcomeEmail, function (err, user) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, user) {
             if(err) {
                 self.log.error('Error creating account or user: ' + err);
                 return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
             }
             self.log.debug('Created user[' + user.id() + '] and account[' + user.getAllAccountIds()[0] + '] objects.');
             var accountId = user.getAllAccountIds()[0];
+            //TODO: create balance to account for signup fee.
             paymentsManager.createStripeCustomerForUser(cardToken, user, accountId, function(err, stripeCustomer){
                 if(err) {
                     self.log.error('Error creating Stripe customer: ' + err);
@@ -321,6 +323,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var email = req.body.username;
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
+        var fingerprint = req.body.fingerprint;
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
         if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
@@ -358,7 +361,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
 
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, sendWelcomeEmail, function (err, value) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, value) {
             var userObj = value;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {

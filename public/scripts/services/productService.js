@@ -16,7 +16,7 @@ mainApp.service('productService', function($http) {
 
     this.getAllProducts = function(fn) {
         var apiUrl = baseUrl + ['products'].join('/');
-        $http.get(apiUrl)
+        $http.get(apiUrl, { cache: true})
             .success(function(data, status, headers, config) {
                 fn(data);
             });

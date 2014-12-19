@@ -86,6 +86,8 @@ angular.module('coursePreview', [])
                 });
             }
         },
+        link: function(scope, el) {
+        },
         replace: true,
         restrict: 'E',
         templateUrl: '/pipeshift/views/directives/coursePreview.html'

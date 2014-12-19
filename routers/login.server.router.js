@@ -260,7 +260,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountToken = cookies.getAccountToken(req);
 
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, null, function (err, value) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, null, null, null, function (err, value) {
             if (!err) {
 
                 req.login(value, function (err) {

@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive', 'keenService'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive', 'keenService', 'timeAgoFilter'], function(app) {
     app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', 'keenService',
         function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, keenService) {
             ngProgress.start();
@@ -14,6 +14,11 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 }
             };
             $scope.customerId = $stateParams.id;
+            $scope.newActivity = {
+                contactId: parseInt($stateParams.id),
+                start: new Date(),
+                end: new Date()
+            };
             $scope.ip_geo_address = '';
             CustomerService.getCustomer($scope.customerId, function(customer) {
                 $scope.customer = customer;
@@ -42,7 +47,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                         });
                     });
                 } else {
-                    if ($scope.customer.details.length !== 0 && scope.customer.details[0].addresses.length !== 0) {
+                    if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
                         $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
                     }
                     CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
@@ -57,7 +62,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
 
                 $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
                 $scope.contactLabel = CustomerService.contactLabel(customer);
-
+                $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
             });
 
             CustomerService.getCustomerActivities($scope.customerId, function(activities) {
@@ -124,6 +129,22 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                     console.info(data);
                 });
             };
+
+            $scope.addActivityFn = function() {
+                CustomerService.postCustomerActivity($scope.newActivity, function(activity) {
+                    $scope.activities.push(activity);
+                    $scope.activities = _.sortBy($scope.activities, function(o) {
+                        return o.start;
+                    }).reverse();
+                    $scope.newActivity = {
+                        contactId: parseInt($stateParams.id),
+                        start: new Date(),
+                        end: new Date()
+                    };
+
+                });
+            };
+
             $scope.displayAddressFormat = function(address) {
                 return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
                     return str !== "";
