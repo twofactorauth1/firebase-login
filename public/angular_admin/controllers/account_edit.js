@@ -1,5 +1,5 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective'], function(app) {
-  app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', function($scope, $stateParams, UserService, ngProgress) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'ngOnboarding'], function(app) {
+  app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', function($scope, $stateParams, UserService, ngProgress, $location) {
     ngProgress.start();
     var phoneCharLimit = 4;
     if ($stateParams.focus)
@@ -8,6 +8,41 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     $scope.$back = function() {
       window.history.back();
     };
+
+    $scope.beginOnboarding = function(type) {
+        if (type == 'basic-info') {
+            $scope.stepIndex = 0
+            $scope.showOnboarding = true;
+            $scope.onboardingSteps = [
+              {
+                overlay: true,
+                title: 'Task: Enter Basic Info',
+                description: "Enter in your basic information. With your business address we can get more information about your local competitors. We will automatically add your logo to your website and emails. Tell us more about yourself so we can customize your experience.",
+                position: 'centered'
+              }
+              // {
+              //   attachTo: '.btn-view-themes',
+              //   position: 'bottom',
+              //   overlay: false,
+              //   title: 'Themes Tab',
+              //   width: 400,
+              //   description: "This is the theme tab where you can change or modify your theme after you choose one."
+              // },
+              // {
+              //   attachTo: '.themes',
+              //   position: 'top',
+              //   overlay: false,
+              //   title: 'Select A Theme',
+              //   description: 'Choose one of the themes from below by clicking the switch button.'
+              // }
+            ];
+        }
+    };
+
+    if ($location.$$search['onboarding']) {
+        console.log('onboarding');
+        $scope.beginOnboarding($location.$$search['onboarding']);
+    }
 
     //business phone watch setup
     $scope.businessPhoneWatchFn = function(index) {

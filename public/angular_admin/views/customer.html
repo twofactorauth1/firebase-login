@@ -260,6 +260,12 @@
                 </div>
             </div>
         </div>
+
+        <div ng-if="renderedCustomers.length <= 0" class="empty">
+            <h1 class="center"><span class="fa fa-users"></span></h1>
+            <h3 class="center">No Contacts Yet</h3>
+            <h5 class="center">Add contacts for them to appear here.</h5>
+        </div>
     </div>
 
     <div class="rightpanel rightpanel-website">

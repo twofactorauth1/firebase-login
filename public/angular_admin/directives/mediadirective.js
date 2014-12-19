@@ -34,6 +34,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                                 console.log('item ', item);
                                 switch (item.type.substring(0, item.type.indexOf('/'))) {
                                     case "image":
+                                        console.log('image type');
                                     case "video":
                                         if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
                                             return true;

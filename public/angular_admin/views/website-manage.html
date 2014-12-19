@@ -32,6 +32,10 @@
 
     <div>
         <div class="btn-group col-xs-12 template-btns">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-themes" ng-class="{'active': activeTab === 'themes'}" ng-click="showToaster = false; activeTab = 'themes'">
+                <i class="fa fa-paint-brush"></i>
+                <span class="hidden-xs">Themes</span>
+            </button>
             <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-pages" ng-class="{'active': activeTab === 'pages'}" ng-click="showToaster = false; activeTab = 'pages'">
                 <i class="fa fa-file-text-o"></i>
                 <span class="hidden-xs">Pages
@@ -41,85 +45,10 @@
                 <i class="fa fa-newspaper-o"></i>
                 <span class="hidden-xs">Posts</span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-themes" ng-class="{'active': activeTab === 'themes'}" ng-click="showToaster = false; activeTab = 'themes'">
-                <i class="fa fa-paint-brush"></i>
-                <span class="hidden-xs">Themes</span>
-            </button>
         </div>
     </div>
 
     <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
-            <div class="pages-section" ng-switch-when="pages">
-
-                <div class="row">
-
-                    <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true">
-                        <div class="thumbnail layered-paper">
-                            <h4 class="title">{{page.title | characters:25 }}</h4>
-                            <h5 style="margin-top:0;color: #999;">{{page.modified.date | timeAgoFilter}}</h5>
-                            <div class="screenshot-wrap scrollhover">
-                                <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
-                                <img ng-if="page.screenshot" src="{{page.screenshot}}" alt="" class="screenshot">
-                                <img ng-if="!page.screenshot" src="http://placehold.it/500x300" alt="">
-                            </div>
-                            <div class="caption">
-                                <a href="/admin#/website-editor?pagehandle={{page.handle}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- End row -->
-            </div>
-
-            <div class="posts-section" ng-switch-when="posts">
-                <div class="row">
-
-                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts">
-                        <!-- <div class="thumbnail box14">
-                            <div class="caption">
-                                <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
-                            </div>
-                        </div>
-                    </div> -->
-                        <div class="paper-wrap">
-                            <div class="paper">
-                                <div class="tape"></div>
-                                <!-- <div class="red-line first"></div>
-                            <div class="red-line"></div> -->
-                                <ul id="lines">
-                                    <li class="first">
-                                        <h4 class="title">{{post.post_title | characters:25 }}</h4>
-                                    </li>
-                                    <li class="second">
-                                        <h5 class="timeago">{{post.modified.date | timeAgoFilter}}</h5>
-                                    </li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <li></li>
-                                    <div class="screenshot-wrap">
-                                        <div class="screenshot-overflow">
-                                            <div class="screenshot" ng-if="post.featured_image" style="background-image: url({{post.featured_image}});width: 255px;height: 120px;background-size: cover;margin: 0 auto;border: 1px solid #ddd;"></div>
-                                            <!-- <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt=""> -->
-                                        </div>
-                                    </div>
-                                    <div class="caption">
-                                        <a href="/admin#/website-editor?posthandle={{post.post_url}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
-                                    </div>
-                                </ul>
-                            </div>
-                            <div class="left-shadow"></div>
-                            <div class="right-shadow"></div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
             <div class="theme-section" ng-switch-when="themes">
                 <div class="row">
                     <div class="panel panel-success">
@@ -200,6 +129,78 @@
                     </div>
                 </div>
             </div>
+
+            <div class="pages-section" ng-switch-when="pages">
+
+                <div class="row">
+
+                    <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true">
+                        <div class="thumbnail layered-paper">
+                            <h4 class="title">{{page.title | characters:25 }}</h4>
+                            <h5 style="margin-top:0;color: #999;font-weight: normal;">{{page.modified.date | timeAgoFilter}}</h5>
+                            <div class="screenshot-wrap scrollhover">
+                                <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
+                                <img ng-if="page.screenshot" src="{{page.screenshot}}" alt="" class="screenshot">
+                                <img ng-if="!page.screenshot" src="http://placehold.it/500x300" alt="">
+                            </div>
+                            <div class="caption">
+                                <a href="/admin#/website-editor?pagehandle={{page.handle}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- End row -->
+            </div>
+
+            <div class="posts-section" ng-switch-when="posts">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts">
+                        <!-- <div class="thumbnail box14">
+                            <div class="caption">
+                                <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
+                            </div>
+                        </div>
+                    </div> -->
+                        <div class="paper-wrap">
+                            <div class="paper">
+                                <div class="tape"></div>
+                                <!-- <div class="red-line first"></div>
+                            <div class="red-line"></div> -->
+                                <ul id="lines">
+                                    <li class="first">
+                                        <h4 class="title">{{post.post_title | characters:25 }}</h4>
+                                    </li>
+                                    <li class="second">
+                                        <h5 class="timeago" style="font-weight: normal;">{{post.modified.date | timeAgoFilter}}</h5>
+                                    </li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <li></li>
+                                    <div class="screenshot-wrap">
+                                        <div class="screenshot-overflow">
+                                            <div class="screenshot" ng-if="post.featured_image" style="background-image: url({{post.featured_image}});width: 255px;height: 120px;background-size: cover;margin: 0 auto;border: 1px solid #ddd;"></div>
+                                            <!-- <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt=""> -->
+                                        </div>
+                                    </div>
+                                    <div class="caption">
+                                        <a href="/admin#/website-editor?posthandle={{post.post_url}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="left-shadow"></div>
+                            <div class="right-shadow"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
             <!-- End container -->
         </div>
 
@@ -213,6 +214,31 @@
 
             <div class="tab-content">
                 <div class="tab-pane pane-settings active" id="rp-settings">
+                    <div class="rightpanelinner">
+                    <div id="current-settings">
+                        <h3>Default Tab</h3>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="pages" ng-value="'pages'"
+                                ng-model="userPreferences.website_default_tab"
+                                ng-change="showToaster = true; activeTab = 'pages'">Pages
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="posts" ng-value="'posts'" ng-model="userPreferences.website_default_tab"
+                                ng-change="showToaster = true; activeTab = 'posts'">Posts
+                            </label>
+                        </div>
+                        <div class="radio disabled">
+                            <label>
+                                <input type="radio" name="default_tab" id="themes" ng-value="'themes'"
+                                ng-model="userPreferences.website_default_tab"
+                                ng-change="showToaster = true; activeTab = 'themes'">Themes
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 </div>
                 <!-- tab-pane -->
             </div>
