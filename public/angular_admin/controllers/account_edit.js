@@ -9,6 +9,10 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       window.history.back();
     };
 
+    UserService.getUserPreferences(function(preferences) {
+        $scope.preferences = preferences;
+    });
+
     $scope.beginOnboarding = function(type) {
         if (type == 'basic-info') {
             $scope.stepIndex = 0
@@ -246,12 +250,16 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     };
 
     $scope.saveAccount = function() {
-      console.log('saving account');
+
       UserService.putUser($scope.user, function(user) {
-        console.log('user saved');
           UserService.putAccount($scope.account, function(account) {
-            console.log('account saved');
             toaster.pop('success', "Account Saved", "All account information has been saved.");
+            if (!$scope.preferences.tasks.basic_info || $scope.preferences.tasks.basic_info == false) {
+                $scope.preferences.tasks.basic_info = true;
+                UserService.updateUserPreferences($scope.preferences, false, function() {
+                    toaster.pop('success', "You completed the Basic Info Task!");
+                });
+            };
           });
       });
     };

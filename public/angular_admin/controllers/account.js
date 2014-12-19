@@ -195,6 +195,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             UserService.getUserSocial(function(social) {
+                console.log('user social >>> ', social);
                 $scope.userSocial = {};
                 social.forEach(function(value, index) {
                     $scope.userSocial[value.type] = value.username;

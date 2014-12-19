@@ -78,7 +78,7 @@
                                 </li>
                                 <li ng-click="startTask('account/edit', 'basic-info')" ng-class="{complete: userPreferences.tasks.basic_info }">
                                     <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.basic_info , 'fa-circle-o' : !userPreferences.tasks.basic_info }"></i></h1>
-                                    <small class="pull-right"></small>
+                                    <small class="pull-right done" ng-if="userPreferences.tasks.basic_info">COMPLETE</small>
                                     <h3 class="pull-left">Basic Account Information</h3>
                                     <div class="clearfix mb5"></div>
                                     <div class="task-desc"><p><b>Enter the basic information about your business like your address and logo.</b><p></div>
