@@ -1,5 +1,5 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'ngOnboarding'], function(app) {
-  app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', function($scope, $stateParams, UserService, ngProgress, $location) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'ngOnboarding', 'toaster'], function(app) {
+  app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', 'toaster', function($scope, $stateParams, UserService, ngProgress, $location, toaster) {
     ngProgress.start();
     var phoneCharLimit = 4;
     if ($stateParams.focus)
@@ -8,6 +8,10 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     $scope.$back = function() {
       window.history.back();
     };
+
+    UserService.getUserPreferences(function(preferences) {
+        $scope.preferences = preferences;
+    });
 
     $scope.beginOnboarding = function(type) {
         if (type == 'basic-info') {
@@ -47,19 +51,21 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     //business phone watch setup
     $scope.businessPhoneWatchFn = function(index) {
       $scope.$watch('account.business.phones[' + index + ']', function(newValue, oldValue) {
-        if (newValue && newValue.number.length > phoneCharLimit)
-          UserService.putAccount($scope.account, function(account) {
-            //$scope.account = account;
-          });
+        if (newValue && newValue.number.length > phoneCharLimit) {
+          // UserService.putAccount($scope.account, function(account) {
+          //   //$scope.account = account;
+          // });
+        }
       }, true);
     };
 
     $scope.userPhoneWatchFn = function(index) {
       $scope.$watch('user.details[0].phones[' + index + ']', function(newValue, oldValue) {
-        if (newValue && newValue.number.length > phoneCharLimit)
-          UserService.putUser($scope.user, function(account) {
-            //$scope.account = account;
-          });
+        if (newValue && newValue.number.length > phoneCharLimit) {
+          // UserService.putUser($scope.user, function(account) {
+          //   //$scope.account = account;
+          // });
+        }
       }, true);
     };
 
@@ -134,57 +140,57 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
           $scope.user.middle = '';
           $scope.user.last = '';
         }
-        UserService.putUser($scope.user, function(user) {
-          //$scope.user = user;
-        });
+        // UserService.putUser($scope.user, function(user) {
+        //   //$scope.user = user;
+        // });
       }
     });
 
     ['user.email'].forEach(function(value) {
-      $scope.$watch(value, function(newValue, oldValue) {
-        if (newValue) {
-          UserService.putUser($scope.user, function(user) {
-            //$scope.user = user;
-          });
-        }
-      });
+      // $scope.$watch(value, function(newValue, oldValue) {
+      //   if (newValue) {
+      //     UserService.putUser($scope.user, function(user) {
+      //       //$scope.user = user;
+      //     });
+      //   }
+      // });
     });
 
     $scope.$watch('account.business.size', function(newValue, oldValue) {
       if ($scope.account && $scope.account.business.size !== parseInt($scope.account.business.size))
         $scope.account.business.size = parseInt($scope.account.business.size);
-      UserService.putAccount($scope.account, function(account) {
-        //$scope.account = account;
-      });
+      // UserService.putAccount($scope.account, function(account) {
+      //   //$scope.account = account;
+      // });
     });
 
     $scope.$watch('account.business.type', function(newValue, oldValue) {
       if ($scope.account && $scope.account.business.type !== parseInt($scope.account.business.type))
         $scope.account.business.type = parseInt($scope.account.business.type);
-      UserService.putAccount($scope.account, function(account) {
-        // $scope.account = account;
-      });
+      // UserService.putAccount($scope.account, function(account) {
+      //   // $scope.account = account;
+      // });
     });
 
 
-    ['account.business.name',
-      'account.business.description',
-      'account.business.category'
-    ].forEach(function(value) {
-      $scope.$watch(value, function(newValue, oldValue) {
-        UserService.putAccount($scope.account, function(account) {
-          //$scope.account = account;
-        });
-      });
-    });
+    // ['account.business.name',
+    //   'account.business.description',
+    //   'account.business.category'
+    // ].forEach(function(value) {
+    //   // $scope.$watch(value, function(newValue, oldValue) {
+    //   //   UserService.putAccount($scope.account, function(account) {
+    //   //     //$scope.account = account;
+    //   //   });
+    //   // });
+    // });
 
-      $scope.$watch('account.business.nonProfit', function(newValue, oldValue) {
-        if (angular.isDefined(newValue)) {
-          UserService.putAccount($scope.account, function(account) {
-            //$scope.account = account;
-          });
-        }
-      });
+      // $scope.$watch('account.business.nonProfit', function(newValue, oldValue) {
+      //   if (angular.isDefined(newValue)) {
+      //     UserService.putAccount($scope.account, function(account) {
+      //       //$scope.account = account;
+      //     });
+      //   }
+      // });
 
     $scope.userPhoneTypeSaveFn = function(index, type) {
       var typeLabel = null;
@@ -213,37 +219,48 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       if($scope.logo)
       {
         $scope.account.business.logo = asset.url;
-        UserService.putAccount($scope.account, function(account) {
         $("#media-manager-modal").modal('hide');
-        });
       }
       else
       {
-        $scope.user.profilePhotos[0] = asset.url;   
-        UserService.putUser($scope.user, function(user) {
-          //$scope.user = user;
-        });
-      } 
+        $scope.user.profilePhotos[0] = asset.url;
+      }
     };
+
     $scope.userSaveFn = function(value) {
       if (value.length % 4 === 0) {
-        UserService.putUser($scope.user, function(user) {
-          //$scope.user = user;
-        });
+        // UserService.putUser($scope.user, function(user) {
+        //   //$scope.user = user;
+        // });
       }
     };
 
     $scope.accountSaveFn = function(value) {
       if (value.length % 4 === 0) {
-        UserService.putAccount($scope.account, function(account) {
+        // UserService.putAccount($scope.account, function(account) {
 
-        });
+        // });
       }
     };
 
     $scope.addBusinessAddressFn = function() {
       $scope.account.business.addresses.push({
         _id: $$.u.idutils.generateUniqueAlphaNumericShort()
+      });
+    };
+
+    $scope.saveAccount = function() {
+
+      UserService.putUser($scope.user, function(user) {
+          UserService.putAccount($scope.account, function(account) {
+            toaster.pop('success', "Account Saved", "All account information has been saved.");
+            if (!$scope.preferences.tasks.basic_info || $scope.preferences.tasks.basic_info == false) {
+                $scope.preferences.tasks.basic_info = true;
+                UserService.updateUserPreferences($scope.preferences, false, function() {
+                    toaster.pop('success', "You completed the Basic Info Task!");
+                });
+            };
+          });
       });
     };
 

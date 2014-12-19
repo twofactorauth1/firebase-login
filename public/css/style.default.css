@@ -15465,9 +15465,6 @@ strong {
 .mainpanel {
   background: #e7e7e7;
 }
-.ng-scope {
-  height: 100%;
-}
 #main-viewport {
   height: auto;
 }
@@ -16894,6 +16891,20 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #27ae60;
   text-align: center;
   margin: 5px 0;
+}
+#bussiness_logo_container {
+  background-color: #eee;
+  display: table;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  border-radius: 6px;
+  padding: 15px;
+}
+#bussiness_logo_container > div {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
 }
 .headerbar {
   border-left: 1px solid #eee;
@@ -20559,6 +20570,10 @@ div.error label.error:before {
 }
 #component-setting-modal .modal-body {
   padding: 0;
+}
+#component-setting-modal .modal-body .tab-content {
+  height: 300px;
+  overflow-y: scroll;
 }
 #component-setting-modal ul.nav {
   margin-top: 0!important;
