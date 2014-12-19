@@ -168,7 +168,7 @@ define([
 
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
-                            images[i].removeEventListener("click");
+                            images[i].removeEventListener("click", function(e){},false);
                             images[i].addEventListener("click", function(e) {
                                 $("#media-manager-modal").modal('show');
                                 $scope.imageChange = true;
@@ -187,7 +187,7 @@ define([
                     var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].removeEventListener("click");
+                            settingsBtns[i].removeEventListener("click",function(e){},false);
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                                 var element = angular.element('#component-setting-modal');
@@ -203,7 +203,7 @@ define([
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].removeEventListener("click");
+                            addComponentBtns[i].removeEventListener("click",function(e){},false);
                             addComponentBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
                                 var element = angular.element('#add-component-modal');
