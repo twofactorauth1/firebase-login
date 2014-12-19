@@ -14,7 +14,7 @@
                     </div>
                     <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                         <div class="single-blog responsive clearfix"
-                             ng-repeat="blogpost in control.blogposts || blog.blogposts | filter: blogpost.created.date"
+                             ng-repeat="blogpost in control.blogposts || blog.blogposts | filter: blogpost.created.date | orderBy :'created.date':true"
                              data-postId="{{blogpost._id}}">
 
                             <div class="blog-entry clearfix" data-id="{{blogpost._id}}">
@@ -33,7 +33,7 @@
 
                                 <div class="blog-meta">
                                    <span data-ng-if="blogpost.created.date">
-                                     • {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
+                                     • {{blogpost.created.date | amDateFormat:'MMMM d, YYYY'}}
                                     </span>
                                      <span data-ng-if="blogpost.post_author">
                                        Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
