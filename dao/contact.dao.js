@@ -801,7 +801,7 @@ var dao = {
                         if(err) {
                             self.log.error('Error creating historic activities for new contact: ' + err);
                         } else {
-                            self.log.error('Successfully created historic activities for new contact');
+                            self.log.debug('Successfully created historic activities for new contact');
                         }
                     });
                     self.log.debug('<< saveOrUpdateContact');

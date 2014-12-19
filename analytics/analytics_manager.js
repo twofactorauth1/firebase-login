@@ -11,6 +11,9 @@ var dao = require('./dao/analytics.dao.js');
 var segmentConfig = require('../configs/segmentio.config');
 var Analytics = require('analytics-node');
 var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
+var contactDao = require('../dao/contact.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
+var async = require('async');
 
 module.exports = {
 
@@ -144,6 +147,7 @@ module.exports = {
     },
 
     storeSessionEvent: function(sessionEvent, fn) {
+        var self = this;
         _log.debug('>> storeSessionEvent');
         //check if we have one already....
         dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
@@ -151,7 +155,35 @@ module.exports = {
                 _log.error('Error looking for duplicate sessionEvents: ' + err);
                 fn(err, null);
             } else if(value=== null) {
-                dao.saveOrUpdate(sessionEvent, fn);
+
+
+                var fingerprint = sessionEvent.get('fingerprint');
+
+                $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
+                    if(err) {
+                        _log.error('error creating contact activity for session event: ' + err);
+                    } else {
+                        async.each(list, function(contact, cb){
+                            var contactActivity = new $$.m.ContactActivity({
+                                accountId: contact.get('accountId'),
+                                contactId: contact.id(),
+                                activityType: $$.m.ContactActivity.types.PAGE_VIEW,
+                                start: new Date()
+                            });
+                            contactActivityManager.createActivity(contactActivity, function(err, val){
+                                if(err) {
+                                    _log.error('error creating contact activity for session event: ' + err);
+                                    cb(err);
+                                } else {
+                                    cb();
+                                }
+                            });
+                        }, function(err){
+                            _log.debug('Created contact activities for session event');
+                            dao.saveOrUpdate(sessionEvent, fn);
+                        });
+                    }
+                });
             } else {
                 //already have one.  Store a ping instead.
                 var pingEvent = new $$.m.PingEvent({
