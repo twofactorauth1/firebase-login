@@ -1,5 +1,5 @@
-define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ngProgress', 'userService', 'navigationService'], function(app) {
-    app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', 'UserService', 'NavigationService', function($scope, ProductService, PaymentService, ngProgress, UserService, NavigationService) {
+define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ngProgress', 'userService', 'navigationService', 'ngOnboarding'], function(app) {
+    app.register.controller('CommerceCtrl', ['$scope', 'ProductService', 'PaymentService', 'ngProgress', 'UserService', 'NavigationService', '$location', function($scope, ProductService, PaymentService, ngProgress, UserService, NavigationService, $location) {
         ngProgress.start();
         NavigationService.updateNavigation();
         $scope.addProductFn = function() {
@@ -9,6 +9,28 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
 '#commerce-add-product').modal('hide');
             });
         };
+
+        $scope.beginOnboarding = function(type) {
+            if (type == 'add-product') {
+                $scope.stepIndex = 0;
+                $scope.showOnboarding = true;
+                $scope.onboardingSteps = [{
+                    overlay: true,
+                    title: 'Task: Add Product',
+                    description: "Add your first product to begin selling.",
+                    position: 'centered',
+                    width: 400
+                }];
+            }
+        };
+
+        $scope.finishOnboarding = function() {
+            console.log('were finished');
+        };
+
+        if ($location.$$search['onboarding']) {
+            $scope.beginOnboarding($location.$$search['onboarding']);
+        }
 
         $scope.productStarredFn = function (product, starred) {
             product.starred = starred;
