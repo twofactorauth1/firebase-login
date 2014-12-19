@@ -290,6 +290,13 @@ define(['app'], function (app) {
 				fn(data);
 			})
 		};
+		this.createPageFromTheme = function (themeId, websiteId, handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'theme', themeId, 'website', websiteId, 'page', handle].join('/');
+			$http.post(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 		this.updateLinkList = function(data, websiteId, handle, fn) {
 			console.log('updateLinkList >>>');
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'linklists', handle].join('/');

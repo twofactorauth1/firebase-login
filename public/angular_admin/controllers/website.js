@@ -15,7 +15,9 @@ define([
     'confirmClickDirective',
     'courseServiceAdmin',
     'navigationService',
-    'draggableModalDirective'
+    'draggableModalDirective',
+    'bootstrap-iconpicker-font-awesome',
+    'bootstrap-iconpicker'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -168,7 +170,7 @@ define([
 
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
-                            images[i].removeEventListener("click");
+                            images[i].removeEventListener("click", function(e){},false);
                             images[i].addEventListener("click", function(e) {
                                 $("#media-manager-modal").modal('show');
                                 $scope.imageChange = true;
@@ -187,7 +189,7 @@ define([
                     var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].removeEventListener("click");
+                            settingsBtns[i].removeEventListener("click",function(e){},false);
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                                 var element = angular.element('#component-setting-modal');
@@ -203,7 +205,7 @@ define([
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].removeEventListener("click");
+                            addComponentBtns[i].removeEventListener("click",function(e){},false);
                             addComponentBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
                                 var element = angular.element('#add-component-modal');
@@ -618,6 +620,30 @@ define([
                 }
             }
 
+            $scope.addFeatureList = function(feature){
+                if (feature && feature.title) {
+                    if (!$scope.featureIcon) {
+                            $scope.featureIcon = {};
+                            $scope.featureIcon.icon = 'fa-credit-card';
+                       }
+                    $scope.componentEditing.features.push({
+                        title: feature.title,
+                        subtitle: feature.subtitle,
+                        icon : 'fa ' + $scope.featureIcon.icon
+                    });
+                    $scope.saveComponent();
+                }
+            }
+
+            window.deleteFeatureList = function(componentId, index)
+            {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.features.splice(index, 1);                    
+                $scope.saveCustomComponent();
+            }
+            
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 $scope.components = $scope.currentPage.components;
@@ -719,6 +745,22 @@ define([
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
                     $scope.versionSelected = $scope.componentEditing.version;
                 });
+                $('#feature-convert').iconpicker({
+                            iconset: 'fontawesome',
+                            icon: 'fa-credit-card',
+                            rows: 5,
+                            cols: 5,
+                            placement: 'right',
+                        });
+
+                    $('#feature-convert').on('change', function(e) {
+                        if (!$scope.featureIcon) {
+                            $scope.featureIcon = {};
+                           }
+                        if ($scope.featureIcon) {
+                            $scope.featureIcon.icon = e.icon;
+                        }
+                    });
             };
 
             $scope.saveComponent = function() {

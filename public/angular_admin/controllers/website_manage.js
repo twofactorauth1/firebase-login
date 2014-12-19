@@ -200,6 +200,20 @@ define([
 
                 WebsiteService.setWebsiteTheme($scope.currentTheme._id, $scope.website._id, function(data) {
                     toaster.pop('success', "Theme saved successfully");
+                    var hasHandle = false;
+                    var page_handle = 'index'
+                    for (var i = 0; i < $scope.pages.length; i++) {
+                        if ($scope.pages[i].handle === page_handle) {
+                            hasHandle = true;
+                        }
+                    };
+                    if(!hasHandle)
+                    {
+                       WebsiteService.createPageFromTheme($scope.currentTheme._id, $scope.website._id, page_handle, function(data) {
+                        $scope.pages.push(data);
+                        toaster.pop('success', "Page created successfully");
+                       })
+                    }
                 });
             };
 
