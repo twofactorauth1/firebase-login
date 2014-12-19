@@ -240,6 +240,7 @@ module.exports = function(grunt) {
                         'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
                         'public/scripts/app.js',
                         'public/scripts/directives/angularparallax.js',
+                        'public/scripts/directives/carousel.js',
                         'public/scripts/directives/convertHtml.js',
                         'public/scripts/directives/coursePreview.js',
                         'public/scripts/directives/dmStyle.js',
