@@ -1187,8 +1187,8 @@ var dao = {
 
             "accountId" : accountId,
             "websiteId" : websiteId,
-            "handle" : "index",
-            "title" : 'Home',
+            "handle" : "coming-soon",
+            "title" : 'Coming Soon',
             "seo" : {},
             "visibility" : {
                 "visible" : true,

@@ -34,6 +34,7 @@
     "angular-spectrum-colorpicker": "1.2.0",
     "angular-stepper": "~0.0.1",
     "angular-timer": "*",
+    "angular-slugify": "*",
     "angular-truncate": "*",
     "angular-count-to": "https://github.com/sparkalow/angular-count-to.git",
     "angular-touch": "1.2.16",
