@@ -1,7 +1,9 @@
-define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDirective'], function (angularAMD, app) {
-    app.register.controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', 'CustomerService', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber, CustomerService) {
+define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDirective', 'toasterService'], function (angularAMD, app) {
+    app.register.controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', 'CustomerService', 'ToasterService', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber, CustomerService, ToasterService) {
         $scope.modal = {};
         $scope.selectedCustomers = [];
+        $scope.tmpSubscribers = [];
+        $scope.subscribers = [];
         $scope.isSubdomainChecked = true;
         $scope.isSubdomainFree = true;
         $scope.protocol = $location.protocol() + "://"
@@ -28,6 +30,11 @@ define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDi
             $modalInstance.dismiss();
         }
         $scope.submit = function () {
+            $scope.tmpSubscribers.forEach(function(value, index) {
+                Subscriber.save(value, function(data) {
+                    console.info(data);
+                });
+            });
             $modalInstance.close({course: $scope.course, isRemove: false});
         }
         $scope.removeCourse = function () {
@@ -42,7 +49,7 @@ define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDi
             });
             modalInstance.result.then(function () {
                 $modalInstance.close({course: $scope.course, isRemove: true});
-            }, function () {
+            }, function () {$scope.tmpSubscribers
             });
         }
         var subdomainChangeTimeout = -1;
@@ -89,9 +96,17 @@ define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDi
         $scope.selectCustomerFn = function(customer) {
             if ($scope.selectedCustomers.indexOf(customer) == -1) {
                 $scope.selectedCustomers.push(customer);
+                if (customer.details.length && customer.details[0].emails.length) {
+                    var email = customer.details[0].emails[0];
+                    if (email.email !== undefined) {
+                        email = email.email;
+                    }
+                    $scope.tmpSubscribers.push({email: email, courseId: $scope.course._id, subscribeTime: new Date()});
+                    $scope.subscribers.push({email: email, courseId: $scope.course._id, subscribeTime: new Date()});
+                }
             }
         };
-        CustomerService.getCustomersShortForm(['_id', 'first', 'middle', 'last'], function(customers) {
+        CustomerService.getCustomersShortForm(['_id', 'first', 'middle', 'last', 'details'], function(customers) {
             $scope.customers = customers;
         });
     }])
