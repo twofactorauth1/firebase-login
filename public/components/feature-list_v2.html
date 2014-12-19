@@ -44,6 +44,9 @@
                 </div>
 
             </div>
+              <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+            </div>
         </div>
 
         <div class="col-sm-4 feature" ng-if="component.features.length == 3">
@@ -66,6 +69,9 @@
                     <a href="{{feature.btn.url}}" class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
                 </div> -->
 
+            </div>
+             <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
             </div>
         </div>
 

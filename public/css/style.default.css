@@ -19580,6 +19580,9 @@ div.error label.error:before {
   -ms-transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
   transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
 }
+.iconpicker-popover {
+  z-index: 9999!important;
+}
 .dataTables_length .chosen-container {
   min-width: 75px;
 }

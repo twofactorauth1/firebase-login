@@ -15,7 +15,9 @@ define([
     'confirmClickDirective',
     'courseServiceAdmin',
     'navigationService',
-    'draggableModalDirective'
+    'draggableModalDirective',
+    'bootstrap-iconpicker-font-awesome',
+    'bootstrap-iconpicker'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -618,6 +620,30 @@ define([
                 }
             }
 
+            $scope.addFeatureList = function(feature){
+                if (feature && feature.title) {
+                    if (!$scope.featureIcon) {
+                            $scope.featureIcon = {};
+                            $scope.featureIcon.icon = 'fa-credit-card';
+                       }
+                    $scope.componentEditing.features.push({
+                        title: feature.title,
+                        subtitle: feature.subtitle,
+                        icon : 'fa ' + $scope.featureIcon.icon
+                    });
+                    $scope.saveComponent();
+                }
+            }
+
+            window.deleteFeatureList = function(componentId, index)
+            {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.features.splice(index, 1);                    
+                $scope.saveCustomComponent();
+            }
+            
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 $scope.components = $scope.currentPage.components;
@@ -719,6 +745,22 @@ define([
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
                     $scope.versionSelected = $scope.componentEditing.version;
                 });
+                $('#feature-convert').iconpicker({
+                            iconset: 'fontawesome',
+                            icon: 'fa-credit-card',
+                            rows: 5,
+                            cols: 5,
+                            placement: 'right',
+                        });
+
+                    $('#feature-convert').on('change', function(e) {
+                        if (!$scope.featureIcon) {
+                            $scope.featureIcon = {};
+                           }
+                        if ($scope.featureIcon) {
+                            $scope.featureIcon.icon = e.icon;
+                        }
+                    });
             };
 
             $scope.saveComponent = function() {

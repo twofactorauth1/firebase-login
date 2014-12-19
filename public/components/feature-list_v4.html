@@ -39,6 +39,9 @@
                     <a ng-if="feature.btn.visibility" href="{{feature.btn.url}}" class="btn btn-primary {{feature.btn.class}}" target="_blank"><i class="{{feature.btn.icon}}"></i>&nbsp;{{feature.btn.text}} </a>
                 </div>
             </div>
+             <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+            </div>
             <hr ng-if="!$last" />
         </div>
     </div>

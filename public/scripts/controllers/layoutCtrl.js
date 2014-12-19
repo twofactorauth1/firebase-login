@@ -479,6 +479,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
              window.parent.deleteTeamMember(componentId,index);
         }
 
+        $scope.deleteFeatureList = function(componentId,index)
+        {
+             window.parent.deleteFeatureList(componentId,index);
+        }
+
         window.activateAloha = function() {
             $('.editable').aloha();
             // aloha.dom.query('.editable', document).forEach(aloha);
