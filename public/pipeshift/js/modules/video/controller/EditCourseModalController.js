@@ -1,6 +1,7 @@
-define(['angularAMD', 'app'], function (angularAMD, app) {
-    app.register.controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber) {
+define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDirective'], function (angularAMD, app) {
+    app.register.controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', 'CustomerService', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber, CustomerService) {
         $scope.modal = {};
+        $scope.selectedCustomers = [];
         $scope.isSubdomainChecked = true;
         $scope.isSubdomainFree = true;
         $scope.protocol = $location.protocol() + "://"
@@ -85,6 +86,14 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
             });
         }
 
+        $scope.selectCustomerFn = function(customer) {
+            if ($scope.selectedCustomers.indexOf(customer) == -1) {
+                $scope.selectedCustomers.push(customer);
+            }
+        };
+        CustomerService.getCustomersShortForm(['_id', 'first', 'middle', 'last'], function(customers) {
+            $scope.customers = customers;
+        });
     }])
     ;
 });
