@@ -471,7 +471,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 break;
                 }
                 window.parent.updateSocialNetworks(old_value,mode,social);
-                $("#socialComponentModal").modal("hide");
+                // $("#socialComponentModal").modal("hide");
                 $(".modal-backdrop").remove();
         };
         $scope.deleteTeamMember = function(componentId,index)

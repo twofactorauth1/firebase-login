@@ -19,7 +19,7 @@
 
             <div class="video-subtitle">
                 <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                    <span ng-bind-html="component.subtitle" />
+                    <span ng-bind-html="component.subtitle | unsafe" />
                 </div>
             </div>
 
