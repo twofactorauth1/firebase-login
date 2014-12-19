@@ -182,7 +182,6 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-touch/angular-touch.js',
                     'public/js/libs/angular-route/angular-route.js',
                     'public/js/libs/angular-ui-router/release/angular-ui-router.js',
-                    'public/js/libs/jquery-waypoints/waypoints.js',
                     'public/js/libs/angular-parallax/scripts/angular-parallax.js',
                     'public/js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
                     'public/js/libs/moment/moment.js',

@@ -1,6 +1,6 @@
-define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter', 'navigationService'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', 'NavigationService',
-        function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService, NavigationService) {
+define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter', 'navigationService', 'ngOnboarding'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', 'NavigationService', '$location',
+        function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService, NavigationService, $location) {
             NavigationService.updateNavigation();
             ngProgress.start();
             $scope.customerFilter = {};
@@ -12,8 +12,39 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             $scope.customerScrollOffset = 0;
             $scope.renderedCustomers = [];
 
+
             $scope.searchBarType = 'name';
             //$scope.gridViewDisplay = "true";
+
+            $scope.beginOnboarding = function(type) {
+                if (type == 'create-contact') {
+                    $scope.stepIndex = 0;
+                    $scope.showOnboarding = true;
+                    $scope.onboardingSteps = [{
+                        overlay: true,
+                        title: 'Task: Import/Create Contacts',
+                        description: "Import contacts on your social accounts or add them manually.",
+                        position: 'centered',
+                        width: 400
+                    },
+                    {
+                        attachTo: '.btn-create-contact',
+                        position: 'left',
+                        overlay: false,
+                        title: 'Add Button',
+                        width: 400,
+                        description: "Click this button to add a new contact."
+                    }];
+                }
+            };
+
+            $scope.finishOnboarding = function() {
+                console.log('were finished');
+            };
+
+            if ($location.$$search['onboarding']) {
+                $scope.beginOnboarding($location.$$search['onboarding']);
+            }
 
             $scope.saveScrollFn = function(pos) {
                 $scope.userPreferences.customerSettings.scrollPos = pos;
@@ -327,8 +358,17 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
                 });
 
+                $scope.completeTask = function() {
+                    //if theme doesn;t exist, set task complete
+                    if (!$scope.preferences.tasks) {
+                        $scope.preferences.tasks = {};
+                    }
 
-
+                    if (!$scope.preferences.tasks.create_contact || $scope.preferences.tasks.create_contact == false) {
+                        $scope.preferences.tasks.create_contact = true;
+                        $scope.savePreferencesFn();
+                    };
+                };
 
                 $scope.importFacebookFriends = function() {
                     CustomerService.importFacebookFriends(function(data, success) {

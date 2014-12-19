@@ -20,12 +20,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                         overlay: true,
                         title: 'Task: Connect Social Accounts',
                         description: "Connect your social media accounts to start marketing campaigns and track your customers.",
-                        position: 'centered'
+                        position: 'centered',
+                        width: 400
                     }, {
-                        attachTo: '#connect-google-plus',
-                        position: 'left',
-                        overlay: false,
+                        overlay: true,
                         title: 'Click Connect Button',
+                        position: 'centered',
                         width: 400,
                         description: "Click the connect button on Facebook, Twitter, or Google Plus. You will be redirected to the login screen where you will approve Indigenous for access."
                     }];
