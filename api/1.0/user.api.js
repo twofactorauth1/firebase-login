@@ -231,6 +231,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var anonymousId = req.body.anonymousId;
         var coupon = req.body.coupon;
         var fingerprint = req.body.fingerprint;
+        var setupFee = req.body.setupFee;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
