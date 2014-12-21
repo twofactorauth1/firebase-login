@@ -83,7 +83,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleIndiWelcome = function () {
                     return {
-                        'height': (newValue.h)-55 + 'px',
+                        'height': (newValue.h)-63 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
