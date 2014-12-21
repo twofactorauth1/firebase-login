@@ -14,6 +14,10 @@ script(type="text/javascript").
     (function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}}; js=d.createElement(s);fs=d.getElementsByTagName(s)[0]; js.src='https://apis.google.com/js/platform.js'; fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};}(window,document,'script'));
 
 script(type="text/javascript").
+    var initialAlert =  "#{user.user_preferences.welcome_alert.initial}";
+    if(initialAlert == 'false') {
+        window.location="/admin#/indi";
+    }
     //- window.location="/admin#/" + (function(){
     //-     var single_view = "#{user.user_preferences.single_view}"
     //-     , last = "#{user.user_preferences.last}";
@@ -42,8 +46,3 @@ script(type="text/javascript").
     }, window.analytics.SNIPPET_VERSION = "2.0.9",
             window.analytics.load('#{segmentIOWriteKey}');
     window.analytics.page('admin', {accountId:#{account._id}});
-
-    var initialAlert =  "#{user.user_preferences.welcome_alert.initial}";
-    if(initialAlert == 'false') {
-        window.location="/admin#/indi";
-    }
