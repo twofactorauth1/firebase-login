@@ -723,10 +723,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           return newArr;
         }
 
-        $scope.selectSubscriptionPlanFn = function(planId, amount, interval) {
+        $scope.subscriptionPlanOneTimeFee = 0;
+
+        $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
             $scope.newAccount.membership = planId;
             $scope.subscriptionPlanAmount = amount;
             $scope.subscriptionPlanInterval = interval;
+            $scope.subscriptionPlanOneTimeFee = cost;
         };
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;
@@ -951,6 +954,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             newUser.anonymousId = window.analytics.user().anonymousId();
                             newUser.permanent_cookie = ipCookie("permanent_cookie");
                             newUser.fingerprint = new Fingerprint().get();
+                            if ($scope.subscriptionPlanOneTimeFee) {
+                                newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
+                            }
                             userService.initializeUser(newUser, function(data) {
                             if(data)
                                 window.location = data.accountUrl;
