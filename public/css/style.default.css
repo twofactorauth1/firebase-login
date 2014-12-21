@@ -24976,6 +24976,13 @@ div[data-type="coming-soon"] .component-inner {
 .triangle-text-v1 .align-text-center {
   text-align: center;
 }
+.payment-form-v1 .selected .well {
+  border: 1px solid #2ecc71!important;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+.payment-form-v1 .notSelected .well {
+  background: #f0fafb!important;
+}
 .payment-form-v1 .glyphicon-refresh-animate {
   -animation: spin .7s infinite linear;
   -ms-animation: spin .7s infinite linear;
