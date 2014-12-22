@@ -660,7 +660,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$watch('currentpage.components', function(newValue, oldValue) {
             if (newValue) {
                 newValue.forEach(function(value, index) {
-                    if (value.type === 'payment-form') {
+                    if (value && value.type === 'payment-form') {
                         var productId = value.productId;
                         ProductService.getProduct(productId, function(product) {
                             $scope.paymentFormProduct = product;
