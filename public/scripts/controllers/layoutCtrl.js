@@ -191,7 +191,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 //if tagname is present, filter the cached posts with the tagname
                 if ($route.current.params.tagname != null) {
                     var filterPosts = [];
-                    that.currentTag = $route.current.params.tagname;
+                    that.currentTag = decodeURIComponent($route.current.params.tagname);
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].post_tags) {
                             var tags = data[i].post_tags;

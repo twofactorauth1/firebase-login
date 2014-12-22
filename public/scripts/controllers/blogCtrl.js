@@ -74,7 +74,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 //if tagname is present, filter the cached posts with the tagname
                 if ($route.current.params.tagname != null) {
                     var filterPosts = [];
-                    that.currentTag = $route.current.params.tagname;
+                    that.currentTag = decodeURIComponent($route.current.params.tagname);
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].post_tags) {
                             var tags = data[i].post_tags;
@@ -123,7 +123,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
-                        var iframe = window.parent.document.getElementById("iframe-website")               
+                        var iframe = window.parent.document.getElementById("iframe-website")
                         iframe && iframe.contentWindow && iframe.contentWindow.parent.checkIfSinglePost && iframe.contentWindow.parent.checkIfSinglePost(found);
                     }
                     return;
@@ -138,7 +138,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             that.tempPost=angular.copy(that.post);
         };
 
-        window.savePostMode=function(toaster){ 
+        window.savePostMode=function(toaster){
             var post_data =  angular.copy(that.post);
             post_data.post_tags.forEach(function(v,i) {
                 if(v.text)
@@ -151,7 +151,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             PostService.updatePost($scope.$parent.currentpage._id, post_data._id,post_data,function(data){
                 console.log(data);
                 console.log("Post Saved");
-                if(toaster)                      
+                if(toaster)
                     toaster.pop('success', "Post Saved");
             });
         };
