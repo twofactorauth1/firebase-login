@@ -1,5 +1,5 @@
-define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDirective', 'toasterService'], function (angularAMD, app) {
-    app.register.controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', 'CustomerService', 'ToasterService', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber, CustomerService, ToasterService) {
+define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDirective', 'toasterService', 'courseServiceAdmin'], function (angularAMD, app) {
+    app.register.controller('EditCourseModalController', ['$scope', '$modal', '$http', '$location', '$timeout', '$modalInstance', 'course', 'templates', 'Course', 'Subscriber', 'CustomerService', 'ToasterService', 'CourseService', function ($scope, $modal, $http, $location, $timeout, $modalInstance, course, templates, Course, Subscriber, CustomerService, ToasterService, CourseService) {
         $scope.modal = {};
         $scope.selectedCustomers = [];
         $scope.tmpSubscribers = [];
