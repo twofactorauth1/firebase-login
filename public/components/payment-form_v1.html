@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <div class="row social btn-toolbar">
+                    <!-- <div class="row social btn-toolbar">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
                             <a class="btn btn-large btn-default" href="/signup/facebook"><i class="fa fa-facebook"></i></a>
@@ -28,7 +28,7 @@
                             <a class="btn btn-large btn-default" href="/signup/linkedin"><i class="fa fa-linkedin"></i></a>
                         </div>
                         <div class="col-sm-4"></div>
-                    </div>
+                    </div> -->
                     <div class="row"></div>
                     <fieldset ng-disabled="isFormValid">
                         <!-- EMAIL AND PASSOWORD -->
@@ -36,8 +36,7 @@
                         <div id="email" class="form-group col-sm-6 has-feedback">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-envelope" /></span>
-                                <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email"
-                                ng-blur="checkEmailExists(newAccount)" />
+                                <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
                                 <span class="glyphicon form-control-feedback"></span>
                             </div>
                             <span class="error help-block" />
@@ -47,9 +46,7 @@
                         <div id="password" class="form-group col-sm-6 has-feedback">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock" /></span>
-                                <input class="form-control input-lg" type="password" ng-model="newAccount.password"
-                                placeholder="password" ng-blur="checkPasswordLength(newAccount)"
-                                />
+                                <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
                                 <span class="glyphicon form-control-feedback"></span>
                             </div>
                             <span class="error" />
@@ -60,9 +57,7 @@
                         <div id="business-name" class="form-group col-xs-12 has-feedback">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-building" /></span>
-                                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName"
-                                placeholder="Business Name" ng-blur="checkDomainExists(newAccount)"
-                                />
+                                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
                                 <span class="glyphicon form-control-feedback"></span>
                             </div>
                             <span class="error" />
@@ -74,28 +69,20 @@
 
                         <!-- MEMBERSHIP -->
 
-                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans">
+                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
                             <div class="well well-calm">
                                 <h4 class="center">{{plan.name}}</h4>
                                 <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
                                 <div class="mb30"></div>
-                                <a type="button" class="btn btn-primary" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, paymentFormProduct.cost)">Choose</a>
+                                <div class="col-xs-12 mb15">
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval)">Choose</a>
+                                    <a type="button" class="btn btn-green btn-block center active" ng-if="newAccount.membership == plan.id">Selected</a>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
 
                         <div class="clearfix"></div>
-
-                        <hr></hr>
-                        <!-- Coupon DETAILS -->
-                        <div id="coupon-name" class="form-group col-xs-12">
-                            <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code"
-                            />
-                            <span class="error" />
-                        </div>
-
-                        <div class="clearfix"></div>
-
-                        <hr></hr>
 
                         <!-- PAYMENT DETAILS -->
 
@@ -105,6 +92,7 @@
                                     <h3 class="center">Amount:</h3>
                                 </div>
                                 <div class="col-sm-10">
+
                                     <h4>Only</h4>  <i class="fa fa-usd fa-1"></i>{{(subscriptionPlanAmount/100).toFixed(2)}}/{{subscriptionPlanInterval}}&nbsp;+&nbsp;<i class="fa fa-usd fa-1"></i>{{subscriptionPlanOneTimeFee}}(One Time Fee)
                                     <!--
                                 <h4>Only $49.00/month (when you prepay $588.00 for 12 months)
@@ -126,8 +114,7 @@
                                         <form name="card-details" action="">
                                             <div class="row">
                                                 <div id="card_number" class="form-group small-6 columns col-sm-6">
-                                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()"
-                                                    class="form-control input-lg">
+                                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
                                                     <span class="error help-block" />
                                                 </div>
                                                 <div class="visible-xs mb20"></div>
@@ -139,37 +126,39 @@
                                             <div class="clearfix mb20"></div>
                                             <div class="row">
                                                 <div id="card_expiry" class="form-group small-3 columns col-xs-6">
-                                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry"
-                                                    name="expiry" class="form-control input-lg">
+                                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
                                                     <span class="error help-block" />
                                                 </div>
                                                 <div id="card_cvc" class="form-group small-3 columns col-xs-6">
-                                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc"
-                                                    class="form-control input-lg">
+                                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
                                                     <span class="error help-block" />
                                                 </div>
                                             </div>
                                             <div class="clearfix mb20"></div>
                                         </form>
                                     </div>
+                                    <!-- Coupon DETAILS -->
+                                    <div id="coupon-name" class="form-group col-xs-12">
+                                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
+                                        <span class="error" />
+                                    </div>
                                 </div>
+
+                                <div class="clearfix"></div>
+
+                                <hr></hr>
+
+
+                                <!-- BUY -->
+
+                                <div class="submit-signup">
+                                    <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Become
+                                an Indigenous Member Now</a>
+                                </div>
+                                <p class="center">By clicking this button you agree to the Indigenous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                             </div>
                         </div>
 
-
-                        <div class="clearfix"></div>
-
-                        <hr></hr>
-
-
-                        <!-- BUY -->
-
-                        <div class="submit-signup">
-                            <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Become
-                                an Indigenous Member Now</a>
-                        </div>
-                        <p class="center">By clicking this button you agree to the Indigenous.io <a href=""
-                            type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                     </fieldset>
                 </div>
             </div>
@@ -202,18 +191,7 @@
                     <h4 class="modal-title">Terms of Service</h4>
                 </div>
                 <div class="modal-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel, possimus, quasi.
-                    Necessitatibus praesentium, dolorem blanditiis modi mollitia,
-                    non veritatis. In laboriosam maxime vitae! Atque minima voluptates
-                    nisi aspernatur nihil. Quos, necessitatibus sint veritatis
-                    dolores magnam minima debitis sunt totam sit reiciendis! Suscipit
-                    eveniet placeat, velit totam repellendus illo quam quae aliquam
-                    voluptatibus deserunt nihil corporis, odio voluptate reiciendis
-                    dolorum non asperiores aut. Impedit doloribus aspernatur quasi
-                    ea tempora vitae odio eaque reiciendis omnis. Quia, nisi facilis
-                    vel non optio in, sit a! Molestiae placeat quae, nostrum officiis,
-                    iusto ea at repellat et atque consequatur! Id ut sapiente illo?
-                    Quas, deserunt?
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel, possimus, quasi. Necessitatibus praesentium, dolorem blanditiis modi mollitia, non veritatis. In laboriosam maxime vitae! Atque minima voluptates nisi aspernatur nihil. Quos, necessitatibus sint veritatis dolores magnam minima debitis sunt totam sit reiciendis! Suscipit eveniet placeat, velit totam repellendus illo quam quae aliquam voluptatibus deserunt nihil corporis, odio voluptate reiciendis dolorum non asperiores aut. Impedit doloribus aspernatur quasi ea tempora vitae odio eaque reiciendis omnis. Quia, nisi facilis vel non optio in, sit a! Molestiae placeat quae, nostrum officiis, iusto ea at repellat et atque consequatur! Id ut sapiente illo? Quas, deserunt?
                 </div>
             </form>
         </div>
@@ -225,8 +203,7 @@
 
 
 <script type="text/javascript">
-    card = $('form[name="card-details"]').card(
-    {
-        container: '.card-wrapper'
-    });
+card = $('form[name="card-details"]').card({
+    container: '.card-wrapper'
+});
 </script>

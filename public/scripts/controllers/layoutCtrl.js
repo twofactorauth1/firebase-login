@@ -723,13 +723,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           return newArr;
         }
 
-        $scope.subscriptionPlanOneTimeFee = 0;
+        $scope.subscriptionPlanOneTimeFee = 500;
 
         $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
             $scope.newAccount.membership = planId;
             $scope.subscriptionPlanAmount = amount;
             $scope.subscriptionPlanInterval = interval;
-            $scope.subscriptionPlanOneTimeFee = parseInt(cost.substring(1));
+            // $scope.subscriptionPlanOneTimeFee = parseInt(cost.substring(1));
         };
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;
