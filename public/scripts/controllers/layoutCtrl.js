@@ -368,6 +368,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** CMS RELATED **********/
 
+        $scope.setPostImage = function(componentId,blogpost)
+        {
+           window.parent.setPostImage(componentId);
+           blogpost.featured_image = window.parent.postImageUrl;
+        }
+
         $scope.social_links = [
         {name:"adn",icon:"adn"},
         {name:"bitbucket",icon:"bitbucket"},
