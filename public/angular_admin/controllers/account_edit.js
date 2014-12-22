@@ -254,6 +254,12 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       UserService.putUser($scope.user, function(user) {
           UserService.putAccount($scope.account, function(account) {
             toaster.pop('success', "Account Saved", "All account information has been saved.");
+            //if theme doesn;t exist, set task complete
+            if (!$scope.preferences.tasks) {
+                $scope.preferences.tasks = {
+                   basic_info:false
+                };
+            }
             if (!$scope.preferences.tasks.basic_info || $scope.preferences.tasks.basic_info == false) {
                 $scope.preferences.tasks.basic_info = true;
                 UserService.updateUserPreferences($scope.preferences, false, function() {
