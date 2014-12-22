@@ -163,9 +163,10 @@ module.exports = {
                                 if (err) {
                                     log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
                                 } else {
+                                    var vars = [];
                                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                                         notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                        htmlContent, accountId, userId, function (err, result) {
+                                        htmlContent, accountId, userId, vars, function (err, result) {
                                         });
                                 }
 
