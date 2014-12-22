@@ -63,7 +63,7 @@ rm -f public/js/main.js
 mv public/js/mainforproduction.js public/js/main.js
 
 # Compile all handlebars templates
-grunt compiletemplates
+#grunt compiletemplates
 
 # run grunt
 echo Running grunt production
