@@ -13,6 +13,7 @@ var csv = require("fast-csv");
 var campaignManager = require('../../campaign/campaign_manager');
 
 
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -47,6 +48,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthAndSubscribedApi.bind(this), this.getVideoForCurrentUser.bind(this));
         app.post(this.url(':id/subscribers/upload'), this.isAuthAndSubscribedApi.bind(this), this.subscribeEmailsFromFile.bind(this));
         app.post(this.url(':id/subscribe'), this.setup, this.subscribeToCourse.bind(this));
+        app.post(this.url('subscribers'), this.isAuthAndSubscribedApi.bind(this), this.bulkSubscribe.bind(this));
     },
 
     listCoursesBySubdomain: function(req, res) {
@@ -438,6 +440,16 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendResultOrError(resp, err, result, "Could not send the course-scheduled emails.", 500);
                 });
             }
+        });
+    },
+
+    bulkSubscribe: function(req, resp) {
+        var self = this;
+        self.log.debug('>> bulkSubscribe');
+        var subs = req.body.subs;
+        campaignManager.bulkSubscribeToCourse(subs, self.userId(req), self.accountId(req), function(err, result){
+            self.log.debug('<< bulkSubscribe');
+            self.sendResultOrError(resp, err, result, "Could not create all subscriptions.", 500);
         });
     },
 

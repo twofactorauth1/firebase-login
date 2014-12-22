@@ -23,6 +23,7 @@ var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
 //todo: change it to dynamic resolution depending on env
 var hostSuffix = appConfig.subdomain_suffix;
+var async = require('async');
 
 /**
  * Constants for pipeshift
@@ -363,6 +364,43 @@ module.exports = {
                 );
             }
         });
+
+    },
+
+    /**
+     *
+     * @param subAry of objects: {email: x, courseId: x, subscribeTime: x}
+     * @param fn
+     */
+    bulkSubscribeToCourse: function(subAry, userId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> bulkSubscribeToCourse');
+        var timezoneOffset = 0;//TODO: calculate this.
+        accountDao.getAccountByID(accountId, function(err, account){
+            async.each(subAry, function(sub, callback){
+                courseDao.getById(sub.courseId, $$.m.Course, function(err, course){
+                    self._addSubscriber(sub.email, course, userId, timezoneOffset, function (error) {
+                        if (error) {
+                            callback('Error creating subscriber.', null);
+                        } else {
+                            self._sendVAREmails(sub.email, course, timezoneOffset, account, function (result) {
+                                callback();
+                            });
+                        }
+                    });
+                });
+
+            }, function(err){
+                if(err) {
+                    self.log.error('Error creating subscriptions: ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug('<< bulkSubscribe');
+                    fn(null, 'SUCCESS');
+                }
+            });
+        });
+
 
     },
 
