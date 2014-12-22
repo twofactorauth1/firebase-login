@@ -283,7 +283,7 @@ define([
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
                             if ($location.$$search['posthandle']) {
-                                $scope.updatePage("blog");
+                                $scope.updatePage("blog", true);
                             }
                         }
                     } else {
@@ -643,7 +643,7 @@ define([
                 $scope.componentEditing.features.splice(index, 1);                    
                 $scope.saveCustomComponent();
             }
-            
+
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 $scope.components = $scope.currentPage.components;
