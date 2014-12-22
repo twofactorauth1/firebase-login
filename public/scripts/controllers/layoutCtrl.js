@@ -683,7 +683,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             }
                         });
                     }
-                    if(value.type === 'thumbnail-slider')
+                    if(value && value.type === 'thumbnail-slider')
                     {
                         var w = angular.element($window);
                         var check_if_mobile = mobilecheck();
