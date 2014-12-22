@@ -567,7 +567,10 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
                 </div>
-                <div class="modal-body">
+                 <div ng-if = "!upcomingInvoice" class="modal-body">
+                    No upcoming invoices found
+                 </div>
+                 <div ng-if = "upcomingInvoice" class="modal-body">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="mb40"></div>

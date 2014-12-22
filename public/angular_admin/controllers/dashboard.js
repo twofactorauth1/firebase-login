@@ -148,7 +148,7 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
             $scope.avgRevenue = data.avgRevenue;
             $scope.annualRunRate = data.annualRunRate;
-            $scope.arpu = data.arpu;
+            $scope.arpu = data.arpu || null;
             $scope.totalCanceledSubscriptions = data.totalCanceledSubscriptions;
             $scope.cancelSubscriptionPercent = data.cancelSubscriptionPercent;
             $scope.cancelSubscriptionData = data.cancelSubscriptionData;
@@ -158,8 +158,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             $scope.lifetimeValue = data.lifetimeValue;
             $scope.totalRevenue = data.totalRevenue;
             $scope.totalFees = data.totalFees;
-            $scope.totalRevenuePercent = data.totalRevenuePercent;
-            $scope.netRevenue = data.netRevenue;
+            $scope.totalRevenuePercent = data.totalRevenuePercent || null;
+            $scope.netRevenue = data.netRevenue || null;
             $scope.totalCustomerData = data.totalCustomerData;
             $scope.totalPayingCustomerPercent = data.totalPayingCustomerPercent;
             $scope.customerStart = data.customerStart;
