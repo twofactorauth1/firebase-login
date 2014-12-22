@@ -138,7 +138,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             that.tempPost=angular.copy(that.post);
         };
 
-        window.savePostMode=function(toaster){
+         window.savePostMode=function(toaster){ 
+
             var post_data =  angular.copy(that.post);
             post_data.post_tags.forEach(function(v,i) {
                 if(v.text)
@@ -147,14 +148,27 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post_content_container = $('.post_content_div .post_content');
             if(post_content_container.length > 0)
                 post_data.post_content = post_content_container.html();
-
-            PostService.updatePost($scope.$parent.currentpage._id, post_data._id,post_data,function(data){
+            if(!post_data.post_content)
+            {
+                 var post_content_container = $('.post_content_div .blog_post_content');
+                 if(post_content_container.length > 0)
+                    post_data.post_content = post_content_container.text();
+            }    
+            
+            var postImageUrl = window.parent.getPostImageUrl();
+            if(postImageUrl)
+            {
+                post_data.featured_image = postImageUrl;
+            }
+            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            PostService.updatePost(pageId, post_data._id,post_data,function(data){
                 console.log(data);
                 console.log("Post Saved");
-                if(toaster)
+                if(toaster)                      
                     toaster.pop('success', "Post Saved");
             });
         };
+
 
 
         window.updatePostMode = function() {
