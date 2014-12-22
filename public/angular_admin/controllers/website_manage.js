@@ -23,6 +23,7 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+            $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
 
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
@@ -192,6 +193,7 @@ define([
                 if (!$scope.preferences.tasks.select_theme || $scope.preferences.tasks.select_theme == false) {
                     $scope.preferences.tasks.select_theme = true;
                     UserService.updateUserPreferences($scope.preferences, false, function() {
+                        $scope.toasterOptions['position-class'] = 'toast-bottom-full-width';
                         toaster.pop('success', "You selected you first theme!");
                     });
                 };
