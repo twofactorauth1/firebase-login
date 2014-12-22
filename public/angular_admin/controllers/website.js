@@ -283,7 +283,7 @@ define([
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
                             if ($location.$$search['posthandle']) {
-                                $scope.updatePage("blog");
+                                $scope.updatePage("blog", true);
                             }
                         }
                     } else {
@@ -387,8 +387,8 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                var iFrame = document.getElementById("iframe-website");                
-                if($scope.singlePost)
+                var iFrame = document.getElementById("iframe-website"); 
+                if($location.$$search['posthandle'])
                 {
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = false;
@@ -620,6 +620,17 @@ define([
                 }
             }
 
+            window.setPostImage = function(componentId)
+            {
+                $scope.postImage = true;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");                
+            }
+            window.getPostImageUrl = function()
+            {
+                return $scope.postImageUrl;             
+            }
+
             $scope.addFeatureList = function(feature){
                 if (feature && feature.title) {
                     if (!$scope.featureIcon) {
@@ -643,7 +654,7 @@ define([
                 $scope.componentEditing.features.splice(index, 1);                    
                 $scope.saveCustomComponent();
             }
-            
+
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
                 $scope.components = $scope.currentPage.components;
@@ -976,7 +987,15 @@ define([
                         console.log('unknown component or image location');
                     }
                     $scope.bindEvents();
-                } else {
+                }
+                else if($scope.postImage && !$scope.componentEditing)
+                {
+                    $scope.postImage = false;
+                    $scope.postImageUrl = asset.url;
+                    toaster.pop('success', "Post Image added successfully");
+                    return;
+                }
+                else {
                     $scope.componentEditing.bg.img.url = asset.url;
                 }
                 $scope.updateIframeComponents();
