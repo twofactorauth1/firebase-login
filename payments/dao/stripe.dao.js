@@ -83,13 +83,17 @@ var dao = {
         });
     },
 
-    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomerForUser");
         var params = {};
         params.email = user.get('email');
         params.description = 'Customer for ' + user.get('email');
+        if(accountBalance > 0) {
+            self.log.debug('Setting initial account balance of ' + accountBalance);
+            params.account_balance = accountBalance;
+        }
         params.metadata = {};
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;

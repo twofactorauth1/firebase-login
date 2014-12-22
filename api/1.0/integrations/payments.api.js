@@ -295,7 +295,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self = value = null;
                     });
                 } else {
-                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, function(err, value){
+                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
                         self.log.debug('<< createCustomer');
                         self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
                     });
