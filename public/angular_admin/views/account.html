@@ -373,8 +373,9 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                         <div class="caption">
                             <h3>Facebook</h3>
-                            <p>Connect with your friends</p>
-                            <div class="connected" ng-show="userSocialActive[credentialTypes.FACEBOOK]">
+
+                            <p ng-show="!userSocial[credentialTypes.FACEBOOK]">Connect with your friends</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
                                 <img ng-src="{{userSocialImage[credentialTypes.FACEBOOK]}}" class="img-circle" />
@@ -394,7 +395,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-4">
+                <div class="col-sm-3 col-md-4 hidden">
                     <div class="thumbnail">
                         <div class="img-wrap">
                             <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg"
@@ -419,7 +420,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                         <div class="caption">
                             <h3>Google +</h3>
-                            <p>Import customers, plan posts in advance.</p>
+                            <p ng-show="!userSocialActive[credentialTypes.GOOGLE]">Import customers, plan posts in advance.</p>
                             <div class="connected" ng-show="userSocialActive[credentialTypes.GOOGLE]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
@@ -447,7 +448,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                         <div class="caption">
                             <h3>LinkedIn</h3>
-                            <p>Import contacts</p>
+                            <p ng-show="!userSocialActive[credentialTypes.LINKEDIN]">Import contacts</p>
                             <div class="connected" ng-show="userSocialActive[credentialTypes.LINKEDIN]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
@@ -474,7 +475,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                         <div class="caption">
                             <h3>Twitter</h3>
-                            <p>Import followers</p>
+                            <p ng-show="!userSocial[credentialTypes.TWITTER]">Import followers</p>
                             <div class="connected" ng-show="userSocialActive[credentialTypes.TWITTER]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
@@ -502,7 +503,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                         <div class="caption">
                             <h3>Stripe</h3>
-                            <p>Stripe Allows you to recieve payments on your website.</p>
+                            <p ng-show="!userSocial[credentialTypes.STRIPE]">Stripe Allows you to recieve payments on your website.</p>
                             <p>
                                 <a href="/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
                                     <span class="fa fa-plug"></span>Connect</a>
