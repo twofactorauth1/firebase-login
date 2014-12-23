@@ -94,31 +94,26 @@ module.exports = {
 
                         /*
                          * Send welcome email.  This is done asynchronously.
-                         * But only do this if we are not in the "testing" env.
+                         * But only do this if we are not running unit tests.
                          */
-
-
+                        if (process.env.NODE_ENV != "testing") {
                             fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
                                 if (err) {
                                     log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
                                 } else {
                                     log.debug('account ', account.attributes.subdomain);
-                                        var siteUrl;
-                                        if (process.env.NODE_ENV != "testing") {
-                                            siteUrl = account.attributes.subdomain + ".test.indigenous.io";
-                                        } else {
-                                            siteUrl = account.attributes.subdomain + ".indigenous.io";
+                                    var siteUrl = account.get('subdomain') + appConfig.subdomain_suffix;
+
+                                    var vars = [
+                                        {
+                                            "name": "SITEURL",
+                                            "content": siteUrl
+                                        },
+                                        {
+                                            "name": "USERNAME",
+                                            "content": savedUser.attributes.username
                                         }
-                                        var vars = [
-                                            {
-                                                "name": "SITEURL",
-                                                "content": siteUrl
-                                            },
-                                            {
-                                                "name": "USERNAME",
-                                                "content": savedUser.attributes.username
-                                            }
-                                        ];
+                                    ];
                                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                                         notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                         htmlContent, accountId, userId, vars, function (err, result) {
@@ -126,6 +121,9 @@ module.exports = {
                                 }
 
                             });
+                        }
+
+
 
                         log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
