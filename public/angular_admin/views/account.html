@@ -373,7 +373,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                         <div class="caption">
                             <h3>Facebook</h3>
-                            <p>Connect with your friends</p>
+                            <p ng-show="!userSocial[credentialTypes.FACEBOOK]">Connect with your friends</p>
                             <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
@@ -394,7 +394,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-4">
+                <div class="col-sm-3 col-md-4 hidden">
                     <div class="thumbnail">
                         <div class="img-wrap">
                             <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg"
