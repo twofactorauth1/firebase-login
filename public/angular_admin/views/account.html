@@ -377,7 +377,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                             <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <img ng-src="{{userSocialImage[credentialTypes.FACEBOOK]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.FACEBOOK]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
@@ -423,7 +423,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                             <div class="connected" ng-show="userSocial[credentialTypes.GOOGLE]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <img ng-src="{{userSocialImage[credentialTypes.GOOGLE]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.GOOGLE]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
@@ -451,7 +451,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                             <div class="connected" ng-show="userSocial[credentialTypes.LINKEDIN]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <img ng-src="{{userSocialImage[credentialTypes.LINKEDIN]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.LINKEDIN]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
@@ -478,7 +478,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                             <div class="connected" ng-show="userSocial[credentialTypes.TWITTER]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
+                                <img ng-src="{{userSocialImage[credentialTypes.TWITTER]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.TWITTER]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">

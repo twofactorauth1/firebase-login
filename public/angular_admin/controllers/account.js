@@ -192,6 +192,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUser(function(user) {
                 $scope.user = user;
+                $scope.userSocialImage = {};
+                angular.forEach($scope.user.profilePhotos, function(value, index) {
+                    $scope.userSocialImage[value.type] = value.url;
+                });
+                console.log('Social images ', $scope.userSocialImage);
             });
 
             UserService.getUserSocial(function(social) {
@@ -200,6 +205,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 social.forEach(function(value, index) {
                     $scope.userSocial[value.type] = value.username;
                 });
+                console.log('social auth usernames ', $scope.userSocial);
             });
         }
     ]);
