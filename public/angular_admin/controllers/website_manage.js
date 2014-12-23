@@ -158,6 +158,12 @@ define([
                 WebsiteService.getThemes(function(themes) {
                     $scope.themes = themes;
                     console.log('themes ', themes);
+                    for (var i = 0; i < themes.length; i++) {
+                        var comingSoonThemes = ['SAAS', 'Ethlete', 'Charity', 'Inventor', 'Real Estate', 'Health Care', 'Public Speaker', 'Fit Writer', 'Fit Tester II', 'FitTester', 'CopyWriter', 'Hair Stylist'];
+                        if (comingSoonThemes.indexOf(themes[i].name) > -1) {
+                            themes[i].coming_soon = true;
+                        }
+                    };
                     $scope.currentTheme = _.findWhere($scope.themes, {
                         _id: account.website.themeId
                     });
@@ -194,7 +200,7 @@ define([
                     $scope.preferences.tasks.select_theme = true;
                     UserService.updateUserPreferences($scope.preferences, false, function() {
                         $scope.toasterOptions['position-class'] = 'toast-bottom-full-width';
-                        toaster.pop('success', "You selected you first theme!");
+                        toaster.pop('success', "You selected you first theme!", '<div class="mb15"></div><a href="/admin#/website?onboarding=select-theme" class="btn btn-primary">Next Step: Select A Theme</a>', 0, 'trustedHtml');
                     });
                 };
 
