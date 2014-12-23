@@ -23,7 +23,8 @@ var contactActivity = $$.m.ModelBase.extend({
             duration:null,
             start:null, //datestamp
             end:null,   //datestamp
-            v:0.1
+            v:0.1,
+            extraFields:null
         }
     },
 
@@ -41,11 +42,19 @@ var contactActivity = $$.m.ModelBase.extend({
     types: {
         PAGE_VIEW: 'PAGE_VIEW',
         SUBSCRIBE: 'SUBSCRIBE',
-        ACCOUNT_CREATED: 'ACCOUNT_CREATED',
+        COURSE_SUBSCRIBE: 'COURSE_SUBSCRIBE',
+        CONTACT_CREATED: 'CONTACT_CREATED',
         EMAIL: 'EMAIL',
         PHONECALL: 'PHONECALL',
         FACEBOOK_LIKE: 'FACEBOOK_LIKE',
-        TWEET: 'TWEET'
+        TWEET: 'TWEET',
+        FORM_SUBMISSION: 'FORM_SUBMISSION',
+        EMAIL_DELIVERED: 'EMAIL_DELIVERED',
+        EMAIL_OPENED: 'EMAIL_OPENED',
+        EMAIL_CLICKED: 'EMAIL_CLICKED',
+        EMAIL_UNSUB: 'EMAIL_UNSUB',
+        SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
+        SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL'
     }
 });
 

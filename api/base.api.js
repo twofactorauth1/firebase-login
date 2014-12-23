@@ -10,6 +10,7 @@
 var securityManager = require('../security/sm')(true);
 var securityConstants = require('../security/utils/security.constants');
 var appConfig = require('../configs/app.config');
+//var geoip = require('geoip-lite');
 
 
 var apiBase = function(options) {
@@ -161,6 +162,14 @@ _.extend(apiBase.prototype, {
         }
     },
 
+    customerId: function(req) {
+        try {
+            return req.user.attributes.stripeId;
+        }catch(exception) {
+            return null;
+        }
+    },
+
 
     accountId: function(req) {
         try {
@@ -168,6 +177,31 @@ _.extend(apiBase.prototype, {
         }catch(exception) {
             return null;
         }
+    },
+
+    ip: function(req) {
+        try {
+            var ip = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress;
+
+            if(Array.isArray(ip)) {
+                return ip[0];
+            } else if(ip.indexOf(',') !== -1){
+                return ip.split(',')[0].trim();
+            } else{
+                return ip;
+            }
+        } catch(exception) {
+            return null;
+        }
+
+    },
+
+    geo: function(req) {
+        //return geoip.lookup(this.ip(req));
+        return null;
     },
 
 
@@ -278,7 +312,7 @@ _.extend(apiBase.prototype, {
     },
 
     checkPermissionForAccountAndUser: function(userId, accountId, priv, cb) {
-        console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
+        //console.log('checkPermissionForAccountAndUser(' + userId + ',' + accountId +',' + priv + ',' + cb + ')');
         this.sm.hasPermission(userId, accountId, priv, cb);
     },
 

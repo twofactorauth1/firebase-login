@@ -6,21 +6,21 @@
 
 mainApp.factory('accountService', ['$location', '$http', function ($location, $http) {
 
-    var that = this;
-    that.account = {};
+    var account = {};
 
     return function (callback) {
-        if (Object.getOwnPropertyNames(that.account).length != 0) {
-            callback(null,that.account);
+
+        if (Object.getOwnPropertyNames(account).length != 0) {
+            callback(null,account);
         } else {
             // API URL: http://yoursubdomain.indigenous.local/api/1.0/account
-            $http.get('/api/1.0/account')
+            $http.get('/api/1.0/account', { cache: true})
             .success(function (data) {
-                that.account = data;
+                account = data;
                 callback(null, data)
             })
             .error(function (err) {
-                console.log('END:Account Service with ERROR');
+                console.log('END:Account Service with ERROR ', err);
                 callback(err, null);
             });
         }

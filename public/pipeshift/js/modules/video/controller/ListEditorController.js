@@ -1,9 +1,10 @@
 /**
  * The controller used when editing video courses
  */
-define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController',
-    'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController'], function (angularAMD, app) {
-    app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo) {
+define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController', 'navigationService',
+    'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'], function (angularAMD, app) {
+    app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService) {
+        NavigationService.updateNavigation();
         $scope.location = $location;
         $scope.courseBlocked = false;
         $scope.searchsort = $location.search()['searchsort'] || false;
@@ -18,6 +19,27 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
         }).error(function (data) {
             alert("Error on templates get.")
         });
+        $scope.beginOnboarding = function(type) {
+            if (type == 'create-campaign') {
+                $scope.stepIndex = 0;
+                $scope.showOnboarding = true;
+                $scope.onboardingSteps = [{
+                    overlay: true,
+                    title: 'Task: Create First Campaign',
+                    description: "Create your first campaign that will funnel your potential customers.",
+                    position: 'centered',
+                    width: 400
+                }];
+            }
+        };
+
+        $scope.finishOnboarding = function() {
+            console.log('were finished');
+        };
+
+        if ($location.$$search['onboarding']) {
+            $scope.beginOnboarding($location.$$search['onboarding']);
+        }
         $scope.ui = {};
         $scope.courses = [];
         Course.query({}, function (resp) {

@@ -31,6 +31,8 @@ html(class="no-js", lang="en")
             link(rel='stylesheet', href='/js/libs/jd-fontselect/dist/angular-fontselect.min.css')
             link(rel='stylesheet', href='/css/angular-admin.css')
             link(rel='stylesheet', href='/js/libs/ngprogress/ngProgress.css')
+            link(rel='stylesheet' href='/js/libs/ng-tags-input/ng-tags-input.bootstrap.min.css')
+            link(rel='stylesheet' href='/js/libs/jPushMenu/css/jPushMenu.css')
             //- link(rel='stylesheet', href='/js/libs/skeuocard-new/lib/css/card.css')
             
 
@@ -52,7 +54,7 @@ html(class="no-js", lang="en")
                         span.message #{errorMsg}
 
                 if infoMsg
-                    #info-msg.alert.alert-info
+                    //- #info-msg.alert.alert-info
                         button.close(type="button" aria-hidden="true") &times;
                         span.message #{infoMsg}
                 else
@@ -93,4 +95,7 @@ html(class="no-js", lang="en")
 
         include _serverprops
         script(type="text/javascript").
-            window.analytics.identify(#{user._id}, {accountId:#{account._id}});
+            if(window.analytics) {
+                window.analytics.identify(#{user._id}, {accountId:#{account._id}});
+            }
+

@@ -7,11 +7,14 @@
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var KEEN_CONFIG = require('./configs/keen.config');
+var GOOGLE_CONFIG = require('./configs/google.config');
+var TWONET_CONFIG = require('./configs/twonet.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
 var hostfileGenerator = require('./utils/hostfile.generator');
 var dbcopyutil = require('./utils/dbcopyutil');
+var wordpressConverter = require('./utils/wordpressconverter');
 
 module.exports = function(grunt) {
 
@@ -180,7 +183,6 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-touch/angular-touch.js',
                     'public/js/libs/angular-route/angular-route.js',
                     'public/js/libs/angular-ui-router/release/angular-ui-router.js',
-                    'public/js/libs/jquery-waypoints/waypoints.js',
                     'public/js/libs/angular-parallax/scripts/angular-parallax.js',
                     'public/js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
                     'public/js/libs/moment/moment.js',
@@ -204,7 +206,10 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
                     'public/js/libs/purl/purl.js',
                     'public/js/libs/ua-parser-js/dist/ua-parser.min.js',
-                    'public/js/libs_misc/uuid.js'
+                    'public/js/libs_misc/uuid.js',
+                    'public/js/libs_misc/angular-file-upload/angular-file-upload.js',
+                    'public/js/libs/jqcloud2/dist/jqcloud.min.js',
+                    'public/js/libs/angular-jqcloud/angular-jqcloud.js'
 
                 ],
                 /*src: wiredepJSAry,*/
@@ -235,14 +240,18 @@ module.exports = function(grunt) {
                         'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
                         'public/scripts/app.js',
                         'public/scripts/directives/angularparallax.js',
+                        'public/scripts/directives/carousel.js',
                         'public/scripts/directives/convertHtml.js',
                         'public/scripts/directives/coursePreview.js',
                         'public/scripts/directives/dmStyle.js',
+                        'public/scripts/directives/fileChange.js',
+                        'public/scripts/directives/last.js',
                         'public/scripts/directives/ngEnter.js',
                         'public/scripts/directives/skeuocard.js',
                         'public/scripts/directives/convertHtml.js',
 			'public/scripts/directives/scrollTo.js',
                         'public/scripts/services/accountService.js',
+                        'public/scripts/services/analyticsService.js',
                         'public/scripts/services/courseService.js',
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/paymentService.js',
@@ -255,10 +264,12 @@ module.exports = function(grunt) {
                         'public/scripts/filters/CreateUrlFilter.js',
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
+                        'public/scripts/filters/getByType.js',
+                        'public/scripts/filters/trustHtml.js',
                         'public/scripts/controllers/blogCtrl.js',
                         'public/scripts/controllers/CourseSubscribeModalController.js',
                         'public/scripts/controllers/layoutCtrl.js',
-                        'public/scripts/controllers/mainCtrl.js',
+                        'public/scripts/controllers/mainCtrl.js'
                     ]
                 }
             }
@@ -280,9 +291,11 @@ module.exports = function(grunt) {
         nodeunit: {
             all:['test/**/*_test.js'],
             analytics: ['analytics/tests/*_test.js'],
+            analyticsCollater: ['analytics/tests/analytics_collater_test.js'],
             api:['api/test/*_test.js'],
             assets:['assets/test/*_test.js'],
             biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
+            campaign:['campaign/test/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
             contactActivities: ['contactactivities/test/*_test.js'],
@@ -290,6 +303,7 @@ module.exports = function(grunt) {
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
             payments: ['payments/tests/*_test.js'],
+            paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
             products: ['products/tests/*_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
@@ -325,7 +339,16 @@ module.exports = function(grunt) {
                         segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
                         keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
                         keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
-                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID
+                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID,
+                        googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
+                        googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
+                        googleClientId: GOOGLE_CONFIG.CLIENT_ID,
+                        googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
+                        googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
+                        twonetKey: TWONET_CONFIG.TWONET_KEY,
+                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
+                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
+                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID
                     }
                 }
             },
@@ -337,7 +360,19 @@ module.exports = function(grunt) {
                     ENV: {
                         name: 'production',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
-                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY
+                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
+                        keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
+                        keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
+                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID,
+                        googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
+                        googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
+                        googleClientId: GOOGLE_CONFIG.CLIENT_ID,
+                        googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
+                        googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
+                        twonetKey: TWONET_CONFIG.TWONET_KEY,
+                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
+                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
+                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID
                     }
                 }
             }
@@ -404,6 +439,11 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('convertWordpress', 'Convert blog', function(){
+        var done = this.async();
+        wordpressConverter.convertBlog('', 15,'a4bf6965-7ddd-4f4c-9f22-6986f16315fc','e6d3a8a4-5a2f-44d6-a16e-d5cf0759916f', done);
+    });
+
     grunt.registerTask('copyAccount',  ['prompt', 'doCopyAccount']);
 
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -429,7 +469,8 @@ module.exports = function(grunt) {
      * This task is run by CI.
      */
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
-            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments']);
+            'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
+            'nodeunit:analyticsCollater']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
@@ -450,6 +491,10 @@ module.exports = function(grunt) {
     grunt.registerTask('testContactActivities', ['nodeunit:contactActivities']);
     grunt.registerTask('testPayments', ['nodeunit:payments']);
     grunt.registerTask('testFunctionalPayments', ['nodeunit:functionalPayments']);
+    grunt.registerTask('testCampaigns', ['nodeunit:campaign']);
+    grunt.registerTask('testPaymentEvents', ['nodeunit:paymentEvents']);
+    grunt.registerTask('testCollater', ['nodeunit:analyticsCollater']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
+
     
 };

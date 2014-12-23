@@ -9,12 +9,35 @@ var appConfig = require('./app.config');
 
 var nodemailer = require('nodemailer');
 
+var emailHost = process.env.EMAIL_HOST || 's169290.gridserver.com';
+var emailPort = process.env.EMAIL_PORT || 465;
+var emailIsSecure = process.env.EMAIL_IS_SECURE || false;
+if(process.env.EMAIL_IS_SECURE) {
+    emailIsSecure = process.env.EMAIL_IS_SECURE;
+}
+var emailUsername = process.env.EMAIL_USERNAME || 'test_operations@indigenous.io';
+var emailPassword = process.env.EMAIL_PASSWORD || '!Indigenous1';
+
 var smtpTransportConfigs = {
-    service:"Gmail",
+    //service:"Gmail",
+    //auth: {
+    //    user: "indigenous.emailer@gmail.com",
+    //    pass: "indigenousemail"
+    //}
+
+    host: emailHost,
+    port: emailPort,
+    secure: emailIsSecure,
+    tls:false,
     auth: {
-        user: "indigenous.emailer@gmail.com",
-        pass: "indigenousemail"
-    }
+        user: emailUsername,
+        pass: emailPassword
+    },
+    transport: "SMTP",
+    secureConnection: true,
+    requiresAuth: true,
+    name: 'nodemailer'
+
 };
 
 var mailConfigs = {
@@ -35,6 +58,8 @@ switch(process.env.NODE_ENV) {
 }
 
 var smtpTransport = nodemailer.createTransport("SMTP", smtpTransportConfigs);
+//console.log('Email password is: ' + smtpTransportConfigs.auth.password);
+//console.dir(smtpTransportConfigs);
 
 var recreateSmptTransport = function() {
     smtpTransport = nodemailer.createTransport("SMTP", smtpTransportConfigs);
@@ -86,7 +111,7 @@ module.exports = {
                 if (err) {
                     log.error(err);
                     try {
-                        if (err.indexOf("ECONNRESET") > -1) {
+                        if (err.toString().indexOf("ECONNRESET") > -1) {
                             log.error("Attempting to reset SMTP Connection");
                             recreateSmptTransport();
                             recreateSmptTransport();

@@ -5,7 +5,7 @@
     * Please contact info@indigenous.io for approval or questions.
 
 
-#leftnav.leftpanel
+#leftnav.leftpanel.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left
     .logopanel
         if account
             if account.company.logo
@@ -46,6 +46,9 @@
             li().account-li: a(href="#/account")
                     i.fa.fa-cog
                     span Account
-            li().logout-li: a(href="/logout")
+            li().logout-li: a(href="/logout", onclick="return confirm('Are you sure you want to sign out?')")
                     i.fa.fa-sign-out
                     span Sign Out
+            li().indi-li: a(href="#/indi")
+                    i.indi-sm
+                    span Indi

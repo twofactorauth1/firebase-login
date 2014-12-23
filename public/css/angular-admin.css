@@ -1,6 +1,13 @@
 #leftnav {
   position: fixed;
 }
+#leftnav .nav-bracket > li.active > a {
+  background-color: #eee;
+  color: #333333;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
 #headerbar {
   left: 0px;
   position: fixed;
@@ -11,7 +18,7 @@
   border: 0 !important;
 }
 .leftpanel-show #headerbar {
-  left: 190px;
+  left: 240px;
 }
 body.leftpanel-collapsed #headerbar {
   left: 52px;

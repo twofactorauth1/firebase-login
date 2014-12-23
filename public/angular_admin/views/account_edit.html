@@ -1,4 +1,7 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div ng-if="showOnboarding">
+    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
+</div>
 <div style="">
 	<div class="pageheader">
 		<div class="col-xs-7">
@@ -12,7 +15,12 @@
 			</h2>
 		</div>
 
-		<div class="col-xs-5"></div>
+		<div class="col-xs-5">
+			<button class="btn btn-success pull-right" type="button" ng-click="saveAccount()">
+                <span class="fa fa-save"></span>
+                <span class="hidden-xs">Save</span>
+            </button>
+		</div>
 	</div>
 	<div id="contact-edit-container" class="contentpanel" ng-style="styleAccountEdit()" indigeweb-resize>
 		<div class="row">
@@ -26,13 +34,16 @@
 						<!-- UPDATE PHOTO -->
 						<div id="contact-photo-container" class="row">
 							<row>
-							<div class="col-xs-5 col-md-6">
-								<div class="hidden-xs hidden-sm">
-									<div class="btn-link btn-edit-photo" data-toggle="modal" data-target="#modal-change-photo">Change Photo</div>
-								</div>
+							<div class="col-xs-12">
 								<img id="contact-photo"
 									class="img-responsive img-rounded hand btn-edit-photo"
-									src="/assets/icons/blank-user.jpg">
+									ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}"
+									class="img-responsive img-rounded hand btn-edit-photo"
+									style="max-width:200px;margin:0 auto;">
+									<div class="clearfix mb15"></div>
+									<div class="col-xs-12 text-center">
+										<a class="btn btn-primary btn-edit-photo media-modal" ng-click = "logo = false" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user'>Change Photo</a>
+									</div>
 							</div>
 
 							<div class="col-xs-7 col-md-6">
@@ -130,11 +141,28 @@
 								<i class="icon-main fa fa-map-marker"></i>
 							</div>
 							<div class="col-xs-11">
+								<div class="row" ng-repeat="address in user.details[0].addresses">
 								<div id="edit-addresses-container">
 									<div class="form-group">
-										<input class="form-control input-edit-map input-lg" placeholder="Address" ng-model='user.address' type="text">
+										<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="userSaveFn(address.address1)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Address 2" ng-model='address.address2' type="text" ng-change="userSaveFn(address.address2)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="City" ng-model='address.city' type="text" ng-change="userSaveFn(address.city)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="State" ng-model='address.state' type="text" ng-change="userSaveFn(address.state)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Zip" ng-model='address.zip' type="text" ng-change="userSaveFn(address.zip)">
+									</div>
+									<div class="form-group">
+										<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="userSaveFn(address.country)">
 									</div>
 								</div>
+							</div>
 							</div>
 						</div>
 
@@ -173,30 +201,18 @@
 						<!-- UPDATE PHOTO -->
 				        <div id="contact-photo-container" class="row">
 				            <row>
-				                <div class="col-xs-5 col-md-6">
-				                    <div class="hidden-xs hidden-sm">
-				                        <div class="media-modal"  on-insert-mediacb="insertMedia">
-                                            <span class="btn-link btn-edit-photo"> Change Logo</span>
-                                        </div>
-				                    </div>
+				                <div class="col-xs-12">
                                     <div id="bussiness_logo_container" >
                                         <div>
                                             <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" />
                                         </div>
-                                        <style>
-                                            #bussiness_logo_container {
-                                                background-color: #eee;
-                                                display: table;
-                                                width: 100px;
-                                                height: 100px;
-                                            }
-                                            #bussiness_logo_container > div {
-                                                display: table-cell;
-                                                vertical-align: middle;
-                                                text-align: center;
-                                            }
-                                        </style>
                                     </div>
+                                    <div class="clearfix mb15"></div>
+                                    <div class="col-xs-12 text-center">
+				                        <a class="media-modal btn btn-primary" ng-click = "logo = true"  media-modal-show-insert="true" on-insert-mediacb="insertMedia">
+                                            <span class="btn-edit-photo"> Change Logo</span>
+                                        </a>
+				                    </div>
 
 
 				                </div>
@@ -278,6 +294,18 @@
 				            </div>
 				        </div>
 
+				        <div class="row">
+				            <!-- UPDATE Non-Profit -->
+				            <div class="col-xs-12 form" role="form">
+				                <div class="form-group">
+				                    <div class="ckbox ckbox-primary">
+		  			                <input type="checkbox" id="input-business-non-profit" class="chk-business-non-profit" ng-model="account.business.nonProfit" >
+			            		    <label for="input-business-non-profit">Non Profit</label>
+				                </div>
+				                </div>
+				            </div>
+				        </div>
+
 				        <hr></hr>
 
 				        <div id="phone-row" class="row" ng-repeat="phone in account.business.phones">
@@ -306,18 +334,35 @@
 
 				        </div>
 
-				        <div id="address-row" class="row">
+				        <div id="address-row" class="row"  ng-repeat="address in account.business.addresses">
 				            <div class="col-xs-1"><i class="icon-main fa fa-map-marker"></i>
 				            </div>
 				            <div class="col-xs-9">
-				                <div id="edit-addresses-container">
-									<div class="form-group">
-										<input class="form-control input-edit-map input-lg" placeholder="Address" ng-model='user.address' type="text">
-									</div>
-				                </div>
+											<div class="row">
+												<div id="edit-addresses-container">
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="accountSaveFn(address.address1)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Address 2" ng-model='address.address2' type="text" ng-change="accountSaveFn(address.address2)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="City" ng-model='address.city' type="text" ng-change="accountSaveFn(address.city)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="State" ng-model='address.state' type="text" ng-change="accountSaveFn(address.state)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Zip" ng-model='address.zip' type="text" ng-change="accountSaveFn(address.zip)">
+													</div>
+													<div class="form-group">
+														<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="accountSaveFn(address.country)">
+													</div>
+												</div>
+											</div>
 				            </div>
 				            <div class="col-xs-2">
-		                		<div id="btn-new-address" class="btn btn-primary btn-lg pull-right"><i class="fa fa-plus"></i></div>
+											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessAddressFn()"><i class="fa fa-plus"></i></button>
 		                	</div>
 				        </div>
 					</div>

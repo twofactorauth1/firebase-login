@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFilter','confirmClick2'], function (angularAMD) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','confirmClick2', 'toasterService'], function (angularAMD) {
     angularAMD.directive('mediaModal', [ 'FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService',function (FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
@@ -6,6 +6,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
             transclude: false,
             replace: true,
             scope: {
+                insertMediaType: "=",
                 onInsertMediacb: "=",
                 user: '=user'
             },
@@ -30,9 +31,17 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                         {
                             name: "SizeLimit",
                             fn: function (item) {
+                                console.log('item ', item);
                                 switch (item.type.substring(0, item.type.indexOf('/'))) {
                                     case "image":
+                                        console.log('image type');
                                     case "video":
+                                        if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
+                                            return true;
+                                        } else {
+                                            ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
+                                        }
+                                        break;
                                     case "audio":
                                     case "document":
                                     default:
@@ -55,6 +64,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                     }
                 });
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                    console.log('success upload >>> ');
+                    console.log('fileItem >>> ', fileItem);
+                    console.log('response >>> ', response);
+                    console.log('response >>> ', response);
                     $scope.uploadComplete = false;
                     response.files[0].filename = fileItem.file.name;
                     response.files[0].mimeType = fileItem.file.type;
@@ -77,6 +90,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
 
                     contentElement.css('visibility','hidden');
                     mediaModalElement.on('shown.bs.modal', function (e) {
+                        $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
                         $(window).trigger( "resize" )
                         contentElement.css('visibility', 'visible')
                     });
@@ -257,7 +271,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
                 };
                 $scope.m.onInsertMedia = function () {
                     if ($scope.batch.length > 0) {
-                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+                        $scope.type = null;
                     }
 
                     $("#media-manager-modal").modal('hide');
@@ -266,12 +281,22 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'moment', 'timeAgoFi
 
             link: function (scope, element) {
                 scope.assets = [];
-                AssetsService.getAssetsByAccount(function(data){
-                    scope.assets = data;
+                AssetsService.getAssetsByAccount(function(data) {
+                    console.log('asset service data ', data);
+                    if (data instanceof Array) {
+                        scope.assets = data;
+                    }
                 });
                 element.attr("data-toggle", "modal");
                 element.attr("data-target", "#media-manager-modal");
-
+                $(document).on("add_image", function (event) {
+                    $("#media-manager-modal").modal('show');
+                    scope.type = "image_gallery_add_image";
+                })
+                $(document).on("delete_image", function (event, index) {
+                    scope.type = "image_gallery_delete_image";
+                    scope.onInsertMediacb && scope.onInsertMediacb(index, scope.type );
+                })
             }
         };
     }]).directive('captureShift', function(){

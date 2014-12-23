@@ -5,6 +5,10 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+if (process.env.ENABLE_MONITORING == "true") {
+	require('./configs/newrelicjs.config');
+}
+
 /*
  //Do not delete this
  //requires: "nodetime": "~0.8.15" to run
@@ -346,6 +350,14 @@ if (process.env.NODE_ENV != "testing") {
     })
 }
 
+//-----------------------------------------------------
+//  SETUP ANALYTICS PROCESSING JOB
+//-----------------------------------------------------
+//if (process.env.NODE_ENV != "testing") {
+    var analyticsTimerConfig = require('./configs/analyticstimer.config');
+    log.info('Starting analytics job to run every ' + analyticsTimerConfig.ANALYTICS_JOB_MS + 'ms');
+    analyticsTimerConfig.startJob();
+//}
 //-----------------------------------------------------
 //  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------

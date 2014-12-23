@@ -1,5 +1,5 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img'], function(angularAMD) {
-  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier'], function(angularAMD) {
+  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
@@ -33,7 +33,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controllerUrl: '/angular_admin/controllers/dashboard/other_revenue.js'
         }))
         .state('singlePageAnalytics', angularAMD.route({
-          url: '/dashboard/single-page/:pageId',
+          url: '/dashboard/single-page',
           templateUrl: '/angular_admin/views/dashboard/single-page-analytics.html',
           controller: 'SinglePageAnalyticsCtrl',
           controllerUrl: '/angular_admin/controllers/dashboard/single_page_analytics.js'
@@ -99,11 +99,23 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'CustomerEditCtrl',
           controllerUrl: '/angular_admin/controllers/customer_edit.js'
         }))
-        .state('website', angularAMD.route({
+        .state('websiteManage', angularAMD.route({
           url: '/website',
+          templateUrl: '/angular_admin/views/website-manage.html',
+          controller: 'WebsiteManageCtrl',
+          controllerUrl: '/angular_admin/controllers/website_manage.js'
+        }))
+        .state('website', angularAMD.route({
+          url: '/website-editor',
           templateUrl: '/angular_admin/views/website.html',
           controller: 'WebsiteCtrl',
           controllerUrl: '/angular_admin/controllers/website.js'
+        }))
+        .state('indi', angularAMD.route({
+          url: '/indi',
+          templateUrl: '/angular_admin/views/indi.html',
+          controller: 'IndiCtrl',
+          controllerUrl: '/angular_admin/controllers/indi.js'
         }));
 
       var authInterceptor =
@@ -122,14 +134,26 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       $httpProvider.interceptors.push(authInterceptor);
     })
     .run(['$rootScope', function($rootScope) {
+      var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
+        , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'indi'];
+
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
-          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit'];
+          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,
               params: fromParams
             };
+          }
+
+          // update active tab
+          if (includeList.indexOf(toState.name) >= 0) {
+            p = p || $('.nav.nav-pills.nav-stacked.nav-bracket');
+            toName = toState.name.split(/[A-Z]/g);
+            fromName = fromState.name.split(/[A-Z]/g);
+            $('[href="#/' + toName[0] + '"]', p).parent().addClass('active')
+            $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active')
           }
         });
     }]);

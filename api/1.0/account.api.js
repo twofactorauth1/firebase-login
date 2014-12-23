@@ -176,6 +176,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     updateAccount: function(req,resp) {
+        var self = this;
+        self.log.debug('>> updateAccount');
         var account = new $$.m.Account(req.body);
 
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
@@ -184,8 +186,10 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 accountDao.saveOrUpdate(account, function(err, value){
                     if(!err &&value != null){
+                        self.log.debug('<< updateAccount');
                         resp.send(value.toJSON("public"));
                     } else {
+                        self.log.error('Error updating account: ' + err);
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
@@ -361,7 +365,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> saveOrUpdateTmpAccount');
 
         var account = new $$.m.Account(req.body);
-
+        account.set('subdomain', account.get('subdomain').toLowerCase());
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
@@ -390,10 +394,10 @@ _.extend(api.prototype, baseApi.prototype, {
     checkSubdomainAvailability: function(req, res) {
         var self = this;
         self.log.debug('>> checkSubdomainAvailability');
-        var subdomain = req.params.subdomain;
+        var subdomain = req.params.subdomain.toLowerCase();
         accountDao.getAccountBySubdomain(subdomain, function(err, value){
             if(err) {
-                res.wrapError(resp,500,null,err,value);
+                res.wrapError(res,500,null,err,value);
             } else if(value === null) {
                 res.send('true');
             } else {
@@ -414,7 +418,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         accountDao.getAccountsBySubdomain(subdomain, accountId, function(err, value){
             if(err) {
-                res.wrapError(resp,500,null,err,value);
+                res.wrapError(res,500,null,err,value);
             } else if(value === null) {
                 res.send("false");
             } else {

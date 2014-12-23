@@ -11,10 +11,130 @@ var app = require('../../app');
 var CampaignManager = require('../campaign_manager.js');
 var Contact = require('../../models/contact');
 var contactDao = require('../../dao/contact.dao');
+var courseDao = require('../../dao/course.dao');
+var accountDao = require('../../dao/account.dao');
 
 var campaignId;
 
 exports.campaign_manager_test = {
+
+    testAddSubscriberToCourse: function(test) {
+        var self = this;
+        test.expect(1);
+
+        var courseData = {
+            "_id" : 14,
+            "title" : "Herp de Derp",
+            "template" : {
+                "name" : "minimalist"
+            },
+            "subdomain" : "herpdederp",
+            "subtitle" : "Herp de Derp",
+            "body" : "Thanks a million for joining Minimalist.",
+            "description" : "",
+            "price" : 0,
+            "showExitIntentModal" : false,
+            "videos" : [
+                {
+                    "videoId" : "-pr-xzajQo0",
+                    "subject" : "",
+                    "videoUrl" : "http://youtube.com/watch?v=-pr-xzajQo0",
+                    "videoTitle" : "Herp de Derp",
+                    "videoSubtitle" : "Subtitle",
+                    "videoBody" : "body",
+                    "videoPreviewUrl" : "https://i.ytimg.com/vi/-pr-xzajQo0/mqdefault.jpg",
+                    "videoBigPreviewUrl" : "https://i.ytimg.com/vi/-pr-xzajQo0/sddefault.jpg",
+                    "scheduledHour" : 8,
+                    "scheduledMinute" : 0,
+                    "scheduledDay" : 0,
+                    "_id" : null
+                },
+                {
+                    "videoId" : "kC-S4gh4Wt0",
+                    "subject" : "",
+                    "videoUrl" : "http://youtube.com/watch?v=kC-S4gh4Wt0",
+                    "videoTitle" : "Herp De Derp (Music Video Only)",
+                    "videoSubtitle" : "Subtitle",
+                    "videoBody" : "body",
+                    "videoPreviewUrl" : "https://i.ytimg.com/vi/kC-S4gh4Wt0/mqdefault.jpg",
+                    "videoBigPreviewUrl" : "https://i.ytimg.com/vi/kC-S4gh4Wt0/sddefault.jpg",
+                    "scheduledHour" : 8,
+                    "scheduledMinute" : 0,
+                    "scheduledDay" : 1,
+                    "_id" : null
+                }
+            ],
+            "userId" : 4,
+            "accountId" : 4
+        };
+        var userId = 4;
+        var accountId = 4;
+        var toEmail = 'millkyl+test@gmail.com';
+
+
+        var timezoneOffset = 5;
+        var account = new $$.m.Account({
+            "_id" : 4,
+            "company" : {
+                "name" : "kyletesting",
+                "type" : 1,
+                "size" : 0
+            },
+            "subdomain" : "kyletesting",
+            "domain" : "",
+            "token" : "5081b557-8312-4657-89b4-242e0cd70eb3",
+            "website" : {
+                "themeId" : "default",
+                "websiteId" : "0c0d1ab0-9a45-4d4a-92f7-eddf0f64fc9f"
+            },
+            "business" : {
+                "logo" : "",
+                "name" : "",
+                "description" : "",
+                "category" : "",
+                "size" : "",
+                "phones" : [],
+                "addresses" : [],
+                "type" : ""
+            },
+            "billing" : {
+                "stripeCustomerId" : "cus_50ScrDbuljnShG",
+                "cardToken" : "tok_52iZu6ZKYNrjaH",
+                "userId" : 4,
+                "subscriptionId" : "sub_53qp4DpZmKaMqc",
+                "lastVerified" : "2014-10-31T17:00:47.505Z"
+            },
+            "_v" : "0.1",
+            "accountUrl" : "http://kyletesting.indigenous.io"
+        });
+
+        accountDao.saveOrUpdate(account, function(err, savedAccount){
+            if(err) {
+                test.ok(false, err.toString());
+                return test.done();
+            }
+            courseDao.createCourse(courseData, userId, accountId, function(err, course){
+                if(err) {
+                    test.ok(false, err.toString());
+                    test.done();
+                }
+                CampaignManager.subscribeToCourse(toEmail, course, accountId, timezoneOffset, function(err, value){
+                    if(err) {
+                        test.ok(false, err.toString());
+                        test.done();
+                    }
+                    console.log('subscribed');
+                    test.ok(true);
+                    test.done();
+                });
+            });
+        });
+
+
+
+    },
+
+
     testAddNonExistingCampaign: function(test) {
         test.expect(2);
         CampaignManager.addContactToMandrillCampaign("123", "123", [], function(err, value) {
@@ -23,7 +143,7 @@ exports.campaign_manager_test = {
             test.equal(value, null);
             test.done();
         })
-    },
+    }/*,
 
     testAddCampaignBadTemplate: function(test) {
         CampaignManager.createMandrillCampaign(
@@ -128,4 +248,5 @@ exports.campaign_manager_test = {
             })
         })
     }
+    */
 };

@@ -15,26 +15,32 @@ var contactDao = require('./contact.dao');
 var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
 
+var mandrillHelper = require('../utils/mandrillhelper');
+var notificationConfig = require('../configs/notification.config');
+var fs = require('fs');
+
 module.exports = {
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
             accountToken = null;
         }
         log.debug('>> createAccountAndUser');
+        var user = null;
         dao.getUserByUsername(username, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
             if (value != null) {
-                return fn(true, "An account with this username already exists");
+                //return fn(true, "An account with this username already exists");
+                user = value;
             }
 
-            var deferred = $.Deferred();
 
+            var deferred = $.Deferred();
 
             accountDao.convertTempAccount(accountToken, function(err, value) {
                 if (!err) {
@@ -57,21 +63,23 @@ module.exports = {
                     }
 
 
+                    if(user === null) {
+                        user = new $$.m.User({
 
-                    var user = new $$.m.User({
+                            username:username,
+                            email:email,
+                            created: {
+                                date: new Date().getTime(),
+                                strategy: $$.constants.user.credential_types.LOCAL,
+                                by: null, //self-created
+                                isNew: true
+                            }
+                        });
+                        user.createOrUpdateLocalCredentials(password);
 
-                        username:username,
-                        email:email,
-                        created: {
-                            date: new Date().getTime(),
-                            strategy: $$.constants.user.credential_types.LOCAL,
-                            by: null, //self-created
-                            isNew: true
-                        }
-                    });
+                    }
 
 
-                    user.createOrUpdateLocalCredentials(password);
                     var roleAry = ["super","admin","member"];
                     user.createUserAccount(accountId, username, password, roleAry);
 
@@ -83,8 +91,42 @@ module.exports = {
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
                         analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
+
+                        /*
+                         * Send welcome email.  This is done asynchronously.
+                         * But only do this if we are not running unit tests.
+                         */
+                        if (process.env.NODE_ENV != "testing") {
+                            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
+                                if (err) {
+                                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                                } else {
+                                    log.debug('account ', account.attributes.subdomain);
+                                    var siteUrl = account.get('subdomain') + appConfig.subdomain_suffix;
+
+                                    var vars = [
+                                        {
+                                            "name": "SITEURL",
+                                            "content": siteUrl
+                                        },
+                                        {
+                                            "name": "USERNAME",
+                                            "content": savedUser.attributes.username
+                                        }
+                                    ];
+                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                        notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                        htmlContent, accountId, userId, vars, function (err, result) {
+                                        });
+                                }
+
+                            });
+                        }
+
+
+
                         log.debug('Creating customer contact for main account.');
-                        contactDao.createCustomerContact(user, appConfig.mainAccountID, function(err, contact){
+                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
                             if(err) {
                                 log.error('Error creating customer for user: ' + userId);
                             } else {

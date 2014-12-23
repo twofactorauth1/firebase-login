@@ -26,6 +26,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('social'), this.isAuthApi, this.getLoggedInUserSocialCredentials.bind(this));
+        app.delete(this.url('social/:type'), this.isAuthApi, this.removeSocialCredentials.bind(this));
 
         app.get(this.url('security'), this.isAuthApi, this.initializeSecurity.bind(this));
 
@@ -61,6 +63,60 @@ _.extend(api.prototype, baseApi.prototype, {
                return self.wrapError(resp, 500, null, err, value);
            }
         });
+    },
+
+    getLoggedInUserSocialCredentials: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getLoggedInUserSocialCredentials');
+        var user = req.user;
+
+        userDao.getById(user.id(), function(err, value) {
+            if (!err) {
+                var userObj = value.toJSON('public');
+                self.log.debug('<< getLoggedInUserSocialCredentials');
+                return resp.send(userObj.credentials);
+            } else {
+                self.log.error('Error getting user by id: ' + err);
+                return self.wrapError(resp, 500, null, err, value);
+            }
+        });
+    },
+
+    removeSocialCredentials: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeSocialCredentials');
+
+        var type = req.params.type;
+        if(!type || type.length < 1) {
+            return self.wrapError(resp, 400, 'Bad Request', 'Invalid type parameter.');
+        }
+
+        userDao.getById(req.user.id(), $$.m.User, function(err, user){
+            if(err) {
+                self.log.error('Error occurred loading user: ' + err);
+                return self.wrapError(resp, 500, null, err);
+            }
+            var targetIndex = -1;
+            var credentials = user.get('credentials');
+            for(var i=0; i<credentials.length; i++) {
+                if(credentials[i].type === type) {
+                    targetIndex = i;
+                }
+            }
+            if(targetIndex !== -1) {
+                credentials.splice(targetIndex, 1);
+            }
+            user.set('credentials', credentials);
+            //user.removeCredentials(type);
+            userDao.saveOrUpdate(user, function(err, value){
+                if(err) {
+                    self.log.error('Error occurred removing social credentials: ' + err);
+                    return self.wrapError(resp, 500, null, err);
+                }
+                return resp.send(value.toJSON('public'));
+            });
+        });
+
     },
 
     /**
@@ -173,9 +229,17 @@ _.extend(api.prototype, baseApi.prototype, {
         var email = req.body.username;
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
+        var coupon = req.body.coupon;
+        var fingerprint = req.body.fingerprint;
+        var setupFee = req.body.setupFee;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
+
+        var sendWelcomeEmail = true;//this can be overridden in the request.
+        if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
+            sendWelcomeEmail = false;
+        }
 
         //createStripeCustomer
         //updateCurrentAccountBilling
@@ -190,21 +254,23 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> cardToken', cardToken);
         self.log.debug('>> plan', plan);
         self.log.debug('>> anonymousId', anonymousId);
+        self.log.debug('>> coupon', coupon);
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, function (err, user) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, user) {
             if(err) {
                 self.log.error('Error creating account or user: ' + err);
                 return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
             }
             self.log.debug('Created user[' + user.id() + '] and account[' + user.getAllAccountIds()[0] + '] objects.');
             var accountId = user.getAllAccountIds()[0];
-            paymentsManager.createStripeCustomerForUser(cardToken, user, accountId, function(err, stripeCustomer){
+            //TODO: create balance to account for signup fee.
+            paymentsManager.createStripeCustomerForUser(cardToken, user, accountId, setupFee, function(err, stripeCustomer){
                 if(err) {
                     self.log.error('Error creating Stripe customer: ' + err);
                     return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
                 }
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, accountId, user.id(), function(err, sub){
+                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, accountId, user.id(), coupon, function(err, sub){
                     if(err) {
                         self.log.error('Error creating Stripe subscription: ' + err);
                         return self.wrapError(res, 500, 'Error creating Stripe Subscription', err);
@@ -232,21 +298,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                         self = null;
                                         return;
                                     }
-                                    user.set("accountUrl", value);
-                                    //res.send(user);
+                                    user.set("accountUrl", value.toLowerCase());
                                     res.send(user.toJSON("public", {accountId:self.accountId(req)}));
                                 });
                             });
-                            /*req.login(user, function (err) {
-                                if (err) {
-                                    self.log.error('Error logging in: ' + err);
-                                    return self.wrapError(res, 500, 'Error logging in', err);
-                                } else {
-                                    */
 
-
-                            /*    }
-                            });*/
                         });
                     });
                 });
@@ -268,6 +324,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var email = req.body.username;
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
+        var fingerprint = req.body.fingerprint;
+
+        var sendWelcomeEmail = true;//this can be overridden in the request.
+        if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
+            sendWelcomeEmail = false;
+        }
 
         // if (username == null || username.trim() == "") {
         //     req.flash("error", "You must enter a valid username");
@@ -300,7 +362,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
 
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, function (err, value) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, value) {
             var userObj = value;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {
@@ -319,7 +381,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     self = null;
                                     return;
                                 }
-                                userObj.set("accountUrl",value);
+                                userObj.set("accountUrl",value.toLowerCase());
                                 resp.send(userObj);
                                 self = null;
                             });
@@ -341,6 +403,11 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    /**
+     * This method WILL NOT update credentials for the user nor the account/credentials object.
+     * @param req
+     * @param resp
+     */
     updateUser: function(req,resp) {
         //TODO - ensure user accounts are not tampered with
         var self = this;
@@ -358,8 +425,9 @@ _.extend(api.prototype, baseApi.prototype, {
         userDao.getById(userId, function(err, value) {
             if (!err && value != null) {
                 value.set("welcome_alert",req.body.welcome_alert);
-                console.log(value);
+                //console.log(value);
                 user.set("credentials",value.get("credentials"));
+                user.set('accounts', value.get('accounts'));
 
                 self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
                     if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {

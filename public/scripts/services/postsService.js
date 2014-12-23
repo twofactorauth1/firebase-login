@@ -22,7 +22,7 @@ mainApp.factory('postsService', ['accountService', '$http', function (accountSer
                     //API is getting only one page but we need page arrays
                     var postsUrl = '/api/1.0/cms/blog';
 
-                    $http.get(postsUrl)
+                    $http.get(postsUrl, { cache: true})
                         .success(function (post) {
                             if (post !== null) {
 

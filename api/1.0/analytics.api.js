@@ -9,7 +9,10 @@ var baseApi = require('../base.api');
 var cookies = require('../../utils/cookieutil');
 var analyticsDao = require('../../analytics/dao/analytics.dao.js');
 var analyticsManager = require('../../analytics/analytics_manager.js');
+var keenConfig = require('../../configs/keen.config');
 var async = require('async');
+var contactDao = require('../../dao/contact.dao');
+var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -34,8 +37,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEvent.bind(this));
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
-        app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
-        //app.post(this.url('mandrill/event'), this.sendToKeen.bind(this));
+        app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
+
+        //visit
+        app.post(this.url('session/:id/sessionStart'), this.storeSessionInfo.bind(this));
+        app.post(this.url('session/:id/pageStart'), this.storePageInfo.bind(this));
+        app.post(this.url('session/:id/ping'), this.storePingInfo.bind(this));
+
 
     },
 
@@ -73,11 +81,10 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         //self.log.info('Sending the following to keen:');
         //console.dir(messagesToSend);
-        var url = "https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/";
-        var api_key = "c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a";
+        var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/";
+        var api_key = keenConfig.KEEN_WRITE_KEY;
         async.eachSeries(messagesToSend, function(message, callback){
-            //var url = 'https://api.keen.io/3.0/projects/54528c1380a7bd6a92e17d29/events/mandrill_events?api_key=c36124b0ccbbfd0a5e50e6d8c7e80a870472af9bf6e74bd11685d30323096486a19961ebf98d57ee642d4b83e33bd3929c77540fa479f46e68a0cdd0ab57747a96bff23c4d558b3424ea58019066869fd98d04b2df4c8de473d0eb66cc6164f03530f8ab7459be65d3bf2e8e8a21c34a';
-
+            console.log('url ', url + message.collection + '?api_key=' + api_key);
             var newrequest = request.post(url + message.collection + '?api_key=' + api_key)
                 .send(message.value)
                 .end(function(error, result){
@@ -102,6 +109,74 @@ _.extend(api.prototype, baseApi.prototype, {
     verifyEvent: function(req, res, next) {
         //TODO: verify event comes from segment
         next();
+    },
+
+    filterMandrillEvents: function(req, res, next) {
+        //TODO: create customActivities
+        var self = this;
+        self.log.debug('>> filterMandrillEvents');
+        var msg = null;
+        var objArray = [];
+        if(req.body.mandrill_events) {
+            try {
+                msg = JSON.parse(req.body.mandrill_events);
+                if(_.isArray(msg)) {
+                    _.each(msg, function (value, key, list) {
+                        var type = value.event;
+                        var obj = {};
+                        obj.email = value.msg.email;
+                        obj.sender = value.msg.sender;
+                        obj.ts = moment.utc(value.ts*1000).toDate();
+                        if (type === 'send') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                            objArray.push(obj);
+                        } else if (type === 'open') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                            objArray.push(obj);
+                        } else if (type === 'click') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                            objArray.push(obj);
+                        } else if (type === 'unsub') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
+                            objArray.push(obj);
+                        }
+                    });
+                }
+            } catch(err) {
+                self.log.debug('error parsing events: ' + err);
+                msg = req.body;
+            }
+
+        }
+
+        self.log.debug('<< filterMandrillEvents');
+        next();
+        //create contactActivities from events.
+        _.each(objArray, function(value, key, list){
+            var query = {};
+            //TODO: get contactId from sender Email
+            //query.accountId = value.id();
+            query['details.emails.email'] = value.email;
+
+            contactDao.findMany(query, $$.m.Contact, function(err, list){
+                if(err) {
+                    self.log.error('Error finding contacts by email: ' + err);
+                } else if(!list || list.length < 1) {
+                    self.log.warn('Contact could not be found for email address: ' + value.email);
+                } else if(list.length > 1) {
+                    self.log.warn('Too many contacts found for email address: ' + value.email);
+                } else {
+                    var contact = list[0];
+                    var activity = new $$.m.ContactActivity({
+                        accountId: contact.get('accountId'),
+                        contactId: contact.id(),
+                        activityType: value.activityType,
+                        start: value.ts
+                    });
+                    contactActivityManager.createActivity(activity, function(err, value){});
+                }
+            });
+        });
     },
 
     saveAnalyticEvent: function(req, res) {
@@ -222,6 +297,52 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    storeSessionInfo: function(req, res) {
+        var self = this;
+        var sessionEvent = new $$.m.SessionEvent(req.body);
+        sessionEvent.set('session_id', req.params.id);
+        console.log('Storing Session API >>> ', new Date().getTime());
+        sessionEvent.set('server_time', new Date().getTime());
+        sessionEvent.set('ip_address', self.ip(req));
+        var geoInfo = self.geo(req);
+        sessionEvent.set('ip_geo_info', geoInfo);
+        analyticsManager.storeSessionEvent(sessionEvent, function(err){
+            if(err) {
+                self.log.error('Error saving session event: ' + err);
+            }
+        });
+
+        return self.send200(res);
+    },
+
+    storePageInfo: function(req, res) {
+        var self = this;
+        var pageEvent = new $$.m.PageEvent(req.body);
+        pageEvent.set('session_id', req.params.id);
+        pageEvent.set('server_time', new Date().getTime());
+        analyticsManager.storePageEvent(pageEvent, function(err){
+            if(err) {
+                self.log.error('Error saving page event: ' + err);
+            }
+        });
+
+        self.send200(res);
+    },
+
+    storePingInfo: function(req, res) {
+        var self = this;
+        var pingEvent = new $$.m.PingEvent(req.body);
+        pingEvent.set('session_id', req.params.id);
+        pingEvent.set('server_time', new Date().getTime());
+        analyticsManager.storePingEvent(pingEvent, function(err){
+            if(err) {
+                self.log.error('Error saving ping event: ' + err);
+            }
+        });
+
+        self.send200(res);
     }
 });
 

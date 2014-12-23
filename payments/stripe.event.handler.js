@@ -9,6 +9,8 @@ var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
 var subscriptionDao = require('./dao/subscription.dao.js');
+var notificationConfig = require('../configs/notification.config.js');
+var contactActivytManager = require('../contactactivities/contactactivity_manager');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
 var eventQ = async.queue(function(event, fn){
@@ -40,6 +42,7 @@ var eventHandler =  {
             accountId: 0
         });
         eventDao.saveOrUpdate(iEvent, function(err, value){
+            console.dir(value);
             if(err) {
                 log.error('Error saving indigenous event: ' + err);
                 fn(err, null);
@@ -116,6 +119,7 @@ var eventHandler =  {
             case 'customer.card.deleted':
                 break;
             case 'customer.subscription.created':
+
                 break;
             case 'customer.subscription.updated':
                 break;
@@ -184,16 +188,20 @@ var eventHandler =  {
 
     sendEmailToOperationFn: function(iEvent, fn) {
         var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
-        var emailBody = jade.renderFile('./../templates/emails/stripe/common.jade', context);
-        $$.g.mailer.sendMail('admin@indigenous.io', 'operations@indigenous.io', null, iEvent.get('type') + ' Event', emailBody, null, function () {});
-
-        $.when(p1).done(function(){
-            eventDao.updateStripeEventState(iEvent.id(), status, function(err, value){
+        var emailBody = jade.renderFile('templates/emails/stripe/common.jade', context);
+        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function (err, value) {
+            if(err) {
+                log.error('Error sending notification');
+            }
+            eventDao.updateStripeEventState(iEvent.id(), 'PROCESSED', function(err, value){
                 //err or not... we're done here.
                 log.debug('<< ' + iEvent.get('type'));
                 fn(err, value);
             });
         });
+
+
+
     },
 
     onAccountUpdated: function(iEvent, fn) {
@@ -256,6 +264,7 @@ var eventHandler =  {
     },
 
     onChargeFailed: function(iEvent, fn) {
+        var self = this;
         self.sendEmailToOperationFn(iEvent, fn);
     },
 
@@ -285,7 +294,8 @@ var eventHandler =  {
     },
 
     onChargeDisputeCreated: function(iEvent, fn) {
-      self.sendEmailToOperationFn(iEvent, fn);
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeDisputeUpdated: function(iEvent, fn) {
@@ -329,11 +339,32 @@ var eventHandler =  {
     },
 
     onCustomerSubscriptionDeleted: function(iEvent, fn) {
-      var subId = iEvent.get('body').id;
-      subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
-        log.error('Subscription deletion failed:' % err.message);
-      });
-      self.sendEmailToOperationFn(iEvent, fn);
+
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.getSubscriptionBySubId(subId, function(err, sub){
+            if(err) {
+                log.error('Could not get subscription from invoice payment event: ' + err);
+            } else {
+                var contactId = sub.get('contactId');
+                var contactActivity = new $$.m.ContactActivity({
+                    accountId: iEvent.get('accountId'),
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.SUBSCRIBE_CANCEL,
+                    start: new Date()
+                });
+                contactActivytManager.createActivity(contactActivity, function(err, activity){
+                    if(err) {
+                        log.error('Could not create activity for invoice payment event: ' + err);
+                    }
+                });
+            }
+            subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
+                log.error('Subscription deletion failed:' % err.message);
+            });
+        });
+
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onCustomerSubscriptionTrialWillEnd: function(iEvent, fn) {
@@ -350,10 +381,32 @@ var eventHandler =  {
 
     onInvoicePaymentSucceeded: function(iEvent, fn) {
 
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.getSubscriptionBySubId(subId, function(err, sub){
+            if(err) {
+                log.error('Could not get subscription from invoice payment event: ' + err);
+            } else {
+                var contactId = sub.get('contactId');
+                var contactActivity = new $$.m.ContactActivity({
+                    accountId: iEvent.get('accountId'),
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.SUBCRIPTION_PAID,
+                    start: new Date()
+                });
+                contactActivytManager.createActivity(contactActivity, function(err, activity){
+                    if(err) {
+                        log.error('Could not create activity for invoice payment event: ' + err);
+                    }
+                });
+            }
+        });
+
     },
 
     onInvoicePaymentFailed: function(iEvent, fn) {
-      self.sendEmailToOperationFn(iEvent, fn);
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onInvoiceItemCreated: function(iEvent, fn) {

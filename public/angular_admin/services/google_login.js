@@ -1,7 +1,7 @@
 define(['app'], function(app) {
-    app.register.service('googleLogin', ['$http', '$rootScope', '$q', function($http, $rootScope, $q) {
-        var clientId = '1026246177215-tqpcc51fjk3vm0mgjef2jg7jagcmtuba.apps.googleusercontent.com',
-            apiKey = 'AIzaSyAVrtKPAAD24y1t9eC-VMVoGtoocuSHHxg',
+    app.register.service('googleLogin', ['$http', '$rootScope', '$q','ENV' function($http, $rootScope, $q, ENV) {
+        var clientId = ENV.googleClientId,
+            apiKey = ENV.googleServerKey,
             token = "",
             code = "",
             refreshToken = "",

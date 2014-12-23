@@ -13,6 +13,7 @@
     }
 </style> -->
 <div ng-class="component.type+'-v'+component.version">
+
     <div class="feature-block-title">
         <div class="editable" data-class="title" ng-bind-html="component.title"></div>
     </div>
@@ -28,11 +29,12 @@
     </div>
 
     <div class="col-xs-12" ng-show="component.btn.visibility">
-        <a class="btn btn-primary btn-block center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
+        <a class="btn {{component.btn.class}} center" data-ng-href="{{component.btn.url}}" du-smooth-scroll>
             <div class="{{component.btn.icon}}"></div>
             <div data-class="btn-text" class="editable btn-text" data-index="{{$index}}">
                 {{component.btn.text}}
             </div>
         </a>
     </div>
+
 </div>

@@ -4,6 +4,7 @@
     top: 0;
     left: 0;
     z-index: 200;
+    height: 100%;
     .searchform {
         display: none;
         input {
@@ -65,6 +66,10 @@
         color: #1d2939;
         line-height: 30px;
         margin: 0;
+        width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         span {
             color: #54C8E8;
         }
@@ -73,6 +78,8 @@
 .leftpanelinner {
     padding: 5px 15px;
     margin-top: 15px;
+    background:#fff;
+    height: 100%;
 }
 .sidebartitle {
     font-size: 11px;
@@ -222,6 +229,9 @@
     .logopanel {
         display: none;
     }
+    .header-right {
+        margin-right: 0;
+    }
     .headerbar {
         margin-left: -50px;
     }
@@ -335,5 +345,33 @@
     }
     .sticky-leftpanel {
         overflow-y: visible;
+    }
+}
+.cbp-spmenu {
+    background: #fff !important;
+}
+.cbp-spmenu-vertical a {
+    border-bottom: 0px !important;
+}
+.cbp-spmenu-push-toright {
+    .mainpanel {
+        margin-left: 0px;
+    }
+}
+.cbp-spmenu-push {
+    #leftnav {
+        left: 0;
+    }
+}
+.cbp-spmenu-vertical {
+    z-index: 200 !important;
+}
+
+.indi-li {
+    a {
+        height: 42px;
+        i {
+            margin: -8px 0 0 -7px;
+        }
     }
 }

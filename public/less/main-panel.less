@@ -1,5 +1,5 @@
 .mainpanel {
-    margin-left: 240px;
+    margin-left: 52px;
     height: auto;
     .alert {
         margin: 10px 10px 0px;
@@ -30,6 +30,10 @@
                 content: '/';
                 margin: 0 10px 0 5px;
                 color: #ccc;
+            }
+            .div-header
+            {
+              display: inline;
             }
         }
         .glyphicon {
@@ -85,6 +89,26 @@
                 display: inline-block;
             }
         }
+        .pages {
+            max-width: 45%;
+            button {
+                max-width: 100%;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+        .pages-editing {
+            max-width: 100%;
+
+            h2 {
+                margin-right: 15px;
+                max-width: 100%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
         .breadcrumb {
             background: none;
             display: inline-block;
@@ -134,6 +158,9 @@
 
 @media(max-width:767px) {
     .leftpanel-show {
+        .header-right {
+            margin-right: 240px;
+        }
         .mainpanel {
             .pageheader {
                 margin-left: 0px;

@@ -11,6 +11,23 @@
  * Stores data that supports the display of a single image and optional
  * text.  If text is available, it is either to the right or th left of the video.
  */
+
+/*
+    {
+        "_id" : "w12b442s-0034-2f09-4h65-33423h8898767",
+        "anchor" : "about-us",
+        "type" : "image-text",
+        "version" : 1,
+        "visibility" : true,
+        "title" : "<h2>About</h2>",
+        "subtitle" : "Katya Meyers",
+        "text" : "<h4 style='color:#26b69f;'>Katya Meyers</h4><p class='mb15'><b>Pro Triathlete</b></p><p>A ballerina at the age of four, her parents soon added gymnastics to the mix to keep her from bouncing off the walls.  After a serious knee injury her Senior year in high school ended her gymnastics career, Katya did not give up her dreams of competing as a Division I varsity athlete.  Picking up an oar, she rowed crew for the Stanford Cardinal for 3 years before stumbling upon the University Triathlon Team.  With just one practice under her belt, a collection of borrowed equipment, and no swimming or biking experience to speak of, Meyers entered her first race that same week.</p>",
+        "imagePosition" : "left",
+
+        "imgurl" : "http://s3.amazonaws.com/indigenous-digital-assets/account_15/about-section_1416293355812.png",
+        "url" : "            <img ng-src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_15/about-section_1416293355812.png\" class=\"img-responsive img-circle\" src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_15/about-section_1416293355812.png\">        "
+    }
+*/
 require('../../../models/base.model.js');
 
 var component = $$.m.ModelBase.extend({
@@ -35,28 +52,40 @@ var component = $$.m.ModelBase.extend({
             type: "image-text",
 
             /**
-             * The label for the component
-             * (optional)
+             * Version
              */
-            label:"",
+            version: 1,
 
             /**
-             * A description that appears at the top of the component
-             * (optional)
+             *
+             *
              */
-            description:"",
+            title : "<h1>Image/Text Title</h1>",
 
             /**
-             * The html formatted text to display, if applicable
+             *
+             *
              */
-            text: null,
+            subtitle : "<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </h4>",
+
+            /**
+             *
+             *
+             */
+            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
+
+            /**
+             *
+             *
+             */
+            txtcolor : "#ffffff",
 
             /**
              * The position of the image relative to the text, left, right, center
              *
              * @see $$.m.cms.modules.ImageText.IMAGE_POSITION
              */
-            imagePosition: "",
+            imagePosition: "left",
 
             /**
              * The caption to accompany the image (optional)
@@ -66,8 +95,37 @@ var component = $$.m.ModelBase.extend({
             /**
              * The url of the image
              */
-            url: "",
-            title:""
+            imgurl: "http://placehold.it/350x150",
+
+            /**
+             *
+             *
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false,
+                    overlay: false,
+                    show: false
+                },
+                color : "#4bb0cb"
+            },
+
+            /**
+             *
+             *
+             */
+            btn : {
+                visibility: true,
+                text : "Learn More",
+                url : "#features",
+                icon : "fa fa-rocket"
+            },
+
+            visibility: true
         }
     },
 

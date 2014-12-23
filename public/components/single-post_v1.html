@@ -13,17 +13,17 @@
                 <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                     <div class="et_pt_blogentry clearfix">
                         <h2 class="et_pt_title">
-                            <div class="editable" data-class="post_title">
-                                <span ng-show="blog.post.post_title">{{blog.post.post_title}}</span>
-                                <span ng-show="!blog.post.post_title">Enter Post Title</span>
+                            <div data-class="post_title">
+                                 <input type="text" ng-if="isEditing" ng-model="blog.post.post_title"/>
+                                <span ng-if="!isEditing" ng-show="blog.post.post_title">{{blog.post.post_title}}</span>
+                                <span ng-if="!isEditing" ng-show="!blog.post.post_title">Enter Post Title</span>
                             </div>
                         </h2>
-
                         <div class="blog-meta">
-                            <div ng-show="blog.post.created_date" data-class="created.date">
+                            <div ng-show="blog.post.created.date" data-class="created.date">
                                 <input type="date" ng-if="isEditing" ng-model="blog.post.created_date"/>
 
-                                <span ng-if="!isEditing">  {{ blog.post.created_date | date: 'fullDate' }} </span>
+                                <span ng-if="!isEditing">  {{ blog.post.created.date | date: 'fullDate' }} </span>
                             </div>
                             <div ng-show="blog.post.post_author">
                                 <input type="text" ng-if="isEditing" ng-model="blog.post.post_author"/>
@@ -55,17 +55,22 @@
                         </div> <!-- end .thumb -->
 
                         <div class="entry-content">
-                            <div class="editable" data-class="post_content">
-                                <span ng-show="blog.post.post_content" ng-bind-html="blog.post.post_content"></span>
-                                <span ng-show="!blog.post.post_content"> Create you blog post here</span>
+                            <div class="editable post_content_div" data-class="post_content">
+                                <span class="post_content" ng-show="blog.post.post_content" ng-bind-html="blog.post.post_content"></span>
+                                <span class="blog_post_content" ng-show="!blog.post.post_content"> Create you blog post here</span>
                             </div>
+                        </div>
+                        <div ng-if="!blog.post.featured_image">
+                                <button ng-if="isEditing" class="btn btn-primary btn-lg pull-right"  ng-click="setPostImage(component._id, blog.post)" >Add Image</button>
                         </div>
                     </div> <!-- end .et_pt_blogentry -->
                 </div> <!-- end #et_pt_blog -->
             </article> <!-- .entry -->
         </div> <!-- #main-area -->
     </div> <!-- .container -->
-    <div class="clearfix row-fluid">
+</div>
+</div>
+<div class="clearfix row-fluid">
         <div ng-click="$back()" class="goback col-xs-12">
             <p>
                 <span>
@@ -77,5 +82,3 @@
             <div class="col-xs-3"></div>
         </div>
     </div><!-- #content-area -->
-</div>
-</div>

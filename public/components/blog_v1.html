@@ -14,13 +14,13 @@
                     </div>
                     <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                         <div class="single-blog responsive clearfix"
-                             ng-repeat="blogpost in control.blogposts || blog.blogposts track by $index"
+                             ng-repeat="blogpost in control.blogposts || blog.blogposts | filter: blogpost.created.date | orderBy :'created.date':true"
                              data-postId="{{blogpost._id}}">
 
-                            <div class="blog-entry clearfix">
+                            <div class="blog-entry clearfix" data-id="{{blogpost._id}}">
                                 <h2 class="blog-title">
-                                    <a data-ng-if="blogpost.post_url" href="/blog/{{blogpost.post_url}}">
-                                        <div class="editable" data-class="post_title"
+                                    <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
+                                        <div class="editable post_title" data-class="post_title"
                                              data-ng-if="blogpost.post_title">
                                             {{blogpost.post_title}}
                                         </div>
@@ -33,7 +33,7 @@
 
                                 <div class="blog-meta">
                                    <span data-ng-if="blogpost.created.date">
-                                     • {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
+                                     • {{blogpost.created.date | amDateFormat:'MMMM d, YYYY'}}
                                     </span>
                                      <span data-ng-if="blogpost.post_author">
                                        Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
@@ -59,13 +59,13 @@
 
                                 <div class="entry-excerpt"><p>
 
-                                    <div class="editable" data-class="post_excerpt"
+                                    <div class="editable post_excerpt" data-class="post_excerpt"
                                          data-ng-if="blogpost.post_excerpt">
                                         {{blogpost.post_excerpt}}
                                     </div>
                                     </p></div>
                                 <a data-ng-if="blogpost.post_url"
-                                   href="/blog/{{blogpost.post_url}}"
+                                   href="/page/blog/{{blogpost.post_url}}"
                                    class="btn btn-orange pull-right"><span>READ MORE</span></a>
                                    <div class="clearfix"></div>
                                    <hr></hr>
@@ -85,18 +85,16 @@
                     </div>
                     <div class="clearfix mb30 hidden"></div>
 
-                    <div class="tags" data-ng-if="blog.postTags">
+                    <div class="tags" data-ng-if="blog.postTags || control.postTags">
                         <h4><i class="fa fa-tag"></i> Tags</h4>
-                        <ul class="tag-cloud">
-                            <li data-ng-repeat="tag in blog.postTags track by $index"><a href="/tag/{{tag}}">{{tag}}</a></li>
-                        </ul>
+                        <jqcloud words="tagCloud" width="250" height="250" steps="7"></jqcloud>
                     </div>
 
-                    <div class="posts" data-ng-if="blog.latestposts">
+                    <div class="posts" ng-if="blog.latestposts || control.latestposts">
                         <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
-                        <ul data-ng-repeat="blogPost in blog.latestposts|limitTo: 3 track by $index">
+                        <ul data-ng-repeat="blogPost in blog.latestposts || control.latestposts |limitTo: 3 track by $index">
                             <li>
-                                <a href="/blog/{{blogPost.post_url}}">
+                                <a href="/page/blog/{{blogPost.post_url}}">
                                     <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
                                 </a>
                                 <span data-ng-if="blogPost.post_author"> by <a
@@ -105,17 +103,17 @@
                         </ul>
                     </div>
 
-                    <div data-ng-if="blog.categories">
+                    <div ng-if="blog.categories || control.categories">
                         <div class="clearfix mb30"></div>
                         <div class="categories">
                             <h4><i class="fa fa-list-ul"></i> Categories</h4>
-                            <ul class="tag-cloud" data-ng-repeat="category in blog.categories track by $index">
+                            <ul class="tag-cloud" data-ng-repeat="category in blog.categories || control.categories track by $index">
                                 <li><a href="/category/{{category}}">{{category}}</a></li>
                             </ul>
                         </div>
                     </div>
 
-                    <div data-ng-if="control.blogpost.comments">
+                    <div ng-if="control.blogpost.comments || control.comments">
                         <div class="clearfix mb30"></div>
                         <div class="comments hidden">
                             <h4><i class="fa fa-comments"></i> Comments</h4>

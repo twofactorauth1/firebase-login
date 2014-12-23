@@ -6,8 +6,15 @@
     }
   }
 
+  .jdfs-search-indicator,
+  .jdfs-meta,
+  .jdfs-footer-con,
+  .jdfs-close {
+    display: none;
+  }
+
   .btn.media-modal {
-    margin-right: 10px;
+    margin-right: 5px;
   }
 
   #iframe-website {
@@ -112,11 +119,11 @@
       margin: 10px 0;
     }
 
-    i.sign-up-form {
+    i.simple-form {
       background-position: -69px -46px;
       width: 97px;
       height: 60px;
-      margin: 10px 0;
+      margin: 10px auto;
     }
 
     i.single-post {
@@ -166,6 +173,19 @@
       }
     }
 
+}
+
+#component-setting-modal {
+  .modal-body {
+    padding: 0;
+      .tab-content {
+        height: 300px;
+        overflow-y: scroll;
+      }
+  }
+  ul.nav {
+    margin-top: 0!important;
+  }
 }
 
 
@@ -262,7 +282,11 @@ background: #fff!important;
 
 .componentActions {
   position: absolute;
-  z-index: 99999;
+  /*
+    100000 is for
+      .add-component
+  */
+  z-index: 1032;
   width: 100%;
   margin-right: 10px;
   span {
@@ -451,7 +475,7 @@ input[type='file'] {
   }
 
   .btn-add {
-    margin-right: 10px;
+    margin-right: 5px;
   }
 
 }

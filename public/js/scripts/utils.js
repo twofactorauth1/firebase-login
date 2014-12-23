@@ -13,6 +13,9 @@ indigenous.utils.trackSubscriptionEvent = function() {
     var emailAddress = $('input[name="EMAIL"]').val();
     var metadata = {'email': emailAddress};
     indigenous.utils.trackEvent(eventName, metadata);
-    analytics.identify({email:emailAddress});
+    if(window.analytics) {
+        analytics.identify({email:emailAddress});
+    }
+
     return true;
 };

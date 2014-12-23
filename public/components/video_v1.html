@@ -19,14 +19,14 @@
 
             <div class="video-subtitle">
                 <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                    <span ng-bind-html="component.subtitle" />
+                    <span ng-bind-html="component.subtitle | unsafe" />
                 </div>
             </div>
 
             <div class="mb20"></div>
 
             <div class="videoblock">
-                <div class="embed-responsive embed-responsive-16by9">
+                <div class="videogular-container">
                     <!-- <iframe width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe> -->
 
                     <!-- <videogular vg-responsive="config.responsive" vg-autoPlay="config.autoPlay">
@@ -36,9 +36,11 @@
                                         <vg-overlay-play></vg-overlay-play>
                                     </videogular> -->
 
-                    <videogular vg-theme="config.theme.url" vg-autoplay="config.autoPlay">
-                        <video class='videoPlayer' controls preload='metadata'>
-                            <source src='{{trustSrc(component.video.src)}}' type='video/mp4'>
+                    <videogular vg-width="config.width" vg-height="config.height" vg-theme="config.theme.url" vg-autoplay="config.autoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive">
+                        <video class='videoPlayer' preload='metadata'>
+                            <source src='{{trustSrc(component.video.src.ogv)}}' type='video/ogv'>
+                            <source src="{{trustSrc(component.video.src.mp4)}}" type='video/mp4' />
+                            <source src="{{trustSrc(component.video.src.webm)}}" type='video/webm' />
                         </video>
 
                         <vg-overlay-play></vg-overlay-play>

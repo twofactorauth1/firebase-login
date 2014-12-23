@@ -43,7 +43,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleAccount = function () {
                     return {
-                        'height': (newValue.h)-108 + 'px',
+                        'height': (newValue.h)-110 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
@@ -58,6 +58,30 @@ define(['angularAMD'], function (angularAMD) {
                 };
 
                 scope.styleCommerce = function () {
+                    return {
+                        'height': (newValue.h)-63 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleWebsiteManage = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleIndi = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleIndiWelcome = function () {
                     return {
                         'height': (newValue.h)-63 + 'px',
                         'width': '100%',

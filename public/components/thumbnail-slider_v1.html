@@ -2,22 +2,23 @@
 
 </style>
 
-<div class="container thumbnail-slider-v1">
+<div class="thumbnail-slider-v1">
     <div class="col-md-12"><br>
         <h1 class="center editable">{{component.title}}</h1><br>
         <div class="well" style="background: none">
             <div id="myCarousel-{{component.anchor}}" class="carousel slide">
-                <ol class="carousel-indicators" ng-hide="component.collections[0][0].detail">
-                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in component.collections"></li>
+                <ol class="carousel-indicators hidden" ng-hide="thumbnailCollection[0][0].detail">
+                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in thumbnailCollection"></li>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in component.collections">
+                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in thumbnailCollection">
                         <div class="row">
-                            <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center">
-                                <img style="width: {{image.width}}px;height: {{image.height}}px" src="{{image.url}}" alt="Image" class="img-responsive hover"/>
+                            <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> 
+                            <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 70px;background: none;">
+                                <img src="{{image.url}}" alt="Image" class="img-responsive hover" style="max-height: 100px; margin:{{image.margin}}; " />
                                 <!--<span style="color: {{collection.imagetextcolor}};" >{{image.text}}</span> -->
                             </a>
-                                <h4 ng-show="component.collections[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
+                                <h4 ng-show="thumbnailCollection[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
                                 <p ng-show="image.detail">{{image.detail}}</p>
                                 <div class="row">
                                     <div class="col-md-3"></div>

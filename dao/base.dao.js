@@ -330,6 +330,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         return this.defaultModel.db.cache || false;
     },
 
+    batchUpdate: function(list, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._batchUpdateMongo(list, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     _isAuthenticationError: function (obj, fn) {
         var error;

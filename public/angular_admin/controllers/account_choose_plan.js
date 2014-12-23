@@ -8,11 +8,22 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     };
 
     $scope.switchPlanFn = function (planId) {
+        if($scope.user.stripeId) {
+            PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription){
+                $scope.cancelOldSubscriptionsFn();
+                ToasterService.setPending('success', 'Subscribed to new plan.');
+                $state.go('account');
+            });
+        } else {
+            ToasterService.setPending('error', 'No Stripe customer ID.');
+        }
+        /*
       PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
         $scope.cancelOldSubscriptionsFn();
         ToasterService.setPending('success', 'Subscribed to new plan.');
         $state.go('account');
       });
+      */
     };
 
     $scope.buyPlanFn = function() {
@@ -27,7 +38,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         if ($scope.user.stripeId) {
           PaymentService.getCustomerCards($scope.user.stripeId, function(cards) {
             cards.data.forEach(function(value, index) {
-              PaymentService.deleteCustomerCard(value.customer, value.id, function(card) {});
+              PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
             });
             PaymentService.putCustomerCard($scope.user.stripeId, token, function(card) {});
           });

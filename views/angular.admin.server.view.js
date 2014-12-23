@@ -38,10 +38,21 @@ _.extend(view.prototype, BaseView.prototype, {
 
             data.showPreloader = false;
             data.includeJs = false;
+
+
             data = self.baseData(data);
+            /*
+             * Add some objects in case the user object is incomplete.
+             */
+            //data.user.user_preferences.welcome_alert.initial
+            data.user.user_preferences = data.user.user_preferences || {};
+            data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
             logger.debug('<< show');
+            //console.dir(data);
             self.resp.render('admin', data);
+            //logger.debug('_cleanUp');
             self.cleanUp();
+            //logger.debug('cleanUp_');
             data = self = null;
         });
     }

@@ -2,7 +2,7 @@
 
     <div class="title">
         <div class="editable" data-class="title">
-            <span ng-bind-html="component.title"/>
+            <span ng-bind-html="component.title | unsafe"/>
         </div>
     </div>
 
@@ -15,16 +15,32 @@
     <div class="mb30"></div>
 
     <div class="row ">
-        <div ng-repeat="feature in component.features track by $index">
+        <div ng-repeat="feature in component.features track by $index"  class="single-feature" data-index="{{$index}}">
             <div class="row row-xs-height">
-                <div class="col-sm-3 col-xs-12 col-xs-height">
+                <div class="col-sm-3 col-xs-3 col-xs-height">
                     <img src="{{feature.imgurl}}" class="img-rounded" height="250px" width="250px" />
                 </div>
-                <div class="col-sm-9 img-rounded demo col-top col-xs-12 col-xs-height">
-                    <h5>{{feature.title}}</h5>
-                    <p>{{feature.body}}</p>
-                    <a href="{{feature.btn.url}}" class="btn btn-primary btn-sm"><i class="{{feature.btn.icon}}"></i>&nbsp;{{feature.btn.text}} </a>
+                <div class="col-sm-9 img-rounded demo col-top col-xs-9 col-xs-height">
+                    <div class="feature-title">
+                        <div class="editable" data-class="feature.title">
+                            <span ng-bind-html="feature.title"/>
+                        </div>
+                    </div>
+                    <div class="feature-subtitle">
+                        <div class="editable" data-class="feature.subtitle">
+                            <span ng-bind-html="feature.subtitle"/>
+                        </div>
+                    </div>
+                    <div class="feature-list-body">
+                        <div class="editable" data-class="body">
+                            <span ng-bind-html="feature.body" />
+                        </div>
+                    </div>
+                    <a ng-if="feature.btn.visibility" href="{{feature.btn.url}}" class="btn btn-primary {{feature.btn.class}}" target="_blank"><i class="{{feature.btn.icon}}"></i>&nbsp;{{feature.btn.text}} </a>
                 </div>
+            </div>
+             <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
             </div>
             <hr ng-if="!$last" />
         </div>

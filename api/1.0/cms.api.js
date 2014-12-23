@@ -46,6 +46,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
         app.put(this.url('page'), this.isAuthApi, this.saveOrUpdatePage.bind(this));
+        app.get(this.url('page/:handle/screenshot'), this.isAuthApi, this.generateScreenshot.bind(this));
 
 
         //consistent URLs
@@ -437,7 +438,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var label = req.params.label;
 
                 cmsManager.deletePage(pageId, function (err, value) {
-                    self.log.debug('<< deletePage', err);
+                    self.log.debug('<< deletePage');
                     self.sendResultOrError(res, err, value, "Error deleting Page");
                     self = null;
                 });
@@ -782,7 +783,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     component = new component({
                         _id: temp,
                         anchor: temp,
-                        title: componentObj.title,
+                        // title: componentObj.title,
                         visibility : true
                     });
                     if(componentObj.cmpVersion && componentObj.cmpVersion !== null) {
@@ -931,7 +932,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> createBlogPost');
         var blog=req.body;
-        if(!Array.isArray(blog.post_tags))
+        if(blog.post_tags && !Array.isArray(blog.post_tags))
             blog.post_tags=blog.post_tags.split(',');
 
         var blogPost = new $$.m.BlogPost(blog);
@@ -984,9 +985,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var blogPost = new $$.m.BlogPost(req.body);
         var postId = req.params.postId;
         var pageId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
 
-        var accountId = self.accountId(req);
-        blogPost.set('accountId', parseInt(accountId));
+        blogPost.set('accountId', accountId);
         blogPost.set('_id', postId);
         blogPost.set('pageId', pageId);
 
@@ -996,7 +997,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                blogPost.set('accountId', accountId.toString());
+                blogPost.set('accountId', accountId);
                 blogPost.set('_id', postId);
                 blogPost.set('pageId', pageId);
 
@@ -1216,6 +1217,30 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    /**
+     *
+     * @param req
+     * @param res
+     */
+    generateScreenshot: function(req, res) {
+        var self = this;
+        self.log.debug('>> generateScreenshot');
+        var accountId = parseInt(self.accountId(req));
+        var pageHandle = req.params.handle;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.generateScreenshot(accountId, pageHandle, function(err, url){
+                    self.log.debug('<< generateScreenshot');
+                    self.sendResultOrError(res, err, url, "Error generating screenshot.");
+                    self = null;
+                });
+            }
+        });
     }
 
 });

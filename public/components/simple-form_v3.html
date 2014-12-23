@@ -1,0 +1,77 @@
+<style>
+    .simple-form-v3 .simple-form-title {
+        color:{{component.txtcolor || 'white'}};
+    }
+</style>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="contact-us-title">
+        <div class="editable text-center" data-class="title">
+            <span ng-bind-html="component.title"></span>
+        </div>
+    </div>
+
+    <div class="contact-us-subtitle">
+        <div class="editable text-center" data-class="subtitle">
+            <span ng-bind-html="component.subtitle"></span>
+        </div>
+    </div>
+
+    <div class="clearfix mb20"></div>
+
+    <div class="row">
+        <div class="col-sm-6 col-xs-12" data-ng-show="component.imgurl && component.text">
+                <div class="row panel-body contact-left" style="margin: 0 20px; background-color:{{primaryColor}};color: {{component.txtcolor}}">
+                    <div class="col-xs-12">
+                        <div class="editable" data-class="url">
+                            <img ng-src="{{component.imgurl}}" class="img-responsive contact-img center {{component.imagestyle}}">
+                        </div>
+                    </div>
+                    <div id="para" class="editable col-xs-12" data-class="text">
+                        <convert-html contents="{{component.text}}"></convert-html>
+                    </div>
+                </div>
+        </div>
+        <div class="mb30 visible-xs clearfix"></div>
+        <div class="col-sm-6 col-xs-12 contact-right">
+                <form class="form-horizontal" action="" method="post">
+                    <fieldset>
+
+                        <div class="form-group">
+                            <input id="firstName" name="name" type="text" placeholder="First Name" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input id="lastName" name="name" type="text" placeholder="Last Name" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input id="email" name="email" type="text" placeholder="Email" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="row">
+                                <span class="col-md-2">Topic:</span>
+                                <span class="col-md-3">
+                                    <input type="radio" name="topic" value="Personal">Personal</span>
+                                <span class="col-md-3">
+                                    <input type="radio" name="topic" value="Coaching">Coaching</span>
+                                <span class="col-md-3">
+                                    <input type="radio" name="topic" value="Services">Services</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea class="form-control" id="message" name="message" placeholder="Message" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-lg btn-block btn-success ">Send
+
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+        </div>
+    </div>
+</div>

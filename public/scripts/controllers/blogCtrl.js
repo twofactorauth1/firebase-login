@@ -28,7 +28,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                    // console.log($scope.$parent)
             }
         });
-        console.log('BlogCtrl: postsService >>> ');
         postsService(function(err, data){
             console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
@@ -75,7 +74,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 //if tagname is present, filter the cached posts with the tagname
                 if ($route.current.params.tagname != null) {
                     var filterPosts = [];
-                    that.currentTag = $route.current.params.tagname;
+                    that.currentTag = decodeURIComponent($route.current.params.tagname);
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].post_tags) {
                             var tags = data[i].post_tags;
@@ -124,6 +123,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
+                        var iframe = window.parent.document.getElementById("iframe-website")
+                        iframe && iframe.contentWindow && iframe.contentWindow.parent.checkIfSinglePost && iframe.contentWindow.parent.checkIfSinglePost(found);
                     }
                     return;
                 }
@@ -135,18 +136,39 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         window.copyPostMode=function(){
             console.log(that.post);
             that.tempPost=angular.copy(that.post);
-
-
         };
 
-        window.savePostMode=function(){
-            that.post.post_tags.forEach(function(v,i) {
-                that.post.post_tags[i] = v.text;
-            },that.post.post_tags);
-            PostService.updatePost($scope.$parent.currentpage._id, that.post._id,that.post,function(data){
+         window.savePostMode=function(toaster){ 
 
+            var post_data =  angular.copy(that.post);
+            post_data.post_tags.forEach(function(v,i) {
+                if(v.text)
+                    post_data.post_tags[i] = v.text;
+            });
+            var post_content_container = $('.post_content_div .post_content');
+            if(post_content_container.length > 0)
+                post_data.post_content = post_content_container.html();
+            if(!post_data.post_content)
+            {
+                 var post_content_container = $('.post_content_div .blog_post_content');
+                 if(post_content_container.length > 0)
+                    post_data.post_content = post_content_container.text();
+            }    
+            
+            var postImageUrl = window.parent.getPostImageUrl();
+            if(postImageUrl)
+            {
+                post_data.featured_image = postImageUrl;
+            }
+            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            PostService.updatePost(pageId, post_data._id,post_data,function(data){
+                console.log(data);
+                console.log("Post Saved");
+                if(toaster)                      
+                    toaster.pop('success', "Post Saved");
             });
         };
+
 
 
         window.updatePostMode = function() {

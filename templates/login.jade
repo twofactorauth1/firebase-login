@@ -10,8 +10,8 @@ block content
     section
         .signinpanel
             if account
-                if account.company.logo
-                    img(src="#{account.company.logo}" style="max-width:300px; max-height:100px")
+                if account.business.logo
+                    img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
                 else
                     h1.center.company-title #{account.company.name}
             else
@@ -48,7 +48,7 @@ block content
 
                 a(href='/forgotpassword')
                     small Forgot Your Password&quest;
-                button.btn.btn-success.btn-block.btn-lg(type="submit", value="Login") Sign In
+                button.btn.btn-success.btn-block.btn-lg(type="submit", value="Login" , onClick="login(this)") Sign In
 
                 div.checkbox
                     label
@@ -66,3 +66,9 @@ block content
                 $('body').delay(350).css({'overflow':'visible'});
               });
             });
+            function login(obj)
+            {
+                 $(obj).text('Loading...');
+                 $(obj).attr('disabled', 'true'); 
+                 obj.form.submit();
+            }

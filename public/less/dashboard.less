@@ -1,5 +1,77 @@
 .dashboard {
     background: #e7e7e7;
+    .customer-overview-wrap {
+        height: 300px;
+        display: block;
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+        #customerOverviewChart {
+            height:100%;
+            width:100%;
+            position:absolute;
+        }
+    }
+    .time-on-site-wrap {
+        height: 265px;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+
+        #timeonSiteConfig {
+            height:100%;
+            width:100%;
+            position:absolute;
+        }
+    }
+    .traffic-source-wrap {
+        height: 400px;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        #traffic-source-chart {
+            height:100%;
+            width:100%;
+            position:absolute;
+        }
+    }
+    .new-vs-returning-wrap {
+        height: 400px;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        #new-vs-returning-chart {
+            height:100%;
+            width:100%;
+            position:absolute;
+        }
+    }
+    .analytics-overview-wrap {
+        height: 400px;
+        display: block;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        #analytics-overview-chart {
+            height:100%;
+            width:100%;
+            position:absolute;
+        }
+    }
+    .smart-timeline-list {
+        >li {
+            padding: 15px 5px 15px 5px;
+            min-height: 85px;
+        }
+    }
+    .form-values {
+        li {
+            padding: 0;
+        }
+    }
     .btn-clearblack {
         background: rgba(0, 0, 0, 0.1);
     }
@@ -44,6 +116,12 @@
         padding: 8px 10px 5px;
     }
     .keen-metric {
+        background: #49c5b1;
+        border-radius: 4px;
+        color: #fff;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        padding: 10px 0;
+        text-align: center;
         a {
             color: inherit;
             &:hover {
@@ -67,6 +145,7 @@
             }
         }
         .keen-metric-title {
+            display: block;
             text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.2);
             font-weight: 400;
             font-size: 21px;
@@ -74,6 +153,9 @@
         .keen-metric-value {
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
             font-size: 45px;
+            display: block;
+            font-weight: 700;
+            line-height: 84px;
         }
         .keen-metric-change-value {
             font-size: 20px;
@@ -82,6 +164,7 @@
             line-height: 3px;
             span {
                 font-size: 14px;
+                line-height: 25px;
             }
         }
         .nullPercent {
@@ -165,7 +248,7 @@
     }
 }
 .increase {
-    color: #2ecc71;
+    color: #29b87f;
 }
 .decrease {
     color: #e74c3c;

@@ -48,7 +48,7 @@
 
                 <div class="ckbox ckbox-primary form-group" ng-hide="isAdd">
                     <input  id="showExitIntentModal" type="checkbox" ng-model="playlist.showExitIntentModal"/>
-                    <label for="checkboxPrimary">Show Exit Intent Modal</label>
+                    <label for="showExitIntentModal">Show Exit Intent Modal</label>
                     <p class="help-block">An Exit Intent Modal enables you to display a modal before a user leaves your website, helping you increase your landing page conversion rates. From experience, you can expect a 7% to 15% conversion rate increase - depending on your audience, traffic quality and offer.</p>
                   </div>
             </form>
@@ -99,6 +99,39 @@
                         </table>
                     </div>
                 </div>
+        </tab>
+
+        <tab disabled="tab.disabled">
+            <tab-heading>
+                <span class='fa fa-users'></span>Import</span>
+            </tab-heading>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <h4>Available</h4>
+                        </div>
+                        <div class="row">
+                            <input type="text" class='form-control' placeholder="Search for first name" ng-model="searchBar.first"/>
+                        </div>
+                        <div class="row" style="height: 350px; overflow-x: hidden; overflow-y: scroll;">
+                            <ul>
+                                <li ng-click="selectCustomerFn(customer)" ng-repeat="customer in customers | iStartsWithFilter : searchBar"><span indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=30 truncate-symbol='.'></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <h4>Selected</h4>
+                        </div>
+                        <div class="row" style="height: 350px; overflow-x: hidden; overflow-y: scroll;">
+                            <ul>
+                                <li ng-repeat="customer in selectedCustomers"><span indigeweb-truncate truncate-list="[customer.first, customer.middle, customer.last]" truncate-limit=30 truncate-symbol='.'></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+             </div>
         </tab>
     </tabset>
 

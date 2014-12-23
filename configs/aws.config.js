@@ -32,6 +32,9 @@ if (process.env.AWS_REGION == null) {
     process.env.AWS_REGION = AWS_REGION;
 }
 
+var route53Endpoint = process.env.ROUTE53_ENDPOINT || 'route53domains.us-east-1.amazonaws.com';
+var route53Region = process.env.ROUTE53_REGION || 'us-east-1';
+
 
 //TODO - CAM -- Add Indigenous Credentials here, these are my personal credentials
 module.exports = {
@@ -45,10 +48,13 @@ module.exports = {
         CONTACT_PHOTOS: "indigenous-contact-photos",
         THEMES: "indigenous-themes",
         ACCOUNT_WEBSITES: "indigenous-account-websites",
-        ASSETS: 'indigenous-digital-assets'
+        ASSETS: 'indigenous-digital-assets',
+        SCREENSHOTS: 'indigenous-screenshots'
     },
     "accessKeyId":AWS_ACCESS_KEY,
     "secretAccessKey":AWS_SECRET_ACCESS_KEY,
+    route53Endpoint: route53Endpoint,
+    route53Region: route53Region,
     "apiVersions": {
         s3: AWS_S3_API
     }

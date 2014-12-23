@@ -83,13 +83,17 @@ var dao = {
         });
     },
 
-    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomerForUser");
         var params = {};
         params.email = user.get('email');
         params.description = 'Customer for ' + user.get('email');
+        if(parseInt(accountBalance) > 0) {
+            self.log.debug('Setting initial account balance of ' + accountBalance);
+            params.account_balance = parseInt(accountBalance);
+        }
         params.metadata = {};
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
@@ -109,6 +113,10 @@ var dao = {
                 self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
                 var p1 = $.Deferred(), p2 = $.Deferred();
                 var savedCustomer = customer;
+                // TESTING
+                //console.log('this: ', this);
+                //console.log('userDao:', userDao);
+                //DONE TESTING
                 userDao.saveOrUpdate(user, function(err, value){
                     if (err) {
                         fn(err, value);
@@ -783,7 +791,10 @@ var dao = {
             metadata = {};
         }
         metadata.paymentId = paymentId;
-        params.capture = capture || false;
+        if(capture === false) {
+            params.capture = false;
+        }
+
         if(statement_description && statement_description.length>0) {params.statement_description = statement_description;}
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
         if(application_fee && application_fee > 0) {params.application_fee = application_fee;}

@@ -6,10 +6,12 @@
  */
 
 var baseApi = require('../base.api');
+var accountDao = require('../../dao/account.dao');
 var courseDao = require('../../dao/course.dao');
 var subscriberDao = require('../../dao/subscriber.dao');
 var csv = require("fast-csv");
 var campaignManager = require('../../campaign/campaign_manager');
+
 
 
 var api = function () {
@@ -45,6 +47,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/subscribers'), this.isAuthAndSubscribedApi.bind(this), this.getSubscribersList.bind(this));
         app.get(this.url(':id/subscribers/video/:videoId'), this.isAuthAndSubscribedApi.bind(this), this.getVideoForCurrentUser.bind(this));
         app.post(this.url(':id/subscribers/upload'), this.isAuthAndSubscribedApi.bind(this), this.subscribeEmailsFromFile.bind(this));
+        app.post(this.url(':id/subscribe'), this.setup, this.subscribeToCourse.bind(this));
+        app.post(this.url('subscribers'), this.isAuthAndSubscribedApi.bind(this), this.bulkSubscribe.bind(this));
     },
 
     listCoursesBySubdomain: function(req, res) {
@@ -407,6 +411,46 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    subscribeToCourse: function(req, resp) {
+        var self = this;
+        self.log.debug('>> subscribeToVARCourse');
+        var accountId = 0;
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                if (value === true) {
+                    accountId = 0;
+                } else {
+                    accountId = value.id();
+                }
+            }
+            var toEmail = req.body.email;
+            var courseObj = req.body.course;
+            courseObj._id = req.params.id;
+            var course = new $$.m.Course(courseObj);
+            
+            var timezoneOffset = req.body.timezoneOffset;
+
+            if (!course) {
+                self.wrapError(resp,400,"","No course provided","");
+            } else {
+                campaignManager.subscribeToCourse(toEmail, course, accountId, timezoneOffset, function(err, result){
+                    self.log.debug('<< subscribeToVARCourse');
+                    self.sendResultOrError(resp, err, result, "Could not send the course-scheduled emails.", 500);
+                });
+            }
+        });
+    },
+
+    bulkSubscribe: function(req, resp) {
+        var self = this;
+        self.log.debug('>> bulkSubscribe');
+        var subs = req.body.subs;
+        campaignManager.bulkSubscribeToCourse(subs, self.userId(req), self.accountId(req), function(err, result){
+            self.log.debug('<< bulkSubscribe');
+            self.sendResultOrError(resp, err, result, "Could not create all subscriptions.", 500);
+        });
     },
 
     subscribeEmailsFromFile: function (req, resp) {

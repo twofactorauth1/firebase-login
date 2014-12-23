@@ -8,7 +8,8 @@ define(['app',
   'confirmClick2',
   'toasterService',
   'mediaDirective',
-  'userService'
+  'userService',
+  'geocodeService',
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -17,12 +18,14 @@ define(['app',
     'ngProgress',
     'ToasterService',
     'UserService',
-    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService) {
+    'GeocodeService',
+    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService) {
       ngProgress.start();
       var displayAddressCharLimit = 2;
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
+
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,
@@ -66,27 +69,75 @@ define(['app',
         CustomerService.postTwoNetSubscribe($scope.customer._id, function(data) {});
       };
 
+      $scope.checkAddressLatLng = function(addresses, fn) {
+        var self = this;
+
+        // var _addresses = [];
+        // for (var i = 0; i < addresses.length; i++) {
+        //   console.log('addresses ', addresses[i]);
+        //   if (addresses[i].lat == '' || addresses[i].lon == '') {
+        //     console.log('latlng empty', addresses[i].address);
+        //     var formatedAddress = addresses[i].address+' '+addresses[i].city+' '+addresses[i].state+' '+addresses[i].zip;
+        //     console.log('formatted ', formatedAddress);
+        //     GeocodeService.geocodeAddress(formatedAddress, function(latlng) {
+        //       console.log('latlng ', latlng);
+        //       self.addresses[i]['lat'] = latlng.results[0].geometry.location.B;
+        //       self.addresses[i]['lon'] = latlng.results[0].geometry.location.k;
+        //       _addresses.push(addresses[i]);
+        //     });
+
+        //   } else {
+        //     _addresses.push(addresses[i]);
+        //   }
+        // };
+
+        fn(addresses);
+      };
+
       $scope.customerSaveFn = function() {
         if ($scope.customer.details[0].phones) {
           $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
             return num.number !== "";
           });
         }
-        CustomerService.saveCustomer($scope.customer, function(customer) {
-          $scope.customer = customer;
-          if ($scope.currentState == 'customerAdd') {
-            ToasterService.setPending('success', 'Contact Created.');
-            $state.go('customerDetail', {
-              id: $scope.customer._id
+
+        $scope.checkAddressLatLng($scope.customer.details[0].addresses, function(addresses) {
+          $scope.customer.details[0].addresses = addresses;
+            if($scope.checkContactValidity())
+            {
+              CustomerService.saveCustomer($scope.customer, function(customer) {
+              $scope.customer = customer;
+              if ($scope.currentState == 'customerAdd') {
+                ToasterService.setPending('success', 'Contact Created.');
+                $state.go('customerDetail', {
+                  id: $scope.customer._id
+                });
+              } else {
+                ToasterService.setPending('success', 'Contact Saved.');
+                $state.go('customerDetail', {
+                  id: $scope.customerId
+                });
+              }
             });
-          } else {
-            ToasterService.setPending('success', 'Contact Saved.');
-            $state.go('customerDetail', {
-              id: $scope.customerId
-            });
-          }
+            }
+            else
+              ToasterService.show("warning", "Contact Name OR Email is required");
         });
+
       };
+      $scope.checkContactValidity = function()
+      {
+        var fullName =  $scope.fullName;
+        var emails = $scope.customer.details[0].emails;
+         var email = _.filter($scope.customer.details[0].emails, function(mail) {
+            return mail.email !== "";
+          });
+         if((angular.isDefined(fullName) && fullName !== "") ||  email.length > 0)
+           return true;
+         else
+           return false;
+      }
+
       $scope.addDeviceFn = function() {
         $scope.customer.devices.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -214,14 +265,22 @@ define(['app',
       if ($scope.customerId) {
         CustomerService.getCustomer($scope.customerId, function(customer) {
           $scope.customer = customer;
-          if ($scope.customer.details[0].phones && $scope.customer.details[0].phones.length == 0)
+          if(!$scope.customer.details[0].phones)
+          {
+            $scope.customer.details[0].phones = [];
+          }
+          if ($scope.customer.details[0].phones.length == 0)
           {
             $scope.addCustomerContactFn();
           }
-          if ($scope.customer.details[0].emails && $scope.customer.details[0].emails.length == 0)
+          if(!$scope.customer.details[0].emails)
+          {
+            $scope.customer.details[0].emails = [];
+          }
+          if ($scope.customer.details[0].emails.length == 0)
           {
             $scope.customerAddEmailFn();
-          }         
+          }
           UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.restoreFn();
@@ -229,6 +288,10 @@ define(['app',
 
           ngProgress.complete();
           $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
+          if(!$scope.customer.details[0].addresses)
+          {
+            $scope.customer.details[0].addresses = [];
+          }
           if ($scope.customer.details[0].addresses.length) {
             $scope.customer.details[0].addresses.forEach(function(value, index) {
               $scope.customerAddressWatchFn(index);
