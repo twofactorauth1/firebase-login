@@ -23277,6 +23277,7 @@ contenthover a {
   left: 70px;
   margin-bottom: 25px;
   margin-top: 10px;
+  position: absolute;
 }
 .meet-team-v1 .profile-social li {
   display: inline-block;
@@ -23301,6 +23302,9 @@ contenthover a {
   text-align: center;
 }
 /********** Meet Team  v2**********/
+.meet-team-v2 {
+  /* Small devices (tablets, 768px and up) */
+}
 .meet-team-v2 .title {
   font-weight: bold;
   text-align: center;
@@ -23315,6 +23319,27 @@ contenthover a {
 }
 .meet-team-v2 .teamMember {
   padding: 20px;
+}
+.meet-team-v2 .social {
+  margin: 20px auto;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v2 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v2 .team-member-container {
+    margin: 0;
+  }
 }
 /********** Meet Team v3 **********/
 .meet-team-v3 {
@@ -23416,6 +23441,33 @@ contenthover a {
     margin: 0;
   }
 }
+.meet-team-v4 {
+  /* Small devices (tablets, 768px and up) */
+}
+.meet-team-v4 .social {
+  margin: 20px auto;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v4 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v4 .team-member-container {
+    margin: 0;
+  }
+}
+.meet-team-v5 {
+  /* Small devices (tablets, 768px and up) */
+}
 .meet-team-v5 .para h4 {
   text-align: center;
 }
@@ -23428,6 +23480,27 @@ contenthover a {
 }
 .meet-team-v5 .para span p {
   text-align: left;
+}
+.meet-team-v5 .social {
+  margin: 20px auto;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v5 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v5 .team-member-container {
+    margin: 0;
+  }
 }
 /********** Testimonials **********/
 .testimonials-v1 div[data-class="testimonials"] {

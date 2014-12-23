@@ -54,13 +54,13 @@
                                 <span ng-bind-html="teamMember.bio" />
                             </div>
                         </div>
-                        <ul class="profile-social">
-                            <li ng-repeat="(val, key) in teamMembers.social">
-                                <a href="{{key}}" target="_blank">
-                                    <span class="fa fa-{{val}}"></span>
-                                </a>
-                            </li>
-                        </ul>
+                    <ul class="profile-social">
+                        <li ng-repeat="(val, key) in teamMember.social">
+                            <a href="{{key}}" target="_blank">
+                                <span class="fa fa-{{val}}"></span>
+                            </a>
+                        </li>
+                    </ul>
                     </div>
 
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
@@ -81,6 +81,7 @@
                         <span ng-bind-html="teamMember.position" />
                     </div>
                 </div>
+               
                 <div ng-if="isEditing" class="delete-team-member center">
                     <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
                 </div>
