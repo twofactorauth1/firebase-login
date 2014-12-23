@@ -542,8 +542,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     var blog_id = posts[i].attributes['data-id'].value;
                     var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
                     var post_title_div = posts[i].querySelectorAll('.post_title');
-                    var post_excerpt = post_excerpt_div[0].outerText;
-                    var post_title = post_title_div[0].outerText;
+                    var post_excerpt = post_excerpt_div.length ? post_excerpt_div[0].outerText : "";
+                    var post_title = post_title_div.length ? post_title_div[0].outerText : "";
                     var matching_post = _.find(that.blogposts, function(item) {
                         return item._id === blog_id
                     })
