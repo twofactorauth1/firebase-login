@@ -48,11 +48,11 @@ _.extend(view.prototype, BaseView.prototype, {
             data.user.user_preferences = data.user.user_preferences || {};
             data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
             logger.debug('<< show');
-            console.dir(data);
+            //console.dir(data);
             self.resp.render('admin', data);
-            logger.debug('_cleanUp');
+            //logger.debug('_cleanUp');
             self.cleanUp();
-            logger.debug('cleanUp_');
+            //logger.debug('cleanUp_');
             data = self = null;
         });
     }
