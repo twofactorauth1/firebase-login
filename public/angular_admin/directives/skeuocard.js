@@ -62,7 +62,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                                     scope.updateFn(billing);
                                 });
                                 scope.cards.data.forEach(function(value, index) {
-                                    PaymentService.deleteCustomerCard(value.customer, value.id, function(card) {});
+                                    PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
                                 });
                                 PaymentService.putCustomerCard(scope.user.stripeId, token, function(card) {});
                             } else {

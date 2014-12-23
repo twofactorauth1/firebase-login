@@ -38,7 +38,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         if ($scope.user.stripeId) {
           PaymentService.getCustomerCards($scope.user.stripeId, function(cards) {
             cards.data.forEach(function(value, index) {
-              PaymentService.deleteCustomerCard(value.customer, value.id, function(card) {});
+              PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
             });
             PaymentService.putCustomerCard($scope.user.stripeId, token, function(card) {});
           });
