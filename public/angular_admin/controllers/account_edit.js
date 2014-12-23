@@ -249,6 +249,8 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       });
     };
 
+    $scope.toasterOptions = {'close-button':true};
+
     $scope.saveAccount = function() {
 
       UserService.putUser($scope.user, function(user) {
@@ -263,7 +265,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             if (!$scope.preferences.tasks.basic_info || $scope.preferences.tasks.basic_info == false) {
                 $scope.preferences.tasks.basic_info = true;
                 UserService.updateUserPreferences($scope.preferences, false, function() {
-                    toaster.pop('success', "You completed the Basic Info Task!");
+                    toaster.pop('success', "You completed the Basic Info Task!", '<div class="mb15"></div><a href="/admin#/website?onboarding=select-theme" class="btn btn-primary">Next Step: Select A Theme</a>', 0, 'trustedHtml');
                 });
             };
           });
