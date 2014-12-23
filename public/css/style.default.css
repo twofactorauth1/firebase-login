@@ -21659,6 +21659,9 @@ i.indi-sm {
 .single-product .product-details h4 {
   margin-top: 0!important;
 }
+.single-product .product-details textarea {
+  resize: none;
+}
 .single-product .product-details h3 {
   margin-top: 0!important;
 }
