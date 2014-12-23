@@ -35,13 +35,5 @@ module.exports = {
     createStripeSubscription: function(customerId, planId, accountId, userId, coupon, fn) {    	
         log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ',callback)');
         stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
-    },
-
-    deleteStripeCustomerForUser: function(customerId, userId, fn) {
-        stripeDao.deleteStripeCustomer(customerId, null, userId, fn);
-    },
-
-    deleteStripeCustomerForContact: function(customerId, contactId, fn) {
-        stripeDao.deleteStripeCustomer(customerId, contactId, null, fn);
     }
 };

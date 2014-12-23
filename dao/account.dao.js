@@ -9,7 +9,6 @@ require('./base.dao');
 require('../models/account');
 var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
-var paymentsManager = require('../payments/payments_manager');
 
 var dao = {
 
@@ -251,14 +250,7 @@ var dao = {
                                 self.log.error('Error removing courses for user: ' + err);
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
-                                var customerId = user.get('stripeId');
-                                if(customerId && customerId.length > 0) {
-                                    paymentsManager.deleteStripeCustomerForUser(customerId, user.id(), function(err, value){
-                                        if(err) {
-                                            self.log.warn('Error deleting stripe customer: ' + err);
-                                        }
-                                    });
-                                }
+
                                 $$.dao.UserDao.remove(user, function(err, value){
                                     if(err) {
                                         self.log.error('Error deleting user: ' + err);
