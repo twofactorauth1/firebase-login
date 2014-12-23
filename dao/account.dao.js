@@ -250,6 +250,7 @@ var dao = {
                                 self.log.error('Error removing courses for user: ' + err);
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
+
                                 $$.dao.UserDao.remove(user, function(err, value){
                                     if(err) {
                                         self.log.error('Error deleting user: ' + err);

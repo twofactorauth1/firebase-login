@@ -90,9 +90,9 @@ var dao = {
         var params = {};
         params.email = user.get('email');
         params.description = 'Customer for ' + user.get('email');
-        if(accountBalance > 0) {
+        if(parseInt(accountBalance) > 0) {
             self.log.debug('Setting initial account balance of ' + accountBalance);
-            params.account_balance = accountBalance;
+            params.account_balance = parseInt(accountBalance);
         }
         params.metadata = {};
         params.metadata.contactId = user.id();
@@ -113,6 +113,10 @@ var dao = {
                 self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
                 var p1 = $.Deferred(), p2 = $.Deferred();
                 var savedCustomer = customer;
+                // TESTING
+                //console.log('this: ', this);
+                //console.log('userDao:', userDao);
+                //DONE TESTING
                 userDao.saveOrUpdate(user, function(err, value){
                     if (err) {
                         fn(err, value);
