@@ -72,6 +72,8 @@ grunt production --optimize=uglify
 # rename /min to /js directory
 mv public/min public/js
 ########################
+rm -r public/comps
+
 echo Starting zip
 # zip the application
 zip -q -x *.git* node_modules/ -r "${APP_NAME}-${APP_VERSION}.zip" .
