@@ -338,7 +338,7 @@ var dao = {
 
     addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
         var self=this;
-        self.log.debug('>> addStripeTokensToAccount(' + accountId, + ',' + accessToken + ',' + refreshToken +')');
+        self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken +')');
 
         self.getById(accountId, $$.m.Account, function(err, account){
             if(err) {
