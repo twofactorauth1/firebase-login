@@ -374,18 +374,18 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <div class="caption">
                             <h3>Facebook</h3>
                             <p>Connect with your friends</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK]">
+                            <div class="connected" ng-show="userSocialActive[credentialTypes.FACEBOOK]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
                                 <img ng-src="{{userSocialImage[credentialTypes.FACEBOOK]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.FACEBOOK]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK]">
+                                <div class="btn-group" ng-hide="userSocialActive[credentialTypes.FACEBOOK]">
                                     <a href="/inapplogin/facebook" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK]">
+                                <div class="btn-group" ng-show="userSocialActive[credentialTypes.FACEBOOK]">
                                     <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.FACEBOOK)">
                                         <span class="fa fa-trash-o"></span>Delete</button>
                                 </div>
@@ -420,18 +420,18 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <div class="caption">
                             <h3>Google +</h3>
                             <p>Import customers, plan posts in advance.</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.GOOGLE]">
+                            <div class="connected" ng-show="userSocialActive[credentialTypes.GOOGLE]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
                                 <img ng-src="{{userSocialImage[credentialTypes.GOOGLE]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.GOOGLE]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.GOOGLE]">
+                                <div class="btn-group" ng-hide="userSocialActive[credentialTypes.GOOGLE]">
                                     <a href="/inapplogin/google" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.GOOGLE]">
+                                <div class="btn-group" ng-show="userSocialActive[credentialTypes.GOOGLE]">
                                     <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.GOOGLE)">
                                         <span class="fa fa-trash-o"></span>Delete</button>
                                 </div>
@@ -448,18 +448,18 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <div class="caption">
                             <h3>LinkedIn</h3>
                             <p>Import contacts</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.LINKEDIN]">
+                            <div class="connected" ng-show="userSocialActive[credentialTypes.LINKEDIN]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
                                 <img ng-src="{{userSocialImage[credentialTypes.LINKEDIN]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.LINKEDIN]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.LINKEDIN]">
+                                <div class="btn-group" ng-hide="userSocialActive[credentialTypes.LINKEDIN]">
                                     <a href="/inapplogin/linkedin" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.LINKEDIN]">
+                                <div class="btn-group" ng-show="userSocialActive[credentialTypes.LINKEDIN]">
                                     <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.LINKEDIN)">
                                         <span class="fa fa-trash-o"></span>Delete</button>
                                 </div>
@@ -475,18 +475,18 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <div class="caption">
                             <h3>Twitter</h3>
                             <p>Import followers</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.TWITTER]">
+                            <div class="connected" ng-show="userSocialActive[credentialTypes.TWITTER]">
                                 <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
                                 <img ng-src="{{userSocialImage[credentialTypes.TWITTER]}}" class="img-circle" />
                                 <span>{{userSocial[credentialTypes.TWITTER]}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.TWITTER]">
+                                <div class="btn-group" ng-hide="userSocialActive[credentialTypes.TWITTER]">
                                     <a href="/inapplogin/twitter" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.TWITTER]">
+                                <div class="btn-group" ng-show="userSocialActive[credentialTypes.TWITTER]">
                                     <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.TWITTER)">
                                         <span class="fa fa-trash-o"></span>Delete</button>
                                 </div>
