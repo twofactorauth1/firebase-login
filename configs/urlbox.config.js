@@ -7,8 +7,8 @@
 
 
 var urlbox_template = process.env.URLBOX_URLTEMPLATE || 'https://api.urlbox.io/v1/%s/%s/png?%s';
-var urlbox_key = process.env.URLBOX_KEY || '16fb9a22-8f4c-4218-92ad-fc04697100d3';
-var urlbox_secret = process.env.URLBOX_SECRET || 'b670c331-70c6-47c1-ba2d-87204ece2511';
+var urlbox_key = process.env.URLBOX_KEY || 'de7626dc-ee09-4700-999a-96c3ebcf187a';
+var urlbox_secret = process.env.URLBOX_SECRET || 'e08df86a-1852-4db2-ae3e-e8596c601155';
 
 module.exports = {
 
