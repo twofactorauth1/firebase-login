@@ -46,11 +46,12 @@ _.extend(router.prototype, baseRouter.prototype, {
     },
 
 
-    getState: function(accountId, authMode, authSocialType) {
+    getState: function(accountId, authMode, authSocialType, redirect) {
         var state = {};
         state.accountId = accountId;
         state.authMode = authMode;
         state.socialType = authSocialType;
+        state.redirectUrl = redirect;
         return state;
     },
 
@@ -63,7 +64,7 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialLogin: function(req, resp, next) {
-        var state = this.getState(this.accountId(req), "login", req.params.socialtype);
+        var state = this.getState(this.accountId(req), "login", req.params.socialtype, req.params.redirect);
         resp.redirect(this.getInternalAuthRedirect(state));
     },
 
@@ -84,17 +85,17 @@ _.extend(router.prototype, baseRouter.prototype, {
             console.dir(req.query);
         }
 
-        var referringUrl = req.query['redirectTo']|| '/admin';
+        var referringUrl = req.query['redirectTo'] || '/admin/account';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
-            // if(err) {
-            //     self.log.error('Error getting referring url for: ' + referringUrl);
-            //     self.log.debug('<< inAppSocialLogin redirecting to /login');
-            //     resp.redirect('/login');
-            // } else {
-            //     state.redirectUrl = encodeURIComponent(value);
-            //     self.log.debug('<< inAppSocialLogin');
-            //     resp.redirect(self.getInternalAuthRedirect(state));
-            // }
+            if(err) {
+                 self.log.error('Error getting referring url for: ' + referringUrl);
+                 self.log.debug('<< inAppSocialLogin redirecting to /login');
+                 resp.redirect('/login');
+            } else {
+                 state.redirectUrl = encodeURIComponent(value);
+                 self.log.debug('<< inAppSocialLogin');
+                 resp.redirect(self.getInternalAuthRedirect(state));
+            }
         });
 
     },
@@ -143,12 +144,14 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         var accountId = state.accountId;
 
+
         var options = {
             callbackURL: callbackUrl,
             returnURL: callbackUrl,
             successRedirect: "/oauth2/postlogin",
             failureRedirect: "/login", failureFlash:true
         };
+
 
         var scope = config.getScope();
         if (scope != null) {
@@ -175,6 +178,7 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     redirectAfterOauth: function(req, resp, next) {
+        var self = this;
         var state = req.session.state;
         var user = req.user;
 
@@ -183,7 +187,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         if (state.redirectUrl != null) {
             var redirectUrl = state.redirectUrl;
             redirectUrl = decodeURIComponent(redirectUrl);
-
+            self.log.debug('decoded redirect: ' + redirectUrl);
             if (authMode == "in_app") {
                 if (redirectUrl.indexOf("?") == -1) {
                     redirectUrl += "?";
@@ -196,18 +200,20 @@ _.extend(router.prototype, baseRouter.prototype, {
                     redirectUrl += "&detail=" + state.appStateDetail;
                 }
             }
-
+            self.log.debug('redirecting to: ' + redirectUrl);
             return resp.redirect(redirectUrl);
         }
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
         if (redirectUrl != null) {
+            self.log.debug('redirectUrl from cookies: ' + redirectUrl);
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function(err, value) {
+                self.log.debug('redirecting to authenticated url: ' + redirectUrl);
                 return resp.redirect(redirectUrl);
             });
             return;
         }
-
+        self.log.debug('redirecting to default of admin');
         var accountId = null;
         var path = "admin";
         if (state.accountId > 0) {

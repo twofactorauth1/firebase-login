@@ -338,12 +338,15 @@ var dao = {
 
     addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
         var self=this;
-        self.log.debug('>> addStripeTokensToAccount');
+        self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken +')');
 
         self.getById(accountId, $$.m.Account, function(err, account){
             if(err) {
                 self.log.error('Error getting account: ' + err);
                 return fn(err, null);
+            } else if(account === null) {
+                self.log.error('Error getting account for id: ' + accountId);
+                return fn('No account found', null);
             }
             var billing = account.get('billing');
             billing.accessToken = accessToken;
