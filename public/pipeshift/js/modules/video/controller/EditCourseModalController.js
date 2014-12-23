@@ -30,10 +30,8 @@ define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDi
             $modalInstance.dismiss();
         }
         $scope.submit = function () {
-            $scope.tmpSubscribers.forEach(function(value, index) {
-                Subscriber.save(value, function(data) {
-                    console.info(data);
-                });
+            Subscriber.save({subs: $scope.tmpSubscribers}, function(data) {
+                console.info(data);
             });
             $modalInstance.close({course: $scope.course, isRemove: false});
         }
@@ -49,8 +47,7 @@ define(['angularAMD', 'app', 'customerService', 'iStartsWithFilter', 'truncateDi
             });
             modalInstance.result.then(function () {
                 $modalInstance.close({course: $scope.course, isRemove: true});
-            }, function () {$scope.tmpSubscribers
-            });
+            }, function () {});
         }
         var subdomainChangeTimeout = -1;
         $scope.onSubdomainChange = function () {
