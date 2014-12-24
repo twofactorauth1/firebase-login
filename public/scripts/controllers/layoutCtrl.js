@@ -104,6 +104,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 }
 
                 $scope.currentpage = that.pages;
+                if ($route.current.params.custid != null) {
+                   $scope.custid =  $route.current.params.custid;
+                   customerService.getCustomer($scope.custid, function(data) {
+                        that.customer = data;
+                        that.shipping = customerService.getAddressByType(data, "shipping");
+                        that.billing = customerService.getAddressByType(data, "billing");
+                        that.billingChange = false;
+                        that.shippingChange = false;
+                    });
+                
+                   $scope.getAddressByType = function(customer, type)
+                        {   
+                            var address;
+                            if (customer){
+                                address = customerService.getAddressByType(customer, type)
+                                if (address == "") {
+                                    return '';
+                                }
+                                return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
+                                        return str !== "";
+                                    }).join(", ")
+                            }
+                            return '';
+                        }
+                }
 
                 var iframe = window.parent.document.getElementById("iframe-website")
                 iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
@@ -251,19 +276,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         ProductService.getAllProducts(function(data) {
             that.products = data;
         });
-        var cusId = 1841;
-        customerService.getCustomer(cusId, function(data) {
-            that.customer = data;
-            that.shipping = customerService.getAddressByType(data, "shipping");
-            that.billing = customerService.getAddressByType(data, "billing");
-            
-            that.billingChange = false;
-            that.shippingChange = false;
-        });
-                
-          
 
-
+        
         $scope.showEdit = function(type) {
             if (type == "billing")
                 that.billingChange = that.billingChange ? false : true;
@@ -438,28 +452,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.saveCustomerAccount = function(customer)
         {
-            customerService.putCustomer(customer, function(data) {
-                that.customer = data;
-            });
+            if (customer && customer.accountId)  
+                customerService.putCustomer(customer, function(data) {
+                    that.customer = data;
+                });
         }
 
-        $scope.getAddressByType = function(customer, type)
-        {   
-            var address;
-            address = customerService.getAddressByType(customer, type)
-            if (address == "") {
-                return '';
-            }
-            return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
-                    return str !== "";
-                }).join(", ")
-        }
 
-        $scope.getAddressObject = function(customer, type)
-        {   
-            address =  customerService.getAddressByType(customer, type)
-            $scope.address = address;
-        }
 
         $scope.social_links = [
         {name:"adn",icon:"adn"},

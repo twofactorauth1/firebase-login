@@ -55,6 +55,12 @@ define([
                 document.getElementById("iframe-website").setAttribute("src", '/page/blog/'+$location.$$search['posthandle']+'?editor=true');
             }
 
+            if ($location.$$search['custid']) {
+                console.log('customerID detected');
+                current_src = document.getElementById("iframe-website").getAttribute("src");
+                document.getElementById("iframe-website").setAttribute("src", current_src +'&custid='+$location.$$search['custid']);
+            }
+
             NavigationService.updateNavigation();
                 $scope.$back = function() {
                 window.history.back();
@@ -522,9 +528,14 @@ define([
             	}
 
 
+
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
-
+                if ($location.$$search['custid']) {
+                    console.log('customerID detected');
+                    current_src = document.getElementById("iframe-website").getAttribute("src");
+                    document.getElementById("iframe-website").setAttribute("src", current_src +'&custid='+$location.$$search['custid']);
+                }
                 WebsiteService.getPages($scope.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
                     var parsed = angular.fromJson(pages);
