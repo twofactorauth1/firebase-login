@@ -5,11 +5,13 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+process.env.NODE_ENV = "testing";
 var app = require('../app');
 var testHelpers = require('../testhelpers/testhelpers');
 var testConfig = require('../testhelpers/configs/test.config.js');
 var userDao = require('../dao/user.dao');
 var facebookDao = require('../dao/social/facebook.dao');
+
 
 module.exports.group = {
     setUp: function(cb) {

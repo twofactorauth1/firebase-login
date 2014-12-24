@@ -33,6 +33,10 @@ module.exports = {
         username:'jramrod'
     },
 
+    linkedIn: {
+        accessToken: 'AQXJxRdJ7YRCxQIh93CHhWzK6UgyJpbK29uphR2_8mIKahuwREsH4kVHr3mwpwgD_t_vXCESONL46ZYEMHBOJk8Ta4X9n9cJhXpQtWrlN9gPUTK3-19hZmfITy9QnKUvKj2rZRirJHKTtMEUwjaOfVeK3_RVlf-9-lS8k2Tqr-UHJcfYwKQ'
+    },
+
     twitter: {
         twitterId: "19695866",
         username: "cycleboy99",

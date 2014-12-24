@@ -32,7 +32,7 @@ module.exports = {
     SCOPE_MAILBOX: "w_messages",
 
     getScope: function(additions) {
-        var arr = ['r_emailaddress', 'r_basicprofile', 'r_network', 'r_contactinfo'];
+        var arr = ['r_emailaddress', 'r_basicprofile', 'r_network', 'r_contactinfo', 'rw_nus'];
 
         if (additions != null) {
             arr = arr.concat(additions);
