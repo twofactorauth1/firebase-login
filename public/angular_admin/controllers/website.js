@@ -626,6 +626,13 @@ define([
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");                
             }
+            window.changeProfilePhoto = function(componentId,customer)
+            {
+                $scope.profilepic = true;
+                $scope.customerAccount = customer;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");                
+            }
             window.getPostImageUrl = function()
             {
                 return $scope.postImageUrl;             
@@ -954,6 +961,12 @@ define([
                 type: 'text-only',
                 icon: 'fa fa-like',
                 enabled: true
+            },
+            {
+                title: 'Customer Account',
+                type: 'customer-account',
+                icon: 'fa fa-user',
+                enabled: true
             } ];
 
             $scope.selectComponent = function(type) {
@@ -993,6 +1006,12 @@ define([
                     $scope.postImage = false;
                     $scope.postImageUrl = asset.url;
                     toaster.pop('success', "Post Image added successfully");
+                    return;
+                }
+                else if($scope.profilepic && !$scope.componentEditing)
+                {
+                    $scope.profilepic = false;
+                    $scope.customerAccount.photo = asset.url;
                     return;
                 }
                 else {
