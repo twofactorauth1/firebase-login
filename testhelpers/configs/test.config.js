@@ -38,10 +38,10 @@ module.exports = {
     },
 
     twitter: {
-        twitterId: "19695866",
-        username: "cycleboy99",
-        accessToken: "19695866-7SxQyAGtkFIOaiJ0IDLj1LLnb0IuelSj21e6Xz55D",
-        accessTokenSecret: "N7ZhkNsLD27NirESDLaNPkuRP4g5WU5zKQrU5UV2fDjJH",
+        twitterId: "2939270068",
+        username: "indigtester",
+        accessToken: "2939270068-wXgcSStrU9V60IeAlstMVqmzgKuApMVgxkI3fhF",
+        accessTokenSecret: "GCmfi7uflfFnpTvGMsL0stT4pSfnjDjQZbLaD0c8d9Rta",
         tokenScope: null,
         tokenExpires: null
     }
