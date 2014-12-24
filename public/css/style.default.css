@@ -24598,7 +24598,7 @@ div[data-type=single-post] .container {
   border-top: none!important;
   text-transform: none!important;
   color: #9E9E9E;
-  font-family: Georgia,serif;
+  font-family: Georgia, serif;
   font-size: 12px;
   font-style: italic;
   padding: 0 5px 7px 4px;
@@ -24623,6 +24623,7 @@ div[data-class="blog"] .single-blog {
 }
 .post_tags li {
   display: inline-block;
+  margin-bottom: 10px;
   background: #47b1cc;
   padding: 5px;
   margin-right: 10px;
