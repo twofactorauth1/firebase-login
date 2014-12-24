@@ -367,6 +367,44 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
         /********** CMS RELATED **********/
+        $scope.sharePost = function(post, type)
+        {
+            var postData = {};
+            switch(type) {
+                case "twitter":
+                 postData = {
+                      status: post.post_status
+                    }
+                PostService.sharePostOnTwitter(postData, function(data) {
+
+                });
+                break;
+                case "facebook":
+                   postData = {
+                      url: post.post_url,
+                      picture: post.featured_image,
+                      name: post.post_title,
+                      caption: post.post_excerpt,
+                      description: post.post_content
+                    }
+                PostService.sharePostOnFacebook(postData, function(data) {
+
+                });
+                break;
+                case "linked-in":
+                 postData = {
+                      url: post.post_url,
+                      picture: post.featured_image,
+                      name: post.post_title,
+                      caption: post.post_excerpt,
+                      description: post.post_content
+                    }
+                PostService.sharePostOnLinkedIn(postData, function(data) {
+
+                });
+                break;
+            }
+        }
 
         $scope.setPostImage = function(componentId,blogpost)
         {
