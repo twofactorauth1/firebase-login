@@ -1,0 +1,235 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div ng-class="component.type+'-v'+component.version">
+<div id="content-area">
+    <div class=" clearfix row-fluid">
+        <div class="panel-heading">
+
+            <h3 class="panel-title"> <i class="icon-main fa fa-user"></i> MY ACCOUNTS</h3>
+          </div>
+        <div id="main-area" class="col-xs-12">
+          
+
+    <div class="row">
+
+      <div class="col-md-6">
+
+        <!-- Name & Photo -->
+        <div class="panel panel-default">
+          
+          <div class="panel-body">
+
+            <div class="row">
+              <!-- UPDATE NAME -->
+              <div class="col-xs-12 form" role="form">
+              <!-- UPDATE PHOTO -->
+                  <div id="contact-photo-container" class="row mb15">
+                    <row>
+                      <div class="col-sm-4 ">
+                      <img id="contact-photo" class="img-responsive thumbnail img-circle img-rounded hand btn-edit-photo center" ng-src="{{ layout.customer.photo ? layout.customer.photo : '/assets/icons/blank-user.jpg' }}">
+                      <div class="clearfix mb15"></div>
+                        <div class="btn-contact-photo">
+                          <div class="btn-link btn-edit-photo">
+                             <div class="form-group">
+                            <button  class="btn btn-black pull-right"  ng-click="setProfileImage(component._id, layout.customer)" >Change Photo</button>
+                            </div>
+                             <div class="form-group">
+                           <button  class="btn btn-black pull-right"  ng-click="#" >Change Password</button>
+                         </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-xs-7 col-md-6">
+
+                        <div class="form-group">
+                        <h4 class="panel-title">My Information</h4>
+                      </div>
+                        <div class="form-group">
+                        <input id="input-firstname" class="form-control" value="  " ng-model="layout.customer.first" placeholder="First name" type="text">
+                      </div>
+                        <div class="form-group">
+                        <input id="input-middlename" class="form-control" value="  " ng-model="layout.customer.middle" placeholder="Middle name" type="text">
+                        </div>
+                        <div class="form-group">
+                        <input id="input-lastname" class="form-control" value="  " ng-model="layout.customer.last" placeholder="Last name" type="text">
+                        </div>
+                        <div class="form-group">
+
+                       <input class="form-control input-edit-email " indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="layout.customer.details[0].emails[0].email">
+                        </div>
+                        <div class="form-group">
+                        <button  class="btn btn-primary btn-lg pull-right"  ng-click="saveCustomerAccount(layout.customer)" >Save Customer Account</button>
+                      </div>
+                        <div class="btn-edit-photo-controls hidden-md hidden-lg hidden">
+                          <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
+                          <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                        </div>
+                      </div>
+                    </row>
+                  </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- END Name & Photo -->
+
+      </div>
+
+      <!-- Contact Information -->
+      <div class="col-md-6 junbotron address-info">
+        <div class="col-md-6"> 
+          <h4 class="address-title"> Billing Information</h4>
+          <div class="address-desc">
+            <span class="display-block">{{layout.customer.first}} {{layout.customer.middle}}  {{layout.customer.last}} </span>
+            <span class="display-block">
+              {{getAddressByType(layout.customer, 'billing')}}
+              </span>
+               <div class="form-group">
+                    <button  ng-if="layout.billing" class="btn btn-change btn-sm"  ng-click="showEdit('billing')">CHANGE</button>
+                  </div>
+                <div id="edit-addresses-container" ng-show="layout.billingChange">
+
+                    <div class="form">
+                      <div class="edit-address-fields">
+                        <div class="form-group">
+                          <label>Address Line 1</label>
+                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="layout.billing.address">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Address Line 2</label>
+                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="layout.billing.address2">
+                        </div>
+
+                        <div class="form-group">
+                          <label>City</label>
+                          <input type="text" value="" class="form-control input-city input-address-field" ng-model="layout.billing.city">
+                        </div>
+
+                        <div class="form-group">
+                          <label>State</label>
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="layout.billing.state">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Country</label>
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="layout.billing.country">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Zip Code</label>
+                          <input type="text" value="" validation-type="zip" indigeweb-validate-form-fields class="form-control input-zip input-address-field" ng-model="layout.billing.zip">
+
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                
+              </div>
+
+        </div>
+        <div class="col-md-6"> 
+          <h4 class="address-title">Shipping Information</h4>
+            <div class="address-desc">
+            <span class="display-block">{{layout.customer.first}} {{layout.customer.middle}}  {{layout.customer.last}} </span>
+             <span class="display-block">
+              {{getAddressByType(layout.customer, 'shipping')}}
+              </span>
+               <div class="form-group">
+                <button  ng-if="layout.shipping" class="btn btn-change btn-sm" ng-click="showEdit('shipping')" >CHANGE</button>
+              </div>
+
+              <div id="edit-addresses-container" ng-show="layout.shippingChange">
+                    <div class="form">
+                      <div class="edit-address-fields">
+                        <div class="form-group">
+                          <label>Address Line 1</label>
+                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="layout.shipping.address">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Address Line 2</label>
+                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="layout.shipping.address2">
+                        </div>
+
+                        <div class="form-group">
+                          <label>City</label>
+                          <input type="text" value="" class="form-control input-city input-address-field" ng-model="layout.shipping.city">
+                        </div>
+
+                        <div class="form-group">
+                          <label>State</label>
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="layout.shipping.state">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Country</label>
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="layout.shipping.country">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Zip Code</label>
+                          <input type="text" value="" validation-type="zip" indigeweb-validate-form-fields class="form-control input-zip input-address-field" ng-model="layout.shipping.zip">
+                       
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                
+              </div>
+          </div>
+        </div>
+        <!-- End Panel Default -->
+      </div>
+
+<div class="col-xs-12">
+                    <div class="panel panel-default row">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">PAST ORDERS</h3>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table mb30">
+                                <thead>
+                                    <tr class="info">
+                                        <th>#</th>
+                                        <th>DATE</th>
+                                        <th>ITEMS</th>
+                                        <th>TOTAL</th>
+                                        <th>SHIPPING</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr >
+                                        <td>No order found</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div> <!-- #main-area -->
+    </div> <!-- .container -->
+</div>
+</div>
+

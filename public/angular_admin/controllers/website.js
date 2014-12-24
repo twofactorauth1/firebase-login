@@ -55,6 +55,12 @@ define([
                 document.getElementById("iframe-website").setAttribute("src", '/page/blog/'+$location.$$search['posthandle']+'?editor=true');
             }
 
+            if ($location.$$search['custid']) {
+                console.log('customerID detected');
+                current_src = document.getElementById("iframe-website").getAttribute("src");
+                document.getElementById("iframe-website").setAttribute("src", current_src +'&custid='+$location.$$search['custid']);
+            }
+
             NavigationService.updateNavigation();
                 $scope.$back = function() {
                 window.history.back();
@@ -522,9 +528,14 @@ define([
             	}
 
 
+
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
-
+                if ($location.$$search['custid']) {
+                    console.log('customerID detected');
+                    current_src = document.getElementById("iframe-website").getAttribute("src");
+                    document.getElementById("iframe-website").setAttribute("src", current_src +'&custid='+$location.$$search['custid']);
+                }
                 WebsiteService.getPages($scope.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
                     var parsed = angular.fromJson(pages);
@@ -623,6 +634,13 @@ define([
             window.setPostImage = function(componentId)
             {
                 $scope.postImage = true;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");                
+            }
+            window.changeProfilePhoto = function(componentId,customer)
+            {
+                $scope.profilepic = true;
+                $scope.customerAccount = customer;
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");                
             }
@@ -966,6 +984,12 @@ define([
                 type: 'text-only',
                 icon: 'fa fa-like',
                 enabled: true
+            },
+            {
+                title: 'Customer Account',
+                type: 'customer-account',
+                icon: 'fa fa-user',
+                enabled: true
             } ];
 
             $scope.selectComponent = function(type) {
@@ -1005,6 +1029,12 @@ define([
                     $scope.postImage = false;
                     $scope.postImageUrl = asset.url;
                     toaster.pop('success', "Post Image added successfully");
+                    return;
+                }
+                else if($scope.profilepic && !$scope.componentEditing)
+                {
+                    $scope.profilepic = false;
+                    $scope.customerAccount.photo = asset.url;
                     return;
                 }
                 else {

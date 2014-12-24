@@ -301,9 +301,11 @@ module.exports = function(grunt) {
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
+            linkedin: ['test/linkedin.dao_test.js'],
             payments: ['payments/tests/*_test.js'],
             paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
             products: ['products/tests/*_test.js'],
+            twitter: ['test/twitter_test.js'],
             twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
                 'biometrics/twonet/adapter/test/twonet_test_poll.js'],
             twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
@@ -482,6 +484,8 @@ module.exports = function(grunt) {
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);
+    grunt.registerTask('testLinkedIn', ['nodeunit:linkedin']);
+    grunt.registerTask('testTwitter', ['nodeunit:twitter']);
     grunt.registerTask('testContacts', ['nodeunit:contacts']);
     grunt.registerTask('testAnalytics', ['nodeunit:analytics']);
     grunt.registerTask('testProducts', ['nodeunit:products']);
