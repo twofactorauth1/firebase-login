@@ -24,6 +24,15 @@ module.exports = {
         tokenExpires: 1398164400
     },
 
+    facebook2: {
+        name: 'Joe A Ramrod',
+        facebookId: '1378921789074576',
+        accessToken: 'CAAI13KqWRXQBAA99paSDHbqSeyXt2MNOZCo3qZBqx78mQt8hnbGYmf38A851WDycNv2AZCXqQD79d225ZBasVq3DIQsRuxN64iBUx2ZCs7ZBzz3X31qpMZBjdnhtFAcZAoSzbZCLFZBNpAqkRAqIwMe5qoKeoXxvvjyZC9csfR6uWCIuecJczsD1ZAamoNmALZC35NQVI0rzoZBij8LZC7wUjZB1VGsf',
+        tokenExpires: 1429700400,
+        tokenScope: ["basic_info","email","friends_website","friends_birthday","offline_access","read_stream","read_mailbox", 'publish_actions'],
+        username:'jramrod'
+    },
+
     twitter: {
         twitterId: "19695866",
         username: "cycleboy99",

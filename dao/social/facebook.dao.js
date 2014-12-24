@@ -688,6 +688,40 @@ var dao = {
             fn(res.error, res.data || [])
         });
     },
+
+    //region feed
+
+    shareLink: function(user, url, picture, name, caption, description, fn) {
+
+        var self = this;
+        self.log.debug('>> shareLink');
+        //var facebookID = self._getFacebookId(user);
+        var accessToken = self._getAccessToken(user);
+
+        var urlOptions = {access_token: accessToken, link:url};
+        if(picture && picture.length > 0) {
+            urlOptions.picture = picture;
+        }
+        if(name && name.length > 0) {
+            urlOptions.name = name;
+        }
+        if(caption && caption.length > 0) {
+            urlOptions.caption = caption;
+        }
+        if(description && description.length > 0) {
+            urlOptions.description = description;
+        }
+
+        FB.api('me/feed', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< shareLink', res);
+                fn(null, res.id);
+            }
+        });
+    },
     
     //region PRIVATE
     _batchRequest: function(batchName, options, fn){
