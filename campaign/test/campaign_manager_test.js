@@ -14,12 +14,15 @@ var contactDao = require('../../dao/contact.dao');
 var courseDao = require('../../dao/course.dao');
 var accountDao = require('../../dao/account.dao');
 
+var testContext = {};
+
 var campaignId;
 
 exports.campaign_manager_test = {
 
     testAddSubscriberToCourse: function(test) {
         var self = this;
+        console.log('\n\n\n testAddSubscriberToCourse\n\n\n');
         test.expect(1);
 
         var courseData = {
@@ -109,22 +112,29 @@ exports.campaign_manager_test = {
         });
 
         accountDao.saveOrUpdate(account, function(err, savedAccount){
+            console.log('returned from saveOrUpdate');
             if(err) {
                 test.ok(false, err.toString());
                 return test.done();
             }
             courseDao.createCourse(courseData, userId, accountId, function(err, course){
+                console.log('returned from createCourse');
                 if(err) {
                     test.ok(false, err.toString());
-                    test.done();
+                    return test.done();
                 }
+                testContext.course = course;
+                testContext.userId = userId;
+                testContext.accountId = accountId;
                 CampaignManager.subscribeToCourse(toEmail, course, accountId, timezoneOffset, function(err, value){
+                    console.log('returned from subscribeToCourse');
                     if(err) {
                         test.ok(false, err.toString());
-                        test.done();
+                        return test.done();
                     }
                     console.log('subscribed');
                     test.ok(true);
+                    console.log('\n\n\n testAddSubscriberToCourse\n\n\n');
                     test.done();
                 });
             });
@@ -132,6 +142,30 @@ exports.campaign_manager_test = {
 
 
 
+    },
+
+    testBulkSubscribe: function(test) {
+        console.log('\n\n\n testBulkSubscribe\n\n\n');
+        test.expect(1);
+        /*
+         testContext.course = course;
+         testContext.userId = userId;
+         testContext.accountId = accountId;
+         */
+        var ary = [{"email":"test@test.com","courseId":testContext.course.id(),"subscribeTime":"2014-12-23T18:25:19.014Z"}];
+        console.dir(ary);
+        var userId = testContext.userId;
+        var accountId = testContext.accountId;
+        CampaignManager.bulkSubscribeToCourse(ary, userId, accountId, function(err, value){
+            if(err) {
+                test.ok(false, "Error: " + err);
+                test.done();
+            } else {
+                test.ok(true);
+                console.log('\n\n\n testBulkSubscribe\n\n\n');
+                test.done();
+            }
+        });
     },
 
 

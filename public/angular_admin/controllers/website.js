@@ -664,7 +664,19 @@ define([
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
+                if($scope.selectedComponent.type === 'footer')
+                {
+                    var footerType = _.findWhere($scope.currentPage.components, {
+                        type: $scope.selectedComponent.type
+                    });
+                    if(footerType)
+                    {
+                        toaster.pop('error', "Footer component already exists");
+                        return;
+                    }
+                }
                 $scope.components = $scope.currentPage.components;
+
                 var cmpVersion = null;
                 if ($scope.selectedTheme) {
                     var selectedType = _.findWhere($scope.selectedTheme.config.components, {

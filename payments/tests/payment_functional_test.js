@@ -84,7 +84,7 @@ exports.testGroup = {
         log.debug('runTest');
 
         //create a stripe customer for a user
-        stripeDao.createStripeCustomerForUser(null, testContext.user, testContext.accountId, function(err, value){
+        stripeDao.createStripeCustomerForUser(null, testContext.user, testContext.accountId, 0, function(err, value){
             if(err) {
                 test.ok(false, 'Error creating Stripe Customer: ' + err);
                 test.done();

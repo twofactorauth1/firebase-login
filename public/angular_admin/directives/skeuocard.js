@@ -43,18 +43,37 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                     });
 
                     scope.addCardFn = function() {
-                        var expiry = $('#expiry').val().split("/")
-                        var exp_month = expiry[0].trim();
-                        var exp_year = "";
-                        if (expiry.length > 1)
-                            exp_year = expiry[1].trim();
-                        $('#expiry').val().split("/")[0].trim()
-                        var cardInput = {
-                            number: $('#number').val(),
-                            cvc: $('#cvc').val(),
-                            exp_month: exp_month,
-                            exp_year: exp_year
-                        };
+                        var parent_div = $("." + scope.wrapper).next();
+                        if(parent_div.length && parent_div.attr("wrapper-div"))
+                        {
+                            var expiry = parent_div.find('#expiry').val().split("/")
+                            var exp_month = expiry[0].trim();
+                            var exp_year = "";
+                            if (expiry.length > 1)
+                                exp_year = expiry[1].trim();
+                            parent_div.find('#expiry').val().split("/")[0].trim()
+                            var cardInput = {
+                                number: parent_div.find('#number').val(),
+                                cvc: parent_div.find('#cvc').val(),
+                                exp_month: exp_month,
+                                exp_year: exp_year
+                            };
+                        }
+                        else
+                        {
+                            var expiry = $('#expiry').val().split("/")
+                            var exp_month = expiry[0].trim();
+                            var exp_year = "";
+                            if (expiry.length > 1)
+                                exp_year = expiry[1].trim();
+                            $('#expiry').val().split("/")[0].trim()
+                            var cardInput = {
+                                number: $('#number').val(),
+                                cvc: $('#cvc').val(),
+                                exp_month: exp_month,
+                                exp_year: exp_year
+                            };
+                        } 
                         PaymentService.getStripeCardToken(cardInput, function(token) {
                             //scope.card.flip();
                             if (scope.user.stripeId) {
@@ -62,7 +81,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                                     scope.updateFn(billing);
                                 });
                                 scope.cards.data.forEach(function(value, index) {
-                                    PaymentService.deleteCustomerCard(value.customer, value.id, function(card) {});
+                                    PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
                                 });
                                 PaymentService.putCustomerCard(scope.user.stripeId, token, function(card) {});
                             } else {

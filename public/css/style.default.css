@@ -15819,6 +15819,7 @@ strong {
 }
 .chosen-select {
   margin: 0;
+  padding: 0;
 }
 .ckbox,
 .rdio {
@@ -20854,6 +20855,54 @@ input[type='file'] {
 .theme.success .check-theme {
   display: block!important;
 }
+.ribbon-wrapper-green {
+  width: 123px;
+  height: 128px;
+  overflow: hidden;
+  position: absolute;
+  top: -3px;
+  right: 7px;
+}
+.ribbon-green {
+  font: bold 15px Sans-Serif;
+  color: #333;
+  text-align: center;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 1px 0px;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  position: relative;
+  padding: 7px 0;
+  left: -6px;
+  top: 32px;
+  width: 165px;
+  background-color: #BFDC7A;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#bfdc7a), to(#8ebf45));
+  background-image: -webkit-linear-gradient(top, #bfdc7a, #8ebf45);
+  background-image: -moz-linear-gradient(top, #bfdc7a, #8ebf45);
+  background-image: -ms-linear-gradient(top, #bfdc7a, #8ebf45);
+  background-image: -o-linear-gradient(top, #bfdc7a, #8ebf45);
+  color: #6a6340;
+  -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
+}
+.ribbon-green:before,
+.ribbon-green:after {
+  content: "";
+  border-top: 3px solid #6e8900;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  position: absolute;
+  bottom: -3px;
+}
+.ribbon-green:before {
+  left: 0;
+}
+.ribbon-green:after {
+  right: 0;
+}
 .blog-item {
   background: #fcfcfc;
   margin-bottom: 20px;
@@ -21657,6 +21706,9 @@ i.indi-sm {
 }
 .single-product .product-details h4 {
   margin-top: 0!important;
+}
+.single-product .product-details textarea {
+  resize: none;
 }
 .single-product .product-details h3 {
   margin-top: 0!important;
@@ -23276,6 +23328,7 @@ contenthover a {
   left: 70px;
   margin-bottom: 25px;
   margin-top: 10px;
+  position: absolute;
 }
 .meet-team-v1 .profile-social li {
   display: inline-block;
@@ -23300,6 +23353,9 @@ contenthover a {
   text-align: center;
 }
 /********** Meet Team  v2**********/
+.meet-team-v2 {
+  /* Small devices (tablets, 768px and up) */
+}
 .meet-team-v2 .title {
   font-weight: bold;
   text-align: center;
@@ -23314,6 +23370,27 @@ contenthover a {
 }
 .meet-team-v2 .teamMember {
   padding: 20px;
+}
+.meet-team-v2 .social {
+  margin: 20px auto;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v2 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v2 .team-member-container {
+    margin: 0;
+  }
 }
 /********** Meet Team v3 **********/
 .meet-team-v3 {
@@ -23415,6 +23492,33 @@ contenthover a {
     margin: 0;
   }
 }
+.meet-team-v4 {
+  /* Small devices (tablets, 768px and up) */
+}
+.meet-team-v4 .social {
+  margin: 20px auto;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v4 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v4 .team-member-container {
+    margin: 0;
+  }
+}
+.meet-team-v5 {
+  /* Small devices (tablets, 768px and up) */
+}
 .meet-team-v5 .para h4 {
   text-align: center;
 }
@@ -23427,6 +23531,27 @@ contenthover a {
 }
 .meet-team-v5 .para span p {
   text-align: left;
+}
+.meet-team-v5 .social {
+  margin: 20px auto;
+  font-size: 14px;
+  list-style-type: none;
+  padding-left: 0;
+}
+.meet-team-v5 .social a {
+  font-size: 1.1em;
+  padding: 0 0.3em;
+  border: 1px solid #fff;
+  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 28px;
+}
+@media (min-width: 768px) {
+  .meet-team-v5 .team-member-container {
+    margin: 0;
+  }
 }
 /********** Testimonials **********/
 .testimonials-v1 div[data-class="testimonials"] {

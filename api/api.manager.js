@@ -25,6 +25,7 @@ var paymentsApi = require('./1.0/integrations/payments.api');
 var facebookApi = require('./1.0/social/facebook.api');
 var googleApi = require('./1.0/social/google.api');
 var linkedInApi = require('./1.0/social/linkedin.api');
+var twitterApi = require('./1.0/social/twitter.api');
 
 //Biometrics
 var biometricsPlatform = require('./1.0/biometricsplatform.api');

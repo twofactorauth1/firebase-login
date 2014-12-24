@@ -24,11 +24,24 @@ module.exports = {
         tokenExpires: 1398164400
     },
 
+    facebook2: {
+        name: 'Joe A Ramrod',
+        facebookId: '1378921789074576',
+        accessToken: 'CAAI13KqWRXQBAA99paSDHbqSeyXt2MNOZCo3qZBqx78mQt8hnbGYmf38A851WDycNv2AZCXqQD79d225ZBasVq3DIQsRuxN64iBUx2ZCs7ZBzz3X31qpMZBjdnhtFAcZAoSzbZCLFZBNpAqkRAqIwMe5qoKeoXxvvjyZC9csfR6uWCIuecJczsD1ZAamoNmALZC35NQVI0rzoZBij8LZC7wUjZB1VGsf',
+        tokenExpires: 1429700400,
+        tokenScope: ["basic_info","email","friends_website","friends_birthday","offline_access","read_stream","read_mailbox", 'publish_actions'],
+        username:'jramrod'
+    },
+
+    linkedIn: {
+        accessToken: 'AQXJxRdJ7YRCxQIh93CHhWzK6UgyJpbK29uphR2_8mIKahuwREsH4kVHr3mwpwgD_t_vXCESONL46ZYEMHBOJk8Ta4X9n9cJhXpQtWrlN9gPUTK3-19hZmfITy9QnKUvKj2rZRirJHKTtMEUwjaOfVeK3_RVlf-9-lS8k2Tqr-UHJcfYwKQ'
+    },
+
     twitter: {
-        twitterId: "19695866",
-        username: "cycleboy99",
-        accessToken: "19695866-7SxQyAGtkFIOaiJ0IDLj1LLnb0IuelSj21e6Xz55D",
-        accessTokenSecret: "N7ZhkNsLD27NirESDLaNPkuRP4g5WU5zKQrU5UV2fDjJH",
+        twitterId: "2939270068",
+        username: "indigtester",
+        accessToken: "2939270068-wXgcSStrU9V60IeAlstMVqmzgKuApMVgxkI3fhF",
+        accessTokenSecret: "GCmfi7uflfFnpTvGMsL0stT4pSfnjDjQZbLaD0c8d9Rta",
         tokenScope: null,
         tokenExpires: null
     }

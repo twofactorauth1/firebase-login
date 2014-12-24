@@ -13,10 +13,14 @@ var moment = require('moment');
 
 var mandrillHelper =  {
 
-    sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, fn) {
+    sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, vars, fn) {
         var self = this;
         //console.log('Sending mail from ' + fromName + ' with address ' + fromAddress);
         //console.dir(htmlContent);
+        vars.push({
+            "name": "SENDDATE",
+            "content": moment().format('MMM Do, YYYY')
+        });
 
         var message = {
             'html': htmlContent,
@@ -50,12 +54,7 @@ var mandrillHelper =  {
             "merge_vars": [
                 {
                     "rcpt": toAddress,
-                    "vars": [
-                         {
-                            "name": "SENDDATE",
-                            "content": moment().format('MMM Do, YYYY')
-                        }
-                    ]
+                    "vars": vars
                 }
             ],
             "subaccount": null,

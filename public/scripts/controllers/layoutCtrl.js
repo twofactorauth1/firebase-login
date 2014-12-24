@@ -386,6 +386,44 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
         /********** CMS RELATED **********/
+        $scope.sharePost = function(post, type)
+        {
+            var postData = {};
+            switch(type) {
+                case "twitter":
+                 postData = {
+                      status: post.post_status
+                    }
+                PostService.sharePostOnTwitter(postData, function(data) {
+
+                });
+                break;
+                case "facebook":
+                   postData = {
+                      url: post.post_url,
+                      picture: post.featured_image,
+                      name: post.post_title,
+                      caption: post.post_excerpt,
+                      description: post.post_content
+                    }
+                PostService.sharePostOnFacebook(postData, function(data) {
+
+                });
+                break;
+                case "linked-in":
+                 postData = {
+                      url: post.post_url,
+                      picture: post.featured_image,
+                      name: post.post_title,
+                      caption: post.post_excerpt,
+                      description: post.post_content
+                    }
+                PostService.sharePostOnLinkedIn(postData, function(data) {
+
+                });
+                break;
+            }
+        }
 
         $scope.setPostImage = function(componentId,blogpost)
         {
@@ -591,8 +629,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     var blog_id = posts[i].attributes['data-id'].value;
                     var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
                     var post_title_div = posts[i].querySelectorAll('.post_title');
-                    var post_excerpt = post_excerpt_div[0].outerText;
-                    var post_title = post_title_div[0].outerText;
+                    var post_excerpt = post_excerpt_div.length ? post_excerpt_div[0].outerText : "";
+                    var post_title = post_title_div.length ? post_title_div[0].outerText : "";
                     var matching_post = _.find(that.blogposts, function(item) {
                         return item._id === blog_id
                     })

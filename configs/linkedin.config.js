@@ -7,9 +7,16 @@
 
 var appConfig =  require('./app.config');
 
+//78blriy70xyzo2
+//E1UX5CVDTF1nQOBS
 
-var clientId = process.env.LINKEDIN_CLIENT_ID || '75yguynstm9v3i';
-var clientSecret = process.env.LINKEDIN_CLIENT_SECRET || 'IMYsFv9qrnPeng0J';
+/*
+ * Old application
+ * var clientId = process.env.LINKEDIN_CLIENT_ID || '75yguynstm9v3i';
+ * var clientSecret = process.env.LINKEDIN_CLIENT_SECRET || 'IMYsFv9qrnPeng0J';
+ */
+var clientId = process.env.LINKEDIN_CLIENT_ID || '78blriy70xyzo2';
+var clientSecret = process.env.LINKEDIN_CLIENT_SECRET || 'E1UX5CVDTF1nQOBS';
 
 //var clientId = '774w328y41vuu2';
 //var clientSecret = '9leiTjDCqsEhmjpu';
@@ -25,7 +32,7 @@ module.exports = {
     SCOPE_MAILBOX: "w_messages",
 
     getScope: function(additions) {
-        var arr = ['r_emailaddress', 'r_basicprofile', 'r_network', 'r_contactinfo'];
+        var arr = ['r_emailaddress', 'r_basicprofile', 'r_network', 'r_contactinfo', 'rw_nus'];
 
         if (additions != null) {
             arr = arr.concat(additions);

@@ -429,9 +429,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     var contactEmail = savedContact.getEmails()[0].email;
                                                     var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                     self.log.debug('sending email to: ',contactEmail);
+                                                    var vars = [];
                                                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                                                         notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                        htmlContent, value.id(), savedContact.id(), function(err, result){});
+                                                        htmlContent, value.id(), savedContact.id(), vars, function(err, result){});
                                                 }
 
                                             });
@@ -449,7 +450,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     var fromEmail = component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
                                                     var fromName = component.from_name || notificationConfig.WELCOME_FROM_NAME;
                                                     var emailSubject = component.email_subject || notificationConfig.WELCOME_EMAIL_SUBJECT;
-                                                    mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, value.id(), savedContact.id(), function(err, result){});
+                                                    var vars = [];
+                                                    mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, value.id(), savedContact.id(), vars, function(err, result){});
                                                 }
                                             });
                                         }

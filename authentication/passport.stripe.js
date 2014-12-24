@@ -44,16 +44,18 @@ passport.use(new StripeStrategy({
         var userId = null;
         var state = req.query['state'];
         if(state) {
+            console.log('state: ', state);
             var stateParams = state.split(',');
-            stripeAccount.baggage.accountId = stateParams[0];
+            stripeAccount.baggage.accountId = parseInt(stateParams[0]);
+            req.session.accountId = parseInt(stateParams[0]);
             if(!req.user) {
                 userId = parseInt(stateParams[1]);
-                req.session.accountId =parseInt(stateParams[0]);
+                req.session.accountId = parseInt(stateParams[0]);
             } else {
                 userId = req.user.id();
             }
         }
-
+        console.log('req.session.accountId: ' + req.session.accountId);
         userDao.getById(userId, function(err, value){
             if (value == null || err) {
                 log.error("No user found during stripe callback for userId[" + userId + "]. (" + err + ")");

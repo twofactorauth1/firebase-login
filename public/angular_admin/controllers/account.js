@@ -192,14 +192,22 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUser(function(user) {
                 $scope.user = user;
+                $scope.userSocialImage = {};
+                angular.forEach($scope.user.profilePhotos, function(value, index) {
+                    $scope.userSocialImage[value.type] = value.url;
+                });
+                console.log('Social images ', $scope.userSocialImage);
             });
 
             UserService.getUserSocial(function(social) {
                 console.log('user social >>> ', social);
                 $scope.userSocial = {};
+                $scope.userSocialActive = {};
                 social.forEach(function(value, index) {
                     $scope.userSocial[value.type] = value.username;
+                    $scope.userSocialActive[value.type] = true;
                 });
+                console.log('social auth usernames ', $scope.userSocial);
             });
         }
     ]);

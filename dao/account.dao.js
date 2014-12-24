@@ -250,6 +250,7 @@ var dao = {
                                 self.log.error('Error removing courses for user: ' + err);
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
+
                                 $$.dao.UserDao.remove(user, function(err, value){
                                     if(err) {
                                         self.log.error('Error deleting user: ' + err);
@@ -338,12 +339,15 @@ var dao = {
 
     addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
         var self=this;
-        self.log.debug('>> addStripeTokensToAccount');
+        self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken +')');
 
         self.getById(accountId, $$.m.Account, function(err, account){
             if(err) {
                 self.log.error('Error getting account: ' + err);
                 return fn(err, null);
+            } else if(account === null) {
+                self.log.error('Error getting account for id: ' + accountId);
+                return fn('No account found', null);
             }
             var billing = account.get('billing');
             billing.accessToken = accessToken;

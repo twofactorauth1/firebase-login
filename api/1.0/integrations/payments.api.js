@@ -295,7 +295,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self = value = null;
                     });
                 } else {
-                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, function(err, value){
+                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
                         self.log.debug('<< createCustomer');
                         self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
                     });
@@ -580,10 +580,17 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listSubscriptions');
         var accountId = parseInt(self.accountId(req));
 
+        /*
+         * list subscriptions are on the customer... which belongs to the main account.
+         * there is no need to use an accessToken.
+         */
+        /*
         var accessToken = self._getAccessToken(req);
         if(accessToken === null && accountId != appConfig.mainAccountID) {
             return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
         }
+        */
+
         var customerId = req.params.id;
         var limit = req.body.limit;
 
@@ -843,10 +850,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accountId = parseInt(self.accountId(req));
+
+                /*
+                 * This operation is done on customers, which belong to the main account.
+                 * No access token is needed.
+                 */
+                /*
                 var accessToken = self._getAccessToken(req);
                 if(accessToken === null && accountId != appConfig.mainAccountID) {
                     return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
                 }
+                */
                 var customerId = req.params.id;
 
                 stripeDao.listStripeCards(customerId, function(err, value){

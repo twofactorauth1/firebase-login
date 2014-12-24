@@ -94,83 +94,36 @@ module.exports = {
 
                         /*
                          * Send welcome email.  This is done asynchronously.
-                         * But only do this if we are not in the "testing" env.
+                         * But only do this if we are not running unit tests.
                          */
-
-                          /*
-                             * Send welcome email.  This is done asynchronously.
-                             *
-                             * Here are the steps... maybe this should go somewhere else?
-                             *
-                             * 1. Get the account from session
-                             * 2. Get Page with page_type:email (if it does not exist, goto: 8)
-                             * 3. Get the HTML from the email component
-                             * 4. Set it as data.content
-                             * 5. Call app.render('email/base_email', data...
-                             * 6. Pass it to mandrillHelper
-                             * 7. RETURN
-                             * 8. Get the default welcome html if no page exists
-                             * 9. Call mandrillHelper
-                             */
-
-                            // accountDao.getAccountByID(accountId, function(err, account){
-                            //     if(err) {
-                            //         log.debug('Error getting account: ' + err);
-                            //         log.debug('No email will be sent.');
-                            //     } else {
-                            //         log.debug('savedUser >>> ', savedUser);
-                            //         cmsDao.getPageByType(accountId, null, 'email', function(err, emailPage){
-                            //             log.debug('emailPage >>> ', emailPage);
-                            //             // if(err || emailPage === null) {
-                            //             //     log.debug('Could not get email page.  Using default.');
-                            //             //     fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
-                            //             //         if(err) {
-                            //             //             log.debug('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
-                            //             //         } else {
-                            //             //             var contactEmail = savedUser.attributes.email;
-                            //             //             var contactName = savedUser.attributes.first + ' ' + savedUser.attributes.last;
-                            //             //             log.debug('sending email to: ',contactEmail);
-                            //             //             mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
-                            //             //                 notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                            //             //                 htmlContent, value.id(), savedUser.id(), function(err, result){});
-                            //             //         }
-
-                            //             //     });
-                            //             // } else {
-                            //             //     var component = emailPage.get('components')[0];
-                            //             //     log.debug('Using this for data', component);
-                            //             //     app.render('emails/base_email', component, function(err, html){
-                            //             //         if(err) {
-                            //             //             log.debug('error rendering html: ' + err);
-                            //             //             log.debug('email will not be sent.');
-                            //             //         } else {
-                            //             //             var contactEmail = savedUser.attributes.email;
-                            //             //             var contactName = savedUser.attributes.first + ' ' + savedUser.attributes.last;
-                            //             //             log.debug('sending email to: ', contactEmail);
-                            //             //             var fromEmail = component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
-                            //             //             var fromName = component.from_name || notificationConfig.WELCOME_FROM_NAME;
-                            //             //             var emailSubject = component.email_subject || notificationConfig.WELCOME_EMAIL_SUBJECT;
-                            //             //             mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, value.id(), savedContact.id(), function(err, result){});
-                            //             //         }
-                            //             //     });
-                            //             // }
-                            //         });
-                            //     }
-                            // });
-
                         if (process.env.NODE_ENV != "testing") {
                             fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
                                 if (err) {
                                     log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
                                 } else {
+                                    log.debug('account ', account.attributes.subdomain);
+                                    var siteUrl = account.get('subdomain') + appConfig.subdomain_suffix;
+
+                                    var vars = [
+                                        {
+                                            "name": "SITEURL",
+                                            "content": siteUrl
+                                        },
+                                        {
+                                            "name": "USERNAME",
+                                            "content": savedUser.attributes.username
+                                        }
+                                    ];
                                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                                         notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                        htmlContent, accountId, userId, function (err, result) {
+                                        htmlContent, accountId, userId, vars, function (err, result) {
                                         });
                                 }
 
                             });
                         }
+
+
 
                         log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){

@@ -23,6 +23,7 @@ var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
 //todo: change it to dynamic resolution depending on env
 var hostSuffix = appConfig.subdomain_suffix;
+var async = require('async');
 
 /**
  * Constants for pipeshift
@@ -363,6 +364,46 @@ module.exports = {
                 );
             }
         });
+
+    },
+
+    /**
+     *
+     * @param subAry of objects: {email: x, courseId: x, subscribeTime: x}
+     * @param fn
+     */
+    bulkSubscribeToCourse: function(subAry, userId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> bulkSubscribeToCourse');
+        var timezoneOffset = 0;//TODO: calculate this.
+        accountDao.getAccountByID(accountId, function(err, account){
+            async.each(subAry, function(sub, callback){
+                courseDao.getById(sub.courseId, $$.m.Course, function(err, course){
+                    if(err) {
+                        callback('Error finding course.');
+                    }
+                    self._addSubscriber(sub.email, course, userId, timezoneOffset, function (error) {
+                        if (error) {
+                            callback('Error creating subscriber.');
+                        } else {
+                            self._sendVAREmails(sub.email, course, timezoneOffset, account, function (result) {
+                                callback();
+                            });
+                        }
+                    });
+                });
+
+            }, function(err){
+                if(err) {
+                    self.log.error('Error creating subscriptions: ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug('<< bulkSubscribe');
+                    fn(null, 'SUCCESS');
+                }
+            });
+        });
+
 
     },
 
@@ -720,17 +761,19 @@ module.exports = {
     },
 
     _sendVAREmails: function (toEmail, course, timezoneOffset, account, callback) {
+        var self = this;
+        self.log.debug('>> _sendVAREmails');
         var host = account.get('subdomain') + "." + hostSuffix;
         var templateName = course.get('template').name;
-        var self = this;
+
         //base message
         var message = self._initPipeshiftMessage(toEmail);
-        var async = false;
+        //var async = false;
         var successItemsCounter = 0;
         var videos = course.get('videos');
         //loop through course videos
-        for (var i = 0; i < videos.length; i++) {
-            var video = videos[i];
+        var i = 0;
+        async.each(videos, function(video, cb){
             message.subject = video.subject || course.get('title');
             // adjust values for current video
             self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/" + video.videoId);
@@ -748,18 +791,25 @@ module.exports = {
             sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
             // send template
             console.dir(sendObj);
+            i++;
             mandrill_client.messages.sendTemplate(sendObj, function (result) {
                 self.log.debug(result);
-                //
-                successItemsCounter++;
-                if (successItemsCounter == course.get('videos').length) {
-                    callback(null, {});
-                }
+                cb();
             }, function (e) {
                 self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                callback(e, null);
+                cb(e.name + ' - ' + e.message);
             });
-        }
+        }, function(err){
+            if(err) {
+                self.log.warn('An error occurred calling mandrill: ' + err);
+                return callback(err, null);
+            } else {
+                self.log.debug('<< _sendVAREmails');
+                return callback(null, {});
+            }
+        });
+
+
     }
 
 }

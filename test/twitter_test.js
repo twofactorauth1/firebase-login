@@ -73,6 +73,20 @@ module.exports.group = {
         });
     },
 
+    testPost: function(test) {
+        var self = this;
+
+        twitterDao.post(this.user, 'Hello world', function(err, value){
+            if (err) {
+                test.ok(false, "Error posting tweet.");
+                return test.done()
+            }
+            console.dir(value);
+            test.ok(true);
+            test.done();
+        });
+    },
+
 
     testGetTweetsForUser: function(test) {
         console.log("TESTING RETRIEVE TWEETS FOR USER");

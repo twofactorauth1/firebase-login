@@ -23,6 +23,7 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+            $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
 
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
@@ -157,6 +158,12 @@ define([
                 WebsiteService.getThemes(function(themes) {
                     $scope.themes = themes;
                     console.log('themes ', themes);
+                    for (var i = 0; i < themes.length; i++) {
+                        var comingSoonThemes = ['SAAS', 'Ethlete', 'Charity', 'Inventor', 'Real Estate', 'Health Care', 'Public Speaker', 'Fit Writer', 'Fit Tester II', 'FitTester', 'CopyWriter', 'Hair Stylist'];
+                        if (comingSoonThemes.indexOf(themes[i].name) > -1) {
+                            themes[i].coming_soon = true;
+                        }
+                    };
                     $scope.currentTheme = _.findWhere($scope.themes, {
                         _id: account.website.themeId
                     });
@@ -192,7 +199,8 @@ define([
                 if (!$scope.preferences.tasks.select_theme || $scope.preferences.tasks.select_theme == false) {
                     $scope.preferences.tasks.select_theme = true;
                     UserService.updateUserPreferences($scope.preferences, false, function() {
-                        toaster.pop('success', "You selected you first theme!");
+                        $scope.toasterOptions['position-class'] = 'toast-bottom-full-width';
+                        toaster.pop('success', "You selected you first theme!", '<div class="mb15"></div><a href="/admin#/website?onboarding=select-theme" class="btn btn-primary">Next Step: Select A Theme</a>', 0, 'trustedHtml');
                     });
                 };
 
