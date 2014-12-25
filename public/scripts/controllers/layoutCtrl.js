@@ -582,7 +582,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         window.activateAloha = function() {
             if($scope.activated == false) {
                 CKEDITOR.disableAutoInline = true; 
-                CKEDITOR.inline( 'editor1' ); 
+                // CKEDITOR.inline( 'editor1' ); 
+                // CKEDITOR.inline( 'editor2' ); 
+
+                var editables = $('.editable');
+                console.log('editable length ', editables.length);
+                for (var i = 0; i < editables.length; i++) {
+                    editables[i].id = 'edt'+i;
+                    var __editorName = editables[i].id;
+                    editables[i].setAttribute('contenteditable', true);
+                    CKEDITOR.inline(__editorName);
+                };
                 CKEDITOR.setReadOnly(false);
                 $scope.activated = true;
             }

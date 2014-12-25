@@ -47,7 +47,7 @@
                         </li>
                     </ul>
                     <div class="media">
-                        <div ng-repeat="asset in assets track by $index" class="col-xs-6 col-sm-4 {{asset.mimeType}}">
+                        <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
@@ -85,7 +85,8 @@
                                     </div>
                                 </div>
                                 <h5 class="fm-title">
-                                    <a href="">{{asset.filename}}</a>
+                                    <a href="" indigeweb-truncate truncate-list=" [asset.filename]"
+                                    truncate-limit=35 truncate-symbol="'...'" ></a>
                                 </h5>
                                 <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>
