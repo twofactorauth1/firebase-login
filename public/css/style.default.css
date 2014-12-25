@@ -23216,6 +23216,15 @@ div[data-type="feature-block"] .component-inner {
 .overlay-gallery-image:hover:before {
   opacity: 1;
 }
+.thumbnail .image {
+  width: 228px;
+  height: 228px;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
 .contenthover {
   padding: 20px 20px 10px 20px;
 }
@@ -24598,7 +24607,7 @@ div[data-type=single-post] .container {
   border-top: none!important;
   text-transform: none!important;
   color: #9E9E9E;
-  font-family: Georgia,serif;
+  font-family: Georgia, serif;
   font-size: 12px;
   font-style: italic;
   padding: 0 5px 7px 4px;
@@ -24623,6 +24632,7 @@ div[data-class="blog"] .single-blog {
 }
 .post_tags li {
   display: inline-block;
+  margin-bottom: 10px;
   background: #47b1cc;
   padding: 5px;
   margin-right: 10px;
@@ -24787,6 +24797,7 @@ div[data-type=blog] .container {
 .coming-soon-v1 .logo {
   margin: 0 auto 0;
   display: block;
+  max-width: 300px;
 }
 .coming-soon-v1 div[ng-transclude] {
   height: 100%;

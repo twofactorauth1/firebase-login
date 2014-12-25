@@ -61,7 +61,7 @@
 
                 <div class="feature-subtitle">
                     <div class="editable" data-class="features.item.subtitle" data-index="{{$index}}">
-                        <span ng-bind-html="feature.subtitle"></span>
+                        <span ng-bind-html="feature.subtitle | unsafe"></span>
                     </div>
                 </div>
 
