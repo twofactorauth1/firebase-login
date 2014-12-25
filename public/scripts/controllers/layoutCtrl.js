@@ -576,10 +576,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
              window.parent.deleteFeatureList(componentId,index);
         }
 
+        $scope.activated = false;
+
+
         window.activateAloha = function() {
-            $('.editable').aloha();
-            // aloha.dom.query('.editable', document).forEach(aloha);
-            // $('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
+            if($scope.activated == false) {
+                CKEDITOR.disableAutoInline = true; 
+                CKEDITOR.inline( 'editor1' ); 
+                CKEDITOR.setReadOnly(false);
+                $scope.activated = true;
+            }
         };
 
         window.deactivateAloha = function() {

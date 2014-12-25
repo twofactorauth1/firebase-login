@@ -3,7 +3,11 @@
         <div ng-include src="component.url"></div>
     </div>
 </div> -->
-<div ng-show="isEditing"></div>
+ <div data-sample="1" id="top">
+    <!-- This div will handle all toolbars. -->
+</div>
+<div ng-show="isEditing">
+</div>
 <ul ui-sortable="sortableOptions">
     <li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
         <div class="componentActions">
@@ -33,6 +37,7 @@
         </div>
     </li>
 </ul>
+
 
 <style>
     .zee-blur {
