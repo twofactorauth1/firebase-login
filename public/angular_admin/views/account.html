@@ -387,7 +387,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK].status">
-                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.FACEBOOK)">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.FACEBOOK)" confirm-click2>
                                         <span class="fa fa-trash-o"></span>Disconnect</button>
                                 </div>
                             </div>
@@ -433,7 +433,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.GOOGLE].status">
-                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.GOOGLE)">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.GOOGLE)" confirm-click2>
                                         <span class="fa fa-trash-o"></span>Disconnect</button>
                                 </div>
                             </div>
@@ -461,7 +461,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.LINKEDIN].status">
-                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.LINKEDIN)">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.LINKEDIN)" confirm-click2>
                                         <span class="fa fa-trash-o"></span>Disconnect</button>
                                 </div>
                             </div>
@@ -488,7 +488,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.TWITTER].status">
-                                    <button class="btn btn-danger btn-lg" role="button" ng-click="deleteSocialFn(credentialTypes.TWITTER)">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.TWITTER)" confirm-click2>
                                         <span class="fa fa-trash-o"></span>Disconnect</button>
                                 </div>
                             </div>
