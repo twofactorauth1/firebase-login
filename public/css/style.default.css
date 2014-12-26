@@ -20457,6 +20457,9 @@ div.error label.error:before {
   font-size: 55px;
   text-align: center;
 }
+.website .componentOption .thumbnail {
+  min-height: 135px;
+}
 .website .componentOption .thumbnail:hover {
   background: #dddddd;
 }
