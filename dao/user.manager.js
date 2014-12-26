@@ -9,6 +9,7 @@
 var dao = require('./user.dao');
 var accountDao = require('./account.dao');
 var cmsDao = require('../cms/dao/cms.dao');
+var cmsManager = require('../cms/cms_manager');
 var log = $$.g.getLogger("user.manager");
 var securityManager = require('../security/sm')(true);
 var contactDao = require('./contact.dao');
@@ -140,13 +141,13 @@ module.exports = {
                                 return fn(err, null);
                             }
                             log.debug('creating website for account');
-                            cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                            cmsManager.createWebsiteForAccount(accountId, 'admin', function(err, value){
                                 if(err) {
                                     log.error('Error creating website for account: ' + err);
                                     fn(err, null);
                                 } else {
                                     log.debug('creating default page');
-                                    cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
+                                    cmsManager.createDefaultPageForAccount(accountId, value.id(), function(err, value){
                                         if(err) {
                                             log.error('Error creating default page for account: ' + err);
                                             fn(err, null);

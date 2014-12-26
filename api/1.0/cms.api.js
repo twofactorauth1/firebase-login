@@ -390,8 +390,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.createPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
-                        cmsManager.updatePageScreenshot(pageId, function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        cmsManager.updatePageScreenshot(value.id(), function(err, value){
+                            if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
                             self = null;
                         });
                     });
