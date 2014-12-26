@@ -350,7 +350,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 var page = new Page(_page);
                 cmsDao.saveOrUpdate(page, function (err, value) {
                     self.sendResultOrError(resp, err, value, "Error saving website Page");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
         });
@@ -387,7 +390,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.createPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
-                        self = null;
+                        cmsManager.updatePageScreenshot(pageId, function(err, value){
+                            if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                            self = null;
+                        });
                     });
                 } else {
                     self.log.error('Cannot create null page.');
@@ -415,7 +421,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(res, err, value, "Error updating Page");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
         });
@@ -680,6 +689,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
                     self.log.debug('<< createWebsiteFromTheme');
                     self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
+                    cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
         });
@@ -796,7 +809,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< addComponentToPageID' + pageId);
                     self.log.debug('<< addComponentToPageComponent' + componentObj);
                     self.sendResultOrError(res, err, value, "Error adding components to page");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
 
@@ -823,7 +839,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updatePageComponent(pageId, componentObj, function (err, value) {
                     self.log.debug('<< updateComponent');
                     self.sendResultOrError(res, err, value, "Error updating a component on a page");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
         });
@@ -847,7 +866,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updateAllPageComponents(pageId, componentAry, function (err, value) {
                     self.log.debug('<< updateAllComponents');
                     self.sendResultOrError(res, err, value, "Error updating components");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
         });
@@ -872,7 +894,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteComponent(pageId, componentId, function (err, value) {
                     self.log.debug('<< deleteComponent');
                     self.sendResultOrError(res, err, value, "Error deleting component");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
                 });
             }
         });
@@ -898,7 +923,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function (err, value) {
                     self.log.debug('<< updateComponentOrder');
                     self.sendResultOrError(res, err, value, "Error deleting component");
-                    self = null;
+                    cmsManager.updatePageScreenshot(pageId, function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                        self = null;
+                    });
+
                 });
             }
         });

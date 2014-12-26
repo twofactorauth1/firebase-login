@@ -95,6 +95,11 @@ var page = $$.m.ModelBase.extend({
             components: [],
 
             /**
+             * Screenshot of the page.  Updated after an edit.
+             */
+            screenshot:null,
+
+            /**
              * Created by data
              *
              * @property created
