@@ -1,12 +1,16 @@
 $(document).ready(function () {
     $('.toggle-menu').jPushMenu();
-
+    var jPushMenu = {
+            close: function (o) {
+                $('.jPushMenuBtn,body,.cbp-spmenu').removeClass('disabled active cbp-spmenu-open cbp-spmenu-push-toleft cbp-spmenu-push-toright');
+            }
+        }
 	function openLeftMenu() {
 	    var body = $('body');
 	    var bodypos = body.css('position');
         body.removeClass('leftpanel-collapsed');
-            body.addClass('leftpanel-show');
-            storageutils.set("state_leftnav", "open", "session");
+        body.addClass('leftpanel-show');
+        storageutils.set("state_leftnav", "open", "session");
 	    // if (bodypos != 'relative') {
 	    //     body.removeClass('leftpanel-collapsed rightmenu-open');
 	    //     $('.nav-bracket li.active ul').css({
@@ -67,10 +71,11 @@ $(document).ready(function () {
 
                 if (!body.hasClass('rightmenu-open')) {
                     body.addClass('leftpanel-collapsed rightmenu-open');
+                    body.removeClass('leftpanel-show');
                     $('.nav-bracket ul').attr('style', '');
                 } else {
                     body.removeClass('rightmenu-open');
-
+                    jPushMenu.close();
                     // if (!$('.menutoggle').hasClass('menu-collapsed')) {
                     //     $('body').removeClass('leftpanel-collapsed').addClass('leftpanel-open');
                     //     $('.nav-bracket li.active ul').css({
