@@ -11,9 +11,15 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.credentialTypes = $$.constants.user.credential_types;
 
+            $scope.userSocial = {};
+
+            for (var key in $scope.credentialTypes) {
+                $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
+            }
+
             $scope.beginOnboarding = function(type) {
                 if (type == 'connect-social') {
-                    $scope.stepIndex = 0
+                    $scope.stepIndex = 0;
                     $scope.showOnboarding = true;
                     $scope.activeTab = 'integrations';
                     $scope.onboardingSteps = [{
@@ -36,8 +42,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 console.log('were finished');
             };
 
-            if ($location.$$search['onboarding']) {
-                $scope.beginOnboarding($location.$$search['onboarding']);
+            if ($location.$$search.onboarding) {
+                $scope.beginOnboarding($location.$$search.onboarding);
             }
 
             $scope.tabList = [{
@@ -66,7 +72,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.$watch('activeTab', function(newValue, oldValue) {
                 console.log('watch activeTab >> ', newValue);
                 if ($scope.userPreferences) {
-                    if (!$location.$$search['onboarding']) {
+                    if (!$location.$$search.onboarding) {
                         $scope.userPreferences.account_default_tab = newValue;
                     }
                     $scope.savePreferencesFn();
@@ -127,7 +133,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.deleteSocialFn = function(type) {
                 UserService.deleteUserSocial(type, function() {
-                    delete $scope.userSocial[type];
+                    $scope.userSocial[type].status = false;
                     ToasterService.show('warning', 'Social connection deleted.');
                 });
             };
@@ -173,7 +179,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if (!$location.$$search['onboarding']) {
+                if (!$location.$$search.onboarding) {
                     var activeTab = $scope.userPreferences.account_default_tab;
                     if (activeTab)
                         $scope.activeTab = activeTab;
@@ -183,7 +189,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             $scope.savePreferencesFn = function() {
-                UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {})
+                UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {});
             };
 
             $scope.updateDefaultTab = function(user) {
@@ -192,22 +198,16 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUser(function(user) {
                 $scope.user = user;
-                $scope.userSocialImage = {};
                 angular.forEach($scope.user.profilePhotos, function(value, index) {
-                    $scope.userSocialImage[value.type] = value.url;
+                    $scope.userSocial[value.type].image = value.url;
                 });
-                console.log('Social images ', $scope.userSocialImage);
             });
 
             UserService.getUserSocial(function(social) {
-                console.log('user social >>> ', social);
-                $scope.userSocial = {};
-                $scope.userSocialActive = {};
                 social.forEach(function(value, index) {
-                    $scope.userSocial[value.type] = value.username;
-                    $scope.userSocialActive[value.type] = true;
+                    $scope.userSocial[value.type].username = value.username;
+                    $scope.userSocial[value.type].status = true;
                 });
-                console.log('social auth usernames ', $scope.userSocial);
             });
         }
     ]);
