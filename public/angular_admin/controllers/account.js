@@ -1,4 +1,4 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'bootstrap-confirmation'], function(app) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants'], function(app) {
     app.register.controller('AccountCtrl', ['$scope', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService',
         function($scope, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
             ngProgress.start();
@@ -12,8 +12,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.credentialTypes = $$.constants.user.credential_types;
 
             $scope.userSocial = {};
-
-            $('.btn.btn-danger.btn-lg').confirmation();
 
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
