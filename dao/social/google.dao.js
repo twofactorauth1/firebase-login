@@ -29,6 +29,7 @@ var dao = {
     PROFILE_API_URL: "https://www.googleapis.com/oauth2/v1/userinfo",
     CONTACT_API_URL: "https://www.google.com/m8/feeds/contacts/",
     GROUPS_API_URL: "https://www.google.com/m8/feeds/groups/",
+    MOMENTS_API_URL: 'https://www.googleapis.com/plus/v1/people/',
 
 //region ACCESS TOKEN
     refreshAccessToken: function(user, fn) {
@@ -415,6 +416,60 @@ var dao = {
                 }
             })(_contacts, 1);
         });
+    },
+//---------------------------------------------------------
+//endregion
+//---------------------------------------------------------
+
+//region SHARE
+    shareLink: function(user, url, picture, name, caption, description, fn) {
+        //https://www.googleapis.com/plus/v1/people/userId/moments/collection
+        // me/moments/vault
+        var self = this;
+        self.log.debug('>> shareLink');
+        var accessToken = self._getAccessToken(user);
+        var postUrl = self.MOMENTS_API_URL + 'me/moments/vault?access_token=' + accessToken;
+        var payload = {
+            'type': 'http://schema.org/CreateAction',
+            target : {
+                'url':url,
+                'type' : 'http://schema.org/CreativeWork'//,
+                //'startDate': new Date()
+            }
+        };
+        if(picture) {
+            payload.target.image = picture;
+        }
+        if(name) {
+            payload.target.name = name;
+        }
+        if(caption) {
+            payload.target.caption = caption;
+        }
+        if(description) {
+            payload.target.description = description;
+        }
+        var options = {
+            url: postUrl,
+            headers : {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        };
+        self.log.debug('Sending the following: ', options);
+        request.post(options, function(err, response, body) {
+            if (!err) {
+                //self.log.debug('Got response: ', response);
+                self.log.debug('Body: ', body);
+                var list = JSON.parse(body);
+                self.log.debug('<< shareLink');
+                return fn(null, list);
+            } else {
+                self.log.error('Error sharing link', err);
+                return fn(err, response);
+            }
+        });
+
     },
 //---------------------------------------------------------
 //endregion
