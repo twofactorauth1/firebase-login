@@ -104,6 +104,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                 $scope.lastSelect = null;
                 $scope.isSingleSelect = true;
                 $scope.showType = "all";
+                $scope.editingImage = false;
                 $scope.select_all = false;
                 $scope.batch = [];
                 $scope.m = $scope.m || {};
