@@ -69,7 +69,7 @@
                                             <a href="#"><i class="fa fa-envelope-o"></i> Email</a>
                                         </li>
                                         <li>
-                                            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+                                            <a href="#" ng-click="m.editImage(asset)"><i class="fa fa-pencil"></i> Edit</a>
                                         </li>
                                         <li>
                                             <a href="{{asset.url}}" download><i class="fa fa-download"></i> Download</a>
@@ -98,18 +98,19 @@
                         <div id="all-warning-box"> No Media</div>
                     </div>
                 </div>
-                <div class="row editimage" ng-if="editingImage">
-                    <div class="col-xs-6">
-                        <img src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/woman-with-laptop-working-on-the-beach-place-for-text-s_1418778578148.jpg" class="img-responsive img-thumbnail">
+                <div class="editimage" ng-if="editingImage">
+                    <div class="col-xs-6 imgedit-wrap">
+                        <img src="{{singleAsset.url}}" class="img-responsive img-thumbnail">
                     </div>
                     <div class="col-xs-6">
                         Image Editing Buttons
                     </div>
                 </div>
+                <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
                 <div class="row" ng-if="editingImage">
-                    <button class="btn btn-primary"> <i class="fa fa-chevron-left"></i> Back</button>
+                    <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
                     <button>Restore</button>
                     <button>Save Image</button>
                 </div>

@@ -22318,6 +22318,9 @@ i.indi-sm {
   font-weight: normal;
   font-style: normal;
 }
+#media-manager-modal .imgedit-wrap {
+  padding: 25px;
+}
 #media-manager-modal .modal-body {
   padding: 0;
 }

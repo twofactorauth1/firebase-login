@@ -97,6 +97,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
         //get browser fingerprint
         var fingerprint = new Fingerprint().get();
+        var timezone = jstz.determine();
 
         //all the properties of the session
         sessionProperties = {
@@ -123,6 +124,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             fingerprint: fingerprint,
             session_start: start,
             session_length: 0,
+            timezone: timezone.name(),
             new_visitor: new_visitor,
             entrance: parsedEntranceUrl.attr("path")
         };

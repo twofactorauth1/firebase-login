@@ -13,7 +13,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
             controller: function ($scope, AssetsService,  $compile) {
                 var uploader, footerElement, headerElement, contentElement,mediaElement, mediaModalElement;
                 function resizeModal() {
-                    contentElement.css('height', $(window).height() - 30 + 'px');
+                    //contentElement.css('height', $(window).height() - 30 + 'px');
                     mediaElement.css( 'height', (contentElement.innerHeight() - ( footerElement.innerHeight() + headerElement.innerHeight() + 48)) + 'px');
 
                     var filterType = $('.filter-type');
@@ -241,6 +241,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                         }
                     }, 0)
                 };
+
                 $scope.m.toggleShiftKey = function (event){
                     $scope.isSingleSelect = !$scope.isSingleSelect;
                 };
@@ -270,6 +271,17 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter','con
                         }
                     });
                 };
+
+                $scope.m.editImage = function (asset){
+                    console.log('editing image ', asset);
+                    $scope.editingImage = true;
+                    $scope.singleAsset = asset;
+                };
+
+                $scope.m.goback = function (){
+                    $scope.editingImage = false;
+                };
+
                 $scope.m.onInsertMedia = function () {
                     if ($scope.batch.length > 0) {
                         $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
