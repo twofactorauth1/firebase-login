@@ -301,6 +301,7 @@ module.exports = function(grunt) {
             contextio:['test/contextio_test.js'],
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
+            google: ['test/google.dao_test.js'],
             linkedin: ['test/linkedin.dao_test.js'],
             payments: ['payments/tests/*_test.js'],
             paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
@@ -484,6 +485,7 @@ module.exports = function(grunt) {
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);
+    grunt.registerTask('testGoogle', ['nodeunit:google']);
     grunt.registerTask('testLinkedIn', ['nodeunit:linkedin']);
     grunt.registerTask('testTwitter', ['nodeunit:twitter']);
     grunt.registerTask('testContacts', ['nodeunit:contacts']);

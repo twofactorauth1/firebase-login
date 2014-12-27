@@ -294,6 +294,23 @@ module.exports = {
 
     },
 
+    createDefaultPageForAccount: function(accountId, websiteId, fn) {
+        var self = this;
+        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, page){
+            if(err) {
+                log.error('Error creating default page: ' + err);
+                return fn(err, null);
+            }
+            log.debug('creating page screenshot');
+            self.updatePageScreenshot(page.id(), fn);
+        });
+    },
+
+    createWebsiteForAccount: function(accountId, userId, fn) {
+        var self = this;
+        cmsDao.createWebsiteForAccount(accountId, userId, fn);
+    },
+
     _createBlogPost: function(accountId, blogPost, fn) {
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
@@ -1025,23 +1042,23 @@ module.exports = {
 
         cmsDao.getPageById(pageId, function(err, page){
             if(err) {
-                self.log.error('Error getting page: ' + err);
+                log.error('Error getting page: ' + err);
                 return fn(err, null);
             }
             var accountId = page.get('accountId');
             var pageHandle = page.get('handle');
             self.generateScreenshot(accountId, pageHandle, function(err, url){
                 if(err) {
-                    self.log.error('Error generating screenshot: ' + err);
+                    log.error('Error generating screenshot: ' + err);
                     return fn(err, null);
                 }
                 page.set('screenshot', url);
                 cmsDao.saveOrUpdate(page, function(err, savedPage){
                     if(err) {
-                        self.log.error('Error updating page: ' + err);
+                        log.error('Error updating page: ' + err);
                         return fn(err, null);
                     } else {
-                        self.log.debug('<< updatePageScreenshot');
+                        log.debug('<< updatePageScreenshot');
                         return fn(null, savedPage);
                     }
                 });

@@ -44,5 +44,13 @@ module.exports = {
         accessTokenSecret: "GCmfi7uflfFnpTvGMsL0stT4pSfnjDjQZbLaD0c8d9Rta",
         tokenScope: null,
         tokenExpires: null
+    },
+
+    google: {
+        "type" : "go",
+        "socialId" : "103698062613565282126",
+        "accessToken" : "ya29.6ADVbhmJitWATB7EPSGhNkhjhNZG1Nd7T1xhCobx1DPJ8OlyB-UPi3J3kjM7osmU-ys-IcKUzsqM1A",
+        "expires" : 1419631093464,
+        "scope" : "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/plus.login"
     }
 };
