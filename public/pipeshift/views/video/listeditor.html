@@ -22,7 +22,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <div class="dropdown col-sm-4">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" tooltip="Media Source">
                               <h3 class="panel-title"><span
-                                        class="fa fa-youtube-square"></span> Youtube <span class="caret"></span> 
+                                        class="fa fa-youtube-square"></span> Youtube <span class="caret"></span>
                             </h3>
                             </a>
                             <ul class="dropdown-menu" role="menu">
@@ -74,7 +74,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         </div>
 
                         <div class="panel-body" ng-style="styleMarketing()" resize>
-                            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort">
+                            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort" no-video-modal='showAddCourseModal'>
                             </div>
                         </div>
                     </div>
