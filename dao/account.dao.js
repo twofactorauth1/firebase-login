@@ -10,6 +10,7 @@ require('../models/account');
 var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
 
+
 var dao = {
 
     options: {
@@ -250,20 +251,26 @@ var dao = {
                                 self.log.error('Error removing courses for user: ' + err);
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
-
-                                $$.dao.UserDao.remove(user, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error deleting user: ' + err);
-                                    } else {
-                                        self.log.debug('Removed user: ' + user.id());
-                                    }
+                                var customerId = user.get('stripeId');
+                                $$.dao.StripeDao.deleteStripeCustomer(customerId, null, user.id(), function(err, value){
+                                    $$.dao.UserDao.remove(user, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error deleting user: ' + err);
+                                        } else {
+                                            self.log.debug('Removed user: ' + user.id());
+                                        }
+                                    });
                                 });
+
                             }
                         });
                     }
                 });
             }
         });
+
+
+
 
         //delete the account stuff here (websites, pages, posts, contacts, contactactivites, assets)
         var query = {'accountId': accountId};
