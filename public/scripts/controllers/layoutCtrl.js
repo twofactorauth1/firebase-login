@@ -593,7 +593,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
                     CKEDITOR.on( 'instanceReady', function( ev ) {
                          var editor = ev.editor;
-                         editor.setReadOnly( false );
+                         //editor.setReadOnly( false );
                     });
                 }
                 $scope.activated = true;

@@ -14,7 +14,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
                 function resizeModal() {
-                    //contentElement.css('height', $(window).height() - 30 + 'px');
+                    contentElement.css('height', $(window).height() - 30 + 'px');
                     mediaElement.css('height', (contentElement.innerHeight() - (footerElement.innerHeight() + headerElement.innerHeight() + 48)) + 'px');
 
                     var filterType = $('.filter-type');
@@ -31,7 +31,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     filters: [{
                         name: "SizeLimit",
                         fn: function(item) {
-                            console.log('item ', item);
                             switch (item.type.substring(0, item.type.indexOf('/'))) {
                                 case "image":
                                     console.log('image type');
@@ -63,10 +62,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     }
                 });
                 uploader.onSuccessItem = function(fileItem, response, status, headers) {
-                    console.log('success upload >>> ');
-                    console.log('fileItem >>> ', fileItem);
-                    console.log('response >>> ', response);
-                    console.log('response >>> ', response);
                     $scope.uploadComplete = false;
                     response.files[0].filename = fileItem.file.name;
                     response.files[0].mimeType = fileItem.file.type;
@@ -269,13 +264,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     });
                 };
 
-                // $scope.getContext = function(canvas) {
-                //     console.log('canvas ', canvas);
-                //     return canvas[0].getContext('2d');
-                // };
-
                 $scope.m.editImage = function(asset) {
-                    console.log('editing image ', asset);
                     $scope.editingImage = true;
                     $scope.singleAsset = asset;
                     var targetImage = $('.modal-content #targetEditImage');
@@ -286,9 +275,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     img.src = $("#originalSource").attr('src');
                     ctx.drawImage(img,10,20);
                     var imgData = JSON.parse(JSON.stringify(canvas.toDataURL("image/jpeg")));
-                    console.log('source ', targetImage.attr('src'));
                     targetImage.attr('src', imgData);
-                    console.log('source ', targetImage.attr('src'));
 
                     var dkrm = new Darkroom(targetImage, {
                         // Size options
@@ -312,14 +299,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                             //cropPlugin.requireFocus();
                         }
                     });
-                    console.log('dkrm ', dkrm);
 
                 };
-
-                $scope.m.rotateImage = function(direction) {
-                    console.log('rotate image');
-                };
-
 
                 $scope.m.goback = function() {
                     $scope.editingImage = false;
@@ -338,7 +319,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
             link: function(scope, element) {
                 scope.assets = [];
                 AssetsService.getAssetsByAccount(function(data) {
-                    console.log('asset service data ', data);
                     if (data instanceof Array) {
                         scope.assets = data;
                     }

@@ -759,6 +759,88 @@ module.exports = {
         var self = this;
         self.log = log;
 
+        page.attributes.components = [
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "navigation",
+                    "version" : 1,
+                    "visibility" : true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                },
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "feature-block",
+                    "version" : 1,
+                    "title" : "<h1>Feature Block Title</h1>",
+                    "subtitle" : "<h3>This is the feature block subtitle.</h3>",
+                    "text" : "<h5>The Feature Block component is great for a quick testimonial or a list of<br>features for a single product. It works great with an image background and parallax.</h5>",
+                    "txtcolor" : "#888888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/feature-block_1416870905848.jpg",
+                            "width" : 838,
+                            "height" : 470,
+                            "parallax" : true,
+                            "blur" : false,
+                            "overlay" : false,
+                            "show" : false
+                        },
+                        "color" : "#f7f7f7"
+                    },
+                    "btn" : {
+                        "text" : "                &lt;p&gt;Button Text&lt;/p&gt;            ",
+                        "url" : "#",
+                        "icon" : "fa fa-rocket"
+                    },
+                    "visibility" : true
+                },
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "footer",
+                    "version" : 1,
+                    "visibility": true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#fff",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                }
+
+            ];
+
 
         self.log.debug('>> createPage', page);
         cmsDao.saveOrUpdate(page, function(err, value){
