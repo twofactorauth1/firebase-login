@@ -581,10 +581,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         window.activateAloha = function() {
             if($scope.activated == false) {
-                CKEDITOR.disableAutoInline = true; 
-                CKEDITOR.inline( 'editor1' ); 
-                CKEDITOR.setReadOnly(false);
+                CKEDITOR.disableAutoInline = true;
+
+                var elements = $( '.editable' );
+                elements.each( function() {
+                    CKEDITOR.inline( this , {
+                        on: {
+                            instanceReady: function(ev) {
+                                var editor = ev.editor;
+                                editor.setReadOnly( false );
+                            }
+                        }
+                    });
+                });
+
                 $scope.activated = true;
+                //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
             }
         };
 

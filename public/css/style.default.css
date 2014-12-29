@@ -20457,6 +20457,9 @@ div.error label.error:before {
   font-size: 55px;
   text-align: center;
 }
+.website .componentOption .thumbnail {
+  min-height: 135px;
+}
 .website .componentOption .thumbnail:hover {
   background: #dddddd;
 }
@@ -22315,6 +22318,9 @@ i.indi-sm {
   font-weight: normal;
   font-style: normal;
 }
+#media-manager-modal .imgedit-wrap {
+  padding: 25px;
+}
 #media-manager-modal .modal-body {
   padding: 0;
 }
@@ -22547,9 +22553,6 @@ hr {
 }
 .add-component:hover a {
   color: #219265;
-}
-body.editing a {
-  pointer-events: none;
 }
 body.editing .no-component {
   display: block;
@@ -23664,7 +23667,7 @@ contenthover a {
 }
 .image-text-v1 .image-text-image img {
   margin: 25px auto;
-  min-width: 250px;
+  width: 100%;
 }
 #paradata span h4 {
   font-size: 22px;

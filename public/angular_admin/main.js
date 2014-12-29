@@ -68,6 +68,9 @@ require.config({
         'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
+        'fabric' : 'libs/darkroomjs/vendor/fabric',
+        'darkroom' : 'libs_misc/darkroomjs/darkroom.min',
+        'caman' : 'libs/caman/dist/caman',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -187,6 +190,7 @@ require.config({
         'leaflet-directive': {deps: ['leaflet', 'angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},
+        'darkroom': {deps: ['fabric']},
         'ngFileUpload': {deps: ['angular']},
         'angularStepper': {deps: ['angular']},
         'angularMoney': {deps: ['angular']},
