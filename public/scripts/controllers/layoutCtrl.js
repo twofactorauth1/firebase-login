@@ -402,11 +402,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /********** CMS RELATED **********/
         $scope.sharePost = function(post, type)
         {
+            var url = $location.$$absUrl;           
             var postData = {};
             switch(type) {
                 case "twitter":
                  postData = {
-                      status: post.post_status
+                      status: url
                     }
                 PostService.sharePostOnTwitter(postData, function(data) {
 
@@ -414,7 +415,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 break;
                 case "facebook":
                    postData = {
-                      url: post.post_url,
+                      url: url,
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
@@ -426,7 +427,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 break;
                 case "linked-in":
                  postData = {
-                      url: post.post_url,
+                      url: url,
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,

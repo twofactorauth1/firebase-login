@@ -95,7 +95,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The url of the image
              */
-            imgurl: "http://placehold.it/350x150",
+            imgurl: "",
 
             /**
              *
