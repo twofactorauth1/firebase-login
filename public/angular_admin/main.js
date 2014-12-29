@@ -69,7 +69,7 @@ require.config({
         'fingerprint': 'libs/fingerprint/fingerprint',
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
         'fabric' : 'libs/darkroomjs/vendor/fabric',
-        'darkroom' : 'libs_misc/darkroomjs/darkroom.min',
+        'darkroom' : 'libs/darkroomjs/build/js/darkroom.min',
 
         //application related
         'storageutils': 'utils/storageutils',
