@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective', 'fabric', 'darkroom', 'caman'], function(angularAMD) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective', 'fabric', 'darkroom'], function(angularAMD) {
     angularAMD.directive('mediaModal', ['FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService', function(FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
