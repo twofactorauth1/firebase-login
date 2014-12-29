@@ -407,7 +407,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             switch(type) {
                 case "twitter":
                  postData = {
-                      status: url;
+                      status: url
                     }
                 PostService.sharePostOnTwitter(postData, function(data) {
 
