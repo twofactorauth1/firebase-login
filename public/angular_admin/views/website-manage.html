@@ -57,17 +57,17 @@
                         </div>
                         <div class="panel-body">
                             <div ng-if="currentTheme">
-                                <div class="col-xs-6">
+                                <div class="col-sm-6">
                                     <img class="img-thumbnail" ng-src="{{currentTheme.previewUrl}}">
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-sm-6">
                                     <div class="caption">
                                         <h4>{{currentTheme.name}}</h4>
                                         <p><b>{{currentTheme.description}}</b>
                                         </p>
                                         <hr>
                                         <div class="mb30"></div>
-                                        <div class="col-xs-6">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="colorpicker">Color Primary:</label>
                                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primary_color" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
@@ -90,7 +90,7 @@
                                                 <img ng-if = "website.settings.favicon" class=" center pull-right" style="max-height:40px;max-width:40px" ng-src="{{ website.settings.favicon }}">
                                             </div>
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="colorpicker">Font Family Primary:</label>
                                                 <jd-fontselect on-open="editPage()" stack="primaryFontStack" on-change="updatePrimaryFont(font)" rawText="{ toggleOpenLabel: 'Mach uff!' }"></jd-fontselect>
