@@ -24679,7 +24679,6 @@ div[data-type=blog] .container {
   font-size: 28px;
 }
 #sidebar {
-  margin-top: 10px;
   padding: 20px;
 }
 #sidebar .fa {
@@ -24719,6 +24718,11 @@ div[data-type=blog] .container {
   display: block;
   height: 200px;
   max-width: 100%;
+}
+@media screen and (max-width: 640px) {
+  #sidebar {
+    background: #ffffff;
+  }
 }
 .pricing-tables-v1 .container {
   padding-top: 40px;
