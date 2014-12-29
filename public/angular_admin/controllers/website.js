@@ -47,22 +47,20 @@ define([
             // });
 
             if ($location.$$search['pagehandle']) {
-                console.log('page handle detected');
-                document.getElementById("iframe-website").setAttribute("src", '/page/'+$location.$$search['pagehandle']+'?editor=true');
+                document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
             }
 
             if ($location.$$search['posthandle']) {
-                document.getElementById("iframe-website").setAttribute("src", '/page/blog/'+$location.$$search['posthandle']+'?editor=true');
+                document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
             }
 
             if ($location.$$search['custid']) {
-                console.log('customerID detected');
                 current_src = document.getElementById("iframe-website").getAttribute("src");
-                document.getElementById("iframe-website").setAttribute("src", current_src +'&custid='+$location.$$search['custid']);
+                document.getElementById("iframe-website").setAttribute("src", current_src + '&custid=' + $location.$$search['custid']);
             }
 
             NavigationService.updateNavigation();
-                $scope.$back = function() {
+            $scope.$back = function() {
                 window.history.back();
             };
 
@@ -135,7 +133,7 @@ define([
             }
 
             window.checkIfSinglePost = function(post) {
-                if(post)
+                if (post)
                     $scope.singlePost = true;
             }
 
@@ -145,20 +143,19 @@ define([
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 $scope.bindEvents();
                 // to do need to check when iframe content is loaded properly
-                if($scope.isEditing)
-                {
-                  if($("#iframe-website").contents().find("body").length) {
+                if ($scope.isEditing) {
+                    if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
-                           $scope.editPage();
+                            $scope.editPage();
                         }, 5000)
-                     }
-                }               
-                
+                    }
+                }
+
             }
 
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
-                if(!iframe)
+                if (!iframe)
                     return;
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
@@ -176,7 +173,7 @@ define([
 
                     for (var i = 0; i < images.length; i++) {
                         if (typeof images[i].addEventListener != "undefined") {
-                            images[i].removeEventListener("click", function(e){},false);
+                            images[i].removeEventListener("click", function(e) {}, false);
                             images[i].addEventListener("click", function(e) {
                                 $("#media-manager-modal").modal('show');
                                 $scope.imageChange = true;
@@ -195,7 +192,7 @@ define([
                     var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].removeEventListener("click",function(e){},false);
+                            settingsBtns[i].removeEventListener("click", function(e) {}, false);
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                                 var element = angular.element('#component-setting-modal');
@@ -211,7 +208,7 @@ define([
                     var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
                     for (var i = 0; i < addComponentBtns.length; i++) {
                         if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].removeEventListener("click",function(e){},false);
+                            addComponentBtns[i].removeEventListener("click", function(e) {}, false);
                             addComponentBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
                                 var element = angular.element('#add-component-modal');
@@ -239,16 +236,15 @@ define([
                     }, false);
                 };
 
-               
-                    if (iframeDoc.getElementById('body')) {
-                       elementBindingFn();
-                    }
+
+                if (iframeDoc.getElementById('body')) {
+                    elementBindingFn();
+                }
             };
 
             UserService.getAccount(function(account) {
                 $scope.account = account;
                 that.account = account;
-                console.log('account ', account);
                 //get pages and find this page
                 WebsiteService.getPages(account.website.websiteId, function(pages) {
                     //TODO should be dynamic based on the history
@@ -263,11 +259,10 @@ define([
                     $scope.allPages = arr;
 
                     $scope.currentPage = _.findWhere(pages, {
-                            handle: currentPage
-                        });
+                        handle: currentPage
+                    });
 
                     if ($scope.editingPageId) {
-                        console.log('pageId >>> ', $scope.editingPageId);
                         $scope.currentPage = _.findWhere(pages, {
                             _id: $scope.editingPageId
                         });
@@ -279,7 +274,6 @@ define([
                         // console.log('$scope.currentPage >>> ', $scope.currentPage);
                         // $scope.resfeshIframe();
                     } else {
-                        console.log('current');
                         $scope.currentPage = _.findWhere(pages, {
                             handle: currentPage
                         });
@@ -393,124 +387,113 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                var iFrame = document.getElementById("iframe-website"); 
-                if($location.$$search['posthandle'])
-                {
+                var iFrame = document.getElementById("iframe-website");
+                if ($location.$$search['posthandle']) {
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = false;
-                }
-                else
-                {
+                } else {
                     var componentJSON = $scope.currentPage.components;
                     var pageId = $scope.currentPage._id;
-                    
+
                     var componentIdArr = [];
 
-                        //foreach components by class .component
-                        var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
-                        for (var i = 0; i < editedPageComponents.length; i++) {
-                            var componentId = editedPageComponents[i].attributes['data-id'].value;
-                            componentIdArr.push(componentId);
-                            var componentType = editedPageComponents[i].attributes['data-type'].value;
-                            var matchingComponent = _.findWhere($scope.currentPage.components, {
-                                _id: componentId
-                            });
+                    //foreach components by class .component
+                    var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+                    for (var i = 0; i < editedPageComponents.length; i++) {
+                        var componentId = editedPageComponents[i].attributes['data-id'].value;
+                        componentIdArr.push(componentId);
+                        var componentType = editedPageComponents[i].attributes['data-type'].value;
+                        var matchingComponent = _.findWhere($scope.currentPage.components, {
+                            _id: componentId
+                        });
 
-                            //get all the editable variables and replace the ones in view with variables in DB
-                            var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
-                            console.log('length ', componentEditable.length);
-                            if (componentEditable.length >= 1) {
-                                for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                                    var componentVar = componentEditable[i2].attributes['data-class'].value;
-                                    var componentVarContents = componentEditable[i2].innerHTML;
-                                    console.log('componentVar ', componentVar);
-                                    console.log('componentVarContents ', componentVarContents);
+                        //get all the editable variables and replace the ones in view with variables in DB
+                        var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
+                        if (componentEditable.length >= 1) {
+                            for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                                var componentVar = componentEditable[i2].attributes['data-class'].value;
+                                var componentVarContents = componentEditable[i2].innerHTML;
 
-                                    //if innerhtml contains a span with the class ng-binding then remove it
-                                    var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
-                                    console.log('span ', span);
+                                //if innerhtml contains a span with the class ng-binding then remove it
+                                var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
 
-                                    if (span) {
-                                        var spanParent = span.parentNode;
-                                        var spanInner = span.innerHTML;
-                                        console.log('spanParent.classList >>> ', spanParent.classList);
-                                        if (spanParent.classList.contains('editable')) {
-                                            componentVarContents = spanInner;
-                                        } else {
-                                            spanParent.innerHTML = spanInner;
-                                            componentVarContents = spanParent.parentNode.innerHTML;
-                                        }
-                                    }
-                                    //remove "/n"
-                                    componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
-                                    console.log('componentVarContents ', componentVarContents);
-
-                                    var setterKey, pa;
-                                    //if contains an array of variables
-                                    if (componentVar.indexOf('.item') > 0) {
-                                        //get index in array
-                                        var first = componentVar.split(".")[0];
-                                        var second = componentEditable[i2].attributes['data-index'].value;
-                                        var third = componentVar.split(".")[2];
-                                        matchingComponent[first][second][third] = componentVarContents;
-                                    }
-                                    //if needs to traverse a single
-                                    if (componentVar.indexOf('-') > 0) {
-                                        var first = componentVar.split("-")[0];
-                                        var second = componentVar.split("-")[1];
-                                        matchingComponent[first][second] = componentVarContents;
-                                    }
-                                    //simple
-                                    if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                        matchingComponent[componentVar] = componentVarContents;
+                                if (span) {
+                                    var spanParent = span.parentNode;
+                                    var spanInner = span.innerHTML;
+                                    if (spanParent.classList.contains('editable')) {
+                                        componentVarContents = spanInner;
+                                    } else {
+                                        spanParent.innerHTML = spanInner;
+                                        componentVarContents = spanParent.parentNode.innerHTML;
                                     }
                                 }
+                                //remove "/n"
+                                componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                                var setterKey, pa;
+                                //if contains an array of variables
+                                if (componentVar.indexOf('.item') > 0) {
+                                    //get index in array
+                                    var first = componentVar.split(".")[0];
+                                    var second = componentEditable[i2].attributes['data-index'].value;
+                                    var third = componentVar.split(".")[2];
+                                    matchingComponent[first][second][third] = componentVarContents;
+                                }
+                                //if needs to traverse a single
+                                if (componentVar.indexOf('-') > 0) {
+                                    var first = componentVar.split("-")[0];
+                                    var second = componentVar.split("-")[1];
+                                    matchingComponent[first][second] = componentVarContents;
+                                }
+                                //simple
+                                if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                    matchingComponent[componentVar] = componentVarContents;
+                                }
                             }
-                            $scope.backup = {};
-                         };
+                        }
+                        $scope.backup = {};
+                    };
 
-                        //sort the components in currentPage to match iframe
+                    //sort the components in currentPage to match iframe
 
-                        var newComponentOrder = [];
+                    var newComponentOrder = [];
 
-                        for (var i = 0; i < componentIdArr.length; i++) {
-                            var matchedComponent = _.findWhere($scope.currentPage.components, {
-                                _id: componentIdArr[i]
-                            });
-                            newComponentOrder.push(matchedComponent);
-                        };
-
-
-                        $scope.currentPage.components = newComponentOrder;
-
-
-
-                        WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                            $scope.isEditing = false;
-                            //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
-                            //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
-                            //document.getElementById('iframe-website').contentWindow.location.reload(true);
-                            iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-                            //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+                    for (var i = 0; i < componentIdArr.length; i++) {
+                        var matchedComponent = _.findWhere($scope.currentPage.components, {
+                            _id: componentIdArr[i]
                         });
-                        //$scope.deactivateAloha();
-                        var data = {
-                            _id: $scope.website._id,
-                            accountId: $scope.website.accountId,
-                            settings: $scope.website.settings
-                        };
-                        //website service - save page data
-                        WebsiteService.updateWebsite(data, function(data) {
-                            console.log('updated website settings', data);
-                        }); 
-                }                
+                        newComponentOrder.push(matchedComponent);
+                    };
+
+
+                    $scope.currentPage.components = newComponentOrder;
+
+
+
+                    WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
+                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        $scope.isEditing = false;
+                        //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
+                        //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
+                        //document.getElementById('iframe-website').contentWindow.location.reload(true);
+                        iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
+                        //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+                    });
+                    //$scope.deactivateAloha();
+                    var data = {
+                        _id: $scope.website._id,
+                        accountId: $scope.website.accountId,
+                        settings: $scope.website.settings
+                    };
+                    //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                        console.log('updated website settings', data);
+                    });
+                }
             };
 
             $scope.updatePage = function(handle, editing) {
-                console.log('update page');
-                if(!angular.isDefined(editing))
+                if (!angular.isDefined(editing))
                     $scope.isEditing = false;
 
                 $scope.pageSelected = handle || 'index';
@@ -518,23 +501,21 @@ define([
                 var sPage = $scope.pageSelected;
                 if (sPage === 'index') {
                     route = '';
-                }
-                else {
+                } else {
                     route = '/page/' + sPage;
                 }
-                
+
                 if ($location.$$search['posthandle']) {
-					route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';                	
-            	}
+                    route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
+                }
 
 
 
                 //TODO - replace with sending route through scope to update without iframe refresh
                 document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 if ($location.$$search['custid']) {
-                    console.log('customerID detected');
                     current_src = document.getElementById("iframe-website").getAttribute("src");
-                    document.getElementById("iframe-website").setAttribute("src", current_src +'&custid='+$location.$$search['custid']);
+                    document.getElementById("iframe-website").setAttribute("src", current_src + '&custid=' + $location.$$search['custid']);
                 }
                 WebsiteService.getPages($scope.account.website.websiteId, function(pages) {
                     var currentPage = $scope.pageSelected;
@@ -563,125 +544,115 @@ define([
                     that.originalCurrentPageComponents = localPage.components;
                 });
             };
-            window.deleteTeamMember = function(componentId, index)
-            {
+            window.deleteTeamMember = function(componentId, index) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                $scope.componentEditing.teamMembers.splice(index, 1);                    
+                $scope.componentEditing.teamMembers.splice(index, 1);
                 $scope.saveCustomComponent();
             }
-            window.updateSocialNetworks = function(old_value,mode,new_value)
-            {
-               var selectedName;
-               switch(mode) {
-                case "add":
-                if (new_value && new_value.name && new_value.url) {                    
-                    $scope.componentEditing.networks.push({
-                        name: new_value.name,
-                        url: new_value.url,
-                        icon: new_value.icon
-                    });
-                    $scope.saveCustomComponent();
+            window.updateSocialNetworks = function(old_value, mode, new_value) {
+                var selectedName;
+                switch (mode) {
+                    case "add":
+                        if (new_value && new_value.name && new_value.url) {
+                            $scope.componentEditing.networks.push({
+                                name: new_value.name,
+                                url: new_value.url,
+                                icon: new_value.icon
+                            });
+                            $scope.saveCustomComponent();
+                        }
+                        break;
+                    case "update":
+                        if (new_value && new_value.name && new_value.url) {
+                            selectedName = _.findWhere($scope.componentEditing.networks, {
+                                name: old_value.name
+                            });
+                            selectedName.name = new_value.name;
+                            selectedName.url = new_value.url;
+                            selectedName.icon = new_value.icon;
+                            $scope.saveCustomComponent();
+                        }
+                        break;
+                    case "delete":
+                        selectedName = _.findWhere($scope.componentEditing.networks, {
+                            name: old_value.name
+                        });
+                        if (selectedName) {
+                            var index = $scope.componentEditing.networks.indexOf(selectedName)
+                            $scope.componentEditing.networks.splice(index, 1);
+                            $scope.saveCustomComponent();
+                        }
+                        break;
                 }
-                break;
-                case "update":
-                if (new_value && new_value.name && new_value.url) {                   
-                    selectedName = _.findWhere($scope.componentEditing.networks, {
-                         name: old_value.name
-                    });
-                    selectedName.name = new_value.name;
-                    selectedName.url = new_value.url;
-                    selectedName.icon = new_value.icon;
-                    $scope.saveCustomComponent();
-                }
-                break;
-                case "delete":
-                    selectedName = _.findWhere($scope.componentEditing.networks, {
-                         name: old_value.name
-                    });
-                    if(selectedName)
-                    {
-                        var index = $scope.componentEditing.networks.indexOf(selectedName)
-                        $scope.componentEditing.networks.splice(index, 1);                        
-                        $scope.saveCustomComponent();
-                    }                    
-                break;
-                }
-                
+
             }
 
-            window.getSocialNetworks = function(componentId)
-            {
-               $scope.componentEditing = _.findWhere($scope.components, {
-                        _id: componentId
+            window.getSocialNetworks = function(componentId) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
                 });
-               return $scope.componentEditing.networks;
+                return $scope.componentEditing.networks;
             }
 
-            $scope.addTeamMember = function(team){
+            $scope.addTeamMember = function(team) {
                 if (team && team.name) {
                     $scope.componentEditing.teamMembers.push({
                         name: team.name,
                         position: team.position,
                         bio: team.bio,
-                        profilepic : team.profilepic
+                        profilepic: team.profilepic
                     });
                     $scope.saveComponent();
                 }
             }
 
-            window.setPostImage = function(componentId)
-            {
+            window.setPostImage = function(componentId) {
                 $scope.postImage = true;
                 $("#media-manager-modal").modal('show');
-                $(".insert-image").removeClass("ng-hide");                
+                $(".insert-image").removeClass("ng-hide");
             }
-            window.changeProfilePhoto = function(componentId,customer)
-            {
+            window.changeProfilePhoto = function(componentId, customer) {
                 $scope.profilepic = true;
                 $scope.customerAccount = customer;
                 $("#media-manager-modal").modal('show');
-                $(".insert-image").removeClass("ng-hide");                
+                $(".insert-image").removeClass("ng-hide");
             }
-            window.getPostImageUrl = function()
-            {
-                return $scope.postImageUrl;             
+            window.getPostImageUrl = function() {
+                return $scope.postImageUrl;
             }
 
-            $scope.addFeatureList = function(feature){
+            $scope.addFeatureList = function(feature) {
                 if (feature && feature.title) {
                     if (!$scope.featureIcon) {
-                            $scope.featureIcon = {};
-                            $scope.featureIcon.icon = 'fa-credit-card';
-                       }
+                        $scope.featureIcon = {};
+                        $scope.featureIcon.icon = 'fa-credit-card';
+                    }
                     $scope.componentEditing.features.push({
                         title: feature.title,
                         subtitle: feature.subtitle,
-                        icon : 'fa ' + $scope.featureIcon.icon
+                        icon: 'fa ' + $scope.featureIcon.icon
                     });
                     $scope.saveComponent();
                 }
             }
 
-            window.deleteFeatureList = function(componentId, index)
-            {
+            window.deleteFeatureList = function(componentId, index) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                $scope.componentEditing.features.splice(index, 1);                    
+                $scope.componentEditing.features.splice(index, 1);
                 $scope.saveCustomComponent();
             }
 
             $scope.addComponent = function() {
                 var pageId = $scope.currentPage._id;
-                if($scope.selectedComponent.type === 'footer')
-                {
+                if ($scope.selectedComponent.type === 'footer') {
                     var footerType = _.findWhere($scope.currentPage.components, {
                         type: $scope.selectedComponent.type
                     });
-                    if(footerType)
-                    {
+                    if (footerType) {
                         toaster.pop('error', "Footer component already exists");
                         return;
                     }
@@ -708,7 +679,7 @@ define([
                         $scope.updateIframeComponents();
                         $scope.bindEvents();
 
-                        $scope.deactivateAloha();
+                        // $scope.deactivateAloha();
                         $scope.activateAloha();
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
@@ -720,7 +691,7 @@ define([
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
-                    // $scope.resfeshIframe();
+                    $scope.resfeshIframe();
                     for (var i = 0; i < $scope.components.length; i++) {
                         if ($scope.components[i]._id == componentId) {
                             deletedType = $scope.components[i].type;
@@ -731,7 +702,7 @@ define([
                     $scope.updateIframeComponents();
                     $scope.componentEditing = null;
                     $(".modal-backdrop").remove();
-                    //toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                    toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };
 
@@ -761,7 +732,6 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
-                console.log('editComponent >>> ');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -782,26 +752,26 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
-                    if($scope.componentEditing.version)
+                    if ($scope.componentEditing.version)
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
                     $scope.versionSelected = $scope.componentEditing.version;
                 });
                 $('#feature-convert').iconpicker({
-                            iconset: 'fontawesome',
-                            icon: 'fa-credit-card',
-                            rows: 5,
-                            cols: 5,
-                            placement: 'right',
-                        });
+                    iconset: 'fontawesome',
+                    icon: 'fa-credit-card',
+                    rows: 5,
+                    cols: 5,
+                    placement: 'right',
+                });
 
-                    $('#feature-convert').on('change', function(e) {
-                        if (!$scope.featureIcon) {
-                            $scope.featureIcon = {};
-                           }
-                        if ($scope.featureIcon) {
-                            $scope.featureIcon.icon = e.icon;
-                        }
-                    });
+                $('#feature-convert').on('change', function(e) {
+                    if (!$scope.featureIcon) {
+                        $scope.featureIcon = {};
+                    }
+                    if ($scope.featureIcon) {
+                        $scope.featureIcon.icon = e.icon;
+                    }
+                });
             };
 
             $scope.saveComponent = function() {
@@ -836,7 +806,7 @@ define([
                         $scope.components[i] = $scope.componentEditing
                     }
                 }
-                $scope.currentPage.components = $scope.components;                
+                $scope.currentPage.components = $scope.components;
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, $scope.componentEditing.networks);
 
             };
@@ -972,25 +942,22 @@ define([
                 type: 'social-link',
                 icon: 'custom social-links',
                 enabled: true
-            },
-            {
+            }, {
                 title: 'Text Only',
                 type: 'text-only',
                 icon: 'fa fa-file-text',
                 enabled: true
-            },
-            {
+            }, {
                 title: 'Thumbnail Slider',
                 type: 'text-only',
                 icon: 'fa fa-like',
                 enabled: true
-            },
-            {
+            }, {
                 title: 'Customer Account',
                 type: 'customer-account',
                 icon: 'fa fa-user',
                 enabled: true
-            } ];
+            }];
 
             $scope.selectComponent = function(type) {
                 if (type.enabled) {
@@ -999,14 +966,12 @@ define([
             };
 
             $scope.insertMedia = function(asset) {
-                if($scope.componentEditing && $scope.componentEditing.type == "meet-team")
-                {
-                    if(!$scope.team)
-                    {
+                if ($scope.componentEditing && $scope.componentEditing.type == "meet-team") {
+                    if (!$scope.team) {
                         $scope.team = {}
                     }
                     $scope.team.profilepic = asset.url;
-                 return;
+                    return;
                 }
                 if ($scope.imageChange) {
                     $scope.imageChange = false;
@@ -1023,21 +988,16 @@ define([
                         console.log('unknown component or image location');
                     }
                     $scope.bindEvents();
-                }
-                else if($scope.postImage && !$scope.componentEditing)
-                {
+                } else if ($scope.postImage && !$scope.componentEditing) {
                     $scope.postImage = false;
                     $scope.postImageUrl = asset.url;
                     toaster.pop('success', "Post Image added successfully");
                     return;
-                }
-                else if($scope.profilepic && !$scope.componentEditing)
-                {
+                } else if ($scope.profilepic && !$scope.componentEditing) {
                     $scope.profilepic = false;
                     $scope.customerAccount.photo = asset.url;
                     return;
-                }
-                else {
+                } else {
                     $scope.componentEditing.bg.img.url = asset.url;
                 }
                 $scope.updateIframeComponents();
@@ -1093,7 +1053,6 @@ define([
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                    console.log('updated website navigation link list', data);
                                     toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }

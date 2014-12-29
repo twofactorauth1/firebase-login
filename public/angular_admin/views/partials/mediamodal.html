@@ -14,7 +14,7 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <div class="row filemanager {{showType}}">
+                <div class="row filemanager {{showType}}" ng-if="!editingImage">
                     <ul class="filemanager-options">
                         <li class="checked">
                             <div class="ckbox ckbox-default">
@@ -46,8 +46,8 @@
                             <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
                         </li>
                     </ul>
-                    <div class="media">
-                        <div ng-repeat="asset in assets track by $index" class="col-xs-6 col-sm-4 {{asset.mimeType}}">
+                    <div class="media" id="assets" style="height:{{bodyHeight}};">
+                        <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
@@ -68,11 +68,11 @@
                                         <li class="hidden">
                                             <a href="#"><i class="fa fa-envelope-o"></i> Email</a>
                                         </li>
-                                        <li class="hidden">
-                                            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+                                        <li>
+                                            <a href="#" ng-click="m.editImage(asset)"><i class="fa fa-pencil"></i> Edit</a>
                                         </li>
-                                        <li class="hidden">
-                                            <a href="#"><i class="fa fa-download"></i> Download</a>
+                                        <li>
+                                            <a href="{{asset.url}}" download><i class="fa fa-download"></i> Download</a>
                                         </li>
                                         <li>
                                             <a href="" ng-click="m.deleteAsset(asset._id)"><i class="fa fa-trash-o"></i> Delete</a>
@@ -85,7 +85,8 @@
                                     </div>
                                 </div>
                                 <h5 class="fm-title">
-                                    <a href="">{{asset.filename}}</a>
+                                    <a href="" indigeweb-truncate truncate-list=" [asset.filename]"
+                                    truncate-limit=35 truncate-symbol="'...'" ></a>
                                 </h5>
                                 <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>
@@ -97,9 +98,24 @@
                         <div id="all-warning-box"> No Media</div>
                     </div>
                 </div>
+                <div class="editimage" ng-if="editingImage" style="height:{{bodyHeight}};">
+                    <div class="col-xs-6 imgedit-wrap">
+                        <img ng-src="{{singleAsset.url}}" class="img-responsive img-thumbnail" id="targetEditImage">
+                        <!-- <img ng-src="{{singleAsset.url}}" id="originalSource" class="hidden"> -->
+                    </div>
+                    <div class="col-xs-6">
+                        Image Editing Buttons
+                    </div>
+                </div>
+                <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
-                <div class="row">
+                <div class="row" ng-if="editingImage">
+                    <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
+                    <button class="btn btn-primary"><i class="fa fa-history"></i> Restore</button>
+                    <button class="btn btn-primary"><i class="fa fa-save"></i> Save Image</button>
+                </div>
+                <div class="row" ng-if="!editingImage">
                     <div class="col-md-offset-8 col-md-4">
                         <label for="upload_image" class="btn btn-primary"> Upload File
                             <input type="file"

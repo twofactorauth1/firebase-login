@@ -131,7 +131,6 @@ define([
                 this.account = account;
                 //get pages and find this page
                 WebsiteService.getPages(account.website.websiteId, function(pages) {
-                    console.log('pages ', pages);
                     var _pages =[];
                     for( var i in pages ) {
                         if (pages.hasOwnProperty(i)){
@@ -146,18 +145,15 @@ define([
 
                 UserService.getUserPreferences(function(preferences) {
                     $scope.preferences = preferences;
-                    console.log('preferences ', preferences);
                     // UserService.updateUserPreferences(preferences, false, function() {});
                 });
 
                 WebsiteService.getPosts(function(posts) {
-                    console.log('posts ', posts);
                     $scope.posts = posts;
                 });
 
                 WebsiteService.getThemes(function(themes) {
                     $scope.themes = themes;
-                    console.log('themes ', themes);
                     for (var i = 0; i < themes.length; i++) {
                         var comingSoonThemes = ['SAAS', 'Ethlete', 'Charity', 'Inventor', 'Real Estate', 'Health Care', 'Public Speaker', 'Fit Writer', 'Fit Tester II', 'FitTester', 'CopyWriter', 'Hair Stylist'];
                         if (comingSoonThemes.indexOf(themes[i].name) > -1) {
@@ -228,7 +224,6 @@ define([
             $scope.createPageValidated = false;
 
             $scope.validateCreatePage = function(page) {
-                console.log('page ', page);
                 if (page.handle == '') {
                     $scope.handleError = true
                 } else {
@@ -239,10 +234,7 @@ define([
                 } else {
                     $scope.titleError = false
                 }
-                console.log('$scope.titleError ', $scope.titleError);
-                console.log('$scope.handleError  ', $scope.handleError);
                 if (page && page.title && page.title != '' && page.handle && page.handle != '') {
-                    console.log('page validated');
                     $scope.createPageValidated = true;
                 }
             };
@@ -285,9 +277,7 @@ define([
             };
 
             $scope.createPost = function(postData) {
-                console.log('$scope.blogId ', $scope.blogId);
                 WebsiteService.createPost($scope.blogId, postData, function(data) {
-                    console.log('successfully created post ', data);
                     toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                     $('#create-post-modal').modal('hide');
                     $scope.posts.push(data);
