@@ -33,9 +33,20 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                         }]
                     };
                     keenService.singleExtraction(keenParams, function(data) {
-                        $scope.ip_geo_address = _.filter([data.ip_geo_info.city, data.ip_geo_info.province, data.ip_geo_info.country, data.ip_geo_info.continent, data.ip_geo_info.postal_code], function(str) {
+                        var keepGoing =  true;
+                       data.result.forEach(function(value, index) {
+                        if (keepGoing && value.ip_geo_info && value.ip_geo_info.country) {
+                            $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.country, value.ip_geo_info.continent, value.ip_geo_info.postal_code], function(str) {
                             return (str !== "" || str !== undefined || str !== null);
-                        }).join(",");
+                            }).join(",");
+                            keepGoing = false;
+                        } else if (keepGoing && value.ip_geo_info_gen && value.ip_geo_info_gen.country){
+                            $scope.ip_geo_address = _.filter([value.ip_geo_info_gen.city, value.ip_geo_info_gen.province, value.ip_geo_info_gen.country, value.ip_geo_info_gen.continent, value.ip_geo_info_gen.postal_code], function(str) {
+                            return (str !== "" || str !== undefined || str !== null);
+                         }).join(",");
+                            keepGoing = false;
+                        }
+                       });
 
                         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
                             if (data.error === undefined) {

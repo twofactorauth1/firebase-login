@@ -8,7 +8,8 @@
                 addVideo: '=',
                 removeVideo: '=',
                 ngDisabled: '=',
-                videoSort: '='
+                videoSort: '=',
+                noVideoModal: '='
             },
             templateUrl: "/pipeshift/views/video/course.html",
             controller: function ($scope) {
@@ -26,11 +27,18 @@
                         return false;
                     }
                 });
+
+                scope.$watch('videos', function(newValue, oldValue) {
+                    if (newValue!==undefined && newValue.length===0) {
+                        scope.noVideoModal();
+                    }
+                });
+
                 elm.bind("drop", function (event) {
                     if (!scope.ngDisabled) {
                         event.preventDefault();
                         if (scope.to != null) {
-                           
+
                             var videoIndex = event.originalEvent.dataTransfer.getData("videoIndex");
                             if (videoIndex != null && videoIndex != "") {
                                 var video = scope.from[videoIndex];

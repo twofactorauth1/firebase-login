@@ -412,6 +412,57 @@ var dao = {
     },
 
 
+    //region share
+    shareLink: function(user, url, picture, name, comment, description, fn) {
+        var self = this;
+        self.log.debug('>> shareLink');
+        var path = '~/shares';
+        var accessToken = self._getAccessToken(user);
+        var urlOptions = {
+            share: {
+                content: { },
+                visibility: {
+                    code: 'anyone'
+                }
+            }
+        };
+
+        if(comment && comment.length > 0) {
+            urlOptions.share.comment = comment;
+        }
+        if(name && name.length > 0) {
+            urlOptions.share.content.title = name;
+        }
+        if(description && description.length > 0) {
+            urlOptions.share.content.description = description;
+        }
+        if(url && url.length > 0) {
+            urlOptions.share.content.submittedUrl = url;
+        }
+        if(picture && picture.length > 0) {
+            urlOptions.share.content.submittedImageUrl = picture;
+        }
+        var options = {
+            url: self._generateUrl(path, accessToken),
+            headers: {
+                'Content-type': 'application/json',
+                'x-li-format': 'json'
+            },
+            body: JSON.stringify(urlOptions.share)
+        };
+        request.post(options, function(err, response, body){
+            if (!err) {
+                var list = JSON.parse(body);
+                self.log.debug('<< shareLink');
+                return fn(null, list);
+            } else {
+                self.log.error('Error sharing link', err);
+                return fn(err, response);
+            }
+        });
+
+    },
+
     _getAccessToken: function(user) {
         var credentials = user.getCredentials($$.constants.user.credential_types.LINKEDIN);
         if (credentials == null) {

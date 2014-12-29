@@ -114,6 +114,7 @@
                     </div>
                     <div class="themes">
                         <div class="col-sm-4 theme" ng-class="{success: theme.name == currentTheme.name, selected: theme.name == selectedTheme.name}" ng-repeat="theme in themes">
+                        <div class="ribbon-wrapper-green" ng-if="theme.coming_soon == true"><div class="ribbon-green">COMING SOON</div></div>
                             <div class="thumbnail" data-themeid="">
                                 <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i>
                                 </div>
@@ -121,7 +122,7 @@
                                 <div class="caption">
                                     <h5>{{theme.name}}</h5>
                                     <p>{{theme.description}}</p>
-                                    <button class="btn btn-primary btn-lg btn-block" ng-if="theme.name != currentTheme.name" ng-click="changeTheme(theme)">Switch Theme</button>
+                                    <button class="btn btn-primary btn-lg btn-block" ng-if="theme.name != currentTheme.name" ng-click="changeTheme(theme)" ng-disabled="theme.coming_soon">Switch Theme</button>
                                     <h1 class="center" ng-if="theme.name == currentTheme.name" style="height:47px"><span class="label label-success">CURRENT THEME</span></h1>
                                 </div>
                             </div>
@@ -156,7 +157,7 @@
             <div class="posts-section" ng-switch-when="posts">
                 <div class="row">
 
-                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts">
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true"">
                         <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>

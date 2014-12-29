@@ -294,6 +294,23 @@ module.exports = {
 
     },
 
+    createDefaultPageForAccount: function(accountId, websiteId, fn) {
+        var self = this;
+        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, page){
+            if(err) {
+                log.error('Error creating default page: ' + err);
+                return fn(err, null);
+            }
+            log.debug('creating page screenshot');
+            self.updatePageScreenshot(page.id(), fn);
+        });
+    },
+
+    createWebsiteForAccount: function(accountId, userId, fn) {
+        var self = this;
+        cmsDao.createWebsiteForAccount(accountId, userId, fn);
+    },
+
     _createBlogPost: function(accountId, blogPost, fn) {
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
@@ -962,6 +979,7 @@ module.exports = {
     generateScreenshot: function(accountId, pageHandle, fn) {
         var self = this;
         log.debug('>> generateScreenshot');
+        //TODO: handle multiple websites per account. (non-unique page handles)
         /*
          * Get the URL for the page.
          * Generate URLBox URL
@@ -986,8 +1004,7 @@ module.exports = {
                 force: true
             };
 
-            //TODO: comment out this line.
-            //serverUrl = 'http://www.indigenous.io';
+
             var name = new Date().getTime() + '.png';
             var tempFile = {
                 name: name,
@@ -1017,6 +1034,38 @@ module.exports = {
             });
 
         });
+    },
+
+    updatePageScreenshot: function(pageId, fn) {
+        var self = this;
+        log.debug('>> updatePageScreenshot');
+
+        cmsDao.getPageById(pageId, function(err, page){
+            if(err) {
+                log.error('Error getting page: ' + err);
+                return fn(err, null);
+            }
+            var accountId = page.get('accountId');
+            var pageHandle = page.get('handle');
+            self.generateScreenshot(accountId, pageHandle, function(err, url){
+                if(err) {
+                    log.error('Error generating screenshot: ' + err);
+                    return fn(err, null);
+                }
+                page.set('screenshot', url);
+                cmsDao.saveOrUpdate(page, function(err, savedPage){
+                    if(err) {
+                        log.error('Error updating page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< updatePageScreenshot');
+                        return fn(null, savedPage);
+                    }
+                });
+            });
+        });
+
+
     },
 
 

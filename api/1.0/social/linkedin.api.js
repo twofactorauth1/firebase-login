@@ -27,6 +27,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('connections/import'), this.isAuthApi, this.importLinkedInConnections.bind(this));
         app.post(this.url('connections/import'), this.isAuthApi, this.importLinkedInConnections.bind(this));
+
+        app.post(this.url('share/link'), this.isAuthApi, this.shareLink.bind(this));
     },
 
 
@@ -85,6 +87,23 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             self.wrapError(resp, 500, "Unauthorized action", "Unauthorized action. Contacts may only be imported at the Account level");
         }
+    },
+
+    shareLink: function(req, resp) {
+        var self = this;
+        self.log.debug('>> shareLink');
+
+        var url = req.body.url;
+        var picture = req.body.picture;
+        var name = req.body.name;
+        var caption = req.body.caption;
+        var description = req.body.description;
+
+        linkedInDao.shareLink(req.user, url, picture, name, caption, description, function(err, value){
+            self.log.debug('<< shareLink');
+            self.sendResultOrError(resp, err, value, 'Error sharing link.', 500);
+        });
+
     }
 });
 

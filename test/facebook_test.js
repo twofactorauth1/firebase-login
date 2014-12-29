@@ -5,11 +5,13 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+process.env.NODE_ENV = "testing";
 var app = require('../app');
 var testHelpers = require('../testhelpers/testhelpers');
 var testConfig = require('../testhelpers/configs/test.config.js');
 var userDao = require('../dao/user.dao');
 var facebookDao = require('../dao/social/facebook.dao');
+
 
 module.exports.group = {
     setUp: function(cb) {
@@ -22,7 +24,7 @@ module.exports.group = {
             }
             self.user = value;
 
-            var config = testConfig.facebook;
+            var config = testConfig.facebook2;
             self.user.createOrUpdateSocialCredentials($$.constants.social.types.FACEBOOK,
                 config.facebookId,
                 config.accessToken,
@@ -69,7 +71,7 @@ module.exports.group = {
         });
     },
 
-
+/*
     testGetMessagesForUser: function(test) {
         var self = this;
         console.log("TESTING MESSAGES FOR FRIEND");
@@ -102,6 +104,18 @@ module.exports.group = {
             }
 
             test.notEqual(value.length, 0, "Posts returned for user");
+            test.done();
+        });
+    },
+*/
+    testShareLink: function(test) {
+        var self = this;
+        facebookDao.shareLink(this.user, 'http://www.indigenous.io', 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png', 'Indig-name', 'Indig-caption', 'Indig-description', function(err, value){
+            if(err) {
+                test.ok(false, 'Error sharing link: ' + err);
+                return test.done();
+            }
+            test.ok(true);
             test.done();
         });
     }

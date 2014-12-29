@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -104,6 +104,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 }
 
                 $scope.currentpage = that.pages;
+                if ($route.current.params.custid != null) {
+                   $scope.custid =  $route.current.params.custid;
+                   customerService.getCustomer($scope.custid, function(data) {
+                        that.customer = data;
+                        that.shipping = customerService.getAddressByType(data, "shipping");
+                        that.billing = customerService.getAddressByType(data, "billing");
+                        that.billingChange = false;
+                        that.shippingChange = false;
+                    });
+                
+                   $scope.getAddressByType = function(customer, type)
+                        {   
+                            var address;
+                            if (customer){
+                                address = customerService.getAddressByType(customer, type)
+                                if (address == "") {
+                                    return '';
+                                }
+                                return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
+                                        return str !== "";
+                                    }).join(", ")
+                            }
+                            return '';
+                        }
+                }
 
                 var iframe = window.parent.document.getElementById("iframe-website")
                 iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
@@ -252,6 +277,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.products = data;
         });
 
+        
+        $scope.showEdit = function(type) {
+            if (type == "billing")
+                that.billingChange = that.billingChange ? false : true;
+            else 
+                that.shippingChange = that.shippingChange ? false : true;
+        }
+
         $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         }
@@ -367,12 +400,65 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
         /********** CMS RELATED **********/
+        $scope.sharePost = function(post, type)
+        {
+            var postData = {};
+            switch(type) {
+                case "twitter":
+                 postData = {
+                      status: post.post_status
+                    }
+                PostService.sharePostOnTwitter(postData, function(data) {
+
+                });
+                break;
+                case "facebook":
+                   postData = {
+                      url: post.post_url,
+                      picture: post.featured_image,
+                      name: post.post_title,
+                      caption: post.post_excerpt,
+                      description: post.post_content
+                    }
+                PostService.sharePostOnFacebook(postData, function(data) {
+
+                });
+                break;
+                case "linked-in":
+                 postData = {
+                      url: post.post_url,
+                      picture: post.featured_image,
+                      name: post.post_title,
+                      caption: post.post_excerpt,
+                      description: post.post_content
+                    }
+                PostService.sharePostOnLinkedIn(postData, function(data) {
+
+                });
+                break;
+            }
+        }
 
         $scope.setPostImage = function(componentId,blogpost)
         {
            window.parent.setPostImage(componentId);
            blogpost.featured_image = window.parent.postImageUrl;
         }
+
+        $scope.setProfileImage = function(componentId,customer)
+        {
+           window.parent.changeProfilePhoto(componentId, customer);           
+        }
+
+        $scope.saveCustomerAccount = function(customer)
+        {
+            if (customer && customer.accountId)  
+                customerService.putCustomer(customer, function(data) {
+                    that.customer = data;
+                });
+        }
+
+
 
         $scope.social_links = [
         {name:"adn",icon:"adn"},
@@ -490,10 +576,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
              window.parent.deleteFeatureList(componentId,index);
         }
 
+        $scope.activated = false;
+
+
         window.activateAloha = function() {
-            $('.editable').aloha();
-            // aloha.dom.query('.editable', document).forEach(aloha);
-            // $('.aloha-caret.aloha-ephemera', document).css('visibility','visible');
+            if($scope.activated == false) {
+                CKEDITOR.disableAutoInline = true; 
+                CKEDITOR.inline( 'editor1' ); 
+                CKEDITOR.setReadOnly(false);
+                $scope.activated = true;
+            }
         };
 
         window.deactivateAloha = function() {
