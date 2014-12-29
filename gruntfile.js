@@ -209,8 +209,8 @@ module.exports = function(grunt) {
                     'public/js/libs_misc/uuid.js',
                     'public/js/libs_misc/angular-file-upload/angular-file-upload.js',
                     'public/js/libs/jqcloud2/dist/jqcloud.min.js',
-                    'public/js/libs/angular-jqcloud/angular-jqcloud.js'
-
+                    'public/js/libs/angular-jqcloud/angular-jqcloud.js',
+                    'public/js/libs_misc/jstimezonedetect/jstz.min.js'
                 ],
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
@@ -252,6 +252,7 @@ module.exports = function(grunt) {
                         'public/scripts/services/accountService.js',
                         'public/scripts/services/analyticsService.js',
                         'public/scripts/services/courseService.js',
+                        'public/scripts/services/customerService.js',
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/paymentService.js',
                         'public/scripts/services/postsService.js',
