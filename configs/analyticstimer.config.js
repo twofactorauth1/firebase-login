@@ -7,7 +7,10 @@
 
 var analyticsJobMS = process.env.ANALYTICS_JOB_MS || 1000 * 60 * 2;//1 hour
 var secondsSinceLastPingThreshold = process.env.ANALYTICS_LAST_PING_SECONDS || 60*1;//30 minutes
-var runJob = 'true' || process.env.ANALYTICS_RUN_JOB;
+var runJob = 'false';
+if(process.env.ANALYTICS_RUN_JOB){
+    runJob = process.env.ANALYTICS_RUN_JOB;
+};
 
 var collater = require('../analytics/analytics_collater');
 

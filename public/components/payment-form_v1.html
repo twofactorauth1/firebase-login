@@ -75,7 +75,7 @@
                                 <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
                                 <div class="mb30"></div>
                                 <div class="col-xs-12 mb15">
-                                    <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval)">Choose</a>
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
                                     <a type="button" class="btn btn-green btn-block center active" ng-if="newAccount.membership == plan.id">Selected</a>
                                 </div>
                                 <div class="clearfix"></div>

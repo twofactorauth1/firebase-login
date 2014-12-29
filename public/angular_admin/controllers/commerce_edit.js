@@ -4,6 +4,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             ngProgress.start();
 
             var productPlanStatus = {};
+            var productPlanSignupFee = {};
 
             $scope.showToaster = false;
             //back button click function
@@ -21,6 +22,8 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             $scope.newSubscription = {
                 planId: $$.u.idutils.generateUniqueAlphaNumericShort()
             };
+
+            $scope.signup_fee = null;
 
             ProductService.getProduct($scope.productId, function(product) {
                 $scope.product = product;
@@ -41,11 +44,13 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
                         promises.push(PaymentService.getPlanPromise(value.id));
                         productPlanStatus[value.id] = value.active;
+                        productPlanSignupFee[value.id] = value.signup_fee;
                     });
                     $q.all(promises)
                         .then(function(data) {
                             data.forEach(function(value, index) {
                                 value.data.active = productPlanStatus[value.data.id];
+                                value.data.signup_fee = productPlanSignupFee[value.data.id];
                                 $scope.plans.push(value.data);
                             });
                         })
@@ -127,12 +132,14 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     if ('stripePlans' in $scope.product.product_attributes) {
                         $scope.product.product_attributes.stripePlans.push({
                             id: subscription.id,
-                            active: true
+                            active: true,
+                            signup_fee: $scope.signup_fee
                         });
                     } else {
                         $scope.product.product_attributes.stripePlans = [{
                             id: subscription.id,
-                            active: true
+                            active: true,
+                            signup_fee: $scope.signup_fee
                         }];
                     }
                     productPlanStatus[subscription.id] = true;
@@ -140,6 +147,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     $scope.newSubscription = {
                         planId: $$.u.idutils.generateUniqueAlphaNumericShort()
                     };
+                    $scope.signup_fee = null;
                 }, showToast);
             };
 
@@ -173,6 +181,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                         $scope.newSubscription = angular.copy(value);
                         $scope.newSubscription.amount = $scope.newSubscription.amount / 100;
                         $scope.newSubscription.planId = value.id;
+                        $scope.signup_fee = productPlanSignupFee[value.id];
                     }
                 });
             };
