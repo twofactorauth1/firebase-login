@@ -583,19 +583,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if($scope.activated == false) {
                 CKEDITOR.disableAutoInline = true;
 
-                var editables = $('.editable');
-                console.log('editable length ', editables.length);
-                for (var i = 0; i < editables.length; i++) {
-                    editables[i].id = 'edt'+i;
-                    var __editorName = editables[i].id;
-                    editables[i].setAttribute('contenteditable', true);
-                    var ck = CKEDITOR.inline(__editorName);
-
-                    CKEDITOR.on( 'instanceReady', function( ev ) {
-                         var editor = ev.editor;
-                         //editor.setReadOnly( false );
+                var elements = $( '.editable' );
+                elements.each( function() {
+                    CKEDITOR.inline( this , {
+                        on: {
+                            instanceReady: function(ev) {
+                                var editor = ev.editor;
+                                editor.setReadOnly( false );
+                            }
+                        }
                     });
-                }
+                });
+
                 $scope.activated = true;
                 //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
             }

@@ -70,7 +70,7 @@ require.config({
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
         'fabric' : 'libs/darkroomjs/vendor/fabric',
         'darkroom' : 'libs_misc/darkroomjs/darkroom.min',
-        'base64' : 'libs/angular-base64/angular-base64.min',
+        'caman' : 'libs/caman/dist/caman',
 
         //application related
         'storageutils': 'utils/storageutils',

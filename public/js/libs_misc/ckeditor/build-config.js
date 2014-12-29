@@ -64,7 +64,6 @@ var CKBUILDER_CONFIG = {
 		'link' : 1,
 		'list' : 1,
 		'sharedspace' : 1,
-		'simple-image-browser' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
 		'wysiwygarea' : 1

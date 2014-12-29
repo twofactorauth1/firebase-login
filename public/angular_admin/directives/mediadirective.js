@@ -1,5 +1,5 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective', 'fabric', 'darkroom', 'base64'], function(angularAMD) {
-    angularAMD.directive('mediaModal', ['FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService', '$base64', function(FileUploader, AssetsService, $http, $timeout, ToasterService, $base64) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective', 'fabric', 'darkroom', 'caman'], function(angularAMD) {
+    angularAMD.directive('mediaModal', ['FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService', function(FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
             restrict: 'C',
@@ -15,7 +15,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
 
                 function resizeModal() {
                     contentElement.css('height', $(window).height() - 30 + 'px');
-                    mediaElement.css('height', (contentElement.innerHeight() - (footerElement.innerHeight() + headerElement.innerHeight() + 48)) + 'px');
+                    mediaElement.css('height', $(window).height() - 30 + 'px');
+                    $scope.bodyHeight = $(window).height() - 200 + 'px';
 
                     var filterType = $('.filter-type');
                     $timeout(function() {
@@ -80,7 +81,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     footerElement = $('.modal-footer', mediaModalElement);
                     headerElement = $('.modal-header', mediaModalElement);
                     contentElement = $('.modal-content', mediaModalElement);
-                    mediaElement = $('.media', contentElement);
+                    mediaElement = $('.media', mediaModalElement);
 
                     contentElement.css('visibility', 'hidden');
                     mediaModalElement.on('shown.bs.modal', function(e) {
@@ -267,7 +268,19 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.m.editImage = function(asset) {
                     $scope.editingImage = true;
                     $scope.singleAsset = asset;
-                    var targetImage = $('.modal-content #targetEditImage');
+
+                    var targetImage = $('#targetEditImage');
+                    // image.crossOrigin = 'anonymous';
+                    // console.log('image ', $('#targetEditImage'));
+                    // Caman('#targetEditImage', function () {
+                    //     this.brightness(100);
+                    //     this.contrast(30);
+                    //     this.sepia(60);
+                    //     this.saturation(-30);
+                    //     this.render();
+                    //   });
+
+
                     var canvas = $("#targetCanvas")[0];
                     var ctx = canvas.getContext('2d'),
                     img = new Image();
@@ -277,7 +290,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     var imgData = JSON.parse(JSON.stringify(canvas.toDataURL("image/jpeg")));
                     targetImage.attr('src', imgData);
 
-                    var dkrm = new Darkroom(targetImage, {
+
+                    var dkrm = new Darkroom('#targetEditImage', {
                         // Size options
                         minWidth: 100,
                         minHeight: 100,
@@ -294,11 +308,14 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                             }
                         },
                         init: function() {
+                            console.log('darkroom init');
                             var cropPlugin = this.getPlugin('crop');
                             cropPlugin.selectZone(170, 25, 300, 300);
                             //cropPlugin.requireFocus();
                         }
                     });
+
+                    console.log('dkrm ', dkrm);
 
                 };
 

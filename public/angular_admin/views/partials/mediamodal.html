@@ -46,7 +46,7 @@
                             <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
                         </li>
                     </ul>
-                    <div class="media">
+                    <div class="media" id="assets" style="height:{{bodyHeight}};">
                         <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
@@ -98,10 +98,10 @@
                         <div id="all-warning-box"> No Media</div>
                     </div>
                 </div>
-                <div class="editimage" ng-if="editingImage">
+                <div class="editimage" ng-if="editingImage" style="height:{{bodyHeight}};">
                     <div class="col-xs-6 imgedit-wrap">
-                        <img src="" class="img-responsive img-thumbnail" id="targetEditImage">
-                        <img ng-src="{{singleAsset.url}}" id="originalSource" class="hidden">
+                        <img ng-src="{{singleAsset.url}}" class="img-responsive img-thumbnail" id="targetEditImage">
+                        <!-- <img ng-src="{{singleAsset.url}}" id="originalSource" class="hidden"> -->
                     </div>
                     <div class="col-xs-6">
                         Image Editing Buttons
@@ -109,7 +109,6 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <canvas id="targetCanvas" width="100" height="100"></canvas>
             <div class="modal-footer">
                 <div class="row" ng-if="editingImage">
                     <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
