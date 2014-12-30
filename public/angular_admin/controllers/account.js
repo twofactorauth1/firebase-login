@@ -117,7 +117,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             $scope.switchSubscriptionPlanFn = function(planId) {
-                $scope.account.membership = planId;
+                $scope.subscription.plan.id = planId;
             };
 
             $scope.savePlanFn = function(planId) {
@@ -185,8 +185,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             UserService.getAccount(function(account) {
+                console.log('account ', account);
                 $scope.account = account;
-                $scope.currentAccount = account;
+                $scope.currentAccount.membership = account.billing.subscriptionId;
             });
 
             /*

@@ -759,14 +759,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': currentAccount.membership != plan.id , 'selected': currentAccount.membership == plan.id  }">
-                            <div class="well well-calm">
-                                <h4 class="center">{{plan.name}} {{plan.id}}</h4>
+                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': subscription.plan.id != plan.id , 'selected': subscription.plan.id == plan.id  }">
+                            <div class="well well-calm mb0">
+                                <h4 class="center">{{plan.name}}</h4>
                                 <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
                                 <div class="mb30"></div>
                                 <div class="col-xs-12 mb15">
-                                    <a type="button" class="btn btn-success btn-block center" ng-if="currentAccount.membership != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)">Choose</a>
-                                    <a type="button" class="btn btn-green btn-block center active" ng-if="currentAccount.membership == plan.id">Selected</a>
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)">Choose</a>
+                                    <a type="button" class="btn btn-green btn-block center active" ng-if="subscription.plan.id == plan.id">Selected</a>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -885,9 +885,9 @@
                         </div> -->
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(currentAccount.membership)">
-                        <span class="fa fa-save"> </span>Save Plan</a>
+                <div class="modal-footer" style="margin-top:0;">
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(subscription.plan.id)">
+                        <span class="fa fa-save"> </span> Save Plan</a>
                 </div>
             </div>
         </div>
