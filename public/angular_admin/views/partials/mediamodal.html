@@ -118,7 +118,9 @@
                 </div>
                 <div class="row" ng-if="!editingImage">
                     <div class="col-md-offset-8 col-md-4">
-                        <label for="upload_image" class="btn btn-primary"> Upload File
+                        <label for="upload_image" class="btn btn-primary ">
+                            <span ng-if="uploader.queue.length <= 0">Select File</span>
+                            <span ng-if="uploader.queue.length > 0">Select Another File</span>
                             <input type="file"
                                    id="upload_image"
                                    class="hidden"
@@ -138,6 +140,7 @@
                     </div>
                 </div>
                 <div class="row" ng-if="uploader.queue.length" ng-hide="uploadComplete">
+                    <div class="clearfix mb15"></div>
                     <div class="col-md-12">
                         <table class="table">
                             <thead>
@@ -192,7 +195,8 @@
                         <button type="button"
                                 class="btn btn-success btn-s"
                                 ng-click="uploader.uploadAll()"
-                                ng-disabled="!uploader.getNotUploadedItems().length">
+                                ng-disabled="!uploader.getNotUploadedItems().length"
+                                ng-if="uploader.queue.length > 1">
                             <span class="glyphicon glyphicon-upload"></span> Upload all
                         </button>
                     </div>
