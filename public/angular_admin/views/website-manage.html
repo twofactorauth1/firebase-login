@@ -142,7 +142,7 @@
                             <div class="screenshot-wrap scrollhover">
                                 <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
                                 <img ng-if="page.screenshot" src="{{page.screenshot}}" alt="" class="screenshot">
-                                <img ng-if="!page.screenshot" src="http://placehold.it/500x300" alt="">
+                                <div ng-if="!page.screenshot"><h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-photo"></i></h1></div>
                             </div>
                             <div class="caption">
                                 <a href="/admin#/website-editor?pagehandle={{page.handle}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
