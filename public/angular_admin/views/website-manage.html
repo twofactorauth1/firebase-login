@@ -157,7 +157,7 @@
             <div class="posts-section" ng-switch-when="posts">
                 <div class="row">
 
-                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true"">
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true">
                         <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
@@ -186,6 +186,7 @@
                                     <div class="screenshot-wrap">
                                         <div class="screenshot-overflow">
                                             <div class="screenshot" ng-if="post.featured_image" style="background-image: url({{post.featured_image}});width: 255px;height: 120px;background-size: cover;margin: 0 auto;border: 1px solid #ddd;"></div>
+                                            <div class="excerpt" ng-if="!post.featured_image"><h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-photo"></i></h1></div>
                                             <!-- <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt=""> -->
                                         </div>
                                     </div>
