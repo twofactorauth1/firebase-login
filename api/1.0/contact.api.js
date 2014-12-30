@@ -600,8 +600,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 var detailText = req.query['detail'];
                 var beforeTimestamp = req.query['before'];
                 var afterTimestamp = req.query['after'];
-                var skip = req.query['skip'];
-                var limit = req.query['limit'];
+
+                var skip, limit;
+                if(req.query.skip) {
+                    skip = parseInt(req.query.skip);
+                }
+                if(req.query.limit) {
+                    limit = parseInt(req.query.limit);
+                }
+                
 
                 contactActivityManager.findActivities(accountId, contactId, activityTypeAry, noteText, detailText,
                     beforeTimestamp, afterTimestamp, skip, limit, function(err, list){
