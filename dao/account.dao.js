@@ -167,7 +167,7 @@ var dao = {
                     }
                 } else {
                     p.reject();
-                    return fn(err, avlue);
+                    return fn(err, value);
                 }
                 p.resolve();
             });
