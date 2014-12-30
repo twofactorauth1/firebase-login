@@ -34,6 +34,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/category/*", this.setup, this.index.bind(this));
         app.get("/author/*", this.setup, this.index.bind(this));
         app.get("/page/*", this.setup, this.index.bind(this));
+        app.get("/signup", this.setup, this.index.bind(this));
 
         app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
         // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));

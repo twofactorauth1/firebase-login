@@ -472,7 +472,7 @@ define([
 
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        $scope.isEditing = false;
+                        $scope.isEditing = true;
                         //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                         //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                         //document.getElementById('iframe-website').contentWindow.location.reload(true);

@@ -15,6 +15,7 @@ var twitterConfig = require('../configs/twitter.config');
 var googleConfig = require('../configs/google.config');
 var linkedInConfig = require('../configs/linkedin.config');
 var authenticationDao = require('../dao/authentication.dao');
+var accountDao = require('../dao/account.dao');
 
 var SignupView = require('../views/signup.server.view');
 
@@ -102,8 +103,23 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialSignup: function(req, resp, next) {
-        var state = this.getState(this.accountId(req), "create", req.params.socialtype);
-        resp.redirect(this.getInternalAuthRedirect(state));
+        var state = this.getState(this.accountId(req), "create_in_place", req.params.socialtype, req.query.redirectTo);
+        console.dir(req.query);
+        console.dir(state);
+        //TODO: make sure we have a temp account.
+        var accountToken = cookies.getAccountToken(req);
+        if(accountToken === null) {
+            var tmpAccount = new $$.m.Account({
+                token: $$.u.idutils.generateUUID()
+            });
+            accountDao.saveOrUpdateTmpAccount(tmpAccount, function(err, val){
+                cookies.setAccountToken(resp, val.get('token'));
+                return resp.redirect(this.getInternalAuthRedirect(state));
+            });
+        } else {
+            return resp.redirect(this.getInternalAuthRedirect(state));
+        }
+
     },
 
 
@@ -179,6 +195,7 @@ _.extend(router.prototype, baseRouter.prototype, {
 
     redirectAfterOauth: function(req, resp, next) {
         var self = this;
+        self.log.debug('>> redirectAfterOauth');
         var state = req.session.state;
         var user = req.user;
 

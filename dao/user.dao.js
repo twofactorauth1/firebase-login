@@ -11,7 +11,7 @@ var constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
 var cmsDao = require('../cms/dao/cms.dao');
 require('../models/user');
-
+var cookies = require("../utils/cookieutil");
 
 
 var dao = {
@@ -208,6 +208,96 @@ var dao = {
         })
     },
 
+    createTempUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken,
+                                              refreshToken, expires, accountToken, scope, fn) {
+        var self = this;
+        self.log.debug('>> createTempUserFromSocialProfile');
+
+        accountDao.getTempAccount(accountToken, function(err, tempAccount){
+            if(err) {
+                self.log.error('Error getting temp account: ' + err);
+                return fn(err, null);
+            } else if(tempAccount === null) {
+
+                self.log.error('Could not find account with token: ' + accountToken);
+                return fn('Temp account not found', null);
+            }
+            self.getUserByUsername(email, function(err, user) {
+                if (err) {
+                    return fn(err, null);
+                } else if(user !== null) {
+                    tempAccount.set('tempUser', user);
+                    accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                        if(err) {
+                            self.log.error('Error updating temp account: ' + err);
+                            return fn(err, null);
+                        } else {
+                            self.log.debug('<< createTempUserFromSocialProfile');
+                            return fn(null, user);
+                        }
+                    });
+                } else {
+                    //check if social user exists
+                    self.getUserBySocialId(socialType, socialId, function(err, user) {
+                        if (err) {
+                            return fn(err, null);
+                        } else if (user != null) {
+                            tempAccount.set('tempUser', user);
+                            accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                                if(err) {
+                                    self.log.error('Error updating temp account: ' + err);
+                                    return fn(err, null);
+                                } else {
+                                    self.log.debug('<< createTempUserFromSocialProfile');
+                                    return fn(null, user);
+                                }
+                            });
+                        } else {
+                            self.log.debug('creating new temp user');
+                            //need to create a temp user
+                            var user = new $$.m.User({
+                                _id: 'temp:' + $$.u.idutils.generateUUID(),
+                                username:email,
+                                email:email,
+                                first:firstName,
+                                last:lastName,
+                                created: {
+                                    date: new Date().getTime(),
+                                    by: null, //self-created
+                                    strategy: socialType,
+                                    isNew: true
+                                }
+                            });
+
+                            user.createOrUpdateLocalCredentials(null);
+                            user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
+                            self.saveOrUpdateTmpUser(user, function(err, tmpUser){
+                                self.log.debug('saved temp user with id: ' + tmpUser.id());
+                                tempAccount.set('tempUser', tmpUser);
+                                accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                                    if(err) {
+                                        self.log.error('Error updating temp account: ' + err);
+                                        return fn(err, null);
+                                    } else {
+                                        self.log.debug('<< createTempUserFromSocialProfile');
+                                        return fn(null, user);
+                                    }
+                                });
+                            });
+
+
+
+
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+    },
+
 
     refreshFromSocialProfile: function(user, socialType, defaultPhoto, fn) {
         var self = this;
@@ -266,6 +356,11 @@ var dao = {
     getUsersForAccount: function(accountId, fn) {
         var query = {'accounts.accountId':accountId};
         return this.findMany(query, $$.m.User, fn);
+    },
+
+    saveOrUpdateTmpUser: function(user, fn) {
+        $$.g.cache.set(user.id(), user, "users", 3600 * 24);
+        fn(null, user);
     }
 };
 

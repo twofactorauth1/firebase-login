@@ -99,7 +99,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.pages = data[route];
                 } else {
                     route = $scope.$location.$$path.replace('/page/', '');
-
+                    route = route.replace('/', '');
                     that.pages = data[route];
                 }
 

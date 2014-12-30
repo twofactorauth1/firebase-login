@@ -10,8 +10,8 @@
             <div class="input-group" style="width:330px">
               <label class="sr-only">Date Range</label>
               <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-              <input date-range-picker class="form-control date-picker hidden-xs" type="text" ng-model="selectedDate" options="pickerOptions"/>
-              <span class="input-group-addon"><i class="fa fa-chevron-down fa-fw"></i></span>
+              <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate" options="pickerOptions"/>
+              <span class="input-group-addon" onClick="$('.deshboard-date-picker').click();"><i class="fa fa-chevron-down fa-fw"></i></span>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@
 
     <div class="contentpanel" ng-style="styleDashboard()" indigeweb-resize>
 
-        <div class="activity-section" ng-show="activeTab == 'activity'">
+        <div class="activity-section" ng-if="activeTab == 'activity'">
             <div class="col-md-6" id="activity-section">
                 <div class="panel panel-info panel-nopadding">
                         <div class="panel-heading">
@@ -319,7 +319,7 @@
             </div>
         </div>
 
-        <div class="analytics-section" ng-show="activeTab == 'analytics'">
+        <div class="analytics-section" ng-if="activeTab == 'analytics'">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-info panel-nopadding">
@@ -526,7 +526,7 @@
             </div>
         </div>
 
-        <div class="ecommerce-section" ng-show="activeTab == 'ecommerce'">
+        <div class="ecommerce-section" ng-if="activeTab == 'ecommerce'">
 
             <div class="row">
                 <div class="col-sm-6 col-md-4">

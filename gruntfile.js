@@ -91,6 +91,7 @@ module.exports = function(grunt) {
                 files: {
                     '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
                     '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
+                    '../indigeweb/public/css/style.default_1.css': [ 'public/less/style.default_1.less' ],
                     '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
                     '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ],
                     '../indigeweb/public/css/angular-admin.css': [ 'public/less/angular-admin.less' ]
@@ -98,6 +99,13 @@ module.exports = function(grunt) {
                 }
             }
         },
+
+        csssplit: {
+            your_target: {
+              src: ['../indigeweb/public/css/style.default.css'],
+              dest: '../indigeweb/public/css'
+            },
+          },
 
         watch: {
             less: {
@@ -363,14 +371,14 @@ module.exports = function(grunt) {
                     ENV: {
                         name: 'production',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
-                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
-                        keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
-                        keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
-                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID,
+                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_PROD_WRITE_KEY,
+                        keenWriteKey: KEEN_CONFIG.KEEN_PROD_WRITE_KEY,
+                        keenReadKey: KEEN_CONFIG.KEEN_PROD_READ_KEY,
+                        keenProjectId: KEEN_CONFIG.KEEN_PROD_PROJECT_ID,
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
-                        googleClientId: GOOGLE_CONFIG.CLIENT_ID,
-                        googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
+                        googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
+                        googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         twonetKey: TWONET_CONFIG.TWONET_KEY,
                         twonetSecret: TWONET_CONFIG.TWONET_SECRET,
@@ -462,6 +470,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ng-annotate');
     grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
     grunt.loadNpmTasks('grunt-prompt');
+    grunt.loadNpmTasks('grunt-csssplit');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
