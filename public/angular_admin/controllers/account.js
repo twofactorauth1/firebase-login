@@ -16,10 +16,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
-
+            $scope.onboardingSteps = [];
+            $scope.showOnboarding = false;
+            $scope.stepIndex = 0;
             $scope.beginOnboarding = function(type) {
                 if (type == 'connect-social') {
-                    $scope.stepIndex = 0;
                     $scope.showOnboarding = true;
                     $scope.activeTab = 'integrations';
                     $scope.onboardingSteps = [{
