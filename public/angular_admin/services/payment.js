@@ -131,6 +131,11 @@ define(['app', 'stripe', 'toasterService'], function(app) {
                 return $http.get(apiUrl);
             };
 
+            this.getIndigenousPlanPromise = function(planId) {
+                var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId].join('/');
+                return $http.get(apiUrl);
+            };
+
             this.getPlan = function(planId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
                 $http.get(apiUrl)
