@@ -21,7 +21,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-
+        app.get(this.url('indigenous'), this.setup.bind(this), this.listIndigenousProducts.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createProduct.bind(this));
         app.get(this.url(':id'), this.setup, this.getProduct.bind(this));
         app.get(this.url(''), this.setup, this.listProducts.bind(this));
@@ -29,7 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteProduct.bind(this));
         app.get(this.url('type/:type'), this.isAuthApi, this.getProductsByType.bind(this));
 
-        app.get(this.url('indigenous'), this.setup.bind(this), this.listIndigenousProducts.bind(this));
+
 
     },
 
