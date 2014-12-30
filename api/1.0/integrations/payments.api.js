@@ -756,11 +756,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> createCard');
+        /*
+         * Customers are stored on the main account.  No accessToken needed.
+         */
+
         var accountId = parseInt(self.accountId(req));
+        /*
         var accessToken = self._getAccessToken(req);
         if(accessToken === null && accountId != appConfig.mainAccountID) {
             return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
         }
+        */
         var customerId = req.params.id;
 
         var cardToken = req.params.cardToken;
@@ -786,9 +792,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getCard');
         var accountId = parseInt(self.accountId(req));
         var accessToken = self._getAccessToken(req);
+        /*
         if(accessToken === null && accountId != appConfig.mainAccountID) {
             return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
         }
+        */
         var customerId = req.params.id;
         var cardId = req.params.cardId;
 
@@ -814,10 +822,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accountId = parseInt(self.accountId(req));
+                /*
                 var accessToken = self._getAccessToken(req);
                 if(accessToken === null && accountId != appConfig.mainAccountID) {
                     return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
                 }
+                */
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
@@ -891,10 +901,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accountId = parseInt(self.accountId(req));
+                /*
                 var accessToken = self._getAccessToken(req);
                 if(accessToken === null && accountId != appConfig.mainAccountID) {
                     return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
                 }
+                */
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
@@ -1546,15 +1558,17 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                var accessToken = self._getAccessToken(req);
+                //No need for access token.  customers are stored on main account.
+                /*var accessToken = self._getAccessToken(req);
                 var accountId = parseInt(self.accountId(req));
                 if(accessToken === null && accountId != appConfig.mainAccountID) {
                     return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
                 }
+                */
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
-                stripeDao.createToken(cardId, customerId, accessToken, function(err, value){
+                stripeDao.createToken(cardId, customerId, null, function(err, value){
                     self.log.debug('<< createToken');
                     return self.sendResultOrError(resp, err, value, "Error creating token.");
                 });
