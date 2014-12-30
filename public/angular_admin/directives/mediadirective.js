@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective', 'fabric', 'darkroom'], function(angularAMD) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective'], function(angularAMD) {
     angularAMD.directive('mediaModal', ['FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService', function(FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
@@ -291,28 +291,28 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     targetImage.attr('src', imgData);
 
                     targetImage[0].crossOrigin = 'anonymous';
-                    var dkrm = new Darkroom(targetImage[0], {
-                        // Size options
-                        minWidth: 100,
-                        minHeight: 100,
-                        maxWidth: 650,
-                        maxHeight: 500,
+                    // var dkrm = new Darkroom(targetImage[0], {
+                    //     // Size options
+                    //     minWidth: 100,
+                    //     minHeight: 100,
+                    //     maxWidth: 650,
+                    //     maxHeight: 500,
 
-                        plugins: {
-                            save: false,
-                            crop: {
-                                quickCropKey: 67, //key "c"
-                                //minHeight: 50,
-                                //minWidth: 50,
-                                //ratio: 1
-                            }
-                        },
-                        init: function() {
-                            console.log('darkroom init');
+                    //     plugins: {
+                    //         save: false,
+                    //         crop: {
+                    //             quickCropKey: 67, //key "c"
+                    //             //minHeight: 50,
+                    //             //minWidth: 50,
+                    //             //ratio: 1
+                    //         }
+                    //     },
+                    //     init: function() {
+                    //         console.log('darkroom init');
 
-                            //cropPlugin.requireFocus();
-                        }
-                    });
+                    //         //cropPlugin.requireFocus();
+                    //     }
+                    // });
 
                     console.log('dkrm ', dkrm);
 

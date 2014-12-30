@@ -16,10 +16,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
-
+            $scope.onboardingSteps = [];
+            $scope.showOnboarding = false;
+            $scope.stepIndex = 0;
             $scope.beginOnboarding = function(type) {
                 if (type == 'connect-social') {
-                    $scope.stepIndex = 0;
                     $scope.showOnboarding = true;
                     $scope.activeTab = 'integrations';
                     $scope.onboardingSteps = [{
@@ -102,7 +103,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                     $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
                         if (value.active)
-                            promises.push(PaymentService.getIndigenousPlanPromise(value.id));
+                            promises.push(PaymentService.getPlanPromise(value.id));
                     });
                     $q.all(promises)
                         .then(function(data) {
