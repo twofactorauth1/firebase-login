@@ -504,8 +504,14 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                var skip = req.query['skip'];
-                var limit = req.query['limit'];
+                var skip, limit;
+                if(req.query.skip) {
+                    skip = parseInt(req.query.skip);
+                }
+                if(req.query.limit) {
+                    limit = parseInt(req.query.limit);
+                }
+                
 
                 contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, function(err, value){
                     self.log.debug('<< getActivityByContactId');
@@ -608,7 +614,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(req.query.limit) {
                     limit = parseInt(req.query.limit);
                 }
-                
+
 
                 contactActivityManager.findActivities(accountId, contactId, activityTypeAry, noteText, detailText,
                     beforeTimestamp, afterTimestamp, skip, limit, function(err, list){
