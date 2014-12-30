@@ -1,6 +1,5 @@
 <toaster-container toaster-options="{'time-out': 1000, 'close-button':true, 'limit': 1}"></toaster-container>
-<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
-onFinishCallback='finishOnboarding'></onboarding-popover>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' onFinishCallback='finishOnboarding'></onboarding-popover>
 <div class="account">
 
     <div class="pageheader row">
@@ -25,19 +24,16 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
 
     <div class="row">
         <div class="btn-group col-xs-12 template-btns">
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info"
-            ng-class="{'active': activeTab === 'account_information'}" ng-click="showToaster = false; activeTab = 'account_information'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info" ng-class="{'active': activeTab === 'account_information'}" ng-click="showToaster = false; activeTab = 'account_information'">
                 <i class="fa fa-user"></i>
                 <span class="hidden-xs">Account Information
                 </span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing"
-            ng-class="{'active': activeTab === 'billing'}" ng-click="showToaster = false; activeTab = 'billing'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="showToaster = false; activeTab = 'billing'">
                 <i class="fa fa-credit-card"></i>
                 <span class="hidden-xs">Billing</span>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations"
-            ng-class="{'active': activeTab === 'integrations'}" ng-click="showToaster = false; activeTab = 'integrations'">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="showToaster = false; activeTab = 'integrations'">
                 <i class="fa fa-rocket"></i>
                 <span class="hidden-xs">Integrations</span>
             </button>
@@ -60,8 +56,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                             </div>
                         -->
                         <div class="col-xs-12">
-                            <img ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}" class="img-responsive thumbnail thumb-lg img-circle media-object"
-                            data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+                            <img ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}" class="img-responsive thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" style="height: 220px;">
 
                             <div class="clear"></div>
                         </div>
@@ -153,9 +148,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
 
                                 <li class="col-xs-12">
                                     <div class="col-xs-2">
-                                        <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip"
-                                        data-placement="top" title="" data-original-title="Email"
-                                        target="_blank"> <i class="fa fa-envelope"> </i>
+                                        <a href="mailto:{{user.email}}" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-envelope"> </i>
                                         </a>
                                     </div>
                                     <div class="col-xs-8">
@@ -186,8 +179,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     <div class="profile panel-body">
 
                         <div class="col-xs-12">
-                            <img src="{{account.business.logo}}" class="thumbnail thumb-lg media-object" data-img-src=""
-                            data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
+                            <img src="{{account.business.logo}}" class="thumbnail thumb-lg media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
                             <div class="clear"></div>
                         </div>
                         <div class="col-xs-12">
@@ -280,14 +272,12 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                 <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
                                     <span>/{{subscription.plan.interval}}</span>
                                 </h2>
-                                <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000
-                                    | date : 'longDate'}}</p>
+                                <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                             </div>
                             <div class="no-plan well" ng-hide="user.stripeId">
                                 <h3 class="center">No Subscription Plan Selected</h3>
                                 <div class="cleatfix mb15"></div>
-                                <p class="center">To continue using the Indigenous Platform you must
-                                    choose a subscription plan below.</p>
+                                <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
                                 <div class="cleatfix mb30"></div>
                                 <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#selectPlanModal">Choose Plan</a>
                             </div>
@@ -357,8 +347,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     </div>
                 </div>
                 <div class="col-sm-12">
-                    <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)"
-                    items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
+                    <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)" items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
                 </div>
             </div>
         </div>
@@ -398,15 +387,13 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 <div class="col-sm-3 col-md-4 hidden">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg"
-                            alt="Reveille">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg" alt="Reveille">
                         </div>
                         <div class="caption">
                             <h3>Reveille</h3>
                             <p>Find it first. Fix it fast</p>
                             <p>
-                                <a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block"
-                                role="button">
+                                <a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button">
                                     <span class="fa fa-plug"></span>Connect</a>
                             </p>
                         </div>
@@ -415,8 +402,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg"
-                            alt="...">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="...">
                         </div>
                         <div class="caption">
                             <h3>Google +</h3>
@@ -443,8 +429,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg"
-                            alt="...">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="...">
                         </div>
                         <div class="caption">
                             <h3>LinkedIn</h3>
@@ -498,8 +483,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 <div class="col-sm-3 col-md-4">
                     <div class="thumbnail">
                         <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg"
-                            alt="...">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="...">
                         </div>
                         <div class="caption">
                             <h3>Stripe</h3>
@@ -533,22 +517,17 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     <div id="current-settings">
                         <div class="radio">
                             <label>
-                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'"
-                                ng-model="userPreferences.account_default_tab"
-                                ng-change="setActiveTab('account_information')">Account Information
+                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('account_information')">Account Information
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="userPreferences.account_default_tab"
-                                ng-change="setActiveTab('billing')">Billing
+                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('billing')">Billing
                             </label>
                         </div>
                         <div class="radio disabled">
                             <label>
-                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'"
-                                ng-model="userPreferences.account_default_tab"
-                                ng-change="setActiveTab('integrations')">Integration
+                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('integrations')">Integration
                             </label>
                         </div>
                     </div>
@@ -557,8 +536,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
         </div>
     </div>
 
-    <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
+    <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -568,10 +546,10 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
                 </div>
-                 <div ng-if = "!upcomingInvoice" class="modal-body">
+                <div ng-if="!upcomingInvoice" class="modal-body">
                     No upcoming invoices found
-                 </div>
-                 <div ng-if = "upcomingInvoice" class="modal-body">
+                </div>
+                <div ng-if="upcomingInvoice" class="modal-body">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="mb40"></div>
@@ -638,8 +616,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
         </div>
     </div>
 
-    <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
+    <div class="modal fade" id="payBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -680,8 +657,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     <!-- <h4>Amount: <span class="pull-right">$99.98</span></h4> -->
                 </div>
                 <div class="modal-footer">
-                    <label class="col-xs-9">Please verify the information above and click "Submit" to authorize
-                        us to complete your payment.</label>
+                    <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
                     <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal">
                         <span class="fa fa-lock"></span>Submit</button>
                 </div>
@@ -689,8 +665,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
         </div>
     </div>
 
-    <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1"
-    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
+    <div class="modal fade" id="viewTransactionModal-{{invoice.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-repeat="invoice in invoices.data">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -726,8 +701,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
         </div>
     </div>
 
-    <div class="modal fade" id="facebookSettingsModal" tabindex="-1" role="dialog"
-    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="facebookSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -773,8 +747,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
         </div>
     </div>
 
-    <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
+    <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -786,8 +759,20 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <div class="panel  panel-selected plan-selected mb0">
+                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': currentAccount.membership != plan.id , 'selected': currentAccount.membership == plan.id  }">
+                            <div class="well well-calm">
+                                <h4 class="center">{{plan.name}} {{plan.id}}</h4>
+                                <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+                                <div class="mb30"></div>
+                                <div class="col-xs-12 mb15">
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="currentAccount.membership != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)">Choose</a>
+                                    <a type="button" class="btn btn-green btn-block center active" ng-if="currentAccount.membership == plan.id">Selected</a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-xs-12 col-md-6">
+                            <div class="panel  panel-selected plan-selected mb0" >
                                 <div class="panel-heading">
                                     <h3 class="panel-title">
                                         Monthly</h3>
@@ -838,8 +823,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block"
-                                    data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
@@ -895,19 +879,21 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block"
-                                    data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(currentAccount.membership)">
+                        <span class="fa fa-save"> </span>Save Plan</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
+    <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -918,14 +904,12 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
                 </div>
                 <div class="card-wrapper-change"></div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true
-                wrapper-div="'card-wrapper-change'"></div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="selectPlanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
+    <div class="modal fade" id="selectPlanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -936,8 +920,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     <h4 class="modal-title" id="myModalLabel">Select Plan</h4>
                 </div>
                 <div class="card-wrapper-add" ng-show="selectPlanView=='card'"></div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=false
-                ng-show="selectPlanView=='card'" wrapper-div="'card-wrapper-add'"></div>
+                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=false ng-show="selectPlanView=='card'" wrapper-div="'card-wrapper-add'"></div>
                 <div class="modal-body" ng-show="selectPlanView=='plan'">
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
@@ -992,8 +975,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block"
-                                    data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('monthly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
@@ -1049,8 +1031,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                                     </table>
                                 </div>
                                 <div class="panel-footer">
-                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block"
-                                    data-dismiss="modal">Select</a>
+                                    <a ng-click="switchPlanFn('yearly_access')" role="button" class="btn btn-success btn-lg btn-block" data-dismiss="modal">Select</a>
                                 </div>
                             </div>
                         </div>
