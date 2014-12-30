@@ -62,7 +62,7 @@
 
     <div class="contentpanel" ng-style="styleDashboard()" indigeweb-resize>
 
-        <div class="activity-section" ng-show="activeTab == 'activity'">
+        <div class="activity-section" ng-if="activeTab == 'activity'">
             <div class="col-md-6" id="activity-section">
                 <div class="panel panel-info panel-nopadding">
                         <div class="panel-heading">
@@ -319,7 +319,7 @@
             </div>
         </div>
 
-        <div class="analytics-section" ng-show="activeTab == 'analytics'">
+        <div class="analytics-section" ng-if="activeTab == 'analytics'">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-info panel-nopadding">
@@ -526,7 +526,7 @@
             </div>
         </div>
 
-        <div class="ecommerce-section" ng-show="activeTab == 'ecommerce'">
+        <div class="ecommerce-section" ng-if="activeTab == 'ecommerce'">
 
             <div class="row">
                 <div class="col-sm-6 col-md-4">
