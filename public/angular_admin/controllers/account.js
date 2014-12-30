@@ -95,8 +95,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             //get plans
             var productId = "3d6df0de-02b8-4156-b5ca-f242ab18a3a7";
-            ProductService.getProduct(productId, function(product) {
+            ProductService.getIndigenousProducts(function(products) {
                 console.log('product ', product);
+                var product = _.findWhere(products, {
+                    _id: productId
+                });
                 $scope.paymentFormProduct = product;
                 var promises = [];
                 $scope.subscriptionPlans = [];
