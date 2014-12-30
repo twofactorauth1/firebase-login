@@ -88,6 +88,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
         app.get(this.url('account/invoices'), this.isAuthApi, this.getInvoicesForAccount.bind(this));
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
+        app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
 
         //Coupons
@@ -116,6 +117,15 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
         });
 
+    },
+
+    getIndigenousPlan: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getIndigenousPlan');
+        stripeDao.getStripePlan(req.params.planId, null, function(err, value){
+            self.log.debug('<< getIndigenousPlan');
+            return self.sendResultOrError(resp, err, value, "Error getting Indigenous Plan");
+        });
     },
 
     /**
