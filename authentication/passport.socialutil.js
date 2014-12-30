@@ -53,6 +53,21 @@ module.exports = {
                     }
                 }
             });
+        } else if(authMode === 'create_in_place'){
+            // creating new account
+            var accountToken = cookies.getAccountToken(req);
+
+            userDao.createTempUserFromSocialProfile(socialType, socialId, email, firstName, lastName, username, profileUrl, accessToken, refreshToken, options.expires, accountToken, scope, function (err, value) {
+                if (err) {
+                    return done(null, false, err);
+                } else {
+                    if (value != null) {
+                        return done(null, value);
+                    } else {
+                        return done(null, false, {message: "User not created"});
+                    }
+                }
+            });
         } else if(authMode == "in_app") {
             authenticationDao.linkSocialAccountToUser(req.session.state.userId, socialType, socialId, email, username, profileUrl, accessToken, refreshToken, options.expires, scope, function(err, value) {
                 if (err) {

@@ -359,6 +359,21 @@ _.extend(api.prototype, baseApi.prototype, {
         })
     },
 
+    _createTmpAccount: function(resp, cb) {
+        var self = this;
+        var tmpAccount = new $$.m.Account({
+            token: $$.u.idutils.generateUUID()
+        });
+        accountDao.saveOrUpdateTmpAccount(tmpAccount, function(err, val){
+            if(err) {
+                self.log.error('Error creating temp account: ' + err);
+                cb();
+            } else {
+                cookies.setAccountToken(resp, val.get('token'));
+                cb();
+            }
+        });
+    },
 
     saveOrUpdateTmpAccount: function(req,resp) {
         var self = this;
@@ -399,7 +414,14 @@ _.extend(api.prototype, baseApi.prototype, {
             if(err) {
                 res.wrapError(res,500,null,err,value);
             } else if(value === null) {
-                res.send('true');
+                if(cookies.getAccountToken(req) === undefined) {
+                    self.log.debug('Creating tmp account');
+                    self._createTmpAccount(res, function(){
+                        res.send('true');
+                    });
+                } else {
+                    res.send('true');
+                }
             } else {
                 res.send('false');
             }

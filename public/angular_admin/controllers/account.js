@@ -102,7 +102,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                     $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
                         if (value.active)
-                            promises.push(PaymentService.getPlanPromise(value.id));
+                            promises.push(PaymentService.getIndigenousPlanPromise(value.id));
                     });
                     $q.all(promises)
                         .then(function(data) {

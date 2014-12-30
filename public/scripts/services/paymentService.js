@@ -94,6 +94,10 @@ mainApp.service('paymentService', ['$http', 'ENV',
             return $http.get(apiUrl);
         };
 
+        this.getIndigenousPlanPromise = function(planId) {
+            var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId].join('/');
+            return $http.get(apiUrl);
+        };
 
     }
 ]);

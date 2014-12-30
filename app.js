@@ -182,6 +182,7 @@ app.use(function (req, res) {
 
 // Handle 500
 app.use(function (error, req, res, next) {
+    console.dir(error);
     res.status(500);
     res.render('500.html', {title: '500: Internal Server Error', error: error});
 });
