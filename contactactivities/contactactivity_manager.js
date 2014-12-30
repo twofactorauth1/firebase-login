@@ -90,7 +90,7 @@ module.exports = {
         if(contactId) {
             queryObj.contactId = contactId;
         }
-        if(activityTypeAry && activityTypeAry.indexOf(',') != -1 && $.isArray(activityTypeAry)) {
+        if(activityTypeAry && activityTypeAry.indexOf(',') === -1 && $.isArray(activityTypeAry)) {
             queryObj.activityType = {'$in' : activityTypeAry};
         } else if(activityTypeAry && activityTypeAry.indexOf(',') != -1) {
             queryObj.activityType = activityTypeAry;
