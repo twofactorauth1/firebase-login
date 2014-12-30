@@ -113,9 +113,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         that.billingChange = false;
                         that.shippingChange = false;
                     });
-                
+
                    $scope.getAddressByType = function(customer, type)
-                        {   
+                        {
                             var address;
                             if (customer){
                                 address = customerService.getAddressByType(customer, type)
@@ -277,11 +277,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             that.products = data;
         });
 
-        
+
         $scope.showEdit = function(type) {
             if (type == "billing")
                 that.billingChange = that.billingChange ? false : true;
-            else 
+            else
                 that.shippingChange = that.shippingChange ? false : true;
         }
 
@@ -402,11 +402,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /********** CMS RELATED **********/
         $scope.sharePost = function(post, type)
         {
+            var url = $location.$$absUrl;
             var postData = {};
             switch(type) {
                 case "twitter":
                  postData = {
-                      status: post.post_status
+                      status: url
                     }
                 PostService.sharePostOnTwitter(postData, function(data) {
 
@@ -414,7 +415,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 break;
                 case "facebook":
                    postData = {
-                      url: post.post_url,
+                      url: url,
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
@@ -426,7 +427,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 break;
                 case "linked-in":
                  postData = {
-                      url: post.post_url,
+                      url: url,
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
@@ -447,12 +448,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.setProfileImage = function(componentId,customer)
         {
-           window.parent.changeProfilePhoto(componentId, customer);           
+           window.parent.changeProfilePhoto(componentId, customer);
         }
 
         $scope.saveCustomerAccount = function(customer)
         {
-            if (customer && customer.accountId)  
+            if (customer && customer.accountId)
                 customerService.putCustomer(customer, function(data) {
                     that.customer = data;
                 });
@@ -761,6 +762,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /********** END CMS RELATED **********/
 
         /********** SIGNUP SECTION **********/
+        $scope.planStatus = {};
         $scope.$watch('currentpage.components', function(newValue, oldValue) {
             if (newValue) {
                 newValue.forEach(function(value, index) {
@@ -773,6 +775,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                                 $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
                                     if (value.active)
+                                        $scope.planStatus[value.id] = value;
                                         promises.push(PaymentService.getPlanPromise(value.id));
                                 });
                                 $q.all(promises)
@@ -833,13 +836,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           return newArr;
         }
 
-        $scope.subscriptionPlanOneTimeFee = 500;
-
         $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
             $scope.newAccount.membership = planId;
             $scope.subscriptionPlanAmount = amount;
             $scope.subscriptionPlanInterval = interval;
-            // $scope.subscriptionPlanOneTimeFee = parseInt(cost.substring(1));
+            $scope.subscriptionPlanOneTimeFee = parseInt(cost);
         };
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;

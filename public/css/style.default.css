@@ -7,6 +7,7 @@
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
+@import '../js/libs_misc/darkroomjs/darkroom.min.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -15453,7 +15454,6 @@ a:active {
   outline: none;
 }
 strong {
-  font-family: 'LatoBold';
   font-weight: normal;
 }
 .headerbg {
@@ -20087,9 +20087,6 @@ div.error label.error:before {
   .leftpanel-show .leftpanel {
     display: block;
   }
-  .leftpanel-show .mainpanel {
-    margin-left: 240px;
-  }
   .stickyheader .headerbar {
     left: 0;
   }
@@ -20178,7 +20175,7 @@ div.error label.error:before {
   .signinpanel,
   .signuppanel {
     margin: 0 auto;
-    width: 480px;
+    width: 100%;
     padding: 20px;
   }
   .signinpanel form {
@@ -23920,6 +23917,8 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .btn {
   height: 50px;
+  max-width: 200px;
+  display: block;
 }
 .masthead-v1 .btn .fa {
   float: left;
@@ -24679,7 +24678,6 @@ div[data-type=blog] .container {
   font-size: 28px;
 }
 #sidebar {
-  margin-top: 10px;
   padding: 20px;
 }
 #sidebar .fa {
@@ -24719,6 +24717,11 @@ div[data-type=blog] .container {
   display: block;
   height: 200px;
   max-width: 100%;
+}
+@media screen and (max-width: 640px) {
+  #sidebar {
+    background: #ffffff;
+  }
 }
 .pricing-tables-v1 .container {
   padding-top: 40px;

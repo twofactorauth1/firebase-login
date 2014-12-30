@@ -21,7 +21,12 @@
         </div>
 
         <div class="col-xs-12" class="editable" data-index="{{$index}}" data-class="btn-text">
-           <span ng-bind-html="component.btn.text"></span>
+            <a class="btn btn-success btn-lg center"  data-ng-href="{{component.btn.url}}" du-smooth-scroll>
+                <i ng-if="component.btn.icon" class="{{component.btn.icon}}"></i>
+                <div class="editable" data-index="{{$index}}" data-class="btn-text">
+                    <span ng-bind-html="component.btn.text"></span>
+                </div>
+            </a>
         </div>
 
         <div class="clearfix"></div>

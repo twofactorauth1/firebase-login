@@ -16065,9 +16065,6 @@ div.error label.error:before {
   .leftpanel-show .leftpanel {
     display: block;
   }
-  .leftpanel-show .mainpanel {
-    margin-left: 240px;
-  }
   .stickyheader .headerbar {
     left: 0;
   }
@@ -16156,7 +16153,7 @@ div.error label.error:before {
   .signinpanel,
   .signuppanel {
     margin: 0 auto;
-    width: 480px;
+    width: 100%;
     padding: 20px;
   }
   .signinpanel form {
