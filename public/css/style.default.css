@@ -23917,6 +23917,8 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .btn {
   height: 50px;
+  max-width: 200px;
+  display: block;
 }
 .masthead-v1 .btn .fa {
   float: left;
