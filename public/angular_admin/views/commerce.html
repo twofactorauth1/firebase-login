@@ -107,7 +107,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <i class="fa fa-bolt"></i> Sku: <span class="data">{{product.sku}}</span>
                       </div>
                       <div class="purchased"  ng-if="commerceSettings.showPrice">
-                        <i class="fa fa-money"></i> Price: <span class="data">${{product.regular_price}}</span>
+                        <i class="fa fa-money"></i> Price: <span class="data">${{product.cost}}</span>
                       </div>
                       <div class="emails-opened"  ng-if="commerceSettings.showProductType">
                         <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
@@ -141,17 +141,17 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                     <div class="col-xs-5 hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
                       <span ng-if="!product.is_image" class="icon media-object"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
                       </span>
-                      <img ng-if = "product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">                    
+                      <img ng-if = "product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">
                     </div>
                     </div>
 
                     <div class="media-body col-xs-7 hidden-xs vcenter">
-                      <h4 class="person-name">{{product.name}}</h4>            
+                      <h4 class="person-name">{{product.name}}</h4>
                     </div>
                   </div>
                 </a>
               </div>
-            </div>  
+            </div>
             <div class="tb-col col-md-2">
               <div class="commerce-item">
                 <div class="">
@@ -181,9 +181,9 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 </div>
               </div>
             </div>
-          </div>           
+          </div>
         </div>
-      </div>     
+      </div>
     </div>
   </div>
 
@@ -200,7 +200,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
     <div class="tab-content">
       <div class="tab-pane pane-settings active" id="rp-page">
         <div class="leftpanelinner">
-          <!-- 
+          <!--
           <button class="btn btn-orange btn-block mb15"><span class="fa fa-upload"></span> Import Products</button>
           -->
           <div class="form-group">
