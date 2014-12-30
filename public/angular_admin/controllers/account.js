@@ -1,6 +1,6 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService',
-        function($scope, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2', 'productService'], function(app) {
+    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService',
+        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService) {
             ngProgress.start();
             NavigationService.updateNavigation();
             $scope.showToaster = false;
@@ -90,9 +90,42 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 $scope.pagedInvoices = $scope.invoices.data.slice(begin, end);
             };
 
-            $scope.switchPlanFn = function(planId) {
+            $scope.currentAccount = {};
+
+            //get plans
+            var productId = "3d6df0de-02b8-4156-b5ca-f242ab18a3a7";
+            ProductService.getProduct(productId, function(product) {
+                console.log('product ', product);
+                $scope.paymentFormProduct = product;
+                var promises = [];
+                $scope.subscriptionPlans = [];
+                if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
+                    $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
+                        if (value.active)
+                            promises.push(PaymentService.getPlanPromise(value.id));
+                    });
+                    $q.all(promises)
+                        .then(function(data) {
+                            data.forEach(function(value, index) {
+                                $scope.subscriptionPlans.push(value.data);
+                            });
+                        })
+                        .catch(function(err) {
+                            console.error(err);
+                        });
+                }
+            });
+
+            $scope.switchSubscriptionPlanFn = function(planId) {
+                $scope.account.membership = planId;
+            };
+
+            $scope.savePlanFn = function(planId) {
+                console.log('planId ', planId);
+                console.log('$scope.user.stripeId ', $scope.user.stripeId);
                 if ($scope.user.stripeId) {
                     PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription) {
+                        console.log('subscription ', subscription);
                         $scope.cancelOldSubscriptionsFn();
                         $scope.subscription = subscription;
                         PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice) {
@@ -153,6 +186,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getAccount(function(account) {
                 $scope.account = account;
+                $scope.currentAccount = account;
             });
 
             /*
