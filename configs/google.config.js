@@ -31,6 +31,10 @@ module.exports = {
     CALLBACK_URL_LOGIN: appConfig.server_url + "/oauth2/callback",
     SERVER_KEY: serverKey,
 
+    PROD_CLIENT_ID: '277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com',
+    PROD_CLIENT_SECRET: 'yPiJOniUgxjT94O7M_4tNj_M',
+
+
 
     getScope: function() {
         return "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.google.com/m8/feeds https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/plus.login";

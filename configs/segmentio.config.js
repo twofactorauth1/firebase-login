@@ -12,5 +12,11 @@ var segmentReadKey = process.env.SEGMENT_READ_KEY || 'w80757cy56';
 
 module.exports = {
     SEGMENT_WRITE_KEY : segmentWriteKey,
-    SEGMENT_READ_KEY : segmentReadKey
+    SEGMENT_READ_KEY : segmentReadKey,
+
+
+    /*
+     * Temporary until we get config/env figuredout
+     */
+    SEGMENT_PROD_WRITE_KEY: 'xot1dd3rul'
 }
