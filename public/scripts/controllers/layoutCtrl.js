@@ -11,7 +11,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$routeParams = $routeParams;
         $scope.$url = $location.$$url;
         $scope.tagCloud = [];
+<<<<<<< HEAD
         
+=======
+        $scope.isPageDirty = false;
+>>>>>>> 94ef412862ca41d90cf39c206169a87ab61b01cf
         $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
             if (newValue !== undefined && newValue.length) {
                 newValue.forEach(function(value, index) {
@@ -611,6 +615,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             instanceReady: function(ev) {
                                 var editor = ev.editor;
                                 editor.setReadOnly( false );
+                                editor.on('change', function() {
+                                    $scope.isPageDirty = true;
+                                });
                             }
                         }
                     });
@@ -629,6 +636,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             // }
             // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
+
+        window.checkOrSetPageDirty = function(status)
+        {
+            if(status)
+                $scope.isPageDirty = false;
+            else
+            return $scope.isPageDirty;
+        }
 
         window.updateWebsite = function(data) {
             that.account.website = data;

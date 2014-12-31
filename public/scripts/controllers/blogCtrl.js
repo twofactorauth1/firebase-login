@@ -145,15 +145,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 if(v.text)
                     post_data.post_tags[i] = v.text;
             });
-            var post_content_container = $('.post_content_div .post_content');
+            var post_content_container = $('.post_content_div');
             if(post_content_container.length > 0)
                 post_data.post_content = post_content_container.html();
-            if(!post_data.post_content)
-            {
-                 var post_content_container = $('.post_content_div .blog_post_content');
-                 if(post_content_container.length > 0)
-                    post_data.post_content = post_content_container.text();
-            }    
             
             var postImageUrl = window.parent.getPostImageUrl();
             if(postImageUrl)

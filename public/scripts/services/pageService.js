@@ -45,17 +45,4 @@ mainApp.service('pageService', ['$http', function ($http) {
         });
     };
 
-    //website/:websiteid/page/:handle
-    this.getPage = function (websiteID, handle, fn) {
-        var apiUrl = baseUrl + ['cms', 'website', websiteID, 'page', handle].join('/');
-        $http.get(apiUrl)
-        .success(function (data, status, headers, config) {
-            fn(data);
-        })
-        .error(function (err) {
-            console.log('END:getSinglePage with ERROR');
-            fn(err, null);
-        });
-    };
-
 }]);
