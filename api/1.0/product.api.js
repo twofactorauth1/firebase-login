@@ -7,6 +7,7 @@
 
 var baseApi = require('../base.api');
 var productManager = require('../../products/product_manager');
+var appConfig = require('../../configs/app.config');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -20,13 +21,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
 
-
+        app.get(this.url('indigenous'), this.setup.bind(this), this.listIndigenousProducts.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createProduct.bind(this));
         app.get(this.url(':id'), this.setup, this.getProduct.bind(this));
         app.get(this.url(''), this.setup, this.listProducts.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateProduct.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteProduct.bind(this));
         app.get(this.url('type/:type'), this.isAuthApi, this.getProductsByType.bind(this));
+
+
 
     },
 
@@ -99,6 +102,24 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(res, err, list, 'Error listing products');
         });
 
+    },
+
+    listIndigenousProducts: function(req, res) {
+        var self = this;
+        self.log.debug('>> listIndigenousProducts');
+
+        var accountId = appConfig.mainAccountID;
+        var skip,limit;
+        if(req.query.skip) {
+            skip = parseInt(req.query.skip);
+        }
+        if(req.query.limit) {
+            limit = parseInt(req.query.limit);
+        }
+        productManager.listProducts(accountId, limit, skip, function(err, list){
+            self.log.debug('<< listIndigenousProducts');
+            self.sendResultOrError(res, err, list, 'Error listing Indigenous products');
+        });
     },
 
     updateProduct: function(req, res) {

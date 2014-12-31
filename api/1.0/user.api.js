@@ -13,6 +13,7 @@ var cookies = require('../../utils/cookieutil');
 var authenticationDao = require('../../dao/authentication.dao');
 var userManager = require('../../dao/user.manager');
 var paymentsManager = require('../../payments/payments_manager');
+var async = require('async');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -234,7 +235,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var setupFee = req.body.setupFee;
 
         var cardToken = req.body.cardToken;
-        var plan = req.body.plan || 'monthly_access';//TODO: make sure this gets passed
+        var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
         if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
@@ -256,60 +257,91 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
         self.log.debug('>> coupon', coupon);
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, user) {
-            if(err) {
-                self.log.error('Error creating account or user: ' + err);
-                return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
-            }
-            self.log.debug('Created user[' + user.id() + '] and account[' + user.getAllAccountIds()[0] + '] objects.');
-            var accountId = user.getAllAccountIds()[0];
-            //TODO: create balance to account for signup fee.
-            paymentsManager.createStripeCustomerForUser(cardToken, user, accountId, setupFee, function(err, stripeCustomer){
-                if(err) {
-                    self.log.error('Error creating Stripe customer: ' + err);
-                    return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
+
+        async.waterfall([
+            function(callback){
+                if(password1 === null) {
+                    self.log.debug('Creating user from social');
+                    userManager.createAccountAndUserFromTempAccount(accountToken, fingerprint, sendWelcomeEmail, function(err, accountAndUser){
+                        if(err) {
+                            self.log.error('Error creating account or user: ' + err);
+                            return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
+                        }
+                        callback(null, user, accountAndUser.account);
+                    });
+                } else {
+                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
+                        if (err) {
+                            self.log.error('Error creating account or user: ' + err);
+                            return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
+                        }
+                        callback(null, accountAndUser.user, accountAndUser.account);
+                    });
                 }
+            },
+            function(user, account, callback){
+                self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
+                paymentsManager.createStripeCustomerForUser(cardToken, user, account.id(), setupFee, function(err, stripeCustomer) {
+                    if (err) {
+                        self.log.error('Error creating Stripe customer: ' + err);
+                        return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
+                    }
+                    callback(null, stripeCustomer, user, account);
+                });
+            },
+            function(stripeCustomer, user, account, callback){
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, accountId, user.id(), coupon, function(err, sub){
-                    if(err) {
+                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, function(err, sub) {
+                    if (err) {
                         self.log.error('Error creating Stripe subscription: ' + err);
                         return self.wrapError(res, 500, 'Error creating Stripe Subscription', err);
                     }
-                    self.log.debug('Created subscription: ' + sub.id);
-                    accountDao.getAccountByID(accountId, function(err, account){
-                        if(err || account===null) {
-                            self.log.error('Error retrieving new account: ' + err);
-                            return self.wrapError(res, 500, 'Error getting new account', err);
-                        }
-                        var billingObj = account.get('billing');
-                        billingObj.stripeCustomerId=stripeCustomer.id;
-                        billingObj.subscriptionId = sub.id;
-                        account.set('billing', billingObj);
-                        accountDao.saveOrUpdate(account, function(err, updatedAccount){
-                            if(err) {
-                                self.log.error('Error saving billing information to account: ' + err);
-                                return self.wrapError(res, 500, 'Error saving billing information to account', err);
-                            }
-                            self.sm.addSubscriptionToAccount(accountId, billingObj.subscriptionId, plan, user.id(), function(err, value){
-                                authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
-                                    console.log('value url >>> ', value);
-                                    if (err) {
-                                        res.redirect("/home");
-                                        self = null;
-                                        return;
-                                    }
-                                    user.set("accountUrl", value.toLowerCase());
-                                    res.send(user.toJSON("public", {accountId:self.accountId(req)}));
-                                });
-                            });
+                    callback(null, sub, stripeCustomer, user, account);
+                });
 
-                        });
+            },
+            function(sub, stripeCustomer, user, account, callback){
+                self.log.debug('Created subscription: ' + sub.id);
+                accountDao.getAccountByID(account.id(), function(err, account) {
+                    if (err || account === null) {
+                        self.log.error('Error retrieving new account: ' + err);
+                        return self.wrapError(res, 500, 'Error getting new account', err);
+                    }
+                    var billingObj = account.get('billing');
+                    billingObj.stripeCustomerId = stripeCustomer.id;
+                    billingObj.subscriptionId = sub.id;
+                    account.set('billing', billingObj);
+                    accountDao.saveOrUpdate(account, function (err, updatedAccount) {
+                        if (err) {
+                            self.log.error('Error saving billing information to account: ' + err);
+                            return self.wrapError(res, 500, 'Error saving billing information to account', err);
+                        }
+                        callback(null, account.id(), sub.id, user);
                     });
                 });
-            });
-
-
+            },
+            function(accountId, subId, user, callback) {
+                self.log.debug('Updated account billing.');
+                self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
+                    authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
+                        self.log.debug('Redirecting to: ' + value);
+                        if (err) {
+                            res.redirect("/home");
+                            self = null;
+                            return;
+                        }
+                        user.set("accountUrl", value.toLowerCase());
+                        res.send(user.toJSON("public", {accountId:accountId}));
+                    });
+                });
+            }
+        ], function(err, result){
+            //we don't really need to do anything here.
+            self.log.warn('Unexpected method call!!!')
         });
+
+
+
 
     },
 
@@ -362,17 +394,17 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
 
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, value) {
-            var userObj = value;
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
+            var userObj = accountAndUser.user;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {
-
+                    var value = accountAndUser.user;
                     req.login(value, function (err) {
                         if (err) {
                             return resp.redirect("/");
                         } else {
 
-                            var accountId = value.getAllAccountIds()[0];
+                            var accountId = accountAndUser.account.id();
                             self.log.debug('createUserFromUsernamePassword accountId >>>', accountId);
                             authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
                                 console.log('value url >>> ', value);

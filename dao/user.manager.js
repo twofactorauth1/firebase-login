@@ -8,7 +8,6 @@
 
 var dao = require('./user.dao');
 var accountDao = require('./account.dao');
-var cmsDao = require('../cms/dao/cms.dao');
 var cmsManager = require('../cms/cms_manager');
 var log = $$.g.getLogger("user.manager");
 var securityManager = require('../security/sm')(true);
@@ -21,6 +20,111 @@ var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 
 module.exports = {
+
+    createAccountAndUserFromTempAccount: function(accountToken, fingerprint, sendWelcomeEmail, fn) {
+        var self = this;
+        log.debug('>> createAccountAndUserFromTempAccount');
+
+        accountDao.getTempAccount(accountToken, function(err, tempAccount){
+            if(err) {
+                log.error('Error getting temp account: ' + err);
+                return fn(err, null);
+            }
+            var user = new $$.m.User(tempAccount.tempUser);
+            accountDao.convertTempAccount(accountToken, function(err, account) {
+                if(err) {
+                    log.error('Error converting temp account: ' + err);
+                    return fn(err, null);
+                }
+                var accountId = account.id();
+                var roleAry = ["super","admin","member"];
+                var username = user.get('username');
+                var email = user.get('email');
+                user.createUserAccount(accountId, username, null, roleAry);
+                user.set('_id', null);
+                dao.saveOrUpdate(user, function(err, savedUser){
+                    if(err) {
+                        log.error('Error saving user: ' + err);
+                        return fn(err, null);
+                    }
+                    var userId = savedUser.id();
+                    log.debug('Created user with id: ' + userId);
+
+
+                    /*
+                     * Send welcome email.  This is done asynchronously.
+                     * But only do this if we are not running unit tests.
+                     */
+                    if (process.env.NODE_ENV != "testing") {
+                        fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
+                            if (err) {
+                                log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                            } else {
+                                log.debug('account ', account.attributes.subdomain);
+                                var siteUrl = account.get('subdomain') + appConfig.subdomain_suffix;
+
+                                var vars = [
+                                    {
+                                        "name": "SITEURL",
+                                        "content": siteUrl
+                                    },
+                                    {
+                                        "name": "USERNAME",
+                                        "content": savedUser.attributes.username
+                                    }
+                                ];
+                                mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                    notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                    htmlContent, accountId, userId, vars, function (err, result) {
+                                    });
+                            }
+
+                        });
+                    }
+
+
+
+                    log.debug('Creating customer contact for main account.');
+                    contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
+                        if(err) {
+                            log.error('Error creating customer for user: ' + userId);
+                        } else {
+                            log.debug('Created customer for user:' + userId);
+                        }
+                    });
+                    log.debug('Initializing user security.');
+                    securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value){
+                        if(err) {
+                            log.error('Error initializing user privileges for userID: ' + userId);
+                            return fn(err, null);
+                        }
+                        log.debug('creating website for account');
+                        cmsManager.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                            if(err) {
+                                log.error('Error creating website for account: ' + err);
+                                fn(err, null);
+                            } else {
+                                log.debug('creating default page');
+                                cmsManager.createDefaultPageForAccount(accountId, value.id(), function(err, value){
+                                    if(err) {
+                                        log.error('Error creating default page for account: ' + err);
+                                        fn(err, null);
+                                    } else {
+                                        log.debug('<< createAccountAndUserFromTempAccount');
+                                        fn(null, {account: account, user:savedUser});
+
+                                    }
+
+                                });
+                            }
+
+                        });
+                    });
+                });
+            });
+
+        });
+    },
 
     createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
@@ -153,7 +257,7 @@ module.exports = {
                                             fn(err, null);
                                         } else {
                                             log.debug('<< createUserFromUsernamePassword');
-                                            fn(null, savedUser);
+                                            fn(null, {account: account, user:savedUser});
 
                                         }
 

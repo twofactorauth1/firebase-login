@@ -359,8 +359,14 @@ var dao = {
     },
 
     saveOrUpdateTmpUser: function(user, fn) {
+        //key, value, region, ttl
         $$.g.cache.set(user.id(), user, "users", 3600 * 24);
         fn(null, user);
+    },
+
+    removeTmpUser: function(user, fn) {
+        $$.g.cache.remove(user.id(), 'users');
+        fn(null, 'ok');
     }
 };
 
