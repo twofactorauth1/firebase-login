@@ -387,7 +387,11 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                var iFrame = document.getElementById("iframe-website");
+                var iFrame = document.getElementById("iframe-website");               
+                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty)
+                {
+                    iFrame.contentWindow.checkOrSetPageDirty(true);
+                }
                 if ($location.$$search['posthandle']) {
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = false;
@@ -1033,9 +1037,9 @@ define([
            var offFn = $rootScope.$on('$locationChangeStart', function() { 
                 var isDirty = false; 
                 var iFrame = document.getElementById("iframe-website");
-                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkIfPageDirty)
+                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty)
                 {
-                    var isDirty = iFrame.contentWindow.checkIfPageDirty();
+                    var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
                 }
                 
                 if (!$scope.backup['website']) {

@@ -614,8 +614,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
-        window.checkIfPageDirty = function()
+        window.checkOrSetPageDirty = function(status)
         {
+            if(status)
+                $scope.isPageDirty = false;
+            else
             return $scope.isPageDirty;
         }
 
