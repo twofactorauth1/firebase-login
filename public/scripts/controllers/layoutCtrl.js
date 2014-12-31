@@ -11,11 +11,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$routeParams = $routeParams;
         $scope.$url = $location.$$url;
         $scope.tagCloud = [];
-<<<<<<< HEAD
-        
-=======
         $scope.isPageDirty = false;
->>>>>>> 94ef412862ca41d90cf39c206169a87ab61b01cf
+
         $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
             if (newValue !== undefined && newValue.length) {
                 newValue.forEach(function(value, index) {
