@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -11,6 +11,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.$routeParams = $routeParams;
         $scope.$url = $location.$$url;
         $scope.tagCloud = [];
+        
         $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
             if (newValue !== undefined && newValue.length) {
                 newValue.forEach(function(value, index) {
@@ -87,7 +88,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
             }
         });
-
         pagesService(function(err, data) {
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
@@ -96,7 +96,27 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
                     route = 'index';
                     route = route.replace('/', '');
-                    that.pages = data[route];
+                    if (!angular.isDefined(data[route])) {
+                        route = 'coming-soon';
+                        if (!angular.isDefined(data[route])){
+                            var pageData = {
+                                title: 'Coming Soon',
+                                handle: 'coming-soon',
+                                mainmenu: false
+                            };
+                            var websiteId = that.account.website.websiteId;
+                            pageService.createPage(websiteId, pageData, function(newpage) {
+                                var cmpVersion = 1;
+                                var pageId = newpage._id;
+                                pageService.addNewComponent(pageId, pageData.title, pageData.handle, cmpVersion, function(data) {
+                                    window.location.reload();
+                                });
+                                that.pages = newpage;
+                            });
+                        }
+                    }
+                    if (angular.isDefined(data[route]))
+                        that.pages = data[route];
                 } else {
                     route = $scope.$location.$$path.replace('/page/', '');
                     route = route.replace('/', '');
