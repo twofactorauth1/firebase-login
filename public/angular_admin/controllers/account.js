@@ -96,17 +96,17 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             //get plans
             var productId = "3d6df0de-02b8-4156-b5ca-f242ab18a3a7";
             ProductService.getIndigenousProducts(function(products) {
-                console.log('product ', product);
                 var product = _.findWhere(products, {
                     _id: productId
                 });
+                console.log('product ', product);
                 $scope.paymentFormProduct = product;
                 var promises = [];
                 $scope.subscriptionPlans = [];
                 if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                     $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
                         if (value.active)
-                            promises.push(PaymentService.getPlanPromise(value.id));
+                            promises.push(PaymentService.getIndigenousPlanPromise(value.id));
                     });
                     $q.all(promises)
                         .then(function(data) {
@@ -121,12 +121,18 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             $scope.switchSubscriptionPlanFn = function(planId) {
+                $scope.subscription = {
+                    plan : {
+                        id: null
+                    }
+                };
+                console.log('subscription ', $scope.subscription);
                 $scope.subscription.plan.id = planId;
             };
 
             $scope.savePlanFn = function(planId) {
                 console.log('planId ', planId);
-                console.log('$scope.user.stripeId ', $scope.user.stripeId);
+                console.log('$scope.user.stripeId ', $scope.user);
                 if ($scope.user.stripeId) {
                     PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription) {
                         console.log('subscription ', subscription);
@@ -237,8 +243,13 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUser(function(user) {
                 $scope.user = user;
+                console.log('$scope.user ', $scope.user);
                 angular.forEach($scope.user.profilePhotos, function(value, index) {
-                    $scope.userSocial[value.type].image = value.url;
+                    console.log('$scope.usersocial ', $scope.usersocial);
+                    console.log('social type', value.type);
+                    if (value.type && $scope.userSocial) {
+                        $scope.userSocial[value.type].image = value.url;
+                    }
                 });
             });
 
