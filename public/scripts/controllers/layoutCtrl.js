@@ -472,6 +472,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
            window.parent.changeProfilePhoto(componentId, customer);
         }
 
+        $scope.changeBlogImage = function(blogpost)
+        {        
+           window.parent.changeBlogImage(blogpost);
+        }
+
         $scope.saveCustomerAccount = function(customer)
         {
             if (customer && customer.accountId)
@@ -715,7 +720,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
         };
         window.updateCustomComponent = function(data,networks) {
-                $scope.currentpage.components = data;
+                if(data)
+                    $scope.currentpage.components = data;
+                else
+                {
+                  $scope.$apply(function() {
+                    
+                  });  
+                }
+                    
                 if(networks)
                     $scope.networks = networks;
         };

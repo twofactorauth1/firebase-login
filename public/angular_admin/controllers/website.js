@@ -612,7 +612,12 @@ define([
                     $scope.saveComponent();
                 }
             }
-
+             window.changeBlogImage = function(blog) {
+                $scope.changeblobImage = true;
+                $scope.blog_post = blog;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
             window.setPostImage = function(componentId) {
                 $scope.postImage = true;
                 $("#media-manager-modal").modal('show');
@@ -1011,6 +1016,12 @@ define([
                 } else if ($scope.profilepic && !$scope.componentEditing) {
                     $scope.profilepic = false;
                     $scope.customerAccount.photo = asset.url;
+                    return;
+                } else if ($scope.changeblobImage && !$scope.componentEditing) {
+                    $scope.changeblobImage = false;                                        
+                    $scope.blog_post.featured_image = asset.url;
+                    var iFrame = document.getElementById("iframe-website");
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
                 } else {
                     $scope.componentEditing.bg.img.url = asset.url;
