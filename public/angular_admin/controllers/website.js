@@ -657,6 +657,15 @@ define([
                         return;
                     }
                 }
+                if ($scope.selectedComponent.type === 'navigation') {
+                    var navigationType = _.findWhere($scope.currentPage.components, {
+                        type: $scope.selectedComponent.type
+                    });
+                    if (navigationType) {
+                        toaster.pop('error', "Navbar header already exists");
+                        return;
+                    }
+                }
                 $scope.components = $scope.currentPage.components;
 
                 var cmpVersion = null;
