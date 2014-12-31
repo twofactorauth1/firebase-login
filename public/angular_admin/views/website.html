@@ -412,7 +412,7 @@
                                 </select>
                             </div>
 
-                            <div class="well">
+                            <div ng-if="componentEditing.type !== 'footer'" class="well">
                                 <p>Danger Zone</p>
                                 <button class="btn btn-block btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
                             </div>

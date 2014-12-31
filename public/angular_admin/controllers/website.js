@@ -387,7 +387,11 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                var iFrame = document.getElementById("iframe-website");
+                var iFrame = document.getElementById("iframe-website");               
+                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty)
+                {
+                    iFrame.contentWindow.checkOrSetPageDirty(true);
+                }
                 if ($location.$$search['posthandle']) {
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = false;
@@ -542,6 +546,7 @@ define([
                     }
 
                     that.originalCurrentPageComponents = localPage.components;
+                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
                 });
             };
             window.deleteTeamMember = function(componentId, index) {
@@ -607,7 +612,12 @@ define([
                     $scope.saveComponent();
                 }
             }
-
+             window.changeBlogImage = function(blog) {
+                $scope.changeblobImage = true;
+                $scope.blog_post = blog;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
             window.setPostImage = function(componentId) {
                 $scope.postImage = true;
                 $("#media-manager-modal").modal('show');
@@ -654,6 +664,15 @@ define([
                     });
                     if (footerType) {
                         toaster.pop('error', "Footer component already exists");
+                        return;
+                    }
+                }
+                if ($scope.selectedComponent.type === 'navigation') {
+                    var navigationType = _.findWhere($scope.currentPage.components, {
+                        type: $scope.selectedComponent.type
+                    });
+                    if (navigationType) {
+                        toaster.pop('error', "Navbar header already exists");
                         return;
                     }
                 }
@@ -755,6 +774,7 @@ define([
                     if ($scope.componentEditing.version)
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
                     $scope.versionSelected = $scope.componentEditing.version;
+                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
                 });
                 $('#feature-convert').iconpicker({
                     iconset: 'fontawesome',
@@ -997,6 +1017,12 @@ define([
                     $scope.profilepic = false;
                     $scope.customerAccount.photo = asset.url;
                     return;
+                } else if ($scope.changeblobImage && !$scope.componentEditing) {
+                    $scope.changeblobImage = false;                                        
+                    $scope.blog_post.featured_image = asset.url;
+                    var iFrame = document.getElementById("iframe-website");
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
+                    return;
                 } else {
                     $scope.componentEditing.bg.img.url = asset.url;
                 }
@@ -1019,16 +1045,21 @@ define([
                 });
             }
 
-            var offFn = $rootScope.$on('$locationChangeStart', function() {
+           var offFn = $rootScope.$on('$locationChangeStart', function() { 
+                var isDirty = false; 
+                var iFrame = document.getElementById("iframe-website");
+                if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty)
+                {
+                    var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
+                }
+                
                 if (!$scope.backup['website']) {
 
-                } else if (confirm("Do you want to Save your changes?")) {
+                } else if ((isDirty || !(angular.equals($scope.originalCurrentPage,$scope.currentPage))) && confirm("Do you want to Save your changes?")) {
                     $scope.savePage();
-
                 } else {
                     $scope.cancelPage();
                 }
-
                 offFn();
             });
 

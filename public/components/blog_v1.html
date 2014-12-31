@@ -28,7 +28,7 @@
                                     <a ng-if="isEditing" class="btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deletePost(blogpost._id)" style="margin-right:10px">
                                         <span class="fa fa-times"></span>
                                         <span class="hidden-xs">Delete</span>
-                                    </a>
+                                    </a>                                    
                                 </h2>
 
                                 <div class="blog-meta">
@@ -55,6 +55,10 @@
                                 <div class="blog-thumb alignleft" ng-if="blogpost.featured_image">
                                     <img ng-src="{{blogpost.featured_image}}"/>
                                 </div>
+                                <a ng-if="isEditing" class="btn btn-warning" type="button" ng-click="changeBlogImage(blogpost)" style="margin-right:10px">
+                                        <span class="fa fa-edit"></span>
+                                        <span class="hidden-xs">Change Image</span>
+                                </a>
                                 <!-- end .thumb -->
 
                                 <div class="entry-excerpt"><p>
@@ -62,6 +66,9 @@
                                     <div class="editable post_excerpt" data-class="post_excerpt"
                                          data-ng-if="blogpost.post_excerpt">
                                         {{blogpost.post_excerpt}}
+                                    </div>
+                                    <div class="editable post_excerpt" data-class="post_excerpt"
+                                         data-ng-if="!blogpost.post_excerpt">
                                     </div>
                                     </p></div>
                                 <a data-ng-if="blogpost.post_url"
