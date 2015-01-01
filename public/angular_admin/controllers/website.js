@@ -633,6 +633,13 @@ define([
                 return $scope.postImageUrl;
             }
 
+            window.clickImageButton = function()
+            {
+                $scope.insertMediaImage = true;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
+
             $scope.addFeatureList = function(feature) {
                 if (feature && feature.title) {
                     if (!$scope.featureIcon) {
@@ -1016,6 +1023,11 @@ define([
                 } else if ($scope.profilepic && !$scope.componentEditing) {
                     $scope.profilepic = false;
                     $scope.customerAccount.photo = asset.url;
+                    return;
+                } else if ($scope.insertMediaImage) {
+                    $scope.insertMediaImage = false; 
+                    var iFrame = document.getElementById("iframe-website");
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
                     return;
                 } else if ($scope.changeblobImage && !$scope.componentEditing) {
                     $scope.changeblobImage = false;                                        

@@ -605,11 +605,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.activated = false;
 
+        window.clickImageButton = function(btn)
+        {
+            $scope.urlInput = $(btn).closest('td').prev('td').find('input');            
+            window.parent.clickImageButton();
+        }
 
         window.activateAloha = function() {
             if($scope.activated == false) {
                 CKEDITOR.disableAutoInline = true;
-
+                
                 var elements = $( '.editable' );
                 elements.each( function() {
                     CKEDITOR.inline( this , {
@@ -620,11 +625,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 editor.on('change', function() {
                                     $scope.isPageDirty = true;
                                 });
+                                
                             }
                         }
                     });
                 });
-
                 $scope.activated = true;
                 //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
             }
@@ -731,6 +736,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     
                 if(networks)
                     $scope.networks = networks;
+        };
+
+        window.addCKEditorImage = function(url) {
+            $scope.urlInput.val(url)
         };
 
         window.triggerEditMode = function() {
