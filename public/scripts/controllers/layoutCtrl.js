@@ -440,7 +440,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
-                      description: post.post_content
+                      description: post.post_excerpt
                     }
                 PostService.sharePostOnFacebook(postData, function(data) {
 
@@ -452,7 +452,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
-                      description: post.post_content
+                      description: post.post_excerpt
                     }
                 PostService.sharePostOnLinkedIn(postData, function(data) {
 
