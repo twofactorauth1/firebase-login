@@ -477,6 +477,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
            window.parent.changeBlogImage(blogpost);
         }
 
+        $scope.changeLogoImage = function(componentId)
+        {        
+           window.parent.changeLogoImage(componentId);
+        }
+
         $scope.saveCustomerAccount = function(customer)
         {
             if (customer && customer.accountId)

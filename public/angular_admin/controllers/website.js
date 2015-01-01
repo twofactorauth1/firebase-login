@@ -612,7 +612,7 @@ define([
                     $scope.saveComponent();
                 }
             }
-             window.changeBlogImage = function(blog) {
+            window.changeBlogImage = function(blog) {
                 $scope.changeblobImage = true;
                 $scope.blog_post = blog;
                 $("#media-manager-modal").modal('show');
@@ -626,6 +626,15 @@ define([
             window.changeProfilePhoto = function(componentId, customer) {
                 $scope.profilepic = true;
                 $scope.customerAccount = customer;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.changeLogoImage = function(componentId) {
+                $scope.logoImage = true;
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");
             }
@@ -1024,11 +1033,17 @@ define([
                     $scope.profilepic = false;
                     $scope.customerAccount.photo = asset.url;
                     return;
+<<<<<<< HEAD
                 } else if ($scope.insertMediaImage) {
                     $scope.insertMediaImage = false; 
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
                     return;
+=======
+                 } else if ($scope.logoImage && $scope.componentEditing) {
+                    $scope.logoImage = false;
+                    $scope.componentEditing.logourl = asset.url;
+>>>>>>> e2d94409eef29e9796e6bfd08347abbeb1f53e85
                 } else if ($scope.changeblobImage && !$scope.componentEditing) {
                     $scope.changeblobImage = false;                                        
                     $scope.blog_post.featured_image = asset.url;
