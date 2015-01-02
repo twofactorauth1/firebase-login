@@ -261,6 +261,7 @@ module.exports = function(grunt) {
                         'public/scripts/services/analyticsService.js',
                         'public/scripts/services/courseService.js',
                         'public/scripts/services/customerService.js',
+                        'public/scripts/services/pageService.js',
                         'public/scripts/services/pagesService.js',
                         'public/scripts/services/paymentService.js',
                         'public/scripts/services/postsService.js',

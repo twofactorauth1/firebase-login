@@ -637,7 +637,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var coupon = req.body.coupon;
                 var trial_end = req.body.trial_end;
                 var card = req.body.card;//this will overwrite customer default card if specified
-                var quantity = req.body.quanity;
+                var quantity = req.body.quantity;
                 var application_fee_percent = req.body.application_fee_percent;
                 var metadata = req.body.metadata;
                 var accountId = parseInt(self.accountId(req));

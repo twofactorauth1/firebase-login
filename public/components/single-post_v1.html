@@ -56,7 +56,7 @@
 
                         <div class="entry-content">
                             <div ng-if="blog.post.post_content" class="editable post_content_div" data-class="post_content">
-                                <span class="post_content" ng-bind-html="blog.post.post_content"></span>
+                                <span class="post_content" ng-bind-html="blog.post.post_content | unsafe"></span>
                             </div>
                             <div class="editable post_content_div" ng-if="!blog.post.post_content" data-class="post_content">                               
                                 <span class="blog_post_content" > Create you blog post here</span>
@@ -70,7 +70,7 @@
             </article> <!-- .entry -->
         </div> <!-- #main-area -->
         <section style="padding: 10px;">
-    <div >        
+    <div ng-if="isAdmin">        
         <h4>Share post via...</h4>
         <div>
           <button title="Share on Twitter" ng-click="sharePost(blog.post,'twitter')" class="btn btn-twitter">Twitter</button>
