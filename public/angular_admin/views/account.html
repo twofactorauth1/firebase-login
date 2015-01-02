@@ -267,32 +267,35 @@
                         <h3 class="panel-title">Your Plan</h3>
                     </div>
                     <div class="panel-body">
-                        <div class="col-sm-6">
-                            <div class="has-plan" ng-show="user.stripeId">
-                                <h2 class="center">{{subscription.plan.name}} Plan</h2>
-                                <hr></hr>
-                                <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
-                                    <span>/{{subscription.plan.interval}}</span>
-                                </h2>
-                                <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
-                            </div>
-                            <div class="no-plan well" ng-hide="user.stripeId">
+                         <div class="no-plan well" ng-if="!user.stripeId">
                                 <h3 class="center">No Subscription Plan Selected</h3>
                                 <div class="cleatfix mb15"></div>
                                 <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
                                 <div class="cleatfix mb30"></div>
-                                <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#selectPlanModal">Choose Plan</a>
+                                <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Choose Plan</a>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
-                            <div class="cleatfix mb20"></div>
-                            <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
-                            <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Change Plan</button>
-                            <div class="cleatfix mb20"></div>
-                            <!-- Add Auto Pay Option Toggle-->
-                            <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changeCardModal">Modify Payment Method</button>
-                        </div>
+
+                            <div class="plan-options" ng-if="user.stripeId">
+                                <div class="col-sm-6">
+                                    <div class="has-plan" ng-if="user.stripeId">
+                                        <h2 class="center">{{subscription.plan.name}} Plan</h2>
+                                        <hr></hr>
+                                        <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
+                                            <span>/{{subscription.plan.interval}}</span>
+                                        </h2>
+                                        <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
+                                    <div class="cleatfix mb20"></div>
+                                    <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
+                                    <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Change Plan</button>
+                                    <div class="cleatfix mb20"></div>
+                                    <!-- Add Auto Pay Option Toggle-->
+                                    <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changeCardModal">Modify Payment Method</button>
+                                </div>
+                            </div>
                     </div>
                 </div>
                 <!-- <div class="col-sm-6">
@@ -888,8 +891,10 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="margin-top:0;">
-                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(subscription.plan.id)">
-                        <span class="fa fa-save"> </span> Save Plan</a>
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(subscription.plan.id)" ng-if="selectPlanView=='plan'">
+                        <span class="fa fa-save"> </span> Select Plan</a>
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="chooseFirstTime()" ng-if="selectPlanView=='card'" ng-disabled="!subscriptionSelected">
+                        <span class="fa fa-save"> </span> Select Plan -></a>
                 </div>
             </div>
         </div>
@@ -911,7 +916,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="selectPlanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--     <div class="modal fade" id="selectPlanModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1041,5 +1046,5 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
