@@ -14,7 +14,7 @@ var _log = $$.g.getLogger("contactactivity_manager_test");
 var testContext = {};
 var initialized = false;
 
-exports.subscription_dao_test = {
+exports.contactactivity_manager_test = {
     setUp: function (cb) {
         var self = this;
         //delete all objects
@@ -108,8 +108,8 @@ exports.subscription_dao_test = {
                 test.ok(false, 'list activities by activity type failed.');
                 test.done();
             } else {
-                test.equals(1, list.length);
-                test.equals(0, list[0].get('contactId'));
+                test.equals(1, list.total);
+                test.equals(0, list.results[0].get('contactId'));
                 test.done();
             }
         });
@@ -124,8 +124,8 @@ exports.subscription_dao_test = {
                 test.ok(false, 'list activities by text failed.');
                 test.done();
             } else {
-                test.equals(1, list.length);
-                test.equals(0, list[0].get('contactId'));
+                test.equals(1, list.total);
+                test.equals(0, list.results[0].get('contactId'));
                 test.done();
             }
         });
@@ -139,8 +139,8 @@ exports.subscription_dao_test = {
                 test.ok(false, 'list activities by date range.');
                 test.done();
             } else {
-                test.equals(1, list.length);
-                test.equals(0, list[0].get('contactId'));
+                test.equals(1, list.total);
+                test.equals(0, list.results[0].get('contactId'));
                 test.done();
             }
         });
