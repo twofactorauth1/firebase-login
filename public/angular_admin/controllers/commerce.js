@@ -154,20 +154,25 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.max_value = function(hash) {
                 if(hash) {
                     var price = {};
+                if (hash[0] && hash[0].price) {
                     price = _.max(hash, function(p){ return p.price; });
-                    return _.filter([(price.price/100).toFixed(2), ' (', price.signup_fee, ')'], function(str) {
-                                        return str !== "";
+                    return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
+                                        return (str !== "");
                                     }).join(" ");
+                }
               }
             }
 
         $scope.min_value = function(hash) {
           if(hash) {
                 var price = {};
-                price = _.min(hash, function(p){ return p.price; });
-                return _.filter([(price.price/100).toFixed(2), ' (', price.signup_fee, ')'], function(str) {
-                                    return str !== "";
+                if (hash[0] && hash[0].price) {
+                    price = _.min(hash, function(p){ return p.price; });
+                    
+                    return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
+                                    return (str !== "");
                                 }).join(" ");
+                }
           }
         }
 
