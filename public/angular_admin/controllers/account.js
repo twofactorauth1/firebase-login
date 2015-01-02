@@ -120,14 +120,21 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 }
             });
 
+            $scope.subscriptionSelected = false;
+
             $scope.switchSubscriptionPlanFn = function(planId) {
                 $scope.subscription = {
                     plan : {
                         id: null
                     }
                 };
+                $scope.subscriptionSelected = true;
                 console.log('subscription ', $scope.subscription);
                 $scope.subscription.plan.id = planId;
+            };
+
+            $scope.chooseFirstTime = function() {
+                $('#changeCardModal').modal('show');
             };
 
             $scope.savePlanFn = function(planId) {
@@ -181,6 +188,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 });
             };
 
+            $scope.hasCard = false;
+
             $scope.$watch('user.stripeId', function(newValue, oldValue) {
                 if (newValue) {
                     PaymentService.getListStripeSubscriptions(newValue, function(subscriptions) {
@@ -191,6 +200,23 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                     PaymentService.getUpcomingInvoice(newValue, function(upcomingInvoice) {
                         $scope.upcomingInvoice = upcomingInvoice;
                     });
+
+                    ngProgress.complete();
+
+                    if ($scope.user.stripeId) {
+                        PaymentService.getInvoicesForAccount(function(invoices) {
+                            $scope.invoices = invoices;
+                            $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+                            $scope.showToaster = true;
+                            ToasterService.processPending();
+                        });
+                        console.log('newValue.stripeId ', $scope.user.stripeId);
+                        PaymentService.getCustomerCards($scope.user.stripeId, function(cards) {
+                            if (cards.data.length) {
+                                $scope.hasCard = true;
+                            }
+                        });
+                    }
                 }
             });
 
@@ -210,18 +236,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
             */
 
-            PaymentService.getInvoicesForAccount(function(invoices) {
-                $scope.invoices = invoices;
-                $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
-                ngProgress.complete();
-                $scope.showToaster = true;
-                ToasterService.processPending();
-            });
-
             $scope.setActiveTab = function(tab) {
                 $scope.showToaster = true;
                 $scope.activeTab = tab;
             };
+
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
                 if (!$location.$$search.onboarding) {

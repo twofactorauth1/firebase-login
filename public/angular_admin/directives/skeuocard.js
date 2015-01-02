@@ -17,7 +17,8 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                         scope.user = user;
                     });
                     scope.$watch('user', function(newValue, oldValue) {
-                        if (newValue) {
+                        if (newValue && newValue.stripeId) {
+                            console.log('newValue.stripeId ', newValue.stripeId);
                             PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
                                 scope.cards = cards;
                                 if (scope.cards.data.length) {
@@ -38,6 +39,10 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                                     container: '.' + scope.wrapper
                                 });
 
+                            });
+                        } else {
+                            element.find('form').card({
+                                container: '.' + scope.wrapper
                             });
                         }
                     });
@@ -83,6 +88,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                                 scope.cards.data.forEach(function(value, index) {
                                     PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
                                 });
+                                console.log('scope.user.stripeId ', scope.user.stripeId);
                                 PaymentService.putCustomerCard(scope.user.stripeId, token, function(card) {});
                             } else {
                                 if (token !== undefined) {

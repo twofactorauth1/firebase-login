@@ -34,6 +34,9 @@ define(['app', 'stripe', 'toasterService'], function(app) {
             };
 
             this.putCustomerCard = function(stripeId, cardToken, fn) {
+                console.log('putCustomerCard');
+                console.log('stripeId ', stripeId);
+                console.log('cardToken ', cardToken);
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardToken].join('/');
                 $http.put(apiUrl)
                     .success(function(data, status, headers, config) {
@@ -43,6 +46,7 @@ define(['app', 'stripe', 'toasterService'], function(app) {
             };
 
             this.deleteCustomerCard = function(stripeId, cardId, showToast, fn) {
+                console.log('deleteCustomerCard');
                 var showToast = showToast || false;
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards', cardId].join('/');
                 $http.delete(apiUrl)
@@ -55,6 +59,10 @@ define(['app', 'stripe', 'toasterService'], function(app) {
             };
 
             this.getCustomerCards = function(stripeId, successFn, errorFn) {
+                console.log('getCustomerCards');
+                console.log('stripeId ', stripeId);
+                console.log('successFn ', successFn);
+                console.log('errorFn ', errorFn);
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'cards'].join('/');
                 $http.get(apiUrl)
                     .success(function(data, status, headers, config) {
