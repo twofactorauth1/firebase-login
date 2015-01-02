@@ -152,6 +152,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 }
 
                 var iframe = window.parent.document.getElementById("iframe-website")
+                $scope.isAdmin =  iframe;
                 iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
                 // PostService.getAllPostsByPageId($scope.currentpage._id, function(posts) {
                 //     that.blogposts = posts;
