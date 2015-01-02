@@ -71,7 +71,7 @@
             </article> <!-- .entry -->
         </div> <!-- #main-area -->
         <section style="padding: 10px;">
-    <div >        
+    <div ng-if="isAdmin">        
         <h4>Share post via...</h4>
         <div>
           <button title="Share on Twitter" ng-click="sharePost(blog.post,'twitter')" class="btn btn-twitter">Twitter</button>

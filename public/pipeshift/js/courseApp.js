@@ -11,5 +11,8 @@ var app = angular.module('courseApp', [    'var.directives', 'app.modules.course
     "info.vietnamcode.nampnq.videogular.plugins.youtube",
     "angular-carousel"]);
 app.config(['$locationProvider', function ($locationProvider) {
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+	  	enabled: true,
+	  	requireBase: false
+	});
 }]);

@@ -250,6 +250,46 @@ var mongodao = {
 
     },
 
+    _findWithFieldsLimitAndTotalMongo: function(query, skip, limit, sort, fields, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+        var _query = query || {};
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+
+        mongoColl.count(query, function(err, count){
+            var fxn = function (err, value) {
+                if (!err) {
+                    return self._wrapArrayAndCountMongo(value, fields, type, count, _skip, fn);
+                } else {
+                    self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                    fn(err, value);
+                }
+            };
+            if (fields) {
+                if (sort) {
+                    mongoColl.find(query, fields, {sort: [
+                        [sort, 'ascending']
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
+                }
+            } else {
+                if (sort) {
+                    mongoColl.find(query, {sort: [
+                        [sort, 'ascending']
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
+                }
+            }
+        });
+
+    },
+
     _aggregateMongoWithCustomStages: function (stageAry, type, fn) {
         var self = this;
 
@@ -299,6 +339,19 @@ var mongodao = {
 
         fn(null, arr);
         return arr;
+    },
+
+    _wrapArrayAndCountMongo: function(value, fields, type, count, start, fn) {
+        var self = this, arr = [], result = {};
+        value.forEach(function (item) {
+            arr.push(self._createModel(item, type, fields));
+        });
+        result.total = count;
+        result.limit = arr.length;
+        result.start = start;
+        result.results = arr;
+        fn(null, result);
+        return result;
     },
 
 

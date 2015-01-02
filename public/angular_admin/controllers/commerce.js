@@ -151,6 +151,31 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             $scope.commerceSettings.gridViewDisplay = value;
         };
 
+        $scope.max_value = function(hash) {
+                if(hash) {
+                    var price = {};
+                if (hash[0] && hash[0].price) {
+                    price = _.max(hash, function(p){ return p.price; });
+                    return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
+                                        return (str !== "");
+                                    }).join(" ");
+                }
+              }
+            }
+
+        $scope.min_value = function(hash) {
+          if(hash) {
+                var price = {};
+                if (hash[0] && hash[0].price) {
+                    price = _.min(hash, function(p){ return p.price; });
+                    
+                    return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
+                                    return (str !== "");
+                                }).join(" ");
+                }
+          }
+        }
+
         ProductService.getProducts(function(products) {
             $scope.products = products;
             ngProgress.complete();

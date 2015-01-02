@@ -107,7 +107,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                         <i class="fa fa-bolt"></i> Sku: <span class="data">{{product.sku}}</span>
                       </div>
                       <div class="purchased"  ng-if="commerceSettings.showPrice">
-                        <i class="fa fa-money"></i> Price: <span class="data">${{product.cost}}</span>
+                        <i class="fa fa-money"></i> Price: <span class="data">${{ min_value(product.product_attributes.stripePlans) || product.regular_price}}<span ng-if="product.product_attributes.stripePlans">  -  ${{ max_value(product.product_attributes.stripePlans) || '0.00'}} </span></span>
                       </div>
                       <div class="emails-opened"  ng-if="commerceSettings.showProductType">
                         <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
