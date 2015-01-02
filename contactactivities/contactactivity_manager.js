@@ -90,7 +90,7 @@ module.exports = {
         if(contactId) {
             queryObj.contactId = contactId;
         }
-        if(activityTypeAry && activityTypeAry.indexOf(',') === -1 && $.isArray(activityTypeAry)) {
+        if(activityTypeAry && activityTypeAry.indexOf(',') === -1 && $.isArray(activityTypeAry) && activityTypeAry.length > 0) {
             queryObj.activityType = {'$in' : activityTypeAry};
         } else if(activityTypeAry && activityTypeAry.indexOf(',') != -1) {
             queryObj.activityType = activityTypeAry;
@@ -112,7 +112,8 @@ module.exports = {
 
         log.debug('Submitting query: ' + JSON.stringify(queryObj));
 
-        dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
+        //dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
+        dao.findWithFieldsLimitAndTotal(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
             if(err) {
                 log.error('Error finding activities: ' + err);
                 fn(err, null);
