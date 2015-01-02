@@ -34,6 +34,17 @@ define(['app', 'toasterService'], function(app) {
         });
     };
 
+    this.getIndigenousProducts = function(fn) {
+      console.log('get indigenous products');
+      ///api/1.0/products/indigenous
+      var apiUrl = baseUrl + ['products', 'indigenous'].join('/');
+      $http.get(apiUrl)
+        .success(function(data, status, headers, config) {
+          console.log('SUCCESS: get indigenous products ', data);
+          fn(data);
+      });
+    };
+
     this.saveProduct = function(product, fn) {
       var apiUrl = baseUrl + ['products', product._id].join('/');
       $http({

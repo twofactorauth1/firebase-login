@@ -216,7 +216,16 @@
                                         <tr>
                                             <td class="headerContent">
                                             	<img src="{{component.logourl}}" style="max-width:200px;float:left;max-height: 60px;" id="logo" />
+                                            	
                                             	<h3 class="h3 date" style="float:right">*|DATE:M jS, Y|*</h3>
+                                            </td>
+                                            </tr>
+                                            <tr ng-if="isEditing" class="pull-left">
+                                            <td>
+                                            	<a ng-if="isEditing" class="btn btn-xs" type="button" ng-click="changeLogoImage(component._id)">
+				                                        <span class="fa fa-edit"></span>
+				                                        <span class="hidden-xs">Change Logo</span>
+				                                </a>
                                             </td>
                                         </tr>
                                     </table>

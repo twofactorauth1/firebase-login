@@ -260,9 +260,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountToken = cookies.getAccountToken(req);
 
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, null, null, null, function (err, value) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, null, null, null, function (err, accountAndUser) {
             if (!err) {
-
+                var value = accountAndUser.user;
                 req.login(value, function (err) {
                     if (err) {
                         return resp.redirect("/");
