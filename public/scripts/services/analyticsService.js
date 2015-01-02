@@ -257,10 +257,13 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
     this.pagePing = function() {
         var _pageProperties = pageProperties;
         _pageProperties.ping_time = new Date().getTime();
-        var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
+        if(ipCookie("session_cookie"))
+        {
+         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
         $http.post(apiUrl, _pageProperties).success(function(data, status, headers, config) {
 
-        });
+        });   
+    }        
     };
 
 }]);

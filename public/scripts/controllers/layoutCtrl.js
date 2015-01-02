@@ -440,7 +440,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
-                      description: post.post_content
+                      description: post.post_excerpt
                     }
                 PostService.sharePostOnFacebook(postData, function(data) {
 
@@ -452,7 +452,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                       picture: post.featured_image,
                       name: post.post_title,
                       caption: post.post_excerpt,
-                      description: post.post_content
+                      description: post.post_excerpt
                     }
                 PostService.sharePostOnLinkedIn(postData, function(data) {
 
@@ -475,6 +475,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.changeBlogImage = function(blogpost)
         {        
            window.parent.changeBlogImage(blogpost);
+        }
+
+        $scope.changeLogoImage = function(componentId)
+        {        
+           window.parent.changeLogoImage(componentId);
         }
 
         $scope.saveCustomerAccount = function(customer)
@@ -605,11 +610,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.activated = false;
 
+        window.clickImageButton = function(btn)
+        {
+            $scope.urlInput = $(btn).closest('td').prev('td').find('input');            
+            window.parent.clickImageButton();
+        }
 
         window.activateAloha = function() {
             if($scope.activated == false) {
                 CKEDITOR.disableAutoInline = true;
-
+                
                 var elements = $( '.editable' );
                 elements.each( function() {
                     CKEDITOR.inline( this , {
@@ -620,11 +630,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 editor.on('change', function() {
                                     $scope.isPageDirty = true;
                                 });
+                                
                             }
                         }
                     });
                 });
-
                 $scope.activated = true;
                 //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
             }
@@ -731,6 +741,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     
                 if(networks)
                     $scope.networks = networks;
+        };
+
+        window.addCKEditorImage = function(url) {
+            $scope.urlInput.val(url)
         };
 
         window.triggerEditMode = function() {
