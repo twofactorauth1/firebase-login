@@ -82,7 +82,7 @@
                             </div>
                             <div class="panel-body">
                                 <h4 class="center">{{product.name || 'Product Title'}}</h4>
-                                <p class="subtle-gray center">{{product.regular_price || '$0.00'}}</p>
+                                <p class="subtle-gray center">${{ min_value(product.regular_price.prices) || product.cost}}<span ng-if="product.regular_price.prices">  -  ${{ max_value(product.regular_price.prices) || '0.00'}} </span></p>
                             </div>
                         </div>
                     </div>

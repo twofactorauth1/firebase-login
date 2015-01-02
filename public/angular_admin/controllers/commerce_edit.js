@@ -142,6 +142,21 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             signup_fee: $scope.signup_fee
                         }];
                     }
+                    var price =  parseInt(subscription.amount)
+                    if ('prices' in $scope.product.regular_price) {
+                        $scope.product.regular_price.prices.push({
+                            id: subscription.id,
+                            price: price, 
+                            signup_fee: $scope.signup_fee
+                        });
+                    } else {
+                        $scope.product.regular_price.prices = [{
+                            id: subscription.id,
+                            price: price,
+                            signup_fee: $scope.signup_fee
+                        }];
+                    }
+
                     productPlanStatus[subscription.id] = true;
                     $scope.saveProductFn();
                     $scope.newSubscription = {
@@ -207,7 +222,13 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             $scope.product.product_attributes.stripePlans.splice(index, 1);
                         }
                     });
-
+                    if ($scope.product.regular_price.prices)  {
+                        $scope.product.regular_price.prices.forEach(function(value, index) {
+                            if (value.id == planId) {
+                                $scope.product.regular_price.prices.splice(index, 1);
+                            }
+                        });
+                    }
                     if (fn) {
                         fn();
                     }
@@ -216,6 +237,27 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
 
                 }, showToast);
             };
+
+            $scope.max_value = function(hash) {
+                if(hash) {
+                    var price = {};
+                    price = _.max(hash, function(p){ return p.price; });
+                    
+                    return _.filter([(price.price/100).toFixed(2), ' (', price.signup_fee, ')'], function(str) {
+                                        return str !== "";
+                                    }).join(" ");
+              }
+            }
+
+            $scope.min_value = function(hash) {
+              if(hash) {
+                    var price = {};
+                    price = _.min(hash, function(p){ return p.price; });
+                    return _.filter([(price.price/100).toFixed(2), ' (', price.signup_fee, ')'], function(str) {
+                                        return str !== "";
+                                    }).join(" ");
+              }
+            }
 
             $scope.planToggleActiveFn = function(planId, active) {
                 $scope.product.product_attributes.stripePlans.forEach(function(value, index) {
