@@ -153,6 +153,8 @@ _.extend(api.prototype, baseApi.prototype, {
             setupFee = parseInt(req.body.setupFee);
         }
 
+        self.log.debug('>> setupFee ', setupFee);
+
         if(!planId || planId.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid planId parameter.");
         }
