@@ -16,7 +16,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 function resizeModal() {
                     contentElement.css('height', $(window).height() - 30 + 'px');
                     mediaElement.css('height', $(window).height() - 30 + 'px');
-                    $scope.bodyHeight = $(window).height() - 200 + 'px';
+                    $scope.bodyHeight = $(window).height() - 210 + 'px';
 
                     var filterType = $('.filter-type');
                     $timeout(function() {
