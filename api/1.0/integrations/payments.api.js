@@ -165,34 +165,52 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.wrapError(resp, 400, null, 'Invalid accountId parameter');
         }
 
-        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
-                if(err) {
-                    self.log.error('Error subscribing to Indigenous: ' + err);
-                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
-                } else {
-                    if(setupFee > 0) {
-                        stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, value.id, 'Signup Fee',
-                            null, null, function(err, value){
+        if(setupFee > 0) {
+            stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee',
+                null, null, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating signup fee as invoice item: ' + err);
+                    } else {
+                        self.log.debug('Created signup fee as invoice item.');
+                        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
                                 if(err) {
-                                    self.log.error('Error creating signup fee as invoice item: ' + err);
+                                    self.log.error('Error subscribing to Indigenous: ' + err);
+                                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
                                 } else {
-                                    self.log.debug('Created signup fee as invoice item.');
+                                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                                        if(err) {
+                                            self.log.error('Error adding billing info to account: ' + err);
+                                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                                        }
+                                        self.log.debug('<< subscribeToIndigenous');
+                                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                                    });
                                 }
+
                             });
                     }
+                });
+        } else {
+            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
+                    if(err) {
+                        self.log.error('Error subscribing to Indigenous: ' + err);
+                        return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                    } else {
+                        self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                            if(err) {
+                                self.log.error('Error adding billing info to account: ' + err);
+                                return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                            }
+                            self.log.debug('<< subscribeToIndigenous');
+                            return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                        });
+                    }
 
-                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
-                        if(err) {
-                            self.log.error('Error adding billing info to account: ' + err);
-                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
-                        }
-                        self.log.debug('<< subscribeToIndigenous');
-                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
-                    });
-                }
+                });
+        }
 
-            });
     },
 
     listCustomers: function(req, resp) {
