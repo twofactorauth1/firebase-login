@@ -278,7 +278,7 @@
                             <div class="plan-options" ng-if="user.stripeId">
                                 <div class="col-sm-6">
                                     <div class="has-plan" ng-if="user.stripeId">
-                                        <h2 class="center">{{subscription.plan.name}} Plan</h2>
+                                        <h2 class="center">{{subscription.plan.name}} Plan {{upcomingInvoice.amount_due}}</h2>
                                         <hr></hr>
                                         <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
                                             <span>/{{subscription.plan.interval}}</span>
