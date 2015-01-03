@@ -94,7 +94,6 @@ define([
                 options: {
                     showPalette: true,
                     clickoutFiresChange: true,
-                    showInitial: true,
                     showInput: true,
                     showButtons: false,
                     allowEmpty: true,
