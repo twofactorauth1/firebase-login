@@ -143,7 +143,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.savePlanFn = function(planId) {
                 if ($scope.user.stripeId) {
-                    PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription) {
+                    PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, $scope.planStatus[planId], function(subscription) {
                         $scope.cancelOldSubscriptionsFn();
                         $scope.subscription = subscription;
                         PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice) {

@@ -184,10 +184,11 @@ define(['app', 'stripe', 'toasterService'], function(app) {
                     });
             };
 
-            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
-                    customerId: stripeCustomerId
+                    customerId: stripeCustomerId,
+                    setupFee: setupFee
                 };
                 if (accountId) {
                     params.accountId = accountId;
