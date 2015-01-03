@@ -73,7 +73,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             }];
 
             $scope.$watch('activeTab', function(newValue, oldValue) {
-                console.log('watch activeTab >> ', newValue);
                 if ($scope.userPreferences) {
                     if (!$location.$$search.onboarding) {
                         $scope.userPreferences.account_default_tab = newValue;
@@ -94,6 +93,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.currentAccount = {};
+            $scope.planStatus = {};
 
             //get plans
             var productId = "3d6df0de-02b8-4156-b5ca-f242ab18a3a7";
@@ -101,13 +101,14 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 var product = _.findWhere(products, {
                     _id: productId
                 });
-                console.log('product ', product);
+
                 $scope.paymentFormProduct = product;
                 var promises = [];
                 $scope.subscriptionPlans = [];
                 if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
                     $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
                         if (value.active)
+                            $scope.planStatus[value.id] = value;
                             promises.push(PaymentService.getIndigenousPlanPromise(value.id));
                     });
                     $q.all(promises)
@@ -131,7 +132,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                     }
                 };
                 $scope.subscriptionSelected = true;
-                console.log('subscription ', $scope.subscription);
                 $scope.subscription.plan.id = planId;
             };
 
@@ -142,11 +142,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.savePlanFn = function(planId) {
-                console.log('planId ', planId);
-                console.log('$scope.user.stripeId ', $scope.user);
                 if ($scope.user.stripeId) {
-                    PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, function(subscription) {
-                        console.log('subscription ', subscription);
+                    PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, $scope.planStatus[planId], function(subscription) {
                         $scope.cancelOldSubscriptionsFn();
                         $scope.subscription = subscription;
                         PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice) {
@@ -162,20 +159,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 } else {
                     ToasterService.setPending('error', 'No Stripe customer ID.');
                 }
-                /*
-      PaymentService.postCreateStripeSubscription($scope.user.stripeId, planId, function(subscription) {
-        $scope.cancelOldSubscriptionsFn();
-        $scope.subscription = subscription;
-        PaymentService.getUpcomingInvoice($scope.user.stripeId, function(upcomingInvoice) {
-          $scope.upcomingInvoice = upcomingInvoice;
-        });
-        PaymentService.getAllInvoices(function(invoices) {
-          $scope.invoices = invoices;
-          $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
-        });
-        ToasterService.setPending('success', 'Subscribed to new plan.');
-      });
-      */
+
                 $scope.selectPlanView = 'card';
             };
 
@@ -195,7 +179,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.hasCard = false;
 
             $scope.$watch('user.stripeId', function(newValue, oldValue) {
-                console.log('user.stripeId changed ', newValue +' '+oldValue);
                 if (newValue) {
                     PaymentService.getListStripeSubscriptions(newValue, function(subscriptions) {
                         $scope.subscriptions = subscriptions;
@@ -215,7 +198,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                             $scope.showToaster = true;
                             ToasterService.processPending();
                         });
-                        console.log('newValue.stripeId ', $scope.user.stripeId);
                         PaymentService.getCustomerCards($scope.user.stripeId, function(cards) {
                             if (cards.data.length) {
                                 $scope.hasCard = true;
@@ -231,20 +213,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             UserService.getAccount(function(account) {
-                console.log('account ', account);
                 $scope.account = account;
                 $scope.currentAccount.membership = account.billing.subscriptionId;
             });
-
-            /*
-            PaymentService.getAllInvoices(function(invoices) {
-              $scope.invoices = invoices;
-              $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
-              ngProgress.complete();
-              $scope.showToaster = true;
-              ToasterService.processPending();
-            });
-            */
 
             $scope.setActiveTab = function(tab) {
                 $scope.showToaster = true;
@@ -272,10 +243,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUser(function(user) {
                 $scope.user = user;
-                console.log('$scope.user ', $scope.user);
                 angular.forEach($scope.user.profilePhotos, function(value, index) {
-                    console.log('$scope.usersocial ', $scope.usersocial);
-                    console.log('social type', value.type);
                     if (value.type && $scope.userSocial) {
                         $scope.userSocial[value.type].image = value.url;
                     }
