@@ -74,6 +74,7 @@ define(['app', 'stripe', 'toasterService'], function(app) {
             };
 
             this.getStripeCustomer = function(fn) {
+                console.log('get stripe customer');
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers'].join('/');
                 $http.get(apiUrl)
                     .success(function(data, status, headers, config) {
@@ -193,6 +194,10 @@ define(['app', 'stripe', 'toasterService'], function(app) {
             };
 
             this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, fn) {
+                console.log('postSubscribeToIndigenous');
+                console.log('stripeCustomerId ', stripeCustomerId);
+                console.log('planId ', planId);
+                console.log('accountId ', accountId);
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
                     customerId: stripeCustomerId

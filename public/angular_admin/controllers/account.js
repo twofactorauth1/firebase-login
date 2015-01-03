@@ -13,6 +13,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.userSocial = {};
 
+            $scope.firstTime = false;
+
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
@@ -133,8 +135,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 $scope.subscription.plan.id = planId;
             };
 
-            $scope.chooseFirstTime = function() {
+            $scope.chooseFirstTime = function(planId) {
                 $('#changeCardModal').modal('show');
+                $scope.firstTime = true;
+                //set trigger on success of add card service
             };
 
             $scope.savePlanFn = function(planId) {
@@ -191,6 +195,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.hasCard = false;
 
             $scope.$watch('user.stripeId', function(newValue, oldValue) {
+                console.log('user.stripeId changed ', newValue +' '+oldValue);
                 if (newValue) {
                     PaymentService.getListStripeSubscriptions(newValue, function(subscriptions) {
                         $scope.subscriptions = subscriptions;
@@ -216,6 +221,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                                 $scope.hasCard = true;
                             }
                         });
+
+                        if ($scope.firstTime) {
+                            $scope.savePlanFn($scope.subscription.plan.id);
+                            $scope.firstTime = false;
+                        }
                     }
                 }
             });

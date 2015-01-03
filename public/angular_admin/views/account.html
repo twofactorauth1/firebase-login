@@ -893,7 +893,7 @@
                 <div class="modal-footer" style="margin-top:0;">
                     <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(subscription.plan.id)" ng-if="selectPlanView=='plan'">
                         <span class="fa fa-save"> </span> Select Plan</a>
-                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="chooseFirstTime()" ng-if="selectPlanView=='card'" ng-disabled="!subscriptionSelected">
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="chooseFirstTime(subscription.plan.id)" ng-if="selectPlanView=='card'" ng-disabled="!subscriptionSelected">
                         <span class="fa fa-save"> </span> Select Plan -></a>
                 </div>
             </div>
