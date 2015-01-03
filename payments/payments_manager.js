@@ -10,30 +10,30 @@ var stripeDao = require('./dao/stripe.dao.js');
 var log = $$.g.getLogger("payments_manager");
 
 module.exports = {
-    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
         log.debug('>> createStripeCustomerForUser');
         //check for customer first.
         var customerId = user.get('stripeId');
         if(customerId && customerId.length >0){
-            //TODO: create invoice item if the customer already exists.
-            stripeDao.createInvoiceItem(customerId, accountBalance, 'usd', null, null, 'Setup Fee', null, null, function(err, value){
-                if(err) {
-                    log.error('Error creating invoice item for signup fee: ' + err);
-                    fn(err, null);
-                } else {
-                    stripeDao.getStripeCustomer(customerId, fn);
-                }
-
-            });
-
+            stripeDao.getStripeCustomer(customerId, fn);
         } else {
-            //TODO: set the accountBalance.
-            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, accountBalance, fn);
+            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, fn);
         }
     },
 
-    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, fn) {    	
-        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ',callback)');
-        stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
+    createStripeSubscription: function(customerId, planId, accountId, userId, coupon, setupFee, fn) {
+        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ','+ setupFee + ',callback)');
+        if(setupFee && setupFee > 0) {
+            stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee', null, null, function(err, value){
+                if(err) {
+                    log.error('Error creating signup fee invoice item: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('Created signup fee invoice item.');
+                    stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
+                }
+            });
+        }
+
     }
 };
