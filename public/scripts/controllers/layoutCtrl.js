@@ -646,7 +646,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         window.deactivateAloha = function() {
-            $('.editable').mahalo();
+            // $('.editable').mahalo();
             // if (aloha.editor && aloha.editor.selection) {
                  // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
                  // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');

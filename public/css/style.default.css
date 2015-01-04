@@ -7,6 +7,7 @@
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
+@import '../js/libs/sweetalert/lib/sweet-alert.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
