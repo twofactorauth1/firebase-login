@@ -94,7 +94,6 @@ define([
                 options: {
                     showPalette: true,
                     clickoutFiresChange: true,
-                    showInitial: true,
                     showInput: true,
                     showButtons: false,
                     allowEmpty: true,
@@ -726,7 +725,7 @@ define([
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
-                    $scope.resfeshIframe();
+                    //$scope.resfeshIframe();
                     for (var i = 0; i < $scope.components.length; i++) {
                         if ($scope.components[i]._id == componentId) {
                             deletedType = $scope.components[i].type;
@@ -737,6 +736,7 @@ define([
                     $scope.updateIframeComponents();
                     $scope.componentEditing = null;
                     $(".modal-backdrop").remove();
+                    $("#component-setting-modal").modal('hide');
                     toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 });
             };
@@ -1042,7 +1042,7 @@ define([
                     $scope.logoImage = false;
                     $scope.componentEditing.logourl = asset.url;
                 } else if ($scope.changeblobImage && !$scope.componentEditing) {
-                    $scope.changeblobImage = false;                                        
+                    $scope.changeblobImage = false;
                     $scope.blog_post.featured_image = asset.url;
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();

@@ -148,6 +148,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
         var contactId = req.body.contactId;
         var userId = req.userId;
+        var setupFee = 0;
+        if(req.body.setupFee) {
+            setupFee = parseInt(req.body.setupFee);
+        }
+
+        self.log.debug('>> setupFee ', setupFee);
 
         if(!planId || planId.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid planId parameter.");
@@ -161,23 +167,52 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.wrapError(resp, 400, null, 'Invalid accountId parameter');
         }
 
-        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
-                if(err) {
-                    self.log.error('Error subscribing to Indigenous: ' + err);
-                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
-                } else {
-                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
-                        if(err) {
-                            self.log.error('Error adding billing info to account: ' + err);
-                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
-                        }
-                        self.log.debug('<< subscribeToIndigenous');
-                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
-                    });
-                }
+        if(setupFee > 0) {
+            stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee',
+                null, null, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating signup fee as invoice item: ' + err);
+                    } else {
+                        self.log.debug('Created signup fee as invoice item.');
+                        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
+                                if(err) {
+                                    self.log.error('Error subscribing to Indigenous: ' + err);
+                                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                                } else {
+                                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                                        if(err) {
+                                            self.log.error('Error adding billing info to account: ' + err);
+                                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                                        }
+                                        self.log.debug('<< subscribeToIndigenous');
+                                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                                    });
+                                }
 
-            });
+                            });
+                    }
+                });
+        } else {
+            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
+                    if(err) {
+                        self.log.error('Error subscribing to Indigenous: ' + err);
+                        return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                    } else {
+                        self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                            if(err) {
+                                self.log.error('Error adding billing info to account: ' + err);
+                                return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                            }
+                            self.log.debug('<< subscribeToIndigenous');
+                            return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                        });
+                    }
+
+                });
+        }
+
     },
 
     listCustomers: function(req, resp) {

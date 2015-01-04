@@ -281,7 +281,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(user, account, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
-                paymentsManager.createStripeCustomerForUser(cardToken, user, account.id(), setupFee, function(err, stripeCustomer) {
+                paymentsManager.createStripeCustomerForUser(cardToken, user, account.id(), function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
                         return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
@@ -291,7 +291,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(stripeCustomer, user, account, callback){
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, function(err, sub) {
+                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
                     if (err) {
                         self.log.error('Error creating Stripe subscription: ' + err);
                         return self.wrapError(res, 500, 'Error creating Stripe Subscription', err);

@@ -46,7 +46,7 @@
                             <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
                         </li>
                     </ul>
-                    <div class="media" id="assets" style="height:{{bodyHeight}};">
+                    <div class="media" id="assets" style="max-height:{{bodyHeight}};">
                         <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
@@ -86,7 +86,7 @@
                                 </div>
                                 <h5 class="fm-title">
                                     <a href="" indigeweb-truncate truncate-list=" [asset.filename]"
-                                    truncate-limit=35 truncate-symbol="'...'" ></a>
+                                    truncate-limit=25 truncate-symbol="'...'" ></a>
                                 </h5>
                                 <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>
