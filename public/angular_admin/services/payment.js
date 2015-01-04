@@ -185,10 +185,11 @@ define(['app', 'stripe', 'toasterService'], function(app) {
             };
 
             this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn) {
+                console.log('setup fee ', setupFee.signup_fee);
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
                     customerId: stripeCustomerId,
-                    setupFee: setupFee
+                    setupFee: setupFee.signup_fee * 100
                 };
                 if (accountId) {
                     params.accountId = accountId;

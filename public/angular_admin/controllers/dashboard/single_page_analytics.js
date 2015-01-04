@@ -2,6 +2,10 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
     app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', 'keenService', function($scope, $location, ngProgress, WebsiteService, UserService, keenService) {
         ngProgress.start();
 
+        $scope.$back = function() {
+            window.history.back();
+        };
+
         console.log('$route.current.params.postname >>> ', $location.$$search['pageurl']);
         var pageurl = $location.$$search['pageurl'];
         if (pageurl.indexOf('/page/') != -1  && pageurl.indexOf('blog') == -1) {
@@ -94,10 +98,10 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
                             xx.store.addDataPoint($scope.heatmapData[i].x, $scope.heatmapData[i].y);
                         };
 
-                        xx.get("canvas").onclick = function(ev){
-                            var pos = h337.util.mousePosition(ev);
-                            xx.store.addDataPoint(pos[0],pos[1]);
-                        };
+                        // xx.get("canvas").onclick = function(ev){
+                        //     var pos = h337.util.mousePosition(ev);
+                        //     xx.store.addDataPoint(pos[0],pos[1]);
+                        // };
                     });
                 };
 

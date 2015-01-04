@@ -11,11 +11,10 @@
             if account.company.logo
                 h1
                     img(src="#{account.company.logo}" style="max-height:40px;")
-                    | #{account.company.name}
-            else
+            else if account.company.name
                 h1 #{account.company.name}
-        else
-            h1 #{title}
+            else
+                h1 #{account.subdomain}
 
     // logopanel
     .leftpanelinner
