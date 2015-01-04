@@ -13,6 +13,7 @@ var keenConfig = require('../../configs/keen.config');
 var async = require('async');
 var contactDao = require('../../dao/contact.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
+var urlUtils = require('../../utils/urlutils');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -40,7 +41,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
 
         //visit
-        app.post(this.url('session/:id/sessionStart'), this.storeSessionInfo.bind(this));
+        app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
         app.post(this.url('session/:id/pageStart'), this.storePageInfo.bind(this));
         app.post(this.url('session/:id/ping'), this.storePingInfo.bind(this));
 
@@ -303,11 +304,23 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var sessionEvent = new $$.m.SessionEvent(req.body);
         sessionEvent.set('session_id', req.params.id);
-        console.log('Storing Session API >>> ', new Date().getTime());
+        //console.log('Storing Session API >>> ', new Date().getTime());
         sessionEvent.set('server_time', new Date().getTime());
         sessionEvent.set('ip_address', self.ip(req));
         var geoInfo = self.geo(req);
         sessionEvent.set('ip_geo_info', geoInfo);
+
+        sessionEvent.set('accountId', self.accountId(req));
+
+        var subdomainObj = urlUtils.getSubdomainFromRequest(req);
+        if(subdomainObj.isMainApp===true) {
+            sessionEvent.set('subdomain', 'main');
+        } else {
+            sessionEvent.set('subdomain', subdomainObj.subdomain);
+        }
+        
+
+
         analyticsManager.storeSessionEvent(sessionEvent, function(err){
             if(err) {
                 self.log.error('Error saving session event: ' + err);
