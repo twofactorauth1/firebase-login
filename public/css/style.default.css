@@ -16069,6 +16069,10 @@ strong {
 #component-setting-modal .bootstrap-switch {
   float: right;
 }
+.indigeweb-activity-paging {
+  margin: 10px;
+  float: right;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */

@@ -21,7 +21,7 @@ define([
     'navigationService',
     'chartAnalyticsService',
     'chartCommerceService',
-    'userService'
+    'userService','activityDirective'
     ], function(app) {
     app.register.controller('DashboardCtrl',
         ['$scope',
@@ -79,27 +79,7 @@ define([
             }
         };
 
-        CustomerService.getCustomers(function(customers) {
-            var find = _.where($scope.customers, {
-                _id: 1598
-            });
 
-            $scope.customers = customers;
-
-            CustomerService.getAllCustomerActivities(function(activites) {
-                for (var i = 0; i < activites.length; i++) {
-                    var customer = _.where(customers, {
-                        _id: activites[i].contactId
-                    });
-                    activites[i]['customer'] = customer[0];
-                    activites[i]['activityType'] = activites[i]['activityType'];
-                };
-                $scope.activities = _.sortBy(activites, function(o) {
-                    return o.start;
-                }).reverse();
-
-            });
-        });
 
         $scope.newDesktop = false;
 

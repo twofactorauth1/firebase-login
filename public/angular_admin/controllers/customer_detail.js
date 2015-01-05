@@ -1,4 +1,4 @@
-define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive', 'keenService', 'timeAgoFilter'], function(app) {
+define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive', 'keenService', 'timeAgoFilter','activityDirective', 'formatText'], function(app) {
     app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', 'keenService',
         function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, keenService) {
             ngProgress.start();
@@ -14,11 +14,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 }
             };
             $scope.customerId = $stateParams.id;
-            $scope.newActivity = {
-                contactId: parseInt($stateParams.id),
-                start: new Date(),
-                end: new Date()
-            };
+
             $scope.ip_geo_address = '';
             CustomerService.getCustomer($scope.customerId, function(customer) {
                 $scope.customer = customer;
@@ -86,38 +82,6 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 $scope.contactLabel = CustomerService.contactLabel(customer);
                 $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
             });
-
-            CustomerService.getCustomerActivities($scope.customerId, function(activities) {
-                for (var i = 0; i < activities.length; i++) {
-                    activities[i]['customer'] = $scope.customer;
-                    activities[i]['activityType'] = activities[i]['activityType'];
-                };
-                $scope.activities = _.sortBy(activities, function(o) {
-                    return o.start;
-                }).reverse();
-                // $scope.activities.push(
-                // {
-                //     "contactId": $scope.customerId,
-                //     "activityType": "EMAIL",
-                //     "note": "Email Received.",
-                //     "detail": "by abc",
-                //     "start": "2014-10-28T18:51:52.938Z"
-                // },
-                // {
-                //     "contactId": $scope.customerId,
-                //     "activityType": "TWEET",
-                //     "note": "Tweet Received.",
-                //     "detail": "by xyz",
-                //     "start": "2014-10-28T18:51:52.938Z"
-                // }
-                // )
-                //$scope.activities = activities;
-                ngProgress.complete();
-                ToasterService.processPending();
-            });
-
-
-
             angular.extend($scope, {
                 london: {
                     lat: 51,
@@ -135,9 +99,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 }
             });
 
-            CustomerService.getActivityTypes(function(activity_types) {
-                $scope.activity_types = activity_types;
-            });
+
             $scope.moreToggleFn = function(type) {
                 var id = '.li-' + type + '.more';
                 if ($(id).hasClass('hidden')) {
@@ -151,22 +113,6 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                     console.info(data);
                 });
             };
-
-            $scope.addActivityFn = function() {
-                CustomerService.postCustomerActivity($scope.newActivity, function(activity) {
-                    $scope.activities.push(activity);
-                    $scope.activities = _.sortBy($scope.activities, function(o) {
-                        return o.start;
-                    }).reverse();
-                    $scope.newActivity = {
-                        contactId: parseInt($stateParams.id),
-                        start: new Date(),
-                        end: new Date()
-                    };
-
-                });
-            };
-
             $scope.displayAddressFormat = function(address) {
                 return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function(str) {
                     return str !== "";
