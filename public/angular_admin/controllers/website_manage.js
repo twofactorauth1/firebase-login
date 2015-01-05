@@ -139,6 +139,9 @@ define([
                         if (pages[i].handle == 'blog') {
                             $scope.blogId = pages[i]._id;
                         }
+                        if (pages[i].handle == 'post') {
+                            $scope.postId = pages[i]._id;
+                        }
                     }
                     $scope.pages = _pages;
                 });
@@ -277,11 +280,37 @@ define([
             };
 
             $scope.createPost = function(postData) {
-                WebsiteService.createPost($scope.blogId, postData, function(data) {
-                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                    $('#create-post-modal').modal('hide');
-                    $scope.posts.push(data);
-                });
+                if(!$scope.postId)
+                {
+                    var pageData = {
+                        title: "Post",
+                        handle: "post",
+                        mainmenu: false
+                    };
+                    WebsiteService.createPage($scope.website._id, pageData, function(newpage) {
+                         $scope.pages.push(newpage);
+                         $scope.postId = newpage._id;
+                         WebsiteService.createPost($scope.postId, postData, function(data) {
+                            toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                            $('#create-post-modal').modal('hide');
+                            $scope.posts.push(data);
+                            WebsiteService.createPost($scope.postId, postData, function(data) {
+                                toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                                $('#create-post-modal').modal('hide');
+                                $scope.posts.push(data);
+                            });
+                        });
+                    });
+                }
+                else
+                {
+                    WebsiteService.createPost($scope.postId, postData, function(data) {
+                        toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                        $('#create-post-modal').modal('hide');
+                        $scope.posts.push(data);
+                    });
+                }
+                
             };
 
              $scope.insertMedia = function(asset) {
