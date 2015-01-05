@@ -13,6 +13,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.tagCloud = [];
         $scope.isPageDirty = false;
 
+        //displays the year dynamically for the footer
+        var d = new Date();
+        $scope.copyrightYear = d.getFullYear();
+
         $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
             if (newValue !== undefined && newValue.length) {
                 newValue.forEach(function(value, index) {
@@ -642,7 +646,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         };
 
         window.deactivateAloha = function() {
-            $('.editable').mahalo();
+            // $('.editable').mahalo();
             // if (aloha.editor && aloha.editor.selection) {
                  // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
                  // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');

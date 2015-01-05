@@ -1,5 +1,43 @@
-define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel', 'highcharts-standalone', 'highmaps-data', 'highmaps-us', 'highcharts-ng', 'formatCurrency', 'secTotime', 'formatText', 'formatPercentage', 'dashboardService', 'customerService', 'angular-daterangepicker', 'daterangepicker', 'count-to', 'keenService', 'navigationService', 'chartAnalyticsService', 'chartCommerceService'], function(app) {
-    app.register.controller('DashboardCtrl', ['$scope', '$window', '$resource', 'ngProgress', 'PaymentService', 'dashboardService', 'CustomerService', 'keenService', 'NavigationService', 'ChartAnalyticsService', 'ChartCommerceService', function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService) {
+define([
+    'app',
+    'ngProgress',
+    'paymentService',
+    'highcharts',
+    'highcharts-funnel',
+    'highcharts-standalone',
+    'highmaps-data',
+    'highmaps-us',
+    'highcharts-ng',
+    'formatCurrency',
+    'secTotime',
+    'formatText',
+    'formatPercentage',
+    'dashboardService',
+    'customerService',
+    'angular-daterangepicker',
+    'daterangepicker',
+    'count-to',
+    'keenService',
+    'navigationService',
+    'chartAnalyticsService',
+    'chartCommerceService',
+    'userService'
+    ], function(app) {
+    app.register.controller('DashboardCtrl',
+        ['$scope',
+        '$window',
+        '$resource',
+        'ngProgress',
+        'PaymentService',
+        'dashboardService',
+        'CustomerService',
+        'keenService',
+        'NavigationService',
+        'ChartAnalyticsService',
+        'ChartCommerceService',
+        'UserService',
+    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService) {
+
         ngProgress.start();
         NavigationService.updateNavigation();
 
@@ -15,14 +53,18 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
         };
 
-        $scope.selectedDate = $scope.date;
-
+        var dateSwitch = false;
         $scope.$watch('selectedDate', function() {
            $scope.date.startDate = moment($scope.selectedDate.startDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
            $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
            //update user preferences
-           $scope.runAnalyticsReports();
+           if (dateSwitch) {
+                $scope.runAnalyticsReports();
+            }
+            dateSwitch = true;
         });
+
+        $scope.selectedDate = $scope.date;
 
         $scope.pickerOptions = {
             format: 'MMMM D, YYYY',
@@ -68,8 +110,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             }, 100);
         });
 
-        $scope.runAnalyticsReports = function() {
-            ChartAnalyticsService.runReports($scope.date, function(data) {
+        $scope.runAnalyticsReports = function(account) {
+            ChartAnalyticsService.runReports($scope.date, account, function(data) {
 
                 $scope.desktop = data.desktop;
                 $scope.mobile = data.mobile;
@@ -99,8 +141,10 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
                 $scope.renderAnalyticsCharts();
             });
         };
+        UserService.getAccount(function(account){
+            $scope.runAnalyticsReports(account);
+        });
 
-        $scope.runAnalyticsReports();
 
         $scope.renderAnalyticsCharts = function() {
 
@@ -144,7 +188,8 @@ define(['app', 'ngProgress', 'paymentService', 'highcharts', 'highcharts-funnel'
             });
         };
 
-        $scope.runCommerceReports = ChartCommerceService.runReports(function(data) {
+        $scope.runCommerceReports = ChartCommerceService.runReports
+(function(data) {
             $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
             $scope.avgRevenue = data.avgRevenue;
             $scope.annualRunRate = data.annualRunRate;
