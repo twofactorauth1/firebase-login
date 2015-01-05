@@ -20,6 +20,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     if (route.indexOf("blog/") > -1) {
                         route = 'single-post';
                     }
+                    if (route.indexOf("post/") > -1) {
+                        route = 'single-post';
+                    }
                     if (route === 'blog' || route === '/blog' || route.indexOf("tag/") > -1 || route.indexOf("category/") > -1 || route.indexOf("author/") > -1) {
                         route = 'blog';
                     }

@@ -69,6 +69,10 @@ var mainApp = angular
                 templateUrl: '../views/singlepostpage.html',
                 controller: 'BlogCtrl as blog'
             })
+            .when('/page/post/:postname', {
+                templateUrl: '../views/singlepostpage.html',
+                controller: 'BlogCtrl as blog'
+            })
             .when('/page/:pagename', {
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
