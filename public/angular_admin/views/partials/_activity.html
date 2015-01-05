@@ -198,6 +198,7 @@
                             </p>
                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                         </div>
+                        
                     </div>
                 </div>
             </li>
@@ -355,6 +356,11 @@
                                                 <span ng-if="activity.customer.first == null">{{activity.customer.details[0].emails[0].email}}</span>.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                         </div>
+                                        <div ng-switch-default>
+                                             <p>
+                                                <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+                                            </p>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -387,17 +393,10 @@ aria-hidden="true">
             </div>
             <div class="modal-body">
                 <form role="form">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Note</label>
-                        <input type="text" class="form-control" placeholder="Enter note" ng-model="newActivity.note">
-                    </div>
+                   
                     <div class="form-group">
                         <label for="exampleInputEmail1">Type</label>
-                        <select class="pull-right form-control chosen-select activity-select" data-placeholder="Activity Type"
-                        ng-model="newActivity.activityType">
-                            <option value=""></option>
-                            <option ng-repeat="item in activity_types" value="{{item.data}}">{{item.label}}</option>
-                        </select>
+                        <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
                     </div>
                     <div class="form-group">
                         <label>Detail</textarea>
