@@ -54,8 +54,15 @@ var dao = {
                                     log.info("Incorrect password");
                                     return fn("Incorrect password", "Incorrect password");
                                 } else {
-                                    //TODO: This might be a problem with a user authenticating to main app w/ multiple accounts.
-                                    req.session.accountId = user.getAllAccountIds()[0];
+
+                                    if(user.getAllAccountIds().length > 1) {
+                                        req.session.accounts = user.getAllAccountIds();
+                                        req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
+                                    } else {
+                                        req.session.accounts = user.getAllAccountIds();
+                                        req.session.accountId = user.getAllAccountIds()[0];
+                                    }
+
                                     log.info("Login successful. AccountId is now " + req.session.accountId);
                                     return fn(null, user);
                                 }
@@ -446,7 +453,7 @@ var dao = {
 
     getAuthenticatedUrlForRedirect: function(accountId, userId, path, fn) {
         var self = this;
-        self.log.debug('>> getAuthetnicatedUrlForRedirect(' + accountId + ',' + userId + ',' + path +',fn)');
+        self.log.debug('>> getAuthenticatedUrlForRedirect(' + accountId + ',' + userId + ',' + path +',fn)');
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
             if (err) {
                 return fn(err, value);
