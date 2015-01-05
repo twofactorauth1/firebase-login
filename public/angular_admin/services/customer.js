@@ -238,10 +238,34 @@ define(['app', 'constants', 'importContactService'], function(app) {
                         fn(data);
                     });
             };
+            this.getCustomerActivitiesWithLimit = function(customerId, queryParams, fn) {
+                var apiUrl = baseUrl + ['contact', customerId, 'activity'].join('/');
+                    $http({
+                            url: apiUrl,
+                            method: 'GET',
+                            params: queryParams
+                        })
+                        .success(function(data, status, headers, config) {
+                            fn(data);
+                        });
+            };
 
             this.getAllCustomerActivities = function(fn) {
                 var apiUrl = baseUrl + ['contact', 'activities'].join('/');
                 $http.get(apiUrl)
+                    .success(function(data, status, headers, config) {
+                        fn(data);
+                    });
+            };
+
+
+            this.getAllCustomerActivitiesWithLimit = function(queryParams, fn) {
+                var apiUrl = baseUrl + ['contact', 'activities'].join('/');
+                $http({
+                        url: apiUrl,
+                        method: 'GET',
+                        params: queryParams
+                    })
                     .success(function(data, status, headers, config) {
                         fn(data);
                     });

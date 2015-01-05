@@ -53,7 +53,7 @@ define([
             }
 
             if ($location.$$search['posthandle']) {
-                document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+                document.getElementById("iframe-website").setAttribute("src", '/page/post/' + $location.$$search['posthandle'] + '?editor=true');
             }
 
             if ($location.$$search['custid']) {
@@ -284,7 +284,7 @@ define([
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
                             if ($location.$$search['posthandle']) {
-                                $scope.updatePage("blog", true);
+                                $scope.updatePage("post", true);
                             }
                         }
                     } else {

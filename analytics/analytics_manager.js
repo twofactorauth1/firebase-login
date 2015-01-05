@@ -197,10 +197,11 @@ module.exports = {
 
     },
 
-    findSessionEventsByFingerprint: function(fingerprint, fn) {
+    findSessionEventsByFingerprint: function(fingerprint, accountId, fn) {
         _log.debug('>> findSessionEventsByFingerprint');
         var query = {
-            fingerprint: fingerprint
+            fingerprint: fingerprint,
+            accountId: accountId
         };
         dao.findMany(query, $$.m.SessionEvent, function(err, value){
             if(err) {

@@ -34,7 +34,8 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.poster",
         "ngTagsInput",
         'ngInputDate',
-        'angular-jqcloud'
+        'angular-jqcloud',
+        'socialLinks'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){
@@ -66,6 +67,10 @@ var mainApp = angular
                 controller: 'BlogCtrl as blog'
             })
             .when('/page/blog/:postname', {
+                templateUrl: '../views/singlepostpage.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .when('/page/post/:postname', {
                 templateUrl: '../views/singlepostpage.html',
                 controller: 'BlogCtrl as blog'
             })
