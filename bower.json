@@ -113,7 +113,7 @@
     "ua-parser-js": "0.7.3",
     "js-combinatorics": "https://github.com/dankogai/js-combinatorics.git#0.3.0",
     "bootstrap-social": "https://github.com/lipis/bootstrap-social.git",
-    "angular-jqcloud": "~1.0.0",
+    "angular-jqcloud": "~1.0.1",
     "jPushMenu": "https://github.com/takien/jPushMenu.git",
     "jqcloud2": "~2.0.1",
     "angular-slugify": "~1.0.0",
