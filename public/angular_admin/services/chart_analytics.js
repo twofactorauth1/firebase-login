@@ -564,9 +564,23 @@ define(['app', 'keenService'], function(app) {
             return queryData;
         };
 
-        this.runReports = function(date, fn) {
+        this.runReports = function(date, account, fn) {
 
             var self = this;
+
+            var filters = [{
+                "property_name": "url.domain",
+                "operator": "eq",
+                "property_value": window.location.hostname
+            }];
+
+            if (account && account.domain) {
+                filters.push({
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": account.domain
+                });
+            }
 
             var reportData = {};
             var params2 = {
@@ -601,11 +615,7 @@ define(['app', 'keenService'], function(app) {
                     "end": date.endDate
                 },
                 group_by: 'url.path',
-                filters: [{
-                    "property_name": "url.domain",
-                    "operator": "eq",
-                    "property_value": window.location.hostname
-                }]
+                filters: filters
             };
 
             keenService.multiAnalysis(params2, function(multidata) {
