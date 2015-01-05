@@ -42,6 +42,8 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                             start: new Date(),
                             end: new Date()
                         };
+                        if (!angular.isDefined(scope.activity_type))
+                            scope.activity_type = '';
                         scope.activities =  $filter('filter')(scope.all_activities, { activityType: scope.activity_type });
                         scope.total = scope.activities.length;
                         
