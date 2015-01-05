@@ -22620,6 +22620,9 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   margin: 40px auto;
   padding: 30px 0;
 }
+.post-social-link a:hover {
+  text-decoration: none !important;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;

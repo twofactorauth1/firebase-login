@@ -16,7 +16,7 @@
 
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 
-/*@import '../js/libs_misc/darkroomjs/darkroom.min.css';*/
+@import '../js/libs/sweetalert/lib/sweet-alert.css';
 
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 
@@ -19579,6 +19579,11 @@ strong {
   float: right;
 }
 
+.indigeweb-activity-paging {
+  margin: 10px;
+  float: right;
+}
+
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -19968,8 +19973,4 @@ strong {
 
 #contact-details-container #contact-information {
   margin-top: 30px;
-}
-
-#contact-details-container #contact-information hr {
-  margin-top: 5px;
 }
