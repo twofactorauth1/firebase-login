@@ -116,6 +116,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           templateUrl: '/angular_admin/views/indi.html',
           controller: 'IndiCtrl',
           controllerUrl: '/angular_admin/controllers/indi.js'
+        }))
+        .state('home', angularAMD.route({
+          url: '/home',
+          templateUrl: '/angular_admin/views/home.html',
+          controller: 'HomeCtrl',
+          controllerUrl: '/angular_admin/controllers/home.js'
         }));
 
       var authInterceptor =
@@ -133,12 +139,20 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         };
       $httpProvider.interceptors.push(authInterceptor);
     })
-    .run(['$rootScope', function($rootScope) {
+    .run(['$rootScope', '$http', function($rootScope, $http) {
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
         , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'indi'];
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
+
+          console.log('state change');
+          var baseUrl = '/api/1.0/';
+          var apiUrl = baseUrl + ['users', 'accounts'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    console.log('data ', data);
+                });
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
