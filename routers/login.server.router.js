@@ -151,7 +151,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         return;
                     });
                 } else{
-                    self.log.debug('Not main.  Not contains.');
+
                     accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
                         if(err) {
                             self.log.error('Error finding account:' + err);

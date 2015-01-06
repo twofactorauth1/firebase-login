@@ -61,7 +61,7 @@ var emailTemplateUtil = {
 
 
     //region PUBLIC
-    resetPassword: function(accountId, resetPasswordToken, user, toEmail, fn) {
+    resetPassword: function(accountId, resetPasswordToken, user, toEmail, props, fn) {
         var self = this;
 
         var serverUrl = this._getServerUrl(accountId, function(err, value) {

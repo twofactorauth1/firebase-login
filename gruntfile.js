@@ -218,7 +218,8 @@ module.exports = function(grunt) {
                     'public/js/libs_misc/angular-file-upload/angular-file-upload.js',
                     'public/js/libs/jqcloud2/dist/jqcloud.min.js',
                     'public/js/libs/angular-jqcloud/angular-jqcloud.js',
-                    'public/js/libs_misc/jstimezonedetect/jstz.min.js'
+                    'public/js/libs_misc/jstimezonedetect/jstz.min.js',
+                    'public/js/libs/angular-social-links/angular-social-links.js'
                 ],
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'

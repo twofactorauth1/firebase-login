@@ -237,7 +237,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this;
         self.log.debug('>> handleReauth');
         var activeAccountId = parseInt(req.params.id);
-        req.session.accountId = activeAccountId
+        if(_.contains(req.session.accounts, activeAccountId)){
+            req.session.accountId = activeAccountId
+        } else {
+            self.log.debug('authorized accounts does not contain ' + activeAccountId);
+        }
+
 
 
         if(req.isAuthenticated()) {
