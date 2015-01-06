@@ -17,6 +17,7 @@ var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
 var urlUtils = require('../utils/urlutils');
 var userManager = require('../dao/user.manager');
+var appConfig = require('../configs/app.config');
 
 
 var router = function () {
@@ -135,16 +136,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
-                }
-                accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
-                    if(err) {
-                        self.log.error('Error finding account:' + err);
-                        self.log.debug('redirecting to /home');
-                        resp.redirect("/home");
-                        self = req = resp = null;
-                        return;
-                    }
-                    authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, value) {
+                } else if(subObject.subdomain === null && _.contains(accountIds, appConfig.mainAccountID)) {
+                    authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
                         if (err) {
                             self.log.debug('redirecting to /home');
                             resp.redirect("/home");
@@ -155,8 +148,33 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         self.log.debug('redirecting to ' + value);
                         resp.redirect(value);
                         self = null;
+                        return;
                     });
-                });
+                } else{
+                    self.log.debug('Not main.  Not contains.');
+                    accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
+                        if(err) {
+                            self.log.error('Error finding account:' + err);
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = req = resp = null;
+                            return;
+                        }
+                        authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            }
+
+                            self.log.debug('redirecting to ' + value);
+                            resp.redirect(value);
+                            self = null;
+                        });
+                    });
+                }
+
 
             }
         });
