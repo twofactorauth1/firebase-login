@@ -344,6 +344,8 @@ define([
 
                 if (iframe.contentWindow.copyPostMode) {
                     iframe.contentWindow.copyPostMode();
+                    $scope.post_data = iframe.contentWindow.getPostData();
+                    $scope.single_post = true;
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");`
@@ -862,6 +864,10 @@ define([
                     toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
                     $scope.updatePage("index");
                 });
+            };
+
+            $scope.deletePost = function(post_data) {
+              iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
             };
 
             $scope.showMobile = function() {
