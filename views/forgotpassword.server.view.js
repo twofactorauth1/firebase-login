@@ -8,6 +8,9 @@
 var BaseView = require('./base.server.view');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
+var UAParser = require('ua-parser-js');
+var parser = new UAParser();
+
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -21,7 +24,9 @@ _.extend(view.prototype, BaseView.prototype, {
             includeHeader:false,
             includeFooter:false
         });
-
+        var ua = this.req.headers['user-agent'];
+        var result = parser.setUA(ua).getResult();
+        console.dir(result);
         this.resp.render('forgotpassword', data);
 
         this.cleanUp();
@@ -31,6 +36,22 @@ _.extend(view.prototype, BaseView.prototype, {
 
     handleForgotPassword: function(username) {
         var self = this;
+        var ua = self.req.headers['user-agent'];
+        var result = parser.setUA(ua).getResult();
+        console.dir(result);
+        /*
+         * Need to pull in the following data:
+         * Date: December 12, 2014 10:28 AM
+         * Browser: Safari
+         * Operating System: OS X
+         * IP Address: 00.00.00.00
+         * Approximate Location: La Jolla, California, United States
+         */
+        var ip = self.ip(self.req);
+        var date = new Date();
+        var browser = result.browser.name;
+        var os = result.os.name;
+
 
         authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, function(err, value) {
             if (!err) {

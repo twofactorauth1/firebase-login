@@ -1,9 +1,6 @@
-//-
-    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
-    *
-    * All use or reproduction of any or all of this content must be approved.
-    * Please contact info@indigenous.io for approval or questions.
 
-extends snippets/_requirelayout_new
-
-block content
+html
+    body
+        each val in accounts
+            div
+                a(href="/reauth/#{val}")=val
