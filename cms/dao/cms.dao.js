@@ -1250,7 +1250,10 @@ var dao = {
                 }
 
             ],
-            "created" : new Date(),
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
             "modified" : null
 
         });
@@ -1303,6 +1306,25 @@ var dao = {
             "page_type" : "email"
         });
 
+        var customerAccountPage = new $$.m.cms.Page({
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "customer-account",
+            "title" : 'Customer Accounts',
+            "seo" : {},
+            "visibility" : {
+                "visible" : false,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            components: [],
+            created : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : null
+        });
+
         self.saveOrUpdate(page, function(err, value){
             if(err) {
                 self.log.error('Error creating default page: ' + err);
@@ -1314,15 +1336,23 @@ var dao = {
                         self.log.error('Error creating welcome email page: ' + err);
                         fn(err, null);
                     } else {
-                        self.log.debug('<< createDefaultPageForAccount');
-                        fn(null, value);
+                        self.log.debug('Created welcome email page.');
+                        self.saveOrUpdate(customerAccountPage, function(err, customerPage){
+                            if(err) {
+                                self.log.error('Error creating customer account page: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('<< createDefaultPageForAccount');
+                                fn(null, value);
+                            }
+                        });
+
                     }
                 });
 
             }
         });
     },
-
 
     getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this,
