@@ -77,14 +77,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
             } else {
                 var accountIds = req.user.getAllAccountIds();
                 if (accountIds.length > 1) {
-                    resp.redirect("/home");
+                    resp.redirect("/admin/home");
                     self = req = resp = null;
                     return;
                 }
 
                 authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
                     if (err) {
-                        resp.redirect("/home");
+                        resp.redirect("/admin/home");
                         self = null;
                         return;
                     }
@@ -126,16 +126,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
             } else {
                 var accountIds = req.user.getAllAccountIds();
                 if (accountIds.length > 1) {
-                    self.log.debug('redirecting to /home');
-                    resp.redirect("/home");
+                    self.log.debug('redirecting to /admin/home');
+                    resp.redirect("/admin/home");
                     self = req = resp = null;
                     return;
                 }
 
                 authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
                     if (err) {
-                        self.log.debug('redirecting to /home');
-                        resp.redirect("/home");
+                        self.log.debug('redirecting to /admin/home');
+                        resp.redirect("/admin/home");
                         self = null;
                         return;
                     }
@@ -271,7 +271,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         var accountId = value.getAllAccountIds()[0];
                         authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
                             if (err) {
-                                resp.redirect("/home");
+                                resp.redirect("/admin/home");
                                 self = null;
                                 return;
                             }

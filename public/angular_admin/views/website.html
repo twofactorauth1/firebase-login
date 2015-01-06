@@ -139,7 +139,7 @@
                 <tab-heading>
                     Settings
                 </tab-heading>
-                <div class="rightpanelinner">
+                <div ng-if="!single_post" class="rightpanelinner">
                     <div class="form-group">
                         <label>Title:</label>
                         <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
@@ -152,12 +152,33 @@
                         <label>Show:</label>
                         <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
                     </div>
+                    <div class="form-group">
+                        <label>Secure:</label>
+                        <input bs-switch ng-model="currentPage.secure" type="checkbox" class="pull-right" ng-change="editPage()">
+                    </div>
 
                     <div class="mb20"></div>
 
                     <div class="well">
                         <p>Danger Zone</p>
                         <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-ng-disabled="currentPage.handle==='index'" confirm-click2-confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                    </div>
+                </div>
+                <div ng-if="single_post" class="rightpanelinner">
+                    <div class="form-group">
+                        <label>Title:</label>
+                        <input class="form-control input-lg" type="text" ng-model="post_data.post_title">
+                    </div>
+                    <div class="form-group">
+                        <label>URL:</label>
+                        <input class="form-control input-lg" type="text" ng-model="post_data.post_url">
+                    </div>
+
+                    <div class="mb20"></div>
+
+                    <div class="well">
+                        <p>Danger Zone</p>
+                        <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deletePost(post_data)"><i class="fa fa-trash"></i> Delete Post</button>
                     </div>
                 </div>
             </tab>

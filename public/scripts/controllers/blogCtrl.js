@@ -141,6 +141,18 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             that.tempPost=angular.copy(that.post);
         };
 
+        window.getPostData = function()
+        {
+            return that.post;
+        }
+
+        window.deletePost = function(post_data, toaster) {
+            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            PostService.deletePost(pageId, post_data._id, function(data) {
+                toaster.pop('success', "Post deleted successfully");
+            });
+        };
+
          window.savePostMode=function(toaster){ 
 
             var post_data =  angular.copy(that.post);
