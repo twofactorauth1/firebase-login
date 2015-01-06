@@ -69,8 +69,7 @@ define(['app'], function (app) {
 
         this.handleClientLoad = function() {
             gapi.client.setApiKey(apiKey);
-            window.setTimeo
-ut(this.checkAuth, 1);
+            window.setTimeout(this.checkAuth, 1);
             return deferred.promise;
         };
 

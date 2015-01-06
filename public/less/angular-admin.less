@@ -22,6 +22,12 @@
     #headerbar {
         left: 187px;
     }
+    .contentpanel, .header-menu-row {
+        margin-left: 190px;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    }
 }
 
 body.leftpanel-collapsed {
@@ -32,6 +38,12 @@ body.leftpanel-collapsed {
 body.leftpanel-collapsed.rightmenu-open {
     #headerbar {
         right: 240px;
+    }
+    .contentpanel, .header-menu-row {
+        margin-right: 240px;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
     }
 }
 #main-viewport {

@@ -64,14 +64,18 @@ _.extend(baseRouter.prototype, {
         }
     },
 
-
-    isAuth: function(req, resp, next) {
+    isHomeAuth: function(req, resp, next) {
         var self = this;
-        logger.debug('>> isAuth (' + req.originalUrl + ')');
+        logger.debug('>> isHomeAuth (' + req.originalUrl + ')');
         var path = req.url;
         if (req.isAuthenticated()) {
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
+                if(req.session.accountId === -1) {
+                    //magic number meaning user is authenticated but has multiple accounts
+                    logger.debug('returning next');
+                    return next();
+                }
                 authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
                     function(err, value){
                         if (err) {
@@ -165,6 +169,115 @@ _.extend(baseRouter.prototype, {
                 }
             });
         }
+
+    },
+
+
+    isAuth: function(req, resp, next) {
+        var self = this;
+        logger.debug('>> isAuth (' + req.originalUrl + ')');
+        var path = req.url;
+        if (req.isAuthenticated()) {
+            logger.debug('isAuthenticated');
+            if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
+                //need to redirect
+
+                authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
+                    function(err, value){
+                        if (err) {
+                            logger.error('Error getting authenticated url for redirect: ' + err);
+                            logger.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        } else {
+                            value.replace(/\?authtoken.*/g, "");
+                            logger.debug('redirecting to ' + value);
+                            resp.redirect(value);
+                            self = null;
+                        }
+                    }
+                );
+            } else {
+                if(req.originalUrl.indexOf('authtoken') === -1) {
+                    logger.debug('<< isAuth');
+                    return next();
+                } else {
+
+                    var redirectUrl = req.originalUrl.replace(/\?authtoken.*/g, "");
+                    logger.debug('redirecting to ' + redirectUrl);
+                    return resp.redirect(redirectUrl);
+                }
+
+            }
+        } else {
+            logger.debug('Not authenticated');
+            var checkAuthToken = function(req, fn) {
+                if (req.query.authtoken != null) {
+                    var accountId = 0;
+                    if (req["session"] != null) {
+                        accountId = req.session.accountId;
+                    }
+                    authenticationDao.verifyAuthToken(accountId, req.query.authtoken, true, function(err, value) {
+                        if (err) {
+                            return fn(err);
+                        }
+
+                        req.login(value, function(err) {
+                            if (err) {
+                                return fn(err);
+                            }
+                            return fn(null, value);//here
+                        });
+                    });
+                } else {
+                    return fn("No auth token found");
+                }
+            };
+
+            if (req["session"] != null && req.session["accountId"] == null) {
+                var accountDao = require("../dao/account.dao");
+                accountDao.getAccountByHost(req.get("host"), function(err, value) {
+                    if (!err && value != null) {
+                        if (value === true) {
+                            req.session.accountId = 0;
+                        } else {
+                            req.session.accountId = value.id();
+                        }
+                    }
+
+                    checkAuthToken(req, function(err, value) {
+                        if (!err) {
+                            //need to remove the auth token here.
+                            var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
+                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                            return resp.redirect(redirectUrl);
+                        } else {
+                            logger.error('Error in checkAuthToken: ' + err);
+                            cookies.setRedirectUrl(req, resp);
+                            logger.debug('Redirecting to /login');
+                            return resp.redirect("/login");
+                        }
+                    });
+                });
+            } else {
+                checkAuthToken(req, function(err, value) {
+                    if (!err) {
+                        //need to remove the auth token here.
+                        var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
+                        logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                        return resp.redirect(redirectUrl);
+                    } else {
+                        logger.error('Error in checkAuthToken: ' + err);
+                        cookies.setRedirectUrl(req, resp);
+                        logger.debug('Redirecting to /login');
+                        return resp.redirect("/login");
+                    }
+                });
+            }
+        }
+
+
     },
 
 

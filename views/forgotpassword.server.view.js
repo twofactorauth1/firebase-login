@@ -8,6 +8,9 @@
 var BaseView = require('./base.server.view');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
+var UAParser = require('ua-parser-js');
+var parser = new UAParser();
+
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -21,7 +24,9 @@ _.extend(view.prototype, BaseView.prototype, {
             includeHeader:false,
             includeFooter:false
         });
-
+        var ua = this.req.headers['user-agent'];
+        var result = parser.setUA(ua).getResult();
+        console.dir(result);
         this.resp.render('forgotpassword', data);
 
         this.cleanUp();
@@ -31,8 +36,31 @@ _.extend(view.prototype, BaseView.prototype, {
 
     handleForgotPassword: function(username) {
         var self = this;
+        var ua = self.req.headers['user-agent'];
+        var result = parser.setUA(ua).getResult();
+        console.dir(result);
+        /*
+         * Need to pull in the following data:
+         * Date: December 12, 2014 10:28 AM
+         * Browser: Safari
+         * Operating System: OS X
+         * IP Address: 00.00.00.00
+         * Approximate Location: La Jolla, California, United States
+         */
+        var ip = self.ip(self.req);
+        var date = new Date();
+        var browser = result.browser.name;
+        var os = result.os.name;
 
-        authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, function(err, value) {
+        var requestorProps = {
+            ip: ip,
+            date: date,
+            browser: browser,
+            os: os
+        };
+
+
+        authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, requestorProps, function(err, value) {
             if (!err) {
                 var data = self.baseData({
                     infoMsg: "An email has been sent to the account associated with " + username + ".  Please check your email and follow " +
@@ -85,11 +113,17 @@ _.extend(view.prototype, BaseView.prototype, {
     },
 
 
-    handleResetByToken: function(token, password) {
+    handleResetByToken: function(token, password, email) {
         var self = this;
 
-        authenticationDao.updatePasswordByToken(this.accountId(), token, password, function(err, value) {
+        authenticationDao.updatePasswordByToken(this.accountId(), token, password, email, function(err, value) {
             if (!err) {
+                self.req.flash("info", "Password changed successfully");
+                self.resp.redirect("/login");
+                self.cleanUp();
+                data = self = null;
+
+                /*
                 self.req.login(value, function(err) {
                     if (err) {
                         var data = self.baseData({
@@ -107,6 +141,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data = self = null;
                     }
                 });
+                */
             } else {
                 var data = self.baseData({
                     reset:true,

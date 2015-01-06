@@ -28,12 +28,12 @@
                                     <a ng-if="isEditing" class="btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deletePost(blogpost._id)" style="margin-right:10px">
                                         <span class="fa fa-times"></span>
                                         <span class="hidden-xs">Delete</span>
-                                    </a>                                    
+                                    </a>
                                 </h2>
 
                                 <div class="blog-meta">
                                    <span data-ng-if="blogpost.created.date">
-                                     • {{blogpost.created.date | amDateFormat:'MMMM d, YYYY'}}
+                                     • {{blogpost.created.date | date: 'fullDate'}}
                                     </span>
                                      <span data-ng-if="blogpost.post_author">
                                        Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>

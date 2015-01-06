@@ -100,6 +100,11 @@ var page = $$.m.ModelBase.extend({
             screenshot:null,
 
             /**
+             * Check if the page is secure OR not.
+             */
+            secure:false, 
+
+            /**
              * Created by data
              *
              * @property created

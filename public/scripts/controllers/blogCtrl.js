@@ -20,6 +20,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     if (route.indexOf("blog/") > -1) {
                         route = 'single-post';
                     }
+                    if (route.indexOf("post/") > -1) {
+                        route = 'single-post';
+                    }
                     if (route === 'blog' || route === '/blog' || route.indexOf("tag/") > -1 || route.indexOf("category/") > -1 || route.indexOf("author/") > -1) {
                         route = 'blog';
                     }
@@ -136,6 +139,18 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         window.copyPostMode=function(){
             console.log(that.post);
             that.tempPost=angular.copy(that.post);
+        };
+
+        window.getPostData = function()
+        {
+            return that.post;
+        }
+
+        window.deletePost = function(post_data, toaster) {
+            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            PostService.deletePost(pageId, post_data._id, function(data) {
+                toaster.pop('success', "Post deleted successfully");
+            });
         };
 
          window.savePostMode=function(toaster){ 

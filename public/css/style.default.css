@@ -7,6 +7,7 @@
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
+@import '../js/libs/sweetalert/lib/sweet-alert.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -16068,6 +16069,10 @@ strong {
 #component-setting-modal .bootstrap-switch {
   float: right;
 }
+.indigeweb-activity-paging {
+  margin: 10px;
+  float: right;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -17770,6 +17775,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel .contentpanel {
   padding: 20px;
+  width: auto !important;
 }
 .mainpanel .contentpanel::after {
   clear: both;
@@ -17802,9 +17808,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-bottom: 10px;
 }
 @media (max-width: 767px) {
-  .leftpanel-show .header-right {
-    margin-right: 240px;
-  }
   .leftpanel-show .mainpanel .pageheader {
     margin-left: 0px;
   }
@@ -19595,6 +19598,9 @@ div.error label.error:before {
   -ms-transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
   transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
 }
+.website-manage .contentpanel {
+  float: left;
+}
 .iconpicker-popover {
   z-index: 9999!important;
 }
@@ -20433,6 +20439,15 @@ div.error label.error:before {
     width: 310px;
   }
 }
+@media screen and (max-height: 26.375em) {
+  .leftpanel-show .contentpanel,
+  .leftpanel-show .header-menu-row {
+    margin-left: 140px !important;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+}
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }
@@ -21176,6 +21191,9 @@ input[type='file'] {
   font-size: 20px;
   font-weight: bold;
   display: block;
+}
+.indi-assistant .contentpanel {
+  width: 100% !important;
 }
 i.indi-sm {
   background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-sm-avatar.png');
@@ -22614,6 +22632,9 @@ ul.ui-sortable.active .fragment .componentActions h4 {
   max-width: 440px;
   margin: 40px auto;
   padding: 30px 0;
+}
+.post-social-link a:hover {
+  text-decoration: none !important;
 }
 .accordion-v1 .title {
   text-align: center;

@@ -17,7 +17,8 @@ define([
     'navigationService',
     'draggableModalDirective',
     'bootstrap-iconpicker-font-awesome',
-    'bootstrap-iconpicker'
+    'bootstrap-iconpicker',
+    'ngSweetAlert',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -31,7 +32,8 @@ define([
         '$rootScope',
         'CourseService',
         'NavigationService',
-        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService) {
+        'SweetAlert',
+        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert) {
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             ngProgress.start();
 
@@ -51,7 +53,7 @@ define([
             }
 
             if ($location.$$search['posthandle']) {
-                document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+                document.getElementById("iframe-website").setAttribute("src", '/page/post/' + $location.$$search['posthandle'] + '?editor=true');
             }
 
             if ($location.$$search['custid']) {
@@ -282,7 +284,7 @@ define([
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
                             if ($location.$$search['posthandle']) {
-                                $scope.updatePage("blog", true);
+                                $scope.updatePage("post", true);
                             }
                         }
                     } else {
@@ -342,6 +344,8 @@ define([
 
                 if (iframe.contentWindow.copyPostMode) {
                     iframe.contentWindow.copyPostMode();
+                    $scope.post_data = iframe.contentWindow.getPostData();
+                    $scope.single_post = true;
                 }
                 // var src = iframe.src;
                 // iframe.setAttribute("src", src+"/?editor=true");`
@@ -355,6 +359,7 @@ define([
             };
 
             $scope.cancelPage = function() {
+                console.log('cancel page');
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
@@ -367,17 +372,18 @@ define([
                     $scope.componentEditing = null;
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
 
+                    window.history.back();
                 });
 
 
                 //TODO Only use on single post
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updatePostMode && iFrame.contentWindow.updatePostMode();
+                // iFrame && iFrame.contentWindow && iFrame.contentWindow.updatePostMode && iFrame.contentWindow.updatePostMode();
 
-                $scope['website'] = angular.copy($scope.backup['website']);
-                $scope.backup = {};
-                $scope.primaryFontStack = $scope.website.settings.font_family;
-                $scope.secondaryFontStack = $scope.website.settings.font_family_2;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerFontUpdate && iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
+                // $scope['website'] = angular.copy($scope.backup['website']);
+                // $scope.backup = {};
+                // $scope.primaryFontStack = $scope.website.settings.font_family;
+                // $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+                // iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerFontUpdate && iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
             };
 
             $scope.doubleClick = function() {
@@ -860,6 +866,10 @@ define([
                 });
             };
 
+            $scope.deletePost = function(post_data) {
+              iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
+            };
+
             $scope.showMobile = function() {
                 $scope.isMobile = true;
             };
@@ -1069,22 +1079,43 @@ define([
                 });
             }
 
-           var offFn = $rootScope.$on('$locationChangeStart', function() { 
-                var isDirty = false; 
+           var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+                event.preventDefault();
+                console.log('newURl ', newUrl);
+                console.log('oldUrl ', oldUrl);
+                var isDirty = false;
                 var iFrame = document.getElementById("iframe-website");
                 if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty)
                 {
                     var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
                 }
-                
+
                 if (!$scope.backup['website']) {
 
-                } else if ((isDirty || !(angular.equals($scope.originalCurrentPage,$scope.currentPage))) && confirm("Do you want to Save your changes?")) {
-                    $scope.savePage();
-                } else {
-                    $scope.cancelPage();
+                } else if ((isDirty || !(angular.equals($scope.originalCurrentPage,$scope.currentPage)))) {
+
+                    SweetAlert.swal({
+                       title: "Are you sure?",
+                       text: "Do you want to save your changes?",
+                       type: "warning",
+                       showCancelButton: true,
+                       confirmButtonColor: "#DD6B55",
+                       confirmButtonText: "Yes, save changes!",
+                       cancelButtonText: "No, do not save changes!",
+                       closeOnConfirm: false,
+                       closeOnCancel: false }, 
+                    function(isConfirm){ 
+                        offFn()
+                       if (isConfirm) {
+                          SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                          $location.path(newUrl);
+                       } else {
+                          SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                          $location.path(newUrl);
+                       }
+                    });
+
                 }
-                offFn();
             });
 
             $scope.updateLinkList = function(linkLists) {

@@ -820,7 +820,7 @@ var dao = {
         var self = this;
         self.log.debug('>> _createHistoricActivities');
 
-        analyticsManager.findSessionEventsByFingerprint(fingerprint, function(err, list){
+        analyticsManager.findSessionEventsByFingerprint(fingerprint, accountId, function(err, list){
             if(err) {
                 self.log.error('Error finding session events: ' + err);
                 return fn(err, null);

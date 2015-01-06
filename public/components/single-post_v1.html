@@ -78,7 +78,23 @@
           <button title="Share on Facebook" ng-click="sharePost(blog.post,'facebook')" class="btn btn-facebook">Facebook</button>
           <button title="Share on LinkedIn" ng-click="sharePost(blog.post,'linked-in')" class="btn btn-linkedin">LinkedIn</button>
         </div>
-    </div>    
+    </div>
+    <div ng-if="!isAdmin">        
+        <h4>Share post via...</h4>
+        <div class = "post-social-link">
+         <h2>
+                        <a class="fa fa-facebook-square" href="" social-facebook><span class="hide">Share on facebook</span></a>
+                        <a class="fa fa-twitter-square" href="" social-twitter><span class="hide">Share on twitter</span></a>
+                        <a class="fa fa-twitter-square" href="" social-twitter status="This status is {{ demo.coolWord }}"><span class="hide">Share with custom status</span></a>
+                        <a class="fa fa-google-plus-square" href="" social-gplus><span class="hide">Share on google plus</span></a>
+                        <a class="fa fa-pinterest-square" href="" social-pinterest media="{{ demo.pinterestMediaUrl }}" description="An awesome description"><span class="hide">Share on pinterest</span></a>
+                        <a class="fa fa-stumbleupon" href="" social-stumbleupon><span class="hide">Share on stumbleupon</span></a>
+                        <a class="fa fa-linkedin-square" href="" social-linkedin><span class="hide">Share on linkedin</span></a>
+                        <a class="fa fa-reddit-square" href="" social-reddit><span class="hide">Share on reddit</span></a>
+                    </h2>
+        </div>
+    </div>
+
 </section>
     </div> <!-- .container -->
 </div>

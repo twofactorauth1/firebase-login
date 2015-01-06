@@ -14,6 +14,7 @@ var WebsiteView = require('../views/website.server.view');
 var contactDao = require('../dao/contact.dao');
 var cookies = require("../utils/cookieutil");
 var appConfig = require('../configs/app.config.js');
+var authenticationDao = require('../dao/authentication.dao');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -35,6 +36,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/author/*", this.setup, this.index.bind(this));
         app.get("/page/*", this.setup, this.index.bind(this));
         app.get("/signup", this.setup, this.index.bind(this));
+        app.get("/post", this.setup, this.index.bind(this));
 
         app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
         // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
@@ -47,8 +49,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 //        app.post("/signupnews", this.signUpNews.bind(this));
 
-        app.get("/home", this.isAuth.bind(this), this.showHome.bind(this));
-        app.get("/home/*", this.isAuth.bind(this), this.showHome.bind(this));
+        app.get("/home", this.isHomeAuth.bind(this), this.showHome.bind(this));
+        app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
 
         app.get("/admin", this.isAuth, this.showAngularAdmin.bind(this));
         app.get("/admin/*", this.isAuth, this.showAngularAdmin.bind(this));
@@ -57,6 +59,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
 
         app.get("/demo", this.setup, this.demo.bind(this));
+        app.get('/reauth/:id', this.setup, this.handleReauth.bind(this));
 
         return this;
     },
@@ -174,12 +177,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
     showHome: function(req,resp) {
         var self = this;
         var accountId = this.accountId(req);
+        this._showHome(req, resp);
+
+        /*
         if (accountId > 0) {
             //This is an account based url, there is no /home
             resp.redirect("/admin");
         } else {
             this._showHome(req,resp);
         }
+        */
     },
 
     showAdmin: function(req,resp) {
@@ -224,6 +231,42 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 return resp.redirect("/");
             }
         });
+    },
+
+    handleReauth: function(req, resp) {
+        var self = this;
+        self.log.debug('>> handleReauth');
+        var activeAccountId = parseInt(req.params.id);
+        if(_.contains(req.session.accounts, activeAccountId)){
+            req.session.accountId = activeAccountId
+        } else {
+            self.log.debug('authorized accounts does not contain ' + activeAccountId);
+        }
+
+
+
+        if(req.isAuthenticated()) {
+            self.log.debug('isAuthenticated');
+
+        }
+        if(req.session.accountId === -1) {
+            self.log.debug('AccountId is -1');
+            resp.redirect('/home');
+        } else {
+            self.log.debug('AccountId is ' + req.session.accountId);
+
+            authenticationDao.getAuthenticatedUrlForAccount(req.session.accountId, req.user.attributes._id, '/admin', 30, function(err, value){
+                if(err) {
+                    self.log.error('Error getting authenticated url for redirect: ' + err);
+                    resp.redirect('/login');
+                } else {
+                    self.log.debug('<< handleReauth');
+                    resp.redirect(value);
+                }
+            });
+
+        }
+
     }
 });
 

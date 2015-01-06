@@ -68,6 +68,8 @@ require.config({
         'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
+        'ngSweetAlert' : 'libs/angular-sweetalert/SweetAlert',
+        'sweetAlert': 'libs/sweetalert/lib/sweet-alert.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -120,6 +122,8 @@ require.config({
         'formatPercentage': '/angular_admin/filters/formatPercentage',
         'formatText': '/angular_admin/filters/format_text',
         'draggableModalDirective': '/angular_admin/directives/draggable_modal',
+        'activityDirective': '/angular_admin/directives/activity',
+        'offsetFilter': '/angular_admin/filters/offset',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -190,6 +194,7 @@ require.config({
         'ngFileUpload': {deps: ['angular']},
         'angularStepper': {deps: ['angular']},
         'angularMoney': {deps: ['angular']},
+        'ngSweetAlert': {deps: ['sweetAlert']},
         'youtubeService': {deps: ['angular', 'varModules']},
         'courseService': {deps: ['angular', 'varModules', 'angularResource']},
         'courseVideoService': {deps: ['angular', 'varModules', 'angularResource']},

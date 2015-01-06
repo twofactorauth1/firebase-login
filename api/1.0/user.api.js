@@ -27,6 +27,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
+        app.get(this.url('accounts'), this.isAuthApi, this.getUserAccounts.bind(this));
+        app.post(this.url('accounts/:id'), this.isAuthApi, this.setActiveAccount.bind(this));
+
         app.get(this.url('social'), this.isAuthApi, this.getLoggedInUserSocialCredentials.bind(this));
         app.delete(this.url('social/:type'), this.isAuthApi, this.removeSocialCredentials.bind(this));
 
@@ -46,6 +49,39 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':accountId/user/exists/:username', "account"), this.setup, this.userExistsForAccount.bind(this));
     },
 
+    /**
+     * No security needed.
+     * @param req
+     * @param resp
+     */
+    getUserAccounts: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getUserAccounts');
+        /*
+         * This method assumes a user has been authenticated.  It will only return the accounts that were present at
+         * authentication-time.
+         */
+        var result = {
+            activeAccount: req.session.accountId,
+            accounts: req.session.accounts
+        }
+        self.log.debug('<< getUserAccounts');
+        self.sendResult(resp, result);
+    },
+
+    /** No security needed.
+     *
+     * @param req
+     * @param resp
+     */
+    setActiveAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> setActiveAccount');
+        var activeAccountId = parseInt(req.params.id);
+        req.session.accountId = activeAccountId;
+        self.log.debug('<< setActiveAccount (' + req.session.accountId + ')');
+        self.send200(resp);
+    },
 
     /**
      * No security needed.

@@ -9,6 +9,7 @@ var BaseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
+var accountDao = require('../dao/account.dao');
 var cookies = require("../utils/cookieutil");
 var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
@@ -16,6 +17,7 @@ var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
 var urlUtils = require('../utils/urlutils');
 var userManager = require('../dao/user.manager');
+var appConfig = require('../configs/app.config');
 
 
 var router = function () {
@@ -124,26 +126,56 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 resp.redirect("/admin");
                 self = req = resp = null;
             } else {
+                /*
+                 * Get account from url.  If main app, check for multi-users
+                 */
                 var accountIds = req.user.getAllAccountIds();
-                if (accountIds.length > 1) {
+                var subObject = urlUtils.getSubdomainFromRequest(req);
+                if(subObject.isMainApp && accountIds.length > 1) {
                     self.log.debug('redirecting to /home');
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
-                }
+                } else if(subObject.subdomain === null && _.contains(accountIds, appConfig.mainAccountID)) {
+                    authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
+                        if (err) {
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        }
 
-                authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
-                    if (err) {
-                        self.log.debug('redirecting to /home');
-                        resp.redirect("/home");
+                        self.log.debug('redirecting to ' + value);
+                        resp.redirect(value);
                         self = null;
                         return;
-                    }
+                    });
+                } else{
 
-                    self.log.debug('redirecting to ' + value);
-                    resp.redirect(value);
-                    self = null;
-                });
+                    accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
+                        if(err) {
+                            self.log.error('Error finding account:' + err);
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = req = resp = null;
+                            return;
+                        }
+                        authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            }
+
+                            self.log.debug('redirecting to ' + value);
+                            resp.redirect(value);
+                            self = null;
+                        });
+                    });
+                }
+
+
             }
         });
     },
@@ -201,6 +233,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     handleResetPasswordByToken: function (req, resp) {
+        var email = req.body.email;
         var password = req.body.password;
         var password2 = req.body.password2;
         var token = req.params.token;
@@ -209,8 +242,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             req.flash("error", "Passwords do not match");
             return resp.redirect("/forgotpassword/reset/" + token);
         }
-
-        new ForgotPasswordView(req, resp).handleResetByToken(token, password);
+        new ForgotPasswordView(req, resp).handleResetByToken(token, password, email);
     },
     //endregion
 
