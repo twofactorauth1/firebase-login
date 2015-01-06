@@ -85,11 +85,17 @@ _.extend(view.prototype, BaseView.prototype, {
     },
 
 
-    handleResetByToken: function(token, password) {
+    handleResetByToken: function(token, password, email) {
         var self = this;
 
-        authenticationDao.updatePasswordByToken(this.accountId(), token, password, function(err, value) {
+        authenticationDao.updatePasswordByToken(this.accountId(), token, password, email, function(err, value) {
             if (!err) {
+                self.req.flash("info", "Password changed successfully");
+                self.resp.redirect("/login");
+                self.cleanUp();
+                data = self = null;
+
+                /*
                 self.req.login(value, function(err) {
                     if (err) {
                         var data = self.baseData({
@@ -107,6 +113,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         data = self = null;
                     }
                 });
+                */
             } else {
                 var data = self.baseData({
                     reset:true,

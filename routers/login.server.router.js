@@ -201,6 +201,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     handleResetPasswordByToken: function (req, resp) {
+        var email = req.body.email;
         var password = req.body.password;
         var password2 = req.body.password2;
         var token = req.params.token;
@@ -209,8 +210,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             req.flash("error", "Passwords do not match");
             return resp.redirect("/forgotpassword/reset/" + token);
         }
-
-        new ForgotPasswordView(req, resp).handleResetByToken(token, password);
+        new ForgotPasswordView(req, resp).handleResetByToken(token, password, email);
     },
     //endregion
 
