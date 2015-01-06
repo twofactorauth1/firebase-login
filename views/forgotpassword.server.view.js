@@ -52,8 +52,15 @@ _.extend(view.prototype, BaseView.prototype, {
         var browser = result.browser.name;
         var os = result.os.name;
 
+        var requestorProps = {
+            ip: ip,
+            date: date,
+            browser: browser,
+            os: os
+        };
 
-        authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, function(err, value) {
+
+        authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(this.accountId(), username, requestorProps, function(err, value) {
             if (!err) {
                 var data = self.baseData({
                     infoMsg: "An email has been sent to the account associated with " + username + ".  Please check your email and follow " +

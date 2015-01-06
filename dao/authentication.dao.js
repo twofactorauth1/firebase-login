@@ -250,7 +250,15 @@ var dao = {
     },
 
 
-    sendForgotPasswordEmailByUsernameOrEmail: function (accountId, email, fn) {
+    /*
+     * requestorProps = {
+     *      ip: ip,
+     *      date: date,
+     *      browser: browser,
+     *      os: os
+     *  };
+     */
+    sendForgotPasswordEmailByUsernameOrEmail: function (accountId, email, requestorProps, fn) {
         var _email = email, promise = $.Deferred();
 
         if (accountId !== appConfig.mainAccountID) {//TODO: != mainApp
@@ -321,7 +329,7 @@ var dao = {
                 userDao.saveOrUpdate(user, function (err, value) {
                     if (!err) {
                         //Send Email based on the current token
-                        EmailTemplateUtil.resetPassword(accountId, token, value, email, fn);
+                        EmailTemplateUtil.resetPassword(accountId, token, value, email, requestorProps, fn);
                     } else {
                         return fn("An error occurred: " + err);
                     }
