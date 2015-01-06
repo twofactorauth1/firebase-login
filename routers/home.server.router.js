@@ -59,7 +59,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
 
         app.get("/demo", this.setup, this.demo.bind(this));
-        app.get('/reauth', this.setup, this.handleReauth.bind(this));
+        app.get('/reauth/:id', this.setup, this.handleReauth.bind(this));
 
         return this;
     },
@@ -236,6 +236,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
     handleReauth: function(req, resp) {
         var self = this;
         self.log.debug('>> handleReauth');
+        var activeAccountId = parseInt(req.params.id);
+        req.session.accountId = activeAccountId
+
+
         if(req.isAuthenticated()) {
             self.log.debug('isAuthenticated');
 

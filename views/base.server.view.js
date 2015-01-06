@@ -127,6 +127,26 @@ _.extend(baseView.prototype, {
         fn();
     },
 
+    ip: function(req) {
+        try {
+            var ip = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress;
+
+            if(Array.isArray(ip)) {
+                return ip[0];
+            } else if(ip.indexOf(',') !== -1){
+                return ip.split(',')[0].trim();
+            } else{
+                return ip;
+            }
+        } catch(exception) {
+            return null;
+        }
+
+    },
+
 
     cleanUp: function() {
         this.req = this.resp = null;

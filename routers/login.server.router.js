@@ -9,6 +9,7 @@ var BaseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
+var accountDao = require('../dao/account.dao');
 var cookies = require("../utils/cookieutil");
 var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
@@ -77,14 +78,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
             } else {
                 var accountIds = req.user.getAllAccountIds();
                 if (accountIds.length > 1) {
-                    resp.redirect("/admin/home");
+                    resp.redirect("/home");
                     self = req = resp = null;
                     return;
                 }
 
                 authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
                     if (err) {
-                        resp.redirect("/admin/home");
+                        resp.redirect("/home");
                         self = null;
                         return;
                     }
@@ -124,26 +125,39 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 resp.redirect("/admin");
                 self = req = resp = null;
             } else {
+                /*
+                 * Get account from url.  If main app, check for multi-users
+                 */
                 var accountIds = req.user.getAllAccountIds();
-                if (accountIds.length > 1) {
-                    self.log.debug('redirecting to /admin/home');
-                    resp.redirect("/admin/home");
+                var subObject = urlUtils.getSubdomainFromRequest(req);
+                if(subObject.isMainApp && accountIds.length > 1) {
+                    self.log.debug('redirecting to /home');
+                    resp.redirect("/home");
                     self = req = resp = null;
                     return;
                 }
-
-                authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
-                    if (err) {
-                        self.log.debug('redirecting to /admin/home');
-                        resp.redirect("/admin/home");
-                        self = null;
+                accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding account:' + err);
+                        self.log.debug('redirecting to /home');
+                        resp.redirect("/home");
+                        self = req = resp = null;
                         return;
                     }
+                    authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, value) {
+                        if (err) {
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        }
 
-                    self.log.debug('redirecting to ' + value);
-                    resp.redirect(value);
-                    self = null;
+                        self.log.debug('redirecting to ' + value);
+                        resp.redirect(value);
+                        self = null;
+                    });
                 });
+
             }
         });
     },
@@ -271,7 +285,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         var accountId = value.getAllAccountIds()[0];
                         authenticationDao.getAuthenticatedUrlForAccount(accountId, self.userId(req), "admin", function (err, value) {
                             if (err) {
-                                resp.redirect("/admin/home");
+                                resp.redirect("/home");
                                 self = null;
                                 return;
                             }

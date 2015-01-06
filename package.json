@@ -53,12 +53,14 @@
     "stripe": "~2.4.0",
     "temporary": "0.0.8",
     "tldtools": "0.0.9",
+    "ua-parser-js": "^0.7.3",
     "underscore": ">=1.6.0",
     "wiredep": "^1.8.6",
     "xml2js": "^0.4.4"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
+    "grunt-bower-concat": "^0.4.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "~0.5.0",
@@ -69,13 +71,13 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-copy-to": "0.0.10",
+    "grunt-csssplit": "0.2.1",
     "grunt-jsdoc-to-markdown": "^0.4.2",
     "grunt-ng-annotate": "^0.4.0",
     "grunt-ng-constant": "^1.0.0",
     "grunt-prompt": "^1.2.1",
     "superagent": "0.18.1",
-    "supertest": "0.13.0",
-    "grunt-csssplit" : "0.2.1"
+    "supertest": "0.13.0"
   },
   "main": "./app.js"
 }
