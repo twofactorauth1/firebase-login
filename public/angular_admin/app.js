@@ -139,20 +139,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         };
       $httpProvider.interceptors.push(authInterceptor);
     })
-    .run(['$rootScope', '$http', function($rootScope, $http) {
+    .run(['$rootScope', function($rootScope) {
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
         , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'indi'];
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
-
-          console.log('state change');
-          var baseUrl = '/api/1.0/';
-          var apiUrl = baseUrl + ['users', 'accounts'].join('/');
-            $http.get(apiUrl)
-                .success(function(data, status, headers, config) {
-                    console.log('data ', data);
-                });
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
