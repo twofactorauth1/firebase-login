@@ -253,7 +253,7 @@ var dao = {
     sendForgotPasswordEmailByUsernameOrEmail: function (accountId, email, fn) {
         var _email = email, promise = $.Deferred();
 
-        if (accountId > 0) {
+        if (accountId !== appConfig.mainAccountID) {//TODO: != mainApp
             userDao.getUserForAccount(accountId, email, function(err, value) {
                 if (err) {
                     promise.reject();
@@ -337,7 +337,7 @@ var dao = {
                     return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
                 }
 
-                if (accountId > 0) {
+                if (accountId !== appConfig.mainAccountID) {
                     if (value.getUserAccount(accountId) == null) {
                         return fn("No user found for this account", "No user found for this account");
                     }
@@ -355,9 +355,33 @@ var dao = {
         });
     },
 
+    verifyPasswordResetTokenWithEmail: function (accountId, token, email, fn) {
+        userDao.findOne({passRecover: token, email: email}, function (err, value) {
+            if (!err) {
+                if (value == null) {
+                    return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
+                }
 
-    updatePasswordByToken: function (accountId, passwordResetToken, password, fn) {
-        this.verifyPasswordResetToken(accountId, passwordResetToken, function (err, value) {
+                if (accountId !== appConfig.mainAccountID) {
+                    if (value.getUserAccount(accountId) == null) {
+                        return fn("No user found for this account", "No user found for this account");
+                    }
+                }
+
+                var passRecoverExp = value.get("passRecoverExp");
+                if (new Date(passRecoverExp) < new Date()) {
+                    return fn("Password recovery token is expired, please resubmit the form below.");
+                }
+
+                return fn(null, value);
+            } else {
+                return fn(err, value);
+            }
+        });
+    },
+
+    updatePasswordByToken: function (accountId, passwordResetToken, password, email, fn) {
+        this.verifyPasswordResetTokenWithEmail(accountId, passwordResetToken, email, function (err, value) {
             if (!err) {
                 var user = value;
                 user.clearPasswordRecoverToken();
@@ -372,6 +396,13 @@ var dao = {
                     if (localCredentials != null && socialCredentials != null && localCredentials.username == socialCredentials.username) {
                         user.createOrUpdateLocalCredentials(password);
                     }
+                    var accountIds = user.getAllAccountIds();
+                    accountIds.forEach(function(acctId) {
+                        var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
+                        if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
+                            user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, password);
+                        }
+                    });
                 } else {
                     user.createOrUpdateLocalCredentials(password);
 
