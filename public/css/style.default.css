@@ -17499,9 +17499,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   background: #54C8E8;
   color: #fff;
 }
-.leftpanel-collapsed .mainpanel {
-  margin-left: 52px;
-}
 .leftpanel-collapsed .infosummary {
   display: none;
 }
@@ -17519,6 +17516,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .cbp-spmenu-push #leftnav {
   left: 0;
+}
+.cbp-spmenu-push #leftnav .leftpanelinner {
+  top: 65px;
 }
 .cbp-spmenu-vertical {
   z-index: 200 !important;
@@ -17806,6 +17806,17 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .mainpanel p {
   margin-bottom: 10px;
+}
+.leftpanel-show .mainpanel .pageheader {
+  left: 197px;
+}
+.leftpanel-show .mainpanel #iframe-website {
+  margin-left: 191px;
+}
+@media (max-width: 1024px) {
+  .mainpanel .pageheader {
+    margin-left: 39px;
+  }
 }
 @media (max-width: 767px) {
   .leftpanel-show .mainpanel .pageheader {
@@ -20095,7 +20106,7 @@ div.error label.error:before {
   .stickyheader .headerbar {
     left: 0;
   }
-  .stickyheader.leftpanel-show .headerbar {
+  .leftpanel-show .headerbar {
     left: 240px;
   }
   .stickyheader.chat-relative-view .headerbar {

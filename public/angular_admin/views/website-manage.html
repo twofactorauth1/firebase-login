@@ -57,10 +57,10 @@
                         </div>
                         <div class="panel-body">
                             <div ng-if="currentTheme">
-                                <div class="col-sm-6">
+                                <div class="col-sm-5">
                                     <img class="img-thumbnail" ng-src="{{currentTheme.previewUrl}}">
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-7">
                                     <div class="caption">
                                         <h4>{{currentTheme.name}}</h4>
                                         <p><b>{{currentTheme.description}}</b>
@@ -123,7 +123,7 @@
                                     <h5>{{theme.name}}</h5>
                                     <p>{{theme.description}}</p>
                                     <button class="btn btn-primary btn-lg btn-block" ng-if="theme.name != currentTheme.name" ng-click="changeTheme(theme)" ng-disabled="theme.coming_soon">Switch Theme</button>
-                                    <h1 class="center" ng-if="theme.name == currentTheme.name" style="height:47px"><span class="label label-success">CURRENT THEME</span></h1>
+                                    <h1 class="center" ng-if="theme.name == currentTheme.name" style="height:47px"><span class="label label-success" style="font-size: 21px;">CURRENT THEME</span></h1>
                                 </div>
                             </div>
                         </div>

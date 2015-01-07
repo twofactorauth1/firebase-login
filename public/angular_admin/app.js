@@ -116,6 +116,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           templateUrl: '/angular_admin/views/indi.html',
           controller: 'IndiCtrl',
           controllerUrl: '/angular_admin/controllers/indi.js'
+        }))
+        .state('home', angularAMD.route({
+          url: '/home',
+          templateUrl: '/angular_admin/views/home.html',
+          controller: 'HomeCtrl',
+          controllerUrl: '/angular_admin/controllers/home.js'
         }));
 
       var authInterceptor =

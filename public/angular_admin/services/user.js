@@ -19,6 +19,14 @@ define(['app'], function(app) {
                 });
         };
 
+        this.getSingleAccount = function(accountId, fn) {
+            var apiUrl = baseUrl + ['account', accountId].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         this.getAccount = function(fn) {
             if (that.account) {
                 console.log('cached account');
@@ -31,6 +39,14 @@ define(['app'], function(app) {
                         fn(data);
                     });
             }
+        };
+
+        this.getAccounts = function(fn) {
+            var apiUrl = baseUrl + ['user', 'accounts'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
         };
 
         this.putAccount = function(user, fn) {
