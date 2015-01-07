@@ -891,7 +891,13 @@ module.exports = {
         var self = this;
         self.log = log;
         self.log.debug('>> getPagesByWebsiteId');
-        cmsDao.findMany({'accountId': accountId, 'websiteId':websiteId}, $$.m.cms.Page, function(err, list){
+        var query = {
+            accountId: accountId,
+            websiteId: websiteId,
+            $or: [{secure:false},{secure:{$exists:false}}]
+
+        };
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
             if(err) {
                 self.log.error('Error getting pages by websiteId: ' + err);
                 fn(err, null);
@@ -901,6 +907,31 @@ module.exports = {
                     map[value.get('handle')] = value;
                 });
                 fn(null, map);
+            }
+        });
+    },
+
+    getSecurePage: function(accountId, pageHandle, websiteId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getSecurePage');
+
+        var query = {
+            accountId: accountId,
+            handle: pageHandle,
+            secure:true
+        }
+        if(websiteId) {
+            query.websiteId = websiteId;
+        }
+
+        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+            if(err) {
+                self.log.error('Error getting secure page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getSecurePage');
+                fn(null, page);
             }
         });
     },
