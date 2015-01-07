@@ -2,8 +2,9 @@
  * The controller used when editing video courses
  */
 define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController', 'navigationService',
-    'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'], function (angularAMD, app) {
-    app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', '$templateCache', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService, $templateCache) {
+    'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding', 'analyticService'], function (angularAMD, app) {
+    app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', '$templateCache', 'AnalyticService', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService, $templateCache, AnalyticService) {
+        console.log(AnalyticService);
         NavigationService.updateNavigation();
         $scope.location = $location;
         $scope.courseBlocked = false;
