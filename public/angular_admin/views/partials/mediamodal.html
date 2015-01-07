@@ -119,7 +119,7 @@
                 <div class="row" ng-if="!editingImage">
                     <div class="col-md-offset-8 col-md-4">
                         <label for="upload_image" class="btn btn-primary ">
-                            <span ng-if="uploader.queue.length <= 0">Select File</span>
+                            <span ng-if="uploader.queue.length <= 0">Select File </span>
                             <span ng-if="uploader.queue.length > 0">Select Another File</span>
                             <input type="file"
                                    id="upload_image"
@@ -171,6 +171,7 @@
                                         <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
                                         <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
                                         <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        <span ng-show="item.isUploading"><i class="fa fa-spinner fa-spin"></i></span>
                                     </td>
                                     <td nowrap>
                                         <button type="button"
