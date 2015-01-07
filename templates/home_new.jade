@@ -5,14 +5,16 @@ block content
 		.signinpanel
 			img(src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png", style="margin: 25px auto;width: 270px;display: block;")
 			.panel.panel-default.widget-messaging.choose-account-selection
-					.panel-heading
-						h3.panel-title.center Choose An Account
+					.panel-heading(style="background:#4bafca")
+						h3(style="color:#ffffff").panel-title.center Choose An Account
 					.panel-body
 						ul
 							each val in accounts
 								a(href="/reauth/#{val.id}")
 									li(ng-repeat='accountinavaliableAccounts')
-										img(src="#{val.logo}")
-										span=val.subdomain
-										i.fa.fa-chevron-right.pull-right
+										div(style="width:130px;background: #e7e7e7;padding: 5px;border-radius: 3px;margin-right: 15px;float:left")
+											img(src="#{val.logo}", style="max-width: 120px;max-height: 30px;margin: 0 auto;display: block;")
+										span(style="line-height: 33px;")=val.subdomain
+										i.fa.fa-chevron-right.pull-right(style="line-height: 33px;color:#4bafca")
+								div.clearfix
 			img(src="https://s3.amazonaws.com/indigenous-digital-assets/account_6/brought-by.png" style="width: 220px;margin: 0 auto;display: block;")
