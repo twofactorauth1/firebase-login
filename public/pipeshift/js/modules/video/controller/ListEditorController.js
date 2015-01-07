@@ -3,7 +3,7 @@
  */
 define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController', 'navigationService',
     'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'], function (angularAMD, app) {
-    app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService) {
+    app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', '$templateCache', function ($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService, $templateCache) {
         NavigationService.updateNavigation();
         $scope.location = $location;
         $scope.courseBlocked = false;
@@ -12,7 +12,8 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
         $scope.searchtime = $location.search()['searchtime'] || false;
         $scope.section = $location.path().split('/')[2];
         $scope.courseBlocked = true;
-        //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used)
+        //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used
+
         $http.get("/api/1.0/campaignmanager/pipeshift/templates").success(function (result) {
             $scope.courseBlocked = false;
             $scope.templates = result;
@@ -295,7 +296,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
                     video: function () {
                         return $.extend({}, video, {percents: Math.round(100 * (index + 1) / totalNumber), videoIndex: index + 1, totalVideos: totalNumber});
                     }, template: function () {
-                        return findTemplateByName($scope.course.template.name);
+                        return {name: 'minimalist', code: $templateCache.get('/pipeshift/views/directives/videoPreview.html')[1]};
                     }
                 }
             });
