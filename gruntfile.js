@@ -281,6 +281,7 @@ module.exports = function(grunt) {
                         'public/scripts/filters/generateURLforLinks.js',
                         'public/scripts/filters/getByProperty.js',
                         'public/scripts/filters/getByType.js',
+                        'public/scripts/filters/offset.js',
                         'public/scripts/filters/trustHtml.js',
                         'public/scripts/controllers/blogCtrl.js',
                         'public/scripts/controllers/CourseSubscribeModalController.js',
