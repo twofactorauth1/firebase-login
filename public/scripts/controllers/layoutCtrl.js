@@ -127,6 +127,25 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     route = route.replace('/', '');
                     that.pages = data[route];
                 }
+                if ($scope.$location.$$path === '/signup') {
+                    userService.getTmpAccount(function(data) {
+                        var tmpAccount = data;
+                        if (tmpAccount.tempUser) {
+                            if (tmpAccount.tempUser.email) {
+                                $scope.newAccount.email = tmpAccount.tempUser.email;
+                            }
+                            if (tmpAccount.tempUser.businessName) {
+                                $scope.newAccount.businessName = tmpAccount.tempUser.businessName;    
+                            }
+                        } else{
+                            userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+                            });    
+                        }
+                        
+                        
+                    });
+                }
+                
 
                 $scope.currentpage = that.pages;
                 if ($route.current.params.custid != null) {
@@ -1031,6 +1050,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             //redirect to signup with details
             //window.location.href = "http://app.indigenous.local:3000/signup";
         };
+
+         $scope.makeSocailAccount = function(socialType) {
+            if(socialType) {
+                window.location.href = "/signup/"+socialType+"?redirectTo=/signup";
+                return;
+                }
+            };
 
         $scope.createAccount = function(newAccount) {
             //validate
