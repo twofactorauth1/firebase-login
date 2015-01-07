@@ -248,6 +248,7 @@ module.exports = function(grunt) {
             },
             app1: {
                 files: {
+                    /*
                     'public/js/ng-indigenous.js':[
                         'public/js/libs/angular-ui/build/angular-ui.min.js',
                         'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
@@ -285,6 +286,8 @@ module.exports = function(grunt) {
                         'public/scripts/controllers/layoutCtrl.js',
                         'public/scripts/controllers/mainCtrl.js'
                     ]
+                    */
+                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts')
                 }
             }
         },
@@ -469,6 +472,11 @@ module.exports = function(grunt) {
             srcfiles = data;
             done();
         });
+    });
+
+    grunt.registerTask('buildNGList', 'Build Angular List', function(){
+        var fileAry = jsincludeGenerator.includeDirectory('public/scripts');
+        console.log('returned array: ', fileAry)
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');

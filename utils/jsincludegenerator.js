@@ -62,6 +62,26 @@ var jsincludegenerator = {
         console.log('returning: ', dataAry);
         return dataAry;
 
+    },
+
+    includeDirectory: function(dir) {
+        var self = this;
+        var fileAry = [];
+
+        var ary = fs.readdirSync(dir);
+        //console.log('readdir returned', ary);
+
+        _.each(ary, function(_file){
+            //console.log('working on ' + _file);
+            if(fs.statSync(dir + '/' + _file).isDirectory()) {
+                //concat
+                fileAry = fileAry.concat(self.includeDirectory(dir + '/' + _file));
+            } else if(fs.statSync(dir + '/' + _file).isFile()) {
+                fileAry.push(dir + '/' + _file);
+            }
+        });
+
+        return fileAry;
     }
 
 
