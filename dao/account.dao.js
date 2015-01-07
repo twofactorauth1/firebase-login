@@ -9,7 +9,7 @@ require('./base.dao');
 require('../models/account');
 var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
-
+var async = require('async');
 
 var dao = {
 
@@ -213,6 +213,27 @@ var dao = {
         } else {
             return this.createAccount(fn);
         }
+    },
+
+    getPreviewData: function(idAry, fn) {
+        var self = this;
+        var data = [];
+        async.each(idAry, function(_id, callback){
+            self.getById(_id, function(err, val){
+                if(err) {
+                    callback(err);
+                } else {
+                    var obj = {};
+                    obj.id = _id;
+                    obj.subdomain = val.get('subdomain');
+                    obj.logo = val.get('business').logo;
+                    data.push(obj);
+                    callback();
+                }
+            });
+        }, function(err){
+            fn(null, data);
+        });
     },
 
     deleteAccountAndArtifacts: function(accountId, fn) {

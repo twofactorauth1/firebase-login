@@ -3,4 +3,5 @@ html
     body
         each val in accounts
             div
-                a(href="/reauth/#{val}")=val
+                a(href="/reauth/#{val.id}")
+                    img(src='#{val.logo}')=val.subdomain
