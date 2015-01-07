@@ -10,8 +10,9 @@ block content
 					.panel-body
 						ul
 							each val in accounts
-								a(href="/reauth/#{val}")
+								a(href="/reauth/#{val.id}")
 									li(ng-repeat='accountinavaliableAccounts')
-										span=val
+										img(src="#{val.logo}")
+										span=val.subdomain
 										i.fa.fa-chevron-right.pull-right
 			img(src="https://s3.amazonaws.com/indigenous-digital-assets/account_6/brought-by.png" style="width: 220px;margin: 0 auto;display: block;")
