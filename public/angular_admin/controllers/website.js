@@ -67,7 +67,6 @@ define([
             };
 
             var iFrame = document.getElementById("iframe-website");
-            var iframe_contents = iFrame.contentWindow.document.body.innerHTML;
             var subdomainCharLimit = 4;
             $scope.primaryFontStack = '';
             $scope.secondaryFontStack = '';
@@ -340,7 +339,9 @@ define([
                 $scope.isEditing = true;
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
-                iframe.contentWindow.triggerEditMode();
+
+                if(iframe.contentWindow.triggerEditMode)
+                    iframe.contentWindow.triggerEditMode();
 
                 if (iframe.contentWindow.copyPostMode) {
                     iframe.contentWindow.copyPostMode();
