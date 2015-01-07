@@ -12,6 +12,7 @@ var cookies = require('../utils/cookieutil');
 var EmailTemplateUtil = require('../utils/emailtemplateutil');
 var crypto = require('../utils/security/crypto');
 var appConfig = require('../configs/app.config');
+var urlUtils = require('../utils/urlutils');
 
 var dao = {
 
@@ -24,19 +25,23 @@ var dao = {
         var log = this.log;
         log.info("Authenticating by username & password: " + username);
         var host = req.get("host");
+        var parsedHost = urlUtils.getSubdomainFromHost(host);
         accountDao.getAccountByHost(host, function (err, value) {
             if (err) {
                 return fn(err, "An error occurred validating account");
             }
 
             var account = value;
-            if (account !== true && (account == null || account.id() == null || account.id() == 0)) {
+            if (account !== true && (account == null || account.id() == null || account.id() == 0 ) ) {
                 log.info("No account found with username: " + username);
                 return fn("Account not found", "No account found at this location");
             }
 
+
+
+
             //We are at the main indigenous level application, not at a custom subdomain
-            else if (account === true || account.id() ===appConfig.mainAccountID) {
+            else if (parsedHost.subdomain !== 'main' && (account === true || account.id() === appConfig.mainAccountID) ) {
                 log.info("Logging into main App");
                 req.session.accountId = 0;
                 userDao.getUserByUsername(username, function (err, value) {
