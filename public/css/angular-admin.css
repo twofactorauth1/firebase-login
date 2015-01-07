@@ -1,5 +1,10 @@
 #leftnav {
   position: fixed;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
 }
 #leftnav .nav-bracket > li.active > a {
   background-color: #eee;
@@ -23,9 +28,6 @@
 .leftpanel-show .contentpanel,
 .leftpanel-show .header-menu-row {
   margin-left: 190px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 body.leftpanel-collapsed #headerbar {
   left: 52px;
@@ -36,9 +38,6 @@ body.leftpanel-collapsed.rightmenu-open #headerbar {
 body.leftpanel-collapsed.rightmenu-open .contentpanel,
 body.leftpanel-collapsed.rightmenu-open .header-menu-row {
   margin-right: 240px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  transition: all 0.3s ease;
 }
 #main-viewport {
   padding: 52px 0 0 0;

@@ -37,7 +37,7 @@
                         <li>
                             <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                         </li>
-                        <li class="filter-type">
+                        <li class="filter-type" style="font-size: 11px;">
                             Show:
                             <a href="" data-active="all"        ng-click="select_all=false;showType = 'all'     ;m.selectAll()"     >All</a>
                             <a href="" data-active="document"   ng-click="select_all=false;showType = 'document';m.selectAll()"     >Documents</a>
@@ -46,6 +46,7 @@
                             <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
                         </li>
                     </ul>
+                    <div class="clearfix"></div>
                     <div class="media" id="assets" style="max-height:{{bodyHeight}};">
                         <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
                             <div class="thmb checked">
@@ -119,7 +120,7 @@
                 <div class="row" ng-if="!editingImage">
                     <div class="col-md-offset-8 col-md-4">
                         <label for="upload_image" class="btn btn-primary ">
-                            <span ng-if="uploader.queue.length <= 0">Select File</span>
+                            <span ng-if="uploader.queue.length <= 0">Select File </span>
                             <span ng-if="uploader.queue.length > 0">Select Another File</span>
                             <input type="file"
                                    id="upload_image"
@@ -171,6 +172,7 @@
                                         <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
                                         <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
                                         <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                        <span ng-show="item.isUploading"><i class="fa fa-spinner fa-spin"></i></span>
                                     </td>
                                     <td nowrap>
                                         <button type="button"

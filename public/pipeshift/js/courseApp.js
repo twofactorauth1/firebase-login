@@ -2,17 +2,23 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('var.directives', []);
-var app = angular.module('courseApp', [    'var.directives', 'app.modules.course',
-    "ui.bootstrap",
-    "com.2fdevs.videogular",
-    "com.2fdevs.videogular.plugins.controls",
-    "com.2fdevs.videogular.plugins.overlayplay",
-    "com.2fdevs.videogular.plugins.buffering",
-    "info.vietnamcode.nampnq.videogular.plugins.youtube",
-    "angular-carousel"]);
-app.config(['$locationProvider', function ($locationProvider) {
-    $locationProvider.html5Mode({
-	  	enabled: true,
-	  	requireBase: false
-	});
+var app = angular.module('courseApp', ['var.directives', 'app.modules.course',
+  "ui.bootstrap",
+  "com.2fdevs.videogular",
+  "com.2fdevs.videogular.plugins.controls",
+  "com.2fdevs.videogular.plugins.overlayplay",
+  "com.2fdevs.videogular.plugins.buffering",
+  "info.vietnamcode.nampnq.videogular.plugins.youtube",
+  "angular-carousel",
+  "ipCookie"
+]);
+app.config(['$locationProvider', function($locationProvider) {
+  $locationProvider.html5Mode({
+    enabled: true,
+    requireBase: false
+  });
+}]);
+
+app.run(['$rootScope', '$location', 'analyticsService', function($rootScope, $location, analyticsService) {
+  analyticsService.sessionStart(function(data) {});
 }]);

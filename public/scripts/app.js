@@ -106,20 +106,22 @@ var mainApp = angular
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
             // $rootScope.transitionState = "active";
             analyticsService.pageStart(function() {
-                analyticsService.pagePing();
-                clearInterval(runningInterval);
-
-                var counter = 0;
-                //every 15 seconds send page tracking data
-                runningInterval = setInterval(function(){
+                if (!window.isAdmin) {
                     analyticsService.pagePing();
-                    counter++;
+                    clearInterval(runningInterval);
 
-                    if (counter >= (1000 * 60 * 60))
-                    {
-                        clearInterval(runningInterval);
-                    }
-                }, 15000);
+                    var counter = 0;
+                    //every 15 seconds send page tracking data
+                    runningInterval = setInterval(function(){
+                            analyticsService.pagePing();
+                            counter++;
+
+                            if (counter >= (1000 * 60 * 60))
+                            {
+                                clearInterval(runningInterval);
+                            }
+                    }, 15000);
+                }
             });
         });
 

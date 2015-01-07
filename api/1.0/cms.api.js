@@ -47,6 +47,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id'), this.getPageById.bind(this));
         app.put(this.url('page'), this.isAuthApi, this.saveOrUpdatePage.bind(this));
         app.get(this.url('page/:handle/screenshot'), this.isAuthApi, this.generateScreenshot.bind(this));
+        app.get(this.url('website/:id/page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
+        app.get(this.url('page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
+        ///api/1.0/cms/website/{id}/page/secure/{handle} and at /api/1.0/cms/page/secure/{handle}
 
 
         //consistent URLs
@@ -59,6 +62,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
         app.put(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
+
 
 
         //THEME Updated URLs
@@ -1269,6 +1273,27 @@ _.extend(api.prototype, baseApi.prototype, {
                     self = null;
                 });
             }
+        });
+    },
+
+    /**
+     *
+     * @param req
+     * @param resp
+     * @param req.params.id -- websiteId (optional)
+     * @param req.params.handle -- page handle
+     */
+    getSecurePage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getSecurePage');
+        var accountId = parseInt(self.accountId(req));
+        var pageHandle = req.params.handle;
+        var websiteId = req.params.id;
+
+        cmsManager.getSecurePage(accountId, pageHandle, websiteId, function(err, page){
+            self.log.debug('<< getSecurePage');
+            self.sendResultOrError(resp, err, page, 'Error getting secure page');
+            self = null;
         });
     }
 
