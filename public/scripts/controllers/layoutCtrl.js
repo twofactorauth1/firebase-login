@@ -443,6 +443,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         /********** END PRODUCT RELATED **********/
 
+        /********** BLOG PAGE PAGINATION RELATED **********/
+        $scope.curPage = 0;
+        $scope.pageSize = 10;
+        $scope.numberOfPages = function()
+        {
+         return Math.ceil(that.blogposts.length / $scope.pageSize);
+        };
+
+        /********** END BLOG PAGE PAGINATION RELATED **********/
 
         /********** CMS RELATED **********/
         $scope.sharePost = function(post, type)
