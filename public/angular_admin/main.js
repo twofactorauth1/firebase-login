@@ -125,7 +125,9 @@ require.config({
         'activityDirective': '/angular_admin/directives/activity',
         'offsetFilter': '/angular_admin/filters/offset',
         'analyticService': '/angular_admin/services/analytic',
-        'angularCookie': 'libs/angular-cookie/angular-cookie',
+        'angularCookie': 'libs/angular-cookie/angular-cookie.min',
+        'purl': 'libs/purl/purl',
+        'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",

@@ -1,4 +1,4 @@
-define(['app', 'angularCookie'], function(app) {
+define(['app', 'angularCookie', 'purl', 'uaParser'], function(app) {
   app.register.service('AnalyticService', ['$http', '$location', 'ipCookie', function($http, $location, ipCookie) {
     var baseUrl = '/api/1.0/';
     var sessionProperties;
