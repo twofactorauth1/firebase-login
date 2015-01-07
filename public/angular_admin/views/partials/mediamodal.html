@@ -37,7 +37,7 @@
                         <li>
                             <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                         </li>
-                        <li class="filter-type">
+                        <li class="filter-type" style="font-size: 11px;">
                             Show:
                             <a href="" data-active="all"        ng-click="select_all=false;showType = 'all'     ;m.selectAll()"     >All</a>
                             <a href="" data-active="document"   ng-click="select_all=false;showType = 'document';m.selectAll()"     >Documents</a>
@@ -46,6 +46,7 @@
                             <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
                         </li>
                     </ul>
+                    <div class="clearfix"></div>
                     <div class="media" id="assets" style="max-height:{{bodyHeight}};">
                         <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
                             <div class="thmb checked">
