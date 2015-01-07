@@ -15,6 +15,8 @@ var TWONET_CONFIG = require('./configs/twonet.config');
 var hostfileGenerator = require('./utils/hostfile.generator');
 var dbcopyutil = require('./utils/dbcopyutil');
 var wordpressConverter = require('./utils/wordpressconverter');
+var jsincludeGenerator = require('./utils/jsincludegenerator');
+var srcfiles = [];
 
 module.exports = function(grunt) {
 
@@ -104,7 +106,7 @@ module.exports = function(grunt) {
             your_target: {
               src: ['../indigeweb/public/css/style.default.css'],
               dest: '../indigeweb/public/css'
-            },
+            }
           },
 
         watch: {
@@ -177,9 +179,9 @@ module.exports = function(grunt) {
          */
          concat: {
             js: {
+                /*
                 src: ['public/js/libs/jquery/dist/jquery.js',
                     'public/js/libs/bootstrap/dist/js/bootstrap.js',
-                    'public/js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
                     'public/js/libs/angular/angular.js',
                     'public/js/scripts/config.js',
                     'public/js/libs/json3/lib/json3.js',
@@ -221,6 +223,8 @@ module.exports = function(grunt) {
                     'public/js/libs_misc/jstimezonedetect/jstz.min.js',
                     'public/js/libs/angular-social-links/angular-social-links.js'
                 ],
+                */
+                src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
@@ -459,6 +463,14 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyAccount',  ['prompt', 'doCopyAccount']);
 
+    grunt.registerTask('generateJS', 'Generate JS', function(){
+        var done = this.async();
+        jsincludeGenerator.buildJSArray('templates/snippets/index_body_scripts.jade', function(data){
+            srcfiles = data;
+            done();
+        });
+    });
+
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -477,7 +489,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('production',['clean:prebuild','less','concat', 'uglify', 'ngAnnotate','clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild','less', 'concat', 'uglify', 'ngAnnotate','clean:postbuild']);
 
     /*
      * This task is run by CI.
