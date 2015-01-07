@@ -67,9 +67,13 @@ var dao = {
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = user.getAllAccountIds()[0];
                                     }
-
                                     log.info("Login successful. AccountId is now " + req.session.accountId);
-                                    return fn(null, user);
+                                    accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                        log.debug('got preview data');
+                                        req.session.accounts = data;
+                                        return fn(null, user);
+                                    });
+
                                 }
                             } else {
                                 log.info("Error occurred verifying password");
