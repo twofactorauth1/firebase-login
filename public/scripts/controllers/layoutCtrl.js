@@ -906,6 +906,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           return check;
         }
 
+        window.isAdmin = function() {
+          return $scope.isAdmin;
+        }
+
         function partition(arr, size) {
           var newArr = [];
           var isArray = angular.isArray(arr[0]);
