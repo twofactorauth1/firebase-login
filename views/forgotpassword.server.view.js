@@ -48,7 +48,7 @@ _.extend(view.prototype, BaseView.prototype, {
          * Approximate Location: La Jolla, California, United States
          */
         var ip = self.ip(self.req);
-        var date = new Date();
+        var date = moment().format('MMMM DD, YYYY hh:mm A');
         var browser = result.browser.name;
         var os = result.os.name;
 
