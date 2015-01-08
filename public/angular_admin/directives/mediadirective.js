@@ -206,6 +206,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                                 });
                 */
                 $scope.m.singleSelect = function(asset) {
+                    $scope.singleSelected = true;
                     $timeout(function() {
                         if (!$scope.isSingleSelect) {
                             //$scope.batch.push(asset);

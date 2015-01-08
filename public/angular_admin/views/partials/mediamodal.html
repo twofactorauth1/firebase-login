@@ -131,12 +131,10 @@
                                    multiple>
                         </label>
                         <button
-                                ng-show="showInsert"
                                 type="button"
-                                ng-show="$parent.insertMedia"
+                                ng-show="showInsert && singleSelected"
                                 class="btn btn-primary insert-image"
-                                ng-click="m.onInsertMedia()">Insert
-                            Images
+                                ng-click="m.onInsertMedia()">Insert Images
                         </button>
                     </div>
                 </div>
