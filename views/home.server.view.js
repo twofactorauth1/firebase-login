@@ -32,7 +32,7 @@ _.extend(view.prototype, BaseView.prototype, {
             data.includeJs = false;
             data = self.baseData(data);
             data.accounts = self.req.session.accounts;
-            console.dir(data.accounts);
+            //console.dir(data.accounts);
             self.resp.render('home_new', data);
             self.cleanUp();
             data = self = null;

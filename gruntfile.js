@@ -52,8 +52,8 @@ module.exports = function(grunt) {
                 namespace: function(filename) {
                     var names = filename.replace(/hbs\/(.*)(\/\w+\.hbs)/, '$1');
                     names = names.split('/').join('.').replace(".hbs", "");
-                    grunt.log.write(names);
-                    grunt.log.writeln();
+                    //grunt.log.write(names);
+                    //grunt.log.writeln();
                     return names;
                 },
 
@@ -93,6 +93,9 @@ module.exports = function(grunt) {
                 files: {
                     '../indigeweb/public/css/site.css': [ 'public/less/site.less' ],
                     '../indigeweb/public/css/style.default.css': [ 'public/less/style.default.less' ],
+
+                    //'../indigeweb/public/css/style.default_1.css': [ 'public/less/style.default_1.less' ],
+
                     '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
                     '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ],
                     '../indigeweb/public/css/angular-admin.css': [ 'public/less/angular-admin.less' ]
@@ -498,7 +501,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('production',['clean:prebuild','less', 'concat', 'uglify', 'ngAnnotate','clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'uglify', 'ngAnnotate','clean:postbuild']);
 
     /*
      * This task is run by CI.
