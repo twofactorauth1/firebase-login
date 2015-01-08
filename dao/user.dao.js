@@ -271,19 +271,22 @@ var dao = {
 
                             user.createOrUpdateLocalCredentials(null);
                             user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                            self.saveOrUpdateTmpUser(user, function(err, tmpUser){
-                                self.log.debug('saved temp user with id: ' + tmpUser.id());
-                                tempAccount.set('tempUser', tmpUser);
-                                accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
-                                    if(err) {
-                                        self.log.error('Error updating temp account: ' + err);
-                                        return fn(err, null);
-                                    } else {
-                                        self.log.debug('<< createTempUserFromSocialProfile');
-                                        return fn(null, user);
-                                    }
+                            self.refreshFromSocialProfile(user, socialType, true, function(err, updatedUser){
+                                self.saveOrUpdateTmpUser(updatedUser, function(err, tmpUser){
+                                    self.log.debug('saved temp user with id: ' + tmpUser.id());
+                                    tempAccount.set('tempUser', tmpUser);
+                                    accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                                        if(err) {
+                                            self.log.error('Error updating temp account: ' + err);
+                                            return fn(err, null);
+                                        } else {
+                                            self.log.debug('<< createTempUserFromSocialProfile');
+                                            return fn(null, user);
+                                        }
+                                    });
                                 });
                             });
+
 
 
 
