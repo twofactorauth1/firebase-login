@@ -147,6 +147,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
+                            console.log('iframe onload');
                         }, 5000)
                     }
                 }
@@ -223,17 +224,19 @@ define([
 
                     //TODO get event from stop
 
-                    iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
-                        setTimeout(function() {
-                            $scope.$apply(function() {
-                                $scope.editPage;
-                            });
-                        });
-                    }, false);
+                    // iframeDoc.addEventListener("DOMSubtreeModified", function(e) {
+                    //     setTimeout(function() {
+                    //         $scope.$apply(function() {
+                    //             console.log('DOMSubtreeModified');
+                    //             $scope.editPage;
+                    //         });
+                    //     });
+                    // }, false);
 
-                    iframeDoc.addEventListener("dblclick", function(e) {
-                        $scope.editPage();
-                    }, false);
+                    // iframeDoc.addEventListener("dblclick", function(e) {
+                    //     console.log('double click');
+                    //     $scope.editPage();
+                    // }, false);
                 };
 
 
@@ -336,6 +339,7 @@ define([
             };
 
             $scope.editPage = function() {
+                console.log('edit page');
                 $scope.isEditing = true;
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
