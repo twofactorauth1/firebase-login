@@ -23025,9 +23025,6 @@ div[data-type='campaign'] .inner-page {
   max-width: 300px!important;
   margin: 5px auto!important;
 }
-.navbar-brand img {
-  max-height: 60px;
-}
 .navbar-toggle {
   margin-top: 20px;
 }
@@ -23117,6 +23114,9 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
+  height: 110px;
+  display: block;
+  max-height: inherit;
 }
 @media (max-width: 625px) {
   .navigation-v2 .navbar .navbar-brand img {
@@ -23692,7 +23692,7 @@ contenthover a {
   margin: 20px auto;
 }
 .image-text-v1 .image-text-image img {
-  margin: 25px auto;
+  margin: 15px auto;
   width: 100%;
 }
 #paradata span h4 {

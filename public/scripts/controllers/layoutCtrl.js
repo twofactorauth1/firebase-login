@@ -884,8 +884,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     }
                     if(value && value.type === 'thumbnail-slider')
                     {
+                        console.log('is thumbnail slider ');
                         var w = angular.element($window);
+                        console.log('w ', w);
                         var check_if_mobile = mobilecheck();
+                        console.log('value.images ', value.images);
                         $scope.thumbnailSliderCollection = angular.copy(value.images);
                         var winWidth = w.width();
                         $scope.bindThumbnailSlider(winWidth, check_if_mobile);
@@ -906,6 +909,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                number_of_arr = 1;
             }
+            console.log('thumbnailSliderCollection ', $scope.thumbnailSliderCollection);
             $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
         }
 
@@ -920,6 +924,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
 
         function partition(arr, size) {
+          console.log('arr ', arr);
           var newArr = [];
           var isArray = angular.isArray(arr[0]);
           if(isArray)
