@@ -63,7 +63,7 @@
 
    <div class="clearfix"></div>
 
-   <div style="height: 200px">
+   <div style="height: 200px;position: relative;">
     <carousel interval="5000">
       <slide ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active">
         <img ng-src="{{testimonial.image}}" style="margin:auto;">
