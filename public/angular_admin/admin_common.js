@@ -98,7 +98,6 @@ $(document).ready(function () {
 
     $(document).click(function() {
         closeLeftMenu();
-        $('body').removeClass('rightmenu-open');
      });
 	
 	$('.menutoggle-right').click(function () {

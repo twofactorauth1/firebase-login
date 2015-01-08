@@ -8,6 +8,7 @@
 @import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/sweetalert/lib/sweet-alert.css';
+@import '../js/libs/slick-carousel/slick/slick.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -19609,6 +19610,9 @@ div.error label.error:before {
   -ms-transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
   transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
 }
+.website-manage .jdfs-styles button {
+  color: #636e7b;
+}
 .iconpicker-popover {
   z-index: 9999!important;
 }
@@ -25270,6 +25274,16 @@ div[data-type="coming-soon"] .component-inner {
   padding-top: 12px;
   vertical-align: middle;
   line-height: normal;
+}
+.payment-form-v1 .signup-social-toolbar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.payment-form-v1 .signup-social-toolbar .btn {
+  min-width: 75px;
+}
+.payment-form-v1 .signup-social-toolbar i.fa {
+  font-size: 36px;
 }
 .thumbnail-slider-v1 .hideText .text {
   position: relative;

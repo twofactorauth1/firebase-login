@@ -3883,6 +3883,10 @@ div.error label.error:before {
   transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
 }
 
+.website-manage .jdfs-styles button {
+  color: #636e7b;
+}
+
 .iconpicker-popover {
   z-index: 9999!important;
 }
@@ -10732,6 +10736,19 @@ div[data-type="coming-soon"] .component-inner {
   padding-top: 12px;
   vertical-align: middle;
   line-height: normal;
+}
+
+.payment-form-v1 .signup-social-toolbar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.payment-form-v1 .signup-social-toolbar .btn {
+  min-width: 75px;
+}
+
+.payment-form-v1 .signup-social-toolbar i.fa {
+  font-size: 36px;
 }
 
 .thumbnail-slider-v1 .hideText .text {
