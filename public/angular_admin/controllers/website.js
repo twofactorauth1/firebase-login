@@ -1081,7 +1081,7 @@ define([
             }
 
            var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-                //event.preventDefault();
+                event.preventDefault();
                 console.log('newURl ', newUrl);
                 console.log('oldUrl ', oldUrl);
                 var isDirty = false;
