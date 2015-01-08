@@ -288,7 +288,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.debug('Could not find contact');
                         return self.wrapError(resp, 404, null, 'Contact not found');
                     } else {
-                        userManager.createAccountUserFromContact(accountId, username, password, contact, function(err, user){
+                        userManager.createAccountUserFromContact(accountId, username, password, contact, req.user, function(err, user){
                             self.log.debug('<< createAccountUserFromContact');
                             var responseObj = null;
                             if(user) {

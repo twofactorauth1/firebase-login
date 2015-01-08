@@ -40,6 +40,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.post(this.url(''), this.createUser.bind(this));
+        app.post(this.url('member'), this.isAuthAndSubscribedApi.bind(this), this.createUserForAccount.bind(this));
         app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
@@ -468,6 +469,39 @@ _.extend(api.prototype, baseApi.prototype, {
         //     }
         //     return resp.send(value);
         // });
+    },
+
+    /**
+     * This method will create a 'member' for an account.  It expects two body params:
+     * req.body.user contains a *limited* public/js/models/user.js object.  The only fields examined are username, email, first, last
+     * req.body.password contains the password to encrypt and set.
+     * @param req
+     * @param resp
+     */
+    createUserForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createUserForAccount');
+        var user = req.body.user;
+        var password = req.body.password;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
+            if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
+                return self.send403(res);
+            } else {
+                userManager.createAccountUser(accountId, user.username, password, user.email, user.first, user.last, req.user, function(err, user){
+                    self.log.debug('<< createUserForAccount');
+                    var responseObj = null;
+                    if(user) {
+                        responseObj =  user.toJSON("public", {accountId:self.accountId(req)});
+                    }
+
+                    return self.sendResultOrError(resp, err, responseObj, 'Error creating user');
+                });
+            }
+        });
+
+
     },
 
 
