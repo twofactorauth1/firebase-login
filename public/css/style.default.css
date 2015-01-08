@@ -23980,6 +23980,9 @@ div[data-class='image-text'] p {
 div[data-type="social"] .inner-page {
   padding: 0;
 }
+.btn-youtube {
+  background: #e52d27;
+}
 .social-v1 .inner-page {
   padding: 0;
 }
