@@ -1091,11 +1091,7 @@ define([
                     var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
                 }
 
-                if (!$scope.backup['website']) {
-
-                } else if ((isDirty || !(angular.equals($scope.originalCurrentPage,$scope.currentPage)))) {
-
-                    SweetAlert.swal({
+                SweetAlert.swal({
                        title: "Are you sure?",
                        text: "Do you want to save your changes?",
                        type: "warning",
@@ -1115,8 +1111,6 @@ define([
                           $location.path(newUrl);
                        }
                     });
-
-                }
             });
 
             $scope.updateLinkList = function(linkLists) {
