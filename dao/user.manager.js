@@ -273,6 +273,58 @@ module.exports = {
 
                 });
         });
-    }
+    },
 
+    createAccountUserFromContact: function(accountId, username, password, contact, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> createAccountUserFromContact');
+
+        var user = null;
+
+        //look for user by username first.  If found, update with account details, otherwise create.
+
+        dao.getUserByUsername(username, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value != null) {
+                //return fn(true, "An account with this username already exists");
+                user = value;
+            } else {
+                user = new $$.m.User({
+
+                    username:username,
+                    email:contact.getEmails()[0],
+                    first: contact.get('first'),
+                    middle: contact.get('middle'),
+                    last: contact.get('last'),
+                    created: {
+                        date: new Date().getTime(),
+                        strategy: $$.constants.user.credential_types.LOCAL,
+                        by: null, //self-created
+                        isNew: true
+                    }
+                });
+                user.createOrUpdateLocalCredentials(password);
+            }
+            var roleAry = ["member"];
+            user.createUserAccount(accountId, username, password, roleAry);
+
+            dao.saveOrUpdate(user, function(err, savedUser) {
+                if (err) {
+                    log.error('Error saving user: ' + err);
+                    return fn(err, null);
+                }
+                //TODO: sm.createMemberPrivileges
+                self.log.debug('<< createAccountUserFromContact');
+                return fn(null, savedUser);
+            });
+
+
+
+        });
+
+    }
 };

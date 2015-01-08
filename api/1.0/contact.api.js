@@ -10,6 +10,7 @@ var accountDao = require('../../dao/account.dao');
 var contactDao = require('../../dao/contact.dao');
 var cmsDao = require('../../cms/dao/cms.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager.js');
+var userManager = require('../../dao/user.manager');
 var cookies = require('../../utils/cookieutil');
 var Contact = require('../../models/contact');
 var request = require('request');
@@ -42,7 +43,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
         app.get(this.url('filter/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByLetter.bind(this)); // for individual letter
 
-
+        app.post(this.url(':id/user'), this.isAuthAndSubscribedApi.bind(this), this.createAccountUserFromContact.bind(this));
         //  app.post("/signupnews", this.signUpNews.bind(this));
         //app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
         app.post(this.url('signupnews'), this.setup, this.signUpNews.bind(this));
@@ -259,6 +260,48 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    /**
+     *
+     * @param req
+     * @param resp
+     */
+    createAccountUserFromContact: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createAccountUserFromContact');
+        var accountId = parseInt(self.accountId(req));
+        var contactId = parseInt(req.params.id);
+        var username = req.body.username;
+        var password = req.body.password;
+        self.log.debug('Creating user with username [' + username + '] and password [' + password + ']');
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed){
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                contactDao.getById(contactId, $$.m.Contact, function(err, contact){
+                    if(err) {
+                        self.log.error('Error getting contact : ' + err);
+                        return self.wrapError(resp, 500, err, 'Error getting contact');
+                    } else if(contact === null) {
+                        self.log.debug('Could not find contact');
+                        return self.wrapError(resp, 404, null, 'Contact not found');
+                    } else {
+                        userManager.createAccountUserFromContact(accountId, username, password, contact, function(err, user){
+                            self.log.debug('<< createAccountUserFromContact');
+                            var responseObj = null;
+                            if(user) {
+                                responseObj =  user.toJSON("public", {accountId:self.accountId(req)});
+                            }
+
+                            return self.sendResultOrError(resp, err, responseObj, 'Error creating user');
+                        });
+                    }
+                });
+            }
+        });
+
     },
 
 
