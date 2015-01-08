@@ -1324,10 +1324,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #fff;
 }
 
-.leftpanel-collapsed .mainpanel {
-  margin-left: 52px;
-}
-
 .leftpanel-collapsed .infosummary {
   display: none;
 }
@@ -1350,6 +1346,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .cbp-spmenu-push #leftnav {
   left: 0;
+}
+
+.cbp-spmenu-push #leftnav .leftpanelinner {
+  top: 65px;
 }
 
 .cbp-spmenu-vertical {
@@ -1666,6 +1666,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .mainpanel .contentpanel {
   padding: 20px;
+  width: auto !important;
 }
 
 .mainpanel .contentpanel::after {
@@ -1704,11 +1705,21 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-bottom: 10px;
 }
 
-@media (max-width: 767px) {
-  .leftpanel-show .header-right {
-    margin-right: 240px;
-  }
+.leftpanel-show .mainpanel .pageheader {
+  left: 197px;
+}
 
+.leftpanel-show .mainpanel #iframe-website {
+  margin-left: 191px;
+}
+
+@media (max-width: 1024px) {
+  .mainpanel .pageheader {
+    margin-left: 39px;
+  }
+}
+
+@media (max-width: 767px) {
   .leftpanel-show .mainpanel .pageheader {
     margin-left: 0px;
   }
@@ -4478,7 +4489,7 @@ div.error label.error:before {
     left: 0;
   }
 
-  .stickyheader.leftpanel-show .headerbar {
+  .leftpanel-show .headerbar {
     left: 240px;
   }
 
@@ -4902,6 +4913,16 @@ div.error label.error:before {
   .signinpanel,
   .signuppanel {
     width: 310px;
+  }
+}
+
+@media screen and (max-height: 26.375em) {
+  .leftpanel-show .contentpanel,
+  .leftpanel-show .header-menu-row {
+    margin-left: 140px !important;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
   }
 }
 
@@ -5813,6 +5834,10 @@ input[type='file'] {
   font-size: 20px;
   font-weight: bold;
   display: block;
+}
+
+.indi-assistant .contentpanel {
+  width: 100% !important;
 }
 
 i.indi-sm {
@@ -8094,6 +8119,9 @@ ul.nav {
 
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
+  height: 110px;
+  display: block;
+  max-height: inherit;
 }
 
 @media (max-width: 625px) {
@@ -8787,7 +8815,7 @@ contenthover a {
 }
 
 .image-text-v1 .image-text-image img {
-  margin: 25px auto;
+  margin: 15px auto;
   width: 100%;
 }
 
@@ -9147,6 +9175,10 @@ div[data-class='image-text'] p {
 
 div[data-type="social"] .inner-page {
   padding: 0;
+}
+
+.btn-youtube {
+  background: #e52d27;
 }
 
 .social-v1 .inner-page {

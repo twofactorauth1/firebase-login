@@ -106,7 +106,7 @@ module.exports = function(grunt) {
               src: ['../indigeweb/public/css/style.default.css'],
               dest: '../indigeweb/public/css'
             }
-          },
+        },
 
         watch: {
             less: {
