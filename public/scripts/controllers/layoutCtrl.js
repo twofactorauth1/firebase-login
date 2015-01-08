@@ -135,17 +135,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 $scope.newAccount.email = tmpAccount.tempUser.email;
                             }
                             if (tmpAccount.tempUser.businessName) {
-                                $scope.newAccount.businessName = tmpAccount.tempUser.businessName;    
+                                $scope.newAccount.businessName = tmpAccount.tempUser.businessName;
                             }
                         } else{
                             userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-                            });    
+                            });
                         }
-                        
-                        
+
+
                     });
                 }
-                
+
 
                 $scope.currentpage = that.pages;
                 if ($route.current.params.custid != null) {
@@ -506,12 +506,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
 
         $scope.changeBlogImage = function(blogpost)
-        {        
+        {
            window.parent.changeBlogImage(blogpost);
         }
 
         $scope.changeLogoImage = function(componentId)
-        {        
+        {
            window.parent.changeLogoImage(componentId);
         }
 
@@ -645,14 +645,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         window.clickImageButton = function(btn)
         {
-            $scope.urlInput = $(btn).closest('td').prev('td').find('input');            
+            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
             window.parent.clickImageButton();
         }
 
         window.activateAloha = function() {
             if($scope.activated == false) {
                 CKEDITOR.disableAutoInline = true;
-                
+
                 var elements = $( '.editable' );
                 elements.each( function() {
                     CKEDITOR.inline( this , {
@@ -663,7 +663,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                                 editor.on('change', function() {
                                     $scope.isPageDirty = true;
                                 });
-                                
+
                             }
                         }
                     });
@@ -768,10 +768,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 else
                 {
                   $scope.$apply(function() {
-                    
-                  });  
+
+                  });
                 }
-                    
+
                 if(networks)
                     $scope.networks = networks;
         };
@@ -1173,7 +1173,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             }
                             userService.initializeUser(newUser, function(data) {
                             if(data)
-                                window.location = data.accountUrl;
+                                var currentHost = $.url(window.location.origin).attr('host');
+                                var futureHost = $.url(data.accountUrl).attr('host');
+                                if (currentHost.indexOf(futureHost) > -1) {
+                                  window.location = data.accountUrl;
+                                } else {
+                                  window.location = currentHost;
+                                }
                             else
                               $scope.isFormValid = false;
                         });
