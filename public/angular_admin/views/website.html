@@ -316,7 +316,7 @@
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="form-horizontal" ng-if="componentEditing.type === 'navigation'">
+                                <div class="form-horizontal hidden" ng-if="componentEditing.type === 'navigation'">
                                     <label>Logo Settings:</label>
                                     </hr>
                                     <label>Margin:</label>
@@ -360,7 +360,7 @@
 
 
                                 </div>
-                                <div class="form-group" ng-if="componentEditing.type === 'navigation'">
+                                <div class="form-group hidden" ng-if="componentEditing.type === 'navigation'">
                                     <label>Padding:</label>
                                     <input type="text" placeholder="10px" ng-model="componentEditing.logo.padding">
                                 </div>
