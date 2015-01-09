@@ -34,6 +34,10 @@ _.extend(api.prototype, baseApi.prototype, {
         //GET
         app.get(this.url('myip'), this.getMyIp.bind(this));
         app.get(this.url('activities'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
+        app.get(this.url('activities/all'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
+        app.get(this.url('activities/read'), this.isAuthAndSubscribedApi.bind(this), this.findReadActivities.bind(this));
+        app.get(this.url('activities/unread'), this.isAuthAndSubscribedApi.bind(this), this.findUnreadActivities.bind(this));
+
         app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
@@ -53,8 +57,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':accountId/contacts/:letter', "account"), this.isAuthAndSubscribedApi.bind(this), this.getContactsForAccountByLetter.bind(this));
 
         app.get(this.url(':id/activity'), this.isAuthAndSubscribedApi.bind(this), this.getActivityByContactId.bind(this));
+        app.get(this.url(':id/activity/all'), this.isAuthAndSubscribedApi.bind(this), this.getActivityByContactId.bind(this));
+        app.get(this.url(':id/activity/read'), this.isAuthAndSubscribedApi.bind(this), this.getReadActivityByContactId.bind(this));
+        app.get(this.url(':id/activity/unread'), this.isAuthAndSubscribedApi.bind(this), this.getUnreadActivityByContactId.bind(this));
+
         app.get(this.url('activity/:id'), this.isAuthAndSubscribedApi.bind(this), this.getActivityById.bind(this));
         app.post(this.url('activity'), this.isAuthAndSubscribedApi.bind(this), this.createActivity.bind(this));
+        app.post(this.url('activity/:id/read'), this.isAuthAndSubscribedApi.bind(this), this.markActivityRead.bind(this));
         app.post(this.url('activity/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateActivity.bind(this));
         //searching
 
@@ -556,7 +565,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 
 
-                contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, function(err, value){
+                contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, null, function(err, value){
                     self.log.debug('<< getActivityByContactId');
                     self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
                     self = null;
@@ -564,6 +573,72 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    getReadActivityByContactId: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getActivityByContactId');
+
+        var contactId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        if (!contactId) {
+            return self.wrapError(resp, 400, null, "Invalid parameter for contact id");
+        }
+        contactId = parseInt(contactId);
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var skip, limit;
+                if(req.query.skip) {
+                    skip = parseInt(req.query.skip);
+                }
+                if(req.query.limit) {
+                    limit = parseInt(req.query.limit);
+                }
+
+
+                contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, 'true', function(err, value){
+                    self.log.debug('<< getActivityByContactId');
+                    self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    getUnreadActivityByContactId: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getActivityByContactId');
+
+        var contactId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        if (!contactId) {
+            return self.wrapError(resp, 400, null, "Invalid parameter for contact id");
+        }
+        contactId = parseInt(contactId);
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var skip, limit;
+                if(req.query.skip) {
+                    skip = parseInt(req.query.skip);
+                }
+                if(req.query.limit) {
+                    limit = parseInt(req.query.limit);
+                }
+
+
+                contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, 'false', function(err, value){
+                    self.log.debug('<< getActivityByContactId');
+                    self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
+                    self = null;
+                });
+            }
+        });
     },
 
 
@@ -623,11 +698,33 @@ _.extend(api.prototype, baseApi.prototype, {
      * - after (a timestamp for searching.  All results will have a start time >= this parameter)
      * - skip
      * - limit
+     * - read (a boolean indicating if the activity has been 'seen')
      *
      */
     findActivities: function(req, res) {
         var self = this;
         self.log.debug('>> findActivities');
+
+        return self._doFindActivities(req, res, null, 'findActivities');
+
+    },
+
+    findReadActivities: function(req, resp) {
+        var self = this;
+        self.log.debug('>> findReadActivities');
+
+        return self._doFindActivities(req, resp, 'true', 'findReadActivities');
+    },
+
+    findUnreadActivities: function(req, resp) {
+        var self = this;
+        self.log.debug('>> findUnreadActivities');
+
+        return self._doFindActivities(req, resp, 'false', 'findUnreadActivities');
+    },
+
+    _doFindActivities: function(req, resp, read, method) {
+        var self = this;
 
         var accountId = parseInt(self.accountId(req));
         self.log.debug('>> accountId', accountId);
@@ -660,14 +757,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
                 contactActivityManager.findActivities(accountId, contactId, activityTypeAry, noteText, detailText,
-                    beforeTimestamp, afterTimestamp, skip, limit, function(err, list){
-                        self.log.debug('<< findActivities');
-                        self.sendResultOrError(res, err, list, "Error finding activities");
+                    beforeTimestamp, afterTimestamp, skip, limit, read, function(err, list){
+                        self.log.debug('<< ' + method);
+                        self.sendResultOrError(resp, err, list, "Error finding activities");
                         self = null;
-                });
+                    });
             }
         });
-
     },
 
     //Update data from FullContact API
@@ -752,6 +848,25 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateActivity: function (req, resp) {
+
+    },
+
+    markActivityRead: function(req, resp) {
+        var self = this;
+        self.log.debug('>> markActivityRead');
+        var accountId = parseInt(self.accountId(req));
+        var activityId = req.params.id;
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                contactActivityManager.markActivityRead(activityId, function(err, value){
+                    self.log.debug('<< markActivityRead');
+                    return self.sendResultOrError(resp, err, value, 'Error marking activity as read.');
+                });
+            }
+        });
 
     }
     //endregion CONTACT ACTIVITY
