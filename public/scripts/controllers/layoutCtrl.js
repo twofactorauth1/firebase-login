@@ -34,11 +34,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     //$window.segmentIOWriteKey = ENV.segmentKey;
     //that.themeUrl = $scope.themeUrl;
 
-    // $scope.activateSettings = function() {
-    //     console.log('>>>>> ', window.parent);
-    //     window.parent.frames[0].parentNode.activateSettings();
-    // };
-
     CourseService.getAllCourses(function(data) {
       that.courses = data;
     });
@@ -97,7 +92,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       }
     });
+
     pagesService(function(err, data) {
+      console.log('pagesService data >>> ', data);
       if (err) {
         console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
       } else {
