@@ -25,7 +25,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup, this.index.bind(this));
+        app.get("/", this.setup.bind(this), this.index.bind(this));
 
         //send all routes to index and let the app router to navigate to the appropiate view
         app.get("/index", this.setup, this.index.bind(this));
@@ -52,14 +52,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/home", this.isHomeAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
 
-        app.get("/admin", this.isAuth, this.showAngularAdmin.bind(this));
-        app.get("/admin/*", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
         
-        app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
-        app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
 
-        app.get("/demo", this.setup, this.demo.bind(this));
-        app.get('/reauth/:id', this.setup, this.handleReauth.bind(this));
+        app.get("/demo", this.setup.bind(this), this.demo.bind(this));
+        app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
 
         return this;
     },
@@ -240,6 +240,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountAry = _.pluck(req.session.accounts, 'id');
         if(_.contains(accountAry, activeAccountId)){
             req.session.accountId = activeAccountId
+            var dataObj = _.find(req.session.accounts, function(previewData){if(previewData.id === activeAccountId)return true;});
+            req.session.subdomain = dataObj.subdomain;
+            req.session.domain = dataObj.domain;
         } else {
             self.log.debug('authorized accounts does not contain ' + activeAccountId);
         }

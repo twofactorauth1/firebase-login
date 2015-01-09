@@ -21,10 +21,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         //  COURSE
         //-------------------------------------------------
-        app.get("/campaign/:courseSubdomain", this.setup, this.showCourse.bind(this));
-        app.get("/campaign/:courseSubdomain/video/:videoId", this.setup, this.showVideo.bind(this));
-        app.get("/course/:courseSubdomain", this.setup, this.showCourse.bind(this));
-        app.get("/course/:courseSubdomain/:videoId", this.setup, this.showVideo.bind(this));
+        app.get("/campaign/:courseSubdomain", this.setup.bind(this), this.showCourse.bind(this));
+        app.get("/campaign/:courseSubdomain/video/:videoId", this.setup.bind(this), this.showVideo.bind(this));
+        app.get("/course/:courseSubdomain", this.setup.bind(this), this.showCourse.bind(this));
+        app.get("/course/:courseSubdomain/:videoId", this.setup.bind(this), this.showVideo.bind(this));
         return this;
     },
 

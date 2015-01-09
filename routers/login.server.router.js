@@ -33,7 +33,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         //  LOGIN
         //-------------------------------------------------
-        app.get("/login", this.setup, this.showLogin.bind(this));
+        app.get("/login", this.setup.bind(this), this.showLogin.bind(this));
         app.post("/login",
             passport.authenticate('local', { failureRedirect: "/login", failureFlash: true }),
             this.onLogin.bind(this));
@@ -48,10 +48,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         // FORGOT PASSWORD
         //-------------------------------------------------
-        app.get("/forgotpassword", this.setup, this.showForgotPassword.bind(this));
-        app.post("/forgotpassword", this.setup, this.handleForgotPassword.bind(this));
-        app.get("/forgotpassword/reset/:token", this.setup, this.showResetPasswordByToken.bind(this));
-        app.post("/forgotpassword/reset/:token", this.setup, this.handleResetPasswordByToken.bind(this));
+        app.get("/forgotpassword", this.setup.bind(this), this.showForgotPassword.bind(this));
+        app.post("/forgotpassword", this.setup.bind(this), this.handleForgotPassword.bind(this));
+        app.get("/forgotpassword/reset/:token", this.setup.bind(this), this.showResetPasswordByToken.bind(this));
+        app.post("/forgotpassword/reset/:token", this.setup.bind(this), this.handleResetPasswordByToken.bind(this));
 
 
         //-------------------------------------------------
@@ -61,7 +61,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         // app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
         // app.post("/signup", this.setup, this.handleSignup.bind(this));
 
-        app.get("/current-user", this.setup, this.getCurrentUser.bind(this));
+        app.get("/current-user", this.setup.bind(this), this.getCurrentUser.bind(this));
 
         return this;
     },
