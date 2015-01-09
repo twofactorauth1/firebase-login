@@ -1186,14 +1186,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
               }
               userService.initializeUser(newUser, function(data) {
-                if (data) {
-                  var currentHost = $.url(window.location.origin).attr('host');
-                  var futureHost = $.url(data.accountUrl).attr('host');
-                  if (currentHost.indexOf(futureHost) > -1) {
+                if (data && data.accountUrl) {
+                    /*
+                     * I'm not sure why these lines were added.  The accountUrl is a string.
+                     * It will never have a host attribute.
+                     *
+                     * var currentHost = $.url(window.location.origin).attr('host');
+                     * var futureHost = $.url(data.accountUrl).attr('host');
+                     * if (currentHost.indexOf(futureHost) > -1) {
+                     *      window.location = data.accountUrl;
+                     * } else {
+                     *      window.location = currentHost;
+                     * }
+                     */
+
                     window.location = data.accountUrl;
-                  } else {
-                    window.location = currentHost;
-                  }
                 } else {
                   $scope.isFormValid = false;
                 }
@@ -1202,20 +1209,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
           });
 
-
-          /*
-          userService.createUser(newUser, function(data) {
-              var newUser = data;
-              PaymentService.getStripeCardToken(newAccount.card, function(token) {
-                  PaymentService.postStripeCustomer(token, newUser, newUser.accounts[0].accountId, function(stripeUser) {
-                      userService.postAccountBilling(stripeUser.id, token, function(billing) {});
-                      window.location.replace(newUser.accountUrl);
-                      // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
-                      //     window.location.replace(adminUrl);
-                      // });
-                  });
-              });
-          });*/
         });
       });
     };

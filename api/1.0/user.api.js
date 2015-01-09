@@ -14,6 +14,8 @@ var authenticationDao = require('../../dao/authentication.dao');
 var userManager = require('../../dao/user.manager');
 var paymentsManager = require('../../payments/payments_manager');
 var async = require('async');
+var UAParser = require('ua-parser-js');
+var parser = new UAParser();
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -38,11 +40,14 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('preferences'), this.isAuthAndSubscribedApi.bind(this), this.getUserPreferences.bind(this));
         app.post(this.url('preferences'), this.isAuthAndSubscribedApi.bind(this), this.updateUserPreferences.bind(this));
 
-        app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
+
         app.post(this.url(''), this.createUser.bind(this));
         app.post(this.url('member'), this.isAuthAndSubscribedApi.bind(this), this.createUserForAccount.bind(this));
+        app.get(this.url('members'), this.isAuthAndSubscribedApi.bind(this), this.getUsersForAccount.bind(this));
+        app.post(this.url('member/:id/resetpassword'), this.isAuthAndSubscribedApi.bind(this), this.resetPassword.bind(this));
         app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
+        app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
         app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteUser.bind(this));
 
@@ -368,7 +373,9 @@ _.extend(api.prototype, baseApi.prototype, {
                             return;
                         }
                         user.set("accountUrl", value.toLowerCase());
-                        res.send(user.toJSON("public", {accountId:accountId}));
+                        var json = user.toJSON('public', {accountId:accountId});
+                        self.log.debug('<< initalizeUserAndAccount: ', json);
+                        res.send(json);
                     });
                 });
             }
@@ -504,6 +511,81 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     *
+     * @param req
+     * @param resp
+     */
+    getUsersForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getUsersForAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
+            if (isAllowed !== true || !_.contains(req.user.getAllAccountIds(), self.accountId(req)) || !_.contains(req.user.getPermissionsForAccount(accountId), 'admin')) {
+                return self.send403(res);
+            } else {
+                userManager.getUserAccounts(accountId, function(err, userAry){
+                    if(err) {
+                        self.log.error('Error finding user accounts: ' + err);
+                        return self.wrapError(resp, 500, null, 'Error finding account');
+                    } else {
+                        var results = [];
+                        _.each(userAry, function(element){
+                            results.push(element.toJSON('manage', {accountId:accountId}));
+                        });
+                        return self.sendResult(resp, results);
+                    }
+
+                });
+
+            }
+        });
+
+    },
+
+    resetPassword: function(req, resp) {
+        var self = this;
+        self.log.debug('>> resetPassword');
+        var ua = req.headers['user-agent'];
+        var result = parser.setUA(ua).getResult();
+        var ip = self.ip(self.req);
+        var date = moment().format('MMMM DD, YYYY hh:mm A');
+        var browser = result.browser.name;
+        var os = result.os.name;
+        var accountId = parseInt(self.accountId(req));
+
+        var requestorProps = {
+            ip: ip,
+            date: date,
+            browser: browser,
+            os: os
+        };
+        self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
+            if (isAllowed !== true || !_.contains(req.user.getAllAccountIds(), accountId) || !_.contains(req.user.getPermissionsForAccount(accountId), 'admin')) {
+                return self.send403(res);
+            } else {
+                var userId = parseInt(req.params.id);
+                userDao.getById(userId, $$.m.User, function(err, value){
+                    if(err || value === null) {
+                        self.log.error('Error getting user by id: ' + err);
+                        return self.wrapError(resp, 500, null, 'Error getting user by id');
+                    }
+                    authenticationDao.sendForgotPasswordEmailByUsernameOrEmail(accountId, value.get('username'), requestorProps, function(err, value) {
+                        if(err) {
+                            self.log.error('Error sending email: ' + err);
+                            return self.wrapError(resp, 500, null, 'Error sending forgot password email.');
+                        } else {
+                            self.log.debug('<< resetPassword');
+                            return self.sendResult(resp, 'sent');
+                        }
+                    });
+                });
+            }
+        });
+
+    },
+
 
     /**
      * This method WILL NOT update credentials for the user nor the account/credentials object.
@@ -531,7 +613,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 user.set("credentials",value.get("credentials"));
                 user.set('accounts', value.get('accounts'));
 
-                self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
+                self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
                     if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
                         return self.send403(res);
                     } else {

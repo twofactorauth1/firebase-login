@@ -164,7 +164,7 @@ var dao = {
                                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                                 return self.saveOrUpdate(value, function(err, value) {
                                     if (!err) {
-                                        userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                                        userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
                                             //regardless of error, always return success
                                             fn(null, value);
                                             fn = req = null;
@@ -206,7 +206,7 @@ var dao = {
                             value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                             self.saveOrUpdate(value, function(err, value) {
                                 if (!err) {
-                                    userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                                    userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
                                         //regardless of error, always return success here.
                                         fn(null, value);
                                         fn = req = null;
@@ -244,7 +244,7 @@ var dao = {
                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                 self.saveOrUpdate(value, function(err, value) {
                     if (!err) {
-                        userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                        userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
                             //regardless of error, always return success
                             fn(null, value);
                             fn = null;
@@ -356,6 +356,8 @@ var dao = {
 
                 if (accountId !== appConfig.mainAccountID) {
                     if (value.getUserAccount(accountId) == null) {
+                        console.log('Could not find user for accountId: ' + accountId);
+                        console.dir(value);
                         return fn("No user found for this account", "No user found for this account");
                     }
                 }
@@ -376,6 +378,7 @@ var dao = {
         userDao.findOne({passRecover: token, email: email}, function (err, value) {
             if (!err) {
                 if (value == null) {
+                    console.log('Could not find recovery token for account [' + accountId + '] token [' + token + '] and email [' + email + ']');
                     return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
                 }
 
