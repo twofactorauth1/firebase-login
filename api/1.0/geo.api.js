@@ -21,7 +21,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //GET
-        app.get(this.url('search/address/:address'), this.isAuthApi, this.searchAddress.bind(this));
+        app.get(this.url('search/address/:address'), this.isAuthApi.bind(this), this.searchAddress.bind(this));
     },
 
 

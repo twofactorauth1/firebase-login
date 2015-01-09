@@ -28,8 +28,8 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
 
         //segmentio webhook
-        app.post(this.url('webhook/event'), this.verifyEvent, this.saveAnalyticEvent.bind(this));
-        app.get(this.url('webhook/event'), this.verifyEvent, this.showOk.bind(this));
+        app.post(this.url('webhook/event'), this.verifyEvent.bind(this), this.saveAnalyticEvent.bind(this));
+        app.get(this.url('webhook/event'), this.verifyEvent.bind(this), this.showOk.bind(this));
 
         //event CRUDL
         app.get(this.url('events'), this.isAuthAndSubscribedApi.bind(this), this.listEvents.bind(this));

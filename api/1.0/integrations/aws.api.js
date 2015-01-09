@@ -21,9 +21,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         //GET
-        app.get(this.url("credentials/download/:bucket/:resource"), this.isAuthApi, this.getSignedRequest.bind(this));
-        app.get(this.url("credentials/upload/:bucket/:filename"), this.isAuthApi, this.getS3UploadCredentials.bind(this));
-        app.get(this.url('route53/:name/available'), this.isAuthApi, this.checkDomainAvailability.bind(this));
+        app.get(this.url("credentials/download/:bucket/:resource"), this.isAuthApi.bind(this), this.getSignedRequest.bind(this));
+        app.get(this.url("credentials/upload/:bucket/:filename"), this.isAuthApi.bind(this), this.getS3UploadCredentials.bind(this));
+        app.get(this.url('route53/:name/available'), this.isAuthApi.bind(this), this.checkDomainAvailability.bind(this));
     },
 
 

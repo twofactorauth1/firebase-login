@@ -32,13 +32,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //courses
         //app.get(this.url(''), this.isAuthApi, this.listCourses.bind(this));
-        app.get(this.url(':id'), this.isAuthApi, this.getCourseById.bind(this));
+        app.get(this.url(':id'), this.isAuthApi.bind(this), this.getCourseById.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createCourse.bind(this));
         app.put(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCourse.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCourse.bind(this));
         //videos
-        app.get(this.url(':id/video'), this.isAuthApi, this.listCourseVideos.bind(this));
-        app.get(this.url(':id/video/:videoId'), this.isAuthApi, this.getCourseVideoById.bind(this));
+        app.get(this.url(':id/video'), this.isAuthApi.bind(this), this.listCourseVideos.bind(this));
+        app.get(this.url(':id/video/:videoId'), this.isAuthApi.bind(this), this.getCourseVideoById.bind(this));
         app.post(this.url(':id/video'), this.isAuthAndSubscribedApi.bind(this), this.addVideoToCourse.bind(this));
         app.put(this.url(':id/video/:videoId'), this.isAuthAndSubscribedApi.bind(this), this.updateVideoInCourse.bind(this));
         app.delete(this.url(':id/video/:videoId'), this.isAuthAndSubscribedApi.bind(this), this.deleteVideoFromCourse.bind(this));

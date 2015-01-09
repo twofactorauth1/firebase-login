@@ -28,14 +28,14 @@ _.extend(api.prototype, baseApi.prototype, {
     dao: userDao,
 
     initialize: function() {
-        app.get(this.url(''), this.isAuthApi, this.getLoggedInUser.bind(this));
-        app.get(this.url('accounts'), this.isAuthApi, this.getUserAccounts.bind(this));
-        app.post(this.url('accounts/:id'), this.isAuthApi, this.setActiveAccount.bind(this));
+        app.get(this.url(''), this.isAuthApi.bind(this), this.getLoggedInUser.bind(this));
+        app.get(this.url('accounts'), this.isAuthApi.bind(this), this.getUserAccounts.bind(this));
+        app.post(this.url('accounts/:id'), this.isAuthApi.bind(this), this.setActiveAccount.bind(this));
 
-        app.get(this.url('social'), this.isAuthApi, this.getLoggedInUserSocialCredentials.bind(this));
-        app.delete(this.url('social/:type'), this.isAuthApi, this.removeSocialCredentials.bind(this));
+        app.get(this.url('social'), this.isAuthApi.bind(this), this.getLoggedInUserSocialCredentials.bind(this));
+        app.delete(this.url('social/:type'), this.isAuthApi.bind(this), this.removeSocialCredentials.bind(this));
 
-        app.get(this.url('security'), this.isAuthApi, this.initializeSecurity.bind(this));
+        app.get(this.url('security'), this.isAuthApi.bind(this), this.initializeSecurity.bind(this));
 
         app.get(this.url('preferences'), this.isAuthAndSubscribedApi.bind(this), this.getUserPreferences.bind(this));
         app.post(this.url('preferences'), this.isAuthAndSubscribedApi.bind(this), this.updateUserPreferences.bind(this));
@@ -47,12 +47,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('member/:id/resetpassword'), this.isAuthAndSubscribedApi.bind(this), this.resetPassword.bind(this));
         app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
-        app.get(this.url(':id'), this.isAuthApi, this.getUserById.bind(this));
-        app.put(this.url(':id'), this.isAuthApi, this.updateUser.bind(this));
+        app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUserById.bind(this));
+        app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteUser.bind(this));
 
-        app.get(this.url('exists/:username'), this.setup, this.userExists.bind(this));
-        app.get(this.url(':accountId/user/exists/:username', "account"), this.setup, this.userExistsForAccount.bind(this));
+        app.get(this.url('exists/:username'), this.setup.bind(this), this.userExists.bind(this));
+        app.get(this.url(':accountId/user/exists/:username', "account"), this.setup.bind(this), this.userExistsForAccount.bind(this));
     },
 
     /**
