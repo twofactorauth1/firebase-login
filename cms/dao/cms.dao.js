@@ -1170,6 +1170,13 @@ var dao = {
         self.log.debug('>> getDataForWebpage');
         //assume index for now
         accountDao.getAccountByID(accountId, function(err, value){
+            if(err) {
+                self.log.error('error getting account by id: ' + err);
+                return fn(err, null);
+            } else if(value == null) {
+                self.log.error('could not find account with id: ' + accountId);
+                return fn('Could not find account with id: ' + accountId, null);
+            }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
                 obj.website = website.toJSON('public');

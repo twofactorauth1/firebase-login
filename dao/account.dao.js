@@ -273,14 +273,21 @@ var dao = {
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
                                 var customerId = user.get('stripeId');
-                                $$.dao.StripeDao.deleteStripeCustomer(customerId, null, user.id(), function(err, value){
-                                    $$.dao.UserDao.remove(user, function(err, value){
+                                if(customerId && customerId.length > 0) {
+                                    $$.dao.StripeDao.deleteStripeCustomer(customerId, null, user.id(), function(err, value){
                                         if(err) {
-                                            self.log.error('Error deleting user: ' + err);
+                                            self.log.error('error deleting Stripe customer: ' + err);
                                         } else {
-                                            self.log.debug('Removed user: ' + user.id());
+                                            self.log.debug('Deleted Stripe Customer');
                                         }
                                     });
+                                }
+                                $$.dao.UserDao.remove(user, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error deleting user: ' + err);
+                                    } else {
+                                        self.log.debug('Removed user: ' + user.id());
+                                    }
                                 });
 
                             }

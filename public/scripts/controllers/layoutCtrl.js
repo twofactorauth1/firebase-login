@@ -134,9 +134,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (tmpAccount.tempUser) {
               if (tmpAccount.tempUser.email) {
                 $scope.newAccount.email = tmpAccount.tempUser.email;
+                $scope.newAccount.tempUserId = tmpAccount.tempUser._id;
               }
               if (tmpAccount.tempUser.businessName) {
                 $scope.newAccount.businessName = tmpAccount.tempUser.businessName;
+              }
+              if (tmpAccount.tempUser.profilePhotos && tmpAccount.tempUser.profilePhotos.length) {
+                $scope.newAccount.profilePhoto = tmpAccount.tempUser.profilePhotos[0];
               }
             } else {
               userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {});
@@ -446,7 +450,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.curPage = 0;
     $scope.pageSize = 10;
     $scope.numberOfPages = function() {
-      return Math.ceil(that.blogposts.length / $scope.pageSize);
+      if(that.blogposts)
+        return Math.ceil(that.blogposts.length / $scope.pageSize);
+      else
+         return 0;
     };
 
     /********** END BLOG PAGE PAGINATION RELATED **********/
@@ -730,9 +737,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       PostService.createPost($scope.currentpage._id, postData, function(data) {});
     };
 
-    $scope.deletePost = function(postId) {
-      PostService.deletePost($scope.currentpage._id, postId, function(data) {
-
+    $scope.deletePost = function(postId, blogpost) {
+      PostService.deletePost($scope.currentpage._id, postId, function(data) { 
+       if(blogpost)
+       {
+        var index = that.blogposts.indexOf(blogpost);
+        that.blogposts.splice(index, 1);
+       }
       });
     };
 
@@ -1094,7 +1105,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
 
       //pass
-      if (!$scope.newAccount.password) {
+      if (!$scope.newAccount.password && !$scope.newAccount.tempUserId) {
         $scope.checkPasswordLength(newAccount);
         return;
       }
@@ -1183,14 +1194,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
               }
               userService.initializeUser(newUser, function(data) {
-                if (data) {
-                  var currentHost = $.url(window.location.origin).attr('host');
-                  var futureHost = $.url(data.accountUrl).attr('host');
-                  if (currentHost.indexOf(futureHost) > -1) {
+                if (data && data.accountUrl) {
+                    /*
+                     * I'm not sure why these lines were added.  The accountUrl is a string.
+                     * It will never have a host attribute.
+                     *
+                     * var currentHost = $.url(window.location.origin).attr('host');
+                     * var futureHost = $.url(data.accountUrl).attr('host');
+                     * if (currentHost.indexOf(futureHost) > -1) {
+                     *      window.location = data.accountUrl;
+                     * } else {
+                     *      window.location = currentHost;
+                     * }
+                     */
+
                     window.location = data.accountUrl;
-                  } else {
-                    window.location = currentHost;
-                  }
                 } else {
                   $scope.isFormValid = false;
                 }
@@ -1199,20 +1217,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
           });
 
-
-          /*
-          userService.createUser(newUser, function(data) {
-              var newUser = data;
-              PaymentService.getStripeCardToken(newAccount.card, function(token) {
-                  PaymentService.postStripeCustomer(token, newUser, newUser.accounts[0].accountId, function(stripeUser) {
-                      userService.postAccountBilling(stripeUser.id, token, function(billing) {});
-                      window.location.replace(newUser.accountUrl);
-                      // PaymentService.postCreateStripeSubscription(stripeUser.id, $scope.selectedPlan, function(subscription) {
-                      //     window.location.replace(adminUrl);
-                      // });
-                  });
-              });
-          });*/
         });
       });
     };

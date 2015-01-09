@@ -202,7 +202,7 @@ var dao = {
                         user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                         user.createUserAccount(accountId, email, null, ["super","admin","member"]);
 
-                        self.refreshFromSocialProfile(user, socialType, true, fn);
+                        self.refreshFromSocialProfile(user, socialType, true, false, fn);
                     });
             });
         })
@@ -271,19 +271,22 @@ var dao = {
 
                             user.createOrUpdateLocalCredentials(null);
                             user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                            self.saveOrUpdateTmpUser(user, function(err, tmpUser){
-                                self.log.debug('saved temp user with id: ' + tmpUser.id());
-                                tempAccount.set('tempUser', tmpUser);
-                                accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
-                                    if(err) {
-                                        self.log.error('Error updating temp account: ' + err);
-                                        return fn(err, null);
-                                    } else {
-                                        self.log.debug('<< createTempUserFromSocialProfile');
-                                        return fn(null, user);
-                                    }
+                            self.refreshFromSocialProfile(user, socialType, true, true, function(err, updatedUser){
+                                self.saveOrUpdateTmpUser(updatedUser, function(err, tmpUser){
+                                    self.log.debug('saved temp user with id: ' + tmpUser.id());
+                                    tempAccount.set('tempUser', tmpUser);
+                                    accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                                        if(err) {
+                                            self.log.error('Error updating temp account: ' + err);
+                                            return fn(err, null);
+                                        } else {
+                                            self.log.debug('<< createTempUserFromSocialProfile');
+                                            return fn(null, user);
+                                        }
+                                    });
                                 });
                             });
+
 
 
 
@@ -299,7 +302,7 @@ var dao = {
     },
 
 
-    refreshFromSocialProfile: function(user, socialType, defaultPhoto, fn) {
+    refreshFromSocialProfile: function(user, socialType, defaultPhoto, tempUser, fn) {
         var self = this;
         if (_.isFunction(defaultPhoto)) {
             fn = defaultPhoto;
@@ -315,6 +318,15 @@ var dao = {
                 self.saveOrUpdate(user, fn);
             }
         };
+        if(tempUser === true) {
+            fxn = function(err, value){
+                if (!err) {
+                    self.saveOrUpdateTmpUser(value, fn);
+                } else {
+                    self.saveOrUpdateTmpUser(user, fn);
+                }
+            }
+        }
 
         switch(socialType) {
             case social.FACEBOOK:
