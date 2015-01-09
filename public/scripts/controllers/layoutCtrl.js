@@ -978,6 +978,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
       if (user.email) {
+        var regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+        var result = regex.test(user.email);
+        if(!result)
+        {
+          $("#user_email .error").html("Valid Email Required");
+          $("#user_email").addClass('has-error');
+          $("#user_email .glyphicon").addClass('glyphicon-remove');
+          return;
+        }  
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,

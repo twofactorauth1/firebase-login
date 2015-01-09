@@ -238,16 +238,12 @@ define(['app', 'constants', 'importContactService'], function(app) {
                         fn(data);
                     });
             };
-            this.getCustomerActivitiesWithLimit = function(customerId, queryParams, fn) {
-                var apiUrl = baseUrl + ['contact', customerId, 'activity'].join('/');
-                    $http({
-                            url: apiUrl,
-                            method: 'GET',
-                            params: queryParams
-                        })
-                        .success(function(data, status, headers, config) {
-                            fn(data);
-                        });
+            this.getCustomerUnreadActivities = function(customerId, fn) {
+                var apiUrl = baseUrl + ['contact', customerId, 'activity', 'unread'].join('/');
+                   $http.get(apiUrl)
+                    .success(function(data, status, headers, config) {
+                        fn(data);
+                    });
             };
 
             this.getAllCustomerActivities = function(fn) {
@@ -266,6 +262,13 @@ define(['app', 'constants', 'importContactService'], function(app) {
                         method: 'GET',
                         params: queryParams
                     })
+                    .success(function(data, status, headers, config) {
+                        fn(data);
+                    });
+            };
+            this.getAllCustomerUnreadActivities = function(fn) {
+                var apiUrl = baseUrl + ['contact', 'activities', 'unread'].join('/');
+                $http.get(apiUrl)
                     .success(function(data, status, headers, config) {
                         fn(data);
                     });
