@@ -137,9 +137,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if (tmpAccount.tempUser) {
               if (tmpAccount.tempUser.email) {
                 $scope.newAccount.email = tmpAccount.tempUser.email;
+                $scope.newAccount.tempUserId = tmpAccount.tempUser._id;
               }
               if (tmpAccount.tempUser.businessName) {
                 $scope.newAccount.businessName = tmpAccount.tempUser.businessName;
+              }
+              if (tmpAccount.tempUser.profilePhotos && tmpAccount.tempUser.profilePhotos.length) {
+                $scope.newAccount.profilePhoto = tmpAccount.tempUser.profilePhotos[0];
               }
             } else {
               userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {});
@@ -1097,7 +1101,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
 
       //pass
-      if (!$scope.newAccount.password) {
+      if (!$scope.newAccount.password && !$scope.newAccount.tempUserId) {
         $scope.checkPasswordLength(newAccount);
         return;
       }

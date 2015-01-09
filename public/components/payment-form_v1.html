@@ -29,11 +29,15 @@
                         </div>
                         <div class="col-sm-3"></div>
                     </div> 
-                    <div class="row"></div>
+                    <div class="row" >
+                        <div class="col-sm-12 signup-social-toolbar" ng-if="newAccount.profilePhoto">
+                            <img ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto">
+                        </div>
+                    </div>
                     <fieldset ng-disabled="isFormValid">
                         <!-- EMAIL AND PASSOWORD -->
 
-                        <div id="email" class="form-group col-sm-6 has-feedback">
+                        <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-envelope" /></span>
                                 <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
@@ -43,7 +47,7 @@
                         </div>
 
 
-                        <div id="password" class="form-group col-sm-6 has-feedback">
+                        <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-lock" /></span>
                                 <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />

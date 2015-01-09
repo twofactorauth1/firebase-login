@@ -25285,6 +25285,9 @@ div[data-type="coming-soon"] .component-inner {
 .payment-form-v1 .signup-social-toolbar i.fa {
   font-size: 36px;
 }
+.payment-form-v1 .profilePhoto {
+  margin: 0 auto;
+}
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
   width: 100%;
