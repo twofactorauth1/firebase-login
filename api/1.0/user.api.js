@@ -695,7 +695,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     deleteUser: function(req,resp) {
+        var self = this;
+        self.log.debug('>> deleteUser');
+        var userId = parseInt(req.params.id);
+        var accountId = parseInt(self.accountId(req));
 
+        self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                userManager.deleteOrRemoveUserForAccount(accountId, userId, function(err, value){
+                    self.log.debug('<< deleteUser');
+                    return self.sendResultOrError(resp, err, value, 'Error deleting user');
+                });
+            }
+        });
     }
 });
 

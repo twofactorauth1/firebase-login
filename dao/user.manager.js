@@ -399,5 +399,41 @@ module.exports = {
             }
         });
 
+    },
+
+    deleteOrRemoveUserForAccount: function(accountId, userId, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deleteOrRemoveUserForAccount');
+
+        dao.getById(userId, $$.m.User, function(err, user){
+            if(err || user=== null) {
+                self.log.error('Error getting user to delete:' + err);
+                return fn(err, null);
+            } else {
+                if(user.getAllAccountIds().length > 1) {
+                    user.removeAccount(accountId);
+                    dao.saveOrUpdate(user, $$.m.User, function(err, savedUser){
+                        if(err) {
+                            self.log.error('Error updating user: ' + err);
+                            return fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteOrRemoveUserForAccount');
+                            return fn(null, 'removed');
+                        }
+                    });
+                } else {
+                    dao.removeById(userId, $$.m.User, function(err, value){
+                        if(err) {
+                            self.log.error('Error deleting user: ' + err);
+                            return fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteOrRemoveUserForAccount');
+                            return fn(null, 'deleted');
+                        }
+                    });
+                }
+            }
+        });
     }
 };
