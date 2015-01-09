@@ -206,6 +206,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                                 });
                 */
                 $scope.m.singleSelect = function(asset) {
+                    $scope.singleSelected = true;
                     $timeout(function() {
                         if (!$scope.isSingleSelect) {
                             //$scope.batch.push(asset);
@@ -268,6 +269,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.m.editImage = function(asset) {
                     $scope.editingImage = true;
                     $scope.singleAsset = asset;
+                    console.log('asset ', asset);
 
                     var targetImage = $('#targetEditImage');
                     // image.crossOrigin = 'anonymous';
@@ -280,17 +282,17 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     //     this.render();
                     //   });
 
-                    var canvas =  $('#media-manager-modal #targetCanvas')[0];
-                    console.log('canvas ', canvas);
-                    var ctx = canvas.getContext('2d'),
-                    img = new Image();
-                    img.crossOrigin = 'anonymous'; // Try to remove/comment this line
-                    img.src = $("#originalSource").attr('src');
-                    ctx.drawImage(img,10,20);
-                    var imgData = JSON.parse(JSON.stringify(canvas.toDataURL("image/jpeg")));
-                    targetImage.attr('src', imgData);
+                    // var canvas =  $('#media-manager-modal #targetCanvas')[0];
+                    // console.log('canvas ', canvas);
+                    // var ctx = canvas.getContext('2d'),
+                    // img = new Image();
+                    // img.crossOrigin = 'anonymous'; // Try to remove/comment this line
+                    // img.src = $("#originalSource").attr('src');
+                    // ctx.drawImage(img,10,20);
+                    // var imgData = JSON.parse(JSON.stringify(canvas.toDataURL("image/jpeg")));
+                    // targetImage.attr('src', imgData);
 
-                    targetImage[0].crossOrigin = 'anonymous';
+                    // targetImage[0].crossOrigin = 'anonymous';
                     // var dkrm = new Darkroom(targetImage[0], {
                     //     // Size options
                     //     minWidth: 100,
@@ -314,7 +316,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     //     }
                     // });
 
-                    console.log('dkrm ', dkrm);
+                    // console.log('dkrm ', dkrm);
 
                 };
 
