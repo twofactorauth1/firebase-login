@@ -21,6 +21,7 @@ var contactActivity = $$.m.ModelBase.extend({
             note: "",
             detail:"",
             duration:null,
+            read: false,
             start:null, //datestamp
             end:null,   //datestamp
             v:0.1,

@@ -87,7 +87,7 @@ exports.contactactivity_manager_test = {
 
     testListActivitiesByContactId: function (test) {
         test.expect(2);
-        manager.listActivitiesByContactId(0, 0, null, null, function (err, list) {
+        manager.listActivitiesByContactId(0, 0, null, null, null, function (err, list) {
             if (err) {
                 test.ok(false, 'list activities by contact failed.');
                 test.done();
@@ -103,7 +103,7 @@ exports.contactactivity_manager_test = {
         test.expect(2);
         var activityTypeAry = [$$.m.ContactActivity.types.PAGE_VIEW];
 
-        manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, function (err, list) {
+        manager.findActivities(null, null, activityTypeAry, null, null, null, null, null, null, null, function (err, list) {
             if (err) {
                 test.ok(false, 'list activities by activity type failed.');
                 test.done();
@@ -119,7 +119,7 @@ exports.contactactivity_manager_test = {
     testFindActivitiesByText: function (test) {
         var text = 'ge';
         test.expect(2);
-        manager.findActivities(null, null, null, text, null, null, null, null, null, function (err, list) {
+        manager.findActivities(null, null, null, text, null, null, null, null, null, null, function (err, list) {
             if (err) {
                 test.ok(false, 'list activities by text failed.');
                 test.done();
@@ -134,7 +134,7 @@ exports.contactactivity_manager_test = {
     testFindActivitiesByDateRange: function (test) {
         var date = testContext.date;
 
-        manager.findActivities(null, null, null, null, null, date, date, null, null, function (err, list) {
+        manager.findActivities(null, null, null, null, null, date, date, null, null, null, function (err, list) {
             if (err) {
                 test.ok(false, 'list activities by date range.');
                 test.done();
