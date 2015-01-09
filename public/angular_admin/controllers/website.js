@@ -128,7 +128,17 @@ define([
             window.updateAdminPageScope = function(page) {
                 $scope.singlePost = false;
                 if (page._id !== $scope.currentPage._id) {
-                    $scope.updatePage(page.handle, true);
+                    $scope.currentPage = _.findWhere(that.allPages, {
+                        handle: page.handle
+                    });
+                   
+                    //get components from page
+                    if ($scope.currentPage && $scope.currentPage.components) {
+                        $scope.components = $scope.currentPage.components;
+                    } else {
+                        $scope.components = [];
+                    }
+                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
                 }
             }
 
