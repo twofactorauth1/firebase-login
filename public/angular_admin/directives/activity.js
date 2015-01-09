@@ -55,6 +55,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                         page: scope.currentPage,
                         take: scope.numPerPage
                     }
+                    
                     scope.activity_type = newVal.activityTypeFilter.activityType;
                     scope.activities =  $filter('filter')(scope.all_activities, { activityType: scope.activity_type });
                     scope.total = scope.activities.length;
@@ -67,8 +68,11 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                         skip: (scope.main.page - 1) * scope.main.take
                     }
                     if (scope.singleCustomer) {   
-                        queryParams = {};      
-                    CustomerService.getCustomerActivitiesWithLimit(scope.customerId, queryParams, function(activities) {
+                    CustomerService.getCustomerUnreadActivities(scope.customerId, function(activities) {
+                        scope.unread = activities.length;
+                    });  
+
+                    CustomerService.getCustomerActivities(scope.customerId, function(activities) {
                         for (var i = 0; i < activities.length; i++) {
                             activities[i]['customer'] = scope.$parent.customer;
                             activities[i]['activityType'] = activities[i]['activityType'];
@@ -96,7 +100,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                                 skip: (scope.main.page - 1) * scope.main.take,
                                 activityType: "CONTACT_CREATED,ACCOUNT_CREATED"
                             }
-                        }      
+                        } 
                         CustomerService.getAllCustomerActivitiesWithLimit(queryParams,function(data) {
                             var activites = data.results;
                             for (var i = 0; i < activites.length; i++) {
@@ -108,7 +112,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                             };
                             scope.total = data.total;
                             scope.activities = activites;
-                        });                                           
+                        });                                       
                     }
                 }
                 if(scope.singleCustomer)
@@ -118,6 +122,9 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                     if(scope.$parent.customers)
                     {
                         scope.customers = scope.$parent.customers;
+                        CustomerService.getAllCustomerUnreadActivities(function(data) {
+                           scope.unread = data.total;
+                        });
                         scope.loadPage();
                     }
                     else
@@ -125,6 +132,9 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                     CustomerService.getCustomers(function(customers) { 
                         scope.$parent.customers = customers;
                         scope.customers = customers;
+                        CustomerService.getAllCustomerUnreadActivities(function(data) {
+                           scope.unread = data.total;
+                        });
                         scope.loadPage();
                     });
                     } 
