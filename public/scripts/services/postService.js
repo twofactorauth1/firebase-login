@@ -41,7 +41,7 @@ mainApp.service('postService', function ($http) {
             method: "DELETE"
         }).finally(function(resp){
                 // when delete is successful api returns status code 1
-                if ( resp.status === 1 )
+                //if ( resp.status === 1 )
                 fn();
             });
     };

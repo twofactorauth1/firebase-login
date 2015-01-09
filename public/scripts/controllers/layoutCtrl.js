@@ -449,7 +449,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.curPage = 0;
     $scope.pageSize = 10;
     $scope.numberOfPages = function() {
-      return Math.ceil(that.blogposts.length / $scope.pageSize);
+      if(that.blogposts)
+        return Math.ceil(that.blogposts.length / $scope.pageSize);
+      else
+         return 0;
     };
 
     /********** END BLOG PAGE PAGINATION RELATED **********/
@@ -733,9 +736,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       PostService.createPost($scope.currentpage._id, postData, function(data) {});
     };
 
-    $scope.deletePost = function(postId) {
-      PostService.deletePost($scope.currentpage._id, postId, function(data) {
-
+    $scope.deletePost = function(postId, blogpost) {
+      PostService.deletePost($scope.currentpage._id, postId, function(data) { 
+       if(blogpost)
+       {
+        var index = that.blogposts.indexOf(blogpost);
+        that.blogposts.splice(index, 1);
+       }
       });
     };
 
