@@ -197,14 +197,18 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                                     console.info('Search by email');
                                     $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
                                         var match = false;
-                                        elem.details[0].emails.forEach(function(value, index) {
-                                            if (value.email === undefined) {
-                                                var email = value;
-                                            } else {
-                                                var email = value.email;
-                                            }
-                                            match = email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
-                                        });
+                                        if(elem.details[0])
+                                        {
+                                          elem.details[0].emails.forEach(function(value, index) {
+                                                if (value.email === undefined) {
+                                                    var email = value;
+                                                } else {
+                                                    var email = value.email;
+                                                }
+                                                match = email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                            });  
+                                        }
+                                        
                                         return match;
                                     });
                                 }
