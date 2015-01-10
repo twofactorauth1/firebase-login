@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService',
-  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
+  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
@@ -152,6 +152,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
         $scope.currentpage = that.pages;
+
+        for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          if ($scope.currentpage.components[i].type == 'contact-us') {
+            $scope.geo_address_string = $scope.stringifyAddress($scope.currentpage.components[i].location);
+            analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                        if (data.error === undefined) {
+                            $scope.mapLocation.lat = parseFloat(data.lat);
+                            $scope.mapLocation.lng = parseFloat(data.lon);
+                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                            $scope.markers.mainMarker.message = $scope.geo_address_string;
+                        }
+                    });
+          }
+        };
+
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
           customerService.getCustomer($scope.custid, function(data) {
@@ -325,6 +341,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       that.products = data;
     });
 
+    $scope.stringifyAddress = function(address) {
+        return _.filter([address.address.replace(/<\/?[^>]+>/gi, ''), address.address2.replace(/<\/?[^>]+>/gi, ''), address.city.replace(/<\/?[^>]+>/gi, ''), address.state.replace(/<\/?[^>]+>/gi, ''), address.zip.replace(/<\/?[^>]+>/gi, '')], function(str) {
+            return str !== "";
+        }).join(",")
+    };
 
     $scope.showEdit = function(type) {
       if (type == "billing")
@@ -459,6 +480,25 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     /********** END BLOG PAGE PAGINATION RELATED **********/
 
     /********** CMS RELATED **********/
+
+    /********** MAP RELATED **********/
+    angular.extend($scope, {
+            mapLocation: {
+                lat: 51,
+                lng: 0,
+                zoom: 10
+            },
+            markers: {
+                mainMarker: {
+                    lat: 51,
+                    lng: 0,
+                    focus: true,
+                    message: "",
+                    draggable: false
+                }
+            }
+      });
+     /********** END MAP RELATED **********/
     $scope.sharePost = function(post, type) {
       var url = $location.$$absUrl;
       var postData = {};
