@@ -39,7 +39,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('share/link'), this.isAuthApi, this.shareLink.bind(this));
         */
 
-        app.post(this.url('status'), this.isAuthApi, this.updateStatus.bind(this));
+        app.post(this.url('status'), this.isAuthApi.bind(this), this.updateStatus.bind(this));
     },
 
     updateStatus: function(req, resp) {

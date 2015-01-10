@@ -226,6 +226,7 @@ var dao = {
                     var obj = {};
                     obj.id = _id;
                     obj.subdomain = val.get('subdomain');
+                    obj.domain = val.get('domain');
                     obj.logo = val.get('business').logo;
                     data.push(obj);
                     callback();

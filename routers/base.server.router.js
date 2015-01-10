@@ -42,16 +42,23 @@ _.extend(baseRouter.prototype, {
 
     setup: function(req, resp, next) {
         //TODO: Cache Account By Host
-        if (req["session"] != null && req.session["accountId"] == null) {
+        var self = this;
+        /*
+         * If we have a session but no session accountId OR the session host doesn't match current host, do the following
+         */
+        if (req["session"] != null && (req.session["accountId"] == null || self.matchHostToSession(req)===false)) {
             var accountDao = require("../dao/account.dao");
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
+                        logger.warn('We should not reach this code.  value ===true');
                         logger.debug("host: " + req.get("host") + " -> accountId:0");
                         req.session.accountId = 0;
                     } else {
                         logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
                         req.session.accountId = value.id();
+                        req.session.subdomain = value.get('subdomain');
+                        req.session.domain = value.get('domain');
                     }
                 } else {
                     logger.warn("No account found from getAccountByHost");
@@ -62,6 +69,25 @@ _.extend(baseRouter.prototype, {
         } else {
             return next();
         }
+    },
+
+    matchHostToSession: function(req) {
+        var subObj = urlUtils.getSubdomainFromHost(req.host);
+        var sSub = req.session.subdomain;
+        var sDom = req.session.domain;
+        if(sSub=== null && sDom===null) {//nothing to match
+            logger.debug('matchHostToSession - nothing to match.  false');
+            return false;
+        }
+
+        if(subObj.isMainApp === true) {
+            var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app');
+            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
+            return mainAppTest;
+        }
+        var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
+        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        return matchHostToSessionTest;
     },
 
     isHomeAuth: function(req, resp, next) {
@@ -177,7 +203,7 @@ _.extend(baseRouter.prototype, {
         var self = this;
         logger.debug('>> isAuth (' + req.originalUrl + ')');
         var path = req.url;
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated() && self.matchHostToSession(req)) {
             logger.debug('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
@@ -210,6 +236,10 @@ _.extend(baseRouter.prototype, {
                 }
 
             }
+        } else if(req.isAuthenticated() && self.matchHostToSession(req) === false){
+            logger.debug('authenticated to the wrong session.  logging out.');
+            req.logout();
+            resp.redirect('/login');
         } else {
             logger.debug('Not authenticated');
             var checkAuthToken = function(req, fn) {
@@ -235,7 +265,7 @@ _.extend(baseRouter.prototype, {
                 }
             };
 
-            if (req["session"] != null && req.session["accountId"] == null) {
+            if (req["session"] != null && req.session["accountId"] == null) {//TODO: do we need to check matchHostToken here?
                 var accountDao = require("../dao/account.dao");
                 accountDao.getAccountByHost(req.get("host"), function(err, value) {
                     if (!err && value != null) {

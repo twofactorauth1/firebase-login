@@ -145,7 +145,7 @@ app.use(express.session({
     secret: 'mys3cr3t',
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
-        //domain: appConfig.cookie_subdomain
+        domain: appConfig.cookie_subdomain
         } //stay open for 1 day of inactivity across all subdomains
 }));
 
@@ -156,17 +156,6 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-// Middleware for login redirect
-/*
-app.use(function (req, res, next) {
-  var paths = ['/login', '/login/'];
-  if ((paths.indexOf(req.path)>=0) && req.user!==undefined) {
-    req.redirect('/admin');
-  }
-  next();
-});
-*/
 
 //app.use(express.session({ secret:'mys3cr3ts3sEss10n' }));
 app.use(passport.initialize());

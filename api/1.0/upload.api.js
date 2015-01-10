@@ -24,7 +24,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         //GET
         app.get(this.url("contact/photo"), this.confirmUpload.bind(this));
-        app.post(this.url("contact/photo"), this.isAuthApi, this.uploadContactPhoto.bind(this));
+        app.post(this.url("contact/photo"), this.isAuthApi.bind(this), this.uploadContactPhoto.bind(this));
     },
 
 

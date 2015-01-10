@@ -50,7 +50,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/user'), this.isAuthAndSubscribedApi.bind(this), this.createAccountUserFromContact.bind(this));
         //  app.post("/signupnews", this.signUpNews.bind(this));
         //app.post(this.url('signupnews'), this.isAuthApi, this.signUpNews.bind(this));
-        app.post(this.url('signupnews'), this.setup, this.signUpNews.bind(this));
+        app.post(this.url('signupnews'), this.setup.bind(this), this.signUpNews.bind(this));
 
         app.get(this.url(':accountId/contacts/:letter/:skip', "account"), this.isAuthAndSubscribedApi.bind(this), this.getContactsForAccountByLetter.bind(this));
 

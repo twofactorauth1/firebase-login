@@ -21,7 +21,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //GET
-        app.get(this.url('account/:accountId/url'), this.isAuthApi, this.getAuthenticatedUrlForAccount.bind(this));
+        app.get(this.url('account/:accountId/url'), this.isAuthApi.bind(this), this.getAuthenticatedUrlForAccount.bind(this));
     },
 
 
