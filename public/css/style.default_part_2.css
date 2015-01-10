@@ -1667,6 +1667,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .mainpanel .contentpanel {
   padding: 20px;
   width: auto !important;
+  float: left;
 }
 
 .mainpanel .contentpanel::after {
@@ -5354,6 +5355,7 @@ div.error label.error:before {
 
 .ui-sortable {
   padding: 0;
+  visibility: visible!important;
 }
 
 input[type='file'] {
@@ -9107,7 +9109,7 @@ div[data-class='image-text'] p {
 
 .navbar-v2 div[data-type='masthead'] .home-text {
   margin-top: 200px;
-  min-height: 300px;
+  min-height: 260px;
 }
 
 .masthead .btn .fa {
@@ -9137,7 +9139,6 @@ div[data-class='image-text'] p {
 
 .masthead-v1 .masthead-title {
   font-size: 32px;
-  padding-bottom: 10px;
 }
 
 .masthead-v1 .masthead-title h1 {

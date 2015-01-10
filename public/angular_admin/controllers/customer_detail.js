@@ -78,7 +78,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                     });
                 }
 
-                $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ');
+                $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
                 $scope.contactLabel = CustomerService.contactLabel(customer);
                 $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
             });

@@ -21,21 +21,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //GET
-        app.get(this.url('checkaccess'), this.isAuthApi, this.checkAccess.bind(this));
-        app.get(this.url('profile'), this.isAuthApi, this.getFacebookProfile.bind(this));
-        app.get(this.url('friends'), this.isAuthApi, this.getFacebookFriends.bind(this));
+        app.get(this.url('checkaccess'), this.isAuthApi.bind(this), this.checkAccess.bind(this));
+        app.get(this.url('profile'), this.isAuthApi.bind(this), this.getFacebookProfile.bind(this));
+        app.get(this.url('friends'), this.isAuthApi.bind(this), this.getFacebookFriends.bind(this));
 
-        app.get(this.url('friends/import'), this.isAuthApi, this.importFacebookFriends.bind(this));
-        app.post(this.url('friends/import'), this.isAuthApi, this.importFacebookFriends.bind(this));
+        app.get(this.url('friends/import'), this.isAuthApi.bind(this), this.importFacebookFriends.bind(this));
+        app.post(this.url('friends/import'), this.isAuthApi.bind(this), this.importFacebookFriends.bind(this));
 
         //facebook api
-        app.get(this.url('likesperday'), this.isAuthApi, this.getLikesPerDay.bind(this));
-        app.get(this.url('insights/'), this.isAuthApi, this.getAppInsights.bind(this));
-        app.get(this.url('insights/:metric'), this.isAuthApi, this.getAppInsights.bind(this));
-        app.get(this.url('insights/:metric/:period'), this.isAuthApi, this.getAppInsights.bind(this));
-        app.get(this.url('insights/:metric/:period/:breakdown'), this.isAuthApi, this.getAppInsights.bind(this));
+        app.get(this.url('likesperday'), this.isAuthApi.bind(this), this.getLikesPerDay.bind(this));
+        app.get(this.url('insights/'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
+        app.get(this.url('insights/:metric'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
+        app.get(this.url('insights/:metric/:period'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
+        app.get(this.url('insights/:metric/:period/:breakdown'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
 
-        app.post(this.url('share/link'), this.isAuthApi, this.shareLink.bind(this));
+        app.post(this.url('share/link'), this.isAuthApi.bind(this), this.shareLink.bind(this));
     },
 
 

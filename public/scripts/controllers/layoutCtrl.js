@@ -34,11 +34,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     //$window.segmentIOWriteKey = ENV.segmentKey;
     //that.themeUrl = $scope.themeUrl;
 
-    // $scope.activateSettings = function() {
-    //     console.log('>>>>> ', window.parent);
-    //     window.parent.frames[0].parentNode.activateSettings();
-    // };
-
     CourseService.getAllCourses(function(data) {
       that.courses = data;
     });
@@ -97,7 +92,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       }
     });
+
     pagesService(function(err, data) {
+      console.log('pagesService data >>> ', data);
       if (err) {
         console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
       } else {
@@ -717,10 +714,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     window.activateAloha = function() {
-      if ($scope.activated == false) {
+      //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
+        console.log('elements length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
@@ -737,10 +735,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
         $scope.activated = true;
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-      }
+      //}
     };
 
     window.deactivateAloha = function() {
+      for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
       // $('.editable').mahalo();
       // if (aloha.editor && aloha.editor.selection) {
       // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');

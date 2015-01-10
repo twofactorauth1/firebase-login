@@ -21,14 +21,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //GET
-        app.get(this.url('checkaccess'), this.isAuthApi, this.checkAccess.bind(this));
-        app.get(this.url('profile'), this.isAuthApi, this.getLinkedInProfile.bind(this));
-        app.get(this.url('connections'), this.isAuthApi, this.getLinkedInConnections.bind(this));
+        app.get(this.url('checkaccess'), this.isAuthApi.bind(this), this.checkAccess.bind(this));
+        app.get(this.url('profile'), this.isAuthApi.bind(this), this.getLinkedInProfile.bind(this));
+        app.get(this.url('connections'), this.isAuthApi.bind(this), this.getLinkedInConnections.bind(this));
 
-        app.get(this.url('connections/import'), this.isAuthApi, this.importLinkedInConnections.bind(this));
-        app.post(this.url('connections/import'), this.isAuthApi, this.importLinkedInConnections.bind(this));
+        app.get(this.url('connections/import'), this.isAuthApi.bind(this), this.importLinkedInConnections.bind(this));
+        app.post(this.url('connections/import'), this.isAuthApi.bind(this), this.importLinkedInConnections.bind(this));
 
-        app.post(this.url('share/link'), this.isAuthApi, this.shareLink.bind(this));
+        app.post(this.url('share/link'), this.isAuthApi.bind(this), this.shareLink.bind(this));
     },
 
 

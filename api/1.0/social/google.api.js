@@ -20,16 +20,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //GET
-        app.get(this.url('checkaccess'), this.isAuthApi, this.checkAccess.bind(this));
-        app.get(this.url('hasaccess'), this.isAuthApi, this.hasAccess.bind(this));
-        app.get(this.url('accesstoken'), this.isAuthApi, this.getAccessToken.bind(this));
+        app.get(this.url('checkaccess'), this.isAuthApi.bind(this), this.checkAccess.bind(this));
+        app.get(this.url('hasaccess'), this.isAuthApi.bind(this), this.hasAccess.bind(this));
+        app.get(this.url('accesstoken'), this.isAuthApi.bind(this), this.getAccessToken.bind(this));
 
-        app.get(this.url('profile'), this.isAuthApi, this.getProfile.bind(this));
-        app.get(this.url('contacts'), this.isAuthApi, this.getContacts.bind(this));
+        app.get(this.url('profile'), this.isAuthApi.bind(this), this.getProfile.bind(this));
+        app.get(this.url('contacts'), this.isAuthApi.bind(this), this.getContacts.bind(this));
 
-        app.get(this.url('contacts/groups'), this.isAuthApi, this.getContactGroups.bind(this));
-        app.get(this.url('contacts/import'), this.isAuthApi, this.importContacts.bind(this));
-        app.post(this.url('contacts/import'), this.isAuthApi, this.importContacts.bind(this));
+        app.get(this.url('contacts/groups'), this.isAuthApi.bind(this), this.getContactGroups.bind(this));
+        app.get(this.url('contacts/import'), this.isAuthApi.bind(this), this.importContacts.bind(this));
+        app.post(this.url('contacts/import'), this.isAuthApi.bind(this), this.importContacts.bind(this));
     },
 
 

@@ -33,12 +33,12 @@ _.extend(router.prototype, baseRouter.prototype, {
         //-------------------------------------------------
         //  LOGIN
         //-------------------------------------------------
-        app.get("/auth/internal", this.setup, this.socialAuthInternal.bind(this));
+        app.get("/auth/internal", this.setup.bind(this), this.socialAuthInternal.bind(this));
 
-        app.get("/login/:socialtype", this.setup, this.socialLogin.bind(this));
-        app.get("/signup/:socialtype", this.setup, this.socialSignup.bind(this));
+        app.get("/login/:socialtype", this.setup.bind(this), this.socialLogin.bind(this));
+        app.get("/signup/:socialtype", this.setup.bind(this), this.socialSignup.bind(this));
 
-        app.get("/inapplogin/:socialtype", this.isAuth, this.inAppSocialLogin.bind(this));
+        app.get("/inapplogin/:socialtype", this.isAuth.bind(this), this.inAppSocialLogin.bind(this));
 
         app.get("/oauth2/callback", this.socialLoginCallback.bind(this));
         app.get("/oauth2/postlogin", this.redirectAfterOauth.bind(this));

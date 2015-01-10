@@ -212,7 +212,7 @@
                         <div class="col-xs-12">
                             <div class="col-xs-12">
                                 <div class="mb20"></div>
-                                <h3 class="profile-name">{{fullName}}
+                                <h3 class="profile-name">{{fullName || (checkBestEmail ? customer.details[0].emails[0].email : "") }}
                                     <span class="leaf-scale" data-container="body" data-toggle="popover" data-placement="top" data-title="Leaf Score 3/5" data-content="<ul><li class='strike'>Visited Website</li><li class='strike'>Signed up for Newsletter</li><li class='strike'>Viewed Tour</li><li>Purchased > $100</li><li>Refered Friend</li></ul>" style="display: none;">
                                         <i class="fa fa-leaf"></i>
                                         <i class="fa fa-leaf"></i>
