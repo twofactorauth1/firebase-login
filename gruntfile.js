@@ -220,7 +220,9 @@ module.exports = function(grunt) {
                     'public/js/libs/jqcloud2/dist/jqcloud.min.js',
                     'public/js/libs/angular-jqcloud/angular-jqcloud.js',
                     'public/js/libs_misc/jstimezonedetect/jstz.min.js',
-                    'public/js/libs/angular-social-links/angular-social-links.js'
+                    'public/js/libs/angular-social-links/angular-social-links.js',
+                    'public/js/libs/slick-carousel/slick/slick.js',
+                    'public/js/libs/angular-slick/dist/slick.js'
                 ],
 
                 /*
