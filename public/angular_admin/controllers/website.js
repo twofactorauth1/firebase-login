@@ -87,6 +87,7 @@ define([
                     togglePaletteOnly: true,
                     togglePaletteMoreText: 'more',
                     togglePaletteLessText: 'less',
+                    appendTo: $("#component-setting-modal"),
                     palette: [
                         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
                         ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
@@ -209,7 +210,7 @@ define([
                     title: 'Contact Us',
                     type: 'contact-us',
                     icon: 'fa fa-map-marker',
-                    enabled: false
+                    enabled: true
                 }, {
                     title: 'Coming Soon',
                     type: 'coming-soon',
