@@ -5355,6 +5355,7 @@ div.error label.error:before {
 
 .ui-sortable {
   padding: 0;
+  visibility: visible!important;
 }
 
 input[type='file'] {

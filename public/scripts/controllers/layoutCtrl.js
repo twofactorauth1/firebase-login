@@ -674,10 +674,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     window.activateAloha = function() {
-      if ($scope.activated == false) {
+      //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
+        console.log('elements length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
@@ -694,10 +695,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
         $scope.activated = true;
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-      }
+      //}
     };
 
     window.deactivateAloha = function() {
+      for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
       // $('.editable').mahalo();
       // if (aloha.editor && aloha.editor.selection) {
       // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
