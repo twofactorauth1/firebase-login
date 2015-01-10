@@ -674,7 +674,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     window.activateAloha = function() {
-      if ($scope.activated == false) {
+      //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
@@ -694,7 +694,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
         $scope.activated = true;
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-      }
+      //}
     };
 
     window.deactivateAloha = function() {

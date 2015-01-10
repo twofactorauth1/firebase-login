@@ -536,6 +536,7 @@ define([
                                 }
                             }
                         }
+
                         $scope.backup = {};
                     };
 
@@ -733,7 +734,6 @@ define([
                 if (fn) {
                     fn();
                 }
-                $scope.bindEvents();
             };
 
             $scope.scrollToIframeComponent = function(section) {
@@ -742,6 +742,7 @@ define([
             };
 
             $scope.activateAloha = function() {
+                console.log('activate aloha');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -753,6 +754,7 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
+                console.log('edit component >>>');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -764,7 +766,6 @@ define([
                         type: $scope.componentEditing.type
                     }).title;
                 });
-                $scope.bindEvents();
                 //open right sidebar and component tab
                 // document.body.className += ' leftpanel-collapsed rightmenu-open';
                 // var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
@@ -797,7 +798,63 @@ define([
             };
 
             $scope.saveComponent = function() {
+                console.log('saving component >>>');
                 var componentId = $scope.componentEditing._id;
+
+                //update single component
+                var componentType = $scope.componentEditing.type;
+                var matchingComponent = _.findWhere($scope.currentPage.components, {
+                    _id: componentId
+                });
+
+                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
+                console.log('edited component ', editedComponent);
+
+                //get all the editable variables and replace the ones in view with variables in DB
+                var componentEditable = editedComponent[0].querySelectorAll('.editable');
+                if (componentEditable.length >= 1) {
+                    for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                        var componentVar = componentEditable[i2].attributes['data-class'].value;
+                        var componentVarContents = componentEditable[i2].innerHTML;
+
+                        //if innerhtml contains a span with the class ng-binding then remove it
+                        var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+
+                        if (span) {
+                            var spanParent = span.parentNode;
+                            var spanInner = span.innerHTML;
+                            if (spanParent.classList.contains('editable')) {
+                                componentVarContents = spanInner;
+                            } else {
+                                spanParent.innerHTML = spanInner;
+                                componentVarContents = spanParent.parentNode.innerHTML;
+                            }
+                        }
+                        //remove "/n"
+                        componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                        var setterKey, pa;
+                        //if contains an array of variables
+                        if (componentVar.indexOf('.item') > 0) {
+                            //get index in array
+                            var first = componentVar.split(".")[0];
+                            var second = componentEditable[i2].attributes['data-index'].value;
+                            var third = componentVar.split(".")[2];
+                            matchingComponent[first][second][third] = componentVarContents;
+                        }
+                        //if needs to traverse a single
+                        if (componentVar.indexOf('-') > 0) {
+                            var first = componentVar.split("-")[0];
+                            var second = componentVar.split("-")[1];
+                            matchingComponent[first][second] = componentVarContents;
+                        }
+                        //simple
+                        if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                            matchingComponent[componentVar] = componentVarContents;
+                        }
+                    }
+                }
+
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
                     if ($scope.components[i]._id === componentId) {
@@ -807,6 +864,8 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
+
+                $scope.activateAloha();
 
                 //update the scope as the temppage until save
 
@@ -1080,7 +1139,6 @@ define([
                         break;
                 }
             }
-
 
             window.getSocialNetworks = function(componentId) {
                 $scope.componentEditing = _.findWhere($scope.components, {
