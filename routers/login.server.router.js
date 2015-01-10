@@ -15,6 +15,7 @@ var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
+var UnsubscribeView = require('../views/unsubscribe.server.view');
 var urlUtils = require('../utils/urlutils');
 var userManager = require('../dao/user.manager');
 var appConfig = require('../configs/app.config');
@@ -46,13 +47,19 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
         //-------------------------------------------------
+        // UNSUBSCRIBE
+        //-------------------------------------------------
+        app.get("/unsubscribe", this.setup.bind(this), this.showUnsubscribe.bind(this));
+        app.post("/unsubscribe", this.setup.bind(this), this.handleUnsubscribe.bind(this));
+
+
+        //-------------------------------------------------
         // FORGOT PASSWORD
         //-------------------------------------------------
         app.get("/forgotpassword", this.setup.bind(this), this.showForgotPassword.bind(this));
         app.post("/forgotpassword", this.setup.bind(this), this.handleForgotPassword.bind(this));
         app.get("/forgotpassword/reset/:token", this.setup.bind(this), this.showResetPasswordByToken.bind(this));
         app.post("/forgotpassword/reset/:token", this.setup.bind(this), this.handleResetPasswordByToken.bind(this));
-
 
         //-------------------------------------------------
         // SIGNUP
@@ -246,6 +253,26 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
     //endregion
 
+    //region Unsubscribe
+
+    showUnsubscribe: function (req, resp) {
+        if (req.isAuthenticated()) {
+            return resp.redirect("/");
+        }/* else if (this.accountId(req) > 0) {
+            return resp.redirect("/login");
+        }*/
+
+        new UnsubscribeView(req, resp).show();
+    },
+
+    handleUnsubscribe: function (req, resp) {
+        // TO DO
+        //var username = req.body.username;
+        //new ForgotPasswordView(req, resp).handleForgotPassword(username);
+    },
+
+    //endregion
+
     //region SIGNUP
     showSignup: function (req, resp) {
         if (req.isAuthenticated()) {
@@ -256,7 +283,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         new SignupView(req, resp).show();
     },
-
 
     handleSignup: function (req, resp) {
         var self = this, user, accountToken, deferred;
