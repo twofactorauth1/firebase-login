@@ -678,6 +678,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
+        console.log('elements length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
@@ -698,6 +699,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     window.deactivateAloha = function() {
+      for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
       // $('.editable').mahalo();
       // if (aloha.editor && aloha.editor.selection) {
       // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');

@@ -660,6 +660,7 @@ define([
             }
 
             $scope.addComponent = function() {
+                $scope.deactivateAloha();
                 var pageId = $scope.currentPage._id;
                 if ($scope.selectedComponent.type === 'footer') {
                     var footerType = _.findWhere($scope.currentPage.components, {
@@ -711,6 +712,7 @@ define([
             $scope.deleteComponent = function(componentId) {
                 var pageId = $scope.currentPage._id;
                 var deletedType;
+                $scope.deactivateAloha();
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
                     //$scope.resfeshIframe();
                     for (var i = 0; i < $scope.components.length; i++) {
@@ -725,6 +727,7 @@ define([
                     $(".modal-backdrop").remove();
                     $("#component-setting-modal").modal('hide');
                     toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                    $scope.activateAloha();
                 });
             };
 
