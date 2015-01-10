@@ -28,17 +28,17 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/", this.setup.bind(this), this.index.bind(this));
 
         //send all routes to index and let the app router to navigate to the appropiate view
-        app.get("/index", this.setup, this.index.bind(this));
-        app.get("/blog", this.setup, this.index.bind(this));
-        app.get("/blog/*", this.setup, this.index.bind(this));
-        app.get("/tag/*", this.setup, this.index.bind(this));
-        app.get("/category/*", this.setup, this.index.bind(this));
-        app.get("/author/*", this.setup, this.index.bind(this));
-        app.get("/page/*", this.setup, this.index.bind(this));
-        app.get("/signup", this.setup, this.index.bind(this));
-        app.get("/post", this.setup, this.index.bind(this));
+        app.get("/index", this.setup.bind(this), this.index.bind(this));
+        app.get("/blog", this.setup.bind(this), this.index.bind(this));
+        app.get("/blog/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/tag/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/category/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/author/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/page/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/signup", this.setup.bind(this), this.index.bind(this));
+        app.get("/post", this.setup.bind(this), this.index.bind(this));
 
-        app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
+        app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
         // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
         // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
