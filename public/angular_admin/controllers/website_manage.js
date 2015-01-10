@@ -327,6 +327,16 @@ define([
 
              };
 
+             //update the primary font
+            $scope.updatePrimaryFont = function(font) {
+
+                if ($scope.website.settings.font_family !== font.name) {
+                    $scope.website.settings.font_family = font.name;
+                    iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
+                    //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
+                }
+            };
+
         }
     ]);
 });

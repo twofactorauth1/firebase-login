@@ -31,22 +31,22 @@ _.extend(api.prototype, baseApi.prototype, {
         // WEBSITE
         //app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
         app.get(this.url('website/:id'), this.getWebsiteById.bind(this)); //Temp Added
-        app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi, this.getWebsiteForAccountId.bind(this));
+        app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi.bind(this), this.getWebsiteForAccountId.bind(this));
         app.post(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateWebsite.bind(this));
         app.put(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateWebsite.bind(this));
 
         // WEBSITE LINKS
-        app.get(this.url('website/:id/linklists'), this.isAuthApi, this.getWebsiteLinklists.bind(this));
-        app.get(this.url('website/:id/linklists/:handle'), this.isAuthApi, this.getWebsiteLinklistsByHandle.bind(this));
-        app.post(this.url('website/:id/linklists'), this.isAuthApi, this.addWebsiteLinklists.bind(this));
+        app.get(this.url('website/:id/linklists'), this.isAuthApi.bind(this), this.getWebsiteLinklists.bind(this));
+        app.get(this.url('website/:id/linklists/:handle'), this.isAuthApi.bind(this), this.getWebsiteLinklistsByHandle.bind(this));
+        app.post(this.url('website/:id/linklists'), this.isAuthApi.bind(this), this.addWebsiteLinklists.bind(this));
         app.post(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi.bind(this), this.updateWebsiteLinklists.bind(this));
         app.delete(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi.bind(this), this.deleteWebsiteLinklists.bind(this));
 
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.getPageById.bind(this));
-        app.put(this.url('page'), this.isAuthApi, this.saveOrUpdatePage.bind(this));
-        app.get(this.url('page/:handle/screenshot'), this.isAuthApi, this.generateScreenshot.bind(this));
+        app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
+        app.get(this.url('page/:handle/screenshot'), this.isAuthApi.bind(this), this.generateScreenshot.bind(this));
         app.get(this.url('website/:id/page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
         app.get(this.url('page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
         ///api/1.0/cms/website/{id}/page/secure/{handle} and at /api/1.0/cms/page/secure/{handle}
@@ -67,16 +67,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //THEME Updated URLs
 
-        app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
-        app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
-        app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
+        app.get(this.url('theme'), this.isAuthApi.bind(this), this.listThemes.bind(this));
+        app.get(this.url('theme/:id'), this.isAuthApi.bind(this), this.getThemeById.bind(this));
+        app.get(this.url('theme/name/:name'), this.isAuthApi.bind(this), this.getThemeByName.bind(this));
         app.post(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.createTheme.bind(this));
         app.post(this.url('theme/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createThemeFromWebsite.bind(this));
         app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTheme.bind(this));
         app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTheme.bind(this));
         app.put(this.url('theme/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTheme.bind(this));
         app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTheme.bind(this));
-        app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi, this.setTheme.bind(this));
+        app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTheme.bind(this));
 
 
         // COMPONENTS
@@ -92,17 +92,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
-        app.get(this.url('page/:id/blog'), this.setup, this.listBlogPostsByPageId.bind(this));
-        app.get(this.url('blog'), this.setup, this.listBlogPosts.bind(this));
-        app.get(this.url('page/:id/blog/:postId'), this.setup, this.getBlogPost.bind(this));
+        app.get(this.url('page/:id/blog'), this.setup.bind(this), this.listBlogPostsByPageId.bind(this));
+        app.get(this.url('blog'), this.setup.bind(this), this.listBlogPosts.bind(this));
+        app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
-        app.get(this.url('page/:id/blog/author/:author'), this.setup, this.getPostsByAuthor.bind(this));
-        app.get(this.url('page/:id/blog/title/:title'), this.setup, this.getPostsByTitle.bind(this));
-        app.get(this.url('page/:id/blog/content/:content'), this.setup, this.getPostsByContent.bind(this));
-        app.get(this.url('page/:id/blog/category/:category'), this.setup, this.getPostsByCategory.bind(this));
-        app.get(this.url('page/:id/blog/tag/:tag'), this.setup, this.getPostsByTag.bind(this));
+        app.get(this.url('page/:id/blog/author/:author'), this.setup.bind(this), this.getPostsByAuthor.bind(this));
+        app.get(this.url('page/:id/blog/title/:title'), this.setup.bind(this), this.getPostsByTitle.bind(this));
+        app.get(this.url('page/:id/blog/content/:content'), this.setup.bind(this), this.getPostsByContent.bind(this));
+        app.get(this.url('page/:id/blog/category/:category'), this.setup.bind(this), this.getPostsByCategory.bind(this));
+        app.get(this.url('page/:id/blog/tag/:tag'), this.setup.bind(this), this.getPostsByTag.bind(this));
         app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi.bind(this), this.reorderPosts.bind(this));
         app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.reorderBlogPost.bind(this));
     },

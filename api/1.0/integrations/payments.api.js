@@ -31,62 +31,62 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('contacts/:id/charge'), this.setup, this.createChargeForContact.bind(this));
 
         //Customers
-        app.get(this.url('customers'), this.isAuthApi, this.listCustomers.bind(this));
-        app.get(this.url('customers/:id'), this.isAuthApi, this.getCustomer.bind(this));
-        app.post(this.url('customers'), this.isAuthApi, this.createCustomer.bind(this));
-        app.post(this.url('customers/:id'), this.isAuthApi, this.updateCustomer.bind(this));
-        app.delete(this.url('customers/:id'), this.isAuthApi, this.deleteCustomer.bind(this));
+        app.get(this.url('customers'), this.isAuthApi.bind(this), this.listCustomers.bind(this));
+        app.get(this.url('customers/:id'), this.isAuthApi.bind(this), this.getCustomer.bind(this));
+        app.post(this.url('customers'), this.isAuthApi.bind(this), this.createCustomer.bind(this));
+        app.post(this.url('customers/:id'), this.isAuthApi.bind(this), this.updateCustomer.bind(this));
+        app.delete(this.url('customers/:id'), this.isAuthApi.bind(this), this.deleteCustomer.bind(this));
 
         //Plans
-        app.get(this.url('plans'), this.setup, this.listPlans.bind(this));
-        app.get(this.url('plans/:id'), this.setup, this.getPlan.bind(this));
-        app.post(this.url('plans'), this.isAuthApi, this.createPlan.bind(this));
-        app.post(this.url('plans/:id'), this.isAuthApi, this.updatePlan.bind(this));
-        app.delete(this.url('plans/:id'), this.isAuthApi, this.deletePlan.bind(this));
+        app.get(this.url('plans'), this.setup.bind(this), this.listPlans.bind(this));
+        app.get(this.url('plans/:id'), this.setup.bind(this), this.getPlan.bind(this));
+        app.post(this.url('plans'), this.isAuthApi.bind(this), this.createPlan.bind(this));
+        app.post(this.url('plans/:id'), this.isAuthApi.bind(this), this.updatePlan.bind(this));
+        app.delete(this.url('plans/:id'), this.isAuthApi.bind(this), this.deletePlan.bind(this));
 
         //Subscriptions
-        app.get(this.url('customers/:id/subscriptions'), this.isAuthApi, this.listSubscriptions.bind(this));
-        app.post(this.url('customers/:id/subscriptions'), this.isAuthApi, this.createSubscription.bind(this));
-        app.post(this.url('customers/:id/subscriptions/:subId'), this.isAuthApi, this.updateSubscription.bind(this));
-        app.get(this.url('customers/:id/subscriptions/:subId'), this.isAuthApi, this.getSubscription.bind(this));
-        app.delete(this.url('customers/:id/subscriptions/:subId'), this.isAuthApi, this.cancelSubscription.bind(this));
+        app.get(this.url('customers/:id/subscriptions'), this.isAuthApi.bind(this), this.listSubscriptions.bind(this));
+        app.post(this.url('customers/:id/subscriptions'), this.isAuthApi.bind(this), this.createSubscription.bind(this));
+        app.post(this.url('customers/:id/subscriptions/:subId'), this.isAuthApi.bind(this), this.updateSubscription.bind(this));
+        app.get(this.url('customers/:id/subscriptions/:subId'), this.isAuthApi.bind(this), this.getSubscription.bind(this));
+        app.delete(this.url('customers/:id/subscriptions/:subId'), this.isAuthApi.bind(this), this.cancelSubscription.bind(this));
 
 
         //Cards
-        app.put(this.url('customers/:id/cards/:cardToken'), this.isAuthApi, this.createCard.bind(this));
-        app.get(this.url('customers/:id/cards/:cardId'), this.isAuthApi, this.getCard.bind(this));
-        app.post(this.url('customers/:id/cards/:cardId'), this.isAuthApi, this.updateCard.bind(this));
-        app.get(this.url('customers/:id/cards'), this.isAuthApi, this.listCards.bind(this));
-        app.delete(this.url('customers/:id/cards/:cardId'), this.isAuthApi, this.deleteCard.bind(this));
+        app.put(this.url('customers/:id/cards/:cardToken'), this.isAuthApi.bind(this), this.createCard.bind(this));
+        app.get(this.url('customers/:id/cards/:cardId'), this.isAuthApi.bind(this), this.getCard.bind(this));
+        app.post(this.url('customers/:id/cards/:cardId'), this.isAuthApi.bind(this), this.updateCard.bind(this));
+        app.get(this.url('customers/:id/cards'), this.isAuthApi.bind(this), this.listCards.bind(this));
+        app.delete(this.url('customers/:id/cards/:cardId'), this.isAuthApi.bind(this), this.deleteCard.bind(this));
 
         //Charges - CRUL & Capture
-        app.get(this.url('charges'), this.isAuthApi, this.listCharges.bind(this));
-        app.get(this.url('charges/:chargeId'), this.isAuthApi, this.getCharge.bind(this));
-        app.post(this.url('charges'), this.isAuthApi, this.createCharge.bind(this));
-        app.post(this.url('charges/:chargeId'), this.isAuthApi, this.updateCharge.bind(this));
-        app.post(this.url('charges/:chargeId/capture'), this.isAuthApi, this.captureCharge.bind(this));
+        app.get(this.url('charges'), this.isAuthApi.bind(this), this.listCharges.bind(this));
+        app.get(this.url('charges/:chargeId'), this.isAuthApi.bind(this), this.getCharge.bind(this));
+        app.post(this.url('charges'), this.isAuthApi.bind(this), this.createCharge.bind(this));
+        app.post(this.url('charges/:chargeId'), this.isAuthApi.bind(this), this.updateCharge.bind(this));
+        app.post(this.url('charges/:chargeId/capture'), this.isAuthApi.bind(this), this.captureCharge.bind(this));
 
         //InvoiceItems - CRUDL
-        app.post(this.url('customers/:id/invoiceItems'), this.isAuthApi, this.createInvoiceItem.bind(this));
-        app.get(this.url('customers/:id/invoiceItems'), this.isAuthApi, this.listInvoiceItems.bind(this));
-        app.get(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi, this.getInvoiceItem.bind(this));
-        app.post(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi, this.updateInvoiceItem.bind(this));
-        app.delete(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi, this.deleteInvoiceItem.bind(this));
+        app.post(this.url('customers/:id/invoiceItems'), this.isAuthApi.bind(this), this.createInvoiceItem.bind(this));
+        app.get(this.url('customers/:id/invoiceItems'), this.isAuthApi.bind(this), this.listInvoiceItems.bind(this));
+        app.get(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi.bind(this), this.getInvoiceItem.bind(this));
+        app.post(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi.bind(this), this.updateInvoiceItem.bind(this));
+        app.delete(this.url('customers/:id/invoiceItems/:itemId'), this.isAuthApi.bind(this), this.deleteInvoiceItem.bind(this));
 
         //Invoices - CRUL & getUpcoming & pay
-        app.post(this.url('customers/:id/invoices'), this.isAuthApi, this.createInvoice.bind(this));
-        app.get(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.getInvoice.bind(this));
-        app.get(this.url('customers/:id/upcomingInvoice'), this.isAuthApi, this.getUpcomingInvoice.bind(this));
-        app.post(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi, this.updateInvoice.bind(this));
-        app.get(this.url('customers/all/invoices'), this.isAuthApi, this.listAllInvoices.bind(this));
-        app.get(this.url('customers/:id/invoices'), this.isAuthApi, this.listInvoices.bind(this));
+        app.post(this.url('customers/:id/invoices'), this.isAuthApi.bind(this), this.createInvoice.bind(this));
+        app.get(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi.bind(this), this.getInvoice.bind(this));
+        app.get(this.url('customers/:id/upcomingInvoice'), this.isAuthApi.bind(this), this.getUpcomingInvoice.bind(this));
+        app.post(this.url('customers/:id/invoices/:invoiceId'), this.isAuthApi.bind(this), this.updateInvoice.bind(this));
+        app.get(this.url('customers/all/invoices'), this.isAuthApi.bind(this), this.listAllInvoices.bind(this));
+        app.get(this.url('customers/:id/invoices'), this.isAuthApi.bind(this), this.listInvoices.bind(this));
 
-        app.post(this.url('customers/:id/invoices/:invoiceId/pay'), this.isAuthApi, this.payInvoice.bind(this));
+        app.post(this.url('customers/:id/invoices/:invoiceId/pay'), this.isAuthApi.bind(this), this.payInvoice.bind(this));
 
         //Special operations for main account
-        app.get(this.url('upcomingInvoice'), this.isAuthApi, this.getMyUpcomingInvoice.bind(this));
-        app.get(this.url('invoices'), this.isAuthApi, this.getMyInvoices.bind(this));
-        app.get(this.url('account/invoices'), this.isAuthApi, this.getInvoicesForAccount.bind(this));
+        app.get(this.url('upcomingInvoice'), this.isAuthApi.bind(this), this.getMyUpcomingInvoice.bind(this));
+        app.get(this.url('invoices'), this.isAuthApi.bind(this), this.getMyInvoices.bind(this));
+        app.get(this.url('account/invoices'), this.isAuthApi.bind(this), this.getInvoicesForAccount.bind(this));
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
         app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
@@ -95,12 +95,12 @@ _.extend(api.prototype, baseApi.prototype, {
         //Discounts
 
         //Tokens - CG
-        app.post(this.url('customers/:id/cards/:cardId'), this.isAuthApi, this.createToken.bind(this));
-        app.get(this.url('tokens/:id'), this.isAuthApi, this.getToken.bind(this));
+        app.post(this.url('customers/:id/cards/:cardId'), this.isAuthApi.bind(this), this.createToken.bind(this));
+        app.get(this.url('tokens/:id'), this.isAuthApi.bind(this), this.getToken.bind(this));
 
         //Events - GL
-        app.get(this.url('events/:id'), this.isAuthApi, this.getEvent.bind(this));
-        app.get(this.url('events'), this.isAuthApi, this.listEvents.bind(this));
+        app.get(this.url('events/:id'), this.isAuthApi.bind(this), this.getEvent.bind(this));
+        app.get(this.url('events'), this.isAuthApi.bind(this), this.listEvents.bind(this));
 
         // ------------------------------------------------
         //  Webhook

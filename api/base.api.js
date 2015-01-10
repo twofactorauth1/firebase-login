@@ -10,7 +10,9 @@
 var securityManager = require('../security/sm')(true);
 var securityConstants = require('../security/utils/security.constants');
 var appConfig = require('../configs/app.config');
+var urlUtils = require('../utils/urlutils');
 //var geoip = require('geoip-lite');
+var logger = global.getLogger("base.api");
 
 
 var apiBase = function(options) {
@@ -76,14 +78,18 @@ _.extend(apiBase.prototype, {
 
 
     setup: function(req,resp, next) {
-        if (req["session"] != null && req.session["accountId"] == null) {
+        var self = this;
+        if (req["session"] != null && (req.session["accountId"] == null || self.matchHostToSession(req) === false)) {
             var accountDao = require("../dao/account.dao");
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
+                        this.log.warn('Deprecated code reached.');
                         req.session.accountId = 0;
                     } else {
                         req.session.accountId = value.id();
+                        req.session.subdomain = value.get('subdomain');
+                        req.session.domain = value.get('domain');
                     }
                 }
 
@@ -94,9 +100,28 @@ _.extend(apiBase.prototype, {
         }
     },
 
+    matchHostToSession: function(req) {
+        var subObj = urlUtils.getSubdomainFromHost(req.host);
+        var sSub = req.session.subdomain;
+        var sDom = req.session.domain;
+        if(sSub=== null && sDom===null) {//nothing to match
+            logger.debug('matchHostToSession - nothing to match.  false');
+            return false;
+        }
+
+        if(subObj.isMainApp === true) {
+            var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app');
+            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
+            return mainAppTest;
+        }
+        var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
+        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        return matchHostToSessionTest;
+    },
+
 
     isAuthApi: function(req, resp, next) {
-        if (req.isAuthenticated()) {
+        if (req.isAuthenticated() && this.matchHostToSession(req)) {
             return next()
         }
 
@@ -120,7 +145,7 @@ _.extend(apiBase.prototype, {
         var self = this;
 
         self.sm = securityManager;
-        if(req.isAuthenticated()) {
+        if(req.isAuthenticated() && this.matchHostToSession(req)) {
             //don't need to verify inidigenous main account
             if(appConfig.mainAccountID === self.accountId(req)) {
                 return next();
@@ -175,6 +200,22 @@ _.extend(apiBase.prototype, {
         try {
             return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
         }catch(exception) {
+            return null;
+        }
+    },
+
+    subdomain: function(req) {
+        try {
+            return req.session.subdomain;
+        } catch(exception) {
+            return null;
+        }
+    },
+
+    domain: function(req) {
+        try {
+            return req.session.domain;
+        } catch(exception) {
             return null;
         }
     },

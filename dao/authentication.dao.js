@@ -66,6 +66,8 @@ var dao = {
                                     } else {
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = user.getAllAccountIds()[0];
+                                        req.session.subdomain = account.get('subdomain');
+                                        req.session.domain = account.get('domain');
                                     }
                                     log.info("Login successful. AccountId is now " + req.session.accountId);
                                     accountDao.getPreviewData(req.session.accounts, function(err, data){
@@ -86,7 +88,7 @@ var dao = {
                 });
             } else {
                 log.info("logging into account with id: " + account.id());
-                req.session.accountId = account.id();
+
                 userDao.getUserForAccount(account.id(), username, function (err, value) {
                     if (err) {
                         log.error("An error occurred retrieving user for account: ", err);
@@ -105,6 +107,9 @@ var dao = {
                                         return fn("Incorrect password", "Incorrect password");
                                     } else {
                                         log.info("Authentication succeeded");
+                                        req.session.accountId = account.id();
+                                        req.session.subdomain = account.get('subdomain');
+                                        req.session.domain = account.get('domain');
                                         return fn(null, user);
                                     }
                                 } else {
@@ -164,11 +169,27 @@ var dao = {
                                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                                 return self.saveOrUpdate(value, function(err, value) {
                                     if (!err) {
-                                        userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
-                                            //regardless of error, always return success
-                                            fn(null, value);
-                                            fn = req = null;
+
+                                        if(value.getAllAccountIds().length > 1) {
+                                            req.session.accounts = value.getAllAccountIds();
+                                            req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
+                                        } else {
+                                            req.session.accounts = value.getAllAccountIds();
+                                            req.session.accountId = value.getAllAccountIds()[0];
+                                            req.session.subdomain = account.get('subdomain');
+                                            req.session.domain = account.get('domain');
+                                        }
+                                        log.info("Login successful. AccountId is now " + req.session.accountId);
+                                        accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                            log.debug('got preview data');
+                                            req.session.accounts = data;
+                                            userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
+                                                //regardless of error, always return success
+                                                fn(null, value);
+                                                fn = req = null;
+                                            });
                                         });
+
                                     } else {
                                         fn(err, value);
                                         fn = req = null;
@@ -178,12 +199,30 @@ var dao = {
                         });
                     } else {
                         value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
-                        self.saveOrUpdate(value, fn);
-                        fn = req = null;
+                        if(value.getAllAccountIds().length > 1) {
+                            req.session.accounts = value.getAllAccountIds();
+                            req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
+                        } else {
+                            req.session.accounts = value.getAllAccountIds();
+                            req.session.accountId = value.getAllAccountIds()[0];
+                            req.session.subdomain = account.get('subdomain');
+                            req.session.domain = account.get('domain');
+                        }
+                        log.info("Login successful. AccountId is now " + req.session.accountId);
+                        accountDao.getPreviewData(req.session.accounts, function(err, data){
+                            log.debug('got preview data');
+                            req.session.accounts = data;
+                            self.saveOrUpdate(value, fn);
+                            fn = req = null;
+                            return;
+                        });
+
                     }
                 });
             } else {
                 req.session.accountId = account.id();
+                req.session.subdomain = account.get('subdomain');
+                req.session.domain = account.get('domain');
                 userDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
                     if (err) {
                         fn(err, "An error occurred retrieving user for account by social profile");
@@ -206,7 +245,7 @@ var dao = {
                             value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                             self.saveOrUpdate(value, function(err, value) {
                                 if (!err) {
-                                    userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                                    userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
                                         //regardless of error, always return success here.
                                         fn(null, value);
                                         fn = req = null;
@@ -244,7 +283,7 @@ var dao = {
                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                 self.saveOrUpdate(value, function(err, value) {
                     if (!err) {
-                        userDao.refreshFromSocialProfile(value, socialType, function(err, value) {
+                        userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
                             //regardless of error, always return success
                             fn(null, value);
                             fn = null;
@@ -356,6 +395,8 @@ var dao = {
 
                 if (accountId !== appConfig.mainAccountID) {
                     if (value.getUserAccount(accountId) == null) {
+                        console.log('Could not find user for accountId: ' + accountId);
+                        console.dir(value);
                         return fn("No user found for this account", "No user found for this account");
                     }
                 }
@@ -376,6 +417,7 @@ var dao = {
         userDao.findOne({passRecover: token, email: email}, function (err, value) {
             if (!err) {
                 if (value == null) {
+                    console.log('Could not find recovery token for account [' + accountId + '] token [' + token + '] and email [' + email + ']');
                     return fn("Invalid recovery token. Please ensure you have clicked the link directly from your email, or resubmit the form below.");
                 }
 

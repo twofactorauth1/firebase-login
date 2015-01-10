@@ -25,20 +25,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup, this.index.bind(this));
+        app.get("/", this.setup.bind(this), this.index.bind(this));
 
         //send all routes to index and let the app router to navigate to the appropiate view
-        app.get("/index", this.setup, this.index.bind(this));
-        app.get("/blog", this.setup, this.index.bind(this));
-        app.get("/blog/*", this.setup, this.index.bind(this));
-        app.get("/tag/*", this.setup, this.index.bind(this));
-        app.get("/category/*", this.setup, this.index.bind(this));
-        app.get("/author/*", this.setup, this.index.bind(this));
-        app.get("/page/*", this.setup, this.index.bind(this));
-        app.get("/signup", this.setup, this.index.bind(this));
-        app.get("/post", this.setup, this.index.bind(this));
+        app.get("/index", this.setup.bind(this), this.index.bind(this));
+        app.get("/blog", this.setup.bind(this), this.index.bind(this));
+        app.get("/blog/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/tag/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/category/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/author/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/page/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/signup", this.setup.bind(this), this.index.bind(this));
+        app.get("/post", this.setup.bind(this), this.index.bind(this));
 
-        app.get("/index_temp_page", this.setup, this.indexTempPage.bind(this));
+        app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
         // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
         // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
 
@@ -52,14 +52,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/home", this.isHomeAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
 
-        app.get("/admin", this.isAuth, this.showAngularAdmin.bind(this));
-        app.get("/admin/*", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
         
-        app.get("/admin1", this.isAuth, this.showAngularAdmin.bind(this));
-        app.get("/admin1/*", this.isAuth, this.showAngularAdmin.bind(this));
+        app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
 
-        app.get("/demo", this.setup, this.demo.bind(this));
-        app.get('/reauth/:id', this.setup, this.handleReauth.bind(this));
+        app.get("/demo", this.setup.bind(this), this.demo.bind(this));
+        app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
 
         return this;
     },
@@ -240,6 +240,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountAry = _.pluck(req.session.accounts, 'id');
         if(_.contains(accountAry, activeAccountId)){
             req.session.accountId = activeAccountId
+            var dataObj = _.find(req.session.accounts, function(previewData){if(previewData.id === activeAccountId)return true;});
+            req.session.subdomain = dataObj.subdomain;
+            req.session.domain = dataObj.domain;
         } else {
             self.log.debug('authorized accounts does not contain ' + activeAccountId);
         }

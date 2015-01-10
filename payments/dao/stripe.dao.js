@@ -264,6 +264,7 @@ var dao = {
             if(err) {
                 fn(err, confirmation);
                 fn = null;
+                return;
             }
             if(contactId && contactId.length > 0) {
                 self.log.debug('removing stripeId from contact.');

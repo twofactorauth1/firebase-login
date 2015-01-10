@@ -35,7 +35,8 @@ var mainApp = angular
         "ngTagsInput",
         'ngInputDate',
         'angular-jqcloud',
-        'socialLinks'
+        'socialLinks',
+        'slick'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){

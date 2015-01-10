@@ -33,18 +33,18 @@ _.extend(api.prototype, baseApi.prototype, {
         //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
         app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
 
-        app.get(this.url('billing'), this.isAuthApi, this.getCurrentAccountBilling.bind(this));
-        app.post(this.url('billing'), this.isAuthApi, this.updateCurrentAccountBilling.bind(this));
-        app.get(this.url(':id'), this.isAuthApi, this.getAccountById.bind(this));
-        app.post(this.url(''), this.isAuthApi, this.createAccount.bind(this));
-        app.put(this.url(':id'), this.isAuthApi, this.updateAccount.bind(this));
-        app.put(this.url(':id/displaysetting'), this.isAuthApi, this.updateAccountDisplaySetting.bind(this));
-        app.put(this.url(':id/setting'), this.isAuthApi, this.updateAccountSetting.bind(this));
-        app.put(this.url(':id/website'), this.isAuthApi, this.updateAccountWebsiteInfo.bind(this));
+        app.get(this.url('billing'), this.isAuthApi.bind(this), this.getCurrentAccountBilling.bind(this));
+        app.post(this.url('billing'), this.isAuthApi.bind(this), this.updateCurrentAccountBilling.bind(this));
+        app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
+        app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
+        app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateAccount.bind(this));
+        app.put(this.url(':id/displaysetting'), this.isAuthApi.bind(this), this.updateAccountDisplaySetting.bind(this));
+        app.put(this.url(':id/setting'), this.isAuthApi.bind(this), this.updateAccountSetting.bind(this));
+        app.put(this.url(':id/website'), this.isAuthApi.bind(this), this.updateAccountWebsiteInfo.bind(this));
 
-        app.delete(this.url(':id'), this.isAuthApi, this.deleteAccount.bind(this));
+        app.delete(this.url(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
 
-        app.get(this.url(':userid/accounts', 'user'), this.isAuthApi, this.getAllAccountsForUserId.bind(this));
+        app.get(this.url(':userid/accounts', 'user'), this.isAuthApi.bind(this), this.getAllAccountsForUserId.bind(this));
 
 
     },

@@ -273,6 +273,167 @@ module.exports = {
 
                 });
         });
-    }
+    },
 
+    createAccountUserFromContact: function(accountId, username, password, contact, requser, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> createAccountUserFromContact');
+
+        var user = null;
+
+        //look for user by username first.  If found, update with account details, otherwise create.
+
+        dao.getUserByUsername(username, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value != null) {
+                //return fn(true, "An account with this username already exists");
+                user = value;
+            } else {
+                user = new $$.m.User({
+
+                    username:username,
+                    email:contact.getEmails()[0],
+                    first: contact.get('first'),
+                    middle: contact.get('middle'),
+                    last: contact.get('last'),
+                    created: {
+                        date: new Date().getTime(),
+                        strategy: $$.constants.user.credential_types.LOCAL,
+                        by: requser.id(), //created by current user
+                        isNew: true
+                    }
+                });
+                user.createOrUpdateLocalCredentials(password);
+            }
+            var roleAry = ["member"];
+            user.createUserAccount(accountId, username, password, roleAry);
+
+            dao.saveOrUpdate(user, function(err, savedUser) {
+                if (err) {
+                    log.error('Error saving user: ' + err);
+                    return fn(err, null);
+                }
+                //TODO: sm.createMemberPrivileges
+                self.log.debug('<< createAccountUserFromContact');
+                return fn(null, savedUser);
+            });
+
+
+
+        });
+
+    },
+
+    createAccountUser: function(accountId, username, password, email, first, last, user, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> createAccountUser');
+
+        var user = null;
+        //look for user by username first.  If found, update with account details, otherwise create.
+
+        dao.getUserByUsername(username, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value != null) {
+                //return fn(true, "An account with this username already exists");
+                user = value;
+            } else {
+                user = new $$.m.User({
+
+                    username:username,
+                    email:email,
+                    first: first,
+                    middle: '',
+                    last: last,
+                    created: {
+                        date: new Date().getTime(),
+                        strategy: $$.constants.user.credential_types.LOCAL,
+                        by: user.id(), //created by current user
+                        isNew: true
+                    }
+                });
+                user.createOrUpdateLocalCredentials(password);
+            }
+            var roleAry = ["member"];
+            user.createUserAccount(accountId, username, password, roleAry);
+
+            dao.saveOrUpdate(user, function(err, savedUser) {
+                if (err) {
+                    log.error('Error saving user: ' + err);
+                    return fn(err, null);
+                }
+                //TODO: sm.createMemberPrivileges
+                self.log.debug('<< createAccountUserFromContact');
+                return fn(null, savedUser);
+            });
+
+
+
+        });
+
+    },
+
+    getUserAccounts: function(accountId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getUserAccounts');
+
+        var query ={
+            'accounts.accountId': accountId
+        };
+
+        dao.findMany(query, $$.m.User, function(err, list){
+            if(err) {
+                self.log.error('Error searching for users by account:' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getUserAccounts');
+                fn(null, list);
+            }
+        });
+
+    },
+
+    deleteOrRemoveUserForAccount: function(accountId, userId, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deleteOrRemoveUserForAccount');
+
+        dao.getById(userId, $$.m.User, function(err, user){
+            if(err || user=== null) {
+                self.log.error('Error getting user to delete:' + err);
+                return fn(err, null);
+            } else {
+                if(user.getAllAccountIds().length > 1) {
+                    user.removeAccount(accountId);
+                    dao.saveOrUpdate(user, $$.m.User, function(err, savedUser){
+                        if(err) {
+                            self.log.error('Error updating user: ' + err);
+                            return fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteOrRemoveUserForAccount');
+                            return fn(null, 'removed');
+                        }
+                    });
+                } else {
+                    dao.removeById(userId, $$.m.User, function(err, value){
+                        if(err) {
+                            self.log.error('Error deleting user: ' + err);
+                            return fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteOrRemoveUserForAccount');
+                            return fn(null, 'deleted');
+                        }
+                    });
+                }
+            }
+        });
+    }
 };

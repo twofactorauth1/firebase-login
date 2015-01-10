@@ -20,5 +20,28 @@ app.config(['$locationProvider', function($locationProvider) {
 }]);
 
 app.run(['$rootScope', '$location', 'analyticsService', function($rootScope, $location, analyticsService) {
+  var runningInterval;
+
   analyticsService.sessionStart(function(data) {});
+
+  $rootScope.$on("$routeChangeSuccess", function(scope, next, current) {
+    // $rootScope.transitionState = "active";
+    analyticsService.pageStart(function() {
+      if (!window.isAdmin) {
+        analyticsService.pagePing();
+        clearInterval(runningInterval);
+
+        var counter = 0;
+        //every 15 seconds send page tracking data
+        runningInterval = setInterval(function() {
+          analyticsService.pagePing();
+          counter++;
+
+          if (counter >= (1000 * 60 * 60)) {
+            clearInterval(runningInterval);
+          }
+        }, 15000);
+      }
+    });
+  });
 }]);

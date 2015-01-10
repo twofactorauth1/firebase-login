@@ -8,6 +8,7 @@
 @import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/sweetalert/lib/sweet-alert.css';
+@import '../js/libs/slick-carousel/slick/slick.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -17776,6 +17777,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .mainpanel .contentpanel {
   padding: 20px;
   width: auto !important;
+  float: left;
 }
 .mainpanel .contentpanel::after {
   clear: both;
@@ -19608,6 +19610,9 @@ div.error label.error:before {
   -o-transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
   -ms-transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
   transform: scale(1) rotate(184deg) translate(20px, 25px) skew(9deg, 0deg);
+}
+.website-manage .jdfs-styles button {
+  color: #636e7b;
 }
 .iconpicker-popover {
   z-index: 9999!important;
@@ -23025,9 +23030,6 @@ div[data-type='campaign'] .inner-page {
   max-width: 300px!important;
   margin: 5px auto!important;
 }
-.navbar-brand img {
-  max-height: 60px;
-}
 .navbar-toggle {
   margin-top: 20px;
 }
@@ -23117,6 +23119,9 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
+  height: 110px;
+  display: block;
+  max-height: inherit;
 }
 @media (max-width: 625px) {
   .navigation-v2 .navbar .navbar-brand img {
@@ -23692,7 +23697,7 @@ contenthover a {
   margin: 20px auto;
 }
 .image-text-v1 .image-text-image img {
-  margin: 25px auto;
+  margin: 15px auto;
   width: 100%;
 }
 #paradata span h4 {
@@ -23914,7 +23919,7 @@ div[data-class='image-text'] p {
 }
 .navbar-v2 div[data-type='masthead'] .home-text {
   margin-top: 200px;
-  min-height: 300px;
+  min-height: 260px;
 }
 .masthead .btn .fa {
   margin-top: 8px;
@@ -23939,7 +23944,6 @@ div[data-class='image-text'] p {
 }
 .masthead-v1 .masthead-title {
   font-size: 32px;
-  padding-bottom: 10px;
 }
 .masthead-v1 .masthead-title h1 {
   font-size: 45px;
@@ -23979,6 +23983,9 @@ div[data-class='image-text'] p {
 /********** Social **********/
 div[data-type="social"] .inner-page {
   padding: 0;
+}
+.btn-youtube {
+  background: #e52d27;
 }
 .social-v1 .inner-page {
   padding: 0;
@@ -25267,6 +25274,19 @@ div[data-type="coming-soon"] .component-inner {
   padding-top: 12px;
   vertical-align: middle;
   line-height: normal;
+}
+.payment-form-v1 .signup-social-toolbar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.payment-form-v1 .signup-social-toolbar .btn {
+  min-width: 75px;
+}
+.payment-form-v1 .signup-social-toolbar i.fa {
+  font-size: 36px;
+}
+.payment-form-v1 .profilePhoto {
+  margin: 0 auto;
 }
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
