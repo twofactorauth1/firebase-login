@@ -1,0 +1,123 @@
+<div ng-class="component.type+'-v'+component.version">
+    <div class="row ">
+        <h2 class="contact-us-title">
+            <div class="editable text-center" data-class="title" data-ng-bind-html="component.title">
+                <convert-html contents="{{component.title}}"></convert-html>
+            </div>
+        </h2>
+        <div class="contact-us-subtitle">
+            <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe"></div>
+        </div>
+        <br>
+
+        <div class="map-wrap">
+            <div tabindex="0" class="leaflet-container leaflet-fade-anim" id="map-marker" style="height: 250px; width: 100%; position: relative;">
+                <leaflet center="mapLocation" markers="markers" width="100%" height="250px"></leaflet>
+            </div>
+            <div class="panel panel-default widget-weather col-sm-2 col-sm-offset-9 hidden-xs">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12 temp text-center">
+                            <h5><i class="fa fa-map-marker"></i> &nbsp;
+                                <span ng-bind-html="component.location.address"></span>
+                                <span ng-bind-html="component.location.address2"></span>
+                                <span ng-bind-html="component.location.city"></span>
+                                <span ng-bind-html="component.location.state"></span>
+                                <span ng-bind-html="component.location.zip"></span>
+                                <span ng-bind-html="component.contact.phone"></span>
+                            </h5>
+                        </div>
+                        <div class="col-xs-0 weather text-center" style="display: none">
+                            <i class="fa fa-cloud weather-icon"></i>
+                            <div class="pull-left">96 ° F</div>
+                            <div class="pull-right"><i class="fa fa-flag"></i> 30mph</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- panel-body -->
+            </div>
+        </div>
+        </div>
+        <div class="row">
+             <div class="col-sm-4">
+                <div class="contact-us-phone-display-label">
+                    <div ng-if="component.contact.phone" class="editable" data-class="contact-phone" data-index="{{$index}}">
+                        <span ng-bind-html="component.contact.phone" />
+                    </div>
+                    <div ng-if="!component.contact.phone" class="editable" data-class="contact-phone" data-index="{{$index}}">
+                        <span>Enter your Phone Number here</span>
+                    </div>
+                </div>
+             </div>
+          <div class="col-sm-4">
+            <div class="contact-us-address-display-label">
+                <div ng-if="component.location.addressDisplayLabel" class="editable" data-class="location-addressDisplayLabel" data-index="{{$index}}">
+                    <span ng-bind-html="component.location.addressDisplayLabel" />
+                </div>
+                <div ng-if="!component.location.addressDisplayLabel" class="editable" data-class="location-addressDisplayLabel" data-index="{{$index}}">
+                    <span>Enter your Address type here</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="contact-us-location-address">
+                    <div ng-if="component.location.address" class="editable" data-class="location-address" data-index="{{$index}}">
+                        <span ng-bind-html="component.location.address" />
+                    </div>
+                    <div ng-if="!component.location.address" class="editable" data-class="location-address" data-index="{{$index}}">
+                        <span>Address</span>
+                    </div>
+                </div>
+                <div class="contact-us-location-address2">
+                    <div ng-if="component.location.address2" class="editable" data-class="location-address2" data-index="{{$index}}">
+                        <span ng-bind-html="component.location.address2" />
+                    </div>
+                    <div ng-if="!component.location.address2" class="editable" data-class="location-address2" data-index="{{$index}}">
+                        <span>Address Suite or Apartment</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="contact-us-location-city">
+                    <div ng-if="component.location.city" class="editable" data-class="location-city" data-index="{{$index}}">
+                        <span ng-bind-html="component.location.city" />
+                    </div>
+                    <div ng-if="!component.location.city" class="editable" data-class="location-city" data-index="{{$index}}">
+                        <span>City</span>
+                    </div>
+                </div>
+                <div class="contact-us-location-state">
+                    <div ng-if="component.location.state" class="editable" data-class="location-state" data-index="{{$index}}">
+                        <span ng-bind-html="component.location.state" />
+                    </div>
+                    <div ng-if="!component.location.state" class="editable" data-class="location-state" data-index="{{$index}}">
+                        <span>State</span>
+                    </div>
+                </div>
+                <div class="contact-us-location-zip">
+                    <div ng-if="component.location.zip" class="editable" data-class="location-zip" data-index="{{$index}}">
+                        <span ng-bind-html="component.location.zip" />
+                    </div>
+                     <div ng-if="!component.location.zip" class="editable" data-class="location-zip" data-index="{{$index}}">
+                        <span>Zip Code</span>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="contact-us-hours-display-label">
+                    <div ng-if="component.hours" class="editable" data-class="hours" data-index="{{$index}}">
+                        <span ng-bind-html="component.hours" />
+                    </div>
+                    <div ng-if="!component.hours" class="editable" data-class="hours" data-index="{{$index}}">
+                        <span>Enter your Business hours Hear</span>
+                    </div>
+                </div>
+             </div>
+
+        </div>
+        
+</div>
+</div>
