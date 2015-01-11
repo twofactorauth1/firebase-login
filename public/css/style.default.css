@@ -19336,6 +19336,11 @@ div.error label.error:before {
   width: 100%;
   height: auto;
 }
+.website-manage .screenshot-wrap .page-icon h1 {
+  font-size: 98px;
+  margin-top: 10px;
+  color: #e7e7e7;
+}
 .website-manage .template-btns {
   margin-bottom: 0px;
   padding: 0;
@@ -20665,6 +20670,9 @@ div.error label.error:before {
   padding: 5px 15px;
   width: 100%;
   max-width: 241px;
+}
+.rightpanel-website {
+  background-color: #fff;
 }
 .rightpanel-website .tab-content {
   padding: 10px 15px;
