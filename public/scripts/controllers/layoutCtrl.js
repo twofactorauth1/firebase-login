@@ -393,6 +393,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
     $scope.newContact = {
+      isAuthenticated: true,
       details: [
         {
           phones: [{type: 'w', default: false, number: ''}],
