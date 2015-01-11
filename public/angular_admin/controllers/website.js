@@ -260,7 +260,7 @@ define([
                     title: 'Products',
                     type: 'products',
                     icon: 'fa fa-money',
-                    enabled: false
+                    enabled: true
                 }, {
                     title: 'Simple form',
                     type: 'simple-form',
@@ -301,6 +301,24 @@ define([
                     type: 'customer-account',
                     icon: 'fa fa-user',
                     enabled: true
+                },
+                {
+                    title: 'Customer SignUp',
+                    type: 'customer-signup',
+                    icon: 'fa fa-male',
+                    enabled: true
+                },
+                {
+                    title: 'Customer Login',
+                    type: 'customer-login',
+                    icon: 'fa fa-sign-in',
+                    enabled: true
+                },
+                {
+                    title: 'Customer Forgot Password',
+                    type: 'customer-forgot-password',
+                    icon: 'fa fa-lock',
+                    enabled: true
                 }
             ];
 
@@ -317,7 +335,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
-                        }, 5000)
+                        }, 20000)
                     }
                 }
             }
@@ -658,6 +676,10 @@ define([
                     });
                     $scope.saveComponent();
                 }
+            }
+
+            $scope.updateContactUsAddress = function(location) {
+                $scope.saveComponent();
             }
 
             $scope.addComponent = function() {

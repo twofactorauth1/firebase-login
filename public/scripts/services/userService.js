@@ -24,8 +24,41 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
+    this.postContact = function (user, fn) {
+      console.log('user ', JSON.stringify(user));
+      var apiUrl = baseUrl + ['contact'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: angular.toJson(user)
+      })
+      .success(function (data, status, headers, config) {
+        console.log('success created ', data);
+        fn(data, null);
+      })
+      .error(function (err) {
+        console.log('END:userService with ERROR');
+        fn(null, err)
+      });
+    };
+
     this.createUser = function (user, fn) {
         var apiUrl = baseUrl + ['user'].join('/');
+        $http({
+            url: apiUrl,
+            method: "POST",
+            data: angular.toJson(user)
+        })
+        .success(function (data, status, headers, config) {
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:userService with ERROR', err);
+        });
+    };
+
+    this.createCustomerUser = function (user, fn) {
+        var apiUrl = baseUrl + ['user', 'member' ].join('/');
         $http({
             url: apiUrl,
             method: "POST",

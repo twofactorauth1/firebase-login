@@ -153,20 +153,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.currentpage = that.pages;
 
-        for (var i = 0; i < $scope.currentpage.components.length; i++) {
-          if ($scope.currentpage.components[i].type == 'contact-us') {
-            $scope.geo_address_string = $scope.stringifyAddress($scope.currentpage.components[i].location);
-            analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                        if (data.error === undefined) {
-                            $scope.mapLocation.lat = parseFloat(data.lat);
-                            $scope.mapLocation.lng = parseFloat(data.lon);
-                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                            $scope.markers.mainMarker.message = $scope.geo_address_string;
-                        }
-                    });
-          }
-        };
+
 
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
@@ -404,6 +391,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     // };
 
     /********** PRODUCT RELATED **********/
+    $scope.checkoutModalState = 1;
+    $scope.newContact = {
+      isAuthenticated: true,
+      details: [
+        {
+          phones: [{type: 'w', default: false, number: ''}],
+          addresses: [{}]
+        }
+      ]
+    };
+
     $scope.addDetailsToCart = function(product) {
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
@@ -448,6 +446,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_month: exp_month,
         exp_year: exp_year
       };
+
+      if ($scope.newContact.first !== undefined) {
+        userService.postContact($scope.newContact, function(data, err) {
+        });
+      }
 
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         //|| !cc_name
@@ -783,7 +786,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     $scope.deletePost = function(postId, blogpost) {
-      PostService.deletePost($scope.currentpage._id, postId, function(data) { 
+      PostService.deletePost($scope.currentpage._id, postId, function(data) {
        if(blogpost)
        {
         var index = that.blogposts.indexOf(blogpost);
@@ -965,6 +968,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               });
             });
           }
+          if (value &&  value.type == 'contact-us') {
+            $scope.geo_address_string = $scope.stringifyAddress(value.location);
+            analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                  if (data.error === undefined) {
+                      $scope.mapLocation.lat = parseFloat(data.lat);
+                      $scope.mapLocation.lng = parseFloat(data.lon);
+                      $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                      $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                      $scope.markers.mainMarker.message = $scope.geo_address_string;
+                  }
+              });
+            }
         });
       }
     });
@@ -1031,7 +1046,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $("#user_email").addClass('has-error');
           $("#user_email .glyphicon").addClass('glyphicon-remove');
           return;
-        }  
+        }
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,

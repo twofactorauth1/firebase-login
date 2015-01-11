@@ -5191,6 +5191,10 @@ div.error label.error:before {
   max-width: 241px;
 }
 
+.rightpanel-website {
+  background-color: #fff;
+}
+
 .rightpanel-website .tab-content {
   padding: 10px 15px;
 }
@@ -7624,8 +7628,13 @@ div[data-type='campaign'] .inner-page {
 }
 
 .contact-us-v4 .widget-weather {
-  margin-top: -210px;
+  margin-top: -230px;
   margin-left: 50px;
+}
+
+.contact-us-v4 .row {
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .component-wrap .component > [id] .bg {
@@ -8379,7 +8388,7 @@ contenthover a {
   opacity: 0;
   width: 230px;
   background: rgba(239, 160, 34, 0.75);
-  height: 230px;
+  height: 229px;
   position: absolute;
   border-radius: 130px;
   z-index: 99999;
@@ -12183,4 +12192,322 @@ div[data-type="social-link"] .inner-page {
 
 .customer-account-v1 .info th {
   color: #a4c5d9;
+}
+
+.customer-signup-v1 .selected .well {
+  border: 1px solid #2ecc71!important;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.customer-signup-v1 .notSelected .well {
+  background: #f0fafb!important;
+}
+
+.customer-signup-v1 .glyphicon-refresh-animate {
+  -animation: spin .7s infinite linear;
+  -ms-animation: spin .7s infinite linear;
+  -webkit-animation: spinw .7s infinite linear;
+  -moz-animation: spinm .7s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spinw {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes spinm {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+.customer-signup-v1 .panel {
+  padding: 15px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.customer-signup-v1 .panel .wrap {
+  margin: 0 auto;
+  max-width: 780px;
+  border: 1px solid #dddddd;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.customer-signup-v1 .panel .panel-header {
+  padding: 30px;
+  background: #f0fafb;
+  border-bottom: 1px solid #e4f3f6;
+}
+
+.customer-signup-v1 .panel .panel-header h1 {
+  color: #57b0cf;
+}
+
+.customer-signup-v1 .panel .panel-header h3 {
+  color: #444444;
+}
+
+.customer-signup-v1 .panel .panel-header .row {
+  text-align: center;
+}
+
+.customer-signup-v1 .panel .panel-body {
+  padding: 23px;
+}
+
+.customer-signup-v1 .panel .submit-signup {
+  margin: 15px auto;
+  text-align: center;
+}
+
+.customer-signup-v1 .panel .credit-card-input {
+  margin: 0 auto;
+}
+
+.customer-signup-v1 .panel .well.well-calm {
+  background: #f0fafb;
+  border: 1px solid #e5f3f6;
+  padding: 0;
+}
+
+.customer-signup-v1 .panel .well.well-calm h2 {
+  background: #53afce;
+  padding: 10px 0;
+  color: white;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.customer-signup-v1 .panel .well.well-calm h2 span {
+  font-size: 14px;
+}
+
+.customer-signup-v1 .panel .well.well-calm h4 {
+  padding: 10px 0;
+  color: #444;
+  text-shadow: 1px 1px 1px #ffffff;
+}
+
+.customer-signup-v1 .panel .has-feedback .form-control-feedback {
+  top: 5px;
+}
+
+.customer-signup-v1 .certificates {
+  padding: 0;
+  text-align: center;
+}
+
+.customer-signup-v1 .certificates li {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
+  width: 132px;
+  height: 131px;
+  padding: 10px;
+  list-style-type: none;
+  text-align: center;
+  display: inline-block;
+  margin-right: 15px;
+  vertical-align: top;
+}
+
+.customer-signup-v1 .certificates li .larger {
+  font-size: 24px;
+  padding-top: 12px;
+  vertical-align: middle;
+  line-height: normal;
+}
+
+.customer-signup-v1 .signup-social-toolbar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.customer-signup-v1 .signup-social-toolbar .btn {
+  min-width: 75px;
+}
+
+.customer-signup-v1 .signup-social-toolbar i.fa {
+  font-size: 36px;
+}
+
+.customer-signup-v1 .profilePhoto {
+  margin: 0 auto;
+}
+
+/********** Customer Login **********/
+
+.customer-login-v1 .signinpanel {
+  max-width: 480px;
+  margin: 5% auto 0 auto;
+}
+
+.customer-login-v1 .welcome-text {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.customer-login-v1 .signinpanel .logo {
+  padding: 15px;
+  margin: 15px auto;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.customer-login-v1 .input-group .fa {
+  font-size: 24px;
+}
+
+.customer-login-v1 .signinpanel .form-control {
+  display: block;
+}
+
+.customer-login-v1 .signinpanel .input-group {
+  margin-bottom: 20px;
+}
+
+.customer-login-v1 .fa-input {
+  font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.customer-login-v1 .signinpanel .btn {
+  margin-top: 15px;
+}
+
+.customer-login-v1 .signinpanel .form {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #ccc;
+  -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 30px;
+  padding-top: 10px;
+}
+
+.customer-login-v1 .signinpanel .form a {
+  color: #666;
+}
+
+.customer-login-v1 .signinpanel .social {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.customer-login-v1 .signinpanel .social .btn {
+  min-width: 75px;
+}
+
+.customer-login-v1 .signinpanel .social i.fa {
+  font-size: 36px;
+}
+
+@media screen and (max-width: 640px) {
+  .customer-login-v1 .signinpanel {
+    margin: 0 auto;
+    padding: 0!important;
+  }
+
+  .customer-login-v1 .signinpanel form {
+    margin-top: 20px;
+    padding: 10px;
+  }
+}
+
+/********** Customer Forgot Password **********/
+
+.customer-forgot-password-v1 .signinpanel {
+  max-width: 480px;
+  margin: 5% auto 0 auto;
+}
+
+.customer-forgot-password-v1 .welcome-text {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.customer-forgot-password-v1 .signinpanel .logo {
+  padding: 15px;
+  margin: 15px auto;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.customer-forgot-password-v1 .input-group .fa {
+  font-size: 24px;
+}
+
+.customer-forgot-password-v1 .signinpanel .form-control {
+  display: block;
+}
+
+.customer-forgot-password-v1 .signinpanel .input-group {
+  margin-bottom: 20px;
+}
+
+.customer-forgot-password-v1 .fa-input {
+  font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.customer-forgot-password-v1 .signinpanel .btn {
+  margin-top: 15px;
+}
+
+.customer-forgot-password-v1 .signinpanel .form {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #ccc;
+  -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 30px;
+  padding-top: 10px;
+}
+
+.customer-forgot-password-v1 .signinpanel .form a {
+  color: #666;
+}
+
+.customer-forgot-password-v1 .signinpanel .social {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.customer-forgot-password-v1 .signinpanel .social .btn {
+  min-width: 75px;
+}
+
+.customer-forgot-password-v1 .signinpanel .social i.fa {
+  font-size: 36px;
+}
+
+@media screen and (max-width: 640px) {
+  .customer-forgot-password-v1 .signinpanel {
+    margin: 0 auto;
+    padding: 0!important;
+  }
+
+  .customer-forgot-password-v1 .signinpanel form {
+    margin-top: 20px;
+    padding: 10px;
+  }
 }

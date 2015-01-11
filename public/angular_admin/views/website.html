@@ -453,7 +453,7 @@
                                     <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
                                 </select>
                             </div>
-                            <div class="form-group" ng-if="componentEditing.type === 'payment-form'">
+                            <div class="form-group" ng-if="componentEditing.type === 'payment-form' || componentEditing.type === 'customer-signup'">
                                 <label>Product ID:</label>
                                 <input ng-model="componentEditing.productId" type="text" class="form-control input-lg" ng-change="saveComponent()" value="Add Product ID">
                             </div>
@@ -550,6 +550,50 @@
                             </div>
                         </tab>
 
+                         <tab ng-if="componentEditing.type === 'contact-us'">
+                            <tab-heading>
+                                <span>Add Address</span>
+                            </tab-heading>
+                            <div class="form-group">
+                                <label for="location-address-type">Address type </label>
+                                <input id="location-address-type" class="form-control input-lg" type="text" ng-model="componentEditing.location.addressDisplayLabel">
+                            </div>
+                            <div class="form-group">
+                                <label for="location-address">Address </label>
+                                <input id="location-address" class="form-control input-lg" type="text" ng-model="componentEditing.location.address">
+                            </div>
+                            <div class="form-group">
+                                <label for="location-address2">Address2 </label>
+                                <input id="location-address2" class="form-control input-lg" type="text" ng-model="componentEditing.location.address2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location-city">City </label>
+                                <input id="location-city" class="form-control input-lg" type="text" ng-model="componentEditing.location.city">
+                            </div>
+                            <div class="form-group">
+                                <label for="location-state">State </label>
+                                <input id="location-state" class="form-control input-lg" type="text" ng-model="componentEditing.location.state">
+                            </div>
+                            <div class="form-group">
+                                <label for="location-zip">Zip Code </label>
+                                <input id="location-zip" class="form-control input-lg" type="text" ng-model="componentEditing.location.zip">
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-phone">Phone number </label>
+                                <input id="contact-phone" class="form-control input-lg" type="text" ng-model="componentEditing.contact.phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="location-hours">Business Hours </label>
+                                <input id="location-hours" class="form-control input-lg" type="textarea" ng-model="componentEditing.hours">
+                            </div>
+                            
+                            <div class="footer">
+                                <button type="button" class="btn btn-primary pull-right" ng-click="updateContactUsAddress(location)" data-dismiss="modal">
+                                    Save changes
+                                </button>
+                            </div>
+                        </tab>
 
 
                     </tabset>
