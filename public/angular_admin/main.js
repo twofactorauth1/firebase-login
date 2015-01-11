@@ -124,6 +124,7 @@ require.config({
         'draggableModalDirective': '/angular_admin/directives/draggable_modal',
         'activityDirective': '/angular_admin/directives/activity',
         'offsetFilter': '/angular_admin/filters/offset',
+        'checkImageDirective': '/angular_admin/directives/check_image',
         'analyticService': '/angular_admin/services/analytic',
         'angularCookie': 'libs/angular-cookie/angular-cookie.min',
         'purl': 'libs/purl/purl',
