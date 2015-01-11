@@ -392,6 +392,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
+    $scope.newContact = {
+      details: [
+        {
+          phones: [{type: 'w', default: false, number: ''}],
+          addresses: [{}]
+        }
+      ]
+    };
+
     $scope.addDetailsToCart = function(product) {
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];

@@ -131,7 +131,7 @@
 
                     <div class="row billing-shipping"  ng-class="{'hidden': checkoutModalState !== 2}">
                         <div class="col-sm-8 information">
-                            <ul class="nav nav-tabs">
+                            <ul class="nav nav-tabs hidden">
                                 <li class="active">
                                     <a href="#billing" data-toggle="tab">
                                         <strong>Billing</strong>
@@ -145,7 +145,7 @@
                             </ul>
                             <div class="tab-content mb30">
                                 <div class="tab-pane active" id="billing">
-                                    <div class="checkbox">
+                                    <div class="checkbox hidden">
                                         <label>
                                             <input type="checkbox" value="true" checked>Shipping same as billing information
                                         </label>
@@ -154,13 +154,13 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="firstName">First Name</label>
-                                                <input type="text" class="form-control" id="firstName">
+                                                <input type="text" class="form-control" id="firstName" ng-model="newContact.first">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="lastName">Last Name</label>
-                                                <input type="text" class="form-control" id="lastName">
+                                                <input type="text" class="form-control" id="lastName" ng-model="newContact.last">
                                             </div>
                                         </div>
                                     </div>
@@ -168,19 +168,19 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="address">Address</label>
-                                                <input type="text" class="form-control" id="address">
+                                                <input type="text" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label class="control-label" for="city">City</label>
-                                                <input type="text" class="form-control" id="city">
+                                                <input type="text" class="form-control" id="city"  ng-model="newContact.details[0].addresses[0].city">
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label" for="state">State</label>
-                                                <input type="text" class="form-control" id="state">
+                                                <input type="text" class="form-control" id="state"  ng-model="newContact.details[0].addresses[0].state">
                                             </div>
                                         </div>
                                     </div>
@@ -188,18 +188,18 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="zipCode">Zip Code</label>
-                                                <input type="text" class="form-control" id="zipCode">
+                                                <input type="text" class="form-control" id="zipCode"  ng-model="newContact.details[0].addresses[0].zip">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="phone">Phone</label>
-                                                <input type="text" class="form-control" id="phone">
+                                                <input type="text" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="shipping">
+                                <div class="tab-pane hidden" id="shipping">
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
