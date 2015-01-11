@@ -13,11 +13,11 @@
 
                 <div class="component-inner">
 
-                    <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer'">
+                    <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us'">
         				<div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
 
-                    <div ng-if="component.type == 'navigation' || component.type == 'footer'">
+                    <div ng-if="component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us'">
                     	<div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
 

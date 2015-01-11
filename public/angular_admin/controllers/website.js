@@ -335,7 +335,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
-                        }, 5000)
+                        }, 20000)
                     }
                 }
             }
@@ -676,6 +676,10 @@ define([
                     });
                     $scope.saveComponent();
                 }
+            }
+
+            $scope.updateContactUsAddress = function(location) {
+                $scope.saveComponent();
             }
 
             $scope.addComponent = function() {
