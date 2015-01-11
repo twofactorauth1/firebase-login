@@ -3569,6 +3569,12 @@ div.error label.error:before {
   height: auto;
 }
 
+.website-manage .screenshot-wrap .page-icon h1 {
+  font-size: 98px;
+  margin-top: 10px;
+  color: #e7e7e7;
+}
+
 .website-manage .template-btns {
   margin-bottom: 0px;
   padding: 0;
@@ -5183,6 +5189,10 @@ div.error label.error:before {
   padding: 5px 15px;
   width: 100%;
   max-width: 241px;
+}
+
+.rightpanel-website {
+  background-color: #fff;
 }
 
 .rightpanel-website .tab-content {
@@ -8378,7 +8388,7 @@ contenthover a {
   opacity: 0;
   width: 230px;
   background: rgba(239, 160, 34, 0.75);
-  height: 230px;
+  height: 229px;
   position: absolute;
   border-radius: 130px;
   z-index: 99999;
