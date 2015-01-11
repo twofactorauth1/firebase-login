@@ -153,20 +153,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.currentpage = that.pages;
 
-        for (var i = 0; i < $scope.currentpage.components.length; i++) {
-          if ($scope.currentpage.components[i].type == 'contact-us') {
-            $scope.geo_address_string = $scope.stringifyAddress($scope.currentpage.components[i].location);
-            analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                        if (data.error === undefined) {
-                            $scope.mapLocation.lat = parseFloat(data.lat);
-                            $scope.mapLocation.lng = parseFloat(data.lon);
-                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                            $scope.markers.mainMarker.message = $scope.geo_address_string;
-                        }
-                    });
-          }
-        };
+     
 
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
@@ -965,6 +952,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               });
             });
           }
+          if (value &&  value.type == 'contact-us') {
+            $scope.geo_address_string = $scope.stringifyAddress(value.location);
+            analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                  if (data.error === undefined) {
+                      $scope.mapLocation.lat = parseFloat(data.lat);
+                      $scope.mapLocation.lng = parseFloat(data.lon);
+                      $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                      $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                      $scope.markers.mainMarker.message = $scope.geo_address_string;
+                  }
+              });
+            }
         });
       }
     });
