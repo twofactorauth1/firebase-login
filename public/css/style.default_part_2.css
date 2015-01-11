@@ -1666,7 +1666,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .mainpanel .contentpanel {
   padding: 20px;
-  width: auto !important;
+  width: 100% !important;
   float: left;
 }
 
@@ -3567,6 +3567,12 @@ div.error label.error:before {
 .website-manage .screenshot-wrap img {
   width: 100%;
   height: auto;
+}
+
+.website-manage .screenshot-wrap .page-icon h1 {
+  font-size: 98px;
+  margin-top: 10px;
+  color: #e7e7e7;
 }
 
 .website-manage .template-btns {
