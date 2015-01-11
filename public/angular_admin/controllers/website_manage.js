@@ -11,6 +11,7 @@ define([
     'reverse',
     'jquery',
     'mediaDirective',
+    'checkImageDirective',
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
