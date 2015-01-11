@@ -32,5 +32,9 @@ CKEDITOR.editorConfig = function( config ) {
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = 'link:advanced';
 
+	config.allowedContent = true;
+
+	config.extraPlugins = 'doksoft_button';
+
 	config.filebrowserBrowseUrl = '';
 };

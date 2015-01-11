@@ -51,6 +51,7 @@ var CKBUILDER_CONFIG = {
 		'basicstyles' : 1,
 		'blockquote' : 1,
 		'clipboard' : 1,
+		'doksoft_button' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
 		'floatingspace' : 1,
