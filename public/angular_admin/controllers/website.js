@@ -260,7 +260,7 @@ define([
                     title: 'Products',
                     type: 'products',
                     icon: 'fa fa-money',
-                    enabled: false
+                    enabled: true
                 }, {
                     title: 'Simple form',
                     type: 'simple-form',
@@ -300,6 +300,24 @@ define([
                     title: 'Customer Account',
                     type: 'customer-account',
                     icon: 'fa fa-user',
+                    enabled: true
+                },
+                {
+                    title: 'Customer SignUp',
+                    type: 'customer-signup',
+                    icon: 'fa fa-male',
+                    enabled: true
+                },
+                {
+                    title: 'Customer Login',
+                    type: 'customer-login',
+                    icon: 'fa fa-sign-in',
+                    enabled: true
+                },
+                {
+                    title: 'Customer Forgot Password',
+                    type: 'customer-forgot-password',
+                    icon: 'fa fa-lock',
                     enabled: true
                 }
             ];
