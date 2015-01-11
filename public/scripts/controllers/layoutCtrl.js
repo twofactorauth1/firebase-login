@@ -153,7 +153,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
         $scope.currentpage = that.pages;
 
-     
+
 
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
@@ -391,6 +391,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     // };
 
     /********** PRODUCT RELATED **********/
+    $scope.checkoutModalState = 1;
+    $scope.newContact = {
+      isAuthenticated: true,
+      details: [
+        {
+          phones: [{type: 'w', default: false, number: ''}],
+          addresses: [{}]
+        }
+      ]
+    };
+
     $scope.addDetailsToCart = function(product) {
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
@@ -435,6 +446,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_month: exp_month,
         exp_year: exp_year
       };
+
+      if ($scope.newContact.first !== undefined) {
+        userService.postContact($scope.newContact, function(data, err) {
+        });
+      }
 
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         //|| !cc_name
@@ -770,7 +786,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     $scope.deletePost = function(postId, blogpost) {
-      PostService.deletePost($scope.currentpage._id, postId, function(data) { 
+      PostService.deletePost($scope.currentpage._id, postId, function(data) {
        if(blogpost)
        {
         var index = that.blogposts.indexOf(blogpost);
@@ -1030,7 +1046,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $("#user_email").addClass('has-error');
           $("#user_email .glyphicon").addClass('glyphicon-remove');
           return;
-        }  
+        }
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
