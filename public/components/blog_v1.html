@@ -83,7 +83,7 @@
                         </div>
                         <!-- end #et_pt_blog -->
                     </article>
-                        <div class="pagination pagination-centered" ng-show="control.blogposts.length||blog.blogposts.length">
+                        <div class="pagination pagination-centered" ng-show="(control.blogposts.length||blog.blogposts.length) > pageSize">
                             <ul class="pagination-controle">
                              <li>
                               <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
