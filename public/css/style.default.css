@@ -20671,6 +20671,9 @@ div.error label.error:before {
   width: 100%;
   max-width: 241px;
 }
+.rightpanel-website {
+  background-color: #fff;
+}
 .rightpanel-website .tab-content {
   padding: 10px 15px;
 }
