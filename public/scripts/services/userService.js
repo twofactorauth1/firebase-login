@@ -39,6 +39,21 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
+    this.createCustomerUser = function (user, fn) {
+        var apiUrl = baseUrl + ['user', 'member' ].join('/');
+        $http({
+            url: apiUrl,
+            method: "POST",
+            data: angular.toJson(user)
+        })
+        .success(function (data, status, headers, config) {
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:userService with ERROR', err);
+        });
+    };
+
     this.initializeUser = function(user, fn) {
         user.session_permanent = ipCookie("permanent_cookie");
         user.fingerprint = new Fingerprint().get();
