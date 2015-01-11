@@ -432,11 +432,6 @@
                                     <option value="img-circle">Circle</option>
                                 </select>
                             </div>
-
-                            <div ng-if="componentEditing.type !== 'footer'" class="well">
-                                <p>Danger Zone</p>
-                                <button class="btn btn-block btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
-                            </div>
                         </tab>
                         <tab>
                             <tab-heading>
@@ -560,6 +555,7 @@
                     </tabset>
                 </div>
                 <div class="modal-footer">
+                    <button class="btn btn-danger pull-left" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
                     <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
                 </div>
             </div>
