@@ -446,6 +446,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_year: exp_year
       };
 
+      if ($scope.newContact.first !== undefined) {
+        userService.postContact($scope.newContact, function(data, err) {
+        });
+      }
+
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         //|| !cc_name
         console.log('card invalid');
