@@ -355,63 +355,41 @@ define([
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.display = "block";
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
                     }
-
-                    //add media modal click events to all images
-                    var images = iframeDoc.getElementById('body').querySelectorAll('img');
-
-                    for (var i = 0; i < images.length; i++) {
-                        if (typeof images[i].addEventListener != "undefined") {
-                            images[i].removeEventListener("click", function(e) {}, false);
-                            images[i].addEventListener("click", function(e) {
-                                $("#media-manager-modal").modal('show');
-                                $scope.imageChange = true;
-                                $scope.componentArrTarget = e.currentTarget;
-                                $scope.componentEditing = _.findWhere($scope.components, {
-                                    _id: $(e.currentTarget).closest('.component').data('id')
-                                });
-                            });
-                        } else if (typeof images.attachEvent != "undefined") {
-                            images[i].removeEvent("onclick");
-                            images[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
+                    //Disable all links in edit
+                    $("#iframe-website").contents().find('body').on("click", ".component a", function (e)
+                    { 
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
 
                     //add click events for all the settings buttons
-                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings, .map-wrap .settings');
-                    for (var i = 0; i < settingsBtns.length; i++) {
-                        if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].removeEventListener("click", function(e) {}, false);
-                            settingsBtns[i].addEventListener("click", function(e) {
-                                $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                                if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value == "address")
-                                    $scope.tabs.address = true;
-                                var element = angular.element('#component-setting-modal');
-                                element.modal('show');
-                            });
-                        } else if (typeof settingsBtns.attachEvent != "undefined") {
-                            settingsBtns[i].removeEvent("onclick");
-                            settingsBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings", function (e)
+                    {
+                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                        var element = angular.element('#component-setting-modal');
+                        element.modal('show');
+                    });
 
-                    //add click events for all the add component buttons
-                    var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
-                    for (var i = 0; i < addComponentBtns.length; i++) {
-                        if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].removeEventListener("click", function(e) {}, false);
-                            addComponentBtns[i].addEventListener("click", function(e) {
-                                $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-                                var element = angular.element('#add-component-modal');
-                                element.modal('show');
-                                //get the current index of the component pressed
-                            });
-                        } else if (typeof addComponentBtns.attachEvent != "undefined") {
-                            addComponentBtns[i].removeEvent("onclick");
-                            addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
+                     //add click events for all the add component buttons.
+                    $("#iframe-website").contents().find('body').on("click", ".add-component", function (e)
+                    {
+                         $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                         var element = angular.element('#add-component-modal');
+                         element.modal('show');
+                    });
+
+                    //add media modal click events to all images
+                    
+                    $("#iframe-website").contents().find('body').on("click", "img", function (e)
+                    {
+                    $("#media-manager-modal").modal('show');
+                        $scope.imageChange = true;
+                        $scope.componentArrTarget = e.currentTarget;
+                        $scope.componentEditing = _.findWhere($scope.components, {
+                            _id: $(e.currentTarget).closest('.component').data('id')
+                        });
+                    });
                 };
-
 
                 if (iframeDoc.getElementById('body')) {
                     elementBindingFn();

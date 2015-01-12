@@ -30,7 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         // WEBSITE
         //app.get(this.url('website/:id'), this.isAuthApi, this.getWebsiteById.bind(this));
-        app.get(this.url('website/:id'), this.getWebsiteById.bind(this)); //Temp Added
+        app.get(this.url('website/:id'), this.setup.bind(this), this.getWebsiteById.bind(this)); //Temp Added
         app.get(this.url(':accountid/cms/website', "account"), this.isAuthApi.bind(this), this.getWebsiteForAccountId.bind(this));
         app.post(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateWebsite.bind(this));
         app.put(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateWebsite.bind(this));
@@ -43,8 +43,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('website/:id/linklists/:handle'), this.isAuthAndSubscribedApi.bind(this), this.deleteWebsiteLinklists.bind(this));
 
         // PAGE
-        app.get(this.url('website/:websiteid/page/:handle'), this.getPageByHandle.bind(this));
-        app.get(this.url('page/:id'), this.getPageById.bind(this));
+        app.get(this.url('website/:websiteid/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
+        app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
         app.get(this.url('page/:handle/screenshot'), this.isAuthApi.bind(this), this.generateScreenshot.bind(this));
         app.get(this.url('website/:id/page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
@@ -54,9 +54,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //consistent URLs
 
-        app.get(this.url('website/:websiteId/pages/:id'), this.getPagesById.bind(this));
-        app.get(this.url('website/:websiteId/pages'), this.getAllPages.bind(this));
-        app.get(this.url('website/:websiteId/page/:id'), this.getPageById.bind(this));
+        app.get(this.url('website/:websiteId/pages/:id'), this.setup.bind(this), this.getPagesById.bind(this));
+        app.get(this.url('website/:websiteId/pages'), this.setup.bind(this), this.getAllPages.bind(this));
+        app.get(this.url('website/:websiteId/page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
         app.post(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
         app.put(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
