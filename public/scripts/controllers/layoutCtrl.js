@@ -1097,6 +1097,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
       if (contact.email) {
+        if(contact.full_name)
+        {
+          var full_name = contact.full_name.split(" ")
+          contact.first_name = full_name[0];
+          contact.last_name = full_name[1];
+        }
         var contact_info = {
           first: contact.first_name,
           last: contact.last_name,
@@ -1137,6 +1143,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               contact.email = '';
               contact.message = '';
               contact.full_name = '';
+              contact.first_name = '';
+              contact.last_name = '';
               contact.success = true;
               setTimeout(function() {
                 $scope.$apply(function() {
