@@ -25,7 +25,14 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
 
     $scope.templates = [{
       name: 'minimalist',
-      code: function() {return $templateCache.get('/pipeshift/views/directives/videoPreview.html')[1];}
+      code: function() {
+        return $templateCache.get('/pipeshift/views/directives/videoPreview.html')[1];
+      }
+    }, {
+      name: 'email',
+      code: function() {
+        return $templateCache.get('/pipeshift/views/directives/emailPreview.html')[1];
+      }
     }];
 
     $http.get("/api/1.0/campaignmanager/pipeshift/templates").success(function(result) {
@@ -344,7 +351,9 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
               totalVideos: totalNumber
             });
           },
-          template: function() {return findTemplateByName('minimalist');}
+          template: function() {
+            return findTemplateByName($scope.course.template.name);
+          }
         }
       });
       modalInstance.result.then(function(updatedVideo) {
