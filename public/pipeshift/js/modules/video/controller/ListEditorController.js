@@ -52,13 +52,17 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
     }
     $scope.ui = {};
     $scope.courses = [];
+    $scope.allCourses = [];
     Course.query({}, function(resp) {
+      $scope.allCourses = resp;
       $scope.courses = $filter('filter')(resp, {
         type: $scope.searchType
       });
       if ($scope.courses.length > 0) {
         $scope.ui.selectedCourseId = $scope.courses[0]._id;
         $scope.courseSelected();
+      } else {
+        $scope.ui.selectedCourseId = null;
       }
     }, function(error) {
       alert("Some error happened");
@@ -66,9 +70,15 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
 
     $scope.$watch('searchType', function(newValue, oldValue) {
       if (newValue) {
-        $scope.courses = $filter('filter')($scope.courses, {
+        $scope.courses = $filter('filter')($scope.allCourses, {
           type: newValue
         });
+        if ($scope.courses.length > 0) {
+          $scope.ui.selectedCourseId = $scope.courses[0]._id;
+          $scope.courseSelected();
+        } else {
+          $scope.ui.selectedCourseId = null;
+        }
       }
     });
 
