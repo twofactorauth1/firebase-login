@@ -1,31 +1,21 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="row ">
-        <h2 class="contact-us-title">
-            <div class="editable text-center" data-class="title" data-ng-bind-html="component.title">
-                <convert-html contents="{{component.title}}"></convert-html>
-            </div>
-        </h2>
-        <div class="contact-us-subtitle">
-            <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe"></div>
-        </div>
-        <br>
-
         <div class="map-wrap">
             <div tabindex="0" class="leaflet-container leaflet-fade-anim" id="map-marker" style="height: 250px; width: 100%; position: relative;">
-                <leaflet center="mapLocation" markers="markers" width="100%" height="250px"></leaflet>
+                <leaflet center="mapLocation" markers="markers" defaults="defaults" width="100%" height="250px"></leaflet>
             </div>
             <div class="panel panel-default widget-weather col-sm-2 col-sm-offset-9 hidden-xs">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-12 temp text-center">
-                            <h5><i class="fa fa-map-marker"></i> &nbsp;
-                            </h5>
-                             <span ng-bind-html="component.location.address"></span>
-                            <span ng-bind-html="component.location.address2"></span>
-                            <span ng-bind-html="component.location.city"></span>
-                            <span ng-bind-html="component.location.state"></span>
-                            <span ng-bind-html="component.location.zip"></span>
-                            <span ng-bind-html="component.contact.phone"></span>
+                        
+                        <div class="col-xs-12 temp text-center settings" tab-active="address" data-id="{{component._id}}">
+                            <span ng-if="!geo_address_string"> Enter Address Here</span>
+                            <span ng-bind-html="geo_address_string"></span>
+                            <br>
+                            <span ng-if="!contactPhone">Enter Phone Number here</span>
+                            <span ng-bind-html="contactPhone"></span>
+                            <br>
+                            <span ng-if="!component.hours.length">Enter Business hours here</span>
                             <span ng-bind-html="component.hours"></span>
                         </div>
                         <div class="col-xs-0 weather text-center" style="display: none">

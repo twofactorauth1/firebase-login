@@ -66,7 +66,7 @@ define([
             $scope.components = [];
             $scope.isEditing = true;
             $scope.isMobile = false;
-
+            $scope.tabs = {};
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -335,7 +335,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
-                        }, 2000)
+                        }, 20000)
                     }
                 }
             }
@@ -377,12 +377,14 @@ define([
                     };
 
                     //add click events for all the settings buttons
-                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
+                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings, .map-wrap .settings');
                     for (var i = 0; i < settingsBtns.length; i++) {
                         if (typeof settingsBtns[i].addEventListener != "undefined") {
                             settingsBtns[i].removeEventListener("click", function(e) {}, false);
                             settingsBtns[i].addEventListener("click", function(e) {
                                 $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                                if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value == "address")
+                                    $scope.tabs.address = true;
                                 var element = angular.element('#component-setting-modal');
                                 element.modal('show');
                             });
