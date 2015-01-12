@@ -367,6 +367,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     }
 
+     $scope.gotoPosition = function(pos) {
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+       if(pos.data)
+        {
+         setTimeout(function() {
+         $location.hash(pos.data);
+          $anchorScroll();
+        }, 300)
+        }
+    };
+
     // $scope.$on('$locationChangeStart', function(event, next, current) {
     //     console.log('location changed '+event+' '+next+' '+current);
     //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
