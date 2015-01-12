@@ -278,7 +278,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary btn-add-component" data-dismiss="modal" ng-click="addComponent()" ng-disabled="!selectedComponent">Add {{selectedComponent.title}}</button>
+                        <button type="button" class="btn btn-success btn-add-component" data-dismiss="modal" ng-click="addComponent()" ng-disabled="!selectedComponent">Add {{selectedComponent.title}}</button>
                     </div>
                 </form>
             </div>
@@ -293,10 +293,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
-                    <h4 class="modal-title">Component Settings</h4>
+                    <div class="modal-btns">
+                        <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
+                        <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
+                      </div>
+                    <h4 class="modal-title">{{componentEditing.title}} Settings</h4>
                 </div>
-                <div class="modal-body" style="padding:0;">
+                <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
                     <tabset>
                         <tab ng-show="componentEditing">
                             <tab-heading>
@@ -395,12 +398,6 @@
                                     <label for="bg_overlay">Add Overlay</label>
                                     <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation'">
-                                    <label for="colorpicker">Button:</label>
-                                    <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                                </div>
-
-
 
                                 <div class="clearfix mb15"></div>
                             </div>
@@ -431,31 +428,6 @@
                                     <option value="img-thumbnail">Square with Border</option>
                                     <option value="img-circle">Circle</option>
                                 </select>
-                            </div>
-                        </tab>
-                        <tab>
-                            <tab-heading>
-                                <span>Info</span>
-                            </tab-heading>
-                            <h5>Currently Editing</h5>
-                            <div class="thumbnail">
-                                <div class="check-component" style="display:none"><i class="fa fa-check-circle"></i>
-                                </div>
-                                <div class="component-icon"><i class="{{componentEditing.icon}}"></i>
-                                </div>
-                                <div class="caption">
-                                    <h5 class="center">{{componentEditing.title}}</h5>
-                                </div>
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type === 'campaign'">
-                                <label>Campaign ID:</label>
-                                <select ng-model="componentEditing.campaignId" ng-change="saveComponent()" class="form-control input-lg">
-                                    <option ng-repeat="course in courses" value="{{course._id}}">{{course.title}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type === 'payment-form' || componentEditing.type === 'customer-signup'">
-                                <label>Product ID:</label>
-                                <input ng-model="componentEditing.productId" type="text" class="form-control input-lg" ng-change="saveComponent()" value="Add Product ID">
                             </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'navigation'">
@@ -598,9 +570,9 @@
 
                     </tabset>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger pull-left" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete Component</button>
-                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                <div class="modal-footer" ng-class="{hidden: hover}">
+                    <button class="btn btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete </button>
+                    <!-- <button class="btn btn-default" data-dismiss="modal" type="button">Close</button> -->
                 </div>
             </div>
         </div>
