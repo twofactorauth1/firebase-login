@@ -1,4 +1,4 @@
-define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'websiteService', 'userService', 'keenService', 'heatmapjs'], function(app) {
+define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'websiteService', 'userService', 'keenService', 'heatmapjs', 'checkImageDirective'], function(app) {
     app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', 'keenService', function($scope, $location, ngProgress, WebsiteService, UserService, keenService) {
         ngProgress.start();
 
