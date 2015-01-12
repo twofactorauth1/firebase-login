@@ -23,11 +23,16 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
     $scope.searchType = 1;
     //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used
 
+    $scope.templates = [{
+      name: 'minimalist',
+      code: function() {return $templateCache.get('/pipeshift/views/directives/videoPreview.html')[1];}
+    }];
+
     $http.get("/api/1.0/campaignmanager/pipeshift/templates").success(function(result) {
       $scope.courseBlocked = false;
-      $scope.templates = result;
+      // $scope.templates += result;
     }).error(function(data) {
-      alert("Error on templates get.")
+      alert("Error on templates get.");
     });
     $scope.beginOnboarding = function(type) {
       if (type == 'create-campaign') {
@@ -339,12 +344,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
               totalVideos: totalNumber
             });
           },
-          template: function() {
-            return {
-              name: 'minimalist',
-              code: $templateCache.get('/pipeshift/views/directives/videoPreview.html')[1]
-            };
-          }
+          template: function() {return findTemplateByName('minimalist');}
         }
       });
       modalInstance.result.then(function(updatedVideo) {
@@ -374,13 +374,11 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
 
     function findTemplateByName(templateName) {
       var resultTemplate = null;
-      for (var i = 0; i < $scope.templates.length; i++) {
-        var curTemplate = $scope.templates[i];
-        if (curTemplate.name == templateName) {
-          resultTemplate = curTemplate;
-          break;
+      $scope.templates.forEach(function(value, index) {
+        if (value.name == templateName) {
+          resultTemplate = value;
         }
-      }
+      });
       return resultTemplate;
     }
   }]);
