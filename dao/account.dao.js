@@ -115,7 +115,7 @@ var dao = {
                 }
             };
 
-            if (parsed.subdomain != null) {
+            if (parsed.subdomain !== null && parsed.subdomain !== "") {
                 this.getAccountBySubdomain(parsed.subdomain, cb);
             } else if (parsed.domain != null) {
                 this.getAccountByDomain(parsed.domain, cb);
