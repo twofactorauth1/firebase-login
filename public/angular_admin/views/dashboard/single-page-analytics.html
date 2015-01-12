@@ -39,13 +39,14 @@
 
 	<div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
 		<div class="col-xs-6">
-			<h3>Screenshot</h3>
+			<h3 ng-if="page && page.screenshot">Screenshot</h3>
+			<h3 ng-if="!page.screenshot">No Screenshot Available</h3>
 			<hr>
-			<div id="heatmapArea" style="position:relative">
-				<img src="{{page.screenshot}}" class="img-thumbnail">
+			<div ng-if="page && page.screenshot" id="heatmapArea" style="position:relative">
+				<img ng-src="{{page.screenshot}}" page-scope="{{page}}" err-src="" class="img-thumbnail">
 			</div>
 		</div>
-		<div class="col-xs-6">
+		<div ng-if="!page.screenshot" class="col-xs-6">
 			<h3>Page Info</h3>
 			<hr>
 			<h4>Page Title: {{page.title}}</h4>
