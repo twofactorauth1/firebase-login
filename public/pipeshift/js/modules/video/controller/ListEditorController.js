@@ -197,6 +197,9 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
         resolve: {
           templates: function() {
             return $scope.templates;
+          },
+          searchType: function() {
+            return $scope.searchType;
           }
         }
       });
