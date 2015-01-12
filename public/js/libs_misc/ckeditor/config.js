@@ -15,13 +15,13 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'forms' },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi'] },
 		{ name: 'links', groups: [ 'Link', 'Unlink', 'Anchor' ] },
 		{ name: 'insert' },
 		{ name: 'styles' },
 		{ name: 'colors' },
 		{ name: 'tools' },
-		{ name: 'others' },
+		{ name: 'others'},
 		{ name: 'about' }
 	];
 
@@ -34,7 +34,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.allowedContent = true;
 
-	config.extraPlugins = 'doksoft_button';
+	config.extraPlugins = 'doksoft_button,lineheight,imageresize';
 
 	config.filebrowserBrowseUrl = '';
 };

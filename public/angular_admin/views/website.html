@@ -293,10 +293,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                    <div class="modal-btns">
+                        <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
+                        <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
+                      </div>
                     <h4 class="modal-title">{{componentEditing.title}} Settings</h4>
                 </div>
-                <div class="modal-body" style="padding:0;">
+                <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
                     <tabset>
                         <tab ng-show="componentEditing">
                             <tab-heading>
@@ -567,7 +570,7 @@
 
                     </tabset>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" ng-class="{hidden: hover}">
                     <button class="btn btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete </button>
                     <!-- <button class="btn btn-default" data-dismiss="modal" type="button">Close</button> -->
                 </div>

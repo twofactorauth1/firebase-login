@@ -20635,7 +20635,7 @@ div.error label.error:before {
 }
 #component-setting-modal .modal-body .tab-content {
   height: 300px;
-  overflow-y: autp;
+  overflow-y: auto;
 }
 #component-setting-modal ul.nav {
   margin-top: 0!important;
@@ -22590,13 +22590,15 @@ hr {
 }
 .add-component {
   font-size: 50px;
-  height: 40px;
-  background: #fff;
-  border-radius: 25px;
   position: absolute;
-  margin-top: -25px;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 20px 20px 15px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
   left: 50%;
   z-index: 9998;
+  margin-top: -25px;
   /*
       99999 is for
         .componentActions
@@ -22606,10 +22608,9 @@ hr {
   margin-top: -3px;
 }
 .add-component a {
-  color: #29b87f;
+  color: #ffffff;
 }
 .add-component:hover {
-  background: #fff;
   pointer-events: auto;
 }
 .add-component:hover a {
@@ -23189,7 +23190,7 @@ ul.nav {
 }
 .navigation-v3 .navbar {
   min-height: 115px;
-  border: 1px solid #9b9b9b;
+  border: none;
   border-radius: 0px;
 }
 .navigation-v3 .navbar li {
@@ -23205,11 +23206,11 @@ ul.nav {
   color: #ffffff;
   background: #265fb3;
   border-bottom: 5px solid #1f4d90;
-  -webkit-transition: all 0.8s;
-  -moz-transition: all 0.8s;
-  -ms-transition: all 0.8s;
-  -o-transition: all 0.8s;
-  transition: all 0.8s;
+  -webkit-transition: all 0.4s;
+  -moz-transition: all 0.4s;
+  -ms-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  transition: all 0.4s;
 }
 /********** Feature Block **********/
 .feature-block-v1 {
