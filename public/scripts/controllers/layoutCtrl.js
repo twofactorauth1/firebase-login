@@ -329,9 +329,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.stringifyAddress = function(address) {
-        return _.filter([address.address.replace(/<\/?[^>]+>/gi, ''), address.address2.replace(/<\/?[^>]+>/gi, ''), address.city.replace(/<\/?[^>]+>/gi, ''), address.state.replace(/<\/?[^>]+>/gi, ''), address.zip.replace(/<\/?[^>]+>/gi, '')], function(str) {
+      if (address){
+        return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
             return str !== "";
-        }).join(",")
+        }).join(", ")
+        }
     };
 
     $scope.showEdit = function(type) {
@@ -366,6 +368,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exitFullScreenIcon: "&#xe008;"
       }
     }
+
+     $scope.gotoPosition = function(pos) {
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+       if(pos.data)
+        {
+         setTimeout(function() {
+         $location.hash(pos.data);
+          $anchorScroll();
+        }, 300)
+        }
+    };
 
     // $scope.$on('$locationChangeStart', function(event, next, current) {
     //     console.log('location changed '+event+' '+next+' '+current);
@@ -491,11 +505,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 lng: 0,
                 zoom: 10
             },
+            defaults: {
+              scrollWheelZoom: false
+            },
             markers: {
                 mainMarker: {
                     lat: 51,
                     lng: 0,
-                    focus: true,
+                    focus: false,
                     message: "",
                     draggable: false
                 }
@@ -969,16 +986,27 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
           }
           if (value &&  value.type == 'contact-us') {
+             $scope.contactPhone = value.contact.phone;
             $scope.geo_address_string = $scope.stringifyAddress(value.location);
-            analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                  if (data.error === undefined) {
-                      $scope.mapLocation.lat = parseFloat(data.lat);
-                      $scope.mapLocation.lng = parseFloat(data.lon);
-                      $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                      $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                      $scope.markers.mainMarker.message = $scope.geo_address_string;
+            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
+              $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            }
+            if(!value.contact.phone && that.account.business.phones.length) 
+              $scope.contactPhone = that.account.business.phones[0].number;
+            
+            if($scope.geo_address_string){
+              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                    if (data.error === undefined) {
+                        
+                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                        $scope.markers.mainMarker.message = $scope.geo_address_string;
+                        $scope.mapLocation.lat = parseFloat(data.lat);
+                        $scope.mapLocation.lng = parseFloat(data.lon);
+                        
                   }
               });
+            }
             }
         });
       }

@@ -158,7 +158,7 @@ define(['app', 'constants', 'importContactService'], function(app) {
                         return true;
                     }
                     var details = contact.details[0];
-                    if (details && details.emails.length > 0) {
+                    if (details && details.emails && details.emails.length > 0) {
                         contact.email = details.emails[0].email;
                         return true;
                     }

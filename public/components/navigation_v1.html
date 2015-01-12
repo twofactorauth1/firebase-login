@@ -38,7 +38,7 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background:{{component.bg.color}}">
                         <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                             <li data-ng-repeat="link in mainMenu.links track by $index">
-                                <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
+                                <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-click="gotoPosition(link.linkTo)" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
                                 <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
                             </li>
                         </ul>
