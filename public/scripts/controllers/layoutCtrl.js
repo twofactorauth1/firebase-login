@@ -372,7 +372,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
      $scope.gotoPosition = function(pos) {
       // set the location.hash to the id of
       // the element you wish to scroll to.
-       if(pos.data)
+       if(pos.data && !$scope.isEditing)
         {
          setTimeout(function() {
          $location.hash(pos.data);
