@@ -512,7 +512,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 mainMarker: {
                     lat: 51,
                     lng: 0,
-                    focus: true,
+                    focus: false,
                     message: "",
                     draggable: false
                 }
@@ -997,11 +997,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             if($scope.geo_address_string){
               analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
                     if (data.error === undefined) {
-                        $scope.mapLocation.lat = parseFloat(data.lat);
-                        $scope.mapLocation.lng = parseFloat(data.lon);
+                        
                         $scope.markers.mainMarker.lat = parseFloat(data.lat);
                         $scope.markers.mainMarker.lng = parseFloat(data.lon);
                         $scope.markers.mainMarker.message = $scope.geo_address_string;
+                        $scope.mapLocation.lat = parseFloat(data.lat);
+                        $scope.mapLocation.lng = parseFloat(data.lon);
+                        
                   }
               });
             }
