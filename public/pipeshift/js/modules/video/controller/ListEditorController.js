@@ -12,6 +12,9 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
         $scope.searchtime = $location.search()['searchtime'] || false;
         $scope.section = $location.path().split('/')[2];
         $scope.courseBlocked = true;
+
+        $scope.searchLabels = {1: 'Youtube', 2: 'Vimeo', 3: 'Dropbox', 4: 'Email'};
+        $scope.searchType = 1;
         //todo: might need to replace this with only certain template get, when needed - for example on popup open(if a lot of templates will be used
 
         $http.get("/api/1.0/campaignmanager/pipeshift/templates").success(function (result) {
