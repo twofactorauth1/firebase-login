@@ -388,6 +388,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         handle: pageObj.handle,
                         mainmenu: pageObj.mainmenu
                     });
+                    page.attributes.modified.date = new Date();
+                    page.attributes.created.date = new Date();
                     page.set('websiteId', websiteId);
                     page.set('accountId', accountId);
                     self.log.debug('>> page created');

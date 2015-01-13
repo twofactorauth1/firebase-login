@@ -70,6 +70,8 @@ require.config({
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
         'ngSweetAlert' : 'libs/angular-sweetalert/SweetAlert',
         'sweetAlert': 'libs/sweetalert/lib/sweet-alert.min',
+        'spin': 'libs/spin.js/spin',
+        'angularSpinner': 'libs/angular-spinner/angular-spinner',
 
         //application related
         'storageutils': 'utils/storageutils',

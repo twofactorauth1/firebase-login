@@ -234,7 +234,7 @@ _.extend(baseRouter.prototype, {
         var self = this;
         logger.debug('>> isAuth (' + req.originalUrl + ')');
         var path = req.url;
-        if (req.isAuthenticated() && self.matchHostToSession(req)) {
+        if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1)) {
             logger.debug('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
@@ -250,8 +250,23 @@ _.extend(baseRouter.prototype, {
                         } else {
                             value.replace(/\?authtoken.*/g, "");
                             logger.debug('redirecting to ' + value);
-                            resp.redirect(value);
-                            self = null;
+                            accountDao.getAccountByID(req.session.accountId, function(err, account){
+                                if(err) {
+                                    logger.error('Error getting account by session value: ' +err);
+                                    logger.debug('redirecting to /home');
+                                    resp.redirect("/home");
+                                    self = null;
+                                    return;
+                                } else {
+                                    logger.debug('Setting subdomain to: ' + account.get('subdomain'));
+                                    req.session.subdomain = account.get('subdomain');
+                                    req.session.domain = account.get('domain');
+                                    resp.redirect(value);
+                                    self = null;
+                                    return;
+                                }
+                            });
+
                         }
                     }
                 );
@@ -297,6 +312,7 @@ _.extend(baseRouter.prototype, {
             };
 
             if (req["session"] != null && req.session["accountId"] == null) {//TODO: do we need to check matchHostToken here?
+                logger.debug('No accountId in session');
                 var accountDao = require("../dao/account.dao");
                 accountDao.getAccountByHost(req.get("host"), function(err, value) {
                     if (!err && value != null) {

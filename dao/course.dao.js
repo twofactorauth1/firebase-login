@@ -71,6 +71,7 @@ var dao = {
                         course.set('subdomain', updatedCourseData.subdomain);
                         course.set('price', updatedCourseData.price);
                         course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
+                        course.set('emails', updatedCourseData.emails);
                         self.saveOrUpdate(course, fn);
                     }
                 } else {

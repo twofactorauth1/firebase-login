@@ -358,6 +358,9 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.error('Error saving billing information to account: ' + err);
                             return self.wrapError(res, 500, 'Error saving billing information to account', err);
                         }
+                        req.session.accountId = updatedAccount.id();
+                        req.session.subdomain = updatedAccount.get('subdomain');
+                        req.session.domain = updatedAccount.get('domain');
                         callback(null, account.id(), sub.id, user);
                     });
                 });
