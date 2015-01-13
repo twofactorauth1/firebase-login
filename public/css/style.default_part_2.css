@@ -563,6 +563,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: fixed;
   opacity: .05;
   margin: 0 18%;
+  max-height: 160px;
 }
 
 .account .total {

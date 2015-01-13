@@ -690,7 +690,7 @@
                         <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span>
                     </h4>
                     <h4>Period:
-                        <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{invoice.lines.data[0].period.end * 1000 | date : 'longDate'}}</span>
+                        <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{plusOneMonth(invoice.lines.data[0].period.start * 1000)}}</span>
                     </h4>
                     <h4>Amount Paid:
                         <span class="pull-right">${{(invoice.total/100).toFixed( 2 )}}</span>

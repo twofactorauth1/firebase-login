@@ -15,6 +15,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.firstTime = false;
 
+            $scope.plusOneMonth = function(date) {
+                var date = moment(date);
+                return date.add(1, 'months').format('MMMM D YYYY');
+            };
+
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
