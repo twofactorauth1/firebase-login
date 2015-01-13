@@ -51,7 +51,11 @@
 
         <div class="col-sm-4 feature" ng-if="component.features.length == 3">
             <div class="feature-single feature-single-0">
-                <span class="feature-icon {{feature.icon}}"></span>
+                <span class="feature-icon">
+                    <div class="editable" data-class="features.item.icon" data-index="{{$index}}">
+                         <span ng-bind-html="feature.icon | unsafe" />
+                    </div>
+                </span>
 
                 <div class="feature-title">
                     <div class="editable" data-class="features.item.title" data-index="{{$index}}">

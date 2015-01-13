@@ -15,7 +15,7 @@ exports.urlutils_test = {
         self.testUrls[1] = {
             host: 'www.indigenous.io:3000/',
             isMainApp: true,
-            subDomain: null
+            subDomain: ''
         };
         self.testUrls[2] = {
             host: 'yogaone.indigenous.io',
@@ -25,17 +25,17 @@ exports.urlutils_test = {
         self.testUrls[3] = {
             host: 'indigenous.io',
             isMainApp: true,
-            subDomain: null
+            subDomain: ''
         };
         self.testUrls[4] = {
             host: 'www.test.indigenous.io',
             isMainApp: true,
-            subDomain: null
+            subDomain: ''
         };
         self.testUrls[5] = {
             host: 'www.prod.indigenous.io',
             isMainApp: true,
-            subDomain: null
+            subDomain: ''
         };
         self.testUrls[6] = {
             host: 'www.stuff.test.indigenous.io',

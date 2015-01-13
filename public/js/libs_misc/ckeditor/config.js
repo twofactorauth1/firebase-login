@@ -34,7 +34,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.allowedContent = true;
 
-	config.extraPlugins = 'doksoft_button,lineheight,imageresize';
+	config.extraPlugins = 'doksoft_button,lineheight';
 
 	config.filebrowserBrowseUrl = '';
 };

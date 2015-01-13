@@ -18379,6 +18379,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard .keen-metric .btn-view-details {
   display: none;
 }
+.dashboard .highcharts-title {
+  display: none;
+}
 .single-metric-top h1 {
   padding: 15px;
   font-size: 55px;
@@ -22666,6 +22669,37 @@ ul.ui-sortable.active .fragment .componentActions {
 ul.ui-sortable.active .fragment .componentActions h4 {
   display: block;
 }
+ol.circles-list {
+  list-style-type: none;
+  list-style-type: decimal !ie;
+  /*IE 7- hack*/
+  margin: 0;
+  margin-left: 4em;
+  padding: 0;
+  counter-reset: li-counter;
+}
+ol.circles-list > li {
+  position: relative;
+  margin-bottom: 50px;
+  padding-left: 0.5em;
+  min-height: 3em;
+}
+ol.circles-list > li:before {
+  position: absolute;
+  top: 0;
+  left: -1.73em;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 2.0em;
+  line-height: 1.2;
+  text-align: center;
+  color: #f5f5f5;
+  border: 3px solid #c5c5c5;
+  border-radius: 50%;
+  background-color: #464646;
+  content: counter(li-counter);
+  counter-increment: li-counter;
+}
 .componentActions,
 .add-component,
 .no-component {
@@ -23198,7 +23232,7 @@ ul.nav {
 }
 .navigation-v3 .navbar .nav > li > a {
   float: none;
-  padding: 10px 10px 10px;
+  padding: 10px 20px 10px;
   font-size: 15px;
   line-height: 100px;
 }
