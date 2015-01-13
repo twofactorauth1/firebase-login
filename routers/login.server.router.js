@@ -127,6 +127,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
             return;
         }
 
+        self.log.debug('AccountId: ' + self.accountId(req));
+
         this.setup(req, resp, function (err, value) {
             if (self.accountId(value) > 0) {
                 self.log.debug('redirecting to /admin');
@@ -144,6 +146,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     self = req = resp = null;
                     return;
                 } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
+                    self.log.debug('redirecting to main application');
                     authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
                         if (err) {
                             self.log.debug('redirecting to /home');
@@ -157,8 +160,35 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         self = null;
                         return;
                     });
-                } else{
+                } else if(subObject.subdomain === null || subObject.subdomain === ''){
+                    self.log.debug('logged into main... redirecting to custom subdomain');
+                    authenticationDao.getAuthenticatedUrlForAccount(parseInt(self.accountId(req)), self.userId(req), "admin", function (err, value) {
+                        if (err) {
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        }
+                        accountDao.getAccountByID(parseInt(self.accountId(req)), function(err, account){
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            } else {
+                                self.log.debug('Setting subdomain to: ' + account.get('subdomain'));
+                                req.session.subdomain = account.get('subdomain');
+                                req.session.domain = account.get('domain');
+                                self.log.debug('redirecting to ' + value);
+                                resp.redirect(value);
+                                self = null;
+                                return;
+                            }
+                        });
 
+                    });
+                } else {
+                    self.log.debug('redirecting to account by subdomain');
                     accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
                         if(err) {
                             self.log.error('Error finding account:' + err);
