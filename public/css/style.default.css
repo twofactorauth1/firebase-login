@@ -18379,6 +18379,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard .keen-metric .btn-view-details {
   display: none;
 }
+.dashboard .highcharts-title {
+  display: none;
+}
 .single-metric-top h1 {
   padding: 15px;
   font-size: 55px;
