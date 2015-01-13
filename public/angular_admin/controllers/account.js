@@ -17,7 +17,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.plusOneMonth = function(date) {
                 var date = moment(date);
-                return date.add(1, 'months').format('MMMM D YYYY');
+                return date.add(1, 'months').format('MMMM D, YYYY');
             };
 
             for (var key in $scope.credentialTypes) {
