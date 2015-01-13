@@ -33,10 +33,10 @@ _.extend(router.prototype, baseRouter.prototype, {
         //-------------------------------------------------
         //  LOGIN
         //-------------------------------------------------
-        app.get("/auth/internal", this.setup.bind(this), this.socialAuthInternal.bind(this));
+        app.get("/auth/internal", this.setupForSocialAuth.bind(this), this.socialAuthInternal.bind(this));
 
-        app.get("/login/:socialtype", this.setup.bind(this), this.socialLogin.bind(this));
-        app.get("/signup/:socialtype", this.setup.bind(this), this.socialSignup.bind(this));
+        app.get("/login/:socialtype", this.setupForSocialAuth.bind(this), this.socialLogin.bind(this));
+        app.get("/signup/:socialtype", this.setupForSocialAuth.bind(this), this.socialSignup.bind(this));
 
         app.get("/inapplogin/:socialtype", this.isAuth.bind(this), this.inAppSocialLogin.bind(this));
 
