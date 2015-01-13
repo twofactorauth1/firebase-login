@@ -593,11 +593,12 @@ var dao = {
 
 
     verifyAuthToken: function (accountId, token, remove, fn) {
+        var self = this;
         if (_.isFunction(remove)) {
             fn = remove;
             remove = false;
         }
-
+        self.log.debug('>> verifyAuthToken for accountId:' + accountId);
         userDao.findOne({authToken: token}, function (err, value) {
             if (!err) {
                 if (value === null) {
