@@ -312,6 +312,7 @@ _.extend(baseRouter.prototype, {
             };
 
             if (req["session"] != null && req.session["accountId"] == null) {//TODO: do we need to check matchHostToken here?
+                logger.debug('No accountId in session');
                 var accountDao = require("../dao/account.dao");
                 accountDao.getAccountByHost(req.get("host"), function(err, value) {
                     if (!err && value != null) {
