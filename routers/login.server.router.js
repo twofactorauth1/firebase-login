@@ -143,7 +143,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
-                } else if(subObject.subdomain === null && _.contains(accountIds, appConfig.mainAccountID)) {
+                } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
                     authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
                         if (err) {
                             self.log.debug('redirecting to /home');
