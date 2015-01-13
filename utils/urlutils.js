@@ -37,7 +37,7 @@ var urlutils = {
 
             //replace 'www' (and a trailing '.' if its there) from the beginning of the string with an empty string
             subdomain = obj.subdomain.replace(/^www\.?/gi, '');
-            if(subdomain === '') {
+            if(subdomain === '' && obj.domain === defaultHost) {
                 subdomain = null;
                 isMainApp = true;
             } else {
@@ -63,7 +63,7 @@ var urlutils = {
                 /*
                  * After checking for environment... check for empty subdomain again.
                  */
-                if(subdomain === '') {
+                if(subdomain === '' && obj.domain === defaultHost) {
                     subdomain = null;
                     isMainApp = true;
                 }
@@ -75,6 +75,9 @@ var urlutils = {
 
         //check if the subdomain matches a list of globalSubdomains that indicate mainApp
         if(subdomain != null && _.contains(globalSubdomains.toString().split(','), subdomain)){
+            isMainApp = true;
+        }
+        if(subdomain === '' && domain === 'indigenous') {
             isMainApp = true;
         }
         var returnObj = {

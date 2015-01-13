@@ -7,15 +7,11 @@
 -->
 <div ng-class="component.type+'-v'+component.version">
     <div class="title">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title"/>
-        </div>
+        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe"></div>
     </div>
 
     <div class="subtitle">
-        <div class="editable" data-class="subtitle">
-            <span ng-bind-html="component.subtitle"/>
-        </div>
+        <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe"></div>
     </div>
 
     <div class="mb30"></div>

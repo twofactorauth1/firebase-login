@@ -66,7 +66,7 @@ define([
             $scope.components = [];
             $scope.isEditing = true;
             $scope.isMobile = false;
-
+            $scope.tabs = {};
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -87,6 +87,7 @@ define([
                     togglePaletteOnly: true,
                     togglePaletteMoreText: 'more',
                     togglePaletteLessText: 'less',
+                    appendTo: $("#component-setting-modal"),
                     palette: [
                         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
                         ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
@@ -209,7 +210,7 @@ define([
                     title: 'Contact Us',
                     type: 'contact-us',
                     icon: 'fa fa-map-marker',
-                    enabled: false
+                    enabled: true
                 }, {
                     title: 'Coming Soon',
                     type: 'coming-soon',
@@ -259,7 +260,7 @@ define([
                     title: 'Products',
                     type: 'products',
                     icon: 'fa fa-money',
-                    enabled: false
+                    enabled: true
                 }, {
                     title: 'Simple form',
                     type: 'simple-form',
@@ -299,7 +300,25 @@ define([
                     title: 'Customer Account',
                     type: 'customer-account',
                     icon: 'fa fa-user',
-                    enabled: true
+                    enabled: false
+                },
+                {
+                    title: 'Customer SignUp',
+                    type: 'customer-signup',
+                    icon: 'fa fa-male',
+                    enabled: false
+                },
+                {
+                    title: 'Customer Login',
+                    type: 'customer-login',
+                    icon: 'fa fa-sign-in',
+                    enabled: false
+                },
+                {
+                    title: 'Customer Forgot Password',
+                    type: 'customer-forgot-password',
+                    icon: 'fa fa-lock',
+                    enabled: false
                 }
             ];
 
@@ -316,7 +335,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
-                        }, 5000)
+                        }, 2000)
                     }
                 }
             }
@@ -336,61 +355,41 @@ define([
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.display = "block";
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
                     }
-
-                    //add media modal click events to all images
-                    var images = iframeDoc.getElementById('body').querySelectorAll('img');
-
-                    for (var i = 0; i < images.length; i++) {
-                        if (typeof images[i].addEventListener != "undefined") {
-                            images[i].removeEventListener("click", function(e) {}, false);
-                            images[i].addEventListener("click", function(e) {
-                                $("#media-manager-modal").modal('show');
-                                $scope.imageChange = true;
-                                $scope.componentArrTarget = e.currentTarget;
-                                $scope.componentEditing = _.findWhere($scope.components, {
-                                    _id: $(e.currentTarget).closest('.component').data('id')
-                                });
-                            });
-                        } else if (typeof images.attachEvent != "undefined") {
-                            images[i].removeEvent("onclick");
-                            images[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
+                    //Disable all links in edit
+                    $("#iframe-website").contents().find('body').on("click", ".component a", function (e)
+                    { 
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
 
                     //add click events for all the settings buttons
-                    var settingsBtns = iframeDoc.getElementById('body').querySelectorAll('.componentActions .settings');
-                    for (var i = 0; i < settingsBtns.length; i++) {
-                        if (typeof settingsBtns[i].addEventListener != "undefined") {
-                            settingsBtns[i].removeEventListener("click", function(e) {}, false);
-                            settingsBtns[i].addEventListener("click", function(e) {
-                                $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                                var element = angular.element('#component-setting-modal');
-                                element.modal('show');
-                            });
-                        } else if (typeof settingsBtns.attachEvent != "undefined") {
-                            settingsBtns[i].removeEvent("onclick");
-                            settingsBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings", function (e)
+                    {
+                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                        var element = angular.element('#component-setting-modal');
+                        element.modal('show');
+                    });
 
-                    //add click events for all the add component buttons
-                    var addComponentBtns = iframeDoc.querySelectorAll('.add-component');
-                    for (var i = 0; i < addComponentBtns.length; i++) {
-                        if (typeof addComponentBtns[i].addEventListener != "undefined") {
-                            addComponentBtns[i].removeEventListener("click", function(e) {}, false);
-                            addComponentBtns[i].addEventListener("click", function(e) {
-                                $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-                                var element = angular.element('#add-component-modal');
-                                element.modal('show');
-                                //get the current index of the component pressed
-                            });
-                        } else if (typeof addComponentBtns.attachEvent != "undefined") {
-                            addComponentBtns[i].removeEvent("onclick");
-                            addComponentBtns[i].attachEvent("onclick", iframeClickHandler);
-                        }
-                    };
+                     //add click events for all the add component buttons.
+                    $("#iframe-website").contents().find('body').on("click", ".add-component", function (e)
+                    {
+                         $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                         var element = angular.element('#add-component-modal');
+                         element.modal('show');
+                    });
+
+                    //add media modal click events to all images
+                    
+                    $("#iframe-website").contents().find('body').on("click", "img", function (e)
+                    {
+                    $("#media-manager-modal").modal('show');
+                        $scope.imageChange = true;
+                        $scope.componentArrTarget = e.currentTarget;
+                        $scope.componentEditing = _.findWhere($scope.components, {
+                            _id: $(e.currentTarget).closest('.component').data('id')
+                        });
+                    });
                 };
-
 
                 if (iframeDoc.getElementById('body')) {
                     elementBindingFn();
@@ -536,6 +535,7 @@ define([
                                 }
                             }
                         }
+
                         $scope.backup = {};
                     };
 
@@ -658,7 +658,12 @@ define([
                 }
             }
 
+            $scope.updateContactUsAddress = function(location) {
+                $scope.saveComponent();
+            }
+
             $scope.addComponent = function() {
+                $scope.deactivateAloha();
                 var pageId = $scope.currentPage._id;
                 if ($scope.selectedComponent.type === 'footer') {
                     var footerType = _.findWhere($scope.currentPage.components, {
@@ -710,6 +715,7 @@ define([
             $scope.deleteComponent = function(componentId) {
                 var pageId = $scope.currentPage._id;
                 var deletedType;
+                $scope.deactivateAloha();
                 WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
                     //$scope.resfeshIframe();
                     for (var i = 0; i < $scope.components.length; i++) {
@@ -724,6 +730,7 @@ define([
                     $(".modal-backdrop").remove();
                     $("#component-setting-modal").modal('hide');
                     toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                    $scope.activateAloha();
                 });
             };
 
@@ -733,7 +740,6 @@ define([
                 if (fn) {
                     fn();
                 }
-                $scope.bindEvents();
             };
 
             $scope.scrollToIframeComponent = function(section) {
@@ -742,6 +748,7 @@ define([
             };
 
             $scope.activateAloha = function() {
+                console.log('activate aloha');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -753,6 +760,7 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
+                console.log('edit component >>>');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -764,7 +772,6 @@ define([
                         type: $scope.componentEditing.type
                     }).title;
                 });
-                $scope.bindEvents();
                 //open right sidebar and component tab
                 // document.body.className += ' leftpanel-collapsed rightmenu-open';
                 // var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
@@ -797,7 +804,63 @@ define([
             };
 
             $scope.saveComponent = function() {
+                console.log('saving component >>>');
                 var componentId = $scope.componentEditing._id;
+
+                //update single component
+                var componentType = $scope.componentEditing.type;
+                var matchingComponent = _.findWhere($scope.currentPage.components, {
+                    _id: componentId
+                });
+
+                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
+                console.log('edited component ', editedComponent);
+
+                //get all the editable variables and replace the ones in view with variables in DB
+                var componentEditable = editedComponent[0].querySelectorAll('.editable');
+                if (componentEditable.length >= 1) {
+                    for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                        var componentVar = componentEditable[i2].attributes['data-class'].value;
+                        var componentVarContents = componentEditable[i2].innerHTML;
+
+                        //if innerhtml contains a span with the class ng-binding then remove it
+                        var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+
+                        if (span) {
+                            var spanParent = span.parentNode;
+                            var spanInner = span.innerHTML;
+                            if (spanParent.classList.contains('editable')) {
+                                componentVarContents = spanInner;
+                            } else {
+                                spanParent.innerHTML = spanInner;
+                                componentVarContents = spanParent.parentNode.innerHTML;
+                            }
+                        }
+                        //remove "/n"
+                        componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                        var setterKey, pa;
+                        //if contains an array of variables
+                        if (componentVar.indexOf('.item') > 0) {
+                            //get index in array
+                            var first = componentVar.split(".")[0];
+                            var second = componentEditable[i2].attributes['data-index'].value;
+                            var third = componentVar.split(".")[2];
+                            matchingComponent[first][second][third] = componentVarContents;
+                        }
+                        //if needs to traverse a single
+                        if (componentVar.indexOf('-') > 0) {
+                            var first = componentVar.split("-")[0];
+                            var second = componentVar.split("-")[1];
+                            matchingComponent[first][second] = componentVarContents;
+                        }
+                        //simple
+                        if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                            matchingComponent[componentVar] = componentVarContents;
+                        }
+                    }
+                }
+
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
                     if ($scope.components[i]._id === componentId) {
@@ -807,6 +870,8 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
+
+                $scope.activateAloha();
 
                 //update the scope as the temppage until save
 
@@ -1080,7 +1145,6 @@ define([
                         break;
                 }
             }
-
 
             window.getSocialNetworks = function(componentId) {
                 $scope.componentEditing = _.findWhere($scope.components, {

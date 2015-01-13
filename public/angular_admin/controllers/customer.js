@@ -162,7 +162,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 $scope.$watch('searchBar', function(newValue, oldValue) {
                     if (initializeSearchBar >= 1) {
                         console.log('searching ', newValue);
-                        if (newValue) {
+                        if (newValue || newValue == "") {
                             var searchBarSplit = newValue.split(' ');
                             if (searchBarSplit.length >= 1) {
                                 $scope.customerFilter.first = searchBarSplit[0];
@@ -180,31 +180,33 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                                 console.log($scope.searchBarType);
                                 if ($scope.searchBarType == 'name') {
                                     console.log('Search by name');
-                                    if ($scope.customerOrder === 'first') {
+                                    //if ($scope.customerOrder === 'first') {
                                         $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
                                             if (elem.first) {
-                                                return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                                return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1 || 
+                                                elem.last.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                            }
+                                            else if(newValue == "")
+                                            {
+                                                return true
                                             }
                                         });
-                                    } else {
-                                        $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
-                                            if (elem.last) {
-                                                return elem.last.toLowerCase().indexOf($scope.customerFilter.last.toLowerCase()) != -1;
-                                            }
-                                        });
-                                    }
                                 } else {
                                     console.info('Search by email');
                                     $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
                                         var match = false;
-                                        elem.details[0].emails.forEach(function(value, index) {
-                                            if (value.email === undefined) {
-                                                var email = value;
-                                            } else {
-                                                var email = value.email;
-                                            }
-                                            match = email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
-                                        });
+                                        if(elem.details[0])
+                                        {
+                                          elem.details[0].emails.forEach(function(value, index) {
+                                                if (value.email === undefined) {
+                                                    var email = value;
+                                                } else {
+                                                    var email = value.email;
+                                                }
+                                                match = email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                                            });  
+                                        }
+                                        
                                         return match;
                                     });
                                 }
@@ -218,7 +220,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                             $scope.customerScrollFn();
 
                         } else {
-                            $scope.customerFilter = {};
+                            $scope.customerFilter = {};                           
                         }
                     }
                     initializeSearchBar += 1;

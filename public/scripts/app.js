@@ -36,7 +36,8 @@ var mainApp = angular
         'ngInputDate',
         'angular-jqcloud',
         'socialLinks',
-        'slick'
+        'slick',
+        'leaflet-directive'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){

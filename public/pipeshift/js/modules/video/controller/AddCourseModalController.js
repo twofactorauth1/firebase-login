@@ -1,5 +1,5 @@
 define(['angularAMD', 'app'], function (angularAMD, app) {
-    app.register.controller('AddCourseModalController', ['$scope', '$http', '$location', '$timeout', '$modalInstance', 'templates', 'Course', function ($scope, $http, $location, $timeout, $modalInstance, templates, Course) {
+    app.register.controller('AddCourseModalController', ['$scope', '$http', '$location', '$timeout', '$modalInstance', 'templates', 'Course', 'searchType', function ($scope, $http, $location, $timeout, $modalInstance, templates, Course, searchType) {
         $scope.isSubdomainChecked = true;
         $scope.isSubdomainFree = true;
         $scope.protocol = $location.protocol() + "://"
@@ -13,8 +13,10 @@ define(['angularAMD', 'app'], function (angularAMD, app) {
         $scope.title = "Add Campaign";
         $scope.linkTooltip = "";
         $scope.templates = templates;
+        $scope.searchType = searchType;
+        var courseTemplate = {1: 'minimalist', 4: 'email'};
         //todo: change body and subtitle later
-        $scope.course = {title: "", subtitle: "Get started on the right foot", template: {name: "minimalist"}, description: "", videos: [], body: "Thanks a million for joining Minimalist. You are very good looking and charming, with a great sense of humour to boot. We just can't wait to show you around and tell you about how awesome we are.", price: 0.00}
+        $scope.course = {type: $scope.searchType, title: "", subtitle: "Get started on the right foot", template: {name: courseTemplate[$scope.searchType]}, description: "", videos: [], body: "Thanks a million for joining Minimalist. You are very good looking and charming, with a great sense of humour to boot. We just can't wait to show you around and tell you about how awesome we are.", price: 0.00}
         $scope.close = function () {
             $modalInstance.dismiss();
         }

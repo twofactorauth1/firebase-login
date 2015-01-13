@@ -27,6 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('campaigns'), this.findCampaigns.bind(this));
         app.get(this.url('campaign/:id/messages'), this.findCampaignMessages.bind(this));
         app.get(this.url('campaign/:id'), this.getCampaign.bind(this));
+        app.get(this.url('campaigns/:id/pages'), this.setup.bind(this), this.getPagesWithCampaign.bind(this));
         //pipeshift
         app.post(this.url('pipeshift/courses/:courseId/subscribe'), this.subscribeToVARCourse.bind(this));
         app.post(this.url('courses/:id/subscribe'), this.subscribeToVARCourse.bind(this));//better URL
@@ -187,6 +188,21 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendResult(resp, value);
                 }
             })
+    },
+
+    getPagesWithCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPagesWithCampaign');
+
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+
+        //TODO: add security - VIEW_CAMPAIGN
+        
+        campaignManager.getPagesByCampaign(accountId, campaignId, function(err, pages){
+            self.log.debug('<< getPagesWithCampaign');
+            self.sendResultOrError(resp, err, pages, 'Error getting pages');
+        });
     },
 
 

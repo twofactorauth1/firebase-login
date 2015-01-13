@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService',
-  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
+  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
@@ -152,6 +152,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
         $scope.currentpage = that.pages;
+
+
+
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
           customerService.getCustomer($scope.custid, function(data) {
@@ -325,6 +328,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       that.products = data;
     });
 
+    $scope.stringifyAddress = function(address) {
+      if (address){
+        return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
+            return str !== "";
+        }).join(", ")
+        }
+    };
 
     $scope.showEdit = function(type) {
       if (type == "billing")
@@ -359,6 +369,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     }
 
+     $scope.gotoPosition = function(pos) {
+      // set the location.hash to the id of
+      // the element you wish to scroll to.
+       if(pos.data && !$scope.isEditing)
+        {
+         setTimeout(function() {
+         $location.hash(pos.data);
+          $anchorScroll();
+        }, 300)
+        }
+    };
+
     // $scope.$on('$locationChangeStart', function(event, next, current) {
     //     console.log('location changed '+event+' '+next+' '+current);
     //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
@@ -383,6 +405,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     // };
 
     /********** PRODUCT RELATED **********/
+    $scope.checkoutModalState = 1;
+    $scope.newContact = {
+      isAuthenticated: true,
+      details: [
+        {
+          phones: [{type: 'w', default: false, number: ''}],
+          addresses: [{}]
+        }
+      ]
+    };
+
     $scope.addDetailsToCart = function(product) {
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
@@ -428,6 +461,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_year: exp_year
       };
 
+      if ($scope.newContact.first !== undefined) {
+        userService.postContact($scope.newContact, function(data, err) {
+        });
+      }
+
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         //|| !cc_name
         console.log('card invalid');
@@ -459,6 +497,28 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     /********** END BLOG PAGE PAGINATION RELATED **********/
 
     /********** CMS RELATED **********/
+
+    /********** MAP RELATED **********/
+    angular.extend($scope, {
+            mapLocation: {
+                lat: 51,
+                lng: 0,
+                zoom: 10
+            },
+            defaults: {
+              scrollWheelZoom: false
+            },
+            markers: {
+                mainMarker: {
+                    lat: 51,
+                    lng: 0,
+                    focus: false,
+                    message: "",
+                    draggable: false
+                }
+            }
+      });
+     /********** END MAP RELATED **********/
     $scope.sharePost = function(post, type) {
       var url = $location.$$absUrl;
       var postData = {};
@@ -674,10 +734,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     window.activateAloha = function() {
-      if ($scope.activated == false) {
+      //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
+        console.log('elements length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
@@ -694,10 +755,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
         $scope.activated = true;
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-      }
+      //}
     };
 
     window.deactivateAloha = function() {
+      for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
       // $('.editable').mahalo();
       // if (aloha.editor && aloha.editor.selection) {
       // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
@@ -738,7 +803,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     $scope.deletePost = function(postId, blogpost) {
-      PostService.deletePost($scope.currentpage._id, postId, function(data) { 
+      PostService.deletePost($scope.currentpage._id, postId, function(data) {
        if(blogpost)
        {
         var index = that.blogposts.indexOf(blogpost);
@@ -920,6 +985,29 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               });
             });
           }
+          if (value &&  value.type == 'contact-us') {
+             $scope.contactPhone = value.contact.phone;
+            $scope.geo_address_string = $scope.stringifyAddress(value.location);
+            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
+              $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            }
+            if(!value.contact.phone && that.account.business.phones.length) 
+              $scope.contactPhone = that.account.business.phones[0].number;
+            
+            if($scope.geo_address_string){
+              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                    if (data.error === undefined) {
+                        
+                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                        $scope.markers.mainMarker.message = $scope.geo_address_string;
+                        $scope.mapLocation.lat = parseFloat(data.lat);
+                        $scope.mapLocation.lng = parseFloat(data.lon);
+                        
+                  }
+              });
+            }
+            }
         });
       }
     });
@@ -986,7 +1074,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $("#user_email").addClass('has-error');
           $("#user_email .glyphicon").addClass('glyphicon-remove');
           return;
-        }  
+        }
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
@@ -1037,6 +1125,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
       if (contact.email) {
+        if(contact.full_name)
+        {
+          var full_name = contact.full_name.split(" ")
+          contact.first_name = full_name[0];
+          contact.last_name = full_name[1];
+        }
         var contact_info = {
           first: contact.first_name,
           last: contact.last_name,
@@ -1077,6 +1171,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               contact.email = '';
               contact.message = '';
               contact.full_name = '';
+              contact.first_name = '';
+              contact.last_name = '';
               contact.success = true;
               setTimeout(function() {
                 $scope.$apply(function() {

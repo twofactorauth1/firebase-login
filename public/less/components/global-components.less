@@ -114,13 +114,15 @@ hr {
 
 .add-component {
     font-size: 50px;
-    height: 40px;
-    background: #fff;
-    border-radius: 25px;
     position: absolute;
-    margin-top: -25px;
+    background: rgba(44, 62, 80, 0.8);
+    padding: 20px 20px 15px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
     left: 50%;
     z-index: 9998;
+    margin-top: -25px;
     /*
       99999 is for
         .componentActions
@@ -129,10 +131,9 @@ hr {
       margin-top: -3px;
     }
     a {
-      color: #29b87f;
+      color: #ffffff;
     }
     &:hover {
-      background: #fff;
       pointer-events: auto;
       a {
         color: #219265;
@@ -205,6 +206,39 @@ ul.ui-sortable.active {
   }
 }
 
+ol.circles-list {
+  list-style-type: none;
+  list-style-type: decimal !ie; /*IE 7- hack*/
+  margin: 0;
+  margin-left: 4em;
+  padding: 0;
+  counter-reset: li-counter;
+}
+
+ol.circles-list > li{
+  position: relative;
+  margin-bottom: 50px;
+  padding-left: 0.5em;
+  min-height: 3em;
+}
+
+ol.circles-list > li:before {
+  position: absolute;
+  top: 0;
+  left: -1.73em;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 2.0em;
+  line-height: 1.2;
+  text-align: center;
+  color: #f5f5f5;
+  border: 3px solid #c5c5c5;
+  border-radius: 50%;
+  background-color: #464646;
+  content: counter(li-counter);
+  counter-increment: li-counter;
+}
+
 .componentActions, .add-component, .no-component {
   display: none;
   visibility: hidden;
@@ -232,6 +266,7 @@ ul.ui-sortable.active {
 @import "components/campaign.less";
 @import "components/contact-us-v1.less";
 @import "components/contact-us-v2.less";
+@import "components/contact-us-v4.less";
 @import "components/component-wrap.less";
 @import "components/default-layout.less";
 @import "components/feature-list-v1.less";
@@ -241,7 +276,6 @@ ul.ui-sortable.active {
 @import "components/navbar-v1.less";
 @import "components/navbar-v2.less";
 @import "components/navbar-v3.less";
-@import "components/navbar-v4.less";
 @import "components/feature-block-v1.less";
 @import "components/gallery-v1.less";
 @import "components/meet-team-v1.less";
@@ -282,3 +316,6 @@ ul.ui-sortable.active {
 @import "components/image-gallery-v2.less";
 @import "components/social-link-v1.less";
 @import "components/customer-account-v1.less";
+@import "components/customer-signup-v1.less";
+@import "components/customer-login-v1.less";
+@import "components/customer-forgot-password-v1.less";

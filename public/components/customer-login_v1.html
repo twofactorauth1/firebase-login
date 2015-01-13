@@ -1,0 +1,62 @@
+<!--
+
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+
+*
+
+* All use or reproduction of any or all of this content must be approved.
+
+* Please contact info@indigenous.io for approval or questions.
+
+*
+
+-->
+
+<div ng-class="component.type+'-v'+component.version">
+  <section>
+    <div class="signinpanel">
+      <h1 class="center company-title"></h1>
+      <form role="form" action="/login" method="post">
+        <div class="welcome-text">
+          <h4 class="nomargin">Sign In</h4>
+          <p class="mt5 mb20">
+            Login to access your account.
+          </p>
+        </div>
+        <div class="row social btn-toolbar">
+          <a href="/login/facebook" class="btn btn-large btn-default"><i class="fa fa-facebook"></i></a><a href="/login/twitter" class="btn btn-large btn-default"><i class="fa fa-twitter"></i></a><a href="/login/google" class="btn btn-large btn-default"><i class="fa fa-google-plus"></i></a><a href="/login/linkedin" class="btn btn-large btn-default"><i class="fa fa-linkedin"></i></a>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-user"></i></span>
+          <input type="text" name="username" placeholder="Username" class="form-control uname input-lg">
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input type="password" name="password" placeholder="Password" class="form-control pword input-lg">
+        </div><a href="/page/customer-forgot-password"><small>Forgot Your Password?</small></a>
+        <button type="submit" value="Login" class="btn btn-success btn-block btn-lg">
+          Sign In
+        </button>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="rememberme" id="rememberme">
+            Remember me on this computer</label>
+        </div>
+      </form>
+    </div>
+  </section>
+  <div id="common-modal" class="modal fade hide"></div>
+  <div id="common-progress" class="modal fade hide">
+    <div id="common-progress-title" class="modal-header">
+      Progress...
+    </div>
+    <div class="modal-body">
+      <div class="progress progress-striped active">
+        <div style="width:100%" class="bar">
+          Processing...
+        </div>
+      </div>
+    </div><div id="common-progress-label" class="modal-footer"></div>
+  </div>
+
+</div>

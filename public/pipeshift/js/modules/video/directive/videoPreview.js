@@ -11,7 +11,7 @@ angular.module('var.directives').directive('videoPreview', function ($compile) {
     ];
 
     function convertToAngularHtml(madrillTemplate) {
-        var result = madrillTemplate.code;
+        var result = madrillTemplate.code();
         for (var i = 0; i < varToPropertiesMapping.length; i++) {
             var oneVarMapping = varToPropertiesMapping[i];
             result = replaceAll(result, "*|" + oneVarMapping.varName.toUpperCase() + "|*", "{{video." + oneVarMapping.propertyName + "}}");

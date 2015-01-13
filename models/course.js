@@ -13,6 +13,7 @@ var course = $$.m.ModelBase.extend({
     defaults: function () {
         return {
             _id: null,
+            type: 1,
             title: null,
             template: null,
             subdomain: null,
