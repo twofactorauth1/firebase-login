@@ -35,10 +35,11 @@ define([
         'NavigationService',
         'ChartAnalyticsService',
         'ChartCommerceService',
-        'UserService',
-    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService) {
+        'UserService','usSpinnerService',
+    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService, usSpinnerService) {
 
         ngProgress.start();
+        usSpinnerService.spin('spinner-1');
         NavigationService.updateNavigation();
 
         $scope.activeTab = 'analytics';
@@ -158,10 +159,9 @@ define([
             //         }
             //     }, 100);
             // };
-
+            usSpinnerService.stop('spinner-1');
             ngProgress.complete();
         };
-
         $scope.renderCommerceCharts = function() {
             ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {
                 $scope.customerOverviewConfig = data;

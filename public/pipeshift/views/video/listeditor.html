@@ -93,8 +93,33 @@
           </div>
 
           <div class="panel-body" ng-style="styleMarketing()" resize ng-show="ui.selectedCourseId">
-            <div class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort" no-video-modal='showAddCourseModal'>
+            <div ng-show="searchType==1" class="playlist timeline" video-drop from="videos" ng-disabled="courseBlocked" to="course.videos" videos="course.videos" remove-video="showRemoveVideoModal" add-video="addVideo" video-sort="dayTimeSort" no-video-modal='showAddCourseModal'>
             </div>
+
+            <div ng-show="searchType==4">
+              <div class="timeline-element col-md-12" ng-repeat="email in course.emails">
+                <div class="col-md-6 video" video-draggable index="0">
+                  <a class="video clearfix">
+                    <h4 class="video-title">
+                      <span class="glyphicon glyphicon-move"></span>
+                      <span tooltip="Default Email" tooltip-placement="bottom" class="single-line-text">{{email.title}}</span>
+                    </h4>
+                    <span class="fa fa-envelope"></span>
+                    <button class="btn btn-square-sm remove-video" ng-click="removeEmailFn(email)"><span
+                      class="glyphicon glyphicon-remove"></span>
+                    </button>
+                  </a>
+                </div>
+              </div>
+              <div class="timeline-element timeline-element-no-border col-md-12">
+                <div class="timeline-image ng-scope"><span class="glyphicon glyphicon-envelope" ng-click="showAddCourseModal()"></span></div>
+                <div class="playlist-video drag-drop-target">
+                  <h4 class="video-title"><span class="glyphicon glyphicon-move"></span>Drag & Drop here</a>
+                  </h4>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

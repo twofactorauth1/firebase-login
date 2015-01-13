@@ -1,12 +1,17 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier'], function(angularAMD) {
-  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier', "angularSpinner"], function(angularAMD) {
+  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier', 'angularSpinner']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
   //routes
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
       $urlRouterProvider.otherwise("/website");
-
+      $httpProvider.defaults.cache = false;
+      if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};
+      }
+      // disable IE ajax request caching
+      $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
       $stateProvider
         .state('dashboard', angularAMD.route({
           url: '/dashboard',
