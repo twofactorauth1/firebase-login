@@ -71,6 +71,37 @@ _.extend(baseRouter.prototype, {
         }
     },
 
+    setupForSocialAuth: function(req, resp, next) {
+        //TODO: Cache Account By Host
+        var self = this;
+        /*
+         * If we have a session but no session accountId OR the session host doesn't match current host, do the following
+         */
+        if (req["session"] != null && (req.session["accountId"] == null )) {
+            var accountDao = require("../dao/account.dao");
+            accountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if (!err && value != null) {
+                    if (value === true) {
+                        logger.warn('We should not reach this code.  value ===true');
+                        logger.debug("host: " + req.get("host") + " -> accountId:0");
+                        req.session.accountId = 0;
+                    } else {
+                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                        req.session.accountId = value.id();
+                        req.session.subdomain = value.get('subdomain');
+                        req.session.domain = value.get('domain');
+                    }
+                } else {
+                    logger.warn("No account found from getAccountByHost");
+                }
+
+                return next();
+            });
+        } else {
+            return next();
+        }
+    },
+
     matchHostToSession: function(req) {
         var subObj = urlUtils.getSubdomainFromHost(req.host);
         var sSub = req.session.subdomain;
