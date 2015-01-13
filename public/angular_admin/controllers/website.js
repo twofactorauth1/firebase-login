@@ -870,7 +870,7 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
-
+                $scope.deactivateAloha();
                 $scope.activateAloha();
 
                 //update the scope as the temppage until save
