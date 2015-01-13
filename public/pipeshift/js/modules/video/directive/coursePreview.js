@@ -1,4 +1,4 @@
-angular.module('var.directives').directive('coursePreview', function ($compile, $templateCache) {
+angular.module('var.directives').directive('coursePreview', function () {
     function getTimezoneOffset() {
         return (new Date()).getTimezoneOffset();
     }
@@ -82,14 +82,8 @@ angular.module('var.directives').directive('coursePreview', function ($compile, 
                 });
             };
         },
-        link: function (scope, element, attrs) {
-          scope.templates = {1: $templateCache.get('/pipeshift/views/directives/coursePreview.html')[1],
-                             4: $templateCache.get('/pipeshift/views/directives/courseEmailPreview.html')[1]};
-
-          element.html(scope.templates[scope.course.type]);
-          $compile(element.contents())(scope);
-        },
         replace: true,
-        restrict: 'E'
+        restrict: 'E',
+        templateUrl: '/pipeshift/views/directives/coursePreview.html'
     };
 });
