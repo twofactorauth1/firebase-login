@@ -300,25 +300,25 @@ define([
                     title: 'Customer Account',
                     type: 'customer-account',
                     icon: 'fa fa-user',
-                    enabled: true
+                    enabled: false
                 },
                 {
                     title: 'Customer SignUp',
                     type: 'customer-signup',
                     icon: 'fa fa-male',
-                    enabled: true
+                    enabled: false
                 },
                 {
                     title: 'Customer Login',
                     type: 'customer-login',
                     icon: 'fa fa-sign-in',
-                    enabled: true
+                    enabled: false
                 },
                 {
                     title: 'Customer Forgot Password',
                     type: 'customer-forgot-password',
                     icon: 'fa fa-lock',
-                    enabled: true
+                    enabled: false
                 }
             ];
 
