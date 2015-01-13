@@ -9,6 +9,7 @@ require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
 var accountDao = require('../dao/account.dao');
+var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var courseDao = require('../dao/course.dao');
@@ -422,6 +423,23 @@ module.exports = {
                 callback(err, null);
             }
         );
+    },
+
+    getPagesByCampaign: function(accountId, campaignId, fn) {
+        var self = this;
+        self.log.debug('>> getPagesByCampaign(' + accountId + ',' + campaignId + ')');
+
+        var query = {accountId:accountId, 'components.campaignId':campaignId};
+
+        cmsDao.findMany(query, $$.m.Page, function(err, pages){
+            if(err) {
+                self.log.error('Error getting pages: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getPagesByCampaign');
+                return fn(null, pages);
+            }
+        });
     },
 
     _cancelMandrillCampaignMessages: function (query, callback) {
