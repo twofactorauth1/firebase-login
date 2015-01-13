@@ -390,5 +390,16 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
       });
       return resultTemplate;
     }
+
+    $scope.removeEmail = function(email) {
+      $scope.course.emails.forEach(function(value, index) {
+        if (value === email) {
+          $scope.course.emails.splice(index, 1);
+        }
+      });
+      Course.update({id: $scope.course._id}, $scope.course, function(resp) {
+        console.log(resp);
+      });
+    };
   }]);
 });
