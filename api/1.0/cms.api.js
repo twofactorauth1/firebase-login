@@ -47,6 +47,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
         app.get(this.url('page/:handle/screenshot'), this.isAuthApi.bind(this), this.generateScreenshot.bind(this));
+        app.get(this.url('page/:handle/savedscreenshot'), this.isAuthApi.bind(this), this.getScreenshot.bind(this));
         app.get(this.url('website/:id/page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
         app.get(this.url('page/secure/:handle'), this.isAuthApi.bind(this), this.getSecurePage.bind(this));
         ///api/1.0/cms/website/{id}/page/secure/{handle} and at /api/1.0/cms/page/secure/{handle}
@@ -352,10 +353,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(req);
             } else {
                 var page = new Page(_page);
-                cmsDao.saveOrUpdate(page, function (err, value) {
-                    self.sendResultOrError(resp, err, value, "Error saving website Page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
+                //set screenshot to null so it will refresh properly.
+                page.set('screenshot', null);
+                cmsDao.saveOrUpdate(page, function (err, updatedPage) {
+                    self.sendResultOrError(resp, err, updatedPage, "Error saving website Page");
+                    cmsManager.updatePageScreenshot(updatedPage.id(), function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + updatedPage.id() + ': ' + err);}
                         self = null;
                     });
                 });
@@ -424,6 +427,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var pageId = req.params.id;
                 var _page = req.body;
                 var pageObj = new Page(_page);
+                page.set('screenshot', null);
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(res, err, value, "Error updating Page");
@@ -1272,6 +1276,26 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.generateScreenshot(accountId, pageHandle, function(err, url){
                     self.log.debug('<< generateScreenshot');
                     self.sendResultOrError(res, err, url, "Error generating screenshot.");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    getScreenshot: function(req, res) {
+        var self = this;
+        self.log.debug('>> getScreenshot');
+        var accountId = parseInt(self.accountId(req));
+        var pageHandle = req.params.handle;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+
+                cmsManager.getSavedScreenshot(accountId, pageHandle, function(err, url){
+                    self.log.debug('<< getScreenshot');
+                    self.sendResultOrError(res, err, url, "Error getting screenshot.");
                     self = null;
                 });
             }
