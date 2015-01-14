@@ -786,13 +786,13 @@ var user = $$.m.ModelBase.extend({
         if(accounts == null) {
             return this;
         }
-        _.each(accounts, function(account, index, list){
-            if(account.id() === accountId) {
+        /*_.each(accounts, function(account, index, list){
+            if(account.accountId === accountId) {
 
             }
-        });
+        });*/
 
-        var updatedAccounts = _.filter(accounts, function(account){return account.id() !== accountId});
+        var updatedAccounts = _.filter(accounts, function(account){return account.accountId !== accountId});
         this.set('accounts', updatedAccounts);
         return this;
     },

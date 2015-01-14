@@ -392,6 +392,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
     }
 
     $scope.removeEmailFn = function(email) {
+      console.info('Delete email');
       $scope.course.emails.forEach(function(value, index) {
         if (value === email) {
           $scope.course.emails.splice(index, 1);
@@ -403,6 +404,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
     };
 
     $scope.addToCourseFn = function() {
+      console.info('Add email');
       $scope.course.emails.push({title: 'Default Email', picture: null, content: null});
       Course.update({id: $scope.course._id}, $scope.course, function(resp) {
         console.log(resp);

@@ -69,30 +69,10 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       }, true);
     };
 
-    //user API call for object population
-    UserService.getUser(function(user) {
-      $scope.user = user;
-      $scope.fullName = [user.first, user.middle, user.last].join(' ');
-      if (!$scope.user.details[0].phones.length)
-        $scope.user.details[0].phones.push({
-          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-          number: '',
-          default: false,
-          type: 'm'
-        });
-      $scope.user.details[0].phones.forEach(function(value, index) {
-        $scope.userPhoneWatchFn(index);
-      });
-      if (!$scope.user.details[0].addresses.length)
-        $scope.user.details[0].addresses.push({
-          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
-        });
-    });
-
     //account API call for object population
     UserService.getAccount(function(account) {
       $scope.account = account;
-      ngProgress.complete();
+      
       if (!$scope.account.business.phones.length)
         $scope.account.business.phones.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -107,6 +87,39 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.account.business.addresses.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort()
         });
+    });
+
+    //user API call for object population
+    UserService.getUser(function(user) {
+      $scope.user = user;
+      $scope.fullName = [user.first, user.middle, user.last].join(' ');
+      if(!$scope.user.details[0])
+      {
+        $scope.user.details[0] = [];
+      }
+      if(!$scope.user.details[0].phones)
+        {
+          $scope.user.details[0].phones = [];
+        }
+      if(!$scope.user.details[0].addresses)
+        {
+          $scope.user.details[0].addresses = [];
+        }  
+      if ($scope.user.details[0].phones.length == 0)
+        $scope.user.details[0].phones.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+          number: '',
+          default: false,
+          type: 'm'
+        });
+      $scope.user.details[0].phones.forEach(function(value, index) {
+        $scope.userPhoneWatchFn(index);
+      });
+      if (!$scope.user.details[0].addresses.length)
+        $scope.user.details[0].addresses.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
+        });
+      ngProgress.complete();
     });
 
     //business phone field add

@@ -1258,7 +1258,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var tmpAccount = data;
         tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
         userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-
+          console.log('Saved the temp account.  Account token is: ' + data.token);
           var newUser = {
             username: newAccount.email,
             password: newAccount.password,
@@ -1266,7 +1266,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             accountToken: data.token,
             coupon: newAccount.coupon
           };
-
+          console.log('newUser.accountToken: ' + newUser.accountToken);
           //get the token
           PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
             if (error) {
