@@ -9,6 +9,8 @@
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/sweetalert/lib/sweet-alert.css';
 @import '../js/libs/slick-carousel/slick/slick.css';
+@import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
+@import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -22717,6 +22719,56 @@ ol.circles-list > li:before {
 }
 .post-social-link a:hover {
   text-decoration: none !important;
+}
+/* BS CAROUSEL STEP */
+.single-step.carousel-step {
+  width: 400px;
+  height: 540px;
+  padding: 0;
+  border: none;
+}
+.single-step.carousel-step .carousel-caption,
+.single-step.carousel-step .carousel-inner {
+  height: 540px;
+}
+.single-step.carousel-step .carousel-caption {
+  text-shadow: none;
+  color: #555;
+  left: 0;
+  right: 0;
+  bottom: 90px;
+  padding: 0 40px;
+}
+.single-step.carousel-step .item img {
+  width: 400px;
+  height: 300px;
+}
+.single-step.carousel-step .carousel-indicators {
+  bottom: 20px;
+}
+.single-step.carousel-step .carousel-indicators li {
+  border-color: #2854a1;
+}
+.single-step.carousel-step .carousel-indicators li.active {
+  background-color: #2854a1;
+}
+.carousel-ctrls {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+}
+.single-step .carousel-caption {
+  position: relative;
+  bottom: 0!important;
+  height: 230px!important;
+}
+.single-step .carousel-ctrls {
+  z-index: 99999;
+}
+.powertour-step:focus {
+  outline: 0!important;
 }
 .accordion-v1 .title {
   text-align: center;

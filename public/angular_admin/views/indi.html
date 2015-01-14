@@ -50,7 +50,7 @@
         <div class="contentpanel pull-left" ng-style="styleIndi()" indigeweb-resize>
 
             <div ng-switch="activeTab">
-                 <div class="getting-started-section" ng-switch-when="getting-started">
+                <div class="getting-started-section" ng-switch-when="getting-started">
                     <div>
                         <div class="panel panel-info">
                             <div class="panel-heading">
@@ -73,7 +73,10 @@
                                     <small class="pull-right done">COMPLETE</small>
                                     <h3 class="pull-left">Sign Up For Indigenous</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>You completed the most difficult task of starting to take control of your business.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>You completed the most difficult task of starting to take control of your business.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li ng-click="startTask('account/edit', 'basic-info')" ng-class="{complete: userPreferences.tasks.basic_info }">
@@ -81,7 +84,10 @@
                                     <small class="pull-right done" ng-if="userPreferences.tasks.basic_info">COMPLETE</small>
                                     <h3 class="pull-left">Basic Account Information</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Enter the basic information about your business like your address and logo.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Enter the basic information about your business like your address and logo.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li ng-click="startTask('website', 'select-theme')" ng-class="{complete: userPreferences.tasks.select_theme }">
@@ -89,7 +95,10 @@
                                     <small class="pull-right done" ng-if="userPreferences.tasks.select_theme">COMPLETE</small>
                                     <h3 class="pull-left">Select A Theme</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Select a theme for your front facing website where your customers can visit.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Select a theme for your front facing website where your customers can visit.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li ng-click="startTask('account', 'connect-social')">
@@ -97,7 +106,10 @@
                                     <small class="pull-right"></small>
                                     <h3 class="pull-left">Connect Social Accounts</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Connect your social account so you can import contacts and create marketing campaigns.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Connect your social account so you can import contacts and create marketing campaigns.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li ng-click="startTask('customer', 'create-contact')">
@@ -105,7 +117,10 @@
                                     <small class="pull-right"></small>
                                     <h3 class="pull-left">Import / Create Contacts</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Import your contact from your various accounts or create them.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Import your contact from your various accounts or create them.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li ng-click="startTask('marketing', 'create-campaign')">
@@ -113,7 +128,10 @@
                                     <small class="pull-right"></small>
                                     <h3 class="pull-left">Create First Campaign</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Create your first campaign to start getting vistors.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Create your first campaign to start getting vistors.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li ng-click="startTask('commerce', 'add-product')">
@@ -121,15 +139,21 @@
                                     <small class="pull-right"></small>
                                     <h3 class="pull-left">Import / Create Products</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Import or create new products to start selling and creating revenue.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Import or create new products to start selling and creating revenue.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
-                                 <li ng-click="startTask('wesbite', 'add-post')">
+                                <li ng-click="startTask('wesbite', 'add-post')">
                                     <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
                                     <small class="pull-right"></small>
                                     <h3 class="pull-left">Create First Blog Post</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Keep everyone up to date and informed with a regular blog.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Keep everyone up to date and informed with a regular blog.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                                 <li>
@@ -137,7 +161,10 @@
                                     <small class="pull-right"></small>
                                     <h3 class="pull-left">Discover the Dashboard</h3>
                                     <div class="clearfix mb5"></div>
-                                    <div class="task-desc"><p><b>Now evetything is set up, its time to start trakcing.</b><p></div>
+                                    <div class="task-desc">
+                                        <p><b>Now evetything is set up, its time to start trakcing.</b>
+                                            <p>
+                                    </div>
                                     <div class="clearfix"></div>
                                 </li>
                             </ul>
@@ -171,4 +198,63 @@
     </div>
 </div>
 
+<div id="step-1" class="single-step carousel-step">
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="0">
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div>
+                    <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/onboard.jpg" alt="" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="carousel-caption">
+                    <h4>Welcome to Indigenous</h4>
+                    <p>My name is <b>Indi</b> and I’m here to assist you with setting up your business and answering any questions you may have. So here is how everything works...</p>
+                </div>
+                <div class="carousel-ctrls">
+                    <!-- Controls -->
+                    <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                        Next <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="item">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/business-ina-box.jpg" alt="" />
+                <div class="carousel-caption">
+                    <h4>Together at Last</h4>
+                    <p>No more logging into multiple online services to run your business. Indigenous will provide all things needed for your business in one place.</p>
+                </div>
+                <div class="carousel-ctrls">
+                    <!-- Controls -->
+                    <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                        Next <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="item">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/monitoring.jpg" alt="" />
+                <div class="carousel-caption">
+                    <h4>Track and Analyze Everything</h4>
+                    <p>We track everything from the click and scroll your customers make on your site. Combining you sales data with customer habits creates actionable intelligence based on real data.</p>
+                    <!--                  <a class="btn btn-success btn-block" href="#" data-powertour-action="stop">
+                                GET STARTED
+                            </a> -->
+                </div>
+                <div class="carousel-ctrls">
+                    <!-- Controls -->
+                    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
+                        GET STARTED <i class="fa fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--         <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        </ol> -->
+
+    </div>
 </div>

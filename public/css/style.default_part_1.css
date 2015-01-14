@@ -20,6 +20,10 @@
 
 @import '../js/libs/slick-carousel/slick/slick.css';
 
+@import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
+
+@import '../js/libs_misc/powertour/css/powertour-style-clean.css';
+
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 
 html {
