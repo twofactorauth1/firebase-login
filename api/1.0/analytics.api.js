@@ -308,7 +308,7 @@ _.extend(api.prototype, baseApi.prototype, {
         sessionEvent.set('server_time', new Date().getTime());
         sessionEvent.set('ip_address', self.ip(req));
         var geoInfo = self.geo(req);
-        sessionEvent.set('ip_geo_info', geoInfo);
+        //sessionEvent.set('ip_geo_info', geoInfo);
 
         sessionEvent.set('accountId', self.accountId(req));
 

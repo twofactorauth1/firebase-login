@@ -191,7 +191,7 @@ var collator = {
                         'input':{
                             'ip':'ip_address'
                         },
-                        'output': 'ip_geo_info_gen'
+                        'output': 'ip_geo_info'
                     };
                     sessionEvent.set('keen', keen);
                     //send to keen unless test environment
