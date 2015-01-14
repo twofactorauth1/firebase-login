@@ -1,0 +1,574 @@
+/*
+ * ************************************************************* *
+ * Name         :  Power Tour connectors (LESS)                  *
+ * Description  :  CSS for the tour plugin.                      *
+ * Version      :  Version 2.1.0                                 *
+ * Author       :  CreativeMilk                                  *
+ * Author URI   :  www.creativemilk.net                          *
+ * Updated      :  2014-08-26 17:13:18 UTC+02:00                 *
+ * Copyright    :  (c) 2012 CreativeMilk                         *
+ * ************************************************************* *
+ */
+
+// var(s) ********************************************************
+
+@bg-dark         : #333;
+@bg-white        : #fff;
+@border-trans-10 : 10px solid transparent;
+@border-trans-12 : 12px solid transparent;
+@border-white-10 : 10px solid #fff;
+@border-grey-10  : 10px solid #ccc;
+@border-grey-12  : 12px solid #ccc;
+@border-dark-2   : 2px solid #333;
+
+// mixin(s) ******************************************************
+
+.rotate(@deg){
+	transform         : rotate(@deg);
+	-ms-transform     : rotate(@deg);
+	-webkit-transform : rotate(@deg);
+}
+.heigh-x-width(@h, @w){
+	height : @h;
+	width  : @w;
+}
+.dot{	
+	height                : 10px;
+	width                 : 10px;
+	position              : absolute;
+	content               : "";
+	background-color      : @bg-white;
+	border                : @border-dark-2;	
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.pos-bottom-left(@b, @l){
+	bottom   : @b;
+	left     : @l;
+	position : absolute;	
+}
+.pos-bottom-right(@b, @r){
+	bottom   : @b;
+	right    : @r;
+	position : absolute;	
+}
+.pos-top-right(@t, @r){
+	top      : @t;
+	right    : @r;
+	position : absolute;	
+}
+.pos-top-left(@t, @l){
+	top      : @t;
+	left     : @l;
+	position : absolute;
+}
+.dark-bg{
+	background-color:@bg-dark;
+}
+.borders(@t, @r, @b, @l){
+	border-top    : @t;	
+	border-right  : @r;
+	border-bottom : @b;	
+	border-left   :	@l;	
+}
+
+// base **********************************************************
+
+/*** DOTS ****************************************/
+
+/* TOP */
+
+.connectordot-top{	
+	.pos-top-left(-29px, -69px);
+	.heigh-x-width(2px, 80px);
+	.rotate(45deg);
+	.dark-bg;
+	
+		&:before{
+						
+			.pos-top-left(-4px, -5px);
+			.dot;	
+						
+		}
+}
+.connectordot-tl{	
+	.pos-top-left(-80px, 20px);
+	.heigh-x-width(80px, 2px);
+	.dark-bg;
+	
+		&:before{
+					
+			.pos-top-right(-5px, -4px);
+			.dot;	
+				
+		}
+}
+.connectordot-tm{
+	margin-right:-1px;
+		
+	.pos-top-right(-80px, 50%);
+	.heigh-x-width(80px, 2px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-right(-5px, -4px);
+			.dot;	
+				
+		}
+}
+.connectordot-tr{
+	.pos-top-right(-80px, 20px);
+	.heigh-x-width(80px, 2px);
+	.dark-bg;
+		
+		&:before{
+			
+			.pos-top-right(-5px, -4px);
+			.dot;	
+			
+		}
+}
+
+/* RIGHT */
+
+.connectordot-right{	
+	.pos-top-right(-29px, -69px);
+	.heigh-x-width(2px, 80px);
+	.rotate(-45deg);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-right(-5px, -4px);		
+			.dot;	
+			
+		}
+}
+.connectordot-rt{
+	.pos-top-right(20px, -80px);
+	.heigh-x-width(2px, 80px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-right(-5px, -4px);		
+			.dot;	
+			
+		}
+}
+.connectordot-rm{
+	margin-top:-1px;
+		
+	.pos-top-right(50%, -80px);
+	.heigh-x-width(2px, 80px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-right(-4px, -5px);
+			.dot;
+					
+		}
+}
+.connectordot-rb{	
+	.pos-bottom-right(20px, -80px);
+	.heigh-x-width(2px, 80px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-right(-4px, -5px);		
+			.dot;
+				
+		}	
+}
+
+/* BOTTOM */
+
+.connectordot-bottom{
+	.pos-bottom-right(-29px, -69px);
+	.heigh-x-width(2px, 80px);
+	.rotate(45deg);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-right(-4px, -5px);
+			.dot;	
+				
+		}
+}
+.connectordot-bl{	
+	.pos-bottom-left(-80px, 20px);
+	.heigh-x-width(80px, 2px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-bottom-right(-5px, -4px);
+			.dot;
+					
+		}
+}
+
+.connectordot-bm{
+	margin-right:-1px;
+	
+	.pos-bottom-right(-80px, 50%);
+	.heigh-x-width(80px, 2px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-bottom-right(-5px, -4px);
+			.dot;
+			
+		}
+}
+.connectordot-br{	
+	.pos-bottom-right(-80px, 20px);
+	.heigh-x-width(80px, 2px);
+	.dark-bg;
+		
+		&:before{
+			
+			.pos-bottom-right(-5px, -4px);
+			.dot;	
+				
+		}
+}
+
+/* LEFT */
+
+.connectordot-left{	
+	.pos-bottom-left(-29px, -69px);
+	.heigh-x-width(2px, 80px);
+	.rotate(-45deg);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-left(-4px, -5px);
+			.dot;
+				
+		}
+}
+.connectordot-lt{	
+	.pos-top-left(20px, -80px);
+	.heigh-x-width(2px, 80px);
+	.dark-bg;
+	
+		&:before{
+	
+			.pos-top-left(-4px, -5px);
+			.dot;
+					
+		}
+}
+.connectordot-lm{
+	margin-top:-1px;
+		
+	.pos-top-left(50%, -80px);
+	.heigh-x-width(2px, 80px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-left(-4px, -5px);		
+			.dot;
+				
+		}
+}
+.connectordot-lb{	
+	.pos-bottom-left(20px, -80px);
+	.heigh-x-width(2px, 80px);
+	.dark-bg;
+	
+		&:before{
+			
+			.pos-top-left(-4px, -5px);		
+			.dot;
+					
+		}
+}
+
+/*** ARROWS **************************************/
+
+/* TOP */
+
+.connectorarrow-tle{
+	
+	.borders(@border-trans-10, @border-trans-10, @border-grey-10, @border-grey-10);
+	.pos-top-left(-20px, -1px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, @border-trans-10, @border-white-10, @border-white-10);
+		.pos-top-left(-7px, -9px);
+		
+	}
+}
+.connectorarrow-tl{
+		
+	.borders(none, @border-trans-12, @border-grey-12, @border-trans-12);
+	.pos-top-left(-12px, 20px);
+	
+	&:before{
+		content : "";
+		
+		.borders(none, @border-trans-10, @border-white-10, @border-trans-10);
+		.pos-top-left(2px, -10px);
+		
+	}
+}
+.connectorarrow-tm{
+	margin : 0 -12px 0 0;
+	
+	.borders(none, @border-trans-12, @border-grey-12, @border-trans-12);
+	.pos-top-right(-12px, 50%);
+
+	&:before{
+		content : "";
+		
+		.borders(none, @border-trans-10, @border-white-10, @border-trans-10);
+		.pos-top-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-tr{
+	
+	.borders(none, @border-trans-12, @border-grey-12, @border-trans-12);
+	.pos-top-right(-12px, 20px);
+	
+	&:before{
+		content : "";
+		
+		.borders(none, @border-trans-10, @border-white-10, @border-trans-10);
+		.pos-top-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-tre{
+	
+	.borders(@border-trans-10, @border-grey-10, @border-grey-10, @border-trans-10);
+	.pos-top-right(-20px, -1px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, @border-white-10, @border-white-10, @border-trans-10);
+		.pos-top-left(-7px, -11px);
+		
+	}
+}
+
+/* RIGHT */
+
+.connectorarrow-rte{
+	
+	.borders(@border-grey-10, @border-trans-10, @border-trans-10, @border-grey-10);
+	.pos-top-right(-1px, -21px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-trans-10, @border-trans-10, @border-white-10);
+		.pos-top-right(-9px, -8px);
+		
+	}
+}
+.connectorarrow-rt{
+
+	.borders(@border-trans-12, none, @border-trans-12, @border-grey-12);
+	.pos-top-right(20px, -12px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, none, @border-trans-10, @border-white-10);		
+		.pos-top-right(-10px, 2px);
+		
+	}
+}
+.connectorarrow-rm{
+	margin : -12px 0 0 0;
+	
+	.borders(@border-trans-12, none, @border-trans-12, @border-grey-12);
+	.pos-top-right(50%, -12px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, none, @border-trans-10, @border-white-10);
+	    .pos-top-right(-10px, 2px);
+		
+	}
+}
+.connectorarrow-rb{
+	
+    .borders(@border-trans-12, none, @border-trans-12, @border-grey-12);
+    .pos-bottom-right(20px, -12px);
+
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, none, @border-trans-10, @border-white-10);
+		.pos-top-right(-10px, 2px);
+		
+	}
+}
+.connectorarrow-rbe{
+
+    .borders(@border-trans-10, @border-trans-10, @border-grey-10, @border-grey-10);
+    .pos-bottom-right(-1px, -21px);	
+
+	&:before{
+		content  : "";
+		
+		.borders(@border-trans-10, @border-trans-10, @border-white-10, @border-white-10);
+		.pos-bottom-right(-9px, -8px);
+		
+	}
+}
+
+/* BOTTOM */
+
+.connectorarrow-ble{
+	
+	.borders(@border-grey-10, @border-trans-10, @border-trans-10, @border-grey-10);
+	.pos-bottom-left(-20px, -1px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-trans-10, @border-trans-10, @border-white-10);
+		.pos-bottom-left(-7px, -9px);
+		
+	}
+}
+.connectorarrow-bl{
+
+	.borders(@border-grey-12, @border-trans-12, none, @border-trans-12);
+	.pos-bottom-left(-12px, 20px);
+
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-trans-10, none, @border-trans-10);
+		.pos-bottom-left(2px, -10px);
+		
+	}
+}
+.connectorarrow-bm{
+	margin : 0 -12px 0 0;
+
+	.borders(@border-grey-12, @border-trans-12, none, @border-trans-12);
+    .pos-bottom-right(-12px, 50%);
+
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-trans-10, none, @border-trans-10);
+		.pos-bottom-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-br{
+	
+	.borders(@border-grey-12, @border-trans-12, none, @border-trans-12);
+    .pos-bottom-right(-12px, 20px);
+
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-trans-10, none, @border-trans-10);
+		.pos-bottom-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-bre{
+
+	.borders(@border-grey-10, @border-grey-10, @border-trans-10, @border-trans-10);
+    .pos-bottom-right(-20px, -1px);
+
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-white-10, @border-trans-10, @border-trans-10);
+		.pos-bottom-right(-7px, -9px);
+		
+	}
+}
+
+/* LEFT */
+
+.connectorarrow-lte{
+	
+	.borders(@border-grey-10, @border-grey-10, @border-trans-10, @border-trans-10);
+	.pos-top-left(-1px, -21px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-white-10, @border-white-10, @border-trans-10, @border-trans-10);
+		.pos-top-left(-9px, -8px);
+		
+	}
+}
+.connectorarrow-lt{
+	
+	.borders(@border-trans-12, @border-grey-12, @border-trans-12, none);
+    .pos-top-left(20px, -12px);
+
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, @border-white-10, @border-trans-10, none);
+		.pos-top-right(-10px, -12px);
+		
+	}
+}
+.connectorarrow-lm{
+	margin : -12px 0 0 0;
+	
+	.borders(@border-trans-12, @border-grey-12, @border-trans-12, none);
+	.pos-top-left(50%, -12px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, @border-white-10, @border-trans-10, none);
+		.pos-top-right(-10px, -12px);
+		
+	}
+}
+.connectorarrow-lb{
+	
+	.borders(@border-trans-12, @border-grey-12, @border-trans-12, none);
+	.pos-bottom-left(20px, -12px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, @border-white-10, @border-trans-10, none);
+		.pos-top-right(-10px, -12px);
+		
+	}
+}
+.connectorarrow-lbe{
+	
+	.borders(@border-trans-10, @border-grey-10, @border-grey-10, @border-trans-10);
+	.pos-bottom-left(-1px, -21px);
+	
+	&:before{
+		content : "";
+		
+		.borders(@border-trans-10, @border-white-10, @border-white-10, @border-trans-10);
+		.pos-bottom-left(-9px, -8px);
+		
+	}
+}

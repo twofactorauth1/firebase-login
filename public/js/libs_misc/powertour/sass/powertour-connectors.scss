@@ -1,0 +1,574 @@
+/*
+ * ************************************************************* *
+ * Name         :  Power Tour connectors (SASS)                  *
+ * Description  :  CSS for the tour plugin.                      *
+ * Version      :  Version 2.1.0                                 *
+ * Author       :  CreativeMilk                                  *
+ * Author URI   :  www.creativemilk.net                          *
+ * Updated      :  2014-08-26 17:13:18 UTC+02:00                 *
+ * Copyright    :  (c) 2012 CreativeMilk                         *
+ * ************************************************************* *
+ */
+
+// var(s) ********************************************************
+
+$bg-dark         : #333;
+$bg-white        : #fff;
+$border-trans-10 : 10px solid transparent;
+$border-trans-12 : 12px solid transparent;
+$border-white-10 : 10px solid #fff;
+$border-grey-10  : 10px solid #ccc;
+$border-grey-12  : 12px solid #ccc;
+$border-dark-2   : 2px solid #333;
+
+// mixin(s) ******************************************************
+
+@mixin rotate($deg){
+	transform         : rotate($deg);
+	-ms-transform     : rotate($deg);
+	-webkit-transform : rotate($deg);
+}
+@mixin heigh-x-width($h, $w){
+	height : $h;
+	width  : $w;
+}
+@mixin dot{	
+	height                : 10px;
+	width                 : 10px;
+	position              : absolute;
+	content               : "";
+	background-color      : $bg-white;
+	border                : $border-dark-2;	
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+@mixin pos-bottom-left($b, $l){
+	bottom   : $b;
+	left     : $l;
+	position : absolute;	
+}
+@mixin pos-bottom-right($b, $r){
+	bottom   : $b;
+	right    : $r;
+	position : absolute;	
+}
+@mixin pos-top-right($t, $r){
+	top      : $t;
+	right    : $r;
+	position : absolute;	
+}
+@mixin pos-top-left($t, $l){
+	top      : $t;
+	left     : $l;
+	position : absolute;
+}
+@mixin dark-bg{
+	background-color:$bg-dark;
+}
+@mixin borders($t, $r, $b, $l){
+	border-top    : $t;	
+	border-right  : $r;
+	border-bottom : $b;	
+	border-left   :	$l;	
+}
+
+// base **********************************************************
+
+/*** DOTS ****************************************/
+
+/* TOP */
+
+.connectordot-top{	
+	@include pos-top-left(-29px, -69px);
+	@include heigh-x-width(2px, 80px);
+	@include rotate(45deg);
+	@include dark-bg;
+	
+		&:before{
+						
+			@include pos-top-left(-4px, -5px);
+			@include dot;	
+						
+		}
+}
+.connectordot-tl{	
+	@include pos-top-left(-80px, 20px);
+	@include heigh-x-width(80px, 2px);
+	@include dark-bg;
+	
+		&:before{
+					
+			@include pos-top-right(-5px, -4px);
+			@include dot;	
+				
+		}
+}
+.connectordot-tm{
+	margin-right:-1px;
+		
+	@include pos-top-right(-80px, 50%);
+	@include heigh-x-width(80px, 2px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-right(-5px, -4px);
+			@include dot;	
+				
+		}
+}
+.connectordot-tr{
+	@include pos-top-right(-80px, 20px);
+	@include heigh-x-width(80px, 2px);
+	@include dark-bg;
+		
+		&:before{
+			
+			@include pos-top-right(-5px, -4px);
+			@include dot;	
+			
+		}
+}
+
+/* RIGHT */
+
+.connectordot-right{	
+	@include pos-top-right(-29px, -69px);
+	@include heigh-x-width(2px, 80px);
+	@include rotate(-45deg);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-right(-5px, -4px);		
+			@include dot;	
+			
+		}
+}
+.connectordot-rt{
+	@include pos-top-right(20px, -80px);
+	@include heigh-x-width(2px, 80px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-right(-5px, -4px);		
+			@include dot;	
+			
+		}
+}
+.connectordot-rm{
+	margin-top:-1px;
+		
+	@include pos-top-right(50%, -80px);
+	@include heigh-x-width(2px, 80px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-right(-4px, -5px);
+			@include dot;
+					
+		}
+}
+.connectordot-rb{	
+	@include pos-bottom-right(20px, -80px);
+	@include heigh-x-width(2px, 80px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-right(-4px, -5px);		
+			@include dot;
+				
+		}	
+}
+
+/* BOTTOM */
+
+.connectordot-bottom{
+	@include pos-bottom-right(-29px, -69px);
+	@include heigh-x-width(2px, 80px);
+	@include rotate(45deg);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-right(-4px, -5px);
+			@include dot;	
+				
+		}
+}
+.connectordot-bl{	
+	@include pos-bottom-left(-80px, 20px);
+	@include heigh-x-width(80px, 2px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-bottom-right(-5px, -4px);
+			@include dot;
+					
+		}
+}
+
+.connectordot-bm{
+	margin-right:-1px;
+	
+	@include pos-bottom-right(-80px, 50%);
+	@include heigh-x-width(80px, 2px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-bottom-right(-5px, -4px);
+			@include dot;
+			
+		}
+}
+.connectordot-br{	
+	@include pos-bottom-right(-80px, 20px);
+	@include heigh-x-width(80px, 2px);
+	@include dark-bg;
+		
+		&:before{
+			
+			@include pos-bottom-right(-5px, -4px);
+			@include dot;	
+				
+		}
+}
+
+/* LEFT */
+
+.connectordot-left{	
+	@include pos-bottom-left(-29px, -69px);
+	@include heigh-x-width(2px, 80px);
+	@include rotate(-45deg);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-left(-4px, -5px);
+			@include dot;
+				
+		}
+}
+.connectordot-lt{	
+	@include pos-top-left(20px, -80px);
+	@include heigh-x-width(2px, 80px);
+	@include dark-bg;
+	
+		&:before{
+	
+			@include pos-top-left(-4px, -5px);
+			@include dot;
+					
+		}
+}
+.connectordot-lm{
+	margin-top:-1px;
+		
+	@include pos-top-left(50%, -80px);
+	@include heigh-x-width(2px, 80px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-left(-4px, -5px);		
+			@include dot;
+				
+		}
+}
+.connectordot-lb{	
+	@include pos-bottom-left(20px, -80px);
+	@include heigh-x-width(2px, 80px);
+	@include dark-bg;
+	
+		&:before{
+			
+			@include pos-top-left(-4px, -5px);		
+			@include dot;
+					
+		}
+}
+
+/*** ARROWS **************************************/
+
+/* TOP */
+
+.connectorarrow-tle{
+	
+	@include borders($border-trans-10, $border-trans-10, $border-grey-10, $border-grey-10);
+	@include pos-top-left(-20px, -1px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, $border-trans-10, $border-white-10, $border-white-10);
+		@include pos-top-left(-7px, -9px);
+		
+	}
+}
+.connectorarrow-tl{
+		
+	@include borders(none, $border-trans-12, $border-grey-12, $border-trans-12);
+	@include pos-top-left(-12px, 20px);
+	
+	&:before{
+		content : "";
+		
+		@include borders(none, $border-trans-10, $border-white-10, $border-trans-10);
+		@include pos-top-left(2px, -10px);
+		
+	}
+}
+.connectorarrow-tm{
+	margin : 0 -12px 0 0;
+	
+	@include borders(none, $border-trans-12, $border-grey-12, $border-trans-12);
+	@include pos-top-right(-12px, 50%);
+
+	&:before{
+		content : "";
+		
+		@include borders(none, $border-trans-10, $border-white-10, $border-trans-10);
+		@include pos-top-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-tr{
+	
+	@include borders(none, $border-trans-12, $border-grey-12, $border-trans-12);
+	@include pos-top-right(-12px, 20px);
+	
+	&:before{
+		content : "";
+		
+		@include borders(none, $border-trans-10, $border-white-10, $border-trans-10);
+		@include pos-top-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-tre{
+	
+	@include borders($border-trans-10, $border-grey-10, $border-grey-10, $border-trans-10);
+	@include pos-top-right(-20px, -1px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, $border-white-10, $border-white-10, $border-trans-10);
+		@include pos-top-left(-7px, -11px);
+		
+	}
+}
+
+/* RIGHT */
+
+.connectorarrow-rte{
+	
+	@include borders($border-grey-10, $border-trans-10, $border-trans-10, $border-grey-10);
+	@include pos-top-right(-1px, -21px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-trans-10, $border-trans-10, $border-white-10);
+		@include pos-top-right(-9px, -8px);
+		
+	}
+}
+.connectorarrow-rt{
+
+	@include borders($border-trans-12, none, $border-trans-12, $border-grey-12);
+	@include pos-top-right(20px, -12px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, none, $border-trans-10, $border-white-10);		
+		@include pos-top-right(-10px, 2px);
+		
+	}
+}
+.connectorarrow-rm{
+	margin : -12px 0 0 0;
+	
+	@include borders($border-trans-12, none, $border-trans-12, $border-grey-12);
+	@include pos-top-right(50%, -12px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, none, $border-trans-10, $border-white-10);
+	    @include pos-top-right(-10px, 2px);
+		
+	}
+}
+.connectorarrow-rb{
+	
+    @include borders($border-trans-12, none, $border-trans-12, $border-grey-12);
+    @include pos-bottom-right(20px, -12px);
+
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, none, $border-trans-10, $border-white-10);
+		@include pos-top-right(-10px, 2px);
+		
+	}
+}
+.connectorarrow-rbe{
+
+    @include borders($border-trans-10, $border-trans-10, $border-grey-10, $border-grey-10);
+    @include pos-bottom-right(-1px, -21px);	
+
+	&:before{
+		content  : "";
+		
+		@include borders($border-trans-10, $border-trans-10, $border-white-10, $border-white-10);
+		@include pos-bottom-right(-9px, -8px);
+		
+	}
+}
+
+/* BOTTOM */
+
+.connectorarrow-ble{
+	
+	@include borders($border-grey-10, $border-trans-10, $border-trans-10, $border-grey-10);
+	@include pos-bottom-left(-20px, -1px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-trans-10, $border-trans-10, $border-white-10);
+		@include pos-bottom-left(-7px, -9px);
+		
+	}
+}
+.connectorarrow-bl{
+
+	@include borders($border-grey-12, $border-trans-12, none, $border-trans-12);
+	@include pos-bottom-left(-12px, 20px);
+
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-trans-10, none, $border-trans-10);
+		@include pos-bottom-left(2px, -10px);
+		
+	}
+}
+.connectorarrow-bm{
+	margin : 0 -12px 0 0;
+
+	@include borders($border-grey-12, $border-trans-12, none, $border-trans-12);
+    @include pos-bottom-right(-12px, 50%);
+
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-trans-10, none, $border-trans-10);
+		@include pos-bottom-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-br{
+	
+	@include borders($border-grey-12, $border-trans-12, none, $border-trans-12);
+    @include pos-bottom-right(-12px, 20px);
+
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-trans-10, none, $border-trans-10);
+		@include pos-bottom-right(2px, -10px);
+		
+	}
+}
+.connectorarrow-bre{
+
+	@include borders($border-grey-10, $border-grey-10, $border-trans-10, $border-trans-10);
+    @include pos-bottom-right(-20px, -1px);
+
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-white-10, $border-trans-10, $border-trans-10);
+		@include pos-bottom-right(-7px, -9px);
+		
+	}
+}
+
+/* LEFT */
+
+.connectorarrow-lte{
+	
+	@include borders($border-grey-10, $border-grey-10, $border-trans-10, $border-trans-10);
+	@include pos-top-left(-1px, -21px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-white-10, $border-white-10, $border-trans-10, $border-trans-10);
+		@include pos-top-left(-9px, -8px);
+		
+	}
+}
+.connectorarrow-lt{
+	
+	@include borders($border-trans-12, $border-grey-12, $border-trans-12, none);
+    @include pos-top-left(20px, -12px);
+
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, $border-white-10, $border-trans-10, none);
+		@include pos-top-right(-10px, -12px);
+		
+	}
+}
+.connectorarrow-lm{
+	margin : -12px 0 0 0;
+	
+	@include borders($border-trans-12, $border-grey-12, $border-trans-12, none);
+	@include pos-top-left(50%, -12px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, $border-white-10, $border-trans-10, none);
+		@include pos-top-right(-10px, -12px);
+		
+	}
+}
+.connectorarrow-lb{
+	
+	@include borders($border-trans-12, $border-grey-12, $border-trans-12, none);
+	@include pos-bottom-left(20px, -12px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, $border-white-10, $border-trans-10, none);
+		@include pos-top-right(-10px, -12px);
+		
+	}
+}
+.connectorarrow-lbe{
+	
+	@include borders($border-trans-10, $border-grey-10, $border-grey-10, $border-trans-10);
+	@include pos-bottom-left(-1px, -21px);
+	
+	&:before{
+		content : "";
+		
+		@include borders($border-trans-10, $border-white-10, $border-white-10, $border-trans-10);
+		@include pos-bottom-left(-9px, -8px);
+		
+	}
+}

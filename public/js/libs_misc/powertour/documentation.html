@@ -1,0 +1,1890 @@
+<!DOCTYPE html> 
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+     
+    <title>Power Tour - A powerfull and creative jQuery tour solution</title>
+
+ 	<!-- SEO META -->
+    
+    <meta name="description" content="Powerfull creative jQuery tour plugin to show off your products, sites or other things.">
+    <meta name="keywords" content="HTML,HTML5,CSS,CSS3,JavaScript,jQuery,plugins,tour,helpers,tooltip,wordpress,creative, presantation">
+    <meta name="author" content="CreativeMilk">
+
+    <!-- SOCIAL META -->
+     
+	<meta property="og:title" content="Power Tour - Powerfull creative jQuery tour plugin" />
+    <meta property="og:url" content="http://www.jquerypowertour.com" />
+    <meta property="og:image" content="http://www.jquerypowertour.com/images/overview.jpg" />
+    <meta property="og:description" content="Powerfull creative jQuery tour plugin to show off your products, sites or other things." />
+        
+    <!-- SITE -->
+    
+    <link rel="shortcut icon" href="images/favicon-v2.ico" /> 
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="fontawesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/style-v2.css"/>
+
+    <!--[if gt IE 8]><!-->
+	<script src="js/prism.min.js"></script>
+    <link rel="stylesheet" href="css/prism.css"/>
+    <!-- <![endif]-->
+    
+    <script src="js/modernizr.min.js"></script>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/main-v2.min.js"></script>   
+
+   	<!--[if lte IE 8]>
+    <script src="js/respond.js"></script> 
+    <![endif]-->  
+    
+</head>
+<body>
+    <div id="container">
+    
+    	<div id="bg">&nbsp;</div>
+        
+    	<header id="header-main">
+			<div id="header-main-top">
+                <div class="inner clearfix">
+                    <a href="index.html" id="logo" alt="logo">
+                    	<img src="images/logo.jpg" alt="logo"/>
+                    </a>
+                    <nav id="nav-top">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li class="active"><a href="documentation.html">Documentation</a></li>
+                            <li><a href="extend.html">Extend</a></li>
+                            <li><a href="builder.html">Builder</a></li>
+                        </ul>
+                    </nav>
+                    <div>
+                    	<a href="http://bit.ly/RKcRDu" title="buy this plugin" class="btn pull-right">Buy plugin</a>
+                    </div>
+				</div> 
+			</div> 
+          	<div id="header-main-mid" class="clearfix">
+				<div class="inner clearfix">
+                	<div class="heading clearfix">
+                        <h1>Documentation</h1>
+                        <h2>Everyting you need to know about the plugin</h2>
+                    </div>
+                   	<div class="header-main-subbar clearfix"></div> 
+				</div>
+			</div>
+        </header>  
+        <div id="main">
+        	<div class="inner clearfix">
+            	<aside id="sidebar-main">
+                	<div id="menubox">
+                        <strong>Navigation</strong>
+                        <nav id="nav-main">
+                            <ul class="nav">
+                            	<li><a href="#doc-about" class="gotoid">About</a></li>
+                                <li><a href="#doc-install-plugin" class="gotoid">Install plugin</a></li>
+                                <li><a href="#doc-setup-plugin" class="gotoid">Setup plugin</a></li>
+                                <li><a href="#doc-building-steps" class="gotoid">Building the steps</a></li>
+                                <li><a href="#doc-tourtriggers" class="gotoid">Tour triggers</a></li>
+                                <li><a href="#doc-positions" class="gotoid">Positions</a></li>
+                                <li><a href="#doc-callback-functions" class="gotoid">Callback functions</a></li>
+                                <li><a href="#doc-navigation" class="gotoid">Navigation</a></li>
+                                <li><a href="#doc-animations" class="gotoid">Animations</a></li>
+                                <li><a href="#doc-validation" class="gotoid">Validation</a></li>
+                                <li><a href="#doc-methods" class="gotoid">Methods</a></li> 
+                                <li><a href="#doc-migrate" class="gotoid">Migrate from 1.x to 2.x.x</a></li>
+                                <li><a href="#doc-misc" class="gotoid">Misc</a></li> 
+                            </ul>
+                        </nav>
+                     </div>
+                </aside>
+                <div id="content">
+                	<section class="blocks" id="doc-about">
+                        <div class="heading-block">
+                            <h3>About</h3>
+                            <h4>Welcome to the Power Tour plugin.</h4>
+                        </div>
+                        <p>
+                        Power Tour is a powerfull jQuery tour plugin, which can be used as a tour, helpers, guides or tooltips. 
+                        The plugin is pretty powerfull and has a lot of options which gives you the power to build a very cool and creative tour. 
+                        </p>
+                    </section>
+        			<section class="blocks" id="doc-install-plugin">
+                        <div class="heading-block">
+                            <h3>Install plugin</h3>
+                            <h4>How to install the Power Tour plugin.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-1-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-1-b" data-toggle="tab">Usage</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab-1-a">
+                            	<p>These files should be added inside the <code>&lt;head&gt;</code> element or at the bottom of the HTML/PHP file(s).</p>
+                                <p></p>
+                                <strong>The Power Tour files:</strong>
+                                <p></p>
+                                <ol>
+                                	<li>
+                                        <strong>jquery-x.x.x.min.js</strong> (required)
+                                        <br/>
+                                        jQuery main core file.
+                                    </li>
+                                	<li>
+                                        <strong>powertour.2.x.x.min.js</strong> (required)
+                                        <br/>
+                                    	Power Tour jQuery core file.
+                                    </li>
+                                	<li>
+                                        <strong>powertour.2.x.x.css</strong> (required)
+                                        <br/>
+                                    	Power Tour CSS core file.
+                                    </li>
+                                	<li>
+                                        <strong>powertour-style-clean.css</strong> (optional)
+                                        <br/>
+                                    	Power Tour styling CSS file.
+                                    </li>
+                                	<li>
+                                        <strong>animate.min.css</strong> (optional)
+                                        <br/>
+                                    	CSS3 animations used for the plugin FX.
+                                    </li>
+                                </ol>
+                                <p></p>
+                                <div class="attention-box attention-warning">
+                                    <h4>Preprocessors</h4> 
+                                    <p>All CSS files come in the folowing extentions: .css .less(LESS) &amp; .scss(SASS).</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab-1-b">
+                                <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;!-- PowerTour core stylesheet(required) --&gt;
+&lt;link rel="stylesheet" href="css/powertour.2.1.4.css"/&gt;
+&lt;!-- PowerTour styling stylesheet (optional) --&gt;
+&lt;link rel="stylesheet" href="css/powertour-style-clean.css"/&gt;
+&lt;!-- CSS3 animations stylesheet(needed for animations) --&gt;
+&lt;link rel="stylesheet" href="css/animate.min.css"/&gt;
+
+&lt;!-- jQuery core (required) --&gt;
+&lt;script src="js/jquery-1.11.0.min.js"&gt;&lt;/script&gt;
+&lt;!-- PowerTour plugin (required) --&gt;
+&lt;script src="js/powertour.2.1.4.min.js"&gt;&lt;/script&gt;</code></pre>   
+                            </div>
+                        </div> 
+                    </section>
+                    
+					<section class="blocks" id="doc-setup-plugin">
+                        <div class="heading-block">
+                            <h3>Setup plugin</h3>
+                            <h4>How to build your first Power Tour.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                        	<li class="active"><a href="#tab-2" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-2-a" data-toggle="tab">Usage</a></li>
+                            <li><a href="#tab-2-b" data-toggle="tab">Tour</a></li>
+                            <li><a href="#tab-2-c" data-toggle="tab">Step</a></li>
+                            <li><a href="#tab-2-d" data-toggle="tab">Defaults</a></li>
+                            <li><a href="#tab-2-e" data-toggle="tab">Structure</a></li>
+                            <li><a href="#tab-2-f" data-toggle="tab">Reference</a></li>
+                        </ul>	
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-2">
+                            	<p>The Power Tour plugin alows you to setup multiple tours with multiple steps on the same page. You even can continue on the next page with the tour if needed.</p> 
+                                <p>As of version 2 all steps have a default value(see defaults) this to prevent extra lines of code.</p>
+                                <p></p>
+                                <div class="attention-box attention-warning">
+                                    <h4>Prevent errors</h4> 
+                                    <p>Initializing the tour more than once on a page will result in an error.</p>
+                                </div>
+                                <p></p>
+                                <div class="attention-box attention-warning">
+                                    <h4>Step defaults</h4> 
+                                    <p>The Step defaults options must always be present, if not the plugin will not work proper.</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab-2-a">
+                                <pre class="line-numbers" data-label="javascript"><code class="language-javascript">$('body').powerTour({
+tours : [
+	{
+            trigger            : '#starttour',
+            startWith          : 1,
+            easyCancel         : true,
+            escKeyCancel       : true,
+            scrollHorizontal   : false,
+            keyboardNavigation : true,
+            loopTour           : false,
+            onStartTour        : function(ui){ },
+            onEndTour          : function(ui){ },	
+            onProgress         : function(ui){ },
+            steps : [
+                    {
+                        hookTo          : '#hook-one',
+                        content         : '#step-one',
+                        width           : 370,
+                        position        : 'str',
+                        offsetY         : -20,
+                        offsetX         : -20,
+                        fxIn            : 'flipInX',
+                        fxOut           : 'bounceOutLeft',
+                        showStepDelay   : 0,
+                        center          : 'step',
+                        scrollSpeed     : 400,
+                        scrollEasing    : 'swing',
+                        scrollDelay     : 0,
+                        timer           : '01:09',
+                        highlight       : false,
+                        keepHighlighted : false,
+                        onShowStep      : function(ui){},
+                        onHideStep      : function(ui){ }
+                    },
+                    {
+                        hookTo          : '#hook-two',
+                        content         : '#step-two',
+                        width           : 365,
+                        position        : 'br',
+                        offsetY         : 30,
+                        offsetX         : 20,
+                        fxIn            : 'bounceIn',
+                        fxOut           : 'flipOutY',
+                        showStepDelay   : 1000,
+                        center          : 'step',
+                        scrollSpeed     : 400,
+                        scrollEasing    : 'swing',
+                        scrollDelay     : 1000,
+                        timer           : false,
+                        highlight       : true,
+                        keepHighlighted : false,
+                        onShowStep      : function(ui){ },
+                        onHideStep      : function(ui){ }
+                    },
+                    {
+                        // step 3 goes here
+                    }
+                ],
+                stepDefaults : [
+                    {
+                        width           : 300,
+                        position        : 'tr',
+                        offsetY         : 0,
+                        offsetX         : 0,
+                        fxIn            : 'fadeIn',
+                        fxOut           : 'fadeOut',
+                        showStepDelay   : 0,
+                        center          : 'step',
+                        scrollSpeed     : 400,
+                        scrollEasing    : 'swing',
+                        scrollDelay     : 0,
+                        timer           : '00:00',
+                        highlight       : true,
+                        keepHighlighted : false,
+                        onShowStep      : function(ui){ },
+                        onHideStep      : function(ui){ }
+                    }
+                 ]
+            },
+            {
+               // tour 2 goes here
+            }
+        ]
+});</code></pre>
+                       		    </div>
+                    			<div class="tab-pane" id="tab-2-b">
+									<pre class="line-numbers" data-label="javascript"><code class="language-javascript">tours: [
+	{
+        trigger            : '#starttour',
+        startWith          : 1,
+        easyCancel         : true,
+        escKeyCancel       : true,
+        scrollHorizontal   : 'vertical',
+        keyboardNavigation : true,
+        loopTour           : false,
+        onStartTour        : function(ui){ },	
+        onEndTour          : function(ui){ },
+        onProgress         : function(ui){ },
+        steps              : [ ],
+        stepDefaults       : [ ]
+    }
+]</code></pre> 	
+                        		</div>
+                        		<div class="tab-pane" id="tab-2-c">
+									<pre class="line-numbers" data-label="javascript"><code class="language-javascript">steps : [
+	{
+        hookTo          : '#hook-eight',
+        content         : '#step-eight',
+        width           : 405,
+        position        : 'br',
+        offsetY         : 0,
+        offsetX         : 0,
+        fxIn            : 'fadeIn',
+        fxOut           : 'fadeOut',
+        showStepDelay   : 500,
+        center          : 'step',
+        scrollSpeed     : 400,
+        scrollEasing    : 'swing',
+        scrollDelay     : 0,
+        timer           : '00:00',
+        highlight       : false,
+        keepHighlighted : false,
+        onShowStep      : function(ui){},
+        onHideStep      : function(ui){ }
+    }
+]</code></pre> 
+                        		</div>
+                        		<div class="tab-pane" id="tab-2-d">
+ 									<pre class="line-numbers" data-label="javascript"><code class="language-javascript">stepDefaults : [
+	{
+        width           : 300,
+        position        : 'tr',
+        offsetY         : 0,
+        offsetX         : 0,
+        fxIn            : 'fadeIn',
+        fxOut           : 'fadeOut',
+        showStepDelay   : 0,
+        center          : 'step',
+        scrollSpeed     : 400,
+        scrollEasing    : 'swing',
+        scrollDelay     : 0,
+        timer           : '00:00',
+        highlight       : true,
+        keepHighlighted : false,
+        onShowStep      : function(ui){ },
+        onHideStep      : function(ui){ }
+    }
+]</code></pre> 
+                        		</div>
+								<div class="tab-pane" id="tab-2-e">
+                        			<pre class="line-numbers" data-label="javascript"><code class="language-javascript">$('body').powerTour({
+	tours : [
+                {
+                    // TOUR 1
+                    
+                    steps : [
+                                {
+                                    // STEP 1
+                                },
+                                {
+                                    // STEP 2
+                                },
+                                {
+                                    // STEP 3
+                                } 
+                    ]
+                    stepDefaults : [
+                                        {
+                                            // STEP DEFAULTS
+                                        }
+                    ]
+                },
+                {
+                    // TOUR 2
+                },
+                {
+                    // TOUR 3
+                }
+    ]
+});</code></pre> 
+                        		</div>
+                                <div class="tab-pane" id="tab-2-f">
+                                    <div class="attention-box attention-warning">
+                                        <strong>Notice:</strong> required options are marked red.
+                                    </div>
+                                    <p></p>
+                                    <p></p>
+									<h4>Tour options</h4>
+                                    <p></p>
+                                    <p></p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Option</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Value</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>trigger</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                                <td></td>
+                                                <td>This is the button which will trigger the tour, this can be an id or class attribute.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>startWith</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                                <td></td>
+                                                <td>Choose the step which you want to start the tour with.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr> 
+                                                <td>easyCancel</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                                <td>true, false</td>
+                                                <td>If set to 'true' the tour will stop(cancel) if a user clicks outside the steps.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>escKeyCancel</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                                <td>true, false</td>
+                                                <td>If set to 'true' the tour will stop(cancel) if the user pressed the ECS key.</td>                                                
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>scrollHorizontal</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                                <td>true, false</td>
+                                                <td>If you use a horizontal layout you can set this to true.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>keyboardNavigation</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                                <td>true, false</td>
+                                                <td>Control the tour with the keyboard. More about keyboard navigation <a href="#doc-keyboard-navigation" class="gotoid">here</a>.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>loopTour</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                                <td>true, false</td>
+                                                <td>This allows the tour to loop. It can loop in both directions(last step -> first step, first step -> last step).</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onStartTour</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                                <td></td>
+                                                <td>This function is called once when the tour starts.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onEndTour</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                    			<td></td>
+                                                <td>This function is called when the tour ends.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onProgress</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                    			<td></td>
+                                                <td>This function is called every time a step is shown.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>steps</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Array" target="_blank">array</a></td>
+                                    			<td></td>
+                                                <td>This is where you build all of your steps.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>stepDefaults</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Array" target="_blank">array</a></td>
+                                    			<td></td>
+                                                <td>This option contains the default values of every step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                               
+                                        </tbody>
+                                    </table>
+                                    <p></p>
+                                    <p></p>
+									<h4>Step options</h4>
+                                    <p></p>
+                                    <p></p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Option</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Value</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr class="danger">
+                                                <td>hookTo</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td></td>
+                                                <td>This is the element where you hook the step to.
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> can only be empty with screen positions.
+                                                (if default value is a non-screen position and one of the steps 'hookTo' value is empty an error will occur).</div>
+                                                </td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>content</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td></td>
+                                                <td>This element contains all of the step contents.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>width</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>The width of the step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>position</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a> or 
+                                                <a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td><a href="#doc-positions" class="gotoid">see below</a></td>
+                                                <td>The position of the step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>offsetX</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>This is the X offset of the step, this can be an positive or negative number.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>offsetY</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>This is the Y offset of the step, this can be an positive or negative number.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>fxIn</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td><a href="#doc-animations" class="gotoid">see below</a></td>
+                                                <td>Show step animation.Use the value 'none' if you dont want to use any kind of animations.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>fxOut</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td><a href="#doc-animations" class="gotoid">see below</a></td>
+                                                <td>Hide step animation. Use the value 'none' if you dont want to use any kind of animations.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>showStepDelay</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>An delay to show a step. For no delay set to '0'. Value = milliseconds.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>center</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td>step, hook</td>
+                                                <td>Choose which element should be centerd. Step or the hook.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>scrollSpeed</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>The speed of the animation scroll. Set to '0' to jump directly to the nex/prev hook. Value = milliseconds.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>scrollEasing</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td>swing, linear</td>
+                                                <td>Scroll easing animations. You can use more in combination with the <a href="http://jqueryui.com/resources/demos/effect/easing.html" target="_blank">jQuery UI suite</a>.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>scrollDelay</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>A delay before the scrolling starts. Value = milliseconds.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>timer</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a> or <a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td>time, false</td>
+                                                <td>All steps can have an endtime, this when it ends the tour will continue to the next step. Set to 'false' to disable it. 
+                                                You can use 'powertour-placeholder="timer"' to display the countdown.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>highlight</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td>true, false</td>
+                                                <td>You can highlight a step, this means that everything except the step and hook will be blurred.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>keepHighlighted</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td>true, false</td>
+                                                <td>If set to true and if the next step has the option 'higlight' set to true it will keep the overlay/mask active.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onShowStep</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                    			<td></td>
+                                                <td>This callback function will run when the step is shown.</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>onHideStep</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                    			<td></td>
+                                                <td>This callback function will run when the step goes back to his hidden state.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                               
+                                        </tbody>
+                                    </table>
+                                    <p></p>
+                                    <p></p>
+									<h4>Stepdefault options</h4>
+                                    <p></p>
+                                    <p></p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Option</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Value</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr class="danger">
+                                                <td>width</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>The width of the step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>position</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a> or 
+                                                <a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td><a href="#doc-positions" class="gotoid">see below</a></td>
+                                                <td>The position of the step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>offsetX</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>This is the X offset of the step, this can be an positive or negative number.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>offsetY</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>This is the Y offset of the step, this can be an positive or negative number.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>fxIn</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td><a href="#doc-animations" class="gotoid">see below</a></td>
+                                                <td>Show step animation. Leave this option empty if you dont want to use any kind of animations.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>fxOut</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td><a href="#doc-animations" class="gotoid">see below</a></td>
+                                                <td>Hide step animation. Leave this option empty if you dont want to use any kind of animations.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>showStepDelay</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>An delay to show a step. For no delay set to '0'. Value = milliseconds.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>center</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td>step, hook</td>
+                                                <td>Choose which element should be centerd. Step or the hook.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>scrollSpeed</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>The speed of the animation scroll. Set to '0' to jump directly to the nex/prev hook. Value = milliseconds.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>scrollEasing</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                    			<td>swing, linear</td>
+                                                <td>Scroll easing animations. You can use more in combination with the <a href="http://jqueryui.com/resources/demos/effect/easing.html" target="_blank">jQuery UI suite</a>.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>scrollDelay</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                    			<td></td>
+                                                <td>A delay before the scrolling starts. Value = milliseconds.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>timer</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a> or <a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td>time, false</td>
+                                                <td>All steps can have an endtime, this when it ends the tour will continue to the next step. Set to 'false' to disable it.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>highlight</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td>true, false</td>
+                                                <td>You can highlight a step, this means that everything except the step and hook will be blurred.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr class="danger">
+                                                <td>keepHighlighted</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Boolean" target="_blank">boolean</a></td>
+                                    			<td>true, false</td>
+                                                <td>If set to true and if the next step has the option 'higlight' set to true it will keep the overlay/mask active.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onShowStep</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                    			<td></td>
+                                                <td>This callback function will run when the step is shown.</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>onHideStep</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                    			<td></td>
+                                                <td>This callback function will run when the step goes back to his hidden state.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                                                                                                                                       
+                                        </tbody>
+                                    </table>
+                                </div>
+							</div>
+						</section>
+
+ 						<section class="blocks" id="doc-tourtriggers">
+                            <div class="heading-block">
+                                <h3>Tour triggers</h3>
+                                <h4>See the available ways to start a tour.</h4>
+                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab-33-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-33-b" data-toggle="tab">Trigger</a></li>
+                                <li><a href="#tab-33-c" data-toggle="tab">Method</a></li>
+                                <li><a href="#tab-33-d" data-toggle="tab">Url</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-33-a">
+                                    <p>The plugin provides 3 ways to start a tour, 1. using the trigger option(button), 2. using the public method called 'run', 3. using an url parameter.</p>
+                                    <p>All of the 3 ways allow a 'startwith' option to choose a step to start with.</p>
+                                    
+                                </div>
+                                <div class="tab-pane" id="tab-33-b">
+                                    <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;script&gt;
+	$(document).ready(function($){
+    
+    	// build tour
+    	$('body').powerTour({
+            tours:[
+            	{
+                	trigger: '.startthetour',
+                    startWith: 1,// or use the dataset attribute(see below)
+                    // all other options
+                }
+            ]
+        });
+    });   
+&lt;/script&gt;
+
+&lt;a href="#" titel="Start tour 1"&gt;Start tour 1(step 1)&lt;/a&gt;
+
+&lt;!-- override the 'startWith' option with the dataset attribute --&gt;
+&lt;a href="#" titel="Start tour 1" data-powertour-startwith="4"&gt;Start tour 1(step 4)&lt;/a&gt;</code></pre>  
+                                </div>
+ 								<div class="tab-pane" id="tab-33-c">
+                                    <pre class="line-numbers" data-label="javascript"><code class="language-javascript">$(document).ready(function($){
+                                    
+	// build tour
+    $('body').powerTour({
+        tours:[
+            {
+                trigger: '',
+                startWith: 0,
+                // all other options
+            }
+        ]
+    });  
+                         
+    // run the first tour(more info the the 'methods' section.
+    $('body').powerTour('run',0);
+    
+});</code></pre>  
+                                </div>
+ 								<div class="tab-pane" id="tab-33-d">
+                                    <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;!-- powertour=(1th tour) startwith=(4th step)--&gt;
+http://www.yoururl.com?powertour=1&startwith=4</code></pre>  
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <section class="blocks" id="doc-building-steps">
+                            <div class="heading-block">
+                                <h3>Building the steps</h3>
+                                <h4>How to build your own custom steps.</h4>
+                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab-3-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-3-b" data-toggle="tab">Usage</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-3-a">
+                                <p>You can use any kind of content inside the steps, this can be a simple form, some text or an carousel.</p>
+                                <p>You can use AJAX to load any kind content into a step once it's shown for the first time, this can be handy with big tours or steps.</p>
+                                <p></p>
+                                <p>More about using AJAX can be found on the <a href="extend.html">extend page</a>.</p>
+                                <p></p>
+                                <div class="attention-box attention-warning">
+                                    <h4>Hidden and dynamic content</h4>
+                                    <p>Using hidden or dynamic content inside the step may require the use of the 'update' method to re-position the step.</p>
+                                </div>
+                                <p></p>
+                                <div class="attention-box attention-warning">
+                                    <h4>Unique id's</h4>
+                                    <p>All steps need to have an unique id, this id is used to place the content in the right wrapper(step). You can not use the same step serveral times in the tour, 
+                                    as this will show an empty wrapper(step).</p>
+                                </div>
+                                </div>
+                                <div class="tab-pane" id="tab-3-b">
+                                    <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;div class="stylings-class" id="unique-id-of-step"&gt;
+    &lt;!-- place any kind of content here --&gt;
+&lt;/div&gt;</code></pre>  
+                                </div>
+                            </div>
+                        </section>
+                        
+						<section class="blocks" id="doc-positions">
+                            <div class="heading-block">
+                                <h3>Positions</h3>
+                                <h4>Give every step the right position.</h4>
+                            </div>
+                        	<ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-4-a" data-toggle="tab">Info <span></span></a></li>
+                                <li><a href="#tab-4-b" data-toggle="tab">Usage<span></span></a></li>
+                                <li><a href="#tab-4-c" data-toggle="tab">Reference</a></li>
+                                <li><a href="#tab-4-d" data-toggle="tab">Overview</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                            	<div class="tab-pane active" id="tab-4-a">
+                            	<p>Every step has it's own position option. The position can be divided into 2 types, 1. a hook related position, 2. a screen related position (these are fixed positions).
+                                 Both types can be adjusted with a negative/positive 'offsetX' and 'offsetY' value.</p>
+								</div>
+                                <div class="tab-pane" id="tab-4-b">
+                                   <pre class="line-numbers" data-label="javascript"><code class="language-javascript">steps : [
+	{
+     	position : 'br',
+    	//position : false, // use this if you dont want to set any position
+    	offsetX  : 20,
+    	offsetX  : -40
+    },
+    {
+        // next step
+    }
+],
+stepDefaults : [
+    {
+     	position : 'br',
+    	//position : false, // use this if you dont want to set any position
+    	offsetX  : 20,
+    	offsetX  : -40
+    }
+]</code></pre> 
+                                </div>
+                                <div class="tab-pane" id="tab-4-c">
+                					<table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Value</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>false</td>
+                                                <td>This will not set any position to the step.</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>tl</td>
+                                                <td>Top left of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>tm</td>
+                                                <td>Top mid of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>tr</td>
+                                                <td>Top right of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>rt</td>
+                                                <td>Right top of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>rm</td>
+                                                <td>Right mid of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>rb</td>
+                                                <td>Right bottom of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>rb</td>
+                                                <td>Right bottom of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>br</td>
+                                                <td>Bottom right of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>bm</td>
+                                                <td>Bottom mid of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>bl</td>
+                                                <td>Bottom left of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>bl</td>
+                                                <td>Bottom left of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>lb</td>
+                                                <td>Left bottom of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>lm</td>
+                                                <td>Left mid of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>lt</td>
+                                                <td>Left top of the hook</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>sc</td>
+                                                <td>Center of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>stl</td>
+                                                <td>Top left of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>stm</td>
+                                                <td>Top mid of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>str</td>
+                                                <td>Top right of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr>  
+                                            <tr>
+                                                <td>srm</td>
+                                                <td>Right mid of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>sbr</td>
+                                                <td>Bottom right of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>sbm</td>
+                                                <td>Bottom mid of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>slm</td>
+                                                <td>Left mid of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>sbr</td>
+                                                <td>Bottom right of the screen</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                                                                         
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab-4-d">
+                                    <div id="positions-overview">
+                                        <img src="images/positions-overview.png" alt="step positions overview"/>
+                                    </div>
+                                </div>
+                            </div>                 
+           				</section>
+                        
+        				<section class="blocks" id="doc-callback-functions">
+                            <div class="heading-block">
+                                <h3>Callback functions</h3>
+                                <h4>Extend the power of the plugin even more.</h4>
+                            </div>
+                            <ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-5-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-5-b" data-toggle="tab">Usage</a></li>
+                                <li><a href="#tab-5-c" data-toggle="tab">Reference</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                            	<div class="tab-pane active" id="tab-5-a">
+                                    <p>The Power Tour plugin provides several callback function which are fired at certain points in the tour. These functions can contain your own custom code to 
+                                    extend the power of this plugin even more.
+                                    </p>
+                                    <p></p>
+                                    <div class="attention-box attention-warning">
+                                        <h4>Valid code</h4>
+                                        <p>You must use valid code inside the callback functions, if not the tour will stop working.</p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab-5-b">
+<pre class="line-numbers" data-label="javascript"><code class="language-javascript">steps : [
+    {
+        onShowStep : function(ui){
+           
+           // example: add/remove a custom class  
+                          
+           ui.previousStep.removeClass('custom-current-step-class');    
+                        
+           ui.currentStep.addClass('custom-current-step-class');                     
+           
+        }
+    },
+    {
+        // next step
+    }
+],
+stepDefaults : [
+    {
+        onShowStep : function(ui){
+           
+           // example: add/remove a custom class  
+                          
+           ui.previousStep.removeClass('custom-current-step-class');    
+                        
+           ui.currentStep.addClass('custom-current-step-class');                     
+           
+        }
+    }
+]</code></pre> 
+                                </div>
+                                <div class="tab-pane" id="tab-5-c">
+									<h4>Functions</h4>
+                                    <p></p>
+                                    <p></p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Option</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>onStartTour</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                                <td>This function is called once when the tour starts.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onEndTour</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                                <td>This function is called when the tour ends.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onProgress</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                                <td>This function is called every time a step is shown.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>onShowStep</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                                <td>This callback function will run when the step is shown.</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>onHideStep</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Function" target="_blank">function</a></td>
+                                                <td>This callback function will run when the step goes back to his hidden state.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                        
+                                        </tbody>
+                                    </table>
+                                    <p></p>
+                                    <p></p>
+									<h4>Parameters</h4>
+                                    <p></p>
+                                    <p></p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Function</th>
+                                                <th scope="col">Parameter</th>
+                                                <th scope="col">Returns</th>
+                                                <th scope="col">Desctription</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>onStartTour</td>
+                                                <td>ui.currentStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="3">onEndTour</td>
+                                                <td>ui.currentStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ui.previousStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ui.endType</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#String" target="_blank">string</a></td>
+                                                <td>This will return the value 'stop'  (end by stop button), 'cancel' (end by easycancel) or 'end' (end by timer).</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="3">onProgress</td>
+                                                <td>ui.stepIndex</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                                <td>This is the current step index number.
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> this number is a zero based number.</div>
+                                                </td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ui.totalSteps</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                                <td>The number of steps that there are in the (current) tour.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ui.tourIndex</td>
+                                                <td><a href="http://en.wikipedia.org/wiki/JavaScript_syntax#Number" target="_blank">integer</a></td>
+                                                <td>This is the current tour index number. 
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> this number is a zero based number.</div></td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2">onShowStep</td>
+                                                <td>ui.currentStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ui.previousStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2">onHideStep</td>
+                                                <td>ui.currentStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>ui.previousStep</td>
+                                                <td>object</td>
+                                                <td>This is the current step object.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                                                              
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> 
+                    	</section>
+                        
+        				<section class="blocks" id="doc-navigation">
+                            <div class="heading-block">
+                                <h3>Navigation</h3>
+                                <h4>Be in control of the tour.</h4>
+                            </div>
+                            <ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-6-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-6-b" data-toggle="tab">Usage</a></li>
+                                <li><a href="#tab-6-c" data-toggle="tab">Reference</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                            	<div class="tab-pane active" id="tab-6-a">
+									<p>Manage the tour with the navigation actions. These custom dataset attributes can be used with almost every kind of element. 
+                                	Navigation actions are best used with a anchor element.</p>
+                                    <p>All navigation actions can be used in and outside the steps.</p>
+                                    <p>The tour at defaults supports the use of keyboard navigation, this allows you to navigate through the tour with the use of a keyboard.</p>
+                                </div>
+                                <div class="tab-pane" id="tab-6-b">
+                                    <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;a href="#" data-powertour-action="first"&gt;First&lt;/a&gt;
+&lt;a href="#" data-powertour-action="prev"&gt;Prev&lt;/a&gt;
+ 
+&lt;a href="#" data-powertour-action="goto" data-powertour-goto="1"&gt;1&lt;/a&gt;
+&lt;a href="#" data-powertour-action="goto" data-powertour-goto="2"&gt;2&lt;/a&gt;
+&lt;a href="#" data-powertour-action="goto" data-powertour-goto="3"&gt;3&lt;/a&gt;
+
+&lt;a href="#" data-powertour-action="next"&gt;Next&lt;/a&gt;
+&lt;a href="#" data-powertour-action="last"&gt;Last&lt;/a&gt;
+
+&lt;a href="#" data-powertour-action="pause"&gt;Pause&lt;/a&gt;
+&lt;a href="#" data-powertour-action="play"&gt;Play&lt;/a&gt;
+&lt;a href="#" data-powertour-action="toggleplay"&gt;Toggle pause/play&lt;/a&gt;
+&lt;a href="#" data-powertour-action="stop"&gt;Stop&lt;/a&gt;</code></pre>
+                                </div>
+                                <div class="tab-pane" id="tab-6-c">
+                                	<h4>Navigation actions</h4>
+                                    <p></p>
+                                    <p></p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Action</th>
+                                                <th scope="col">Usage</th>
+                                                <th scope="col">Desctription</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>first</td>
+                                                <td>data-powertour-action="first"</td>
+                                                <td>This directs a user to the first step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>last</td>
+                                                <td>data-powertour-action="last"</td>
+                                                <td>This directs a user to the first step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>prev</td>
+                                                <td>data-powertour-action="prev"</td>
+                                                <td>This directs a user to the previous step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>next</td>
+                                                <td>data-powertour-action="next"</td>
+                                                <td>This directs a user to the next step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>stop</td>
+                                                <td>data-powertour-action="stop"</td>
+                                                <td>This stops the tour.</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>play</td>
+                                                <td>data-powertour-action="play"</td>
+                                                <td>This resumes the tour if the 'timer' option is set.</td>
+                                                <td>2.0.0</td>
+
+
+                                            </tr> 
+                                            <tr>
+                                                <td>toggleplay</td>
+                                                <td>data-powertour-action="toggleplay"</td>
+                                                <td>This switches between pause & play.</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>goto</td>
+                                                <td>data-powertour-action="goto"<br/>data-powertour-goto="3"</td>
+                                                <td>Go to step number 3.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                      
+                                        </tbody>
+                                    </table> 
+                                    <p></p>
+                                    <p></p>  
+                                	<h4>Keyboard navigation</h4>
+                                    <p></p>
+                                    <p></p>  
+									<table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Key</th>
+                                                <th scope="col">Option</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>ESC</td>
+                                                <td>escKeyCancel</td>
+                                                <td>This key will cancel the tour.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Right arrow</td>
+                                                <td>keyboardNavigation</td>
+                                                <td>This key will direct the tour to the next step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Left arrow</td>
+                                                <td>keyboardNavigation</td>
+                                                <td>This key will direct the tour to the previous step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>spacebar</td>
+                                                <td>keyboardNavigation</td>
+                                                <td>This key will trigger pause and play(toggle).</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                   		</tbody>
+                               		</table>
+                                      
+                                </div>
+                            </div>  
+                    	</section>
+
+						<section class="blocks" id="doc-animations">
+                            <div class="heading-block">
+                                <h3>Animations</h3>
+                                <h4>Use CSS3 animations for spice up the tour.</h4>
+                            </div>
+                        	<ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-7-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-7-b" data-toggle="tab">Usage</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-7-a">
+                                	<p>You can choose from more than 60 available CSS3 animations to spice up the tour. Every single step can have there own kind of in and out animation.</p>
+                                    <p></p>
+                                    <p>All animations are provided thru an third-party css file called 'animate.css', more about the this file can be found on the
+                                    <a href="http://daneden.github.io/animate.css/">animate.css page</a>.</p>
+                                    <p></p>
+                                    <div class="attention-box attention-warning">
+                                        <h4>CSS3 support</h4>
+                                        <p>If the browser does not support CSS3 animations a simple show/hide is used instead.</p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab-7-b">
+									<pre class="line-numbers" data-label="javascript"><code class="language-javascript">steps : [
+	{
+     	fxIn  : 'fadeIn',
+		fxOut : 'bounceOutLeft'
+    },
+    {
+        // next step
+    }
+],
+stepDefaults : [
+    {
+     	fxIn  : 'fadeIn',
+		fxOut : 'bounceOutLeft'
+    }
+]</code></pre> 
+								</div>
+                            </div> 
+            			</section>
+
+						<section class="blocks" id="doc-validation">
+                            <div class="heading-block">
+                                <h3>Validation</h3>
+                                <h4>Validate the contents of a step.</h4>
+                            </div>
+                        	<ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-8-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-8-b" data-toggle="tab">Usage</a></li>
+                                <li><a href="#tab-8-c" data-toggle="tab">Reference</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                            	<div class="tab-pane active" id="tab-8-a">
+                                	<p>If you want to extend a step(or all steps) with some kind of validation you can use the Power Tour validation datasets to add your own 
+                                    kind of validation to for example validate a HTML form.</p>
+                                    <p></p>
+                                    <div class="attention-box attention-warning">
+                                        <h4>Body element</h4>
+                                        <p>All validation datasets must be added to the body element as the plugin will check this element for Power Tour related data attributes.</p>
+                                    </div>
+                                    <p></p>
+                                    <div class="attention-box attention-warning">
+                                        <h4>Timer actions</h4>
+                                        <p>Validation does not work with the 'play', 'pause' of 'toggleplay' actions. This means that once the timer has 
+                                        reached it's end it will go to the next step.</p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab-8-b">
+									<pre class="line-numbers" data-label="javascript"><code class="language-javascript">// disable the use of the 'next' control
+$('body').attr('data-powertour-disable-next',true);
+
+// enable the use of the 'goto' control
+$('body').removeAttr('data-powertour-disable-goto');</code></pre>
+								</div>
+                                <div class="tab-pane" id="tab-8-c">
+                					<table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Dataset</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>data-powertour-disable-first</td>
+                                                <td>Disables the 'first' action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>data-powertour-disable-last</td>
+                                                <td>Disables the 'last' action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr>  
+                                            <tr>
+                                                <td>data-powertour-disable-prev</td>
+                                                <td>Disables the 'prev' action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr>     
+                                            <tr>
+                                                <td>data-powertour-disable-next</td>
+                                                <td>Disables the 'next' action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>data-powertour-disable-goto</td>
+                                                <td>Disables the 'goto' action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>data-powertour-disable-stop</td>
+                                                <td>Disables the 'stop' action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>data-powertour-disable-all</td>
+                                                <td>Disables the 'all' above action navigation</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                                                                    
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+            			</section>
+                        
+						<section class="blocks" id="doc-methods">
+                            <div class="heading-block">
+                                <h3>Methods</h3>
+                                <h4>How to use the public methods.</h4>
+                            </div>
+                        	<ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-9-a" data-toggle="tab">Info</a></li>
+                                <li><a href="#tab-9-b" data-toggle="tab">Usage</a></li>
+                                <li><a href="#tab-9-c" data-toggle="tab">Reference</a></li>
+
+                            </ul>	
+                            <div class="tab-content">
+                            	<div class="tab-pane active" id="tab-9-a">
+                                <p>The Power Tour plugin provides 3 public methods which can be used to update, run or destroy a tour.</p> 
+                                
+                                <p>See the reference tab for more info about the available methods.</p>
+                                </div>
+                                <div class="tab-pane" id="tab-9-b">
+									<pre class="line-numbers" data-label="javascript"><code class="language-javascript">// update: single argument(step)
+$('body').powerTour('update', '#step-five');
+                    
+// update: argument array(steps)
+$('body').powerTour('update', ["#step-five", "#step-two", "#step-four"]);
+
+// destroy: no arguments
+$('body').powerTour('destroy');
+
+// run: single argument(tour)
+$('body').powerTour('run', 0);
+
+// navigation: single argument(next)
+$('body').powerTour('navigation', 'next');
+
+// navigation: argument array(goto)
+$('body').powerTour('navigation', ["goto", 4]);
+
+// run: method in combination with new click event, 
+// use the extra class 'powertour-disable-cancel'!
+// Read more about this cancel class misc -> plugin helpers.
+$('#newtrigger').addClass('powertour-disable-cancel').click(function(){
+    $('body').powerTour('run', 0);
+});</code></pre> 
+								</div>
+								<div class="tab-pane" id="tab-9-c">
+                					<table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Method</th>
+                                                <th scope="col">Argument(s)</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>update</td>
+                                                <td>step id</td>
+                                                <td>This will update(reset) the position of the step. 
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> the content of the step must be loaded before you can use this method.</div></td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>run</td>
+                                                <td>tour(index number)</td>
+                                                <td>This will run/start the tour if called. 
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> the tour index is a zero based number.</div></td>
+                                                <td>2.0.0</td>
+                                            </tr>                                             
+                                            <tr>
+                                                <td>destroy</td>
+                                                <td><i>none</i></td>
+                                                <td>Removes the tour functionality completely. This will return the element back to its pre-init state. 
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> this will only destroy the code that have been <u>added</u> by the plugin.</div></td>
+                                                <td>2.0.0</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>navigation</td>
+                                                <td><i>action</i></td>
+                                                <td>Trigger the navigation. All available navigation actions can be used.
+                                                <p></p>
+                                                <div class="attention-box attention-warning">
+                                                <strong>Notice:</strong> when using the 'goto' action you need to pass the data as an array.</div></td>
+                                                <td>2.0.4</td>
+                                            </tr>                                                                                                                                      
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>  
+                		</section>
+                        
+        				<section class="blocks" id="doc-migrate">
+                            <div class="heading-block">
+                                <h3>Migrating from 1.x to 2.x.x</h3>
+                                <h4>What you need to know before updating.</h4>
+                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#tab-11-a" data-toggle="tab">Info</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-11-a">
+                                   <p>We have completely rewritten the plugin, this to add more features, improve speed, reduce the size and to remove the bloat and some pitfalls. 
+                                   Because of the complete overhaul you can't use any previous plugin code(you can keep using the steps).</p>
+                                </div>
+                            </div>  
+                    	</section>
+
+						<section class="blocks" id="doc-misc">
+                            <div class="heading-block">
+                                <h3>Misc</h3>
+                                <h4>Some extra information and help.</h4>
+                            </div>
+                        	<ul class="nav nav-tabs">
+                            	<li class="active"><a href="#tab-12-a" data-toggle="tab">Common issues</a></li>
+                                <li><a href="#tab-12-b" data-toggle="tab">Plugin helpers</a></li>
+                                <li><a href="#tab-12-c" data-toggle="tab">Changelog</a></li>
+                                <li><a href="#tab-12-d" data-toggle="tab">Brand/logo</a></li>
+                            </ul>	
+                            <div class="tab-content">
+                            	<div class="tab-pane active" id="tab-12-a">
+                                	<p>Sometimes it will happen that you have done something wrong, have forgotten something therfore in the next tab a list with most common issues.</p>
+                                    <p></p>
+                                    <div class="attention-box attention-warning">
+                                        <h4>Always double check</h4>
+                                        <p>Before contacting us and saying the plugin doesn't work please check and recheck your code.</p>
+                                    </div>
+                                    <p></p>
+                                    <p></p>
+                       				<table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Problem</th>
+                                                <th scope="col">Cause</th>
+                                                <th scope="col">Solution</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>The tour wont start, or doesn't run as it should.</td>
+                                                <td>Typo(one or more) or using multiple instances of the plugin.</td>
+                                                <td>Check the code that you have added/changed.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>The position of the step isn't right when i try to hook it to an table cell.</td>
+                                                <td>Table cells can't have an absolute position.</td>
+                                                <td>Wrap the cells inner with an element(div, span).</td>
+                                            </tr>
+                                            <tr>
+                                                <td>The hook isn't highlighted.</td>
+                                                <td>The parent(s) element have an position absolute.</td>
+                                                <td>Change the parent(s) position to relative, or disable the highlight option.</td>
+                                            </tr> 
+                                            <tr>
+                                                <td>The steps FX are not working.</td>
+                                                <td>Browser does not support CSS3.</td>
+                                                <td>Use a modern browser.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>The step is empty.</td>
+                                                <td>Using multiple tours on the same page.</td>
+                                                <td>The 'content' id can only be used once, therefor use a different id(step).</td>
+                                            </tr>
+                                            <tr>
+                                                <td>The wrong step/tour is selected.</td>
+                                                <td>Using the wrong step/tour number.</td>
+                                                <td>All options/settings except the url parameters and the 'goto' navigation are zero based numbers.</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Some options are not working.</td>
+                                                <td>Unquoted vs quoted values.</td>
+                                                <td>Some values(boolean and integers) need to be quoted and some dont.</td>
+                                            </tr>                                                                                                                                        
+                                        </tbody>
+                                    </table>
+								</div>
+                                <div class="tab-pane" id="tab-12-b">
+                                	<p>The plugin offers a couple of helper classes which you can use to extend the Power Tour plugin even more.</p>
+                                    <p></p>
+							    	<table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Classname</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Since</th>
+                                            </tr>                                            
+                                        </thead> 
+                                        <tbody>
+                                            <tr>
+                                                <td>powertour-disable-cancel</td>
+                                                <td>If you use the 'easyCancel' option only the hook, step and navigation are excluded, everything else will trigger the ending of the tour.
+                                                This class can be used to excluded extra elements from this event.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>powertour-disable-action</td>
+                                                <td>This class when used on an element with the 'data-powertour-action' attribute will disable this button, this can
+                                                be usefull if you are adding some kind of validation inside a step.</td>
+                                                <td>2.0.0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>powertour-highlight</td>
+                                                <td>This class is used by the plugin it self to highlight the hooks, but you can use this class your self if you need to highlight other elements during the tour.</td>
+                                                <td>2.0.0</td>
+                                            </tr>                                                                                                                                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab-12-c">
+<strong>Update v2.1.4 - November 24, 2014</strong>
+<p></p>
+<p>Fixed: issue with the 'onStartTour' function, it will now run just once.</p>
+<p></p>
+<p></p>
+<strong>Update v2.1.3 - September 17, 2014</strong>
+<p></p>
+<p>Fixed: issue with the 'run' method.</p>
+<p></p>
+<p></p>
+<strong>Update v2.1.2 - September 15, 2014</strong>
+<p></p>
+<p>Fixed: issue with starting a new tour when a tour is already running.</p>
+<p></p>
+<p></p>
+<strong>Update v2.1.1 - September 12, 2014</strong>t
+<p></p>
+<p>Fixed: issue with the 'run' method, it will now use the correct 'startWith' value.</p>
+<p>Fixed: issue with the 'destroy' method. It will now destroy the whole tour.</p>
+<p>Removed: a line of code for the demo file(used for testing).</p>
+<p></p>
+<p></p>
+<strong>Update v2.1.0 - August 27, 2014</strong>
+<p></p>
+<p>Added: new method which allows you to programmatically access the navigation buttons.</p>
+<p>Added: LESS files.</p>
+<p>Added: SASS files.</p>
+<p></p>
+<p></p>
+<strong>Update v2.0.3 - August 07, 2014</strong>
+<p></p>
+<p>Fixed: potential issue with the highlight option(highlight class is not removed correctly).</p>
+<p></p>
+<p></p>
+<strong>Update v2.0.2 - August 06, 2014</strong>
+<p></p>
+<p>Fixed: 'width', 'offsetY' and 'offsetX' options, these options can now be empty(use default values instead).</p>
+<p></p>
+<p></p>
+<strong>Update v2.0.1 - July 15, 2014</strong>
+<p></p>
+<p>Fixed: typo in the builder, the options 'highlight' & 'keepHighlighted' are now correct.</p>
+<p>Updated: the docs, all speed and delay options are now mentioned as millisecond value's.</p>
+<p></p>
+<p></p>
+<strong>Update v2.0.0 - July 11, 2014</strong>
+<p></p>
+<p>The whole plugin has been rebuild, we've added new feautures, removed the bloat and made it faster.</p>
+<p></p>
+<p></p>
+<strong>Update v1.7 - December 19, 2013</strong>
+<p></p>
+<p>Fixed: issue with keyboard events and non-existing steps.<br/>
+Added: new option called 'animatedOnEnd' which allows you to stay at the last hook 
+       or animate back to the top once the tour is done. 
+</p>
+<p></p>
+<p></p>
+<strong>Update v1.6 - November 17, 2013</strong>
+<p></p>
+<p>
+Fixed: exit url param.
+</p>
+<p></p>
+<p></p>
+<strong>Update v1.5 - September 8, 2013</strong>
+<p></p>
+<p>
+Fixed: typos in the builder. 
+Fixed: the 'runOnload' option, it will now run if set to true.
+</p>
+<p></p>
+<p></p>
+<strong>Update v1.4 - August 8, 2013</strong>
+<p></p>
+<p>
+Update: Bug fixes.
+Added: a new method called 'destroy', this will remove the tour from the page. 
+Update: Code improvements.
+</p>
+<p></p>
+<p></p>
+<strong>Update v1.3 - June 15, 2013</strong>
+<p></p>
+<p>
+Added: a new hook/callback to every step called 'onHideStep'.
+Fixed: a little bug that let you fire hooks/callbacks after the tour has ended.
+Updated: the jQuery core to work with 1.9.x, 1.10.X and 2.0.2(not fully tested yet)
+</p>
+<p></p>
+<p></p>
+<strong>Update v1.2 - November 15, 2012</strong>
+<p></p>
+<p>
+Fixed: issue with the exit url, now it will exit once the tour is done.
+Fixed: issue with the onFinish callback function.
+Updated: jQuery core 1.8.2 -> 1.8.3
+</p>
+<p></p>
+<p></p>
+<strong>Update v1.1 - October 15, 2012</strong>
+<p></p>
+<p>
+Added: exit url, so you can continue the tour on other pages.
+Added: an run on page load option, start the tour directly.
+</p>                                 
+                                </div>
+                                <div class="tab-pane" id="tab-12-d">
+                                	<p>We have included 4 .png logo's in the zip.</p>
+                                    <p></p>
+                                    <p></p>
+                                    <img src="images/brand/logo-color.png" alt="logo color" style="background-color:#eee;padding:10px; margin-right:40px"/>
+                                    <img src="images/brand/logo-black.png" alt="logo black" style="background-color:#fff;padding:10px"/>
+                                    <p></p><p></p><p></p>
+                                    <img src="images/brand/logo-white.png" alt="logo white" style="background-color:#000;padding:10px; margin-right:40px"/>
+                                    <img src="images/brand/logo-white-blue.png" alt="logo white blue" style="background-color:#2d58a4;padding:10px"/>
+                                    <p></p>
+                                    <p></p>
+                                    <p></p>
+                                    <div style="width:50px; height:50px; float:left; margin-right:10px; background:#2d58a4"></div>
+                                    <div style="width:50px; height:50px; float:left; margin-right:10px; background:#54585e"></div>
+                                </div>
+                            </div>  
+            			</section>            
+                   	</div>                   
+              	</div>
+           	</div>
+        </div>
+        <footer id="footer-main">
+        	<div class="inner">
+                <nav id="nav-bottom" class="clearfix">
+                    <ul>
+                        <li class="active"><a href="index.html">Home</a></li>
+                        <li>|</li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li>|</li>
+                        <li><a href="extend.html">Extend</a></li>
+                        <li>|</li>
+                        <li><a href="builder.html">Builder</a></li>
+                        <li>|</li>
+                        <li><a href="http://bit.ly/RKcRDu" title="buy this plugin">Buy plugin</a></li>
+                    </ul>
+                </nav>
+                <hr/>
+            	<div id="copyright" class="clearfix">Copyright 2014 <a href="http://wwww.creativemilk.net">CreativeMilk</a>. All rights reserved.</div>
+            </div>
+        </footer>
+        
+        <div id="backtotop"><i class="fa fa-chevron-up"></i></div>
+    </div>                    
+</body>
+</html>
