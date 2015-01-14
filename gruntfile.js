@@ -178,7 +178,7 @@ module.exports = function(grunt) {
          */
          concat: {
             js: {
-                
+                /*
                 src: ['public/js/libs/jquery/dist/jquery.js',
                     'public/js/libs/bootstrap/dist/js/bootstrap.js',
                     'public/js/libs/angular/angular.js',
@@ -227,9 +227,9 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-leaflet-directive/dist/angular-leaflet-directive.min.js'
 
                 ],
+                */
 
-                /*
-                src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),*/
+                src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             }
@@ -254,6 +254,7 @@ module.exports = function(grunt) {
             app1: {
                 files: {
 
+                    /*
                     'public/js/ng-indigenous.js':[
                         'public/js/libs/angular-ui/build/angular-ui.min.js',
                         'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
@@ -292,8 +293,9 @@ module.exports = function(grunt) {
                         'public/scripts/controllers/layoutCtrl.js',
                         'public/scripts/controllers/mainCtrl.js'
                     ]
-                    /*
-                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts')*/
+                    */
+
+                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts')
                 }
             }
         },
