@@ -870,6 +870,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     window.triggerEditMode = function() {
+      console.log('edit mode engaged');
       var body = document.getElementsByTagName('body')[0];
       var hasClass = body.classList.contains('editing');
       if (hasClass === false) {

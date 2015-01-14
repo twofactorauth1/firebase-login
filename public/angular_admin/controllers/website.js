@@ -41,9 +41,9 @@ define([
                 document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
             }
 
-            // if ($location.$$search['posthandle']) {
-            //     document.getElementById("iframe-website").setAttribute("src", '/page/post/' + $location.$$search['posthandle'] + '?editor=true');
-            // }
+            if ($location.$$search['posthandle']) {
+                document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+            }
 
             // if ($location.$$search['custid']) {
             //     current_src = document.getElementById("iframe-website").getAttribute("src");
@@ -147,7 +147,7 @@ define([
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
                             if ($location.$$search['posthandle']) {
-                                $scope.updatePage("post", true);
+                                //$scope.updatePage("post", true);
                             }
                         }
                     } else {
@@ -322,6 +322,7 @@ define([
             ];
 
             document.getElementById("iframe-website").onload = function() {
+                console.log('iframe onload');
 
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
@@ -415,7 +416,7 @@ define([
                 $scope.isEditing = true;
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
-
+                 console.log('triggering edit mode');
                 if (iframe.contentWindow.triggerEditMode)
                     iframe.contentWindow.triggerEditMode();
 
@@ -587,7 +588,10 @@ define([
                 }
 
                 if ($location.$$search['posthandle']) {
+                    console.log('post handle detected');
                     route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
+                    console.log('route ', route);
+                    //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 }
 
                 //TODO - replace with sending route through scope to update without iframe refresh
