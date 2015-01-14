@@ -69,6 +69,26 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       }, true);
     };
 
+    //account API call for object population
+    UserService.getAccount(function(account) {
+      $scope.account = account;
+      
+      if (!$scope.account.business.phones.length)
+        $scope.account.business.phones.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+          number: '',
+          default: false
+        });
+      $scope.account.business.phones.forEach(function(value, index) {
+        $scope.businessPhoneWatchFn(index);
+      });
+
+      if (!$scope.account.business.addresses.length)
+        $scope.account.business.addresses.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
+        });
+    });
+
     //user API call for object population
     UserService.getUser(function(user) {
       $scope.user = user;
@@ -87,26 +107,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.user.details[0].addresses.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort()
         });
-    });
-
-    //account API call for object population
-    UserService.getAccount(function(account) {
-      $scope.account = account;
       ngProgress.complete();
-      if (!$scope.account.business.phones.length)
-        $scope.account.business.phones.push({
-          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-          number: '',
-          default: false
-        });
-      $scope.account.business.phones.forEach(function(value, index) {
-        $scope.businessPhoneWatchFn(index);
-      });
-
-      if (!$scope.account.business.addresses.length)
-        $scope.account.business.addresses.push({
-          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
-        });
     });
 
     //business phone field add
