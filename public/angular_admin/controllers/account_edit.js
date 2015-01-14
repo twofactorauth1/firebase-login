@@ -93,7 +93,19 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     UserService.getUser(function(user) {
       $scope.user = user;
       $scope.fullName = [user.first, user.middle, user.last].join(' ');
-      if (!$scope.user.details[0].phones.length)
+      if(!$scope.user.details[0])
+      {
+        $scope.user.details[0] = [];
+      }
+      if(!$scope.user.details[0].phones)
+        {
+          $scope.user.details[0].phones = [];
+        }
+      if(!$scope.user.details[0].addresses)
+        {
+          $scope.user.details[0].addresses = [];
+        }  
+      if ($scope.user.details[0].phones.length == 0)
         $scope.user.details[0].phones.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
           number: '',
