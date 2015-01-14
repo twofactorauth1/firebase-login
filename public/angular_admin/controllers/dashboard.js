@@ -35,20 +35,34 @@ define([
         'NavigationService',
         'ChartAnalyticsService',
         'ChartCommerceService',
-        'UserService','usSpinnerService',
-    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService, usSpinnerService) {
+        'UserService',
+    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService) {
 
         ngProgress.start();
-        usSpinnerService.spin('spinner-1');
         NavigationService.updateNavigation();
 
-        $scope.activeTab = 'analytics';
+       
 
-        $scope.$watch('activeTab', function() {
+        $scope.$watch('activeTab', function(newValue, oldValue) {
             console.log('tab changed');
+            if (newValue != oldValue && newValue == 'analytics') {
+                setTimeout(function() {
+                    ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
+                }, 100);
+            }
             //$(window).trigger('resize');
         });
-
+        $scope.activeTab = 'analytics';
+        $scope.analyticsOverviewConfig = {};
+        $scope.timeonSiteConfig = {};
+        $scope.trafficSourcesConfig = {};
+        $scope.newVsReturningConfig = {};
+        $scope.customerOverviewConfig = {};
+        $scope.analyticsOverviewConfig.loading = true;
+        $scope.timeonSiteConfig.loading = true;
+        $scope.trafficSourcesConfig.loading = true;
+        $scope.newVsReturningConfig.loading = true;
+        $scope.customerOverviewConfig.loading = true;
         $scope.date = {
             startDate: moment().subtract('days', 29).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
             endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
@@ -131,18 +145,22 @@ define([
 
             ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, function(data) {
                 $scope.analyticsOverviewConfig = data;
+                $scope.analyticsOverviewConfig.loading = false;
             });
 
             ChartAnalyticsService.timeOnSite($scope.avgSessionData, $scope.bouncesData, function(data) {
                 $scope.timeonSiteConfig = data;
+                $scope.timeonSiteConfig.loading = false;
             });
 
             ChartAnalyticsService.trafficSources($scope.trafficSourceData, function(data) {
                 $scope.trafficSourcesConfig = data;
+                $scope.trafficSourcesConfig.loading = false;
             });
 
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function(data) {
                 $scope.newVsReturningConfig = data;
+                $scope.newVsReturningConfig.loading = false;
             });
 
             ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
@@ -159,12 +177,12 @@ define([
             //         }
             //     }, 100);
             // };
-            usSpinnerService.stop('spinner-1');
             ngProgress.complete();
         };
         $scope.renderCommerceCharts = function() {
             ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {
                 $scope.customerOverviewConfig = data;
+                $scope.customerOverviewConfig.loading = false;
             });
         };
 
