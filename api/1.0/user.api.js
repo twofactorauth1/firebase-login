@@ -288,8 +288,10 @@ _.extend(api.prototype, baseApi.prototype, {
         //updateCurrentAccountBilling
 
         //ensure we don't have another user with this username;
-        var accountToken = cookies.getAccountToken(req);
-
+        var cookieAccountToken = cookies.getAccountToken(req);
+        if(cookieAccountToken !== accountToken) {
+            self.log.warn('cookieAccountToken [' + cookieAccountToken + '] does not equal accountToken [' + accountToken + ']');
+        }
         self.log.debug('>> username', username);
         self.log.debug('>> password1', password1);
         self.log.debug('>> email', email);
