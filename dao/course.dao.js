@@ -60,20 +60,18 @@ var dao = {
             var self = this;
             self.getById(courseId, function (err, course) {
                 if (!err && course != null) {
-                    if (course.get('userId') != curUserId) {
-                        fn({message: "Not allowed", status: 403}, null);
-                    } else {
-                        course.set('title', updatedCourseData.title);
-                        course.set('template', updatedCourseData.template);
-                        course.set('subtitle', updatedCourseData.subtitle);
-                        course.set('body', updatedCourseData.body);
-                        course.set('description', updatedCourseData.description);
-                        course.set('subdomain', updatedCourseData.subdomain);
-                        course.set('price', updatedCourseData.price);
-                        course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
-                        course.set('emails', updatedCourseData.emails);
-                        self.saveOrUpdate(course, fn);
-                    }
+
+                    course.set('title', updatedCourseData.title);
+                    course.set('template', updatedCourseData.template);
+                    course.set('subtitle', updatedCourseData.subtitle);
+                    course.set('body', updatedCourseData.body);
+                    course.set('description', updatedCourseData.description);
+                    course.set('subdomain', updatedCourseData.subdomain);
+                    course.set('price', updatedCourseData.price);
+                    course.set('showExitIntentModal', updatedCourseData.showExitIntentModal);
+                    course.set('emails', updatedCourseData.emails);
+                    self.saveOrUpdate(course, fn);
+
                 } else {
                     fn(err || {message: "Error updating course", status: 400}, null);
                 }
@@ -84,13 +82,10 @@ var dao = {
             var self = this;
             self.getById(courseId, function (err, course) {
                 if (!err && course != null) {
-                    if (course.get('userId') != curUserId) {
-                        fn({message: "Not allowed", status: 403}, null);
-                    } else {
-                        self.remove(course, function (err, value) {
-                            fn(err, course);
-                        });
-                    }
+                    self.remove(course, function (err, value) {
+                        fn(err, course);
+                    });
+
                 } else {
                     fn(err || {message: "Error removing course", status: 400}, null)
                 }
