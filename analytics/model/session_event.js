@@ -28,15 +28,15 @@ var sessionEvent = $$.m.ModelBase.extend({
             "session_length": 0,
             "permanent_tracker": "",
             "fingerprint": 0,
-            "ip_geo_info": {
-                /*
+            /*"ip_geo_info": {
+
                 "province": "California",
                 "city": "San Diego",
                 "postal_code": "92115",
                 "continent": "North America",
                 "country": "United States"
-                */
-            },
+
+            },*/
             "ip_address": "127.0.0.1",
 
             "user_agent": {
