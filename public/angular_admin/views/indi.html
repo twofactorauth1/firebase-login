@@ -2,15 +2,12 @@
 <div class="indi-assistant">
 
     <div class="pageheader row">
-        <div class="col-xs-7">
+        <div class="col-xs-12">
             <h2><i class="indi-sm"></i>  &nbsp; Indi Assistant</h2>
-        </div>
-
-        <div class="col-xs-5">
         </div>
     </div>
 
-    <div class="initial-screen" ng-if="!initialWelcome" ng-style="styleIndiWelcome()" indigeweb-resize>
+    <!-- <div class="initial-screen" ng-if="!initialWelcome" ng-style="styleIndiWelcome()" indigeweb-resize>
         <div class="mb40"></div>
         <div>
             <div class="col-xs-7">
@@ -30,9 +27,9 @@
                 <img style="margin-left: 40px;" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-full.png" alt="">
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div ng-if="initialWelcome">
+    <div>
         <div class="header-menu-row">
             <div class="btn-group col-xs-12 template-btns">
                 <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-pages" ng-class="{'active': activeTab === 'getting-started'}" ng-click="showToaster = false; activeTab = 'getting-started'">
@@ -54,12 +51,13 @@
                     <div>
                         <div class="panel panel-info">
                             <div class="panel-heading">
-                                <div class="avatar col-xs-1 col-xs-offset-2">
-                                    <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-lg-avatar.png">
+                                <div class="avatar col-sm-1 col-sm-offset-2 col-xs-12">
+                                    <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-lg-avatar.png" class="center" style="display: block;">
+                                    <div class="visible-xs clearfix mb20"></div>
                                 </div>
-                                <div class="content col-xs-7">
-                                    <h3>Getting the Most Out of Indigenous</h3>
-                                    <p>Complete the tasks below and your business will will truly be launched and ready to accept customers. Complete all 9 tasks and recieve a 30min Phone Consultation worth $75!</p>
+                                <div class="content col-sm-7 col-xs-12">
+                                    <h5>Getting the Most Out of Indigenous</h3>
+                                    <h4>Complete the tasks below and your business will will truly be launched and ready to accept customers. Complete all 9 tasks and recieve a 30min Phone Consultation worth $75!</h4>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -243,7 +241,7 @@
                 </div>
                 <div class="carousel-ctrls">
                     <!-- Controls -->
-                    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
+                    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="next" ng-click="clearWelcome()">
                         GET STARTED <i class="fa fa-chevron-right"></i>
                     </a>
                 </div>
@@ -257,4 +255,19 @@
         </ol> -->
 
     </div>
+</div>
+
+<div id="step-four" class="single-step">
+    <img src="../js/libs_misc/powertour/images/connectors1.png" alt="connectors" id="connectors1" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
+    <img src="../js/libs_misc/powertour/images/connectors2.png" alt="connectors" id="connectors2" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
+    <img src="../js/libs_misc/powertour/images/controls1.png" alt="controls" id="controls1" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
+    <header>
+        <h3>Basic Navigation</h3>
+    </header>
+    <p>
+        The main navigation is on the left and has all the various sections for your business.
+    </p>
+    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
+        <i class="fa fa-check"></i> GOT IT
+    </a>
 </div>

@@ -985,6 +985,7 @@ define([
                 });
             };
 
+            $scope.changesConfirmed = false;
             //Before user leaves editor, ask if they want to save changes
             var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
                 var isDirty = false;
@@ -993,7 +994,7 @@ define([
                     var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
                 }
 
-                if (isDirty) {
+                if (isDirty && !$scope.changesConfirmed) {
                     event.preventDefault();
 
                 SweetAlert.swal({
@@ -1010,13 +1011,19 @@ define([
                     function(isConfirm) {
                         if (isConfirm) {
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                            $scope.changesConfirmed = true;
+                            $scope.savePage();
                             $location.path(newUrl);
-                            offFn()
+                            offFn();
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                            $scope.changesConfirmed = true;
                             $location.path(newUrl);
+                            offFn();
                         }
                     });
+                } else if ($scope.changesConfirmed) {
+                    //do nothing
                 }
 
             });

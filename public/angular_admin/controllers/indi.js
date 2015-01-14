@@ -148,6 +148,12 @@ define(['app', 'userService', 'powertour'], function(app) {
                     }
                 ]
         });
-        $('body').powerTour('run',0);
+
+        $scope.$watch('initialWelcome', function(newValue, oldValue) {
+            if (!$scope.initialWelcome) {
+                $('body').powerTour('run',0);
+            }
+        });
+
   }]);
 });
