@@ -38,7 +38,6 @@ define([
             ngProgress.start();
 
             if ($location.$$search['pagehandle']) {
-                console.log('load pagehandle');
                 document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
             }
 
@@ -323,7 +322,6 @@ define([
             ];
 
             document.getElementById("iframe-website").onload = function() {
-                console.log('iframe onload');
 
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
@@ -341,7 +339,6 @@ define([
             }
 
             $scope.bindEvents = function() {
-                console.log('bindEvents');
                 var iframe = document.getElementById("iframe-website");
                 if (!iframe)
                     return;
@@ -439,7 +436,6 @@ define([
             };
 
             $scope.cancelPage = function() {
-                console.log('cancel page');
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
@@ -578,7 +574,6 @@ define([
             };
 
             $scope.updatePage = function(handle, editing) {
-                console.log('update page ', handle);
                 if (!angular.isDefined(editing))
                     $scope.isEditing = false;
 
@@ -748,7 +743,7 @@ define([
             };
 
             $scope.activateAloha = function() {
-                console.log('activate aloha');
+                console.log('activateAloha');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -760,7 +755,6 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
-                console.log('edit component >>>');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -804,7 +798,6 @@ define([
             };
 
             $scope.saveComponent = function() {
-                console.log('saving component >>>');
                 var componentId = $scope.componentEditing._id;
 
                 //update single component
@@ -814,7 +807,6 @@ define([
                 });
 
                 var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
-                console.log('edited component ', editedComponent);
 
                 //get all the editable variables and replace the ones in view with variables in DB
                 var componentEditable = editedComponent[0].querySelectorAll('.editable');
@@ -991,12 +983,14 @@ define([
 
             //Before user leaves editor, ask if they want to save changes
             var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-                event.preventDefault();
                 var isDirty = false;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
                 }
+
+                if (isDirty) {
+                    event.preventDefault();
 
                 SweetAlert.swal({
                         title: "Are you sure?",
@@ -1010,15 +1004,17 @@ define([
                         closeOnCancel: false
                     },
                     function(isConfirm) {
-                        offFn()
                         if (isConfirm) {
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $location.path(newUrl);
+                            offFn()
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
                             $location.path(newUrl);
                         }
                     });
+                }
+
             });
 
             //when the navigation is reordered, update the linklist in the website object

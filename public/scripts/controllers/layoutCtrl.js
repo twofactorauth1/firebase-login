@@ -94,7 +94,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     pagesService(function(err, data) {
-      console.log('pagesService data >>> ', data);
       if (err) {
         console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
       } else {
@@ -738,7 +737,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
-        console.log('elements length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
