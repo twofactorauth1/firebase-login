@@ -16430,6 +16430,10 @@ strong {
   cursor: pointer;
   color: #f1c40f;
 }
+#contact-details-container .media-object {
+  max-height: 250px;
+  max-width: 250px;
+}
 #contact-edit-container .input-lg {
   height: 48px;
 }
