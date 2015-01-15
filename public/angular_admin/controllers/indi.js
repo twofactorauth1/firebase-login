@@ -142,7 +142,10 @@ define(['app', 'userService', 'powertour'], function(app) {
                                     highlight       : true,
                                     keepHighlighted : false,
                                     onShowStep      : function(){ },
-                                    onHideStep      : function(){ }
+                                    onHideStep      : function(){
+                                        $scope.userPreferences.welcome_alert.initial = true;
+                                        $scope.savePreferencesFn();
+                                    }
                                 }
                         ]
                     }

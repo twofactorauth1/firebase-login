@@ -33,10 +33,50 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                           onProgress : function(ui){ },
                           steps:[
                                   {
-                                      hookTo          : '#contact-photo-container',//not needed
+                                      hookTo          : '#owner_info',//not needed
                                       content         : '#step-one',
                                       width           : 400,
-                                      position        : 'sc',
+                                      position        : 'rt',
+                                      offsetY         : 0,
+                                      offsetX         : 30,
+                                      fxIn            : 'fadeIn',
+                                      fxOut           : 'bounceOutUp',
+                                      showStepDelay   : 500,
+                                      center          : 'step',
+                                      scrollSpeed     : 400,
+                                      scrollEasing    : 'swing',
+                                      scrollDelay     : 0,
+                                      timer           : '00:00',
+                                      highlight       : true,
+                                      keepHighlighted : false,
+                                      onShowStep      : function(ui){ },
+                                      onHideStep      : function(ui){ }
+                                  },
+                                  {
+                                      hookTo          : '#business_info',//not needed
+                                      content         : '#step-two',
+                                      width           : 400,
+                                      position        : 'lt',
+                                      offsetY         : 0,
+                                      offsetX         : 50,
+                                      fxIn            : 'fadeIn',
+                                      fxOut           : 'bounceOutUp',
+                                      showStepDelay   : 500,
+                                      center          : 'step',
+                                      scrollSpeed     : 400,
+                                      scrollEasing    : 'swing',
+                                      scrollDelay     : 0,
+                                      timer           : '00:00',
+                                      highlight       : true,
+                                      keepHighlighted : false,
+                                      onShowStep      : function(ui){ },
+                                      onHideStep      : function(ui){ }
+                                  },
+                                  {
+                                      hookTo          : '#saveAccount',//not needed
+                                      content         : '#step-three',
+                                      width           : 400,
+                                      position        : 'lt',
                                       offsetY         : 0,
                                       offsetX         : 0,
                                       fxIn            : 'fadeIn',
