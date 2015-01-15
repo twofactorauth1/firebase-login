@@ -13,115 +13,115 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.preferences = preferences;
     });
 
-    $('body').powerTour({
-              tours : [
-                  {
-                          trigger            : '',
-                          startWith          : 1,
-                          easyCancel         : false,
-                          escKeyCancel       : false,
-                          scrollHorizontal   : false,
-                          keyboardNavigation : true,
-                          loopTour           : false,
-                          onStartTour        : function(ui){ },
-                          onEndTour          : function(){
+    // $('.accountEdit').powerTour({
+    //   tours : [
+    //       {
+    //               trigger            : '',
+    //               startWith          : 1,
+    //               easyCancel         : false,
+    //               escKeyCancel       : false,
+    //               scrollHorizontal   : false,
+    //               keyboardNavigation : true,
+    //               loopTour           : false,
+    //               onStartTour        : function(ui){ },
+    //               onEndTour          : function(){
 
-                              // animate back to the top
-                              $('html, body').animate({scrollTop:0}, 1000, 'swing');  
-                              //$('html, body').animate({scrollLeft:0}, 1000, 'swing');   
-                          },
-                          onProgress : function(ui){ },
-                          steps:[
-                                  {
-                                      hookTo          : '#owner_info',//not needed
-                                      content         : '#step-one',
-                                      width           : 400,
-                                      position        : 'rt',
-                                      offsetY         : 0,
-                                      offsetX         : 30,
-                                      fxIn            : 'fadeIn',
-                                      fxOut           : 'bounceOutUp',
-                                      showStepDelay   : 500,
-                                      center          : 'step',
-                                      scrollSpeed     : 400,
-                                      scrollEasing    : 'swing',
-                                      scrollDelay     : 0,
-                                      timer           : '00:00',
-                                      highlight       : true,
-                                      keepHighlighted : false,
-                                      onShowStep      : function(ui){ },
-                                      onHideStep      : function(ui){ }
-                                  },
-                                  {
-                                      hookTo          : '#business_info',//not needed
-                                      content         : '#step-two',
-                                      width           : 400,
-                                      position        : 'lt',
-                                      offsetY         : 0,
-                                      offsetX         : 50,
-                                      fxIn            : 'fadeIn',
-                                      fxOut           : 'bounceOutUp',
-                                      showStepDelay   : 500,
-                                      center          : 'step',
-                                      scrollSpeed     : 400,
-                                      scrollEasing    : 'swing',
-                                      scrollDelay     : 0,
-                                      timer           : '00:00',
-                                      highlight       : true,
-                                      keepHighlighted : false,
-                                      onShowStep      : function(ui){ },
-                                      onHideStep      : function(ui){ }
-                                  },
-                                  {
-                                      hookTo          : '#saveAccount',//not needed
-                                      content         : '#step-three',
-                                      width           : 200,
-                                      position        : 'bl',
-                                      offsetY         : 325,
-                                      offsetX         : 50,
-                                      fxIn            : 'fadeIn',
-                                      fxOut           : 'fadeOut',
-                                      showStepDelay   : 500,
-                                      center          : 'step',
-                                      scrollSpeed     : 400,
-                                      scrollEasing    : 'swing',
-                                      scrollDelay     : 0,
-                                      timer           : '00:00',
-                                      highlight       : true,
-                                      keepHighlighted : false,
-                                      onShowStep      : function(ui){
-                                      },
-                                      onHideStep      : function(ui){ }
-                                  }
-                          ],
-                          stepDefaults:[
-                                  {
-                                      width           : 500,
-                                      position        : 'tr',
-                                      offsetY         : 0,
-                                      offsetX         : 0,
-                                      fxIn            : '',
-                                      fxOut           : '',
-                                      showStepDelay   : 0,
-                                      center          : 'step',
-                                      scrollSpeed     : 200,
-                                      scrollEasing    : 'swing',
-                                      scrollDelay     : 0,
-                                      timer           : '00:00',
-                                      highlight       : true,
-                                      keepHighlighted : false,
-                                      onShowStep      : function(){ },
-                                      onHideStep      : function(){ }
-                                  }
-                          ]
-                      }
-                  ]
-            });
+    //                   // animate back to the top
+    //                   $('html, body').animate({scrollTop:0}, 1000, 'swing');  
+    //                   //$('html, body').animate({scrollLeft:0}, 1000, 'swing');   
+    //               },
+    //               onProgress : function(ui){ },
+    //               steps:[
+    //                       {
+    //                           hookTo          : '#owner_info',//not needed
+    //                           content         : '#step-one-account',
+    //                           width           : 400,
+    //                           position        : 'rt',
+    //                           offsetY         : 0,
+    //                           offsetX         : 30,
+    //                           fxIn            : 'fadeIn',
+    //                           fxOut           : 'bounceOutUp',
+    //                           showStepDelay   : 500,
+    //                           center          : 'step',
+    //                           scrollSpeed     : 400,
+    //                           scrollEasing    : 'swing',
+    //                           scrollDelay     : 0,
+    //                           timer           : '00:00',
+    //                           highlight       : true,
+    //                           keepHighlighted : false,
+    //                           onShowStep      : function(ui){ },
+    //                           onHideStep      : function(ui){ }
+    //                       },
+    //                       {
+    //                           hookTo          : '#business_info',//not needed
+    //                           content         : '#step-two-account',
+    //                           width           : 400,
+    //                           position        : 'lt',
+    //                           offsetY         : 0,
+    //                           offsetX         : 50,
+    //                           fxIn            : 'fadeIn',
+    //                           fxOut           : 'bounceOutUp',
+    //                           showStepDelay   : 500,
+    //                           center          : 'step',
+    //                           scrollSpeed     : 400,
+    //                           scrollEasing    : 'swing',
+    //                           scrollDelay     : 0,
+    //                           timer           : '00:00',
+    //                           highlight       : true,
+    //                           keepHighlighted : false,
+    //                           onShowStep      : function(ui){ },
+    //                           onHideStep      : function(ui){ }
+    //                       },
+    //                       {
+    //                           hookTo          : '#saveAccount',//not needed
+    //                           content         : '#step-three-account',
+    //                           width           : 200,
+    //                           position        : 'bl',
+    //                           offsetY         : 325,
+    //                           offsetX         : 50,
+    //                           fxIn            : 'fadeIn',
+    //                           fxOut           : 'fadeOut',
+    //                           showStepDelay   : 500,
+    //                           center          : 'step',
+    //                           scrollSpeed     : 400,
+    //                           scrollEasing    : 'swing',
+    //                           scrollDelay     : 0,
+    //                           timer           : '00:00',
+    //                           highlight       : true,
+    //                           keepHighlighted : false,
+    //                           onShowStep      : function(ui){
+    //                           },
+    //                           onHideStep      : function(ui){ }
+    //                       }
+    //               ],
+    //               stepDefaults:[
+    //                       {
+    //                           width           : 500,
+    //                           position        : 'tr',
+    //                           offsetY         : 0,
+    //                           offsetX         : 0,
+    //                           fxIn            : '',
+    //                           fxOut           : '',
+    //                           showStepDelay   : 0,
+    //                           center          : 'step',
+    //                           scrollSpeed     : 200,
+    //                           scrollEasing    : 'swing',
+    //                           scrollDelay     : 0,
+    //                           timer           : '00:00',
+    //                           highlight       : true,
+    //                           keepHighlighted : false,
+    //                           onShowStep      : function(){ },
+    //                           onHideStep      : function(){ }
+    //                       }
+    //               ]
+    //           }
+    //       ]
+    // });
 
     $scope.beginOnboarding = function(type) {
-        if (type == 'basic-info') {
-          $('body').powerTour('run',0);
-        }
+        // if (type == 'basic-info') {
+        //   $('.accountEdit').powerTour('run',0);
+        // }
     };
 
     if ($location.$$search['onboarding']) {
