@@ -86,9 +86,33 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 }
             });
 
+            // $scope.updateStripeIdFn = function() {
+            //     if ($scope.validateCard()) {
+            //         console.log('validated and updating');
+            //         // $scope.user.stripeId = billing.billing.stripeCustomerId;
+            //         // $scope.selectPlanView = 'plan';
+            //          //credit card
+
+            //           var card = {
+            //             number: $('#number').val(),
+            //             cvc: $('#cvc').val(),
+            //             exp_month: parseInt($('#expiry').val().split('/')[0]),
+            //             exp_year: parseInt($('#expiry').val().split('/')[1])
+            //           };
+
+            //           var cc_name = $('#name').val();
+
+            //           console.info(card.number);
+            //           console.info(card.cvc);
+            //           console.info(card.exp_month);
+            //           console.info(card.exp_year);
+            //           console.info(cc_name);
+            //     }
+            // };
+
             $scope.updateStripeIdFn = function(billing) {
-                $scope.user.stripeId = billing.billing.stripeCustomerId;
-                $scope.selectPlanView = 'plan';
+                    $scope.user.stripeId = billing.billing.stripeCustomerId;
+                    $scope.selectPlanView = 'plan';
             };
 
             $scope.invoicePageChangeFn = function(invoiceCurrentPage, invoiceTotalPages) {
@@ -237,6 +261,84 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                         $scope.activeTab = AccountService.getActiveTab();
                 }
             });
+
+            // $scope.validateCard = function() {
+            //     $scope.checkCardNumber();
+            //     $scope.checkCardExpiry();
+            //     $scope.checkCardCvv();
+            //     $scope.checkCardName();
+            //     if ($scope.cardValidated && $scope.expirationValidated && $scope.cvvValidated && $scope.cardNameValidated) {
+            //         return true;
+            //     }
+            // };
+
+            // $scope.checkCardNumber = function() {
+            //   var card_number = $('#number').val();
+            //   console.log('checking to see if the card numer exists ', card_number);
+            //   if (!card_number) {
+            //     $("#card_number .error").html("Card Number Required");
+            //     $("#card_number").addClass('has-error');
+            //   } else if (card_number.length > 16){
+            //     $("#card_number .error").html("");
+            //     $("#card_number").removeClass('has-error').addClass('has-success');
+            //   }
+            //   $scope.cardValidated = true;
+            // };
+
+            // $scope.checkCardName = function(name) {
+            //   var name = $('#card_name #name').val();
+            //   console.log('name ', name);
+            //   if (!name) {
+            //     $("#card_name .error").html("Card Name Required");
+            //     $("#card_name").addClass('has-error');
+            //   } else {
+            //     $("#card_name .error").html("");
+            //     $("#card_name").removeClass('has-error').addClass('has-success');
+            //   }
+            //   $scope.cardNameValidated = true;
+            // };
+
+            // $scope.checkCardExpiry = function() {
+            //   var expiry = $('#expiry').val();
+            //   var card_expiry = expiry.split("/")
+            //   var exp_month = card_expiry[0].trim();
+            //   var exp_year;
+            //   if (card_expiry.length > 1)
+            //     exp_year = card_expiry[1].trim();
+
+
+
+            //   console.log('checking to see if the card expiry details exists ', card_expiry);
+
+            //   if (!expiry || !exp_month || !exp_year) {
+            //     if (!expiry)
+            //       $("#card_expiry .error").html("Expiry Required");
+            //     else if (!exp_month)
+            //       $("#card_expiry .error").html("Expiry Month Required");
+            //     else if (!exp_year)
+            //       $("#card_expiry .error").html("Expiry Year Required");
+            //     $("#card_expiry").addClass('has-error');
+            //   } else {
+            //     $scope.expirationValidated = true;
+            //     $("#card_expiry .error").html("");
+            //     $("#card_expiry").removeClass('has-error').addClass('has-success');
+            //   }
+            // };
+
+            // $scope.checkCardCvv = function() {
+
+            //   var card_cvc = $('#cvc').val();
+            //   console.log('checking to see if the card cvc exists ', card_cvc);
+
+            //   if (!card_cvc) {
+            //     $("#card_cvc .error").html("CVC Required");
+            //     $("#card_cvc").addClass('has-error');
+            //   } else {
+            //     $scope.cvvValidated = true;
+            //     $("#card_cvc .error").html("");
+            //     $("#card_cvc").removeClass('has-error').addClass('has-success');
+            //   }
+            // };
 
             $scope.savePreferencesFn = function() {
                 UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {});
