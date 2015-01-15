@@ -376,7 +376,27 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
           alert("Some error happened");
         })
       }, function() {});
-    }
+    };
+
+    $scope.showEmailTimelineItemModal = function(email) {
+      var modalInstance = $modal.open({
+        templateUrl: '/pipeshift/views/video/modal/timelineEmailItem.html',
+        controller: 'TimelineEmailItemModalController',
+        size: 'lg',
+        resolve: {
+          email: function() {
+            return email;
+          },
+          template: function() {
+            return findTemplateByName($scope.course.template.name);
+          }
+        }
+      });
+      modalInstance.result.then(function(email) {
+        console.log(email);
+      }, function() {});
+    };
+
     $scope.dayTimeSort = function(video) {
       return video.scheduledDay * 24 * 60 + video.scheduledHour * 60 + video.scheduledMinute;
     }
