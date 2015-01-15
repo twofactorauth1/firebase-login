@@ -115,6 +115,7 @@ require.config({
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
+        'html2plain': '/angular_admin/filters/html2plain',
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
         'reverse':'/angular_admin/filters/reverse',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
