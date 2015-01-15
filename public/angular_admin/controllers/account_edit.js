@@ -34,7 +34,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                           steps:[
                                   {
                                       hookTo          : '',//not needed
-                                      content         : '#step-1',
+                                      content         : '#step-one',
                                       width           : 400,
                                       position        : 'sc',
                                       offsetY         : 0,
