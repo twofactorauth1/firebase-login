@@ -292,7 +292,7 @@ define([
                     enabled: true
                 }, {
                     title: 'Thumbnail Slider',
-                    type: 'text-only',
+                    type: 'thumbnail-slider',
                     icon: 'fa fa-like',
                     enabled: true
                 }, {
@@ -813,8 +813,9 @@ define([
                 });
 
                 var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
-
-                //get all the editable variables and replace the ones in view with variables in DB
+                if(editedComponent && editedComponent.length > 0)
+                {
+                  //get all the editable variables and replace the ones in view with variables in DB
                 var componentEditable = editedComponent[0].querySelectorAll('.editable');
                 if (componentEditable.length >= 1) {
                     for (var i2 = 0; i2 < componentEditable.length; i2++) {
@@ -857,7 +858,9 @@ define([
                             matchingComponent[componentVar] = componentVarContents;
                         }
                     }
+                }  
                 }
+                
 
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -966,6 +969,8 @@ define([
                     return;
                 } else {
                     $scope.componentEditing.bg.img.url = asset.url;
+                    $scope.saveComponent();
+                    return;
                 }
                 $scope.updateIframeComponents();
             };

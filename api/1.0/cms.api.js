@@ -427,7 +427,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var pageId = req.params.id;
                 var _page = req.body;
                 var pageObj = new Page(_page);
-                page.set('screenshot', null);
+                pageObj.set('screenshot', null);
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(res, err, value, "Error updating Page");
