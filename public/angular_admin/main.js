@@ -145,6 +145,7 @@ require.config({
         "subscriberService": "/pipeshift/js/modules/video/service/Subscriber",
         "editCourseModalController": "/pipeshift/js/modules/video/controller/EditCourseModalController",
         "timelineItemController": "/pipeshift/js/modules/video/controller/TimelineItemController",
+        "timelineEmailItemController": "/pipeshift/js/modules/video/controller/TimelineEmailItemController",
         "searchOptionsModalController": "/pipeshift/js/modules/video/controller/SearchOptionsModalController",
         "videoViewModalController": "/pipeshift/js/modules/video/controller/VideoViewModalController",
         "addCourseModalController": "/pipeshift/js/modules/video/controller/AddCourseModalController",

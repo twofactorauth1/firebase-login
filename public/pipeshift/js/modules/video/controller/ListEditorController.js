@@ -2,7 +2,7 @@
  * The controller used when editing video courses
  */
 define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController', 'navigationService',
-  'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'
+  'timelineItemController', 'timelineEmailItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'
 ], function(angularAMD, app) {
   app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', '$templateCache', '$filter', function($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService, $templateCache, $filter) {
     NavigationService.updateNavigation();
