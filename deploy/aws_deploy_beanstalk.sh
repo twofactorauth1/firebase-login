@@ -43,8 +43,6 @@ pip list | grep awscli > /dev/null
 if [ "$1" = "master" ]; then
     echo "Generating constants for production."
     grunt ngconstant:production
-    # copy the minimized jade file
-    mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
     export APP_DESCRIPTION="Production Build"
 elif [ "$1" = "develop" ]; then
     echo "Generating constants for development."
@@ -62,6 +60,10 @@ rm -f public/js/main.js
 # run grunt
 echo Running grunt production
 grunt production --optimize=uglify
+if [ "$1" = "master" ]; then
+    # copy the minimized jade file
+    mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
+fi
 
 # rename mainforproduction to main.js
 mv public/js/mainforproduction.js public/js/main.js
