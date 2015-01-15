@@ -216,7 +216,7 @@
 							validate : CKEDITOR.dialog.validate.notEmpty(c.lang.image.urlMissing)
 						}, {
 							type : "html",
-							html : "<a id='ckeditor_media' onclick='clickImageButton(this);' style='display: inline-block; margin-top: 14px; margin-left: auto; margin-right: auto; -webkit-user-select: none;' href='javascript:void(0)' title='Browse Server' hidefocus='true' class='cke_dialog_ui_button' role='button'><span class='cke_dialog_ui_button'>Browse Server</span></a>"
+							html : "<a id='ckeditor_media' onclick='clickImageButton(this);' style='display: inline-block; margin-top: 14px; margin-left: auto; margin-right: auto; -webkit-user-select: none;display:none' href='javascript:void(0)' title='Browse Server' hidefocus='true' class='cke_dialog_ui_button' role='button'><span class='cke_dialog_ui_button'>Browse Server</span></a>"
 						}]
 					}]
 				}, {

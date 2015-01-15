@@ -759,6 +759,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.clickImageButton();
     }
 
+    window.clickandInsertImageButton = function(editor) {
+      $scope.inlineInput = editor;
+      window.parent.clickImageButton();
+    }
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
@@ -895,8 +900,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.networks = networks;
     };
 
+    window.addCKEditorImageInput = function(url) {
+      if ($scope.urlInput) {
+        $scope.urlInput.val(url);
+      }
+    };
+
     window.addCKEditorImage = function(url) {
-      $scope.urlInput.val(url)
+      if ($scope.inlineInput) {
+        $scope.inlineInput.insertHtml( '<img src="'+url+'"/>' );
+      }
     };
 
     window.triggerEditMode = function() {

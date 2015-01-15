@@ -53,6 +53,7 @@ var CKBUILDER_CONFIG = {
 		'clipboard' : 1,
 		'doksoft_button' : 1,
 		'enterkey' : 1,
+		'mediamanager' : 1,
 		'entities' : 1,
 		'floatingspace' : 1,
 		'font' : 1,
