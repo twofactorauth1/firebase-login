@@ -378,7 +378,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
       }, function() {});
     };
 
-    $scope.showEmailTimelineItemModal = function(email) {
+    $scope.showEmailTimelineItemModal = function(email, index, totalNumber) {
       var modalInstance = $modal.open({
         templateUrl: '/pipeshift/views/video/modal/timelineEmailItem.html',
         controller: 'TimelineEmailItemModalController',
@@ -393,7 +393,10 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
         }
       });
       modalInstance.result.then(function(email) {
-        console.log(email);
+        $scope.course.emails[index] = email;
+        Course.update({id: $scope.course._id}, $scope.course, function(resp) {
+          console.log('Template update', resp);
+        });
       }, function() {});
     };
 
