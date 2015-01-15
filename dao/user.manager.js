@@ -61,7 +61,7 @@ module.exports = {
                                 log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
                             } else {
                                 log.debug('account ', account.attributes.subdomain);
-                                var siteUrl = account.get('subdomain') + appConfig.subdomain_suffix;
+                                var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
 
                                 var vars = [
                                     {
@@ -207,7 +207,7 @@ module.exports = {
                                     log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
                                 } else {
                                     log.debug('account ', account.attributes.subdomain);
-                                    var siteUrl = account.get('subdomain') + appConfig.subdomain_suffix;
+                                    var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
 
                                     var vars = [
                                         {

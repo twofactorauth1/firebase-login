@@ -53,7 +53,7 @@ var cookieUtil =  {
 
     //region COMPANY COOKIES
     setAccountToken: function(resp, token) {
-        this.setCookie(resp, "ind-acc", token, true, 600, '.indigenous.local');
+        this.setCookie(resp, "ind-acc", token, true, 600);
     },
 
     getAccountToken: function(req) {

@@ -112,7 +112,7 @@ _.extend(baseRouter.prototype, {
         }
 
         if(subObj.isMainApp === true) {
-            var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app');
+            var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app' || sSub ==='');
             logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
             return mainAppTest;
         }

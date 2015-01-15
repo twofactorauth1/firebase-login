@@ -72,6 +72,7 @@ require.config({
         'sweetAlert': 'libs/sweetalert/lib/sweet-alert.min',
         'spin': 'libs/spin.js/spin',
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
+        'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -152,6 +153,7 @@ require.config({
         "whenUiScrolledDirective": "/pipeshift/js/modules/video/directive/whenUiScrolled",
         "whenScrolledDirective": "/pipeshift/js/modules/video/directive/whenScrolled",
         "videoDropDirective": "/pipeshift/js/modules/video/directive/videoDrop",
+        "emailDropDirective": "/pipeshift/js/modules/video/directive/emailDrop",
         "videoDraggableDirective": "/pipeshift/js/modules/video/directive/videoDraggable",
         "coursePreviewDirective": "/pipeshift/js/modules/video/directive/coursePreview",
         "resizeDirective": "/pipeshift/js/modules/video/directive/resize",
@@ -191,6 +193,7 @@ require.config({
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
         'highcharts': {deps: ['jquery']},
+        'powertour': {deps: ['jquery']},
         'highcharts-funnel': {deps: ['highcharts']},
         'highmaps-us': {deps: ['highcharts']},
         'highmaps-data': {deps: ['highcharts']},
@@ -209,6 +212,7 @@ require.config({
         'whenUiScrolledDirective': {deps: ['angular', 'varModules']},
         'whenScrolledDirective': {deps: ['angular', 'varModules']},
         'videoDropDirective': {deps: ['angular', 'varModules']},
+        'emailDropDirective': {deps: ['angular', 'varModules']},
         'videoDraggableDirective': {deps: ['angular', 'varModules']},
         'coursePreviewDirective': {deps: ['angular', 'varModules']},
         'videoTitleDirective': {deps: ['angular', 'varModules']},

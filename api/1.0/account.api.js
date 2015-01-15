@@ -384,7 +384,7 @@ _.extend(api.prototype, baseApi.prototype, {
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));
-               self.log.debug('<< saveOrUpdateTmpAccount')
+               self.log.debug('<< saveOrUpdateTmpAccount(' + value.get('token') + ')', value);
                resp.send(value.toJSON("public"));
            } else {
                self.wrapError(resp, 500, null, err, value);

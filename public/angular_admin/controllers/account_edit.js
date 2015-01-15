@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'ngOnboarding', 'toaster'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective','toaster', 'powertour'], function(app) {
   app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', 'toaster', function($scope, $stateParams, UserService, ngProgress, $location, toaster) {
     ngProgress.start();
     var phoneCharLimit = 4;
@@ -13,33 +13,73 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.preferences = preferences;
     });
 
+    $('body').powerTour({
+              tours : [
+                  {
+                          trigger            : '',
+                          startWith          : 1,
+                          easyCancel         : false,
+                          escKeyCancel       : false,
+                          scrollHorizontal   : false,
+                          keyboardNavigation : true,
+                          loopTour           : false,
+                          onStartTour        : function(ui){ },
+                          onEndTour          : function(){
+
+                              // animate back to the top
+                              $('html, body').animate({scrollTop:0}, 1000, 'swing');  
+                              //$('html, body').animate({scrollLeft:0}, 1000, 'swing');   
+                          },
+                          onProgress : function(ui){ },
+                          steps:[
+                                  {
+                                      hookTo          : '',//not needed
+                                      content         : '#step-one',
+                                      width           : 400,
+                                      position        : 'sc',
+                                      offsetY         : 0,
+                                      offsetX         : 0,
+                                      fxIn            : 'fadeIn',
+                                      fxOut           : 'bounceOutUp',
+                                      showStepDelay   : 500,
+                                      center          : 'step',
+                                      scrollSpeed     : 400,
+                                      scrollEasing    : 'swing',
+                                      scrollDelay     : 0,
+                                      timer           : '00:00',
+                                      highlight       : true,
+                                      keepHighlighted : true,
+                                      onShowStep      : function(ui){ },
+                                      onHideStep      : function(ui){ }
+                                  }
+                          ],
+                          stepDefaults:[
+                                  {
+                                      width           : 500,
+                                      position        : 'tr',
+                                      offsetY         : 0,
+                                      offsetX         : 0,
+                                      fxIn            : '',
+                                      fxOut           : '',
+                                      showStepDelay   : 0,
+                                      center          : 'step',
+                                      scrollSpeed     : 200,
+                                      scrollEasing    : 'swing',
+                                      scrollDelay     : 0,
+                                      timer           : '00:00',
+                                      highlight       : true,
+                                      keepHighlighted : false,
+                                      onShowStep      : function(){ },
+                                      onHideStep      : function(){ }
+                                  }
+                          ]
+                      }
+                  ]
+            });
+
     $scope.beginOnboarding = function(type) {
         if (type == 'basic-info') {
-            $scope.stepIndex = 0
-            $scope.showOnboarding = true;
-            $scope.onboardingSteps = [
-              {
-                overlay: true,
-                title: 'Task: Enter Basic Info',
-                description: "Enter in your basic information. With your business address we can get more information about your local competitors. We will automatically add your logo to your website and emails. Tell us more about yourself so we can customize your experience.",
-                position: 'centered'
-              }
-              // {
-              //   attachTo: '.btn-view-themes',
-              //   position: 'bottom',
-              //   overlay: false,
-              //   title: 'Themes Tab',
-              //   width: 400,
-              //   description: "This is the theme tab where you can change or modify your theme after you choose one."
-              // },
-              // {
-              //   attachTo: '.themes',
-              //   position: 'top',
-              //   overlay: false,
-              //   title: 'Select A Theme',
-              //   description: 'Choose one of the themes from below by clicking the switch button.'
-              // }
-            ];
+          $('body').powerTour('run',0);
         }
     };
 
@@ -69,30 +109,10 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       }, true);
     };
 
-    //user API call for object population
-    UserService.getUser(function(user) {
-      $scope.user = user;
-      $scope.fullName = [user.first, user.middle, user.last].join(' ');
-      if (!$scope.user.details[0].phones.length)
-        $scope.user.details[0].phones.push({
-          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-          number: '',
-          default: false,
-          type: 'm'
-        });
-      $scope.user.details[0].phones.forEach(function(value, index) {
-        $scope.userPhoneWatchFn(index);
-      });
-      if (!$scope.user.details[0].addresses.length)
-        $scope.user.details[0].addresses.push({
-          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
-        });
-    });
-
     //account API call for object population
     UserService.getAccount(function(account) {
       $scope.account = account;
-      ngProgress.complete();
+      
       if (!$scope.account.business.phones.length)
         $scope.account.business.phones.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -107,6 +127,39 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.account.business.addresses.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort()
         });
+    });
+
+    //user API call for object population
+    UserService.getUser(function(user) {
+      $scope.user = user;
+      $scope.fullName = [user.first, user.middle, user.last].join(' ');
+      if(!$scope.user.details[0])
+      {
+        $scope.user.details[0] = [];
+      }
+      if(!$scope.user.details[0].phones)
+        {
+          $scope.user.details[0].phones = [];
+        }
+      if(!$scope.user.details[0].addresses)
+        {
+          $scope.user.details[0].addresses = [];
+        }  
+      if ($scope.user.details[0].phones.length == 0)
+        $scope.user.details[0].phones.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+          number: '',
+          default: false,
+          type: 'm'
+        });
+      $scope.user.details[0].phones.forEach(function(value, index) {
+        $scope.userPhoneWatchFn(index);
+      });
+      if (!$scope.user.details[0].addresses.length)
+        $scope.user.details[0].addresses.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
+        });
+      ngProgress.complete();
     });
 
     //business phone field add

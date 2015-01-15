@@ -56,8 +56,8 @@
 
                        
                         <div class="entry-content">
-                            <div ng-if="blog.post.post_content" class="editable post_content_div" data-class="post_content">
-                                <span class="post_content" ng-bind-html="blog.post.post_content | unsafe"></span>
+                            <div ng-if="blog.post.post_content" class="post_content_div">
+                                <span class="post_content editable" ng-bind-html="blog.post.post_content | unsafe" data-class="post_content"></span>
                             </div>
                             <div class="editable post_content_div" ng-if="!blog.post.post_content" data-class="post_content">                               
                                 <span class="blog_post_content" > Create you blog post here</span>

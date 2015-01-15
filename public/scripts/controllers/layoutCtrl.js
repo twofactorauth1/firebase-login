@@ -94,7 +94,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     pagesService(function(err, data) {
-      console.log('pagesService data >>> ', data);
       if (err) {
         console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
       } else {
@@ -738,7 +737,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
-        console.log('elements length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
@@ -872,6 +870,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     window.triggerEditMode = function() {
+      console.log('edit mode engaged');
       var body = document.getElementsByTagName('body')[0];
       var hasClass = body.classList.contains('editing');
       if (hasClass === false) {
@@ -1259,7 +1258,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var tmpAccount = data;
         tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
         userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-
+          console.log('Saved the temp account.  Account token is: ' + data.token);
           var newUser = {
             username: newAccount.email,
             password: newAccount.password,
@@ -1267,7 +1266,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             accountToken: data.token,
             coupon: newAccount.coupon
           };
-
+          console.log('newUser.accountToken: ' + newUser.accountToken);
           //get the token
           PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
             if (error) {
