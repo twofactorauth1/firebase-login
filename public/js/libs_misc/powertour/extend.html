@@ -1,0 +1,563 @@
+<!DOCTYPE html> 
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+     
+    <title>Power Tour - A powerfull and creative jQuery tour solution</title>
+
+ 	<!-- SEO META -->
+    
+    <meta name="description" content="Powerfull creative jQuery tour plugin to show off your products, sites or other things.">
+    <meta name="keywords" content="HTML, HTML5, CSS, CSS3, JavaScript, jQuery, plugins, tour, helpers, tooltip, wordpress, creative, presantation, product, help, tip">
+    <meta name="author" content="CreativeMilk">
+
+    <!-- SOCIAL META -->
+     
+	<meta property="og:title" content="Power Tour - Powerfull creative jQuery tour plugin" />
+    <meta property="og:url" content="http://www.jquerypowertour.com" />
+    <meta property="og:image" content="http://www.jquerypowertour.com/images/overview.jpg" />
+    <meta property="og:description" content="A powerfull and creative jQuery tour plugin to guid your visitors throught the modern chaos." />
+        
+    <!-- SITE -->
+    
+    <link rel="shortcut icon" href="images/favicon-v2.ico" /> 
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="fontawesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/style-v2.css"/>
+
+    <!--[if gt IE 8]><!-->
+	<script src="js/prism.min.js"></script>
+    <link rel="stylesheet" href="css/prism.css"/>
+    <!-- <![endif]-->
+    
+    <script src="js/modernizr.min.js"></script>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/main-v2.min.js"></script>
+
+   	<!--[if lte IE 8]>
+    <script src="js/respond.js"></script> 
+    <![endif]-->  
+    
+</head>
+<body>
+    <div id="container">
+    
+    	<div id="bg">&nbsp;</div>
+        
+    	<header id="header-main">
+			<div id="header-main-top">
+                <div class="inner clearfix">
+                    <a href="index.html" id="logo" alt="logo">
+                    	<img src="images/logo.jpg" alt="logo"/>
+                    </a>
+                    <nav id="nav-top">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="documentation.html">Documentation</a></li>
+                            <li class="active"><a href="extend.html">Extend</a></li>
+                            <li><a href="builder.html">Builder</a></li>
+                        </ul>
+                    </nav>
+                    <div>
+                    	<a href="http://bit.ly/RKcRDu" title="buy this plugin" class="btn pull-right">Buy plugin</a>
+                    </div>
+				</div> 
+			</div> 
+          	<div id="header-main-mid" class="clearfix">
+				<div class="inner clearfix">
+                	<div class="heading clearfix">
+                        <h1>Extend</h1>
+                        <h2>Do more with the Power Tour plugin</h2>
+                    </div>
+                   	<div class="header-main-subbar clearfix"></div> 
+				</div>
+			</div>
+        </header>  
+        <div id="main">
+        	<div class="inner clearfix">
+            	<aside id="sidebar-main">
+                	<div id="menubox">
+                        <strong>Navigation</strong>
+                        <nav id="nav-main">
+                            <ul class="nav">
+                                <li><a href="#extend-validation" class="gotoid">Validation</a></li>
+                                <li><a href="#extend-run-once" class="gotoid">Run once</a></li>
+                                <li><a href="#extend-progress-meter" class="gotoid">Progress meter</a></li>
+                                <li><a href="#extend-tooltips" class="gotoid">Tooltip</a></li>
+                                <li><a href="#extend-showall" class="gotoid">Showall</a></li>
+                                <li><a href="#extend-ajax" class="gotoid">AJAX</a></li>
+                                <li><a href="#extend-animatedscroll" class="gotoid">Animated scroll</a></li>
+                                <li><a href="#extend-connectors" class="gotoid">Connectors</a></li>
+                                <li><a href="#extend-responsive-steps" class="gotoid">Responsive steps</a></li>
+                            </ul>
+                        </nav>
+                     </div>
+                </aside>
+                <div id="content">
+        			<section class="blocks" id="extend-validation">
+                        <div class="heading-block">
+                            <h3>Validation</h3>
+                            <h4>Using a custom validation.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-1-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-1-b" data-toggle="tab">Usage</a></li>
+                        </ul>	
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-1-a">
+                            	<p>We have included a custom (basic) validation example. You can use this in combination with the plugin callback functions(s).</p>
+                                <p>Visit the <a href="documentation.html"> documentation</a> page for available validation attributes.</p>
+                            </div>
+                            <div class="tab-pane" id="tab-1-b">
+                                <pre class="line-numbers" data-label="javascript"><code class="language-javascript">onShowStep : function(ui){
+                        
+        // button variable
+        var nextBtn = obj.currentStep.find('[data-powertour-action="next"]');
+        
+        // disable the next button at default
+        $('body').attr('data-powertour-disable-next', true);
+        
+        // add a visual class to the button at default(not required)
+        nextBtn.addClass('btn-disable');
+        
+        // validate the input
+        $('#step-validation-input-1').keyup(function(e){
+            if($(this).val().length > 3){
+                
+                // enable the next button 
+                $('body').removeAttr('data-powertour-disable-next');
+        
+                // remove the visual class from the button(not required)
+                nextBtn.removeClass('btn-disable');
+                
+                // add a visual class to the input(not required)
+                $(this).addClass('input-valid');
+        
+            }
+        });
+        
+    },
+    onHideStep : function(ui){
+        
+        // remove the next button again
+        $('body').removeAttr('data-powertour-disable-next');
+        
+        // remove class and clear the input after
+        $('#step-validation-input-1').removeClass('input-valid').val('');
+        
+            
+    }</code></pre>
+                            </div>
+                        </div>                 
+                    </section>
+                    
+               		<section class="blocks" id="extend-run-once">
+                        <div class="heading-block">
+                            <h3>Run once</h3>
+                            <h4>Run the tour just once.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-2-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-2-b" data-toggle="tab">Usage</a></li>
+                        </ul>	
+                        <div class="tab-content">
+                        	<div class="tab-pane  active" id="tab-2-a">
+                            	<p>Allow users the option to run the tour just once, in the example in the next tab we use LocalStorage but this can also be done with a cookie or database.</p>
+                            </div>
+                            <div class="tab-pane" id="tab-2-b">
+                                <pre class="line-numbers" data-label="javascript"><code class="language-javascript">$(document).ready(function($){
+            
+        // get the key
+        var runtour = localStorage.getItem('run-tour-1');
+        
+        // run if key has value 'no' (set inside the 'onFinish' callback function)
+        if(runtour == 'no'){
+            $('#trigger-id').hide();//simply hide the trigger
+        
+            // the plugin
+            $('body').powerTour({
+                // options
+                onEndTour : function(ui){
+                
+                    // always
+                    localStorage.setItem('run-tour-1','no');  
+                    
+                    // or
+                    
+                    // if checkbox is checked
+                    if($('#runonce').val() === true){
+                        localStorage.setItem('run-tour-1','no');  
+                    }
+                }
+             });
+         }
+});</code></pre> 
+                                        <p></p>
+                                        <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;div id="step-one" class="single-step"&gt;
+        &lt;input type="checkbox" id="runonce"/&gt; Dont show agian?
+&lt;/div&gt;</code></pre>  
+                            </div>
+                        </div>  
+                	</section>
+
+					<section class="blocks" id="extend-progress-meter">
+                        <div class="heading-block">
+                            <h3>Progress meter</h3>
+                            <h4>Show a simple progress meter.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-3-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-3-b" data-toggle="tab">Usage</a></li>
+                        </ul>	
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-3-a">
+                            	<p>Add a basic progress meter to the tour and show the meter when the tour is running, this gives an good indication how on long the tour will take.</p>
+                            </div>
+                            <div class="tab-pane" id="tab-3-b">
+                                <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;div id="progressmeter"&gt;
+    &lt;div id="progressmeter-bar"&gt;&lt;/div&gt;
+    &lt;div id="progressmeter-text"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                    <p>&nbsp;</p>
+					<pre class="line-numbers" data-label="javascript"><code class="language-javascript">onStartTour : function(ui){
+     
+    // show the progress meter                
+	$('#progressmeter').show();	
+                         
+},
+onEndTour : function(){
+
+	// progress meter hide and reset
+	$('#progressmeter')
+    .hide()
+    .children('#progressmeter-bar')
+    .width(0)
+    .next()
+    .text('loading...');
+								
+},	
+onProgress : function(ui){ 
+
+    // obj.stepInex returns a zero based number!
+    var i       = (obj.stepIndex + 1);
+    var total   = obj.totalSteps;
+    var barSize = 100 / total * i+'%';
+
+    // run progress meter
+    $('#progressmeter-text')
+    .html('&lt;span&gt;'+i+'&lt;/span&gt;/'+total+'')
+    .prev('#progressmeter-bar')
+    .animate({width: barSize},400);
+    					
+}</code></pre>  
+                            </div>
+                        </div>  
+           			</section>
+
+    				<section class="blocks" id="extend-tooltip">
+                        <div class="heading-block">
+                            <h3>Tooltips</h3>
+                            <h4>Transform every step into a tooltip.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-4-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-4-b" data-toggle="tab">Usage</a></li>
+                        </ul>                
+                        <div class="tab-content">
+                        	 <div class="tab-pane active" id="tab-4-a">
+                             	<p>In version 2 we removed the type's(step, auto, showall & tooltip), but to make sure that users who are using these type's 
+                                still can keep on using them we provided examples on how to keep on using them.</p>
+                             </div>
+                             <div class="tab-pane" id="tab-4-b">
+                                <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;div id="hook-one" class="powertour-tooltip"&gt;
+   // add the class 'powertour-tooltip' to your hook id
+&lt;/div&gt;</code></pre>       
+                            </div>
+                        </div>
+                	</section>
+                    
+                	<section class="blocks" id="extend-showall">
+                        <div class="heading-block">
+                            <h3>Showall</h3>
+                            <h4>Show all steps at once with a click or on load.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-5-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-5-b" data-toggle="tab">Usage</a></li>
+                        </ul>  
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-5-a">
+                             	<p>In version 2 we removed the type's(step, auto, showall & tooltip), but to make sure that users who are using these type's 
+                                still can keep on using them we provided examples on how to keep on using them.</p>
+                            </div>
+                            <div class="tab-pane" id="tab-5-b">
+                                <pre class="line-numbers" data-label="javascript"><code class="language-javascript">// SHOW ON CLICK
+                                
+$(document).ready(function($){
+                                    
+    // call plugin here
+    $('body').powerTour({
+    	// options
+    });
+    
+    // trigger the event
+    $('#showall-trigger').click(function(e){
+        // if statement to hide/show the steps
+        if($('.powertour-step').is(':visible')){
+        
+            // show all steps
+            $('.powertour-step').show();
+            
+            // show all steps per tour (use with multiple tours)
+            $('.powertour-step[data-powertour-id="0"]').show();
+                
+        }else{
+            // hide all steps
+            $('.powertour-step').hide();
+            
+            // trigger per tour (use with multiple tours)
+            $('.powertour-step[data-powertour-id="0"]').hide();
+        }
+    
+        e.preventDefault();
+    });
+});
+
+// SHOW ON LOAD
+
+$(document).ready(function($){
+    
+    // call plugin here
+    $('body').powerTour({
+    	// options
+    });
+                
+    // show all steps
+    $('.powertour-step').show();
+    
+    // or
+                    
+    // show all steps per tour (use with multiple tours)
+    $('.powertour-step[data-powertour-id="0"]').show();
+            
+});</code></pre> 
+                            </div>
+                        </div>  
+                    </section>
+
+					<section class="blocks" id="extend-ajax">
+                        <div class="heading-block">
+                            <h3>AJAX</h3>
+                            <h4>Use AJAX to load the contents of the step.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-6-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-6-b" data-toggle="tab">Usage</a></li>
+                        </ul> 
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-6-a">
+                            	<p>You can use to load the contents of the steps with AJAX to reduce the pageload, as you would load the contents of a step only when the step is triggerd.</p>
+                                <p></p>
+                                <div class="attention-box attention-warning">
+                                    <h4>Hidden and dynamic content</h4>
+                                    <p>Using hidden or dynamic content inside the step may require the use of the 'update' method to re-position the step.</p>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab-6-b">
+                    				<pre class="line-numbers" data-label="html"><code class="language-markup">&lt;div class="single-step" id="step-eight"&gt;
+	&lt;!-- place nothing here --&gt;
+&lt;/div&gt;</code></pre>
+                	<p>&nbsp;</p>
+                    <pre class="line-numbers" data-label="javascript"><code class="language-javascript">hookTo     : '#hook-eight',
+content    : '#step-eight',
+onShowStep : function(ui){
+											
+    $('#step-eight').load('AJAX/ajaxcontent.html',function(){ 
+    
+    	// re-position the step
+        $('body').powerTour('update', '#step-eight');
+        
+    });
+
+}</code></pre> 
+                        	</div>
+                    	</div>  
+      				</section>    
+
+`					<section class="blocks" id="extend-animatedscroll">
+                        <div class="heading-block">
+                            <h3>Animated scroll</h3>
+                            <h4>Scroll to the top/left at the end of the tour.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-8-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-8-b" data-toggle="tab">Usage</a></li>
+                        </ul>  
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-8-a">
+                            	<p>The plugin provides the animated scroll between the steps switching but once the tour ends it will stay on the
+                                 page where the tour has ended, but you can add a line of code that will take you back to the top after the tour has ended.</p>
+                            </div>
+                            <div class="tab-pane" id="tab-8-b">
+                                <pre class="line-numbers" data-label="javascript"><code class="language-javascript">onEndTour : function(ui){
+								
+    // animate back to the top (vertical layouts)
+    $('html, body').animate({scrollTop:0}, 1000, 'swing');	
+    
+    // or
+    
+    // animate back to the top (horizontal layouts)
+    $('html, body').animate({scrollLeft:0}, 1000, 'swing');	
+								
+}</code></pre>
+                            </div>
+                        </div>  
+            		</section> 
+
+					<section class="blocks" id="extend-connectors">
+                        <div class="heading-block">
+                            <h3>Connectors</h3>
+                            <h4>Add visual indicators to the steps.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-9-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-9-b" data-toggle="tab">Usage</a></li>
+                        </ul>  
+                        <div class="tab-content">
+                        	 <div class="tab-pane active" id="tab-9-a">
+                             	<p>You can add some cool visual indicators to every step to give more focus to the hook(s). These connectors are pure CSS so no images are used and are easy to change.</p>
+                             </div>
+                            <div class="tab-pane" id="tab-9-b">
+                                 <pre class="line-numbers" data-label="html"><code class="language-markup">&lt;!-- Arrow connectors --&gt;
+
+&lt;div id="step-one" class="single-step"&gt;
+    &lt;!-- top --&gt;
+    &lt;span class="connectorarrow-tle"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-tl"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-tm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-tr"&gt;&lt;!-- custom --&gt;&lt;/span&gt; 
+    &lt;span class="connectorarrow-tre"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;!-- right --&gt;
+    &lt;span class="connectorarrow-rte"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-rt"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-rm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-rb"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-rbe"&gt;&lt;!-- custom --&gt;&lt;/span&gt;  
+    &lt;!-- bottom --&gt;
+    &lt;span class="connectorarrow-ble"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-bl"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-bm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-br"&gt;&lt;!-- custom --&gt;&lt;/span&gt; 
+    &lt;span class="connectorarrow-bre"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;!-- left --&gt;  
+    &lt;span class="connectorarrow-lte"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-lt"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-lm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-lb"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectorarrow-lbe"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+&lt;/div&gt
+
+&lt;!-- Dot connectors --&gt;
+
+&lt;div id="step-five" class="single-step"&gt;
+    &lt;!-- top --&gt;
+    &lt;span class="connectordot-top"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-tl"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-tm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-tr"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;!-- right --&gt;
+    &lt;span class="connectordot-right"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-rt"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-rm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-rb"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;!-- bottom --&gt;
+    &lt;span class="connectordot-bottom"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-bl"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-bm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-br"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;!-- left --&gt;
+    &lt;span class="connectordot-left"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-lt"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-lm"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+    &lt;span class="connectordot-lb"&gt;&lt;!-- custom --&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre> 
+                            </div>
+                        </div>  
+            		</section> 
+
+					<section class="blocks" id="extend-responsive-steps">
+                        <div class="heading-block">
+                            <h3>Responsive steps</h3>
+                            <h4>A solution for smaller screens.</h4>
+                        </div>
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab-10-a" data-toggle="tab">Info</a></li>
+                            <li><a href="#tab-10-b" data-toggle="tab">Usage</a></li>
+                        </ul> 
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="tab-10-a">
+                            	<p>The plugin does not provided an direct solution for responsive screens, but you can transform the tour with some extra css rules to fit the smaller screens. 
+                            All steps are wrapped by the plugin, and every wrapper got an unique id which you can use to override the default plugin position and inner styling.</p>
+                            </div>
+                            <div class="tab-pane" id="tab-10-b">
+                                <div class="attention-box attention-warning">
+                                    <strong>Notice:</strong> The id's are zero based numbers.
+                                </div>
+                                <p></p>
+                                <p></p>
+                                <pre class="line-numbers" data-label="css"><code class="language-css">@media (min-width: 768px) {
+                   
+     /* First tour, first step */        
+     #pw-0-0{
+          /* some rules need the important declaration in order to work */
+          left:0!important;
+     }
+     
+     /* Second tour, sixth step */        
+     #pw-1-5{
+          /* some rules need the important declaration in order to work */
+          right:0!important;
+     }
+     
+     /* Main wrapper class */ 
+     .powertour-step{
+          /* some rules need the important declaration in order to work */
+          width:700px!important;
+     } 
+   
+}</code></pre>  
+                            </div>
+                        </div>  
+            		</section>     
+                    
+                    
+                    
+              	</div>
+           	</div>
+        </div>
+        <footer id="footer-main">
+        	<div class="inner">
+                <nav id="nav-bottom" class="clearfix">
+                    <ul>
+                        <li class="active"><a href="index.html">Home</a></li>
+                        <li>|</li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li>|</li>
+                        <li><a href="extend.html">Extend</a></li>
+                        <li>|</li>
+                        <li><a href="builder.html">Builder</a></li>
+                        <li>|</li>
+                        <li><a href="http://bit.ly/RKcRDu" title="buy this plugin">Buy plugin</a></li>
+                    </ul>
+                </nav>
+                <hr/>
+            	<div id="copyright" class="clearfix">Copyright 2014 <a href="http://wwww.creativemilk.net">CreativeMilk</a>. All rights reserved.</div>
+            </div>
+        </footer>
+        
+        <div id="backtotop"><i class="fa fa-chevron-up"></i></div>
+    </div>                     
+</body>
+</html>

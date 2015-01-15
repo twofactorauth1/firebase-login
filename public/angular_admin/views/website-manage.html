@@ -157,7 +157,7 @@
             <div class="posts-section" ng-switch-when="posts">
                 <div class="row">
 
-                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true">
+                    <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true track by $index">
                         <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>

@@ -1,7 +1,4 @@
 <toaster-container toaster-options="{'time-out': 1000, 'close-button':true, 'limit': 1}"></toaster-container>
-<div ng-if="showOnboarding">
-    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' onFinishCallback='finishOnboarding'></onboarding-popover>
-</div>
 <div class="account">
 
     <div class="pageheader row">
@@ -194,7 +191,7 @@
                             </div>
                         </div>
                         <div class="clearfix mb20"></div>
-                        <div class="col-xs-12"  style="padding: 0 15px;">
+                        <div class="col-xs-12" style="padding: 0 15px;">
                             <ul class="social-list right row">
 
                                 <li class="col-xs-12">
@@ -267,35 +264,35 @@
                         <h3 class="panel-title">Your Plan</h3>
                     </div>
                     <div class="panel-body">
-                         <div class="no-plan well" ng-if="!user.stripeId">
-                                <h3 class="center">No Subscription Plan Selected</h3>
-                                <div class="cleatfix mb15"></div>
-                                <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
-                                <div class="cleatfix mb30"></div>
-                                <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Choose Plan</a>
-                            </div>
+                        <div class="no-plan well" ng-if="!user.stripeId">
+                            <h3 class="center">No Subscription Plan Selected</h3>
+                            <div class="cleatfix mb15"></div>
+                            <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
+                            <div class="cleatfix mb30"></div>
+                            <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Choose Plan</a>
+                        </div>
 
-                            <div class="plan-options" ng-if="user.stripeId">
-                                <div class="col-sm-6">
-                                    <div class="has-plan" ng-if="user.stripeId">
-                                        <h2 class="center">{{subscription.plan.name}} Plan</h2>
-                                        <hr></hr>
-                                        <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
+                        <div class="plan-options" ng-if="user.stripeId">
+                            <div class="col-sm-6">
+                                <div class="has-plan" ng-if="user.stripeId">
+                                    <h2 class="center">{{subscription.plan.name}} Plan</h2>
+                                    <hr></hr>
+                                    <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
                                             <span>/{{subscription.plan.interval}}</span>
                                         </h2>
-                                        <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
-                                    <div class="cleatfix mb20"></div>
-                                    <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
-                                    <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Change Plan</button>
-                                    <div class="cleatfix mb20"></div>
-                                    <!-- Add Auto Pay Option Toggle-->
-                                    <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changeCardModal">Modify Payment Method</button>
+                                    <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
+                                <div class="cleatfix mb20"></div>
+                                <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
+                                <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Change Plan</button>
+                                <div class="cleatfix mb20"></div>
+                                <!-- Add Auto Pay Option Toggle-->
+                                <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changeCardModal">Modify Payment Method</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- <div class="col-sm-6">
@@ -381,7 +378,7 @@
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK].status">
-                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.FACEBOOK)" confirm-click2>
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.FACEBOOK)" confirm-click2 confirm-click2-placement="top">
                                         <span class="fa fa-trash-o"></span>Disconnect</button>
                                 </div>
                             </div>
@@ -799,10 +796,71 @@
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
                 </div>
-                <div class="card-wrapper-change"></div>
-                <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
+                <div style="padding:10px;">
+                    <div class="mb20"></div>
+                    <div class="card-wrapper-change"></div>
+                    <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
+                    <!-- <div class="mb40">
+                        <div class="card-wrapper"></div>
+                    </div>
+                    <div class="active">
+                        <form name="card-details" action="">
+                            <div>
+                                <div id="card_number" class="form-group small-6 columns col-sm-6">
+                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                                <div class="visible-xs mb20"></div>
+                                <div id="card_name" class="form-group small-6 columns col-sm-6">
+                                    <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
+                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
+                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <div id="coupon-name" class="form-group col-xs-12">
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
+                        <span class="error" />
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="coupon-name" class="form-group col-xs-12">
+                        <a type="button" class="btn btn-primary btn-lg btn-block center" ng-click="updateStripeIdFn()"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Add Card</a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="mb10"></div> -->
+                </div>
             </div>
         </div>
     </div>
 
 </div>
+
+<div id="step-1" class="single-step carousel-step">
+    <header>
+        <h3>Basic Navigation</h3>
+    </header>
+    <p>
+        The main navigation is on the left and has all the various sections for your business.
+    </p>
+    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
+        <i class="fa fa-check"></i> GOT IT
+    </a>
+</div>
+
+<script type="text/javascript">
+card = $('form[name="card-details"]').card({
+    container: '.card-wrapper'
+});
+</script>

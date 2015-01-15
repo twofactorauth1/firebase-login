@@ -38,13 +38,12 @@ define([
             ngProgress.start();
 
             if ($location.$$search['pagehandle']) {
-                console.log('load pagehandle');
                 document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
             }
 
-            // if ($location.$$search['posthandle']) {
-            //     document.getElementById("iframe-website").setAttribute("src", '/page/post/' + $location.$$search['posthandle'] + '?editor=true');
-            // }
+            if ($location.$$search['posthandle']) {
+                document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+            }
 
             // if ($location.$$search['custid']) {
             //     current_src = document.getElementById("iframe-website").getAttribute("src");
@@ -148,7 +147,7 @@ define([
                         if ($scope.currentPage.components) {
                             $scope.components = $scope.currentPage.components;
                             if ($location.$$search['posthandle']) {
-                                $scope.updatePage("post", true);
+                                //$scope.updatePage("post", true);
                             }
                         }
                     } else {
@@ -341,7 +340,6 @@ define([
             }
 
             $scope.bindEvents = function() {
-                console.log('bindEvents');
                 var iframe = document.getElementById("iframe-website");
                 if (!iframe)
                     return;
@@ -418,7 +416,7 @@ define([
                 $scope.isEditing = true;
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
-
+                 console.log('triggering edit mode');
                 if (iframe.contentWindow.triggerEditMode)
                     iframe.contentWindow.triggerEditMode();
 
@@ -439,7 +437,6 @@ define([
             };
 
             $scope.cancelPage = function() {
-                console.log('cancel page');
                 // $scope.components = that.originalCurrentPageComponents;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
@@ -578,7 +575,6 @@ define([
             };
 
             $scope.updatePage = function(handle, editing) {
-                console.log('update page ', handle);
                 if (!angular.isDefined(editing))
                     $scope.isEditing = false;
 
@@ -592,7 +588,10 @@ define([
                 }
 
                 if ($location.$$search['posthandle']) {
+                    console.log('post handle detected');
                     route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
+                    console.log('route ', route);
+                    //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 }
 
                 //TODO - replace with sending route through scope to update without iframe refresh
@@ -748,7 +747,7 @@ define([
             };
 
             $scope.activateAloha = function() {
-                console.log('activate aloha');
+                console.log('activateAloha');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -760,7 +759,6 @@ define([
             };
 
             $scope.editComponent = function(componentId) {
-                console.log('edit component >>>');
                 $scope.$apply(function() {
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
@@ -804,7 +802,6 @@ define([
             };
 
             $scope.saveComponent = function() {
-                console.log('saving component >>>');
                 var componentId = $scope.componentEditing._id;
 
                 //update single component
@@ -814,7 +811,6 @@ define([
                 });
 
                 var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
-                console.log('edited component ', editedComponent);
 
                 //get all the editable variables and replace the ones in view with variables in DB
                 var componentEditable = editedComponent[0].querySelectorAll('.editable');
@@ -870,7 +866,7 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
-
+                $scope.deactivateAloha();
                 $scope.activateAloha();
 
                 //update the scope as the temppage until save
@@ -989,14 +985,17 @@ define([
                 });
             };
 
+            $scope.changesConfirmed = false;
             //Before user leaves editor, ask if they want to save changes
             var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-                event.preventDefault();
                 var isDirty = false;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
                 }
+
+                if (isDirty && !$scope.changesConfirmed) {
+                    event.preventDefault();
 
                 SweetAlert.swal({
                         title: "Are you sure?",
@@ -1010,15 +1009,23 @@ define([
                         closeOnCancel: false
                     },
                     function(isConfirm) {
-                        offFn()
                         if (isConfirm) {
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                            $scope.changesConfirmed = true;
+                            $scope.savePage();
                             $location.path(newUrl);
+                            offFn();
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                            $scope.changesConfirmed = true;
                             $location.path(newUrl);
+                            offFn();
                         }
                     });
+                } else if ($scope.changesConfirmed) {
+                    //do nothing
+                }
+
             });
 
             //when the navigation is reordered, update the linklist in the website object

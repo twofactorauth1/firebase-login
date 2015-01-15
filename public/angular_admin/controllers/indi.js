@@ -1,4 +1,4 @@
-define(['app', 'userService'], function(app) {
+define(['app', 'userService', 'powertour'], function(app) {
     app.register.controller('IndiCtrl', ['$scope', 'UserService', function($scope, UserService) {
     	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
@@ -44,5 +44,116 @@ define(['app', 'userService'], function(app) {
                 $scope.savePreferencesFn();
             }
         };
+
+        $('body').powerTour({
+            tours : [
+                {
+                        trigger            : '',
+                        startWith          : 1,
+                        easyCancel         : false,
+                        escKeyCancel       : false,
+                        scrollHorizontal   : false,
+                        keyboardNavigation : true,
+                        loopTour           : false,
+                        onStartTour        : function(ui){ },
+                        onEndTour          : function(){
+
+                            // animate back to the top
+                            $('html, body').animate({scrollTop:0}, 1000, 'swing');  
+                            //$('html, body').animate({scrollLeft:0}, 1000, 'swing');   
+                        },
+                        onProgress : function(ui){ },
+                        steps:[
+                                {
+                                    hookTo          : '',//not needed
+                                    content         : '#step-1',
+                                    width           : 400,
+                                    position        : 'sc',
+                                    offsetY         : 0,
+                                    offsetX         : 0,
+                                    fxIn            : 'fadeIn',
+                                    fxOut           : 'bounceOutUp',
+                                    showStepDelay   : 500,
+                                    center          : 'step',
+                                    scrollSpeed     : 400,
+                                    scrollEasing    : 'swing',
+                                    scrollDelay     : 0,
+                                    timer           : '00:00',
+                                    highlight       : true,
+                                    keepHighlighted : true,
+                                    onShowStep      : function(ui){ },
+                                    onHideStep      : function(ui){ }
+                                },
+                                {
+                                    hookTo          : '',//not needed
+                                    content         : '#step-2',
+                                    width           : 400,
+                                    position        : 'sc',
+                                    offsetY         : 0,
+                                    offsetX         : 0,
+                                    fxIn            : 'fadeIn',
+                                    fxOut           : 'bounceOutLeft',
+                                    showStepDelay   : 1000,
+                                    center          : 'step',
+                                    scrollSpeed     : 400,
+                                    scrollEasing    : 'swing',
+                                    scrollDelay     : 0,
+                                    timer           : '00:00',
+                                    highlight       : true,
+                                    keepHighlighted : true,
+                                    onShowStep      : function(ui){ },
+                                    onHideStep      : function(ui){ }
+                                },
+                                {
+                                    hookTo          : '',//not needed
+                                    content         : '#step-3',
+                                    width           : 400,
+                                    position        : 'sc',
+                                    offsetY         : 0,
+                                    offsetX         : 0,
+                                    fxIn            : 'fadeIn',
+                                    fxOut           : 'bounceOutRight',
+                                    showStepDelay   : 1000,
+                                    center          : 'step',
+                                    scrollSpeed     : 400,
+                                    scrollEasing    : 'swing',
+                                    scrollDelay     : 0,
+                                    timer           : '00:00',
+                                    highlight       : true,
+                                    keepHighlighted : true,
+                                    onShowStep      : function(ui){ },
+                                    onHideStep      : function(ui){ }
+                                }
+                        ],
+                        stepDefaults:[
+                                {
+                                    width           : 500,
+                                    position        : 'tr',
+                                    offsetY         : 0,
+                                    offsetX         : 0,
+                                    fxIn            : '',
+                                    fxOut           : '',
+                                    showStepDelay   : 0,
+                                    center          : 'step',
+                                    scrollSpeed     : 200,
+                                    scrollEasing    : 'swing',
+                                    scrollDelay     : 0,
+                                    timer           : '00:00',
+                                    highlight       : true,
+                                    keepHighlighted : false,
+                                    onShowStep      : function(){ },
+                                    onHideStep      : function(){ }
+                                }
+                        ]
+                    }
+                ]
+        });
+
+        $scope.$watch('initialWelcome', function(newValue, oldValue) {
+            if (!$scope.initialWelcome) {
+                $('body').powerTour('run',0);
+            }
+        });
+
   }]);
 });

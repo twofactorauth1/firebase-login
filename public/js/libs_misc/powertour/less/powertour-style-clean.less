@@ -1,0 +1,82 @@
+/*
+ * ************************************************************* *
+ * Name         :  Power Tour style : clean (LESS)               *
+ * Description  :  CSS styling for the tour plugin.              *
+ * Version      :  Version 2.1.0                                 *
+ * Author       :  CreativeMilk                                  *
+ * Author URI   :  www.creativemilk.net                          *
+ * Updated      :  2014-08-27 14:13:58 UTC+02:00                 *
+ * Copyright    :  (c) 2014 CreativeMilk                         *
+ * ************************************************************* *
+ */
+ 
+// var(s) ********************************************************
+ 
+@bg-black       : #000;
+@bg-white       : #fff;
+@bg-grey        : #eee;
+@color-darkgrey : #333;
+@color-midgrey  : #999;
+@border-grey-1  : 1px solid #ccc;
+
+// base **********************************************************
+
+#powertour-mask{
+	background-color : @bg-black;
+	filter           : alpha(opacity=80);
+	-moz-opacity     : 0.8;
+	-khtml-opacity   : 0.8;
+	opacity          : 0.8;
+}
+.single-step{
+	position         : relative;
+	display          : none;
+	z-index          : 9001;
+	padding          : 20px;
+	background-color : @bg-white;
+	color            : @color-darkgrey;
+	text-align       : left;
+	border           : @border-grey-1;
+	
+		> header{
+			float       : left;
+			height      : 30px;
+			width       : 100%;
+			margin      : 5px 0 10px 0;
+			line-height : 30px;
+			
+				h3{
+					margin      : 0;
+					font-size   : 18px;
+					line-height : 22px;
+				}
+		}
+		
+		> footer{
+			float       : left;
+			height      : auto;
+			width       : 100%;
+			margin      : 20px 0 0 0;
+			line-height : 30px;
+		}
+
+		.close-btn{
+			position         : absolute;
+			top              : -34px;
+			right            : -1px;
+			height           : 24px;
+			width            : 24px;
+			background-color : @bg-grey;
+			font-family      : Verdana, Geneva, sans-serif;
+			font-size        : 14px;
+			font-weight      : 700;
+			color            : @color-midgrey;
+			line-height      : 18px;
+			text-align       : center;
+			text-decoration  : none;
+			border           : @border-grey-1;
+		}
+}
+
+
+
