@@ -8,13 +8,12 @@
                 <div class="panel-body">
                     <div class="row">
                         
-                        <div class="col-xs-12 temp text-center settings" tab-active="address" data-id="{{component._id}}">
+                        <div class="col-xs-12 temp  settings" tab-active="address" data-id="{{component._id}}">
                             <span ng-if="!geo_address_string"> Enter Address Here</span>
                             <span ng-bind-html="geo_address_string"></span>
-                            <br>
+                            
                             <span ng-if="!contactPhone">Enter Phone Number here</span>
                             <span ng-bind-html="contactPhone"></span>
-                            <br>
                             <span ng-if="!component.hours.length">Enter Business hours here</span>
                             <span ng-bind-html="component.hours"></span>
                         </div>

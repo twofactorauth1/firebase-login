@@ -123,6 +123,21 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                       }
                     };
 
+                    // scope.checkCouponCode = function() {
+
+                    //   var couponCode = $('#coupon').val();
+                    //   console.log('checking to see if coupon code is valid ', couponCode);
+
+                    //   if (!couponCode) {
+                    //     $("#coupon_code .error").html("CVC Required");
+                    //     $("#coupon_code").addClass('has-error');
+                    //   } else {
+                    //     scope.cvvValidated = true;
+                    //     $("#coupon_code .error").html("");
+                    //     $("#coupon_code").removeClass('has-error').addClass('has-success');
+                    //   }
+                    // };
+
                     scope.addCardFn = function() {
                         console.log('addCardFn >>>');
                         scope.checkCardCvv();
@@ -131,6 +146,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                         scope.checkCardNumber();
                         if (scope.cardValidated && scope.expirationValidated && scope.cvvValidated && scope.cardNameValidated) {
                             $('#changeCardModal').modal('hide');
+
                             var parent_div = $("." + scope.wrapper).next();
                             if(parent_div.length && parent_div.attr("wrapper-div"))
                             {
