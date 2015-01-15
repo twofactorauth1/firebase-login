@@ -50,7 +50,24 @@ var component = $$.m.ModelBase.extend({
             txtcolor: null,
 
 
-            text: null
+            text: null,
+
+            /**
+             * Background 
+             *  - with url of background image, width/height of that image, if the image is parallax, if the image needs a blur, if the image has an overlay, if to show the the image, or image color
+             */
+            bg: {
+                img : {
+                    url : "",
+                    width : null,
+                    height : null,
+                    parallax : false,
+                    blur : false,
+                    overlay: false,
+                    show: false
+                },
+                color : "#4bb0cb"
+            },
 
 
         }
