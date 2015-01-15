@@ -76,7 +76,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                                       hookTo          : '#saveAccount',//not needed
                                       content         : '#step-three',
                                       width           : 400,
-                                      position        : 'lt',
+                                      position        : 'bm',
                                       offsetY         : 0,
                                       offsetX         : 0,
                                       fxIn            : 'fadeIn',
