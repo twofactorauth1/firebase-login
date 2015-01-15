@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <button aria-hidden="true" data-dismiss="modal" class="close" type="button" ng-click="close()">×</button>
+    <h3 class="modal-title">Timeline item</h3>
+</div>
+<div class="modal-body modal-timeline-item">
+
+    <tabset>
+        <tab>
+            <tab-heading>
+                <span class='fa fa-edit'></span> Edit Template
+            </tab-heading>
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary btn-block btn-lg mb30" ng-click="editMode=!editMode" data-toggle="button">Make Editable
+                </button>
+                <video-preview video="email" template="template" edit-mode="editMode"></video-preview>
+            </div>
+        </tab>
+    </tabset>
+
+
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-success" ng-click="submit()">Save</button>
+</div>

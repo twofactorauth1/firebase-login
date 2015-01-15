@@ -72,6 +72,7 @@ require.config({
         'sweetAlert': 'libs/sweetalert/lib/sweet-alert.min',
         'spin': 'libs/spin.js/spin',
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
+        'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -145,6 +146,7 @@ require.config({
         "subscriberService": "/pipeshift/js/modules/video/service/Subscriber",
         "editCourseModalController": "/pipeshift/js/modules/video/controller/EditCourseModalController",
         "timelineItemController": "/pipeshift/js/modules/video/controller/TimelineItemController",
+        "timelineEmailItemController": "/pipeshift/js/modules/video/controller/TimelineEmailItemController",
         "searchOptionsModalController": "/pipeshift/js/modules/video/controller/SearchOptionsModalController",
         "videoViewModalController": "/pipeshift/js/modules/video/controller/VideoViewModalController",
         "addCourseModalController": "/pipeshift/js/modules/video/controller/AddCourseModalController",
@@ -192,6 +194,7 @@ require.config({
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
         'highcharts': {deps: ['jquery']},
+        'powertour': {deps: ['jquery']},
         'highcharts-funnel': {deps: ['highcharts']},
         'highmaps-us': {deps: ['highcharts']},
         'highmaps-data': {deps: ['highcharts']},

@@ -1089,6 +1089,23 @@ module.exports = {
         });
     },
 
+    getSavedScreenshot: function(accountId, pageHandle, fn) {
+        var self = this;
+        log.debug('>> getSavedScreenshot');
+        //TODO: handle multiple websites per account. (non-unique page handles)
+        var query = {accountId: accountId, handle:pageHandle};
+
+        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+            if(err) {
+                log.error('Error finding page for accountId [' + accountId + '] and handle [' + pageHandle +']: ' + err);
+                return fn(err, null);
+            }
+            log.debug('<< getSavedScreenshot');
+            return fn(null, page.get('screenshot'));
+        });
+
+    },
+
     generateScreenshot: function(accountId, pageHandle, fn) {
         var self = this;
         log.debug('>> generateScreenshot');
@@ -1177,8 +1194,6 @@ module.exports = {
                 });
             });
         });
-
-
     },
 
 

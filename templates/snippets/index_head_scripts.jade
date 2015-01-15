@@ -21,11 +21,14 @@ script(type="text/javascript").
     }, window.analytics.SNIPPET_VERSION = "2.0.9",
             window.analytics.load('#{segmentIOWriteKey}');
     window.analytics.page('Index', {accountId:#{account._id}});
-    WebFont.load({
-                      google: {
-                             families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
-                       }
-           });
+
+if account.website.settings.font_family
+    script(type="text/javascript").
+        WebFont.load({
+                          google: {
+                                 families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
+                           }
+               });
 
 //- // begin olark code
 //- script(data-cfasync='false', type='text/javascript').

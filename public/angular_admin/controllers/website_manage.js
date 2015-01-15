@@ -159,7 +159,7 @@ define([
                 WebsiteService.getThemes(function(themes) {
                     $scope.themes = themes;
                     for (var i = 0; i < themes.length; i++) {
-                        var comingSoonThemes = ['SAAS', 'Ethlete', 'Charity', 'Inventor', 'Real Estate', 'Health Care', 'Public Speaker', 'Fit Writer', 'Fit Tester II', 'FitTester', 'CopyWriter', 'Hair Stylist'];
+                        var comingSoonThemes = ['SAAS', 'Ethlete', 'Charity', 'Inventor', 'Real Estate', 'Public Speaker', 'Fit Writer', 'Fit Tester II', 'FitTester', 'CopyWriter', 'Hair Stylist'];
                         if (comingSoonThemes.indexOf(themes[i].name) > -1) {
                             themes[i].coming_soon = true;
                         }

@@ -288,8 +288,10 @@ _.extend(api.prototype, baseApi.prototype, {
         //updateCurrentAccountBilling
 
         //ensure we don't have another user with this username;
-        var accountToken = cookies.getAccountToken(req);
-
+        var cookieAccountToken = cookies.getAccountToken(req);
+        if(cookieAccountToken !== accountToken) {
+            self.log.warn('cookieAccountToken [' + cookieAccountToken + '] does not equal accountToken [' + accountToken + ']');
+        }
         self.log.debug('>> username', username);
         self.log.debug('>> password1', password1);
         self.log.debug('>> email', email);
@@ -361,6 +363,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         req.session.accountId = updatedAccount.id();
                         req.session.subdomain = updatedAccount.get('subdomain');
                         req.session.domain = updatedAccount.get('domain');
+                        self.log.debug('Just set session accountId to: ' + req.session.accountId);
                         callback(null, account.id(), sub.id, user);
                     });
                 });

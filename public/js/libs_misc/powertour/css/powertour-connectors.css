@@ -1,0 +1,791 @@
+/*
+ * ************************************************************* *
+ * Name         :  Power Tour connectors                         *
+ * Description  :  CSS for the tour plugin.                      *
+ * Version      :  Version 2.1.0                                 *
+ * Author       :  CreativeMilk                                  *
+ * Author URI   :  www.creativemilk.net                          *
+ * Updated      :  2014-08-26 17:13:18 UTC+02:00                 *
+ * Copyright    :  (c) 2012 CreativeMilk                         *
+ * ************************************************************* *
+ */
+
+/*** DOTS ****************************************/
+
+/* TOP */
+
+.connectordot-top{
+	width:80px;
+	height:2px;
+	position:absolute;
+	top:-29px;
+	left:-69px;
+	background-color:#333;
+	transform:rotate(45deg);
+	-ms-transform:rotate(45deg); /* IE 9 */
+	-webkit-transform:rotate(45deg); /* Opera, Chrome, and Safari */	
+}
+.connectordot-top:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	left:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-tl{
+	height:80px;
+	width:2px;
+	position:absolute;
+	left:20px;
+	top:-80px;
+	background-color:#333;
+}
+.connectordot-tl:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-4px;
+	top:-5px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-tm{
+	height:80px;
+	width:2px;
+	position:absolute;
+	right:50%;
+	top:-80px;
+	margin-right:-1px;
+	background-color:#333;
+}
+.connectordot-tm:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-4px;
+	top:-5px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-tr{
+	height:80px;
+	width:2px;
+	position:absolute;
+	right:20px;
+	top:-80px;
+	background-color:#333;
+}
+.connectordot-tr:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-4px;
+	top:-5px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+
+/* RIGHT */
+
+.connectordot-right{
+	width:80px;
+	height:2px;
+	position:absolute;
+	top:-29px;
+	right:-69px;
+	background-color:#333;
+	transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg);
+	-webkit-transform:rotate(-45deg);
+}
+.connectordot-right:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-rt{
+	width:80px;
+	height:2px;
+	position:absolute;
+	top:20px;
+	right:-80px;
+	background-color:#333;
+}
+.connectordot-rt:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-rm{
+	width:80px;
+	height:2px;
+	position:absolute;
+	top:50%;
+	margin-top:-1px;
+	right:-80px;
+	background-color:#333;
+}
+.connectordot-rm:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-rb{
+	width:80px;
+	height:2px;
+	position:absolute;
+	bottom:20px;
+	right:-80px;
+	background-color:#333;
+}
+.connectordot-rb:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+
+/* BOTTOM */
+
+.connectordot-bottom{
+	width:80px;
+	height:2px;
+	position:absolute;
+	bottom:-29px;
+	right:-69px;
+	background-color:#333;
+	transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	-webkit-transform:rotate(45deg);
+}
+.connectordot-bottom:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-bl{
+	height:80px;
+	width:2px;
+	position:absolute;
+	left:20px;
+	bottom:-80px;
+	background-color:#333;
+}
+.connectordot-bl:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-4px;
+	bottom:-5px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-bm{
+	height:80px;
+	width:2px;
+	position:absolute;
+	right:50%;
+	bottom:-80px;
+	margin-right:-1px;
+	background-color:#333;
+}
+.connectordot-bm:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-4px;
+	bottom:-5px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-br{
+	height:80px;
+	width:2px;
+	position:absolute;
+	right:20px;
+	bottom:-80px;
+	background-color:#333;
+}
+.connectordot-br:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	right:-4px;
+	bottom:-5px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+
+/* LEFT */
+
+.connectordot-left{
+	width:80px;
+	height:2px;
+	position:absolute;
+	bottom:-29px;
+	left:-69px;
+	background-color:#333;
+	transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg); /* IE 9 */
+	-webkit-transform:rotate(-45deg); /* Opera, Chrome, and Safari */	
+}
+.connectordot-left:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	left:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-lt{
+	width:80px;
+	height:2px;
+	position:absolute;
+	top:20px;
+	left:-80px;
+	background-color:#333;
+}
+.connectordot-lt:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	left:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-lm{
+	width:80px;
+	height:2px;
+	position:absolute;
+	top:50%;
+	margin-top:-1px;
+	left:-80px;
+	background-color:#333;
+}
+.connectordot-lm:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	left:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+.connectordot-lb{
+	width:80px;
+	height:2px;
+	position:absolute;
+	bottom:20px;
+	left:-80px;
+	background-color:#333;
+}
+.connectordot-lb:before{
+	content:"";
+	height:10px;
+	width:10px;
+	position:absolute;
+	left:-5px;
+	top:-4px;
+	background-color:#fff;
+	border:2px solid #333;
+	-webkit-border-radius : 50%;
+	-khtml-border-radius  : 50%;
+	-moz-border-radius    : 50%;
+	border-radius         : 50%;		
+}
+
+/*** ARROWS **************************************/
+
+/* TOP */
+
+.connectorarrow-tle{
+	position      : absolute;
+	top           : -20px;
+	left          : -1px;
+	border-left   : 10px solid #ccc;
+	border-right  : 10px solid transparent;
+	border-bottom : 10px solid #ccc;
+	border-top    :	10px solid transparent;
+}
+.connectorarrow-tle:before{
+	content       : "";
+	position      : absolute;
+	top           : -7px;
+	left          : -9px;
+	border-left   : 10px solid #fff;
+	border-right  : 10px solid transparent;
+	border-bottom : 10px solid #fff;
+	border-top    :	10px solid transparent;
+}
+.connectorarrow-tl{
+	position      : absolute;
+	top           : -12px;
+	left          : 20px;
+	border-left   : 12px solid transparent;
+	border-right  : 12px solid transparent;
+	border-bottom : 12px solid #ccc;
+	border-top    :	none;
+}
+.connectorarrow-tl:before{
+	content       : "";
+	position      : absolute;
+	top           : 2px;
+	left          : -10px;
+	border-left   : 10px solid transparent;
+	border-right  : 10px solid transparent;
+	border-bottom : 10px solid #fff;
+	border-top    :	none;
+}
+.connectorarrow-tm{
+	position      : absolute;
+	top           : -12px;
+	right         : 50%;
+	margin        : 0 -12px 0 0;
+	border-left   : 12px solid transparent;
+	border-right  : 12px solid transparent;
+	border-bottom : 12px solid #ccc;
+	border-top    :	none;
+}
+.connectorarrow-tm:before{
+	content       : "";
+	position      : absolute;
+	top           : 2px;
+	right         : -10px;
+	border-left   : 10px solid transparent;
+	border-right  : 10px solid transparent;
+	border-bottom : 10px solid #fff;
+	border-top    :	none;
+}
+.connectorarrow-tr{
+	position      : absolute;
+	top           : -12px;
+	right         : 20px;
+	border-left   : 12px solid transparent;
+	border-right  : 12px solid transparent;
+	border-bottom : 12px solid #ccc;
+	border-top    :	none;
+}
+.connectorarrow-tr:before{
+	content       : "";
+	position      : absolute;
+	top           : 2px;
+	right         : -10px;
+	border-left   : 10px solid transparent;
+	border-right  : 10px solid transparent;
+	border-bottom : 10px solid #fff;
+	border-top    :	none;
+}
+.connectorarrow-tre{
+	position      : absolute;
+	top           : -20px;
+	right         : -1px;
+	border-right  : 10px solid #ccc;
+	border-left   : 10px solid transparent;
+	border-bottom : 10px solid #ccc;
+	border-top    :	10px solid transparent;
+}
+.connectorarrow-tre:before{
+	content       : "";
+	position      : absolute;
+	top           : -7px;
+	right         : -9px;
+	border-right  : 10px solid #fff;
+	border-left   : 10px solid transparent;
+	border-bottom : 10px solid #fff;
+	border-top    :	10px solid transparent;
+}
+
+/* RIGHT */
+
+.connectorarrow-rte{
+	position      : absolute;
+	top           : -1px;
+	right         : -21px;
+	border-top    : 10px solid #ccc;
+	border-bottom : 10px solid transparent;
+	border-left   : 10px solid #ccc;
+	border-right  :	10px solid transparent;
+}
+.connectorarrow-rte:before{
+	content       : "";
+	position      : absolute;
+	top           : -9px;
+	right         : -8px;
+	border-top    : 10px solid #fff;
+	border-bottom : 10px solid transparent;
+	border-left   : 10px solid #fff;
+	border-right  :	10px solid transparent;
+}
+.connectorarrow-rt{
+	position      : absolute;
+	right         : -12px;
+	top           : 20px;
+	border-top    : 12px solid transparent;
+	border-bottom : 12px solid transparent;
+	border-left   : 12px solid #ccc;
+	border-right  :	none;
+}
+.connectorarrow-rt:before{
+	content       : "";
+	position      : absolute;
+	right         : 2px;
+	top           : -10px;
+	border-top    : 10px solid transparent;
+	border-bottom : 10px solid transparent;
+	border-left   : 10px solid #fff;
+	border-right  :	none;
+}
+.connectorarrow-rm{
+	position      : absolute;
+	right         : -12px;
+	top           : 50%;
+	margin        : -12px 0 0 0;
+	border-top    : 12px solid transparent;
+	border-bottom : 12px solid transparent;
+	border-left   : 12px solid #ccc;
+	border-right  :	none;
+}
+.connectorarrow-rm:before{
+	content       : "";
+	position      : absolute;
+	right         : 2px;
+	top           : -10px;
+	border-top    : 10px solid transparent;
+	border-bottom : 10px solid transparent;
+	border-left   : 10px solid #fff;
+	border-right  :	none;
+}
+.connectorarrow-rb{
+	position      : absolute;
+	right         : -12px;
+	bottom        : 20px;
+	border-top    : 12px solid transparent;
+	border-bottom : 12px solid transparent;
+	border-left   : 12px solid #ccc;
+	border-right  :	none;
+}
+.connectorarrow-rb:before{
+	content       : "";
+	position      : absolute;
+	right         : 2px;
+	top           : -10px;
+	border-top    : 10px solid transparent;
+	border-bottom : 10px solid transparent;
+	border-left   : 10px solid #fff;
+	border-right  :	none;
+}
+.connectorarrow-rbe{
+	position      : absolute;
+	bottom        : -1px;
+	right         : -21px;
+	border-bottom : 10px solid #ccc;
+	border-top    : 10px solid transparent;
+	border-left   : 10px solid #ccc;
+	border-right  :	10px solid transparent;
+}
+.connectorarrow-rbe:before{
+	content       : "";
+	position      : absolute;
+	bottom        : -9px;
+	right         : -8px;
+	border-bottom : 10px solid #fff;
+	border-top    : 10px solid transparent;
+	border-left   : 10px solid #fff;
+	border-right  :	10px solid transparent;
+}
+
+/* BOTTOM */
+
+.connectorarrow-ble{
+	position      : absolute;
+	bottom        : -20px;
+	left          : -1px;
+	border-left   : 10px solid #ccc;
+	border-right  : 10px solid transparent;
+	border-top    : 10px solid #ccc;
+	border-bottom :	10px solid transparent;
+}
+.connectorarrow-ble:before{
+	content       : "";
+	position      : absolute;
+	bottom        : -7px;
+	left          : -9px;
+	border-left   : 10px solid #fff;
+	border-right  : 10px solid transparent;
+	border-top    : 10px solid #fff;
+	border-bottom : 10px solid transparent;
+}
+.connectorarrow-bl{
+	position      : absolute;
+	bottom        : -12px;
+	left          : 20px;
+	border-left   : 12px solid transparent;
+	border-right  : 12px solid transparent;
+	border-top    : 12px solid #ccc;
+	border-bottom :	none;
+}
+.connectorarrow-bl:before{
+	content       : "";
+	position      : absolute;
+	bottom        : 2px;
+	left          : -10px;
+	border-left   : 10px solid transparent;
+	border-right  : 10px solid transparent;
+	border-top    : 10px solid #fff;
+	border-bottom :	none;
+}
+.connectorarrow-bm{
+	position      : absolute;
+	bottom        : -12px;
+	right         : 50%;
+	margin        : 0 -12px 0 0;
+	border-left   : 12px solid transparent;
+	border-right  : 12px solid transparent;
+	border-top    : 12px solid #ccc;
+	border-bottom :	none;
+}
+.connectorarrow-bm:before{
+	content       : "";
+	position      : absolute;
+	bottom        : 2px;
+	right         : -10px;
+	border-left   : 10px solid transparent;
+	border-right  : 10px solid transparent;
+	border-top    : 10px solid #fff;
+	border-bottom :	none;
+}
+.connectorarrow-br{
+	position      : absolute;
+	bottom        : -12px;
+	right         : 20px;
+	border-left   : 12px solid transparent;
+	border-right  : 12px solid transparent;
+	border-top    : 12px solid #ccc;
+	border-bottom :	none;
+}
+.connectorarrow-br:before{
+	content       : "";
+	position      : absolute;
+	bottom        : 2px;
+	right         : -10px;
+	border-left   : 10px solid transparent;
+	border-right  : 10px solid transparent;
+	border-top    : 10px solid #fff;
+	border-bottom :	none;
+}
+.connectorarrow-bre{
+	position      : absolute;
+	bottom        : -20px;
+	right         : -1px;
+	border-right  : 10px solid #ccc;
+	border-left   : 10px solid transparent;
+	border-top    : 10px solid #ccc;
+	border-bottom :	10px solid transparent;
+}
+.connectorarrow-bre:before{
+	content       : "";
+	position      : absolute;
+	bottom        : -7px;
+	right         : -9px;
+	border-right  : 10px solid #fff;
+	border-left   : 10px solid transparent;
+	border-top    : 10px solid #fff;
+	border-bottom :	10px solid transparent;
+}
+
+/* LEFT */
+
+.connectorarrow-lte{
+	position      : absolute;
+	top           : -1px;
+	left          : -21px;
+	border-top    : 10px solid #ccc;
+	border-bottom : 10px solid transparent;
+	border-right  : 10px solid #ccc;
+	border-left   :	10px solid transparent;
+}
+.connectorarrow-lte:before{
+	content       : "";
+	position      : absolute;
+	top           : -9px;
+	left          : -8px;
+	border-top    : 10px solid #fff;
+	border-bottom : 10px solid transparent;
+	border-right  : 10px solid #fff;
+	border-left   :	10px solid transparent;
+}
+.connectorarrow-lt{
+	position      : absolute;
+	left          : -12px;
+	top           : 20px;
+	border-top    : 12px solid transparent;
+	border-bottom : 12px solid transparent;
+	border-right  : 12px solid #ccc;
+	border-left   :	none;
+}
+.connectorarrow-lt:before{
+	content       : "";
+	position      : absolute;
+	right         : -12px;
+	top           : -10px;
+	border-top    : 10px solid transparent;
+	border-bottom : 10px solid transparent;
+	border-right  : 10px solid #fff;
+	border-left   :	none;
+}
+.connectorarrow-lm{
+	position      : absolute;
+	left          : -12px;
+	top           : 50%;
+	margin        : -12px 0 0 0;
+	border-top    : 12px solid transparent;
+	border-bottom : 12px solid transparent;
+	border-right  : 12px solid #ccc;
+	border-left   :	none;
+}
+.connectorarrow-lm:before{
+	content       : "";
+	position      : absolute;
+	right         : -12px;
+	top           : -10px;
+	border-top    : 10px solid transparent;
+	border-bottom : 10px solid transparent;
+	border-right  : 10px solid #fff;
+	border-left   :	none;
+}
+.connectorarrow-lb{
+	position      : absolute;
+	left          : -12px;
+	bottom        : 20px;
+	border-top    : 12px solid transparent;
+	border-bottom : 12px solid transparent;
+	border-right  : 12px solid #ccc;
+	border-left   :	none;
+}
+.connectorarrow-lb:before{
+	content       : "";
+	position      : absolute;
+	right         : -12px;
+	top           : -10px;
+	border-top    : 10px solid transparent;
+	border-bottom : 10px solid transparent;
+	border-right  : 10px solid #fff;
+	border-left   :	none;
+}
+.connectorarrow-lbe{
+	position      : absolute;
+	bottom        : -1px;
+	left          : -21px;
+	border-bottom : 10px solid #ccc;
+	border-top    : 10px solid transparent;
+	border-right  : 10px solid #ccc;
+	border-left   :	10px solid transparent;
+}
+.connectorarrow-lbe:before{
+	content       : "";
+	position      : absolute;
+	bottom        : -9px;
+	left          : -8px;
+	border-bottom : 10px solid #fff;
+	border-top    : 10px solid transparent;
+	border-right  : 10px solid #fff;
+	border-left   :	10px solid transparent;
+}

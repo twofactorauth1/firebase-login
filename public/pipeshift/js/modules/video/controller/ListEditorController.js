@@ -2,7 +2,7 @@
  * The controller used when editing video courses
  */
 define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoService', 'addCourseModalController', 'editCourseModalController', 'navigationService',
-  'timelineItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'
+  'timelineItemController', 'timelineEmailItemController', 'removeModalController', 'searchOptionsModalController', 'videoViewModalController', 'subscribersCvsUploadController', 'ngOnboarding'
 ], function(angularAMD, app) {
   app.register.controller('ListEditorController', ['$scope', '$routeParams', '$location', '$modal', '$http', 'youtube', 'Course', 'CourseVideo', 'NavigationService', '$templateCache', '$filter', function($scope, $routeParams, $location, $modal, $http, youtube, Course, CourseVideo, NavigationService, $templateCache, $filter) {
     NavigationService.updateNavigation();
@@ -376,7 +376,30 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
           alert("Some error happened");
         })
       }, function() {});
-    }
+    };
+
+    $scope.showEmailTimelineItemModal = function(email, index, totalNumber) {
+      var modalInstance = $modal.open({
+        templateUrl: '/pipeshift/views/video/modal/timelineEmailItem.html',
+        controller: 'TimelineEmailItemModalController',
+        size: 'lg',
+        resolve: {
+          email: function() {
+            return email;
+          },
+          template: function() {
+            return findTemplateByName($scope.course.template.name);
+          }
+        }
+      });
+      modalInstance.result.then(function(email) {
+        $scope.course.emails[index] = email;
+        Course.update({id: $scope.course._id}, $scope.course, function(resp) {
+          console.log('Template update', resp);
+        });
+      }, function() {});
+    };
+
     $scope.dayTimeSort = function(video) {
       return video.scheduledDay * 24 * 60 + video.scheduledHour * 60 + video.scheduledMinute;
     }

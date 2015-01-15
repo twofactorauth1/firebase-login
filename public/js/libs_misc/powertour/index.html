@@ -1,0 +1,621 @@
+<!DOCTYPE html> 
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+     
+    <title>Power Tour - A powerfull and creative jQuery tour solution</title>
+
+ 	<!-- SEO META -->
+    
+    <meta name="description" content="Powerfull creative jQuery tour plugin to show off your products, sites or other things.">
+    <meta name="keywords" content="HTML, HTML5, CSS, CSS3, JavaScript, jQuery, plugins, tour, helpers, tooltip, wordpress, creative, presantation, product, help, tip">
+    <meta name="author" content="CreativeMilk">
+
+    <!-- SOCIAL META -->
+     
+	<meta property="og:title" content="Power Tour - Powerfull creative jQuery tour plugin" />
+    <meta property="og:url" content="http://www.jquerypowertour.com" />
+    <meta property="og:image" content="http://www.jquerypowertour.com/images/overview.jpg" />
+    <meta property="og:description" content="A powerfull and creative jQuery tour plugin to guid your visitors throught the modern chaos." />
+        
+    <!-- SITE -->
+    
+    <link rel="shortcut icon" href="images/favicon-v2.ico" /> 
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="fontawesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/style-v2.css"/>
+    
+    <script src="js/modernizr.min.js"></script>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/main-v2.min.js"></script>
+	
+    <!-- POWERTOUR CORE -->
+    
+    <script src="js/powertour.2.1.4.min.js"></script>            <!-- Core jQuery file -->
+    <link rel="stylesheet" href="css/powertour.2.1.4.css"/>      <!-- Core CSS file -->
+    
+    <!-- POWERTOUR STYLING -->
+    
+    <link rel="stylesheet" href="css/powertour-style-clean.css"/><!-- Styling CSS file -->
+    <link rel="stylesheet" href="css/powertour-connectors.css"/> <!-- Extra styling elements CSS file -->
+    <link rel="stylesheet" href="css/animate.min.css"/>          <!-- Animation core CSS file -->
+
+    <!-- DEMO -->
+    
+    <script src="js/demo-frontpage.js"></script> 
+    
+   	<!--[if lte IE 8]>
+    <script src="js/respond.js"></script> 
+    <![endif]-->  
+
+</head>
+<body>
+    <div id="container" class="frontpage">
+    
+    	<div id="bg">&nbsp;</div>
+        
+		<div id="fixed-social-bar"></div>
+   
+    	<header id="header-main">
+			<div id="header-main-top">
+                <div class="inner">
+                    <a href="index.html" id="logo" alt="logo">
+                    	<img src="images/logo.jpg" alt="logo"/>
+                    </a>
+                    <nav id="nav-top">
+                        <ul>
+                            <li class="active"><a href="index.html">Home</a></li>
+                            <li><a href="documentation.html">Documentation</a></li>
+                            <li><a href="extend.html">Extend</a></li>
+                            <li><a href="builder.html">Builder</a></li>
+                        </ul>
+                    </nav>
+                    <div id="hook-two">
+                    	<a href="http://bit.ly/RKcRDu" title="buy this plugin" class="btn pull-right">Buy plugin</a>
+                    </div>
+				</div> 
+			</div> 
+          	<div id="header-main-mid" class="clearfix">
+				<div class="inner">
+					<h1>A <span>powerfull</span> and creative <span>jQuery</span> tour <span>solution</span></h1>
+                    <h2>Guid your visitors through the modern chaos</h2>
+                  	<div class="row">
+                  		<div class="col-sm-6">
+                     		<a href="#" id="starttour-1" class="btn-header pull-right">Run tour 1</a>
+                     	</div> 
+						<div class="col-sm-6">
+							<a href="#" id="starttour-2" class="btn-header">Run tour 2</a>
+						</div> 
+					</div>
+                   	<p id="tour-version-meta" class="clearfix">Current version 2.1.4 - <a href="documentation.html#doc-changelog">Changelog</a></p>
+				</div>
+			</div>
+        </header>  
+        <div id="main">
+       		<section class="blocks odd">
+            	<div class="inner">
+                	<div class="heading-block">
+                        <h3>Powerfull features</h3>
+                        <h4>The Power Tour plugin has a lot of powerfull features.</h4>
+                    </div>
+                    <div class="row">
+                    	<div class="col-sm-4">
+                            <ul class="list-features">
+                            	<li>
+                                	<span><i class="fa fa-check-square"></i></span>
+                                	<h5>9 Navigation actions</h5>
+                                 	Control the tour(s) with actions like: play, next, stop, goto and more...
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-refresh"></i></span>
+                                	<h5>Loop the tour</h5>
+                                 	Each tour can be looped, so once it's reached the last step it will go back to the first step.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-arrows-h"></i></span>
+                                	<h5>Vertical &amp; horizontal websites</h5>
+                                 	Choose between vertical and horizontal websites support.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-star"></i></span>
+                                	<h5>Works with CSS frameworks</h5>
+                                 	The plugin works with CSS frameworks like Bootstrap.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-level-down"></i></span>
+                                	<h5>Keyboard navigation</h5>
+                                 	Use your keyboard to easily navigate through the tour.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-cogs"></i></span>
+                                	<h5>Default step options</h5>
+                                 	Every single step can use custom or default settings.
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-sm-4">
+                        	<ul class="list-features">
+                            	<li>
+                                	<span><i class="fa fa-random"></i></span>
+                                	<h5>Multiple tours on a page</h5>
+                                    Setup multiple tours on a page. Every tour/step has there own settings.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-male"></i></span>
+                                	<h5>Manual or automated tours</h5>
+                                    Set a end time for a step or go to the next step with a click of a button.
+                                </li>
+                            	<li>	
+                                	<span><i class="fa fa-external-link"></i></span>
+                                	<h5>Continue on a different page</h5>
+                                    Direct users to a different page to continue the tour.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-tint"></i></span>
+                                	<h5>Custom styling</h5>
+                                  Every step can be styled differently. Styling is done by CSS.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-check"></i></span>
+                                	<h5>Validate a step</h5>
+                                 	The plugin provided a method to validate every single step.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-bolt"></i></span>
+                                	<h5>Several callback functions</h5>
+                                 	Extend the plugin with the several callback functions.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-paper-plane-o"></i></span>
+                                	<h5>CSS, LESS &amp; SASS</h5>
+                                 	All CSS file's are included as: CSS, LESS &amp; SASS extentions.
+                                </li>
+                            </ul>                           
+                        </div>
+                        
+                        <div class="col-sm-4">
+                        	<ul class="list-features">
+                            	<li>
+                                	<span><i class="fa fa-sliders"></i></span>
+                                	<h5>Powerfull plugin options</h5>
+                                    The plugin come's with a lot of powerfull options and settings.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-arrows"></i></span>
+                                	<h5>21 Different step positions</h5>
+                                    Every step has it's own position. And every position can be adjusted
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-code"></i></span>
+                                	<h5>Any kind of content</h5>
+                                    Use static or dynamic content, a form or a video, php or javascript.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-css3"></i></span>
+                                	<h5>CSS3 animatations</h5>
+                                 	More that 70+ CSS3 animations are available (in and out fx).
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-eye"></i></span>
+                                	<h5>Highlight step &amp; hook</h5>
+                                 	Every hook and step can be highlighted. This put's more focus on the hook &amp; step.
+                                </li>
+                            	<li>
+                                	<span><i class="fa fa-power-off"></i></span>
+                                	<h5>Run on page load</h5>
+                                 	You can run(by method or url) a tour if the pages gets loaded.
+                                </li>
+                            </ul>  
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+       		<section class="blocks even">
+            	<div class="inner">
+                	<div class="heading-block">
+                        <h3>Endless possibilities</h3>
+                        <h4>Build a simple and straighforward tour, or go creative, it's up to you.</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3" id="hook-four">
+                            <div class="placeholder-150 color-2">YouTube</div>
+                        </div>
+                        <div class="col-sm-3" id="hook-six">
+                            <div class="placeholder-150 color-3">Validation</div>
+                        </div>
+                        <div class="col-sm-3" id="hook-five">
+                            <div class="placeholder-150 color-1">Navigation &amp; Connectors</div>
+                        </div>
+                        <div class="col-sm-3" id="hook-seven">
+                            <div class="placeholder-150 color-4">AJAX</div>
+                        </div>
+                    </div>
+                </div>
+			</section>
+            
+			<section class="blocks odd">
+            	<div class="inner">
+                	<div class="heading-block">
+                        <h3>Custom styling</h3>
+                        <h4>Customize every single step differently or use 1 custom style for the whole tour.</h4>
+                    </div>
+					<img src="images/example-front.png" alt="Custom styling"/>
+                </div>
+			</section>
+            
+			<section class="blocks even">
+            	<div class="inner">
+                	<div class="heading-block">
+                        <h3>Free builder</h3>
+                        <h4>Save time and use the free builder tool to build your tour(s).</h4>
+                    </div>
+					<img src="images/builder.png" alt="Tour builder"/>
+                </div>
+			</section> 
+        </div> 
+        
+        <footer id="footer-main">
+        	<div class="inner">
+                <nav id="nav-bottom" class="clearfix">
+                    <ul>
+                        <li class="active"><a href="index.html">Home</a></li>
+                        <li>|</li>
+                        <li><a href="documentation.html">Documentation</a></li>
+                        <li>|</li>
+                        <li><a href="extend.html">Extend</a></li>
+                        <li>|</li>
+                        <li><a href="builder.html">Builder</a></li>
+                        <li>|</li>
+                        <li><a href="http://bit.ly/RKcRDu" title="buy this plugin">Buy plugin</a></li>
+                    </ul>
+                </nav>
+                <hr/>
+            	<div id="copyright" class="clearfix">Copyright 2014 <a href="http://wwww.creativemilk.net">CreativeMilk</a>. All rights reserved.</div>
+            </div>
+        </footer>
+
+
+
+		<!-- *********** -->
+		<!-- DEMO TOUR 1 -->
+        <!-- *********** -->
+        
+        <div id="step-one" class="single-step">
+            <header>
+               <h3>1. Welcome to the tour</h3>
+            </header>
+            <p>
+            Welcome to the Power Tour plugin a powerfull and creative tour solution. Please fasten your seatbelts, it's gonna be a wild(creative) ride.
+            </p>
+            <p>
+            <i>Enjoy the tour!</i>
+            </p>
+            <footer>
+                <a href="#" class="btn btn-default" data-powertour-action="stop">Cancel</a>
+                <a href="#" class="btn btn-primary pull-right" data-powertour-action="next">Continue</a>
+            </footer> 
+        </div>
+        
+        <div id="step-two" class="single-step ltr-text">
+        	<span class="connectorarrow-tr"><!-- custom --></span> 
+            <header>
+               <h3>2. Hook a step to an element</h3>
+            </header>
+            <p>
+           	You can hook every step to an element which we call a 'hook'.
+            </p>
+            <p>This step has a LTR layout and we've added a custom class to the button above.</p>
+            <footer>                
+                <div class="pull-left">
+                    <a href="#" class="btn btn-primary" data-powertour-action="next">Next</a>  
+                    <a href="#" class="btn btn-default" data-powertour-action="prev">Prev</a>           
+                </div>
+                <a href="#" class="btn btn-default pull-right" data-powertour-action="stop">End tour</a>
+            </footer> 
+        </div>
+        
+        <div id="step-three" class="single-step">
+        	<span class="connectorarrow-rt"><!-- custom --></span> 
+            <header>
+               <h3>3. Sharing is caring</h3>
+            </header>
+            <p>
+           	Please share this plugin with the rest of the world!
+            </p>
+            <footer>            
+                <a href="#" class="btn btn-default" data-powertour-action="prev">Prev</a>  
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="1">1</a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="2">2</a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="3">3</a>
+                <a href="#" class="btn btn-primary" data-powertour-action="next">Next</a>         
+                <a href="#" class="btn btn-default pull-right" data-powertour-action="stop">Stop</a>       
+            </footer> 
+        </div>
+        
+        <div id="step-four" class="single-step">
+        	<a href="#" class="close-btn" data-powertour-action="stop">x</a>
+            <img src="images/highlighthook.png" alt="highlight the hook" id="highlighthook"/>
+            <img src="images/highlightstep.png" alt="highlight the step" id="highlightstep"/>
+            <img src="images/anycontent.png" alt="use any kind of content" id="anycontent"/>
+            <iframe width="560" height="315" src="http://www.youtube.com/embed/O_DwMLUh1YQ" frameborder="0" allowfullscreen class="youtube-player" title="YouTube video player"></iframe>
+        </div> 
+        
+        <div id="step-five" class="single-step">
+            <img src="images/connectors1.png" alt="connectors" id="connectors1"/>
+            <img src="images/connectors2.png" alt="connectors" id="connectors2"/>
+            <img src="images/controls1.png" alt="controls" id="controls1"/>
+            <!-- top -->
+            <span class="connectorarrow-tle"><!-- custom --></span>
+            <span class="connectorarrow-tl"><!-- custom --></span>
+            <span class="connectorarrow-tm"><!-- custom --></span>
+            <span class="connectorarrow-tr"><!-- custom --></span> 
+            <span class="connectorarrow-tre"><!-- custom --></span>
+            <!-- right -->
+            <span class="connectorarrow-rte"><!-- custom --></span>
+            <span class="connectorarrow-rt"><!-- custom --></span>
+            <span class="connectorarrow-rm"><!-- custom --></span>
+            <span class="connectorarrow-rb"><!-- custom --></span>
+            <span class="connectorarrow-rbe"><!-- custom --></span>  
+            <!-- bottom -->
+            <span class="connectorarrow-ble"><!-- custom --></span>
+            <span class="connectorarrow-bl"><!-- custom --></span>
+            
+            <span class="connectordot-bm"><!-- custom --></span>
+            
+            <span class="connectorarrow-br"><!-- custom --></span> 
+            <span class="connectorarrow-bre"><!-- custom --></span>
+            <!-- left -->  
+            <span class="connectorarrow-lte"><!-- custom --></span>
+            <span class="connectorarrow-lt"><!-- custom --></span>
+            <span class="connectorarrow-lm"><!-- custom --></span>
+            <span class="connectorarrow-lb"><!-- custom --></span>
+            <span class="connectorarrow-lbe"><!-- custom --></span>
+            <header>
+               <h3>5. Controls and Navigation</h3>
+            </header>
+            <p>
+            You can use 9 different navigation actions, these can be placed true the whole page(inside and outside the steps, where you want).
+            </p>
+            <p>
+            To make the tour more complete we've added some visual elements called connectors(arrows and dots), that can be placed around the steps.
+            </p>
+            <footer>
+                <a href="#" class="btn btn-default" data-powertour-action="first"><i class="fa fa-fast-backward"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="prev"><i class="fa fa-step-backward"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="1">1</a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="2">2</a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="3">3</a>
+                <a href="#" class="btn btn-primary" data-powertour-action="next"><i class="fa fa-step-forward"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="last"><i class="fa fa-fast-forward"></i></a>
+                <a href="#" class="btn btn-default pull-right" data-powertour-action="stop"><i class="fa fa-stop"></i></a>
+            </footer> 
+        </div>  
+            
+        <div id="step-six" class="single-step">
+			<span class="connectordot-lt"><!-- custom --></span> 
+            <header>
+               <h3>6. Validation</h3>
+            </header> 
+            <p>The plugin provides custom dataset attributs to disable every single navigation action, 
+            this can be used to extend the plugin with your own kind of validation, which alows you to validate every single step..</p>
+            <p></p>
+            <strong>Add something below</strong>
+            <p></p>
+            <input type="text" placeholder="Just type something here" class="form-control" name="" id="step-validation-input-1"/>
+            <p></p>
+            <footer>
+                <a href="#" class="btn btn-default" data-powertour-action="stop">Stop</a>
+                <div class="pull-right">
+                    <a href="#" class="btn btn-default" data-powertour-action="prev">Go back</a>                
+                    <a href="#" class="btn btn-primary" data-powertour-action="next">Next step</a>
+                </div>
+            </footer>
+        </div> 
+     
+        <div id="step-seven" class="single-step">
+            Loading...
+        </div>
+          
+        <div id="step-eight" class="step-img">
+			<img src="images/demo-image.png" alt=""/>
+        </div>  
+          
+        <div id="step-nine" class="single-step">
+            <header>
+               <h3>8. The end of the tour</h3>
+            </header> 
+            <p>The plugin provides custom dataset attributs to disable every single navigation action, 
+            this can be used to extend the plugin with your own kind of validation, which alows you to validate every single step..</p>
+            <p></p>
+            <footer>
+                <a href="#" class="btn btn-default" data-powertour-action="prev">Go back</a>              
+                <a href="#" class="btn btn-primary pull-right" data-powertour-action="stop">End tour</a>
+            </footer>
+        </div> 
+
+		<!-- DEMO TOUR 2 -->
+        
+        <div id="step-1" class="single-step carousel-step">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="0">
+        
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="images/gallery/dummy-1.jpg" alt=""/>
+                        <div class="carousel-caption">
+                            <h4>Carousel inside a step</h4>
+                             <p>Maecenas rhoncus justo est, aliquam laoreet turpis ornare eget. Mauris ut egestas mi. Mauris vehicula nec est sed laoreet.</p>
+                        </div>
+                        <div class="carousel-ctrls">
+                            <!-- Controls -->
+                            <a class="btn btn-default" href="#" data-powertour-action="stop">
+                                Stop
+                            </a>
+                            <a class="btn btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                                Start slides
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="images/gallery/dummy-2.jpg" alt=""/>
+                        <div class="carousel-caption">
+                            <h4>Lorem ipsum dolor</h4>
+                             <p>Maecenas rhoncus justo est, aliquam laoreet turpis ornare eget. Mauris ut egestas mi. Mauris vehicula nec est sed laoreet.</p>
+                        </div>
+                        <div class="carousel-ctrls">
+                            <!-- Controls -->
+                            <a class="btn btn-default" href="#carousel-example-generic" role="button" data-slide="prev">
+                                prev
+                            </a>
+                            <a class="btn btn-default pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                                Next
+                            </a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="images/gallery/dummy-3.jpg" alt=""/>
+                        <div class="carousel-caption">
+                            <h4>Press the blue button</h4>
+                             <p>Maecenas rhoncus justo est, aliquam laoreet turpis ornare eget. Mauris ut egestas mi. Mauris vehicula nec est sed laoreet.</p>
+                        </div>
+                        <div class="carousel-ctrls">
+                            <!-- Controls -->
+                            <a class="btn btn-default" href="#carousel-example-generic" role="button" data-slide="prev">
+                                prev
+                            </a>
+                            <a class="btn btn-success pull-right" href="#" data-powertour-action="next">
+                                I agree!
+                            </a>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Indicators 
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                </ol>
+                -->
+    
+            </div>
+        </div>        
+        
+        <div id="step-2" class="single-step"> 
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+              <li><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+              <li><a href="#messages" role="tab" data-toggle="tab">Messages</a></li>
+              <li><a href="#settings" role="tab" data-toggle="tab">Settings</a></li>
+            </ul>
+            
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="home">
+Vivamus molestie eros felis, condimentum ullamcorper sapien tempus semper. Nullam sit amet nunc id mi vehicula ornare.
+Fusce at blandit ipsum. Sed blandit justo massa, nec adipiscing sem euismod sed. Vivamus diam metus, aliquet nec tempus iaculis, adipiscing nec. 
+              </div>
+              <div class="tab-pane" id="profile">
+Maecenas id tortor non nisi ultrices porttitor. Sed id sem a nulla lobortis ultrices sed vel velit. 
+Duis ligula purus, mattis a tincidunt sed, sagittis a sapien. Aliquam rhoncus et ipsum sit amet tincidunt. 
+Mauris non libero sed mauris condimentum dapibus. Donec nec. 
+              </div>
+              <div class="tab-pane" id="messages">
+ Aenean lectus mi, blandit a tincidunt at, rhoncus sit amet ante. Praesent non eros euismod, dapibus lacus malesuada, 
+ fermentum sapien. Cras ultrices risus quis ornare sagittis. Duis ipsum ligula, 
+ pretium ac consequat non, dictum rutrum lorem. Ut quis consectetur libero.
+              </div>
+              <div class="tab-pane" id="settings">
+              Praesent non eros euismod, dapibus lacus malesuada, fermentum Duis ipsum sapien.
+              </div>
+            </div>
+            <footer>
+                <a href="#" class="btn btn-default" data-powertour-action="prev">Prev</a>              
+                <a href="#" class="btn btn-primary pull-right" data-powertour-action="next">Next</a>
+            </footer>
+        </div> 
+
+        <div id="step-3" class="single-step"> 
+            <div class="panel-group" id="accordion">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                      Collapsible Group Item #1
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                  <div class="panel-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                      Collapsible Group Item #2
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                      Collapsible Group Item #3
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <footer>
+                <a href="#" class="btn btn-default" data-powertour-action="prev">Prev</a>              
+                <a href="#" class="btn btn-primary pull-right" data-powertour-action="stop">End this tour</a>
+            </footer>
+        </div> 
+        
+        <!-- hidden popup navigation/action bar -->
+        
+        <div id="demo-bar-footer">
+            <div id="powertour-controls">
+                <img src="images/controls2.png" alt="controls" id="controls2"/>
+                <a href="#" class="btn btn-default" data-powertour-action="first"><i class="fa fa-fast-backward"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="prev"><i class="fa fa-step-backward"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="1">1</a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="2">2</a>
+                <a href="#" class="btn btn-default" data-powertour-action="goto" data-powertour-goto="3">3</a>
+                <a href="#" class="btn btn-default" data-powertour-action="next"><i class="fa fa-step-forward"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="last"><i class="fa fa-fast-forward"></i></a>
+                
+                <a href="#" class="btn btn-default" data-powertour-action="pause" style="margin-left:20px"><i class="fa fa-pause"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="play"><i class="fa fa-play"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="stop"><i class="fa fa-stop"></i></a>
+                <a href="#" class="btn btn-default" data-powertour-action="toggleplay" style="margin-left:20px"><i class="fa fa-pause"></i> <i class="fa fa-play"></i></a>
+            </div> 
+            <div id="time-placeholder" data-powertour-placeholder="timer">00:00</div>
+            <div id="progressmeter">
+                <div id="progressmeter-bar"></div>
+                <div id="progressmeter-text">loading...</div>
+            </div> 
+            <div id="backtotop"><i class="fa fa-chevron-up"></i></div>
+       </div>
+    </div>                            
+</body>
+</html>

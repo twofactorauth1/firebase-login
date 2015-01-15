@@ -178,8 +178,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
         };
 
-
-
         window.updatePostMode = function() {
             console.log('post cancel');
             console.log(that.post);
@@ -188,5 +186,59 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             $scope.$$phase||$scope.$digest();
 
         };
+
+         window.triggerEditMode = function() {
+          console.log('edit mode engaged');
+          var body = document.getElementsByTagName('body')[0];
+          var hasClass = body.classList.contains('editing');
+          if (hasClass === false) {
+            body.className += ' editing';
+          }
+
+          // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+          // if (toolbar.classList.contains('editing') === false) {
+          //     toolbar.className += ' editing';
+          // }
+          $scope.isEditing = true;
+
+          $scope.$digest();
+        };
+
+        window.activateAloha = function() {
+      //if ($scope.activated == false) {
+        CKEDITOR.disableAutoInline = true;
+
+        var elements = $('.editable');
+        elements.each(function() {
+          CKEDITOR.inline(this, {
+            on: {
+              instanceReady: function(ev) {
+                var editor = ev.editor;
+                editor.setReadOnly(false);
+                editor.on('change', function() {
+                  $scope.isPageDirty = true;
+                });
+
+              }
+            }
+          });
+        });
+        $scope.activated = true;
+        //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
+      //}
+    };
+
+    window.deactivateAloha = function() {
+      for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
+      // $('.editable').mahalo();
+      // if (aloha.editor && aloha.editor.selection) {
+      // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+      // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
+      // }
+      // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
+    };
 
     }]);
