@@ -75,12 +75,12 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                                   {
                                       hookTo          : '#saveAccount',//not needed
                                       content         : '#step-three',
-                                      width           : 400,
-                                      position        : 'bm',
-                                      offsetY         : 0,
-                                      offsetX         : 0,
+                                      width           : 200,
+                                      position        : 'bl',
+                                      offsetY         : 325,
+                                      offsetX         : 50,
                                       fxIn            : 'fadeIn',
-                                      fxOut           : 'bounceOutUp',
+                                      fxOut           : 'fadeOut',
                                       showStepDelay   : 500,
                                       center          : 'step',
                                       scrollSpeed     : 400,
@@ -89,7 +89,8 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                                       timer           : '00:00',
                                       highlight       : true,
                                       keepHighlighted : false,
-                                      onShowStep      : function(ui){ },
+                                      onShowStep      : function(ui){
+                                      },
                                       onHideStep      : function(ui){ }
                                   }
                           ],
