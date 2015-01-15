@@ -59,18 +59,20 @@ fi
 # remove original main file
 rm -f public/js/main.js
 
+# run grunt
+echo Running grunt production
+grunt production --optimize=uglify
+
 # rename mainforproduction to main.js
 mv public/js/mainforproduction.js public/js/main.js
 
 # Compile all handlebars templates
 #grunt compiletemplates
 
-# run grunt
-echo Running grunt production
-grunt production --optimize=uglify
+
 
 # rename /min to /js directory
-mv public/min public/js
+#mv public/min public/js
 ########################
 rm -r public/comps
 
