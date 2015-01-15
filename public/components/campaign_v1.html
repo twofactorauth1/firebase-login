@@ -6,6 +6,11 @@
 *
 -->
 
+<style>
+   div.campaign-v1 td{
+        background: {{component.bg.color}} !important;
+    }
+</style>
 <div ng-class="component.type+'-v'+component.version">
     <course-preview course="getCourse(component.campaignId)" standalone="true"></course-preview>
 </div>
