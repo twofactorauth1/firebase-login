@@ -1,7 +1,4 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
-<div ng-if="showOnboarding">
-    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
-</div>
 <div style="">
 	<div class="pageheader">
 		<div class="col-xs-7">
@@ -476,4 +473,19 @@
 	</div>
 
     <div id="model_container"></div>
+</div>
+
+<div id="step-one" class="single-step">
+    <img src="../js/libs_misc/powertour/images/connectors1.png" alt="connectors" id="connectors1" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
+    <img src="../js/libs_misc/powertour/images/connectors2.png" alt="connectors" id="connectors2" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
+    <img src="../js/libs_misc/powertour/images/controls1.png" alt="controls" id="controls1" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
+    <header>
+        <h3>Basic Navigation</h3>
+    </header>
+    <p>
+        The main navigation is on the left and has all the various sections for your business.
+    </p>
+    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
+        <i class="fa fa-check"></i> GOT IT
+    </a>
 </div>
