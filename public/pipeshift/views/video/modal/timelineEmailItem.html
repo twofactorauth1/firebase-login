@@ -5,6 +5,26 @@
 <div class="modal-body modal-timeline-item">
 
     <tabset>
+      <tab>
+        <tab-heading>
+          <span class='fa fa-info-circle'></span> Item Info
+        </tab-heading>
+        <form class="col-md-12">
+          <div class="row col-xs-6">
+            <div class="form-group col-xs-6">
+              <label class="control-label">Day:</label>
+              <div class="clearfix mb30"></div>
+              <div rn-stepper ng-model="email.scheduledDay" min="0" max="100"></div>
+            </div>
+
+            <div class="form-group col-xs-6">
+              <label class="control-label">Time:</label>
+              <timepicker class="timepicker" ng-model="email.scheduledTime" ng-change="changed()" hour-step="hstep" minute-step="mstep"
+              show-meridian="true"></timepicker>
+            </div>
+          </div>
+        </form>
+      </tab>
         <tab>
             <tab-heading>
                 <span class='fa fa-edit'></span> Edit Template
