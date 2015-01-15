@@ -10,6 +10,7 @@ define([
     'angularBootstrapSwitch',
     'ngProgress',
     'unsafeHtml',
+    'html2plain',
     'mediaDirective',
     'confirmClick2',
     'confirmClickDirective',
