@@ -7,7 +7,7 @@ define(['angularAMD', 'app'], function(angularAMD, app) {
                 $modalInstance.dismiss();
             };
             $scope.submit = function() {
-                $modalInstance.close($scope.video);
+                $modalInstance.close($scope.email);
             };
         }
     ]);

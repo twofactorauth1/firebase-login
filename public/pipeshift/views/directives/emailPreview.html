@@ -19,17 +19,12 @@
                 </tr>
                 <tr>
                     <td bgcolor="f7f7f7" align="center">
-                        <h2 style="padding-top:20px; padding-bottom:5px; font-weight:200; color: #434343;">{{video.videoSubtitle}}</h2>
+                        <h2 style="padding-top:20px; padding-bottom:5px; font-weight:200; color: #434343;">{{video.title}}</h2>
                     </td>
                 </tr>
                 <tr>
                     <td width="600" bgcolor="f7f7f7" style="padding-left:40px; padding-right:40px;">
-                        <div class="flex-video {{video.media$group.yt$aspectRatio.$t}}">
-                            <iframe id="player" ng-show="video" ng-src="{{trustSrc(video.embedurl)}}" abc="{{trustSrc(video.embedurl)}}"
-                                    frameborder="0" allowfullscreen></iframe>
-                        </div>
-
-                        <p style="font-size: 14px; color: #646464; line-height: 20px;">{{video.videoBody}}</p>
+                        <p style="font-size: 14px; color: #646464; line-height: 20px;">{{video.content}}</p>
                     </td>
                 </tr>
                 <tr>
