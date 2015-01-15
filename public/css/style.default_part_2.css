@@ -45,6 +45,11 @@
   color: #f1c40f;
 }
 
+#contact-details-container .media-object {
+  max-height: 250px;
+  max-width: 250px;
+}
+
 #contact-edit-container .input-lg {
   height: 48px;
 }
@@ -7699,12 +7704,22 @@ div[data-type='campaign'] .inner-page {
 
 .contact-us-v4 .widget-weather {
   margin-top: -190px;
-  margin-left: 50px;
+  margin-left: 100px;
 }
 
 .contact-us-v4 .row {
   margin-left: 0px;
   margin-right: 0px;
+}
+
+.contact-us-v4 .widget-weather .temp {
+  background-color: #658CC4;
+  padding: 15px !important;
+}
+
+.contact-us-v4 .widget-weather .temp span {
+  display: block;
+  padding-bottom: 10px;
 }
 
 .component-wrap .component > [id] .bg {

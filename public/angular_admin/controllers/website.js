@@ -335,7 +335,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
-                        }, 2000)
+                        }, 5000)
                     }
                 }
             }
@@ -363,8 +363,10 @@ define([
                     });
 
                     //add click events for all the settings buttons
-                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings", function (e)
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function (e)
                     {
+                        if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
+                           $scope.tabs.address = true;
                         $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                         var element = angular.element('#component-setting-modal');
                         element.modal('show');

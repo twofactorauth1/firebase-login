@@ -509,15 +509,42 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               scrollWheelZoom: false
             },
             markers: {
-                mainMarker: {
-                    lat: 51,
-                    lng: 0,
-                    focus: false,
-                    message: "",
-                    draggable: false
-                }
+                
             }
       });
+
+      $scope.updateContactUsMap = function(component) {
+            $scope.contactPhone = component.contact.phone;
+            $scope.geo_address_string = $scope.stringifyAddress(component.location);
+            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
+              if(that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
+                $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            }
+            if(!component.contact.phone && that.account.business.phones.length) 
+              $scope.contactPhone = that.account.business.phones[0].number;
+            if($scope.geo_address_string){
+              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                    if (data.error === undefined) {
+                      angular.extend($scope, {
+                          mapLocation: {
+                              lat: parseFloat(data.lat),
+                              lng: parseFloat(data.lon),
+                              zoom: 10
+                          },
+                          markers: {
+                              mainMarker: {
+                                  lat: parseFloat(data.lat),
+                                  lng: parseFloat(data.lon),
+                                  focus: true,
+                                  message: $scope.geo_address_string,
+                                  draggable: false
+                              }
+                          }
+                    });
+                  }
+              });
+            }
+      }
      /********** END MAP RELATED **********/
     $scope.sharePost = function(post, type) {
       var url = $location.$$absUrl;
@@ -851,6 +878,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             body.className = body.className.replace('navbar-v', '');
             body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
           }
+          if ($scope.currentpage.components[i].type == 'contact-us') {
+            $scope.updateContactUsMap($scope.currentpage.components[i]);
+          }
         };
       });
     };
@@ -986,27 +1016,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
           }
           if (value &&  value.type == 'contact-us') {
-             $scope.contactPhone = value.contact.phone;
-            $scope.geo_address_string = $scope.stringifyAddress(value.location);
-            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
-              $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
-            }
-            if(!value.contact.phone && that.account.business.phones.length) 
-              $scope.contactPhone = that.account.business.phones[0].number;
-            
-            if($scope.geo_address_string){
-              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                    if (data.error === undefined) {
-                        
-                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                        $scope.markers.mainMarker.message = $scope.geo_address_string;
-                        $scope.mapLocation.lat = parseFloat(data.lat);
-                        $scope.mapLocation.lng = parseFloat(data.lon);
-                        
-                  }
-              });
-            }
+              $scope.updateContactUsMap(value);
             }
         });
       }
