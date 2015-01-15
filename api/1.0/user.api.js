@@ -363,6 +363,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         req.session.accountId = updatedAccount.id();
                         req.session.subdomain = updatedAccount.get('subdomain');
                         req.session.domain = updatedAccount.get('domain');
+                        self.log.debug('Just set session accountId to: ' + req.session.accountId);
                         callback(null, account.id(), sub.id, user);
                     });
                 });
