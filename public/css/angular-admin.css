@@ -29,6 +29,17 @@
 .leftpanel-show .header-menu-row {
   margin-left: 190px;
 }
+@media (max-width: 768px) {
+  /* First tour, first step */
+  .powertour-step {
+    width: 100%!important;
+    left: 0!important;
+    bottom: 0!important;
+    position: fixed!important;
+    height: 187px!important;
+    top: auto!important;
+  }
+}
 body.leftpanel-collapsed #headerbar {
   left: 52px;
 }
@@ -38,6 +49,12 @@ body.leftpanel-collapsed.rightmenu-open #headerbar {
 body.leftpanel-collapsed.rightmenu-open .contentpanel,
 body.leftpanel-collapsed.rightmenu-open .header-menu-row {
   margin-right: 240px;
+}
+.powertour-highlight {
+  position: relative;
+}
+span[class*=" connectordot-"] {
+  background-color: #f8be2b!important;
 }
 #main-viewport {
   padding: 52px 0 0 0;

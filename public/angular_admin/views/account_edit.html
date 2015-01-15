@@ -1,5 +1,5 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
-<div style="">
+<div class="accountEdit">
 	<div class="pageheader">
 		<div class="col-xs-7">
 			<button ng-click="$back()"
@@ -13,16 +13,18 @@
 		</div>
 
 		<div class="col-xs-5">
-			<button class="btn btn-success pull-right" type="button" ng-click="saveAccount()">
-                <span class="fa fa-save"></span>
-                <span class="hidden-xs">Save</span>
-            </button>
+			<div id="saveAccount">
+				<button class="btn btn-success pull-right" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
+	                <span class="fa fa-save"></span>
+	                <span class="hidden-xs">Save</span>
+	            </button>
+            </div>
 		</div>
 	</div>
 	<div id="contact-edit-container" class="contentpanel" ng-style="styleAccountEdit()" indigeweb-resize>
 		<div class="row">
 			<div class="col-md-6">
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="owner_info">
 					<div class="panel-heading">
 						<h3 class="panel-title">Edit Owner Information</h3>
 					</div>
@@ -188,7 +190,7 @@
 
 			<!-- CONTACT DETAILS -->
 			<div class="col-md-6">
-				<div class="panel panel-default">
+				<div class="panel panel-default" id="business_info">
 					<div class="panel-heading">
 						<h3 class="panel-title">Edit Business Information</h3>
 					</div>
@@ -201,6 +203,7 @@
                                     <div id="bussiness_logo_container" >
                                         <div>
                                             <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" />
+                                            <h1 ng-if="!account.business.logo" style="font-size:95px;"><span class="fa fa-image"></span></h1>
                                         </div>
                                     </div>
                                     <div class="clearfix mb15"></div>
@@ -473,19 +476,36 @@
 	</div>
 
     <div id="model_container"></div>
-</div>
 
-<div id="step-one" class="single-step">
-    <img src="../js/libs_misc/powertour/images/connectors1.png" alt="connectors" id="connectors1" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
-    <img src="../js/libs_misc/powertour/images/connectors2.png" alt="connectors" id="connectors2" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
-    <img src="../js/libs_misc/powertour/images/controls1.png" alt="controls" id="controls1" style="position: absolute;right: -22px;top: -78px;z-index: 1;" />
-    <header>
-        <h3>Basic Navigation</h3>
-    </header>
-    <p>
-        The main navigation is on the left and has all the various sections for your business.
-    </p>
-    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
-        <i class="fa fa-check"></i> GOT IT
-    </a>
+    <div id="step-one-account" class="single-step">
+
+	    <span class="connectordot-lm"><!-- custom --></span>
+	    <header>
+	        <h3>Basic Navigation</h3>
+	    </header>
+	    <p>
+	        The main navigation is on the left and has all the various sections for your business.
+	    </p>
+	    <a class="btn btn-success btn-lg pull-right" href="#" data-powertour-action="next">
+	        <i class="fa fa-chevron-right"></i>
+	    </a>
+	</div>
+
+	<div id="step-two-account" class="single-step">
+
+	    <span class="connectordot-rm"><!-- custom --></span>
+	    <header>
+	        <h3>Basic Navigation</h3>
+	    </header>
+	    <p>
+	        The main navigation is on the left and has all the various sections for your business.
+	    </p>
+	    <a class="btn btn-success btn-lg pull-right" href="#" data-powertour-action="next">
+	        Done
+	    </a>
+	</div>
+
+	<div id="step-three-account">
+		<img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/save-account.png">
+	</div>
 </div>

@@ -35,6 +35,19 @@
     }
 }
 
+@media (max-width: 768px) {
+     /* First tour, first step */
+     .powertour-step {
+        width: 100%!important;
+        left: 0!important;
+        bottom: 0!important;
+        position: fixed!important;
+        height: 187px!important;
+        top: auto!important;
+     }
+
+}
+
 body.leftpanel-collapsed {
     #headerbar {
         left: 52px;
@@ -51,6 +64,16 @@ body.leftpanel-collapsed.rightmenu-open {
         // transition: all 0.3s ease;
     }
 }
+
+.powertour-highlight {
+    position: relative;
+}
+
+span[class*=" connectordot-"] {
+    background-color: #f8be2b!important;
+}
+
+
 #main-viewport {
     padding: 52px 0 0 0;
     overflow: auto;
