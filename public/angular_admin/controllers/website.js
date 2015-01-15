@@ -966,6 +966,8 @@ define([
                     return;
                 } else {
                     $scope.componentEditing.bg.img.url = asset.url;
+                    $scope.saveComponent();
+                    return;
                 }
                 $scope.updateIframeComponents();
             };
