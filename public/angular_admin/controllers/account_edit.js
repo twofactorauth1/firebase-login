@@ -33,7 +33,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                           onProgress : function(ui){ },
                           steps:[
                                   {
-                                      hookTo          : '',//not needed
+                                      hookTo          : '#contact-photo-container',//not needed
                                       content         : '#step-one',
                                       width           : 400,
                                       position        : 'sc',
@@ -48,7 +48,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                                       scrollDelay     : 0,
                                       timer           : '00:00',
                                       highlight       : true,
-                                      keepHighlighted : true,
+                                      keepHighlighted : false,
                                       onShowStep      : function(ui){ },
                                       onHideStep      : function(ui){ }
                                   }
