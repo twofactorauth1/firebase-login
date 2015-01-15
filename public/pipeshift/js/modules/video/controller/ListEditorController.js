@@ -428,7 +428,7 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
 
     $scope.addToCourseFn = function() {
       console.info('Add email');
-      $scope.course.emails.push({title: 'Default Email', picture: null, content: null});
+      $scope.course.emails.push({title: 'Default Email', picture: null, content: 'Content Placeholder', scheduledHour: 0, scheduledMinute: 0, scheduledDay: 0});
       Course.update({id: $scope.course._id}, $scope.course, function(resp) {
         console.log(resp);
       });
