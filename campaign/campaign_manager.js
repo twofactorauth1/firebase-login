@@ -789,24 +789,48 @@ module.exports = {
         //var async = false;
         var successItemsCounter = 0;
         var videos = course.get('videos');
-        //loop through course videos
-        var i = 0;
-        async.each(videos, function(video, cb){
-            message.subject = video.subject || course.get('title');
-            // adjust values for current video
-            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/" + video.videoId);
-            self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
-            self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
-            self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
-            self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
-            self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / videos.length));
-            self._setGlobalVarValue(message, VIDEO_INDEX_VAR_NAME, i + 1);
-            self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, videos.length);
+        var emails = course.get('emails');
+        var messages = [];
+        _.each(videos, function(_video){
+            messages.push({video:_video});
+        });
+        _.each(emails, function(_email){
+            messages.push({email:_email});
+        });
 
-            var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
-            // schedule email
-            // if time is in the past mandrill sends email immediately
-            sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+
+        //loop through course videos and emails
+        var i = 0;
+        async.each(messages, function(msg, cb){
+            var sendObj = {};
+            if(msg.video) {
+                var video = msg.video;
+                message.subject = video.subject || course.get('title');
+                // adjust values for current video
+                self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/" + video.videoId);
+                self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
+                self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
+                self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
+                self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+                self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / videos.length));
+                self._setGlobalVarValue(message, VIDEO_INDEX_VAR_NAME, i + 1);
+                self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, videos.length);
+
+                sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+                // schedule email
+                // if time is in the past mandrill sends email immediately
+                sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+
+            } else if(msg.email) {
+                var email = msg.email;
+                message.subject = email.subject || email.title || course.get('title');
+                //TODO: need to set title, picture, content
+                sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+                // schedule email
+                // if time is in the past mandrill sends email immediately
+                sendObj.send_at = self._getScheduleUtcDateTimeIsoString(email.scheduledDay, email.scheduledHour, email.scheduledMinute, timezoneOffset);
+
+            }
             // send template
             console.dir(sendObj);
             i++;
