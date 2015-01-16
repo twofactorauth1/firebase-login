@@ -11,11 +11,11 @@ resized automatically on paste.
 ## Installation
 
  1. Download the plugin from http://github.com/nmmf/imageresize
-
+ 
  2. Extract (decompress) the downloaded file into the plugins folder of your
 	CKEditor installation.
 	Example: http://example.com/ckeditor/plugins/imageresize
-
+	
  3. Enable the plugin by using the extraPlugins configuration setting.
 	Example: CKEDITOR.config.extraPlugins = "imageresize";
 
@@ -32,7 +32,7 @@ resized automatically on paste.
 		(integer) max-width,
 		(integer) max-height
 	);
-
+ 
  // Resize one image:
 	CKEDITOR.plugins.imageresize.resize(
 		CKEditor Instance,
@@ -40,7 +40,7 @@ resized automatically on paste.
 		(integer) max-width,
 		(integer) max-height
 	);
-
+ 
  // Detect browser support:
  // returns boolean true or false
 	CKEDITOR.plugins.imageresize.support();

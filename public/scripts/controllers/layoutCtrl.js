@@ -759,6 +759,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.clickImageButton();
     }
 
+    window.clickandInsertImageButton = function(editor) {
+      $scope.inlineInput = editor;
+      window.parent.clickImageButton();
+    }
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
@@ -895,8 +900,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.networks = networks;
     };
 
+    window.addCKEditorImageInput = function(url) {
+      console.log('addCKEditorImageInput ', url);
+      if ($scope.urlInput) {
+        $scope.urlInput.val(url);
+      }
+    };
+
     window.addCKEditorImage = function(url) {
-      $scope.urlInput.val(url)
+      console.log('addCKEditorImage ', url);
+      if ($scope.inlineInput) {
+        $scope.inlineInput.insertHtml( '<img src="'+url+'"/>' );
+      }
     };
 
     window.triggerEditMode = function() {
@@ -1005,7 +1020,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if (value && value.type === 'thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
-            $scope.thumbnailSliderCollection = angular.copy(value.images);
+            console.log('value ', value);
+            $scope.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
             var winWidth = w.width();
             $scope.bindThumbnailSlider(winWidth, check_if_mobile);
             w.bind('resize', function() {
@@ -1022,6 +1038,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.bindThumbnailSlider = function(width, is_mobile) {
+      console.log('width ', width);
+      console.log('is_mobile ', is_mobile);
       var number_of_arr = 4;
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;

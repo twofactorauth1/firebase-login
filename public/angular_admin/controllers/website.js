@@ -381,15 +381,15 @@ define([
 
                     //add media modal click events to all images
                     
-                    $("#iframe-website").contents().find('body').on("click", "img", function (e)
-                    {
-                    $("#media-manager-modal").modal('show');
-                        $scope.imageChange = true;
-                        $scope.componentArrTarget = e.currentTarget;
-                        $scope.componentEditing = _.findWhere($scope.components, {
-                            _id: $(e.currentTarget).closest('.component').data('id')
-                        });
-                    });
+                    // $("#iframe-website").contents().find('body').on("click", "img", function (e)
+                    // {
+                    // $("#media-manager-modal").modal('show');
+                    //     $scope.imageChange = true;
+                    //     $scope.componentArrTarget = e.currentTarget;
+                    //     $scope.componentEditing = _.findWhere($scope.components, {
+                    //         _id: $(e.currentTarget).closest('.component').data('id')
+                    //     });
+                    // });
                 };
 
                 if (iframeDoc.getElementById('body')) {
@@ -958,6 +958,7 @@ define([
                     $scope.insertMediaImage = false;
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
                     return;
                 } else if ($scope.logoImage && $scope.componentEditing) {
                     $scope.logoImage = false;
@@ -977,7 +978,7 @@ define([
             };
 
             //when changing the subdomain associated with the account, check to make sure it exisits
-            $scope.checkIfSubdomainExists = function() {
+            $scope.checkIfSubdomaddCKEditorImageInputainExists = function() {
                 var parent_div = $('div.form-group.subdomain');
                 UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function(result) {
                     if (result === "true") {
