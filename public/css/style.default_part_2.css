@@ -7715,11 +7715,19 @@ ol.circles-list > li:before {
   margin-bottom: 20px;
 }
 
+body.ie-browser p.overlay {
+  margin-top: -100px !important;
+}
+
 div[data-type='campaign'] .inner-page {
   padding: 0;
   margin: 0;
   width: 100%;
   max-width: 100%;
+}
+
+div[data-type='campaign'] .inner-page .overlay {
+  margin-top: 0px;
 }
 
 .contact-us-v5 .angular-google-map-container {
@@ -10203,7 +10211,6 @@ div[data-type=blog] .container {
   width: auto;
   padding: 0;
   max-width: 1100px;
-  width: 100%;
   margin: 0 auto;
 }
 

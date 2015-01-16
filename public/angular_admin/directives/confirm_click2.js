@@ -20,6 +20,7 @@ define([
                 }
 
                 $(element).confirmation({
+                  placement: 'top',
                     onConfirm: function() {
                         scope.confirmClick2Confirm && scope.confirmClick2Confirm();
                     },

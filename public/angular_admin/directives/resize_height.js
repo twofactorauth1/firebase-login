@@ -10,9 +10,13 @@ define(['angularAMD'], function (angularAMD) {
                 scope.windowWidth = newValue.w;
 
                 scope.styleWebsite = function () {
+                    var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+                    var width = "100%";
+                    if (iOS) 
+                        width = "99%";
                     return {
                         'height': (newValue.h)-70 + 'px',
-                        'width': '100%',
+                        'width': width,
                         'overflow-y' : 'scroll'
                     };
                 };
