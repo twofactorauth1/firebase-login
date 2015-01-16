@@ -438,19 +438,22 @@
                             <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
                                 <ul ui-sortable="sortableOptions" class="nav-bar" style="list-style: none;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                                        <div class="head-menu-links col-sm-12" data-label="{{link.label}}">
-                                            <div class="col-sm-6">
+                                        <div class="head-menu-links" data-label="{{link.label}}">
+                                            <div class="container-fluid">
+                                                <div class="col-sm-6">
                                                 <h4>
                                                      <span ng-show="!edit[$index]">{{link.label}}</span>
                                                      <input ng-show="edit[$index]" type="text" ng-model="link.label">
                                                  </h4>
-                                            </div>
-                                            <div class="col-sm-6 pull-left" style="cursor:auto">
-                                                <h4>                               
+                                                 </div>  
+                                                 <div class="col-sm-6"> 
+                                                    <h4>                           
                                                     <i ng-show="!edit[$index]" class="fa fa-pencil-square-o" ng-click="edit[$index]=true"></i>                                    
                                                     <i ng-show="edit[$index]" class="fa fa-times" ng-click="edit[$index]= false"></i>
                                                     <i class="fa fa-trash-o" ng-click="mainMenu.links.splice($index,1)"></i>
-                                                </h4>
+                                                    </h4>
+                                                </div>
+                                                
                                             </div>
                                     
                                         </div>
