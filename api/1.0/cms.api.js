@@ -90,6 +90,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('page/:id/components/:componentId'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponent.bind(this));
         app.post(this.url('page/:id/components/:componentId/order/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.updateComponentOrder.bind(this));
         app.get(this.url('component/:type/versions'), this.isAuthAndSubscribedApi.bind(this), this.getAvailableComponentVersions.bind(this));
+        app.post(this.url('component/:type'), this.isAuthAndSubscribedApi.bind(this), this.addNewComponent.bind(this));
 
         // BLOG POSTS
         app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
@@ -962,6 +963,40 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    addNewComponent: function(req, res) {
+        var self = this;
+        self.log.debug('>> addNewComponent');
+        var type = req.params.type;
+
+
+        self.checkPermission(req, self.sc.privs.VIEW_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var componentClass = require('../../cms/model/components/' + type);
+                if(componentClass != null) {
+                    var temp = $$.u.idutils.generateUUID();
+                    var componentObj = req.body || {};
+                    componentObj._id = temp;
+                    componentObj.anchor = temp;
+                    componentObj.visibility = true;
+                    if(componentObj.version) {
+                        componentObj.version = parseInt(componentObj.version);
+                    }
+
+                    var component = new componentClass(componentObj);
+                    self.log.debug('<< addNewComponent');
+                    return self.sendResult(res, component);
+
+                } else {
+                    self.log.debug('<< addNewComponent (404)');
+                    return self.wrapError(res, 404, 'Component type not found', 'Could not find component for type ' + type);
+                }
+
+            }
+        });
     },
 
 
