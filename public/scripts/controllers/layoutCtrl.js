@@ -1020,7 +1020,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if (value && value.type === 'thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
-            $scope.thumbnailSliderCollection = angular.copy(value.images);
+            console.log('value ', value);
+            $scope.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
             var winWidth = w.width();
             $scope.bindThumbnailSlider(winWidth, check_if_mobile);
             w.bind('resize', function() {
@@ -1037,6 +1038,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.bindThumbnailSlider = function(width, is_mobile) {
+      console.log('width ', width);
+      console.log('is_mobile ', is_mobile);
       var number_of_arr = 4;
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;

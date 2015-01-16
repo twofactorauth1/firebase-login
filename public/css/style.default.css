@@ -23627,6 +23627,9 @@ contenthover a {
   display: block;
   margin-bottom: 5px;
 }
+.meet-team-v3 .team-member .social li {
+  display: inline-block;
+}
 .meet-team-v3 .team-member .social a {
   font-size: 12px;
   width: 26px;
@@ -23704,6 +23707,9 @@ contenthover a {
   height: 30px;
   display: inline-block;
   line-height: 28px;
+}
+.meet-team-v4 li {
+  display: inline-block;
 }
 @media (min-width: 768px) {
   .meet-team-v4 .team-member-container {
