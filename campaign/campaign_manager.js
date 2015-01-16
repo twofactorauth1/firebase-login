@@ -431,7 +431,7 @@ module.exports = {
 
         var query = {accountId:accountId, 'components.campaignId':campaignId};
 
-        cmsDao.findMany(query, $$.m.Page, function(err, pages){
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, pages){
             if(err) {
                 self.log.error('Error getting pages: ' + err);
                 return fn(err, null);
