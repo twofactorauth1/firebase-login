@@ -60,6 +60,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                 $scope.markers.mainMarker.lat = parseFloat(data.lat);
                                 $scope.markers.mainMarker.lng = parseFloat(data.lon);
                             }
+                            mapBlockUI.stop();
                         });
                     });
                 } else {
@@ -74,7 +75,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                             $scope.markers.mainMarker.lat = parseFloat(data.lat);
                             $scope.markers.mainMarker.lng = parseFloat(data.lon);
                         }
-                        myBlockUI.stop();
+                        mapBlockUI.stop();
                     });
                 }
 
