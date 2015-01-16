@@ -119,7 +119,8 @@
     "angular-social-links": "0.0.12",
     "angular-slick": "0.1.18",
     "slick": "*",
-    "angular-spinner": "0.6.1"
+    "angular-spinner": "0.6.1",
+    "angular-block-ui": "0.1.2"
   },
   "resolutions": {
     "angular": "1.3.9",
