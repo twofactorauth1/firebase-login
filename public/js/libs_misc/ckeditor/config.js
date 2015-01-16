@@ -15,17 +15,17 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'forms' },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi'] },
-		{ name: 'links', groups: [ 'Link', 'Unlink', 'Anchor' ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'links' },
 		{ name: 'insert' },
 		{ name: 'styles' },
 		{ name: 'colors' },
 		{ name: 'tools' },
-		{ name: 'others'},
+		{ name: 'others' },
 		{ name: 'about' }
 	];
 
-	// The default plugins included in the basic setup define some buttons that
+		// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
 	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript,Image';
 
@@ -33,8 +33,17 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = '';
 
 	config.allowedContent = true;
+	config.extraAllowedContent =true;
 
-	config.extraPlugins = 'doksoft_button,lineheight,mediamanager';
+	// ALLOW <i></i>
+	config.protectedSource.push( /<i[\s\S]*?\>/g ); //allows beginning <i> tag
+	config.protectedSource.push( /<\/i[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.filebrowserBrowseUrl = '';
+	config.extraPlugins = 'doksoft_button,doksoft_font_awesome,mediamanager';
+
+	// Dialog windows are also simplified.
+	config.removeDialogTabs = 'link:advanced';
 };
+
+// allow i tags to be empty (for font awesome)
+	CKEDITOR.dtd.$removeEmpty['i'] = false;

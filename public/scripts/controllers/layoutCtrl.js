@@ -901,12 +901,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     window.addCKEditorImageInput = function(url) {
+      console.log('addCKEditorImageInput ', url);
       if ($scope.urlInput) {
         $scope.urlInput.val(url);
       }
     };
 
     window.addCKEditorImage = function(url) {
+      console.log('addCKEditorImage ', url);
       if ($scope.inlineInput) {
         $scope.inlineInput.insertHtml( '<img src="'+url+'"/>' );
       }

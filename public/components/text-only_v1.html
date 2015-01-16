@@ -7,7 +7,7 @@
 -->
 
 <div ng-class="component.type+'-v'+component.version">
-   <div ng-if = "component.text" class="editable" data-class="text" data-ng-bind-html="component.text">
+   <div ng-if = "component.text" class="editable" data-class="text" data-ng-bind-html="component.text | unsafe">
    </div>
    <div ng-if = "!component.text" class="editable" data-class="text">Enter your text here
    </div>
