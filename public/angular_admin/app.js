@@ -1,10 +1,10 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier', "angularSpinner"], function(angularAMD) {
-  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier', 'angularSpinner']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI'], function(angularAMD) {
+  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
   //routes
-  app.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+  app.config(function($stateProvider, $urlRouterProvider, $httpProvider, blockUIConfig) {
       $urlRouterProvider.otherwise("/website");
       
       $stateProvider
@@ -123,7 +123,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
         }));
-
+        blockUIConfig.autoBlock = false;
       var authInterceptor =
         function($q, $window) {
           return {

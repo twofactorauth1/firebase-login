@@ -73,6 +73,7 @@ require.config({
         'spin': 'libs/spin.js/spin',
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
+        'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -235,7 +236,8 @@ require.config({
         'angularConfig': {deps: ['angular']},
         'ngload': ['angularAMD'],
         'jPushMenu' : {deps: ['jquery']},
-        'angularSlugifier': ['angular']
+        'angularSlugifier': ['angular'],
+        'blockUI': ['angular']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
