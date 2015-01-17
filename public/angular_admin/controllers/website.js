@@ -960,7 +960,7 @@ define([
                     $scope.insertMediaImage = false;
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
+                    //iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
                     return;
                 } else if ($scope.logoImage && $scope.componentEditing) {
                     $scope.logoImage = false;
@@ -1022,16 +1022,13 @@ define([
                     function(isConfirm) {
                         if (isConfirm) {
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-                            $scope.changesConfirmed = true;
                             $scope.savePage();
-                            $location.path(newUrl);
-                            offFn();
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-                            $scope.changesConfirmed = true;
-                            $location.path(newUrl);
-                            offFn();
                         }
+                        $scope.changesConfirmed = true;
+                        $location.path(newUrl);
+                        offFn();
                     });
                 } else if ($scope.changesConfirmed) {
                     //do nothing
