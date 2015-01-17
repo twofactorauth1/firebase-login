@@ -27,19 +27,20 @@ CKEDITOR.editorConfig = function( config ) {
 
 		// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript,Image';
+	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = '';
 
 	config.allowedContent = true;
-	config.extraAllowedContent =true;
+	config.extraAllowedContent = true;
+
 
 	// ALLOW <i></i>
 	config.protectedSource.push( /<i[\s\S]*?\>/g ); //allows beginning <i> tag
 	config.protectedSource.push( /<\/i[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'doksoft_button,doksoft_font_awesome,mediamanager';
+	config.extraPlugins = 'doksoft_button,doksoft_font_awesome,image2,mediamanager,widget,lineutils,clipboard';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = 'link:advanced';
@@ -47,3 +48,6 @@ CKEDITOR.editorConfig = function( config ) {
 
 // allow i tags to be empty (for font awesome)
 	CKEDITOR.dtd.$removeEmpty['i'] = false;
+	CKEDITOR.dtd.$editable.span = true;
+	CKEDITOR.dtd.$editable.a = true;
+	CKEDITOR.dtd.$editable.img = true;

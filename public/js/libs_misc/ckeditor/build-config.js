@@ -56,7 +56,7 @@ var CKBUILDER_CONFIG = {
 		'entities' : 1,
 		'floatingspace' : 1,
 		'font' : 1,
-		'image' : 1,
+		'image2' : 1,
 		'justify' : 1,
 		'indentlist' : 1,
 		'lineheight' : 1,
@@ -64,7 +64,8 @@ var CKBUILDER_CONFIG = {
 		'list' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
-		'wysiwygarea' : 1
+		'wysiwygarea' : 1,
+		'widget' : 1
 	},
 	languages : {
 		'en' : 1

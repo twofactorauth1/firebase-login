@@ -917,8 +917,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.addCKEditorImage = function(url) {
       console.log('addCKEditorImage ', url);
+      console.log('$scope.inlineInput ', $scope.inlineInput);
       if ($scope.inlineInput) {
-        $scope.inlineInput.insertHtml( '<img src="'+url+'"/>' );
+        console.log('inserting html');
+        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
       }
     };
 
