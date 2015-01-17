@@ -386,7 +386,7 @@
                                 </div>
                             </li>
                         </ul>
-        <div class="indigeweb-activity-paging" ng-if="total">
+        <div class="indigeweb-activity-paging" ng-if="total && total > numPerPage">
             <button class="btn btn-sm btn-info" ng-disabled="prevPageDisabled()" ng-click='previousPage()'>Previous</button>
             <button class="btn btn-sm btn-info" ng-disabled="nextPageDisabled()" ng-click='nextPage()'>Next</button>
         </div>

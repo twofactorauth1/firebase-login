@@ -44,7 +44,8 @@
                     <div class="component-inner">
 
                         <div ng-if="component.bg.color" class="bg"
-                            style="background: {{component.bg.color}};"></div>
+                        ng-style="{'background': component.bg.color};"
+                            ></div>
 
                         <div ng-if="component.bg.img.show"
                             class="bg"

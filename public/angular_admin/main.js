@@ -73,6 +73,7 @@ require.config({
         'spin': 'libs/spin.js/spin',
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
+        'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -115,6 +116,7 @@ require.config({
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
+        'html2plain': '/angular_admin/filters/html2plain',
         'iStartsWithFilter' : '/angular_admin/filters/i_starts_with',
         'reverse':'/angular_admin/filters/reverse',
         'confirmClick2':'/angular_admin/directives/confirm_click2',
@@ -146,6 +148,7 @@ require.config({
         "subscriberService": "/pipeshift/js/modules/video/service/Subscriber",
         "editCourseModalController": "/pipeshift/js/modules/video/controller/EditCourseModalController",
         "timelineItemController": "/pipeshift/js/modules/video/controller/TimelineItemController",
+        "timelineEmailItemController": "/pipeshift/js/modules/video/controller/TimelineEmailItemController",
         "searchOptionsModalController": "/pipeshift/js/modules/video/controller/SearchOptionsModalController",
         "videoViewModalController": "/pipeshift/js/modules/video/controller/VideoViewModalController",
         "addCourseModalController": "/pipeshift/js/modules/video/controller/AddCourseModalController",
@@ -233,7 +236,8 @@ require.config({
         'angularConfig': {deps: ['angular']},
         'ngload': ['angularAMD'],
         'jPushMenu' : {deps: ['jquery']},
-        'angularSlugifier': ['angular']
+        'angularSlugifier': ['angular'],
+        'blockUI': ['angular']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

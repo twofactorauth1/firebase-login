@@ -66,12 +66,10 @@ if [ "$1" = "master" ]; then
 fi
 
 # rename mainforproduction to main.js
-mv public/js/mainforproduction.js public/js/main.js
+#mv public/js/mainforproduction.js public/js/main.js
 
 # Compile all handlebars templates
 #grunt compiletemplates
-
-
 
 # rename /min to /js directory
 #mv public/min public/js

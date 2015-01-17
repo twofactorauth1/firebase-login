@@ -21,8 +21,9 @@
                         </h2>
                         <div class="blog-meta">
                             <div ng-show="blog.post.created.date" data-class="created.date">
-                                <input type="date" ng-if="isEditing" ng-model="blog.post.created_date"/>
-
+                            <input ng-if="isEditing" type="text"
+                            ng-model="blog.post.created_date" class="datepicker" data-provide="datepicker">
+                        </div>
                                 <span ng-if="!isEditing">  {{ blog.post.created.date | date: 'fullDate' }} </span>
                             </div>
                             <div ng-show="blog.post.post_author">

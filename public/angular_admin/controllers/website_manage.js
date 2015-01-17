@@ -200,7 +200,7 @@ define([
                     $scope.preferences.tasks.select_theme = true;
                     UserService.updateUserPreferences($scope.preferences, false, function() {
                         $scope.toasterOptions['position-class'] = 'toast-bottom-full-width';
-                        toaster.pop('success', "You selected you first theme!", '<div class="mb15"></div><a href="/admin#/website?onboarding=select-theme" class="btn btn-primary">Next Step: Select A Theme</a>', 0, 'trustedHtml');
+                        toaster.pop('success', "You selected you first theme!", '<div class="mb15"></div><a href="/admin#/account?onboarding=select-social" class="btn btn-primary">Next Step: Connect Social Account</a>', 0, 'trustedHtml');
                     });
                 };
 

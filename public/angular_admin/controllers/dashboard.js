@@ -41,7 +41,6 @@ define([
         ngProgress.start();
         NavigationService.updateNavigation();
 
-       
 
         $scope.$watch('activeTab', function(newValue, oldValue) {
             console.log('tab changed');
@@ -52,6 +51,7 @@ define([
             }
             //$(window).trigger('resize');
         });
+
         $scope.activeTab = 'analytics';
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
@@ -93,8 +93,6 @@ define([
                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
             }
         };
-
-
 
         $scope.newDesktop = false;
 

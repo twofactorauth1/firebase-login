@@ -10,6 +10,7 @@ define([
     'angularBootstrapSwitch',
     'ngProgress',
     'unsafeHtml',
+    'html2plain',
     'mediaDirective',
     'confirmClick2',
     'confirmClickDirective',
@@ -292,7 +293,7 @@ define([
                     enabled: true
                 }, {
                     title: 'Thumbnail Slider',
-                    type: 'text-only',
+                    type: 'thumbnail-slider',
                     icon: 'fa fa-like',
                     enabled: true
                 }, {
@@ -334,7 +335,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
-                        }, 2000)
+                        }, 5000)
                     }
                 }
             }
@@ -361,8 +362,10 @@ define([
                     });
 
                     //add click events for all the settings buttons
-                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings", function (e)
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function (e)
                     {
+                        if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
+                           $scope.tabs.address = true;
                         $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                         var element = angular.element('#component-setting-modal');
                         element.modal('show');
@@ -378,15 +381,15 @@ define([
 
                     //add media modal click events to all images
                     
-                    $("#iframe-website").contents().find('body').on("click", "img", function (e)
-                    {
-                    $("#media-manager-modal").modal('show');
-                        $scope.imageChange = true;
-                        $scope.componentArrTarget = e.currentTarget;
-                        $scope.componentEditing = _.findWhere($scope.components, {
-                            _id: $(e.currentTarget).closest('.component').data('id')
-                        });
-                    });
+                    // $("#iframe-website").contents().find('body').on("click", "img", function (e)
+                    // {
+                    // $("#media-manager-modal").modal('show');
+                    //     $scope.imageChange = true;
+                    //     $scope.componentArrTarget = e.currentTarget;
+                    //     $scope.componentEditing = _.findWhere($scope.components, {
+                    //         _id: $(e.currentTarget).closest('.component').data('id')
+                    //     });
+                    // });
                 };
 
                 if (iframeDoc.getElementById('body')) {
@@ -811,8 +814,9 @@ define([
                 });
 
                 var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
-
-                //get all the editable variables and replace the ones in view with variables in DB
+                if(editedComponent && editedComponent.length > 0)
+                {
+                  //get all the editable variables and replace the ones in view with variables in DB
                 var componentEditable = editedComponent[0].querySelectorAll('.editable');
                 if (componentEditable.length >= 1) {
                     for (var i2 = 0; i2 < componentEditable.length; i2++) {
@@ -855,7 +859,9 @@ define([
                             matchingComponent[componentVar] = componentVarContents;
                         }
                     }
+                }  
                 }
+                
 
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -952,6 +958,7 @@ define([
                     $scope.insertMediaImage = false;
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
                     return;
                 } else if ($scope.logoImage && $scope.componentEditing) {
                     $scope.logoImage = false;
@@ -964,12 +971,14 @@ define([
                     return;
                 } else {
                     $scope.componentEditing.bg.img.url = asset.url;
+                    $scope.saveComponent();
+                    return;
                 }
                 $scope.updateIframeComponents();
             };
 
             //when changing the subdomain associated with the account, check to make sure it exisits
-            $scope.checkIfSubdomainExists = function() {
+            $scope.checkIfSubdomaddCKEditorImageInputainExists = function() {
                 var parent_div = $('div.form-group.subdomain');
                 UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function(result) {
                     if (result === "true") {

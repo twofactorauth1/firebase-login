@@ -900,7 +900,7 @@ define(['app', 'keenService'], function(app) {
                     // Visitor Locations
                     // ======================================
                     var locationData = [];
-
+                    console.log('locationData >>> ', results[0]);
                     for (var i = 0; i < results[0].result.length; i++) {
                         var subObj = {};
                         subObj.code = self.stateToAbbr(results[0].result[i]['ip_geo_info.province']);

@@ -56,8 +56,8 @@ var component = $$.m.ModelBase.extend({
              *      url:                        //The url of the image
              * }]
              */
-            imagetextcolor : green,
-            indicatorcolor : #3276bb,
+            imagetextcolor : 'green',
+            indicatorcolor : '#3276bb',
             images : [
                 {
                     text : "Thumbnail Image",

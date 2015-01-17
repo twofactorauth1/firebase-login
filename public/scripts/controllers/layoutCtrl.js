@@ -508,15 +508,42 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               scrollWheelZoom: false
             },
             markers: {
-                mainMarker: {
-                    lat: 51,
-                    lng: 0,
-                    focus: false,
-                    message: "",
-                    draggable: false
-                }
+                
             }
       });
+
+      $scope.updateContactUsMap = function(component) {
+            $scope.contactPhone = component.contact.phone;
+            $scope.geo_address_string = $scope.stringifyAddress(component.location);
+            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
+              if(that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
+                $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            }
+            if(!component.contact.phone && that.account.business.phones.length) 
+              $scope.contactPhone = that.account.business.phones[0].number;
+            if($scope.geo_address_string){
+              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+                    if (data.error === undefined) {
+                      angular.extend($scope, {
+                          mapLocation: {
+                              lat: parseFloat(data.lat),
+                              lng: parseFloat(data.lon),
+                              zoom: 10
+                          },
+                          markers: {
+                              mainMarker: {
+                                  lat: parseFloat(data.lat),
+                                  lng: parseFloat(data.lon),
+                                  focus: true,
+                                  message: $scope.geo_address_string,
+                                  draggable: false
+                              }
+                          }
+                    });
+                  }
+              });
+            }
+      }
      /********** END MAP RELATED **********/
     $scope.sharePost = function(post, type) {
       var url = $location.$$absUrl;
@@ -732,6 +759,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.clickImageButton();
     }
 
+    window.clickandInsertImageButton = function(editor) {
+      $scope.inlineInput = editor;
+      window.parent.clickImageButton();
+    }
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         CKEDITOR.disableAutoInline = true;
@@ -849,6 +881,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             body.className = body.className.replace('navbar-v', '');
             body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
           }
+          if ($scope.currentpage.components[i].type == 'contact-us') {
+            $scope.updateContactUsMap($scope.currentpage.components[i]);
+          }
         };
       });
     };
@@ -865,8 +900,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.networks = networks;
     };
 
+    window.addCKEditorImageInput = function(url) {
+      console.log('addCKEditorImageInput ', url);
+      if ($scope.urlInput) {
+        $scope.urlInput.val(url);
+      }
+    };
+
     window.addCKEditorImage = function(url) {
-      $scope.urlInput.val(url)
+      console.log('addCKEditorImage ', url);
+      if ($scope.inlineInput) {
+        $scope.inlineInput.insertHtml( '<img src="'+url+'"/>' );
+      }
     };
 
     window.triggerEditMode = function() {
@@ -975,7 +1020,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if (value && value.type === 'thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
-            $scope.thumbnailSliderCollection = angular.copy(value.images);
+            console.log('value ', value);
+            $scope.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
             var winWidth = w.width();
             $scope.bindThumbnailSlider(winWidth, check_if_mobile);
             w.bind('resize', function() {
@@ -985,33 +1031,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
           }
           if (value &&  value.type == 'contact-us') {
-             $scope.contactPhone = value.contact.phone;
-            $scope.geo_address_string = $scope.stringifyAddress(value.location);
-            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
-              $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
-            }
-            if(!value.contact.phone && that.account.business.phones.length) 
-              $scope.contactPhone = that.account.business.phones[0].number;
-            
-            if($scope.geo_address_string){
-              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                    if (data.error === undefined) {
-                        
-                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                        $scope.markers.mainMarker.message = $scope.geo_address_string;
-                        $scope.mapLocation.lat = parseFloat(data.lat);
-                        $scope.mapLocation.lng = parseFloat(data.lon);
-                        
-                  }
-              });
-            }
+              $scope.updateContactUsMap(value);
             }
         });
       }
     });
 
     $scope.bindThumbnailSlider = function(width, is_mobile) {
+      console.log('width ', width);
+      console.log('is_mobile ', is_mobile);
       var number_of_arr = 4;
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;

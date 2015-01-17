@@ -38,24 +38,36 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 console.log(product);
             });
         };
+
+        $scope.toggleProductThumb = true;
+
         $scope.$watch('toggleProductThumb', function(value) {
             if (angular.isDefined(value)) {
-                $scope.commerceSettings.showProductThumb = value;             
+                $scope.commerceSettings.showProductThumb = value;
             }
         });
+
+        $scope.toggleSku = true;
+
         $scope.$watch('toggleSku', function(value) {
             if (angular.isDefined(value)) {
-                $scope.commerceSettings.showSku = value;             
+                $scope.commerceSettings.showSku = value;
             }
         });
+
+        $scope.togglePrice = true;
+
         $scope.$watch('togglePrice', function(value) {
             if (angular.isDefined(value)) {
-                $scope.commerceSettings.showPrice = value;             
+                $scope.commerceSettings.showPrice = value;
             }
         });
+
+        $scope.toggleProductType = true;
+        
         $scope.$watch('toggleProductType', function(value) {
             if (angular.isDefined(value)) {
-                $scope.commerceSettings.showProductType = value;             
+                $scope.commerceSettings.showProductType = value;
             }
         });
 
@@ -91,7 +103,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 $scope.productSortReverse = true;
             } else if (newValue == 4) {
                 $scope.productOrder = 'total_sales';
-                $scope.productSortReverse = false;              
+                $scope.productSortReverse = false;
             } else if (newValue == 5) {
                 $scope.productOrder = 'regular_price';
                 $scope.productSortReverse = false;
@@ -122,7 +134,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                     $scope.productSortReverse = false;
                 } else if (newValue == 4) {
                     $scope.productOrder = 'total_sales';
-                    $scope.productSortReverse = false;              
+                    $scope.productSortReverse = false;
                 } else if (newValue == 5) {
                     $scope.productOrder = 'regular_price';
                     $scope.productSortReverse = false;
@@ -132,18 +144,18 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 } else if (newValue == 7) {
                     $scope.productOrder = 'starred';
                     $scope.productSortReverse = false;
-                }    
+                }
                 if (newValue && $scope.userPreferences && $scope.userPreferences.commerceSettings) {
                     $scope.userPreferences.commerceSettings.productOrder = $scope.productOrder;
                     $scope.userPreferences.commerceSettings.productSortReverse = $scope.productSortReverse;
                     $scope.savePreferencesFn();
-                } 
+                }
             }
             initializeSortOrder += 1;
-            
+
 
         });
-        
+
         $scope.savePreferencesFn = function() {
             UserService.updateUserPreferences($scope.userPreferences, true, function() {});
         };
@@ -168,7 +180,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 var price = {};
                 if (hash[0] && hash[0].price) {
                     price = _.min(hash, function(p){ return p.price; });
-                    
+
                     return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
                                     return (str !== "");
                                 }).join(" ");
@@ -187,38 +199,38 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 $scope.userPreferences.commerceSettings = commerceSettings;
                 $scope.productOrder = $scope.userPreferences.commerceSettings.productOrder;
                 $scope.productSortReverse = $scope.userPreferences.commerceSettings.productSortReverse;
-                
-                
+
+
                 var productOrder = $scope.productOrder;
                 var productSortReverse = $scope.productSortReverse;
                 var orderNum;
                 if (productOrder === 'name') {
                     if(productSortReverse)
-                        orderNum = 2;   
+                        orderNum = 2;
                     else
                         orderNum = 1;
                 }
                 else if (productOrder === 'created.date') {
-                   orderNum = 3; 
+                   orderNum = 3;
                 }
                 else if (productOrder === 'total_sales') {
-                   orderNum = 4; 
+                   orderNum = 4;
                 }
                 else if (productOrder === 'regular_price') {
                    if(productSortReverse)
-                        orderNum = 6;   
+                        orderNum = 6;
                     else
                         orderNum = 5;
                 }
                 else if (productOrder === 'starred') {
-                   orderNum = 7; 
-                }               
+                   orderNum = 7;
+                }
                 $scope.sortOrder = orderNum;
                 $scope.sortOrderSettings = orderNum;
             } else {
                     $scope.userPreferences.commerceSettings = {
                     productOrder: 'name',
-                    productSortReverse: false                    
+                    productSortReverse: false
                 };
                 $scope.sortOrder = 1;
                 $scope.sortOrderSettings = 1;

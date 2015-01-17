@@ -12,7 +12,7 @@
     <li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
         <div class="componentActions">
             <span class="reorder fa fa-arrows"></span>
-            <span class="" ng-if="!component.visibility">Hidden</span>
+            <span class="hidden-component" ng-if="!component.visibility">Hidden</span>
             <h4 class="pull-left">{{component.type}}</h4>
             <span class="settings fa fa-cogs" data-id="{{component._id}}"></span>
         </div>

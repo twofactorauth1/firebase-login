@@ -1,27 +1,15 @@
 <div ng-class="component.type+'-v'+component.version">
-<div class="row text-center">
-    <h2>{{component.title}}</h2>
-    <br/>
-</div>
-<div class="row" ng-repeat="teamMember in component.teamMembers">
+<div class="editable" data-class="component.title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
+<div class="row clearfix mb30" ng-repeat="teamMember in component.teamMembers">
     <div class="col-md-4 text-center">
+        <div class="mb10"></div>
         <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img" style="width: 200px;height: 200px" />
-        <br/>
-        <br/>
-        <br/>
     </div>
     <div class="col-md-8">
-        <h3 style="color: {{component.headcolor}}">{{teamMember.name}}</h3>
-        <h4>{{teamMember.position}}</h4>
+        <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
+        <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
+        <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
 
-        <p>{{teamMember.bio}}</p>
-
-        <div class="row">
-            <div class="col-md-3">
-                <button class="btn btn-primary">{{teamMember.btn.text}} <i class="{{teamMember.btn.icon}}"></i>
-                </button>
-            </div>            
-        </div>
         <div class="row">
             <ul class="social">
             <li ng-repeat="(val, key) in teamMember.social">

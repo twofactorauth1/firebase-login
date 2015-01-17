@@ -1534,7 +1534,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-right: 52px;
   position: relative;
   height: 63px;
-  z-index: 11;
 }
 
 .mainpanel .pageheader h2 {
@@ -5284,6 +5283,14 @@ div.error label.error:before {
   color: #54C8E8;
 }
 
+.componentActions .hidden-component {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+  height: 60px;
+}
+
 .componentActions .delete {
   float: right;
 }
@@ -7708,11 +7715,19 @@ ol.circles-list > li:before {
   margin-bottom: 20px;
 }
 
+body.ie-browser p.overlay {
+  margin-top: -100px !important;
+}
+
 div[data-type='campaign'] .inner-page {
   padding: 0;
   margin: 0;
   width: 100%;
   max-width: 100%;
+}
+
+div[data-type='campaign'] .inner-page .overlay {
+  margin-top: 0px;
 }
 
 .contact-us-v5 .angular-google-map-container {
@@ -7766,12 +7781,22 @@ div[data-type='campaign'] .inner-page {
 
 .contact-us-v4 .widget-weather {
   margin-top: -190px;
-  margin-left: 50px;
+  margin-left: 100px;
 }
 
 .contact-us-v4 .row {
   margin-left: 0px;
   margin-right: 0px;
+}
+
+.contact-us-v4 .widget-weather .temp {
+  background-color: #658CC4;
+  padding: 15px !important;
+}
+
+.contact-us-v4 .widget-weather .temp span {
+  display: block;
+  padding-bottom: 10px;
 }
 
 .component-wrap .component > [id] .bg {
@@ -8708,6 +8733,10 @@ contenthover a {
   margin-bottom: 5px;
 }
 
+.meet-team-v3 .team-member .social li {
+  display: inline-block;
+}
+
 .meet-team-v3 .team-member .social a {
   font-size: 12px;
   width: 26px;
@@ -8797,6 +8826,10 @@ contenthover a {
   height: 30px;
   display: inline-block;
   line-height: 28px;
+}
+
+.meet-team-v4 li {
+  display: inline-block;
 }
 
 @media (min-width: 768px) {
@@ -10186,7 +10219,6 @@ div[data-type=blog] .container {
   width: auto;
   padding: 0;
   max-width: 1100px;
-  width: 100%;
   margin: 0 auto;
 }
 

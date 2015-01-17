@@ -1,9 +1,7 @@
-define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive', 'keenService', 'timeAgoFilter','activityDirective', 'formatText'], function(app) {
-    app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', 'keenService',
-        function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, keenService) {
+define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterService', 'leaflet-directive', 'keenService', 'timeAgoFilter','activityDirective', 'formatText','blockUI'], function(app) {
+    app.register.controller('CustomerDetailCtrl', ['$scope', 'CustomerService', '$stateParams', '$state', 'ngProgress', 'ToasterService', 'keenService', 'blockUI',
+        function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, keenService, blockUI) {
             ngProgress.start();
-            $scope.lat = 51;
-            $scope.lng = 0;
             $scope.$back = function() {
                 console.log('$scope.lastState.state ', $scope.lastState.state);
                 console.log('$scope.lastState.params ', $scope.lastState.params);
@@ -14,7 +12,8 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 }
             };
             $scope.customerId = $stateParams.id;
-
+            var mapBlockUI = blockUI.instances.get('mapBlockUI');
+            mapBlockUI.start();
             $scope.ip_geo_address = '';
             CustomerService.getCustomer($scope.customerId, function(customer) {
                 $scope.customer = customer;
@@ -61,6 +60,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                 $scope.markers.mainMarker.lat = parseFloat(data.lat);
                                 $scope.markers.mainMarker.lng = parseFloat(data.lon);
                             }
+                            mapBlockUI.stop();
                         });
                     });
                 } else {
@@ -75,12 +75,15 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                             $scope.markers.mainMarker.lat = parseFloat(data.lat);
                             $scope.markers.mainMarker.lng = parseFloat(data.lon);
                         }
+                        mapBlockUI.stop();
                     });
                 }
 
                 $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
                 $scope.contactLabel = CustomerService.contactLabel(customer);
                 $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
+                ToasterService.processPending();
+                ngProgress.complete();
             });
             angular.extend($scope, {
                 london: {

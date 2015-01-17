@@ -6,6 +6,19 @@
 *
 -->
 
+<style>
+   div.campaign-v1 td{
+        background: {{component.bg.color}} !important;
+    }
+</style>
+<script>
+var ua = window.navigator.userAgent;
+    var ua = window.navigator.userAgent;
+	var msie = ua.indexOf("MSIE ");
+
+	if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))     
+    	$("body").addClass("ie-browser");
+</script>
 <div ng-class="component.type+'-v'+component.version">
     <course-preview course="getCourse(component.campaignId)" standalone="true"></course-preview>
 </div>
