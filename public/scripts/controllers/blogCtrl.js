@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','postService',
-    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService) {
+mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','postService', 'websiteService', 'accountService',
+    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService, websiteService, accountService) {
 
         var account, pages, website, route, postTags, currentTag, categories, currentCat, authors, currentAuthor, latestposts, that = this;
         var post = {};
@@ -31,6 +31,27 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                    // console.log($scope.$parent)
             }
         });
+
+        accountService(function(err, data) {
+          if (err) {
+            console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
+          } else {
+            that.account = data;
+
+            //Include Layout For Theme
+            that.themeUrl = 'components/layout/layout_indimain.html';
+
+          }
+        });
+
+        websiteService(function(err, data) {
+          if (err) {
+            console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
+          } else {
+            that.website = data;
+          }
+        });
+
         postsService(function(err, data){
             console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
