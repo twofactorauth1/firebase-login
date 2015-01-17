@@ -293,6 +293,9 @@ define(['app'], function (app) {
             });
 		};
 		this.saveComponent = function (component, cmpVersion, fn) {
+			console.log('Saving Component >>>');
+			console.log('component ', component);
+			console.log('cmpVersion ', cmpVersion);
 			var apiUrl = baseUrl + ['cms', 'component', component.type].join('/');
 			$http({
 			    url: apiUrl,

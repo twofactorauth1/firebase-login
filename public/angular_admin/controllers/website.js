@@ -689,14 +689,15 @@ define([
                 $scope.components = $scope.currentPage.components;
 
                 var cmpVersion = null;
-                if ($scope.selectedTheme) {
-                    var selectedType = _.findWhere($scope.selectedTheme.config.components, {
+                if ($scope.currentTheme) {
+                    var selectedType = _.findWhere($scope.currentTheme.config.components, {
                         type: $scope.selectedComponent.type
                     });
                     if (selectedType) {
                         cmpVersion = selectedType.version;
                     }
                 }
+                console.log('cmpVersion ', cmpVersion);
                 WebsiteService.saveComponent($scope.selectedComponent, cmpVersion, function(data) {
                     if (data) {
                         var newComponent = data;
