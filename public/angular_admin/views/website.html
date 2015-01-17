@@ -473,7 +473,7 @@
                                         <input ng-model="newLink.linkUrl" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Label" class="input-lg form-control"
                                         type="text">
                                         <select ng-if="addLinkType=='page'" ng-model="newLink.linkPage" class="form-control input-lg">
-                                                <option ng-repeat="page in allPages track by $index" value="{{page.handle}}">{{page.title || page.handle}}</option>
+                                                <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}">{{page.title}}</option>
                                         </select>
                                         <div class="input-group-btn dropup">
                                             <button type="button" class="btn btn-default dropdown-toggle input-lg" data-toggle="dropdown"
