@@ -1,8 +1,6 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="image-text-title">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title"></span>
-        </div>
+        <div class="editable" data-class="title" ng-bind-html="component.title"></div>
     </div>
 
     <div ng-show="component.imgurl" class="pull-{{component.imagePosition}} col-sm-3 col-xs-12 image-text-image">

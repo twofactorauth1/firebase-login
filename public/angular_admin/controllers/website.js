@@ -666,6 +666,7 @@ define([
             }
 
             $scope.addComponent = function() {
+                console.log('add component >>> ');
                 $scope.deactivateAloha();
                 var pageId = $scope.currentPage._id;
                 if ($scope.selectedComponent.type === 'footer') {
@@ -688,7 +689,7 @@ define([
                 }
                 $scope.components = $scope.currentPage.components;
 
-                var cmpVersion = null;
+                var cmpVersion = 1;
                 if ($scope.currentTheme) {
                     var selectedType = _.findWhere($scope.currentTheme.config.components, {
                         type: $scope.selectedComponent.type
@@ -708,8 +709,10 @@ define([
                         $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
 
-                        // $scope.deactivateAloha();
-                        $scope.activateAloha();
+                        //TODO: get updateIframeComponents callback
+                        setTimeout(function() {
+                            $scope.activateAloha();
+                        }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     }
