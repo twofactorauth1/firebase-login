@@ -14,6 +14,7 @@ var passportUtil = require('./passport.socialutil');
 var userDao = require('../dao/user.dao');
 var log = $$.g.getLogger('passport.stripe');
 var connect = require('connect');
+var accountDao = require('../dao/account.dao');
 
 passport.use(new StripeStrategy({
         clientID: stripeConfig.STRIPE_CLIENT_ID,
@@ -43,28 +44,36 @@ passport.use(new StripeStrategy({
         var userId = null;
         var state = req.query['state'];
         if(state) {
+            console.log('state: ', state);
             var stateParams = state.split(',');
-            stripeAccount.baggage.accountId = stateParams[0];
+            stripeAccount.baggage.accountId = parseInt(stateParams[0]);
+            req.session.accountId = parseInt(stateParams[0]);
             if(!req.user) {
-                userId = state[1];
+                userId = parseInt(stateParams[1]);
+                req.session.accountId = parseInt(stateParams[0]);
             } else {
                 userId = req.user.id();
             }
         }
-
+        console.log('req.session.accountId: ' + req.session.accountId);
         userDao.getById(userId, function(err, value){
-            if (value == null) {
-                log.error("No user found during stripe callback. (" + err + ")");
-                return fn("User not found", "Incorrect username");
+            if (value == null || err) {
+                log.error("No user found during stripe callback for userId[" + userId + "]. (" + err + ")");
+                return done("User not found", "Incorrect username");
             }
             var user = value;
 
             user._setCredentials(stripeAccount, false);
-
+            // add accessToken to account.
+            accountDao.addStripeTokensToAccount(stripeAccount.baggage.accountId, accessToken, refreshToken, function(err, value){
+                if(err) {
+                    log.error('Error saving Stripe Tokens to account: ' + err);
+                }
+            });
             userDao.saveOrUpdate(user, function(err, value){
                 if(value==null) {
                     log.error("Error during saveOrUpdate of user: (" + err + ")");
-                    return fn(err, "SaveOrUpdate Error");
+                    return done(err, "SaveOrUpdate Error");
                 }
                 log.debug('<< stripeCallback');
                 return done(err, value);

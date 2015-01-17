@@ -9,6 +9,7 @@ var baseDao = require('./base.dao');
 var accountDao = require('./account.dao');
 var userDao = require('./user.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
+var analyticsManager = require('../analytics/analytics_manager');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
@@ -49,7 +50,6 @@ var dao = {
 
     findContactsShortForm: function(accountId, letter, skip, limit, fields, fn) {
         var self=this;
-        self.log.debug('>> findContactsShortForm');
 
         var query = {};
         if(letter !='all') {
@@ -70,6 +70,11 @@ var dao = {
             } else {
                 sort = 'last';
             }
+            self.log.debug('>> query ', query);
+            self.log.debug('>> skip ', skip);
+            self.log.debug('>> limit ', limit);
+            self.log.debug('>> sort ', sort);
+            self.log.debug('>> fields ', fields);
 
             self.findAllWithFieldsAndLimit(query, skip, limit, sort, fields, $$.m.Contact, fn);
         });
@@ -240,6 +245,10 @@ var dao = {
         this.findOne({'email': email}, fn);
     },
 
+    getContactByEmailAndAccount: function(email, accountId, fn) {
+        this.findOne({'email:':email, 'accountId':accountId}, fn);
+    },
+
     getContactByEmailAndUserId: function (email, userId, fn) {
         if (email == null || userId == null) {
             return fn(null, null);
@@ -349,6 +358,20 @@ var dao = {
         });
     },
 
+    createContactLeadFromEmail: function(email, accountId, fn) {
+        var self = this;
+        self.log.debug('>> createContactLeadFromEmail');
+        var contact = new $$.m.Contact();
+        contact.set('email', email);
+        contact.set('accountId', accountId);
+        contact.set('type', $$.m.Contact.types.LEAD);
+
+        self.saveOrUpdateContact(contact, function(err, value){
+            self.log.debug('<< createContactLeadFromEmail');
+            fn(err, value);
+        });
+    },
+
     createContactFromData: function (data, accountToken, fn) {
         var self = this;
         var email = data.email
@@ -407,6 +430,80 @@ var dao = {
                         }
                     });
                 });
+        });
+    },
+
+    createCustomerContact: function(user, accountId, fingerprint, fn) {
+        var self = this;
+        self.log.debug('>> createCustomerContact');
+        self.getContactByEmailAndAccount(user.get('email'), accountId, function(err, existingContact){
+            if (err) {
+                self.log.error('Error searching for contact by email: ' + err);
+                return fn(err, null);
+            }
+
+            var p1 = $.Deferred();
+            if (existingContact != null) {
+                self.log.info('Attempted to create a new customer for an existing contact');
+                var oldType = existingContact.get('type');
+                existingContact.set('type', 'cu');//set type to customer
+                existingContact.set('fingerprint', fingerprint);
+                self.saveOrUpdate(existingContact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error saving contact: ' + err);
+                        p1.reject(err);
+                    } else {
+                        self.log.debug('Updated existing contact');
+                        p1.resolve(existingContact);
+                    }
+                });
+            } else {
+                //TODO: new contact
+                var newContact = new $$.m.Contact({
+                    accountId: accountId,           //int
+                    first:user.get('first'),             //string,
+                    last:user.get('last'),              //string,
+                    type:"cu",              //contact_types,
+                    fingerprint:fingerprint
+
+                });
+                newContact.createOrUpdateDetails('emails', null, null, null, null, null, user.get('email'), null);
+                self.saveOrUpdate(newContact, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error saving contact: ' + err);
+                        p1.reject(err);
+                    } else {
+                        self.log.debug('created new contact');
+                        p1.resolve(savedContact);
+                    }
+                });
+            }
+            $.when(p1).fail(function(err){
+                return fn(err, null);
+            });
+            $.when(p1).done(function(savedContact){
+                //create activity for subscription purchased
+
+                var activity = new $$.m.ContactActivity({
+                    accountId: savedContact.get('accountId'),
+                    contactId: savedContact.id(),
+                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                    note: "Subscription purchased.",
+                    start:new Date() //datestamp
+
+                });
+                contactActivityManager.createActivity(activity, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating contactActivity for contact with id: ' + savedContact.id());
+                        return fn(err, savedContact);
+                    } else {
+                        self.log.debug('<< createCustomerContact');
+                        return fn(null, savedContact);
+                    }
+                });
+
+            });
+
         });
     },
 
@@ -688,7 +785,7 @@ var dao = {
                     var activity = new $$.m.ContactActivity({
                         accountId: savedContact.get('accountId'),
                         contactId: savedContact.id(),
-                        activityType: $$.m.ContactActivity.types.ACCOUNT_CREATED,
+                        activityType: $$.m.ContactActivity.types.CONTACT_CREATED,
                         note: "Contact created.",
                         start:new Date() //datestamp
 
@@ -700,6 +797,13 @@ var dao = {
                             self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
                         }
                     });
+                    self._createHistoricActivities(savedContact.get('accountId'), savedContact.id(), savedContact.get('fingerprint'), function(err, val){
+                        if(err) {
+                            self.log.error('Error creating historic activities for new contact: ' + err);
+                        } else {
+                            self.log.debug('Successfully created historic activities for new contact');
+                        }
+                    });
                     self.log.debug('<< saveOrUpdateContact');
                     fn(null, savedContact);
                 }
@@ -709,6 +813,40 @@ var dao = {
             self.saveOrUpdate(contact, fn);
         }
 
+    },
+
+    _createHistoricActivities: function(accountId, contactId, fingerprint, fn) {
+        //create PAGE_VIEW activities
+        var self = this;
+        self.log.debug('>> _createHistoricActivities');
+
+        analyticsManager.findSessionEventsByFingerprint(fingerprint, accountId, function(err, list){
+            if(err) {
+                self.log.error('Error finding session events: ' + err);
+                return fn(err, null);
+            }
+
+            async.each(list, function(sessionEvent, cb){
+                var activity = new $$.m.ContactActivity({
+                    accountId: accountId,
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.PAGE_VIEW,
+                    start: sessionEvent.get('session_start')
+                });
+                contactActivityManager.createActivity(activity, function(err, val){
+                    if(err) {
+                        self.log.error('Error creating activity: ' + err);
+                        cb(err);
+                    } else {
+                        cb();
+                    }
+                });
+
+            }, function(err){
+                fn(err, null);
+            });
+
+        });
     }
 
 

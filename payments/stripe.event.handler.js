@@ -4,10 +4,13 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
-
+var jade = require('jade');
 var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
+var subscriptionDao = require('./dao/subscription.dao.js');
+var notificationConfig = require('../configs/notification.config.js');
+var contactActivytManager = require('../contactactivities/contactactivity_manager');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
 var eventQ = async.queue(function(event, fn){
@@ -16,6 +19,13 @@ var eventQ = async.queue(function(event, fn){
 
 var eventHandler =  {
 
+    /**
+     * This method takes a stripe event, transforms it into an "indigenous stripe event" (payemts/models/stripe_event)
+     * and then puts it on a queue for later processing by the "_handleEvent" method.  This is done so we can return a 200
+     * quickly on the webhook and scale to handle a large number of events.
+     * @param event
+     * @param fn
+     */
     handleEvent: function(event, fn) {
         var self = this;
         //save it
@@ -32,6 +42,7 @@ var eventHandler =  {
             accountId: 0
         });
         eventDao.saveOrUpdate(iEvent, function(err, value){
+            console.dir(value);
             if(err) {
                 log.error('Error saving indigenous event: ' + err);
                 fn(err, null);
@@ -80,6 +91,7 @@ var eventHandler =  {
                 self.onChargeSucceeded(iEvent, fn);
                 break;
             case 'charge.failed':
+                self.onChargeFailed(iEvent, fn);
                 break;
             case 'charge.refunded':
                 break;
@@ -88,6 +100,7 @@ var eventHandler =  {
             case 'charge.updated':
                 break;
             case 'charge.dispute.created':
+              self.onChargeDisputeCreated(iEvent, fn);
                 break;
             case 'charge.dispute.updated':
                 break;
@@ -106,10 +119,12 @@ var eventHandler =  {
             case 'customer.card.deleted':
                 break;
             case 'customer.subscription.created':
+
                 break;
             case 'customer.subscription.updated':
                 break;
             case 'customer.subscription.deleted':
+                self.onCustomerSubscriptionDeleted(iEvent, fn);
                 break;
             case 'customer.subscription.trial_will_end':
                 break;
@@ -129,6 +144,7 @@ var eventHandler =  {
             case 'invoice.payment_succeeded':
                 break;
             case 'invoice.payment_failed':
+                self.onInvoicePaymentFailed(iEvent, fn);
                 break;
             case 'invoiceitem.created':
                 break;
@@ -166,6 +182,24 @@ var eventHandler =  {
             default:
                 self.onUnknownEvent(iEvent, fn);
         }
+
+
+    },
+
+    sendEmailToOperationFn: function(iEvent, fn) {
+        var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
+        var emailBody = jade.renderFile('templates/emails/stripe/common.jade', context);
+        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function (err, value) {
+            if(err) {
+                log.error('Error sending notification');
+            }
+            eventDao.updateStripeEventState(iEvent.id(), 'PROCESSED', function(err, value){
+                //err or not... we're done here.
+                log.debug('<< ' + iEvent.get('type'));
+                fn(err, value);
+            });
+        });
+
 
 
     },
@@ -230,12 +264,8 @@ var eventHandler =  {
     },
 
     onChargeFailed: function(iEvent, fn) {
-        /*
-         * Look for payment record.
-         * - if found, update it
-         * - if missing, create it
-         * Notify customer.
-         */
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeRefunded: function(iEvent, fn) {
@@ -264,7 +294,8 @@ var eventHandler =  {
     },
 
     onChargeDisputeCreated: function(iEvent, fn) {
-
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onChargeDisputeUpdated: function(iEvent, fn) {
@@ -309,6 +340,31 @@ var eventHandler =  {
 
     onCustomerSubscriptionDeleted: function(iEvent, fn) {
 
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.getSubscriptionBySubId(subId, function(err, sub){
+            if(err) {
+                log.error('Could not get subscription from invoice payment event: ' + err);
+            } else {
+                var contactId = sub.get('contactId');
+                var contactActivity = new $$.m.ContactActivity({
+                    accountId: iEvent.get('accountId'),
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.SUBSCRIBE_CANCEL,
+                    start: new Date()
+                });
+                contactActivytManager.createActivity(contactActivity, function(err, activity){
+                    if(err) {
+                        log.error('Could not create activity for invoice payment event: ' + err);
+                    }
+                });
+            }
+            subscriptionDao.removeByQuery({stripeSubscriptionId: subId}, function (err, res) {
+                log.error('Subscription deletion failed:' % err.message);
+            });
+        });
+
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onCustomerSubscriptionTrialWillEnd: function(iEvent, fn) {
@@ -325,10 +381,32 @@ var eventHandler =  {
 
     onInvoicePaymentSucceeded: function(iEvent, fn) {
 
+        var self = this;
+        var subId = iEvent.get('body').id;
+        subscriptionDao.getSubscriptionBySubId(subId, function(err, sub){
+            if(err) {
+                log.error('Could not get subscription from invoice payment event: ' + err);
+            } else {
+                var contactId = sub.get('contactId');
+                var contactActivity = new $$.m.ContactActivity({
+                    accountId: iEvent.get('accountId'),
+                    contactId: contactId,
+                    activityType: $$.m.ContactActivity.types.SUBCRIPTION_PAID,
+                    start: new Date()
+                });
+                contactActivytManager.createActivity(contactActivity, function(err, activity){
+                    if(err) {
+                        log.error('Could not create activity for invoice payment event: ' + err);
+                    }
+                });
+            }
+        });
+
     },
 
     onInvoicePaymentFailed: function(iEvent, fn) {
-
+        var self = this;
+        self.sendEmailToOperationFn(iEvent, fn);
     },
 
     onInvoiceItemCreated: function(iEvent, fn) {

@@ -1,88 +1,382 @@
-define(['angularAMD', 'angularFileUpload', 'assetsService'], function (angularAMD) {
-    angularAMD.directive('mediaModal', [ 'FileUploader', 'AssetsService', function (FileUploader, AssetsService) {
+define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective'], function(angularAMD) {
+    angularAMD.directive('mediaModal', ['FileUploader', 'AssetsService', '$http', '$timeout', 'ToasterService', function(FileUploader, AssetsService, $http, $timeout, ToasterService) {
         return {
             require: [],
             restrict: 'C',
-            transclude: true,
+            transclude: false,
+            replace: true,
             scope: {
+                insertMediaType: "=",
+                onInsertMediacb: "=",
                 user: '=user'
             },
-            templateUrl: '/angular_admin/views/partials/_fileUploadModal.html',
-            controller: function ($scope, AssetsService,  $compile) {
-                $scope.showType = "all";
-                $scope.m = {};
+            controller: function($scope, AssetsService, $compile) {
+                var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
-                $scope.m.deleteAsset = function (assetId) {
-                    AssetsService.deleteAssetById(function (resp, status){
-                        if (status === 1 ) {
-                            $scope.assets.forEach(function(v, i){
-                                if ( v._id === assetId ) {
+                function resizeModal() {
+                    contentElement.css('height', $(window).height() - 30 + 'px');
+                    mediaElement.css('height', $(window).height() - 30 + 'px');
+                    $scope.bodyHeight = $(window).height() - 210 + 'px';
+
+                    var filterType = $('.filter-type');
+                    $timeout(function() {
+                        filterType.removeClass('filter-type');
+                    }, 0);
+                    $timeout(function() {
+                        filterType.addClass('filter-type');
+                    }, 0);
+                }
+                uploader = $scope.uploader = new FileUploader({
+                    url: '/api/1.0/assets/',
+                    removeAfterUpload: true,
+                    filters: [{
+                        name: "SizeLimit",
+                        fn: function(item) {
+                            switch (item.type.substring(0, item.type.indexOf('/'))) {
+                                case "image":
+                                    console.log('image type');
+                                case "video":
+                                    if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
+                                        return true;
+                                    } else {
+                                        ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
+                                    }
+                                    break;
+                                case "audio":
+                                case "document":
+                                default:
+                                    //size in bytes
+                                    if (10 * 1024 * 1024 > parseInt(item.size)) {
+                                        return true;
+                                    } else {
+                                        ToasterService.show('error', 'Max file size 10MB. Unable to Upload.');
+                                    }
+                            }
+                            return false;
+                        }
+                    }]
+                });
+                uploader.filters.push({
+                    name: 'customFilter',
+                    fn: function(item /*{File|FileLikeObject}*/ , options) {
+                        return this.queue.length < 10;
+                    }
+                });
+                uploader.onSuccessItem = function(fileItem, response, status, headers) {
+                    $scope.uploadComplete = false;
+                    response.files[0].filename = fileItem.file.name;
+                    response.files[0].mimeType = fileItem.file.type;
+                    $scope.assets.push(response.files[0]);
+                };
+
+                uploader.onErrorItem = function(item, response, status, headers) {
+                    $scope.uploadComplete = false;
+                    ToasterService.show('error', 'Connection timed out');
+                };
+
+                $http.get('/angular_admin/views/partials/mediamodal.html').success(function(data) {
+                    $compile(data)($scope).appendTo($('#model_container'));
+
+                    mediaModalElement = $('#media-manager-modal', '#model_container');
+                    footerElement = $('.modal-footer', mediaModalElement);
+                    headerElement = $('.modal-header', mediaModalElement);
+                    contentElement = $('.modal-content', mediaModalElement);
+                    mediaElement = $('.media', mediaModalElement);
+
+                    contentElement.css('visibility', 'hidden');
+                    mediaModalElement.on('shown.bs.modal', function(e) {
+                        $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
+                        $(window).trigger("resize")
+                        contentElement.css('visibility', 'visible')
+                    });
+
+                });
+                $(window).resize(function() {
+                    resizeModal();
+                });
+
+
+                $scope.lastSelect = null;
+                $scope.isSingleSelect = true;
+                $scope.showType = "all";
+                $scope.editingImage = false;
+                $scope.select_all = false;
+                $scope.batch = [];
+                $scope.m = $scope.m || {};
+
+                /*
+                                $scope.m.selectAll = function () {
+                                    $scope.assets.forEach(function (v, i) {
+                                        if ($scope.showType === 'all' || v.mimeType.match($scope.showType)) {
+                                            v.checked = $scope.select_all;
+                                        }
+                                    });
+                                };
+                                $scope.m.selectStatus = function () {
+                                    var allTrue = true;
+                                    $scope.assets.forEach(function (v, i) {
+                                        if (v.checked !== true) {
+                                            allTrue = false;
+                                        }
+                                    });
+                                    $scope.select_all = allTrue === true;
+                                };
+                                $scope.m.showType = function (type) {
+                                    $scope.showType = type;
+                                };
+                                $scope.m.resetUploader = function () {
+                                    $scope.uploadComplete = false;
+                                };
+                                $scope.m.singleSelect = function (event) {
+                                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
+                                        $scope.lastSelect.checked = false;
+                                    }
+                                    $scope.lastSelect = event.target;
+                                    $scope.m.getSingleSelect();
+                                };
+                */
+                /*
+                                $scope.m.getSingleSelect = function () {
+                                    $scope.batch = [];
+
+
+                                    $scope.assets.forEach(function (v, i) {
+                                        if (v.checked)
+                                            $scope.batch.push(v);
+                                    });
+                                };
+                                $scope.m.onInsertMedia = function () {
+                                    $scope.m.getSingleSelect();
+                                    if ($scope.batch.length > 0) {
+                                        $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                                    }
+                                };
+                                $scope.m.singleSelect = function (event) {
+                                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
+                                        $scope.lastSelect.checked = false;
+                                    }
+                                    $scope.lastSelect = event.target;
+                                    $scope.m.getSingleSelect();
+                                };
+
+
+                                $scope.m.onInsertMedia = function () {
+                                    $scope.m.getSingleSelect();
+                                    if ($scope.batch.length > 0) {
+                                        $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
+                                    }
+
+                                };
+                                */
+
+                $scope.m.deleteAsset = function(assetId) {
+                    AssetsService.deleteAssetById(function(resp, status) {
+                        if (status === 1) {
+                            $scope.assets.forEach(function(v, i) {
+                                if (v._id === assetId) {
                                     $scope.assets.splice(i, 1);
                                 }
                             })
                         }
-                    }, assetId );
+                    }, assetId);
                 };
-
-                $scope.m.batchDeleteAsset = function () {
-                    $scope.assets.forEach(function (v, i){
-                        if(v.checked)
+                $scope.m.batchDeleteAsset = function() {
+                    $scope.assets.forEach(function(v, i) {
+                        if (v.checked)
                             $scope.m.deleteAsset(v._id);
                     });
                 };
-
-                $scope.m.selectAll=function(){
-                    $scope.assets.forEach(function (v, i){
-                        v.checked=$scope.select_all;
+                $scope.m.selectAll = function() {
+                    $scope.batch = [];
+                    $scope.assets.forEach(function(v) {
+                        if ($scope.select_all === false) {
+                            v.checked = false;
+                        } else if ($scope.showType === 'all' || v.mimeType.match($scope.showType)) {
+                            v.checked = true;
+                            $scope.batch.push(v);
+                        }
                     });
+
+                    $scope.lastSelect = null;
+                    $scope.m.selectAllStatus();
+                };
+                /*
+                                $scope.$watch("select_all", function () {
+                                    $scope.m.selectAll();
+                                });
+                */
+                $scope.m.singleSelect = function(asset) {
+                    $scope.singleSelected = true;
+                    $timeout(function() {
+                        if (!$scope.isSingleSelect) {
+                            //$scope.batch.push(asset);
+                            var hasAsset = false;
+                            $scope.batch.forEach(function(v, i) {
+                                if (asset._id === v._id) {
+                                    $scope.batch.splice(i, 1);
+                                    hasAsset = true;
+                                }
+                            });
+                            if (!hasAsset) {
+                                $scope.batch.push(asset)
+                            }
+
+                            $scope.m.selectAllStatus();
+                        } else if ($scope.isSingleSelect) {
+                            $scope.batch.forEach(function(v) {
+                                if (asset._id === v._id) {} else {
+                                    v.checked = false;
+                                }
+                            });
+                            $scope.batch = [];
+                            $scope.batch.push(asset);
+
+                            $scope.m.selectAllStatus();
+                        }
+                    }, 0)
                 };
 
-                $scope.m.selectStatus=function(){
+                $scope.m.toggleShiftKey = function(event) {
+                    $scope.isSingleSelect = !$scope.isSingleSelect;
+                };
+
+                $scope.m.selectAllStatus = function() {
                     var allTrue = true;
-                    $scope.assets.forEach(function (v, i) {
-                        if ( v.checked !== true ) {
+                    $scope.assets.forEach(function(v, i) {
+                        if (v.checked !== true) {
                             allTrue = false;
                         }
                     });
                     $scope.select_all = allTrue === true;
                 };
-
-                $scope.m.showType = function (type) {
-                    $scope.showType = type;
+                $scope.m.deleteAsset = function() {
+                    AssetsService.deleteAssetById($scope.batch, function(assetId, resp, status) {
+                        if (status === 1) {
+                            $scope.assets.forEach(function(v, i) {
+                                if (v._id === assetId) {
+                                    $scope.assets.splice(i, 1);
+                                }
+                            });
+                            $scope.batch.forEach(function(v, i) {
+                                if (v._id === assetId) {
+                                    $scope.batch.splice(i, 1);
+                                }
+                            });
+                        }
+                    });
                 };
 
-                $scope.m.resetUploader = function() {
-                    $scope.uploadComplete = false;
+                $scope.m.editImage = function(asset) {
+                    $scope.editingImage = true;
+                    $scope.singleAsset = asset;
+                    console.log('asset ', asset);
+
+                    var targetImage = $('#targetEditImage');
+                    // image.crossOrigin = 'anonymous';
+                    // console.log('image ', $('#targetEditImage'));
+                    // Caman('#targetEditImage', function () {
+                    //     this.brightness(100);
+                    //     this.contrast(30);
+                    //     this.sepia(60);
+                    //     this.saturation(-30);
+                    //     this.render();
+                    //   });
+
+                    // var canvas =  $('#media-manager-modal #targetCanvas')[0];
+                    // console.log('canvas ', canvas);
+                    // var ctx = canvas.getContext('2d'),
+                    // img = new Image();
+                    // img.crossOrigin = 'anonymous'; // Try to remove/comment this line
+                    // img.src = $("#originalSource").attr('src');
+                    // ctx.drawImage(img,10,20);
+                    // var imgData = JSON.parse(JSON.stringify(canvas.toDataURL("image/jpeg")));
+                    // targetImage.attr('src', imgData);
+
+                    // targetImage[0].crossOrigin = 'anonymous';
+                    // var dkrm = new Darkroom(targetImage[0], {
+                    //     // Size options
+                    //     minWidth: 100,
+                    //     minHeight: 100,
+                    //     maxWidth: 650,
+                    //     maxHeight: 500,
+
+                    //     plugins: {
+                    //         save: false,
+                    //         crop: {
+                    //             quickCropKey: 67, //key "c"
+                    //             //minHeight: 50,
+                    //             //minWidth: 50,
+                    //             //ratio: 1
+                    //         }
+                    //     },
+                    //     init: function() {
+                    //         console.log('darkroom init');
+
+                    //         //cropPlugin.requireFocus();
+                    //     }
+                    // });
+
+                    // console.log('dkrm ', dkrm);
+
                 };
 
-                var uploader = $scope.uploader = new FileUploader({
-                    url: '/api/1.0/assets/',
-                    removeAfterUpload: true
-                });
+                $scope.m.goback = function() {
+                    $scope.editingImage = false;
+                };
 
-                uploader.filters.push({
-                    name: 'customFilter',
-                    fn: function(item /*{File|FileLikeObject}*/, options) {
-                        return this.queue.length < 10;
+                $scope.m.onInsertMedia = function() {
+                    if ($scope.batch.length > 0) {
+                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+                        $scope.type = null;
+                    }
+
+                    $("#media-manager-modal").modal('hide');
+                };
+            },
+
+            link: function(scope, element) {
+                scope.assets = [];
+                AssetsService.getAssetsByAccount(function(data) {
+                    if (data instanceof Array) {
+                        scope.assets = data;
                     }
                 });
-
-                uploader.onSuccessItem = function(fileItem, response, status, headers) {
-                    $scope.uploadComplete = true;
-                    $scope.assets.push( response.files[0] )
-                };
-
-
-                $compile('<div class="modal fade" id="media-manager-modal" tabindex="-1" role="dialog" aria-labelledby="mediaModelLabel" aria-hidden="true">                        <div class="modal-dialog modal-lg">                            <div class="modal-content">                                <div class="modal-header">                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                                    <h4 class="modal-title"><span class="fa fa-image"></span> Media Manager</h4>                                </div>                                <div class="modal-body">                                    <div class="row filemanager {{showType}}">                                        <ul class="filemanager-options">                                            <li class="checked">                                                <div class="ckbox ckbox-default">                                                    <input type="checkbox" id="selectall" ng-model="select_all" ng-change="m.selectAll()" value="1">                                                        <label for="selectall">Select All</label>                                                    </div>                                                </li>                                                <li class="hidden">                                                    <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-envelope-o"></i> <span class="hidden-xs">Email</span></a>                                                </li>                                                <li class="hidden">                                                    <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>                                                </li>                                                <li class="hidden">                                                    <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>                                                </li>                                                <li>                                                    <a href="" class="itemopt" ng-disabled="!select_all" ng-click="m.batchDeleteAsset()"><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>                                                </li>                                                <li class="filter-type">                                                Show:                                                    <a href="" data-active="all" ng-click="m.showType(\'all\')">All</a>                                                    <a href="" data-active="document" ng-click="m.showType(\'document\')">Documents</a>                                                    <a href="" data-active="audio" ng-click="m.showType(\'audio\')">Audio</a>                                                    <a href="" data-active="image" ng-click="m.showType(\'image\')">Images</a>                                                    <a href="" data-active="video" ng-click="m.showType(\'video\')">Videos</a>                                                </li>                                            </ul>                                            <div class="media">                                                <div ng-repeat="asset in assets track by $index" class="col-xs-6 col-sm-4 image {{asset.mimeType}}">                                                    <div class="thmb checked">                                                        <div class="ckbox ckbox-default" style="display: block;">                                                            <input type="checkbox" id="{{asset._id}}" name="{{asset._id}}" ng-change="m.selectStatus()" ng-model="asset.checked">                                                                <label for="{{asset._id}}"></label>                                                            </div>                                                            <div class="btn-group fm-group" style="display: block;">                                                                <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown">                                                                    <span class="caret"></span>                                                                </button>                                                                <ul class="dropdown-menu fm-menu" role="menu">                                                                    <li class="hidden"><a href="#"><i class="fa fa-share"></i> Share</a></li>                                                                    <li class="hidden"><a href="#"><i class="fa fa-envelope-o"></i> Email</a></li>                                                                    <li class="hidden"><a href="#"><i class="fa fa-pencil"></i> Edit</a></li>                                                                    <li class="hidden"><a href="#"><i class="fa fa-download"></i> Download</a></li>                                                                    <li><a href="" ng-click="m.deleteAsset(asset._id)"><i class="fa fa-trash-o" ></i> Delete</a></li>                                                                </ul>                                                            </div>                                                            <div class="thmb-prev">                                                               <img ng-src="{{asset.url}}" alt="">                                                                </div>                                                                <h5 class="fm-title"><a href="">{{asset.filename}}</a></h5>                                                                <small class="text-muted">{{asset.created.date}}</small>                                                            </div>                                                        </div>                                                    </div>                                                </div>                                            </div>                                            <div class="modal-footer">                                                <div class="row" >                                                    <div class="col-md-offset-8 col-md-4">                                                        <label for="upload_image" class="btn btn-primary">                                                        Upload File                                                            <input type="file" id="upload_image" class="hidden" nv-file-select="" uploader="uploader" ng-click="resetUploader()" multiple>                                                            </label>                                                            <button type="button" class="btn btn-primary insert-image">Insert Images</button>                                                        </div>                                                    </div>                                                    <div class="row" ng-if="uploader.queue.length" ng-hide="uploadComplete">                                                        <div class="col-md-12">                                                            <table class="table">                                                                <thead>                                                                    <tr>                                                                        <th width="50%">Name</th>                                                                        <th ng-show="uploader.isHTML5">Size</th>                                                                        <th ng-show="uploader.isHTML5">Progress</th>                                                                        <th>Status</th>                                                                        <th>Actions</th>                                                                    </tr>                                                                </thead>                                                                <tbody>                                                                    <tr ng-repeat="item in uploader.queue">                                                                        <td><strong>{{ item.file.name }}</strong></td>                                                                        <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>                                                                        <td ng-show="uploader.isHTML5">                                                                            <div class="progress" style="margin-bottom: 0;">                                                                                <div class="progress-bar" role="progressbar" ng-style="{ \'width\': item.progress + \'%\' }"></div>                                                                            </div>                                                                        </td>                                                                        <td class="text-center">                                                                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>                                                                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>                                                                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>                                                                        </td>                                                                        <td nowrap>                                                                            <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">                                                                                <span class="glyphicon glyphicon-upload"></span> Upload                                                                            </button>                                                                            <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">                                                                                <span class="glyphicon glyphicon-ban-circle"></span> Cancel                                                                            </button>                                                                            <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">                                                                                <span class="glyphicon glyphicon-trash"></span> Remove                                                                            </button>                                                                        </td>                                                                    </tr>                                                                </tbody>                                                            </table> <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length"> <span class="glyphicon glyphicon-upload"></span> Upload all </button>                                                      </div>                                                    </div>                                                </div>                                            </div>                                        </div>                                        <style>                                        #media-manager-modal label[for="upload_image"] {                                            margin-bottom: 0 !important;                                            }                                        #media-manager-modal .media > * {                                            display: none;                                            }                                        #media-manager-modal .all .media > * {                                            display: inline;                                            }                                        #media-manager-modal .document .media > [class*="documnet"] {                                            display: inline;                                            }                                        #media-manager-modal .audio .media > [class*="audio"] {                                            display: inline;                                            }                                        #media-manager-modal .video .media > [class*="video"] {                                            display: inline;                                            }                                        #media-manager-modal .image .media > [class*="image"] {                                            display: inline;                                            }                                        #media-manager-modal .all [data-active="all"],                                        #media-manager-modal .video [data-active="video"],                                        #media-manager-modal .audio [data-active="audio"],                                        #media-manager-modal .image [data-active="image"],                                        #media-manager-modal .document [data-active="document"]{                                            text-decoration: underline;                                            color: #2A6496;                                            }                                        </style>                                    </div>' )($scope).appendTo($('#model_container'))
-            },
-            link: function (scope, element) {
-
-                AssetsService.getAssetsByAccount(function(data){
-                    scope.assets = data;
-                });
-
-
+                element.attr("data-toggle", "modal");
+                element.attr("data-target", "#media-manager-modal");
+                $(document).on("add_image", function(event) {
+                    $("#media-manager-modal").modal('show');
+                    scope.type = "image_gallery_add_image";
+                })
+                $(document).on("delete_image", function(event, index) {
+                    scope.type = "image_gallery_delete_image";
+                    scope.onInsertMediacb && scope.onInsertMediacb(index, scope.type);
+                })
             }
         };
-    }]);
+    }]).directive('captureShift', function() {
+        return {
+            restrict: 'A',
+            scope: {
+                onPresskey: "="
+            },
+            link: function(scope, elem, attrs) {
+                function onShift(e) {
+                    if (e.shiftKey) {
+                        scope.onPresskey();
+                        elem[0].onkeydown = null;
+                        elem[0].onkeyup = offShift;
+                    }
+                }
+
+                function offShift(e) {
+                    if (e.keyIdentifier === 'Shift') {
+                        scope.onPresskey();
+                        elem[0].onkeyup = null;
+                        elem[0].onkeydown = onShift;
+                    }
+                }
+                elem[0].onkeydown = onShift;
+            }
+        }
+    });
 });

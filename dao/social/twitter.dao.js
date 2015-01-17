@@ -13,6 +13,14 @@ var Post = require('../../models/post');
 
 var OAuth = require('oauth').OAuth;
 
+var twitterAPI = require('node-twitter-api');
+var twitterConfig = require('../../configs/twitter.config');
+var twitter = new twitterAPI({
+    consumerKey: twitterConfig.CLIENT_ID,
+    consumerSecret: twitterConfig.CLIENT_SECRET,
+    callback: twitterConfig.CALLBACK_URL_LOGIN
+});
+
 var dao = {
 
     options: {
@@ -132,6 +140,31 @@ var dao = {
                 fn(null, tweets);
             }
         });
+    },
+
+    post: function(user, status, fn) {
+        var self = this;
+        self.log.debug('>> post');
+
+        var accessToken = self._getAccessToken(user);
+        var accessTokenSecret = self._getAccessTokenSecret(user);
+        twitter.statuses("update", {
+                status: status
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error updating status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< post');
+                    fn(null, response);
+                }
+            }
+        );
     },
 
 

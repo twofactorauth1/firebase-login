@@ -23,7 +23,20 @@ define(['app'], function (app) {
 				fn(data);
 			})
 			.error(function (err) {
-                console.log('END:Website Service with ERROR');
+                console.log('END:Website Service with ERROR', err);
+                fn(err, null);
+            });
+		};
+
+		//website/:websiteid/page/:handle
+		this.getSinglePage = function (websiteID, handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'page', handle].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:getSinglePage with ERROR');
                 fn(err, null);
             });
 		};
@@ -40,8 +53,24 @@ define(['app'], function (app) {
             });
 		};
 
+		this.getPosts = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Get Posts with ERROR');
+                fn(err, null);
+            });
+		};
+
 		// website/:websiteId/page/:id
 		this.updatePage = function(websiteId, pageId, pagedata, fn) {
+			var self = this;
+
+			if (!pagedata.modified) {pagedata.modified = {}}
+			pagedata.modified.date = new Date().getTime();
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
 			$http({
 			    url: apiUrl,
@@ -111,11 +140,12 @@ define(['app'], function (app) {
 		};
 
 		//page/:id/components
-		this.addNewComponent = function(pageId, title, type, fn) {
+		this.addNewComponent = function(pageId, title, type,cmpVersion, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
 			var data = {
 				title : title,
-				type : type
+				type : type,
+				cmpVersion : cmpVersion
 			};
 			$http({
 			    url: apiUrl,
@@ -150,6 +180,7 @@ define(['app'], function (app) {
 
 		//website/:websiteId/page
 		this.createPage = function(websiteId, pagedata, fn) {
+			var self = this;
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page'].join('/');
 			$http({
 			    url: apiUrl,
@@ -157,12 +188,40 @@ define(['app'], function (app) {
 			    data: angular.toJson(pagedata)
 			})
 			.success(function (data, status, headers, config) {
+				console.log('data >>> ', data);
+				console.log('data >>> ', data);
 				fn(data);
 			})
 			.error(function (err) {
                 console.log('END:Create Page with ERROR');
             });
 		};
+
+		this.createPost = function (pageId, postdata, fn) {
+			postdata.post_tags = null;
+			if(!postdata.created)
+			{
+				postdata.created = {};	
+			}
+			if(!postdata.modified)
+			{
+				postdata.modified = {};	
+			}
+			postdata.created.date = new Date().getTime();
+			postdata.modified.date = new Date().getTime();
+	        var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog'].join('/');
+	        $http({
+	            url: apiUrl,
+	            method: "POST",
+	            data: angular.toJson(postdata)
+	        })
+	            .success(function (data, status, headers, config) {
+	                fn(data);
+	            })
+	            .error(function (err) {
+	                console.log('END:Create Page with ERROR', err);
+	            });
+	    };
 
 		//website/:websiteId/page/:id/:label
 		this.deletePage = function(pageId, websiteId, label, fn) {
@@ -175,6 +234,7 @@ define(['app'], function (app) {
 			})
 			.error(function (err) {
                 console.log('END:Delete Page with ERROR', err);
+                fn(err);
             });
 		};
 
@@ -186,6 +246,52 @@ define(['app'], function (app) {
 			});
 		};
 
+		this.getPageComponents = function (pageId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+
+		this.getComponentVersions = function (componentType, fn) {
+			var apiUrl = baseUrl + ['cms', 'component', componentType, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+
+		this.setWebsiteTheme = function (themeId, websiteId, fn) {
+			var apiUrl = baseUrl + ['cms', 'theme', themeId, 'website', websiteId].join('/');
+			$http.post(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+		this.createPageFromTheme = function (themeId, websiteId, handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'theme', themeId, 'website', websiteId, 'page', handle].join('/');
+			$http.post(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
+		this.updateLinkList = function(data, websiteId, handle, fn) {
+			console.log('updateLinkList >>>');
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'linklists', handle].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: data
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR', err);
+                fn(err, null);
+            });
+		};
 
 	});
 });

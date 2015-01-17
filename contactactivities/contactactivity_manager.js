@@ -61,10 +61,16 @@ module.exports = {
             });
     },
 
-    listActivitiesByContactId: function(accountId, contactId, skip, limit, fn) {
+    listActivitiesByContactId: function(accountId, contactId, skip, limit, isRead, fn) {
         var self = this;
         log.debug('>> listActivitiesByContactId');
         var queryObj = {'accountId': accountId, 'contactId': contactId};
+        if(isRead && isRead === 'true') {
+            queryObj.read = true;
+        }
+        if(isRead && isRead === 'false') {
+            queryObj.read = false;
+        }
 
         dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
             if(err) {
@@ -78,10 +84,10 @@ module.exports = {
     },
 
     findActivities: function(accountId, contactId, activityTypeAry, noteText, detailText, beforeTimestamp,
-                             afterTimestamp, skip, limit, fn) {
+                             afterTimestamp, skip, limit, isRead, fn) {
 
         var self = this;
-        log.debug('>> findActivities');
+        log.debug('>> findActivities', activityTypeAry);
         var queryObj = {};
 
         if(accountId) {
@@ -90,9 +96,9 @@ module.exports = {
         if(contactId) {
             queryObj.contactId = contactId;
         }
-        if(activityTypeAry && $.isArray(activityTypeAry)) {
+        if(activityTypeAry && activityTypeAry.indexOf(',') === -1 && $.isArray(activityTypeAry) && activityTypeAry.length > 0) {
             queryObj.activityType = {'$in' : activityTypeAry};
-        } else if(activityTypeAry) {
+        } else if(activityTypeAry && activityTypeAry.indexOf(',') != -1) {
             queryObj.activityType = activityTypeAry;
         }
         if(noteText) {
@@ -110,9 +116,18 @@ module.exports = {
             queryObj.start = {'$gte' : afterTimestamp};
         }
 
+        if(isRead && (isRead === 'true')) {
+            queryObj.read = true;
+        }
+
+        if(isRead && isRead === 'false') {
+            queryObj.read = false;
+        }
+
         log.debug('Submitting query: ' + JSON.stringify(queryObj));
 
-        dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
+        //dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
+        dao.findWithFieldsLimitAndTotal(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
             if(err) {
                 log.error('Error finding activities: ' + err);
                 fn(err, null);
@@ -122,6 +137,27 @@ module.exports = {
             }
         });
 
+    },
+
+    markActivityRead: function(activityId, fn) {
+        var self = this;
+        log.debug('>> markActivityRead');
+
+        dao.getById(activityId, $$.m.ContactActivity, function(err, value){
+            if(err|| value===null) {
+                log.error('Error getting activity: ' + err);
+                return fn(err, null);
+            }
+            value.set('read', true);
+            dao.saveOrUpdate(value, function(err, value){
+                if(err) {
+                    log.error('Error updating activity: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< markActivityRead');
+                return fn(null, value);
+            });
+        });
     }
 
 

@@ -3,8 +3,8 @@
 define(['angularAMD', 'angularSanitize', 'angularResource', 'angularBootstrap', 'securityService',
     'xEditable', 'ngCsv', 'ngFileUpload', 'angularStepper', 'angularMoney', 'youtubeService', 'courseService',
     'courseVideoService', 'subscriberService', 'whenUiScrolledDirective', 'whenScrolledDirective',
-    'videoDropDirective', 'videoDraggableDirective', 'coursePreviewDirective', 'videoTitleDirective',
-    'videoPreviewDirecrive', 'videoPlayerDirective', 'psEditableDirective', 'stripeButtonDirective','htmlify'], function (angularAMD) {
+    'videoDropDirective', 'emailDropDirective', 'videoDraggableDirective', 'coursePreviewDirective', 'videoTitleDirective',
+    'videoPreviewDirecrive', 'videoPlayerDirective', 'psEditableDirective', 'stripeButtonDirective', 'resizeDirective', 'htmlify'], function (angularAMD) {
 // Declare app level module which depends on filters, and services
     var app = angular.module('var', [
         'ngSanitize', 'ui.bootstrap',

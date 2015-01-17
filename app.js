@@ -5,6 +5,10 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+if (process.env.ENABLE_MONITORING == "true") {
+	require('./configs/newrelicjs.config');
+}
+
 /*
  //Do not delete this
  //requires: "nodetime": "~0.8.15" to run
@@ -139,7 +143,10 @@ app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session({
     store: mongoStore,
     secret: 'mys3cr3t',
-    cookie: {maxAge: 24 * 60 * 60 * 1000} //stay open for 1 day of inactivity
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000,
+        domain: appConfig.cookie_subdomain
+        } //stay open for 1 day of inactivity across all subdomains
 }));
 
 //Middle ware to refresh the session cookie expiration on every hit
@@ -148,6 +155,7 @@ app.use(function (req, res, next) {
     req.session.touch();
     next();
 });
+
 
 //app.use(express.session({ secret:'mys3cr3ts3sEss10n' }));
 app.use(passport.initialize());
@@ -163,6 +171,7 @@ app.use(function (req, res) {
 
 // Handle 500
 app.use(function (error, req, res, next) {
+    console.dir(error);
     res.status(500);
     res.render('500.html', {title: '500: Internal Server Error', error: error});
 });
@@ -332,6 +341,14 @@ if (process.env.NODE_ENV != "testing") {
 }
 
 //-----------------------------------------------------
+//  SETUP ANALYTICS PROCESSING JOB
+//-----------------------------------------------------
+if (process.env.NODE_ENV != "testing") {//disables the collator for unit tests
+    var analyticsTimerConfig = require('./configs/analyticstimer.config');
+    log.info('Starting analytics job to run every ' + analyticsTimerConfig.ANALYTICS_JOB_MS + 'ms');
+    analyticsTimerConfig.startJob();
+}
+//-----------------------------------------------------
 //  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------
 process.on('uncaughtException', function (err) {
@@ -342,4 +359,3 @@ process.on('uncaughtException', function (err) {
     process.exit(1);
     //});
 });
-

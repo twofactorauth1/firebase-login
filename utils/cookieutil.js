@@ -7,13 +7,16 @@
 
 var cookieUtil =  {
 
-    setCookie: function(resp, key, value, signed, secondsToExpiration) {
+    setCookie: function(resp, key, value, signed, secondsToExpiration, domain) {
         var obj = {};
         if (signed) {
             obj.signed = true;
         }
         if (secondsToExpiration) {
             obj.maxAge = secondsToExpiration * 1000;
+        }
+        if (domain) {
+            obj.domain = domain;
         }
         resp.cookie(key, value, obj);
     },
@@ -50,7 +53,7 @@ var cookieUtil =  {
 
     //region COMPANY COOKIES
     setAccountToken: function(resp, token) {
-        this.setCookie(resp, "ind-acc", token, true);
+        this.setCookie(resp, "ind-acc", token, true, 600);
     },
 
     getAccountToken: function(req) {

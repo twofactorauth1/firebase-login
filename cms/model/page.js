@@ -95,6 +95,16 @@ var page = $$.m.ModelBase.extend({
             components: [],
 
             /**
+             * Screenshot of the page.  Updated after an edit.
+             */
+            screenshot:null,
+
+            /**
+             * Check if the page is secure OR not.
+             */
+            secure:false, 
+
+            /**
              * Created by data
              *
              * @property created

@@ -1,0 +1,41 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+<div ng-class="component.type+'-v'+component.version">
+    <div class="image-text-title">
+        <div class="editable" data-class="title">
+            <span ng-bind-html="component.title"></span>
+        </div>
+    </div>
+    <div class="col-sm-8 col-xs-12 pull-right image-text-panel">
+
+        <div class="image-text-subtitle">
+            <div class="editable" data-class="subtitle">
+                <span ng-bind-html="component.subtitle"></span>
+            </div>
+        </div>
+        <div class="image-text-text">
+            <div class="editable" data-class="text">
+                <span ng-bind-html="component.text"></span>
+            </div>
+        </div>
+
+       <a ng-show="component.btn.url" class="btn {{component.btn.class}} btn-success" href="{{component.btn.url}}">
+            <i class="{{component.btn.icon}}"></i>
+            {{component.btn.text}}
+        </a>
+
+    </div>
+    <div class="clearfix mb10 visible-xs"></div>
+
+    <div ng-show="component.imgurl" class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
+        <div class="editable" data-class="url">
+            <img ng-src="{{component.imgurl}}" class="img-responsive">
+        </div>
+        <p class="center editable" data-class="caption">{{component.caption}}</p>
+    </div>
+</div>

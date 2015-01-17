@@ -26,7 +26,7 @@
       opacity: 0;
       width: 230px;
       background: rgba(239, 160, 34, 0.75);
-      height: 230px;
+      height: 229px;
       position: absolute;
       border-radius: 130px;
       z-index: 99999;
@@ -47,6 +47,8 @@
     }
 
     .profilepic .thumbnail {
+      background-color: transparent;
+      border: none;
       display: block;
       max-width: 230px;
       margin: 10px auto;
@@ -90,6 +92,7 @@
      left: 70px;
      margin-bottom: 25px;
      margin-top: 10px;
+     position: absolute;
     }
 
     .profile-social li {
@@ -107,5 +110,15 @@
 
     }
 
+    .c {
+      display: table;
+      height: 72%;
+      font-family: 'Open Sans';
 
+      > div {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+      }
+    }
   }

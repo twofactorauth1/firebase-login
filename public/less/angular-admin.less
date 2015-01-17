@@ -1,5 +1,17 @@
 #leftnav {
     position: fixed;
+        -webkit-transition: none;
+        -moz-transition: none;
+        -o-transition: none;
+        -ms-transition: none;
+        transition: none;
+    .nav-bracket > li.active > a {
+        background-color: #eee;
+        color: rgb(51, 51, 51);
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
 }
 #headerbar {
     left: 0px;
@@ -7,12 +19,33 @@
     z-index: 200;
     top: 0;
     right: 0;
+    height: 0;
+    border: 0 !important;
 }
 
 .leftpanel-show {
     #headerbar {
-        left: 240px;
+        left: 187px;
     }
+    .contentpanel, .header-menu-row {
+        margin-left: 190px;
+        // -webkit-transition: all 0.3s ease;
+        // -moz-transition: all 0.3s ease;
+        // transition: all 0.3s ease;
+    }
+}
+
+@media (max-width: 768px) {
+     /* First tour, first step */
+     .powertour-step {
+        width: 100%!important;
+        left: 0!important;
+        bottom: 0!important;
+        position: fixed!important;
+        height: 187px!important;
+        top: auto!important;
+     }
+
 }
 
 body.leftpanel-collapsed {
@@ -24,15 +57,32 @@ body.leftpanel-collapsed.rightmenu-open {
     #headerbar {
         right: 240px;
     }
+    .contentpanel, .header-menu-row {
+        margin-right: 240px;
+        // -webkit-transition: all 0.3s ease;
+        // -moz-transition: all 0.3s ease;
+        // transition: all 0.3s ease;
+    }
 }
+
+.powertour-highlight {
+    position: relative;
+}
+
+span[class*=" connectordot-"] {
+    background-color: #f8be2b!important;
+}
+
+
 #main-viewport {
     padding: 52px 0 0 0;
+    overflow: auto;
 }
 #ngProgress-container {
     height: 2px;
 }
 .jdfs-main {
-    width: 200px;
+    width: 230px;
     height: 50px;
     position: relative;
     display: -webkit-box;
@@ -54,4 +104,11 @@ body.leftpanel-collapsed.rightmenu-open {
 .glyphicon-remove-icon{
   color: #c7254e;
   padding-bottom:10px;
+}
+
+.form-container{
+  padding: 30px;
+}
+.form-container .row{
+  float:left;
 }

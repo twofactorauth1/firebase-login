@@ -27,13 +27,10 @@
     .leftpanel-show .leftpanel {
         display: block;
     }
-    .leftpanel-show .mainpanel {
-        margin-left: 240px;
-    }
     .stickyheader .headerbar {
         left: 0;
     }
-    .stickyheader.leftpanel-show .headerbar {
+    .leftpanel-show .headerbar {
         left: 240px;
     }
     .stickyheader.chat-relative-view .headerbar {
@@ -115,7 +112,7 @@
     }
     .signinpanel, .signuppanel {
         margin: 0 auto;
-        width: 480px;
+        width: 100%;
         padding: 20px;
     }
     .signinpanel form {
@@ -195,6 +192,27 @@
     }
     .pageheader .glyphicon, .pageheader .fa {
         font-size: 18px;
+    }
+    .website .pageheader .glyphicon, .website .pageheader .fa,  .website-manage .pageheader .fa {
+        font-size: 14px;
+    }
+    .website .pageheader .col-xs-5, .website-manage .pageheader .col-xs-5{
+        padding-left: 2px;
+        padding-right: 1px;
+    }
+    .website-manage .pageheader .col-xs-7{
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    .website .pageheader .col-xs-5 a.pull-left {
+        margin-left: 0px !important;
+        margin-right: 2px;
+    }
+    .website-manage .pageheader .col-xs-7 div.pull-right {
+        margin-right: 0px !important;
+    }
+    .website-manage .pageheader .col-xs-5 h2 {
+        font-size: 14px;
     }
     .pageheader h2 span {
         font-size: 11px;
@@ -338,5 +356,15 @@
 @media screen and (max-width: 320px) {
     .signinpanel, .signuppanel {
         width: 310px;
+    }
+}
+@media screen and (max-height: 26.375em) {
+    .leftpanel-show {
+        .contentpanel, .header-menu-row{
+            margin-left: 140px !important;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            transition: all 0.3s ease;
+        }
     }
 }

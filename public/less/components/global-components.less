@@ -5,6 +5,9 @@ hr {
 	border: 0;
 	border-top: 1px solid #eeeeee;
 }
+.btn-lg {
+  font-size: 14px;
+}
 
 .goback {
   background: #d0ecf6;
@@ -65,7 +68,7 @@ hr {
   position: absolute;
   display: block;
 }
-.aloha-editable-active {
+.aloha-editable-active, .editing .editable:hover {
   outline: none!important;
   border: 2px dashed #efa022;
   transition: all .2s linear;
@@ -111,24 +114,34 @@ hr {
 
 .add-component {
     font-size: 50px;
-    height: 40px;
-    background: #fff;
-    border-radius: 25px;
     position: absolute;
-    margin-top: -25px;
+    background: rgba(44, 62, 80, 0.8);
+    padding: 20px 20px 15px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
     left: 50%;
-    z-index: 999;
+    z-index: 9998;
+    margin-top: -25px;
+    /*
+      99999 is for
+        .componentActions
+    */
     i {
       margin-top: -3px;
     }
+    a {
+      color: #ffffff;
+    }
     &:hover {
-      background: #4eb1ca;
       pointer-events: auto;
+      a {
+        color: #219265;
+      }
     }
 }
 
 body.editing {
-  margin-top: 50px;
   .no-component {
     display: block;
     visibility: visible;
@@ -193,6 +206,39 @@ ul.ui-sortable.active {
   }
 }
 
+ol.circles-list {
+  list-style-type: none;
+  list-style-type: decimal !ie; /*IE 7- hack*/
+  margin: 0;
+  margin-left: 4em;
+  padding: 0;
+  counter-reset: li-counter;
+}
+
+ol.circles-list > li{
+  position: relative;
+  margin-bottom: 50px;
+  padding-left: 0.5em;
+  min-height: 3em;
+}
+
+ol.circles-list > li:before {
+  position: absolute;
+  top: 0;
+  left: -1.73em;
+  width: 1.5em;
+  height: 1.5em;
+  font-size: 2.0em;
+  line-height: 1.2;
+  text-align: center;
+  color: #f5f5f5;
+  border: 3px solid #c5c5c5;
+  border-radius: 50%;
+  background-color: #464646;
+  content: counter(li-counter);
+  counter-increment: li-counter;
+}
+
 .componentActions, .add-component, .no-component {
   display: none;
   visibility: hidden;
@@ -210,11 +256,72 @@ ul.ui-sortable.active {
   margin: 40px auto;
   padding: 30px 0;
 }
+.post-social-link
+{
+  a:hover{
+  text-decoration:none !important;
+  }
+}
+
+/* BS CAROUSEL STEP */
+  
+  .single-step.carousel-step{
+    width:400px;
+    height:540px;
+    padding:0;
+    border:none;
+  }
+  .single-step.carousel-step .carousel-caption,
+  .single-step.carousel-step .carousel-inner{
+    height:540px;
+  }
+  .single-step.carousel-step .carousel-caption{
+    text-shadow:none;
+    color:#555;
+    left:0;
+    right:0;
+    bottom:90px;
+    padding:0 40px;
+  }
+  .single-step.carousel-step .item img{
+    width:400px;
+    height:300px;
+  }
+  .single-step.carousel-step  .carousel-indicators{
+    bottom:20px;
+  }
+  .single-step.carousel-step  .carousel-indicators li{
+    border-color:#2854a1;
+  }
+  .single-step.carousel-step  .carousel-indicators li.active{
+    background-color:#2854a1;
+  }
+  .carousel-ctrls{
+    position:absolute;
+    bottom:20px;
+    left:0;
+    right:0;
+    padding:0 20px;
+  }
+  .single-step {
+    .carousel-caption {
+       position: relative;
+       bottom: 0!important;
+       height: 230px!important;
+    }
+    .carousel-ctrls {
+    z-index: 99999;
+    }
+  }
+  .powertour-step:focus {outline:0!important;}
+
 @import "components/accordion-v1.less";
-@import "components/default-layout.less";
+@import "components/campaign.less";
 @import "components/contact-us-v1.less";
-@import "components/contact-us-v3.less";
+@import "components/contact-us-v2.less";
 @import "components/contact-us-v4.less";
+@import "components/component-wrap.less";
+@import "components/default-layout.less";
 @import "components/feature-list-v1.less";
 @import "components/feature-list-v2.less";
 @import "components/feature-list-v3.less";
@@ -237,8 +344,9 @@ ul.ui-sortable.active {
 @import "components/shopping-cart-v1.less";
 @import "components/masthead-v1.less";
 @import "components/social-v1.less";
-@import "components/signup-form-v1.less";
-@import "components/signup-form-v2.less";
+@import "components/simple-form-v1.less";
+@import "components/simple-form-v2.less";
+@import "components/simple-form-v3.less";
 @import "components/products-v1.less";
 @import "components/portfolio-v1.less";
 @import "components/blog-teaser-v1.less";
@@ -255,10 +363,12 @@ ul.ui-sortable.active {
 @import "components/triangle-text-v1.less";
 @import "components/appointment-v1.less";
 @import "components/payment-form-v1.less";
-// @import "components/coming-soon.less";
-// @import "components/contact-us-v2.less";
 @import "components/thumbnail-slider-v1.less";
-//@import "components/contact-us-v2.less";
-// @import "components/sign-up-v1.less";
-@import "components/contact-us-v5.less";
 @import "components/video-v1.less";
+@import "components/image-text-v5.less";
+@import "components/image-gallery-v2.less";
+@import "components/social-link-v1.less";
+@import "components/customer-account-v1.less";
+@import "components/customer-signup-v1.less";
+@import "components/customer-login-v1.less";
+@import "components/customer-forgot-password-v1.less";

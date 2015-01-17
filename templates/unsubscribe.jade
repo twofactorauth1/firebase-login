@@ -1,0 +1,39 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+
+extends snippets/_layout
+
+block content
+
+     section
+      .signinpanel
+            form(role="form", action="/unsubscribe" method="post")
+                h3 You have been unsubscribed                
+                hr
+                p You have been removed from all of the My Dummy Account lists.
+                b If you have a moment, please let us know why you unsubscribed:
+                div.form-group
+                    br                    
+                    input(type="radio", name="unsubscribe", val="subscriber")
+                    label &nbsp; I no longer want to receive these emails
+                    br                    
+                    input(type="radio", name="unsubscribe", val="admin")
+                    label &nbsp; I never signed up for this mailing list
+                    br                    
+                    input(type="radio", name="unsubscribe", val="superadmin")
+                    label &nbsp; The emails are inappropriate
+                    br                    
+                    input(type="radio", name="unsubscribe", val="subscriber")
+                    label &nbsp; The emails are spam and should be reported
+                    br                    
+                    input(type="radio", name="unsubscribe", val="admin")
+                    label &nbsp; Other (fill in below)
+                    hr                                        
+
+                div.btn-toolbar(style="text-align:center;")
+                    button.btn.btn-primary(type="submit", value="Submit" role="button") Submit
+
+               

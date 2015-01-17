@@ -292,15 +292,25 @@ var dao = {
                 self.log.error('Exception in getComponentVersions: ' + err);
                 fn(err, null);
             } else {
+                /*
                 var numVersions = _.reduce(files, function(memo, filename){
                     if(filename.indexOf(type) ===0) {
                         memo++;
                     }
                     return memo;
                 }, 0);
+                */
+                var versionAry = [];
+                _.each(files, function(element, index, list){
+                    if(element.indexOf(type) === 0) {
+                        versionAry.push(element.replace(type + '_v', '').replace('.html',''));
+                    }
+                });
+
+
                 self.log.debug('<< getComponentVersions');
 
-                fn(null, ""+numVersions);
+                fn(null, versionAry);
                 return;
             }
 
@@ -327,6 +337,17 @@ var dao = {
             handle: pageName
         };
         this.findOne(query, Page, fn);
+    },
+
+    getPageByType: function(accountId, websiteId, pageType, fn) {
+        var self = this;
+        var query = {};
+        query.accountId = accountId;
+        if(websiteId) {
+            query.websiteId = websiteId;
+        }
+        query.page_type = pageType;
+        return this.findOne(query, Page, fn);
     },
 
     getBlogPostForWebsite: function(accountId, blogPostUrl, fn) {
@@ -1149,6 +1170,13 @@ var dao = {
         self.log.debug('>> getDataForWebpage');
         //assume index for now
         accountDao.getAccountByID(accountId, function(err, value){
+            if(err) {
+                self.log.error('error getting account by id: ' + err);
+                return fn(err, null);
+            } else if(value == null) {
+                self.log.error('could not find account with id: ' + accountId);
+                return fn('Could not find account with id: ' + accountId, null);
+            }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
                 obj.website = website.toJSON('public');
@@ -1166,8 +1194,8 @@ var dao = {
 
             "accountId" : accountId,
             "websiteId" : websiteId,
-            "handle" : "index",
-            "title" : 'Home',
+            "handle" : "coming-soon",
+            "title" : 'Coming Soon',
             "seo" : {},
             "visibility" : {
                 "visible" : true,
@@ -1229,9 +1257,79 @@ var dao = {
                 }
 
             ],
-            "created" : new Date(),
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
             "modified" : null
 
+        });
+        var componentId = $$.u.idutils.generateUUID();
+        var welcomeEmailPage = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "welcome-aboard",
+            "title" : "Welcome Aboard",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "We're! excited to show you how Indigenous will take your business, whether it's still an idea or you're already making a name for yourself, to the next level.!<br><br>Our current clients have helped us develop a business software platform that is going to wow you and your customers with its simplicity and power, and even more importantly, give you a lot more time to do what you love, whatever it is and wherever you are.<br><br>Imagine catching that golden hour surf sesh instead of going through your client list and trying to determine who's fallen through the cracks, taking your kids to the ball game instead of working on the fourteenth draft of that newsletter you're not sure anyone reads that was supposed to go out a week ago, or being able to say yes to that impromptu trip to Bali because your workshops and lecture series are already scheduled and filled for the year.<br><br>Sounds good, right? Please stay tuned. In the meantime, check out our blog to learn more.<br><a href=\"http://www.indigenous.io/page/blog\" class=\"btn\" target=\"_blank\">Visit Our Blog</a><br>We’re looking forward to helping you tell your story.<br><br><strong>Your team at Indigenous</strong>",
+                    "from_email" : "info@indigenous.io",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : "",
+                "by" : null
+            },
+            "mainmenu" : null,
+            "page_type" : "email"
+        });
+
+        var customerAccountPage = new $$.m.cms.Page({
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "customer-account",
+            "title" : 'Customer Accounts',
+            "seo" : {},
+            "visibility" : {
+                "visible" : false,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            components: [],
+            created : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : null
         });
 
         self.saveOrUpdate(page, function(err, value){
@@ -1239,12 +1337,29 @@ var dao = {
                 self.log.error('Error creating default page: ' + err);
                 fn(err, null);
             } else {
-                self.log.debug('<< createDefaultPageForAccount');
-                fn(null, value);
+                self.log.debug('Created coming soon page.');
+                self.saveOrUpdate(welcomeEmailPage, function(err, emailPage){
+                    if(err) {
+                        self.log.error('Error creating welcome email page: ' + err);
+                        fn(err, null);
+                    } else {
+                        self.log.debug('Created welcome email page.');
+                        self.saveOrUpdate(customerAccountPage, function(err, customerPage){
+                            if(err) {
+                                self.log.error('Error creating customer account page: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('<< createDefaultPageForAccount');
+                                fn(null, value);
+                            }
+                        });
+
+                    }
+                });
+
             }
         });
     },
-
 
     getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
         var self = this,

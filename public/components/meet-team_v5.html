@@ -5,7 +5,7 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
+<div ng-class="component.type+'-v'+component.version">
 <div class="row text-center top-buffer">
     <div class="col-md-12 text-center">
         <h3>{{component.title}}</h3>
@@ -28,8 +28,24 @@
 
                 </div>
             </div>
+             <div class="row">
+                <ul class="social">
+                <li ng-repeat="(val, key) in member.social">
+                    <a href="{{key}}" target="_blank">
+                        <span class="fa fa-{{val}}"></span>
+                    </a>
+                </li>
+                </ul>
+        </div>
+            <div ng-if="isEditing" class="row">
+                <div class="delete-team-member center">
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+                </div>
+            </div>
+            
         </div>
     </div>
     <div class="col-md-2">&nbsp;</div>
 
+</div>
 </div>

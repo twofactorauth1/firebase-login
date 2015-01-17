@@ -53,7 +53,8 @@ var account = $$.m.ModelBase.extend({
                 "size" : '',
                 "phones" : [],
                 "addresses" : [],
-                "type" :''
+                "type" :'',
+                "nonProfit" : false
             },
 
             "billing" : {
@@ -86,6 +87,11 @@ var account = $$.m.ModelBase.extend({
         public: function(json) {
             if (this.get("subdomain") != null) {
                 json.accountUrl = appConfig.getServerUrl(this.get("subdomain"), this.get("domain"));
+            }
+        },
+        db: function(json) {
+            if(!String.isNullOrEmpty(json.subdomain)) {
+                json.subdomain = json.subdomain.toLowerCase();
             }
         }
     },

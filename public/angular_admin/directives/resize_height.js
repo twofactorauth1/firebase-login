@@ -9,33 +9,85 @@ define(['angularAMD'], function (angularAMD) {
                 scope.windowHeight = newValue.h;
                 scope.windowWidth = newValue.w;
 
-                scope.style = function () {
-                    return { 
-                        'height': (newValue.h)-125 + 'px',
+                scope.styleWebsite = function () {
+                    var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+                    var width = "100%";
+                    if (iOS) 
+                        width = "99%";
+                    return {
+                        'height': (newValue.h)-70 + 'px',
+                        'width': width,
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleDashboard = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
                         'width': '100%',
-                        'overflow' : 'hidden'
+                        'overflow-y' : 'scroll'
                     };
                 };
 
                 scope.styleMarketing = function () {
-                    return { 
-                        'height': (newValue.h)-215 + 'px',
+                    return {
+                        'height': (newValue.h) - 1000 + 'px',
                         'width': '100%',
-                        'overflow-x' : 'hidden'
+                        'overflow-y' : 'scroll'
                     };
                 };
 
                 scope.styleCustomers = function () {
-                    return { 
-                        'height': (newValue.h)-115 + 'px',
+                    return {
+                        'height': (newValue.h)-63 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleAccount = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleAccountEdit = function () {
+                    return {
+                        'height': (newValue.h)-63 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
                 };
 
                 scope.styleCommerce = function () {
-                    return { 
-                        'height': (newValue.h)-115 + 'px',
+                    return {
+                        'height': (newValue.h)-63 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleWebsiteManage = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleIndi = function () {
+                    return {
+                        'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleIndiWelcome = function () {
+                    return {
+                        'height': (newValue.h)-63 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };

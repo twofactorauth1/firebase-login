@@ -9,10 +9,7 @@
 
 <div class="image-gallery-title">
     <div class="editable" data-class="maintitle" data-index="{{$index}}">
-        <div data-ng-bind-html="component.maintitle" data-ng-show="component.maintitle"></div>
-        <div ng-show="!component.maintitle">
-            <h1>Image Gallery Title</h1>
-        </div>
+        <div ng-bind-html="component.maintitle | unsafe"></div>
     </div>
 </div>
 
@@ -26,18 +23,23 @@
 
 <div class=" clearfix mb20"></div>
 
-<div class="">
-    <div ng-cloak class="row">
+<div>
+    <div ng-cloak>
         <div ng-repeat="image in component.images track by $index">
             <div class="col-sm-3 col-xs-12">
-                <div class="imgHeight single-image">
-                    <a class="thumbnail" href="{{image.url}}" title="{{image.label}}" data-gallery>
-
-                        <img class="img-responsive" alt="{{image.label}}" ng-src="{{image.url}}">
-                        <span class="caption"><i class="fa fa-plus-circle"></i>
-                        </span>
+                <div class="thumbnail imgHeight single-image">
+                    <a  href="{{image.url}}" title="{{image.label}}" data-gallery>
+                        <img class="img-responsive img-gallery-{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
                     </a>
+                    <span class="caption" ng-if="isEditing">
+                        <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
+                    </span>
                 </div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-xs-12" ng-if="isEditing">
+            <div class="thumbnail imgHeight single-image" style="display: inline-block;color:black;">
+                <i class="fa fa-plus-circle" style="font-size: 174px; cursor:pointer" ng-click="addImage(component)"></i>
             </div>
         </div>
     </div>

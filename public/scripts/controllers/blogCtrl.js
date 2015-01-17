@@ -1,6 +1,6 @@
 'use strict';
 
-mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','PostService',
+mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','postService',
     function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService) {
 
         var account, pages, website, route, postTags, currentTag, categories, currentCat, authors, currentAuthor, latestposts, that = this;
@@ -20,6 +20,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     if (route.indexOf("blog/") > -1) {
                         route = 'single-post';
                     }
+                    if (route.indexOf("post/") > -1) {
+                        route = 'single-post';
+                    }
                     if (route === 'blog' || route === '/blog' || route.indexOf("tag/") > -1 || route.indexOf("category/") > -1 || route.indexOf("author/") > -1) {
                         route = 'blog';
                     }
@@ -28,7 +31,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                    // console.log($scope.$parent)
             }
         });
-        console.log('BlogCtrl: postsService >>> ');
         postsService(function(err, data){
             console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
@@ -75,7 +77,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 //if tagname is present, filter the cached posts with the tagname
                 if ($route.current.params.tagname != null) {
                     var filterPosts = [];
-                    that.currentTag = $route.current.params.tagname;
+                    that.currentTag = decodeURIComponent($route.current.params.tagname);
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].post_tags) {
                             var tags = data[i].post_tags;
@@ -124,6 +126,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
+                        var iframe = window.parent.document.getElementById("iframe-website")
+                        iframe && iframe.contentWindow && iframe.contentWindow.parent.checkIfSinglePost && iframe.contentWindow.parent.checkIfSinglePost(found);
                     }
                     return;
                 }
@@ -135,17 +139,44 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         window.copyPostMode=function(){
             console.log(that.post);
             that.tempPost=angular.copy(that.post);
-
-
         };
 
-        window.savePostMode=function(){
-            console.log(that.post);
-            PostService.updatePost()
+        window.getPostData = function()
+        {
+            return that.post;
+        }
 
-
+        window.deletePost = function(post_data, toaster) {
+            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            PostService.deletePost(pageId, post_data._id, function(data) {
+                toaster.pop('success', "Post deleted successfully");
+            });
         };
 
+         window.savePostMode=function(toaster){ 
+
+            var post_data =  angular.copy(that.post);
+            post_data.post_tags.forEach(function(v,i) {
+                if(v.text)
+                    post_data.post_tags[i] = v.text;
+            });
+            var post_content_container = $('.post_content_div');
+            if(post_content_container.length > 0)
+                post_data.post_content = post_content_container.html();
+            
+            var postImageUrl = window.parent.getPostImageUrl();
+            if(postImageUrl)
+            {
+                post_data.featured_image = postImageUrl;
+            }
+            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            PostService.updatePost(pageId, post_data._id,post_data,function(data){
+                console.log(data);
+                console.log("Post Saved");
+                if(toaster)                      
+                    toaster.pop('success', "Post Saved");
+            });
+        };
 
         window.updatePostMode = function() {
             console.log('post cancel');
@@ -155,5 +186,59 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             $scope.$$phase||$scope.$digest();
 
         };
+
+         window.triggerEditMode = function() {
+          console.log('edit mode engaged');
+          var body = document.getElementsByTagName('body')[0];
+          var hasClass = body.classList.contains('editing');
+          if (hasClass === false) {
+            body.className += ' editing';
+          }
+
+          // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+          // if (toolbar.classList.contains('editing') === false) {
+          //     toolbar.className += ' editing';
+          // }
+          $scope.isEditing = true;
+
+          $scope.$digest();
+        };
+
+        window.activateAloha = function() {
+      //if ($scope.activated == false) {
+        CKEDITOR.disableAutoInline = true;
+
+        var elements = $('.editable');
+        elements.each(function() {
+          CKEDITOR.inline(this, {
+            on: {
+              instanceReady: function(ev) {
+                var editor = ev.editor;
+                editor.setReadOnly(false);
+                editor.on('change', function() {
+                  $scope.isPageDirty = true;
+                });
+
+              }
+            }
+          });
+        });
+        $scope.activated = true;
+        //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
+      //}
+    };
+
+    window.deactivateAloha = function() {
+      for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
+      // $('.editable').mahalo();
+      // if (aloha.editor && aloha.editor.selection) {
+      // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+      // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
+      // }
+      // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
+    };
 
     }]);

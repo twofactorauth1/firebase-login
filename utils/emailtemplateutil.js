@@ -52,7 +52,10 @@ var emailTemplateUtil = {
         USER_EMAIL: "{USER_EMAIL}",
 
         // AUTHENTICATEION
-        RESET_PASSWORD_URL: "{RESET_PASSWORD_URL}"
+        RESET_PASSWORD_URL: "{RESET_PASSWORD_URL}",
+
+        // SYSTEM INFO
+        SYSTEM_INFO: "{SYSTEM_INFO}"
     },
 
     serverUrl: appConfig.server_url,
@@ -61,8 +64,8 @@ var emailTemplateUtil = {
 
 
     //region PUBLIC
-    resetPassword: function(accountId, resetPasswordToken, user, toEmail, fn) {
-        var self = this;
+    resetPassword: function(accountId, resetPasswordToken, user, toEmail, props, fn) {
+        var self = this;       
 
         var serverUrl = this._getServerUrl(accountId, function(err, value) {
             if (err) {
@@ -73,6 +76,10 @@ var emailTemplateUtil = {
             var tokens = {};
             tokens[self.tokens.USER_EMAIL] = user.get("email") || toEmail;
             tokens[self.tokens.RESET_PASSWORD_URL] = url + "/forgotpassword/reset/" + resetPasswordToken;
+            tokens[self.tokens.SYSTEM_INFO] = "Date: "+ props.date + "<br/>" +
+                                              "Browser: "+ props.browser + "<br/>" +
+                                              "Operating System: "+ props.os + "<br/>" +
+                                              "IP Address: "+ props.ip
 
             var options = {};
             if (user != null) {

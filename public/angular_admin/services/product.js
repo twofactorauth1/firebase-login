@@ -11,7 +11,6 @@ define(['app', 'toasterService'], function(app) {
     };
 
     this.postProduct = function(product, fn) {
-      console.log('postProduct >>> ', product);
       var apiUrl = baseUrl + ['products'].join('/');
       $http({
           url: apiUrl,
@@ -22,7 +21,7 @@ define(['app', 'toasterService'], function(app) {
           fn(data);
         })
         .error(function(error) {
-          console.log('ProductService: postProduct error >>> ', error);
+          console.error('ProductService: postProduct error >>> ', error);
         });
     };
 
@@ -32,6 +31,15 @@ define(['app', 'toasterService'], function(app) {
         .success(function(data, status, headers, config) {
           fn(data);
         });
+    };
+
+    this.getIndigenousProducts = function(fn) {
+      ///api/1.0/products/indigenous
+      var apiUrl = baseUrl + ['products', 'indigenous'].join('/');
+      $http.get(apiUrl)
+        .success(function(data, status, headers, config) {
+          fn(data);
+      });
     };
 
     this.saveProduct = function(product, fn) {

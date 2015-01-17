@@ -32,10 +32,6 @@ html(class="no-js", lang="en")
                 #status
                     img(src='/assets/icons/loader.gif')
 
-        if includeHeader
-            #header-background
-                include _header
-
         #wrap
 
             #container-alert.hidden
@@ -77,8 +73,5 @@ html(class="no-js", lang="en")
             //required for sticky footer
             #push
 
-        if includeFooter
-            include _footer
-        else
             include _serverprops
 

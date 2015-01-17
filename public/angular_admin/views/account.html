@@ -1,154 +1,147 @@
-<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<toaster-container toaster-options="{'time-out': 1000, 'close-button':true, 'limit': 1}"></toaster-container>
 <div class="account">
-<div class="pageheader row">
-    <div class="col-xs-9">
-        <h2>
-            <i class="fa fa-cog"></i> Account
-        </h2>
+
+    <div class="pageheader row">
+        <div class="col-xs-8">
+            <h2>
+                <i class="fa fa-cog"></i> Account
+            </h2>
+        </div>
+
+        <div class="col-xs-1">
+            <!-- <span class="mediaModal" user='user'></span> -->
+        </div>
+
+        <div class="col-xs-3">
+            <a href="#/account/edit" class="btn btn-success pull-right" type="button">
+                <span class="fa fa-edit"></span>
+                <span class="hidden-xs">Edit</span>
+            </a>
+        </div>
+        <div class="clear"></div>
     </div>
-    <div class=" col-xs-offset-1 col-xs-1">
-        <span class="mediaModal" user='user'></span>
+
+    <div class="row header-menu-row">
+        <div class="btn-group col-xs-12 template-btns">
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info" ng-class="{'active': activeTab === 'account_information'}" ng-click="showToaster = false; activeTab = 'account_information'">
+                <i class="fa fa-user"></i>
+                <span class="hidden-xs">Account Information
+                </span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="showToaster = false; activeTab = 'billing'">
+                <i class="fa fa-credit-card"></i>
+                <span class="hidden-xs">Billing</span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="showToaster = false; activeTab = 'integrations'">
+                <i class="fa fa-rocket"></i>
+                <span class="hidden-xs">Integrations</span>
+            </button>
+        </div>
     </div>
 
-    <div class="col-xs-1">
-        <a href="#/account/edit" class="btn btn-success pull-right" type="button">
-            <span class="fa fa-edit"></span>
-            <span class="hidden-xs">Edit</span>
-        </a>
-    </div>
-    <div class="clear"></div>
-</div>
+    <div class="contentpanel" ng-switch="activeTab" ng-style="styleAccount()" indigeweb-resize>
 
-<div class="row">
-    <div class="btn-group col-xs-12 template-btns">
-        <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-account-info active" ng-class="{'active': activeTab === 'account'}" ng-click="activeTab = 'account'">
-            <i class="fa fa-user"></i>
-            <span class="hidden-xs">Account Information
-            </span>
-        </button>
-        <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-billing" ng-class="{'active': activeTab === 'billing'}" ng-click="activeTab = 'billing'">
-            <i class="fa fa-credit-card"></i>
-            <span class="hidden-xs">Billing</span>
-        </button>
-        <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-integrations" ng-class="{'active': activeTab === 'integrations'}" ng-click="activeTab = 'integrations'">
-            <i class="fa fa-rocket"></i>
-            <span class="hidden-xs">Integrations</span>
-        </button>
-    </div>
-</div>
-
-
-<div class="contentpanel" ng-switch="activeTab">
-
-    <div class="account-info-section" ng-switch-when="account">
-        <div class="col-sm-6">
-            <div class=" panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Owner Info</h3>
-                </div>
-
-                <div class="profile panel-body">
-                    <!--
-                        <div class="col-xs-12">
-                        <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
-                        </div>
-                    -->
-                    <div class="col-xs-12">
-                        <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
-                        <div class="clear"></div>
+        <div class="account-info-section" ng-switch-when="account_information">
+            <div class="col-sm-6">
+                <div class=" panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Owner Info</h3>
                     </div>
-                    <div class="col-xs-12">
+
+                    <div class="profile panel-body">
+                        <!--
+                            <div class="col-xs-12">
+                            <img alt="" src="../images/photos/loggeduser.png" class="thumbnail thumb-lg img-circle media-object">
+                            </div>
+                        -->
                         <div class="col-xs-12">
-                            <div class="mb20"></div>
-                            <!--
-                                <h3 class="profile-name"{{user.first}} {{user.last}}Jaideep Das</h3>
-                            -->
-                            <!--
-                                <h4 class="center">
-                                <span class="label label-info contact-cat">Das</span>
-                                </h4>
-                            -->
-                            <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
-                            <div class="mb20"></div>
+                            <img ng-src="{{ user.profilePhotos[0] ? user.profilePhotos[0] : '/assets/icons/blank-user.jpg' }}" class="img-responsive thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" style="height: 220px;">
 
+                            <div class="clear"></div>
                         </div>
-                    </div>
-                    <div class="clearfix mb20"></div>
-                    <div class="col-xs-12">
-                        <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
-                            </div>
-                            <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
-                            </div>
-                            <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
-                            </div>
-                            <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
-                            </div>
+                        <div class="col-xs-12">
+                            <div class="col-xs-12">
+                                <div class="mb20"></div>
+                                <!--
+                                    <h3 class="profile-name"{{user.first}} {{user.last}}Jaideep Das</h3>
+                                -->
+                                <!--
+                                    <h4 class="center">
+                                    <span class="label label-info contact-cat">Das</span>
+                                    </h4>
+                                -->
+                                <h3 class="profile-name">{{user.first}} {{user.last}}</h3>
+                                <div class="mb20"></div>
 
-                            <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:jaideep.jdof@gmail.com"> jaideep.jdof@gmail.com</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
-                            </div> -->
+                            </div>
+                        </div>
+                        <div class="clearfix mb20"></div>
+                        <div class="col-xs-12">
+                            <!-- <div class="profile-location"><i class="fa fa-map-marker"></i>  <a href="geo:32.7150,-117.1625?z=3" target="_blank">123 Burgandy DriveSan Diego, CA 92102</a>  <a href="#" class="label label-warning"> + 5 More</a>
+                                </div>
+                                <div class="profile-position"><i class="fa fa-briefcase"></i> News Anchor at <a href="">Channel 9 News</a>
+                                </div>
+                                <div class="profile-position"><i class="fa fa-briefcase"></i> Owner of <a href="">Burgandy Flutes</a>
+                                </div>
+                                <div class="profile-phone"><i class="fa fa-phone"></i>  <a href=""><a href="tel:619-564-2827"> 619-564-2827</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                                </div>
+
+                                <div class="profile-email"><i class="fa fa-envelope"></i>  <a href=""><a href="mailto:jaideep.jdof@gmail.com"> jaideep.jdof@gmail.com</a>  <a href="#" class="label label-warning"> + 2 More</a></a>
+                                </div> -->
                             <ul class="social-list right row">
-                                <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                        <a href="#" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Password" target="_blank"><i class="fa fa-lock"></i></a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <p>&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</p>
-                                    </div>
-                                    <div class="col-xs-2"></div>
-                                </li>
                                 <!--
-                                    <li class="col-xs-12">
+                                        <li class="col-xs-12">
 
-                                    <div class="col-xs-2">
-                                    <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                    <p>123 Burgandy DriveSan Diego, CA 92102</p>
-                                    </div>
-                                    <div class="col-xs-2">
-                                    <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-                                    <span class="hidden-xs">5 More</span>
-                                    </button>
-                                    </div>
-                                    </li>
-                                -->
+                                        <div class="col-xs-2">
+                                        <a href="https://www.google.com/maps/place/700+E+Ocean+Blvd/@33.765741,-118.184199,17z/" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Location" target="_blank"><i class="fa fa-map-marker"></i></a>
+                                        </div>
+                                        <div class="col-xs-8">
+                                        <p>123 Burgandy DriveSan Diego, CA 92102</p>
+                                        </div>
+                                        <div class="col-xs-2">
+                                        <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                                        <span class="hidden-xs">5 More</span>
+                                        </button>
+                                        </div>
+                                        </li>
+                                    -->
 
 
                                 <!--
-                                    <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                    <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                    <p>619-675-2927</p>
-                                    </div>
-                                    <div class="col-xs-2">
-                                    <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-                                    <span class="hidden-xs">2 More</span>
-                                    </button>
-                                    </div>
-                                    </a>
-                                    </li>
-                                -->
+                                        <li class="col-xs-12">
+                                        <div class="col-xs-2">
+                                        <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Phone" target="_blank"><i class="fa fa-phone"></i></a>
+                                        </div>
+                                        <div class="col-xs-8">
+                                        <p>619-675-2927</p>
+                                        </div>
+                                        <div class="col-xs-2">
+                                        <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                                        <span class="hidden-xs">2 More</span>
+                                        </button>
+                                        </div>
+                                        </a>
+                                        </li>
+                                    -->
 
 
 
                                 <!--
-                                    <li class="col-xs-12">
-                                    <div class="col-xs-2">
-                                    <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
-                                    </div>
-                                    <div class="col-xs-8">
-                                    <p>jaideep.jdof@gmail.com</p>
-                                    </div>
-                                    <div class="col-xs-2">
-                                    <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
-                                    <span class="hidden-xs">1 More</span>
-                                    </button>
-                                    </div>
-                                    </a>
-                                    </li>
-                                -->
+                                        <li class="col-xs-12">
+                                        <div class="col-xs-2">
+                                        <a href="" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"><i class="fa fa-envelope"></i></a>
+                                        </div>
+                                        <div class="col-xs-8">
+                                        <p>jaideep.jdof@gmail.com</p>
+                                        </div>
+                                        <div class="col-xs-2">
+                                        <button href="#" class="btn btn-sm btn-warning"><i class="fa fa-chevron-down"></i>
+                                        <span class="hidden-xs">1 More</span>
+                                        </button>
+                                        </div>
+                                        </a>
+                                        </li>
+                                    -->
 
 
 
@@ -171,151 +164,157 @@
 
                             <div class="mb20"></div>
 
+                        </div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Business Info</h3>
-                </div>
-
-                <div class="profile panel-body">
-
-                    <div class="col-xs-12">
-                        <img src="/assets/icons/blank-user.jpg" class="thumbnail thumb-lg img-circle media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'">
-                        <div class="clear"></div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Business Info</h3>
                     </div>
-                    <div class="col-xs-12">
+
+                    <div class="profile panel-body">
+
                         <div class="col-xs-12">
-                            <div class="mb20"></div>
+                            <img ng-src="{{account.business.logo}}" class="thumbnail thumb-lg media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" style="border:none;">
+                            <div class="clear"></div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="col-xs-12">
+                                <div class="mb20"></div>
 
-                            <h3 class="profile-name"></h3>
+                                <h3 class="profile-name"></h3>
+                                <div class="mb20"></div>
+
+                            </div>
+                        </div>
+                        <div class="clearfix mb20"></div>
+                        <div class="col-xs-12" style="padding: 0 15px;">
+                            <ul class="social-list right row">
+
+                                <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                        <p>
+                                            <strong>Name:</strong>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <p>{{account.business.name}}</p>
+                                    </div>
+                                    <div class="col-xs-2"></div>
+
+                                </li>
+                                <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                        <p>
+                                            <strong>Size:</strong>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <p ng-show="account.business.size==1">Single</p>
+                                        <p ng-show="account.business.size==2">Small</p>
+                                        <p ng-show="account.business.size==3">medium</p>
+                                        <p ng-show="account.business.size==4">Large</p>
+                                        <p ng-show="account.business.size==5">Enterprise</p>
+                                    </div>
+                                    <div class="col-xs-2"></div>
+
+                                </li>
+                                <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                        <p>
+                                            <strong>Description:</strong>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <p>{{account.business.description}}</p>
+                                    </div>
+                                    <div class="col-xs-2"></div>
+
+                                </li>
+                                <li class="col-xs-12">
+                                    <div class="col-xs-2">
+                                        <p>
+                                            <strong>Cateogry:</strong>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <p>{{account.business.category}}</p>
+                                    </div>
+                                    <div class="col-xs-2"></div>
+
+                                </li>
+                            </ul>
+
                             <div class="mb20"></div>
 
                         </div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="clearfix mb20"></div>
-                    <div class="col-xs-12">
-                        <ul class="social-list right row">
-
-                            <li class="col-xs-12">
-                                <div class="col-xs-2">
-                                    <a href="#/account/edit/?focus=business-name" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-wrench"></i>
-                                    </a>
-                                </div>
-                                <div class="col-xs-8">
-                                    <p>{{account.business.name}}</p>
-                                </div>
-                                <div class="col-xs-2"></div>
-
-                            </li>
-                            <li class="col-xs-12">
-                                <div class="col-xs-2">
-                                    <a href="#/account/edit/?focus=business-size" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-arrows"></i>
-                                    </a>
-                                </div>
-                                <div class="col-xs-8">
-                                    <p ng-show="account.business.size==1">Single</p>
-                                    <p ng-show="account.business.size==2">Small</p>
-                                    <p ng-show="account.business.size==3">medium</p>
-                                    <p ng-show="account.business.size==4">Large</p>
-                                    <p ng-show="account.business.size==5">Enterprise</p>
-                                </div>
-                                <div class="col-xs-2"></div>
-
-                            </li>
-                            <li class="col-xs-12">
-                                <div class="col-xs-2">
-                                    <a href="#/account/edit/?focus=business-description" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-file-o"></i>
-                                    </a>
-                                </div>
-                                <div class="col-xs-8">
-                                    <p>{{account.business.description}}</p>
-                                </div>
-                                <div class="col-xs-2"></div>
-
-                            </li>
-                            <li class="col-xs-12">
-                                <div class="col-xs-2">
-                                    <a href="#/account/edit/?focus=business-category" class="tooltips pull-left" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email" target="_blank"> <i class="fa fa-bars"></i>
-                                    </a>
-                                </div>
-                                <div class="col-xs-8">
-                                    <p>{{account.business.category}}</p>
-                                </div>
-                                <div class="col-xs-2"></div>
-
-                            </li>
-                        </ul>
-
-                        <div class="mb20"></div>
-
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="billing-section" ng-switch-when="billing">
-        <div class="col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Your Plan</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="col-sm-6">
-                        <div class="has-plan" ng-show="user.stripeId">
-                            <h2 class="center">{{subscription.plan.name}} Plan</h2>
-                            <hr></hr>
-                            <h2 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}} <span>/{{subscription.plan.interval}}</span></h2>
-                            <p class="center">Next Billing Date:  {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
-                        </div>
-                        <div class="no-plan well" ng-hide="user.stripeId">
+        <div class="billing-section" ng-switch-when="billing">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Your Plan</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="no-plan well" ng-if="!user.stripeId">
                             <h3 class="center">No Subscription Plan Selected</h3>
                             <div class="cleatfix mb15"></div>
                             <p class="center">To continue using the Indigenous Platform you must choose a subscription plan below.</p>
                             <div class="cleatfix mb30"></div>
-                            <a class="btn btn-lg btn-orange btn-block" indigeweb-state-nav="accountChoosePlan">Choose Plan</a>
+                            <a class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Choose Plan</a>
+                        </div>
+
+                        <div class="plan-options" ng-if="user.stripeId">
+                            <div class="col-sm-6">
+                                <div class="has-plan" ng-if="user.stripeId">
+                                    <h2 class="center">{{subscription.plan.name}} Plan</h2>
+                                    <hr></hr>
+                                    <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
+                                            <span>/{{subscription.plan.interval}}</span>
+                                        </h2>
+                                    <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
+                                <div class="cleatfix mb20"></div>
+                                <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
+                                <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#planChangeModal">Change Plan</button>
+                                <div class="cleatfix mb20"></div>
+                                <!-- Add Auto Pay Option Toggle-->
+                                <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changeCardModal">Modify Payment Method</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-6" ng-hide="activeSkeuocard">
-                        <button class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#billSummaryModal">Bill Summary</button>
-                        <div class="cleatfix mb20"></div>
-                        <!-- <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#payBillModal">Pay Bill</button> -->
-                        <button class="btn btn-lg btn-orange btn-block" data-toggle="modal" data-target="#changePlan" indigeweb-state-nav="accountChoosePlan">Change Plan</button>
-                        <div class="cleatfix mb20"></div>
-                        <!-- Add Auto Pay Option Toggle-->
-                        <button class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#changePlan" ng-click="activeSkeuocardFn(true)">Modify Payment Method</button>
-                    </div>
-                    <div class="col-sm-6" ng-show="activeSkeuocard">
-                        <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn'></div>
-                    </div>
                 </div>
-            </div>
-            <!-- <div class="col-sm-6">
-                <div class="panel panel-default">
-                <div class="panel-heading">
-                <h3 class="panel-title">Payment Method</h3>
-                </div>
-                <div class="panel-body">
-                <div class="indigeweb-skeuocard" user='user' update='updateBilling'></div>
-                <div class="row"></div>
-                <div class="row hidden">
-                <button id="btn-new-address" class="btn btn-primary btn-sm"
-                ng-click="subscribeMonthlyFn()" ng-show="billing.stripeCustomerId">Subscribe Monthly</button>
-                <button id="btn-new-address" class="btn btn-primary btn-sm"
-                ng-click="subscribeAnnuallyFn()" ng-show="billing.stripeCustomerId">Subscribe Annually</button>
-                </div>
-                </div>
-                </div>
-                </div> -->
-
-                <div class="col-sm-12">
+                <!-- <div class="col-sm-6">
                     <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <h3 class="panel-title">Payment Method</h3>
+                    </div>
+                    <div class="panel-body">
+                    <div class="indigeweb-skeuocard" user='user' update='updateBilling'></div>
+                    <div class="row"></div>
+                    <div class="row hidden">
+                    <button id="btn-new-address" class="btn btn-primary btn-sm"
+                    ng-click="subscribeMonthlyFn()" ng-show="billing.stripeCustomerId">Subscribe Monthly</button>
+                    <button id="btn-new-address" class="btn btn-primary btn-sm"
+                    ng-click="subscribeAnnuallyFn()" ng-show="billing.stripeCustomerId">Subscribe Annually</button>
+                    </div>
+                    </div>
+                    </div>
+                    </div> -->
+
+                <div class="col-xs-12">
+                    <div class="panel panel-default row">
                         <div class="panel-heading">
                             <h3 class="panel-title">Transactions</h3>
                         </div>
@@ -341,7 +340,8 @@
                                         <td ng-show="invoice.paid">PAID</td>
                                         <td ng-hide="invoice.paid">NOT PAID</td>
                                         <td class="table-action">
-                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal-{{invoice.id}}"><i class="fa fa-eye"></i></a>
+                                            <a href="" data-toggle="modal" data-target="#viewTransactionModal-{{invoice.id}}"><i class="fa fa-eye"></i>
+                                            </a>
                                         </td>
                                     </tr>
                             </table>
@@ -349,10 +349,10 @@
                     </div>
                 </div>
                 <div class="col-sm-12">
-                  <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)" items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
+                    <pagination total-items="invoices.data.length" ng-model="invoiceCurrentPage" ng-change="invoicePageChangeFn(invoiceCurrentPage, invoiceTotalPages)" items-per-page="invoicePageLimit" num-pages="invoiceTotalPages"></pagination>
                 </div>
+            </div>
         </div>
-    </div>
 
         <div class="integrations-section" ng-switch-when="integrations">
 
@@ -364,34 +364,40 @@
                         </div>
                         <div class="caption">
                             <h3>Facebook</h3>
-                            <div class="clearfix mb5"></div>
-                            <div class="connected">
-                                <span>You are logged in as: </span>
+
+                            <p ng-show="!userSocial[credentialTypes.FACEBOOK].status">Connect with your friends</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK].status">
+                                <span>You are logged in as:</span>
                                 <div class="clearfix"></div>
-                                <img src="/assets/icons/blank-user.jpg" class="img-circle" />
-                                <span>{{user.first}} {{user.last}}</span>
+                                <img ng-src="{{userSocial[credentialTypes.FACEBOOK].image}}" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.FACEBOOK].username}}</span>
                             </div>
                             <div class="btn-group btn-group-justified">
-                                <div class="btn-group">
-                                    <button class="btn btn-success btn-lg" role="button" data-toggle="modal" data-target="#facebookSettingsModal"><span class="fa fa-wrench"></span> Settings</button>
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK].status">
+                                    <a href="/inapplogin/facebook?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
                                 </div>
-                                <div class="btn-group">
-                                    <button class="btn btn-danger btn-lg" role="button"><span class="fa fa-trash-o"></span> Delete</button>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK].status">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.FACEBOOK)" confirm-click2 confirm-click2-placement="top">
+                                        <span class="fa fa-trash-o"></span>Disconnect</button>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-4">
+                <div class="col-sm-3 col-md-4 hidden">
                     <div class="thumbnail">
                         <div class="img-wrap">
                             <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg" alt="Reveille">
                         </div>
                         <div class="caption">
                             <h3>Reveille</h3>
-                            <p>Find it first.  Fix it fast</p>
-                            <p><a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                            <p>Find it first. Fix it fast</p>
+                            <p>
+                                <a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button">
+                                    <span class="fa fa-plug"></span>Connect</a>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -402,10 +408,22 @@
                         </div>
                         <div class="caption">
                             <h3>Google +</h3>
-                            <p>Import customers, plan posts in advance.</p>
-                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
-                            <div class="toggle-modern">
-                                <div class="toggles on"></div>
+                            <p ng-show="!userSocial[credentialTypes.GOOGLE].status">Import customers, plan posts in advance.</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.GOOGLE].status">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img ng-src="{{userSocial[credentialTypes.GOOGLE].image}}" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.GOOGLE].username}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.GOOGLE].status">
+                                    <a href="/inapplogin/google?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
+                                </div>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.GOOGLE].status">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.GOOGLE)" confirm-click2>
+                                        <span class="fa fa-trash-o"></span>Disconnect</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -417,10 +435,22 @@
                         </div>
                         <div class="caption">
                             <h3>LinkedIn</h3>
-                            <p>Import contacts</p>
-                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
-                            <div class="toggle-modern">
-                                <div class="toggles on"></div>
+                            <p ng-show="!userSocial[credentialTypes.LINKEDIN].status">Import contacts</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.LINKEDIN].status">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img ng-src="{{userSocial[credentialTypes.LINKEDIN].image}}" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.LINKEDIN].username}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.LINKEDIN].status">
+                                    <a href="/inapplogin/linkedin?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
+                                </div>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.LINKEDIN].status">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.LINKEDIN)" confirm-click2>
+                                        <span class="fa fa-trash-o"></span>Disconnect</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -432,8 +462,23 @@
                         </div>
                         <div class="caption">
                             <h3>Twitter</h3>
-                            <p>Tweet with customers, plan tweets in advance.</p>
-                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                            <p ng-show="!userSocial[credentialTypes.TWITTER].status">Import followers</p>
+                            <div class="connected" ng-show="userSocial[credentialTypes.TWITTER].status">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img ng-src="{{userSocial[credentialTypes.TWITTER].image}}" class="img-circle" />
+                                <span>{{userSocial[credentialTypes.TWITTER].username}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group" ng-hide="userSocial[credentialTypes.TWITTER].status">
+                                    <a href="/inapplogin/twitter?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                        <span class="fa fa-plug"></span>Connect</a>
+                                </div>
+                                <div class="btn-group" ng-show="userSocial[credentialTypes.TWITTER].status">
+                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.TWITTER)" confirm-click2>
+                                        <span class="fa fa-trash-o"></span>Disconnect</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -444,8 +489,11 @@
                         </div>
                         <div class="caption">
                             <h3>Stripe</h3>
-                            <p>Stripe Allows you to recieve payments on your website.</p>
-                            <p><a href="#" class="btn btn-orange btn-lg btn-block" role="button"><span class="fa fa-plug"></span> Connect</a></p>
+                            <p ng-show="!userSocial[credentialTypes.STRIPE].status">Stripe Allows you to recieve payments on your website.</p>
+                            <p>
+                                <a href="/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
+                                    <span class="fa fa-plug"></span>Connect</a>
+                            </p>
                             <div class="toggle-modern">
                                 <div class="toggles on"></div>
                             </div>
@@ -454,17 +502,56 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="rightpanel rightpanel-account">
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="#" data-toggle="tab" disabled>Settings</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-settings">
+
+                <div class="rightpanelinner">
+                    <div id="current-settings">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="account_information" ng-value="'account_information'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('account_information')">Account Information
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="default_tab" id="billing" ng-value="'billing'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('billing')">Billing
+                            </label>
+                        </div>
+                        <div class="radio disabled">
+                            <label>
+                                <input type="radio" name="default_tab" id="integration" ng-value="'integrations'" ng-model="userPreferences.account_default_tab" ng-change="setActiveTab('integrations')">Integration
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="billSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
                 </div>
-                <div class="modal-body">
+                <div ng-if="!upcomingInvoice" class="modal-body">
+                    No upcoming invoices found
+                </div>
+                <div ng-if="upcomingInvoice" class="modal-body">
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="mb40"></div>
@@ -478,7 +565,7 @@
                             <!--<span>recieved 01AUG14</span>-->
                         </div>
                         <div class="col-xs-6">
-                          {{subscription.plan.name}} Plan
+                            {{subscription.plan.name}} Plan
                         </div>
                     </div>
                     <div class="mb30"></div>
@@ -496,24 +583,36 @@
                                     <td>${{(item.amount/100).toFixed( 2 )}}</td>
                                 </tr>
                                 <tr>
-                                    <td><span class="pull-right"><h4>Sub-Total</h4></span></td>
-                                    <td><h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4></td>
+                                    <td>
+                                        <span class="pull-right">
+                                            <h4>Sub-Total</h4>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4>
+                                    </td>
                                 </tr>
                                 <!--<tr>-->
-                                    <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
-                                    <!--<td><h4>3.86</h4></td>-->
+                                <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
+                                <!--<td><h4>3.86</h4></td>-->
                                 <!--</tr>-->
                                 <tr>
-                                    <td><span class="pull-right"><h4>TOTAL</h4></span></td>
-                                    <td><h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4></td>
+                                    <td>
+                                        <span class="pull-right">
+                                            <h4>TOTAL</h4>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <!--<div class="modal-footer">-->
-                    <!--<button type="button" class="btn btn-primary btn-lg btn-make-payment"-->
-                                          <!--id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>-->
+                <!--<button type="button" class="btn btn-primary btn-lg btn-make-payment"-->
+                <!--id="" data-dismiss="modal" data-toggle="modal" data-target="#payBillModal"><span class="fa fa-credit-card"></span> Pay Bill</button>-->
                 <!--</div>-->
             </div>
         </div>
@@ -524,7 +623,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Verify Payment</h4>
                 </div>
@@ -543,8 +643,10 @@
                         </div>
                     </div>
                     <hr></hr>
-                    <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
-                    <h4 class="pull-left">Payment Method: </h4>
+                    <h4>Pay To:
+                        <span class="pull-right">Indigenous Software Inc.</span>
+                    </h4>
+                    <h4 class="pull-left">Payment Method:</h4>
                     <span class="pull-right">
                         <select class="form-control">
                             <option>Visa xxxx-xxxx-xxxx-2345 06/15</option>
@@ -558,7 +660,8 @@
                 </div>
                 <div class="modal-footer">
                     <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
-                    <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal"><span class="fa fa-lock"></span> Submit</button>
+                    <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal">
+                        <span class="fa fa-lock"></span>Submit</button>
                 </div>
             </div>
         </div>
@@ -569,23 +672,32 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Transaction #{{$index + 1}}</h4>
                 </div>
                 <div class="modal-body">
                     <img src="../assets/images/paid-in-full.png" class="center paid" />
-                    <h4>Pay To: <span class="pull-right">Indigenous Software Inc.</span></h4>
+                    <h4>Pay To:
+                        <span class="pull-right">Indigenous Software Inc.</span>
+                    </h4>
                     <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
-                    <h4>Date: <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span></h4>
-                    <h4>Period: <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{invoice.lines.data[0].period.end * 1000 | date : 'longDate'}}</span></h4>
-                    <h4>Amount Paid: <span class="pull-right">${{(invoice.total/100).toFixed( 2 )}}</span></h4>
+                    <h4>Date:
+                        <span class="pull-right">{{invoice.date * 1000 | date : 'longDate'}}</span>
+                    </h4>
+                    <h4>Period:
+                        <span class="pull-right">{{invoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{plusOneMonth(invoice.lines.data[0].period.start * 1000)}}</span>
+                    </h4>
+                    <h4>Amount Paid:
+                        <span class="pull-right">${{(invoice.total/100).toFixed( 2 )}}</span>
+                    </h4>
                 </div>
                 <!--<div class="modal-footer">-->
-                    <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
-                                          <!--id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>-->
-                    <!--<button type="button" class="btn btn-primary btn-lg btn-print-bill"-->
-                                          <!--id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>-->
+                <!--<button type="button" class="btn btn-primary btn-lg btn-download-bill"-->
+                <!--id="" data-dismiss="modal"><span class="fa fa-download"></span> Download</button>-->
+                <!--<button type="button" class="btn btn-primary btn-lg btn-print-bill"-->
+                <!--id="" data-dismiss="modal"><span class="fa fa-print"></span> Print</button>-->
                 <!--</div>-->
             </div>
         </div>
@@ -596,22 +708,31 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Facebook Settings</h4>
                 </div>
                 <div class="modal-body">
-                    <h4>Facebook Admins: <span class="fa fa-info-circle"></span></h4>
+                    <h4>Facebook Admins:
+                        <span class="fa fa-info-circle"></span>
+                    </h4>
                     <input type="text" placeholder="Facebook Admin ID" class="form-control mb15 input-lg">
                     <div class="well">
-                        <h4>Facebook App: <span class="fa fa-info-circle"></span></h4>
+                        <h4>Facebook App:
+                            <span class="fa fa-info-circle"></span>
+                        </h4>
                         <input type="text" placeholder="Facebook App ID" class="form-control mb15 input-lg">
                         <input type="text" placeholder="Facebook App Secret" class="form-control mb15 input-lg">
                     </div>
-                    <h4>Facebook Page: <span class="fa fa-info-circle"></span></h4>
+                    <h4>Facebook Page:
+                        <span class="fa fa-info-circle"></span>
+                    </h4>
                     <input type="text" placeholder="Facebook Page Url" class="form-control mb15 input-lg">
 
-                    <h4>Landing Page Redirect: <span class="fa fa-info-circle"></span></h4>
+                    <h4>Landing Page Redirect:
+                        <span class="fa fa-info-circle"></span>
+                    </h4>
                     <select class="form-control input-lg">
                         <option>Landing Page 1</option>
                         <option>Landing Page 2</option>
@@ -620,12 +741,126 @@
 
                 </div>
                 <div class="modal-footer">
-                    <span>Last synced 3hrs ago </span>
-                    <button type="button" class="btn btn-primary btn-lg btn-print-bill"
-                                          id="" data-dismiss="modal"><span class="fa fa-repeat"></span> Sync</button>
+                    <span>Last synced 3hrs ago</span>
+                    <button type="button" class="btn btn-primary btn-lg btn-print-bill" id="" data-dismiss="modal">
+                        <span class="fa fa-repeat"></span>Sync</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="planChangeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Plan Change</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': subscription.plan.id != plan.id , 'selected': subscription.plan.id == plan.id  }">
+                            <div class="well well-calm mb0">
+                                <h4 class="center">{{plan.name}}</h4>
+                                <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+                                <h5 class="center">+ <i class="fa fa-usd fa-1"></i>{{planStatus[plan.id].signup_fee}}(One Time Fee)</h5>
+                                <div class="mb30"></div>
+                                <div class="col-xs-12 mb15">
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)">Choose</a>
+                                    <a type="button" class="btn btn-green btn-block center active" ng-if="subscription.plan.id == plan.id">Selected</a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top:0;">
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(subscription.plan.id)" ng-if="selectPlanView=='plan'">
+                        <span class="fa fa-save"> </span> Select Plan</a>
+                    <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="chooseFirstTime(subscription.plan.id)" ng-if="selectPlanView=='card'" ng-disabled="!subscriptionSelected">
+                        <span class="fa fa-save"> </span> Select Plan -></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="changeCardModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">×</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
+                </div>
+                <div style="padding:10px;">
+                    <div class="mb20"></div>
+                    <div class="card-wrapper-change"></div>
+                    <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
+                    <!-- <div class="mb40">
+                        <div class="card-wrapper"></div>
+                    </div>
+                    <div class="active">
+                        <form name="card-details" action="">
+                            <div>
+                                <div id="card_number" class="form-group small-6 columns col-sm-6">
+                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                                <div class="visible-xs mb20"></div>
+                                <div id="card_name" class="form-group small-6 columns col-sm-6">
+                                    <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
+                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
+                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <div id="coupon-name" class="form-group col-xs-12">
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
+                        <span class="error" />
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="coupon-name" class="form-group col-xs-12">
+                        <a type="button" class="btn btn-primary btn-lg btn-block center" ng-click="updateStripeIdFn()"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Add Card</a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="mb10"></div> -->
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+
+<div id="step-1" class="single-step carousel-step">
+    <header>
+        <h3>Basic Navigation</h3>
+    </header>
+    <p>
+        The main navigation is on the left and has all the various sections for your business.
+    </p>
+    <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop">
+        <i class="fa fa-check"></i> GOT IT
+    </a>
+</div>
+
+<script type="text/javascript">
+card = $('form[name="card-details"]').card({
+    container: '.card-wrapper'
+});
+</script>

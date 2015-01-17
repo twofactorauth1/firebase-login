@@ -4,144 +4,182 @@
         <div class="panel row">
             <div class="wrap">
                 <div class="panel-header">
-                    <h1 class="center">Disruptive Software for Small Businesses</h1>
+                    <h1 class="center">Are you ready to...</h1>
                     <div class="clearfix"></div>
                     <div class="row">
                         <div class="col-sm-4">
-                            <h3><i class="fa fa-check"></i> Get Organized</h3>
+                            <h4><i class="fa fa-check"></i> Tell your story</h4>
                         </div>
                         <div class="col-sm-4">
-                            <h3><i class="fa fa-check"></i> Grow Sales</h3>
+                            <h4><i class="fa fa-check"></i> Build your client base</h4>
                         </div>
                         <div class="col-sm-4">
-                            <h3><i class="fa fa-check"></i> Save Time</h3>
+                            <h4><i class="fa fa-check"></i> Increase revenue</h4>
                         </div>
                     </div>
                 </div>
                 <div class="panel-body">
-
-                    <!-- EMAIL AND PASSOWORD -->
-
-                    <div id="email" class="form-group col-sm-6 has-feedback">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-envelope" /></span>
-                            <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)"/>
-                            <span class="glyphicon form-control-feedback"></span>
+                     <div class="row social btn-toolbar">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6 signup-social-toolbar">
+                            <a ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default" ><i class="fa fa-facebook"></i></a>
+                            <a  ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default"><i class="fa fa-twitter"></i></a>
+                            <a class="btn btn-large btn-default" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
+                            <a class="btn btn-large btn-default" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
                         </div>
-                        <span class="error help-block" />
-                    </div>
-
-
-                    <div id="password" class="form-group col-sm-6 has-feedback">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-lock" /></span>
-                            <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="password" ng-blur="checkPasswordLength(newAccount)"/>
-                            <span class="glyphicon form-control-feedback"></span>
-                        </div>
-                        <span class="error" />
-                    </div>
-
-                    <!-- Business Name -->
-
-                    <div id="business-name" class="form-group col-xs-12 has-feedback">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-building" /></span>
-                            <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)"/>
-                            <span class="glyphicon form-control-feedback"></span>
-                        </div>
-                        <span class="error" />
-                    </div>
-
-                    <div class="clearfix"></div>
-
-                    <hr></hr>
-
-                    <!-- MEMBERSHIP -->
-
-                    <div class="col-xs-6">
-                        <div class="well well-calm">
-                            <h4 class="center">Monthly Membership</h4>
-                            <h2 class="center">97.00 <span>/ month</span></h2>
-                            <div class="mb30"></div>
-                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'monthly'">Choose</a>
+                        <div class="col-sm-3"></div>
+                    </div> 
+                    <div class="row" >
+                        <div class="col-sm-12 signup-social-toolbar" ng-if="newAccount.profilePhoto">
+                            <img ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto">
                         </div>
                     </div>
+                    <fieldset ng-disabled="isFormValid">
+                        <!-- EMAIL AND PASSOWORD -->
 
-                    <div class="col-xs-6">
-                        <div class="well well-calm">
-                            <h4 class="center">Yearly Membership</h4>
-                            <h2 class="center">74.00 <span>/ month</span></h2>
-                            <div class="mb30"></div>
-                            <a type="button" class="btn btn-primary" ng-click="newAccount.membership = 'yearly'">Choose</a>
-                        </div>
-                    </div>
-
-                    <div class="clearfix"></div>
-
-                    <hr></hr>
-
-                    <!-- PAYMENT DETAILS -->
-
-                    <div class="row">
-                        <div class="col-xs-12 mb30">
-                            <div class="col-sm-2">
-                                <h3 class="center">Amount:</h3>
+                        <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope" /></span>
+                                <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
+                                <span class="glyphicon form-control-feedback"></span>
                             </div>
-                            <div class="col-sm-10">
+                            <span class="error help-block" />
+                        </div>
+
+
+                        <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock" /></span>
+                                <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
+                                <span class="glyphicon form-control-feedback"></span>
+                            </div>
+                            <span class="error" />
+                        </div>
+
+                        <!-- Business Name -->
+
+                        <div id="business-name" class="form-group col-xs-12 has-feedback">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-building" /></span>
+                                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
+                                <span class="glyphicon form-control-feedback"></span>
+                            </div>
+                            <span class="error" />
+                        </div>
+
+                        <div class="clearfix"></div>
+                       
+                        <hr></hr>
+
+                        <!-- MEMBERSHIP -->
+
+                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
+                            <div class="well well-calm">
+                                <h4 class="center">{{plan.name}}</h4>
+                                <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+                                <div class="mb30"></div>
+                                <div class="col-xs-12 mb15">
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
+                                    <a type="button" class="btn btn-green btn-block center active" ng-if="newAccount.membership == plan.id">Selected</a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <!-- PAYMENT DETAILS -->
+
+                        <div class="row" ng-show="subscriptionPlanAmount">
+                            <div class="col-xs-12 mb30">
+                                <div class="col-sm-2">
+                                    <h3 class="center">Amount:</h3>
+                                </div>
+                                <div class="col-sm-10">
+
+                                    <h4>Only</h4>  <i class="fa fa-usd fa-1"></i>{{(subscriptionPlanAmount/100).toFixed(2)}}/{{subscriptionPlanInterval}}&nbsp;+&nbsp;<i class="fa fa-usd fa-1"></i>{{subscriptionPlanOneTimeFee}}(One Time Fee)
+                                    <!--
                                 <h4>Only $49.00/month (when you prepay $588.00 for 12 months)
                                     <br/>Save $576.00. Pays for itself in 6 months.
                                     <br/>Keep Locked In Rate for next year.
                                 </h4>
+                                -->
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12">
+                                <div class="row">
+                                    <div class="card-wrapper"></div>
+                                </div>
+                                <div class="row" style="min-height: 10px">
+                                </div>
+                                <div class="row">
+                                    <div class="active">
+                                        <form name="card-details" action="">
+                                            <div class="row">
+                                                <div id="card_number" class="form-group small-6 columns col-sm-6">
+                                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                                                    <span class="error help-block" />
+                                                </div>
+                                                <div class="visible-xs mb20"></div>
+                                                <div id="card_name" class="form-group small-6 columns col-sm-6">
+                                                    <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                                                    <span class="error help-block" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix mb20"></div>
+                                            <div class="row">
+                                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
+                                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                                    <span class="error help-block" />
+                                                </div>
+                                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
+                                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                                    <span class="error help-block" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix mb20"></div>
+                                        </form>
+                                    </div>
+                                    <!-- Coupon DETAILS -->
+                                    <div id="coupon-name" class="form-group col-xs-12">
+                                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
+                                        <span class="error" />
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                                <hr></hr>
+
+
+                                <!-- BUY -->
+
+                                <div class="submit-signup">
+                                    <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Become
+                                an Indigenous Member Now</a>
+                                </div>
+                                <p class="center">By clicking this button you agree to the Indigenous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                             </div>
                         </div>
 
-                        <div class="col-xs-12">
-                            <div class="credit-card-input no-js" id="skeuocard">
-                                <label for="cc_type">Card Type</label>
-                                <select name="cc_type">
-                                    <option value="">...</option>
-                                    <option value="visa">Visa</option>
-                                    <option value="discover">Discover</option>
-                                    <option value="mastercard">MasterCard</option>
-                                    <option value="maestro">Maestro</option>
-                                    <option value="jcb">JCB</option>
-                                    <option value="unionpay">China UnionPay</option>
-                                    <option value="amex">American Express</option>
-                                    <option value="dinersclubintl">Diners Club</option>
-                                </select>
-                                <label for="cc_number">Card Number</label>
-                                <input type="text" name="cc_number" id="cc_number" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" size="19">
-                                <label for="cc_exp_month">Expiration Month</label>
-                                <input type="text" name="cc_exp_month" id="cc_exp_month" placeholder="00">
-                                <label for="cc_exp_year">Expiration Year</label>
-                                <input type="text" name="cc_exp_year" id="cc_exp_year" placeholder="00">
-                                <label for="cc_name">Cardholders Name</label>
-                                <input type="text" name="cc_name" id="cc_name" placeholder="John Doe">
-                                <label for="cc_cvc">Card Validation Code</label>
-                                <input type="text" name="cc_cvc" id="cc_cvc" placeholder="123" maxlength="3" size="3">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="clearfix"></div>
-
-                    <hr></hr>
-
-
-                    <!-- BUY -->
-                    <div class="submit-signup">
-                        <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)">Become an Indigenous Member Now</a>
-                    </div>
-                    <p class="center">By click this button you agree to Indigneous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
+                    </fieldset>
                 </div>
             </div>
         </div>
         <ul class="certificates">
-            <li>100% Secure Data</li>
-            <li>30 Day Money Back Guarantee </li>
-            <li>No Risk, Cancel Anytime </li>
-            <li>Live Customer Support</li>
+            <li>
+                <div class="larger">100%</div>
+                <div class="clearfix"></div>Secure Data</li>
+            <li>
+                <div class="larger">30 Day</div>
+                <div class="clearfix"></div>Money Back Guarantee</li>
+            <li>
+                <div class="larger">No Risk</div>
+                <div class="clearfix"></div>Cancel Anytime</li>
+            <li>
+                <div class="larger">Live</div>
+                <div class="clearfix"></div>Customer Support</li>
         </ul>
     </section>
 </div>
@@ -169,5 +207,7 @@
 
 
 <script type="text/javascript">
-    card = new Skeuocard($("#skeuocard"));
+card = $('form[name="card-details"]').card({
+    container: '.card-wrapper'
+});
 </script>

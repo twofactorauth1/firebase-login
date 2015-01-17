@@ -13,6 +13,7 @@ var course = $$.m.ModelBase.extend({
     defaults: function () {
         return {
             _id: null,
+            type: 1,
             title: null,
             template: null,
             subdomain: null,
@@ -40,6 +41,9 @@ var course = $$.m.ModelBase.extend({
              */
             videos: [
 
+            ],
+            emails: [
+            
             ],
             userId: null,
             accountId: null

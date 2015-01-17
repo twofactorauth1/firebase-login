@@ -9,12 +9,16 @@ var BaseRouter = require('./base.server.router.js');
 var passport = require('passport');
 var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
+var accountDao = require('../dao/account.dao');
 var cookies = require("../utils/cookieutil");
 var FacebookConfig = require('../configs/facebook.config');
 var LoginView = require('../views/login.server.view');
 var ForgotPasswordView = require('../views/forgotpassword.server.view');
 var SignupView = require('../views/signup.server.view');
+var UnsubscribeView = require('../views/unsubscribe.server.view');
 var urlUtils = require('../utils/urlutils');
+var userManager = require('../dao/user.manager');
+var appConfig = require('../configs/app.config');
 
 
 var router = function () {
@@ -30,7 +34,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         //  LOGIN
         //-------------------------------------------------
-        app.get("/login", this.setup, this.showLogin.bind(this));
+        app.get("/login", this.setup.bind(this), this.showLogin.bind(this));
         app.post("/login",
             passport.authenticate('local', { failureRedirect: "/login", failureFlash: true }),
             this.onLogin.bind(this));
@@ -43,13 +47,19 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
         //-------------------------------------------------
+        // UNSUBSCRIBE
+        //-------------------------------------------------
+        app.get("/unsubscribe", this.setup.bind(this), this.showUnsubscribe.bind(this));
+        app.post("/unsubscribe", this.setup.bind(this), this.handleUnsubscribe.bind(this));
+
+
+        //-------------------------------------------------
         // FORGOT PASSWORD
         //-------------------------------------------------
-        app.get("/forgotpassword", this.setup, this.showForgotPassword.bind(this));
-        app.post("/forgotpassword", this.setup, this.handleForgotPassword.bind(this));
-        app.get("/forgotpassword/reset/:token", this.setup, this.showResetPasswordByToken.bind(this));
-        app.post("/forgotpassword/reset/:token", this.setup, this.handleResetPasswordByToken.bind(this));
-
+        app.get("/forgotpassword", this.setup.bind(this), this.showForgotPassword.bind(this));
+        app.post("/forgotpassword", this.setup.bind(this), this.handleForgotPassword.bind(this));
+        app.get("/forgotpassword/reset/:token", this.setup.bind(this), this.showResetPasswordByToken.bind(this));
+        app.post("/forgotpassword/reset/:token", this.setup.bind(this), this.handleResetPasswordByToken.bind(this));
 
         //-------------------------------------------------
         // SIGNUP
@@ -58,7 +68,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         // app.get("/signup/*", this.setup, this.showSignup.bind(this)); //catch all routed routes
         // app.post("/signup", this.setup, this.handleSignup.bind(this));
 
-        app.get("/current-user", this.setup, this.getCurrentUser.bind(this));
+        app.get("/current-user", this.setup.bind(this), this.getCurrentUser.bind(this));
 
         return this;
     },
@@ -67,7 +77,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
         var self = this;
-        if (req.isAuthenticated()&& req._passport.instance._userProperty != 'user') {
+        self.log.debug('>> showLogin')
+        
+        if (req.isAuthenticated()) {
             console.log('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
                 resp.redirect("/admin");
@@ -100,6 +112,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this;
         self.log.debug('>> onLogin');
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
+            self.log.warn('cookie never expires!!!')
             req.session.cookie.expires = false;
         }
 
@@ -114,32 +127,92 @@ _.extend(router.prototype, BaseRouter.prototype, {
             return;
         }
 
+        self.log.debug('AccountId: ' + self.accountId(req));
+
         this.setup(req, resp, function (err, value) {
             if (self.accountId(value) > 0) {
                 self.log.debug('redirecting to /admin');
                 resp.redirect("/admin");
                 self = req = resp = null;
             } else {
+                /*
+                 * Get account from url.  If main app, check for multi-users
+                 */
                 var accountIds = req.user.getAllAccountIds();
-                if (accountIds.length > 1) {
+                var subObject = urlUtils.getSubdomainFromRequest(req);
+                if(subObject.isMainApp && accountIds.length > 1) {
                     self.log.debug('redirecting to /home');
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
-                }
+                } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
+                    self.log.debug('redirecting to main application');
+                    authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
+                        if (err) {
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        }
 
-                authenticationDao.getAuthenticatedUrlForAccount(accountIds[0], self.userId(req), "admin", function (err, value) {
-                    if (err) {
-                        self.log.debug('redirecting to /home');
-                        resp.redirect("/home");
+                        self.log.debug('redirecting to ' + value);
+                        resp.redirect(value);
                         self = null;
                         return;
-                    }
+                    });
+                } else if(subObject.subdomain === null || subObject.subdomain === ''){
+                    self.log.debug('logged into main... redirecting to custom subdomain');
+                    authenticationDao.getAuthenticatedUrlForAccount(parseInt(self.accountId(req)), self.userId(req), "admin", function (err, value) {
+                        if (err) {
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = null;
+                            return;
+                        }
+                        accountDao.getAccountByID(parseInt(self.accountId(req)), function(err, account){
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            } else {
+                                self.log.debug('Setting subdomain to: ' + account.get('subdomain'));
+                                req.session.subdomain = account.get('subdomain');
+                                req.session.domain = account.get('domain');
+                                self.log.debug('redirecting to ' + value);
+                                resp.redirect(value);
+                                self = null;
+                                return;
+                            }
+                        });
 
-                    self.log.debug('redirecting to ' + value);
-                    resp.redirect(value);
-                    self = null;
-                });
+                    });
+                } else {
+                    self.log.debug('redirecting to account by subdomain');
+                    accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
+                        if(err) {
+                            self.log.error('Error finding account:' + err);
+                            self.log.debug('redirecting to /home');
+                            resp.redirect("/home");
+                            self = req = resp = null;
+                            return;
+                        }
+                        authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            }
+
+                            self.log.debug('redirecting to ' + value);
+                            resp.redirect(value);
+                            self = null;
+                        });
+                    });
+                }
+
+
             }
         });
     },
@@ -147,8 +220,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     handleLogout: function (req, resp) {
         var accountId = this.accountId(req);
-
-        req.session.accountId = null;
+        req.session.cookie = null;
+        req.session.accountId = null; 
         req.logout();
         req.session.destroy();
         req.session = null;
@@ -166,7 +239,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
             }
         }
         */
-        return resp.redirect("/login");
+        setTimeout(function() {
+            resp.redirect("/login");
+        }, 2000);
+        //return resp.redirect("/login");
     },
     //endregion
 
@@ -194,6 +270,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     handleResetPasswordByToken: function (req, resp) {
+        var email = req.body.email;
         var password = req.body.password;
         var password2 = req.body.password2;
         var token = req.params.token;
@@ -202,9 +279,28 @@ _.extend(router.prototype, BaseRouter.prototype, {
             req.flash("error", "Passwords do not match");
             return resp.redirect("/forgotpassword/reset/" + token);
         }
-
-        new ForgotPasswordView(req, resp).handleResetByToken(token, password);
+        new ForgotPasswordView(req, resp).handleResetByToken(token, password, email);
     },
+    //endregion
+
+    //region Unsubscribe
+
+    showUnsubscribe: function (req, resp) {
+        if (req.isAuthenticated()) {
+            return resp.redirect("/");
+        }/* else if (this.accountId(req) > 0) {
+            return resp.redirect("/login");
+        }*/
+
+        new UnsubscribeView(req, resp).show();
+    },
+
+    handleUnsubscribe: function (req, resp) {
+        // TO DO
+        //var username = req.body.username;
+        //new ForgotPasswordView(req, resp).handleForgotPassword(username);
+    },
+
     //endregion
 
     //region SIGNUP
@@ -217,7 +313,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         new SignupView(req, resp).show();
     },
-
 
     handleSignup: function (req, resp) {
         var self = this, user, accountToken, deferred;
@@ -252,9 +347,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //ensure we don't have another user with this username;
         var accountToken = cookies.getAccountToken(req);
 
-        userDao.createUserFromUsernamePassword(username, password1, email, accountToken, function (err, value) {
-            if (!err) {
 
+        userManager.createAccountAndUser(username, password1, email, accountToken, null, null, null, function (err, accountAndUser) {
+            if (!err) {
+                var value = accountAndUser.user;
                 req.login(value, function (err) {
                     if (err) {
                         return resp.redirect("/");

@@ -9,6 +9,7 @@ require('./base.dao');
 require('../models/account');
 var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
+var async = require('async');
 
 var dao = {
 
@@ -28,6 +29,10 @@ var dao = {
         this.findOne({'token': token}, fn);
     },
 
+
+    getAccountsBySubdomain: function (subdomain, accountId, fn) {
+        this.findOne({ _id: { $ne: accountId }, 'subdomain': subdomain}, fn);
+    },
 
     getAccountBySubdomain: function (subdomain, fn) {
         this.findOne({'subdomain': subdomain}, fn);
@@ -110,7 +115,7 @@ var dao = {
                 }
             };
 
-            if (parsed.subdomain != null) {
+            if (parsed.subdomain !== null && parsed.subdomain !== "") {
                 this.getAccountBySubdomain(parsed.subdomain, cb);
             } else if (parsed.domain != null) {
                 this.getAccountByDomain(parsed.domain, cb);
@@ -162,7 +167,7 @@ var dao = {
                     }
                 } else {
                     p.reject();
-                    return fn(err, avlue);
+                    return fn(err, value);
                 }
                 p.resolve();
             });
@@ -210,6 +215,28 @@ var dao = {
         }
     },
 
+    getPreviewData: function(idAry, fn) {
+        var self = this;
+        var data = [];
+        async.each(idAry, function(_id, callback){
+            self.getById(_id, function(err, val){
+                if(err) {
+                    callback(err);
+                } else {
+                    var obj = {};
+                    obj.id = _id;
+                    obj.subdomain = val.get('subdomain');
+                    obj.domain = val.get('domain');
+                    obj.logo = val.get('business').logo;
+                    data.push(obj);
+                    callback();
+                }
+            });
+        }, function(err){
+            fn(null, data);
+        });
+    },
+
     deleteAccountAndArtifacts: function(accountId, fn) {
         var self = this;
         self.log.debug('>> deleteAccountAndArtifacts');
@@ -246,6 +273,16 @@ var dao = {
                                 self.log.error('Error removing courses for user: ' + err);
                             } else {
                                 self.log.debug('Removed courses for user ' + user.id());
+                                var customerId = user.get('stripeId');
+                                if(customerId && customerId.length > 0) {
+                                    $$.dao.StripeDao.deleteStripeCustomer(customerId, null, user.id(), function(err, value){
+                                        if(err) {
+                                            self.log.error('error deleting Stripe customer: ' + err);
+                                        } else {
+                                            self.log.debug('Deleted Stripe Customer');
+                                        }
+                                    });
+                                }
                                 $$.dao.UserDao.remove(user, function(err, value){
                                     if(err) {
                                         self.log.error('Error deleting user: ' + err);
@@ -253,12 +290,16 @@ var dao = {
                                         self.log.debug('Removed user: ' + user.id());
                                     }
                                 });
+
                             }
                         });
                     }
                 });
             }
         });
+
+
+
 
         //delete the account stuff here (websites, pages, posts, contacts, contactactivites, assets)
         var query = {'accountId': accountId};
@@ -281,8 +322,86 @@ var dao = {
             }
         });
 
-    }
+    },
     //endregion
+
+    updateAccountBilling: function(accountId, customerId, subscriptionId, fn) {
+        var self = this;
+        self.log.debug('>> updateAccountBilling');
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account for id [' + accountId + ']: ' + err);
+                return fn(err, null);
+            }
+            var billing = account.get('billing');
+            billing.subscriptionId=subscriptionId;
+            billing.stripeCustomerId=customerId;
+
+            account.set('billing', billing);
+            self.saveOrUpdate(account, function(err, savedAccount){
+                if(err) {
+                    self.log.error('Error updating account for id [' + accountId + ']: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< updateAccountBilling');
+                    return fn(null, savedAccount);
+                }
+            });
+        });
+    },
+
+    addSubscriptionToAccount: function(accountId, subscriptionId, fn) {
+        var self = this;
+        self.log.debug('>> addSubscriptionToAccount');
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account for id [' + accountId + ']: ' + err);
+                return fn(err, null);
+            }
+            var billing = account.get('billing');
+            billing.subscriptionId=subscriptionId;
+            account.set('billing', billing);
+            self.saveOrUpdate(account, function(err, savedAccount){
+                if(err) {
+                    self.log.error('Error updating account for id [' + accountId + ']: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< addSubscriptionToAccount');
+                    return fn(null, savedAccount);
+                }
+            });
+        });
+    },
+
+    addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
+        var self=this;
+        self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken +')');
+
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account: ' + err);
+                return fn(err, null);
+            } else if(account === null) {
+                self.log.error('Error getting account for id: ' + accountId);
+                return fn('No account found', null);
+            }
+            var billing = account.get('billing');
+            billing.accessToken = accessToken;
+            billing.refreshToken = refreshToken;
+            account.set('billing', billing);
+            self.saveOrUpdate(account, function(err, updatedAccount){
+                if(err) {
+                    self.log.error('Error updating account: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< addStripeTokensToAccount');
+                    return fn(null, updatedAccount);
+                }
+
+            });
+        });
+
+    }
 };
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();

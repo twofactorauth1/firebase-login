@@ -15,6 +15,7 @@ var twitterConfig = require('../configs/twitter.config');
 var googleConfig = require('../configs/google.config');
 var linkedInConfig = require('../configs/linkedin.config');
 var authenticationDao = require('../dao/authentication.dao');
+var accountDao = require('../dao/account.dao');
 
 var SignupView = require('../views/signup.server.view');
 
@@ -32,12 +33,12 @@ _.extend(router.prototype, baseRouter.prototype, {
         //-------------------------------------------------
         //  LOGIN
         //-------------------------------------------------
-        app.get("/auth/internal", this.setup, this.socialAuthInternal.bind(this));
+        app.get("/auth/internal", this.setupForSocialAuth.bind(this), this.socialAuthInternal.bind(this));
 
-        app.get("/login/:socialtype", this.setup, this.socialLogin.bind(this));
-        app.get("/signup/:socialtype", this.setup, this.socialSignup.bind(this));
+        app.get("/login/:socialtype", this.setupForSocialAuth.bind(this), this.socialLogin.bind(this));
+        app.get("/signup/:socialtype", this.setupForSocialAuth.bind(this), this.socialSignup.bind(this));
 
-        app.get("/inapplogin/:socialtype", this.isAuth, this.inAppSocialLogin.bind(this));
+        app.get("/inapplogin/:socialtype", this.isAuth.bind(this), this.inAppSocialLogin.bind(this));
 
         app.get("/oauth2/callback", this.socialLoginCallback.bind(this));
         app.get("/oauth2/postlogin", this.redirectAfterOauth.bind(this));
@@ -46,11 +47,12 @@ _.extend(router.prototype, baseRouter.prototype, {
     },
 
 
-    getState: function(accountId, authMode, authSocialType) {
+    getState: function(accountId, authMode, authSocialType, redirect) {
         var state = {};
         state.accountId = accountId;
         state.authMode = authMode;
         state.socialType = authSocialType;
+        state.redirectUrl = redirect;
         return state;
     },
 
@@ -63,7 +65,7 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialLogin: function(req, resp, next) {
-        var state = this.getState(this.accountId(req), "login", req.params.socialtype);
+        var state = this.getState(this.accountId(req), "login", req.params.socialtype, req.params.redirect);
         resp.redirect(this.getInternalAuthRedirect(state));
     },
 
@@ -76,17 +78,24 @@ _.extend(router.prototype, baseRouter.prototype, {
         state.userId = req.user.id();
         state.appState = req.query.state;
         state.appStateDetail = req.query.detail;
+        if(req.query.forceApprovalPrompt) {
+            self.log.debug('state.forceApprovalPrompt = true');
+            state.forceApprovalPrompt = true;
+        }else {
+            self.log.debug('no forceApprovalPrompt');
+            console.dir(req.query);
+        }
 
-        var referringUrl = req.query['redirectTo']|| '/admin';
+        var referringUrl = req.query['redirectTo'] || '/admin/account';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
             if(err) {
-                self.log.error('Error getting referring url for: ' + referringUrl);
-                self.log.debug('<< inAppSocialLogin redirecting to /login');
-                resp.redirect('/login');
+                 self.log.error('Error getting referring url for: ' + referringUrl);
+                 self.log.debug('<< inAppSocialLogin redirecting to /login');
+                 resp.redirect('/login');
             } else {
-                state.redirectUrl = encodeURIComponent(value);
-                self.log.debug('<< inAppSocialLogin');
-                resp.redirect(self.getInternalAuthRedirect(state));
+                 state.redirectUrl = encodeURIComponent(value);
+                 self.log.debug('<< inAppSocialLogin');
+                 resp.redirect(self.getInternalAuthRedirect(state));
             }
         });
 
@@ -94,8 +103,23 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialSignup: function(req, resp, next) {
-        var state = this.getState(this.accountId(req), "create", req.params.socialtype);
-        resp.redirect(this.getInternalAuthRedirect(state));
+        var state = this.getState(this.accountId(req), "create_in_place", req.params.socialtype, req.query.redirectTo);
+        console.dir(req.query);
+        console.dir(state);
+        //TODO: make sure we have a temp account.
+        var accountToken = cookies.getAccountToken(req);
+        if(accountToken === null) {
+            var tmpAccount = new $$.m.Account({
+                token: $$.u.idutils.generateUUID()
+            });
+            accountDao.saveOrUpdateTmpAccount(tmpAccount, function(err, val){
+                cookies.setAccountToken(resp, val.get('token'));
+                return resp.redirect(this.getInternalAuthRedirect(state));
+            });
+        } else {
+            return resp.redirect(this.getInternalAuthRedirect(state));
+        }
+
     },
 
 
@@ -104,7 +128,8 @@ _.extend(router.prototype, baseRouter.prototype, {
         self.log.debug('>> socialAuthInternal');
         var state = req.query.state;
         state = JSON.parse(state);
-
+        self.log.debug('state:');
+        console.dir(state);
         req.session.authMode = state.authMode;
         req.session.state = state;
         self.log.debug('<< socialAuthInternal');
@@ -123,8 +148,8 @@ _.extend(router.prototype, baseRouter.prototype, {
         var type
             , config
             , subdomain
-            , callbackUrl
-            , state;
+            , callbackUrl;
+            //, state;
 
         if (state != null) {
             type = state.socialType;
@@ -135,12 +160,14 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         var accountId = state.accountId;
 
+
         var options = {
             callbackURL: callbackUrl,
             returnURL: callbackUrl,
             successRedirect: "/oauth2/postlogin",
             failureRedirect: "/login", failureFlash:true
         };
+
 
         var scope = config.getScope();
         if (scope != null) {
@@ -152,13 +179,23 @@ _.extend(router.prototype, baseRouter.prototype, {
         }
 
         options.accessType = "offline";
-        //options.approvalPrompt = "force"; //-- this causes you to have to reauthorize every time, instead of just logging in
+        if(state.forceApprovalPrompt) {
+            /*
+             * This causes you to have to reauthorize every time, instead of just logging in.
+             * It also ensures you get a refresh token.
+             */
+            options.approvalPrompt = "force";
+            self.log.debug('approvalPrompt set to force');
+        }
+
         self.log.debug('<< _socialLogin');
         passport.authenticate(type, options)(req,resp,next);
     },
 
 
     redirectAfterOauth: function(req, resp, next) {
+        var self = this;
+        self.log.debug('>> redirectAfterOauth');
         var state = req.session.state;
         var user = req.user;
 
@@ -167,7 +204,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         if (state.redirectUrl != null) {
             var redirectUrl = state.redirectUrl;
             redirectUrl = decodeURIComponent(redirectUrl);
-
+            self.log.debug('decoded redirect: ' + redirectUrl);
             if (authMode == "in_app") {
                 if (redirectUrl.indexOf("?") == -1) {
                     redirectUrl += "?";
@@ -180,18 +217,20 @@ _.extend(router.prototype, baseRouter.prototype, {
                     redirectUrl += "&detail=" + state.appStateDetail;
                 }
             }
-
+            self.log.debug('redirecting to: ' + redirectUrl);
             return resp.redirect(redirectUrl);
         }
 
         var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
         if (redirectUrl != null) {
+            self.log.debug('redirectUrl from cookies: ' + redirectUrl);
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function(err, value) {
+                self.log.debug('redirecting to authenticated url: ' + redirectUrl);
                 return resp.redirect(redirectUrl);
             });
             return;
         }
-
+        self.log.debug('redirecting to default of admin');
         var accountId = null;
         var path = "admin";
         if (state.accountId > 0) {

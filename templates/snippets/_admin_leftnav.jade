@@ -5,17 +5,16 @@
     * Please contact info@indigenous.io for approval or questions.
 
 
-#leftnav.leftpanel
+#leftnav.leftpanel.cbp-spmenu.cbp-spmenu-vertical.cbp-spmenu-left
     .logopanel
         if account
             if account.company.logo
                 h1
                     img(src="#{account.company.logo}" style="max-height:40px;")
-                    | #{account.company.name}
-            else
+            else if account.company.name
                 h1 #{account.company.name}
-        else
-            h1 #{title}
+            else
+                h1 #{account.subdomain}
 
     // logopanel
     .leftpanelinner
@@ -36,7 +35,7 @@
                 span Customers
             li().commerce-li: a(href="#/commerce")
                 i.fa.fa-shopping-cart
-                span Products
+                span Commerce
             li().marketing-li: a(href="#/marketing")
                     i.fa.fa-bullhorn
                     span Marketing
@@ -46,6 +45,9 @@
             li().account-li: a(href="#/account")
                     i.fa.fa-cog
                     span Account
-            li().logout-li: a(href="/logout")
+            li().logout-li: a(href="/logout", onclick="return confirm('Are you sure you want to sign out?')")
                     i.fa.fa-sign-out
                     span Sign Out
+            li().indi-li: a(href="#/indi")
+                    i.indi-sm
+                    span Indi

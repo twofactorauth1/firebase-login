@@ -4,6 +4,13 @@ var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
+var urlboxhelper = require('../utils/urlboxhelper');
+var s3dao = require('../dao/integrations/s3.dao');
+var fs = require('fs');
+var request = require('request');
+var tmp = require('temporary');
+var awsConfig = require('../configs/aws.config');
+
 
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
@@ -42,7 +49,7 @@ module.exports = {
 
     getAllThemes: function(accountId, fn) {
         log.debug('>> getAllThemes');
-        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}]}, $$.m.cms.Theme, function(err, list){
+        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Theme, function(err, list){
             if(err) {
                 log.error('Exception thrown listing themes: ' + err);
                 fn(err, null);
@@ -168,7 +175,8 @@ module.exports = {
         log.debug('>> setThemeForAccount');
         //validateThemeId
         var p1 = $.Deferred();
-        cmsDao.themeExists(themeId, function(err, value){
+
+        themeDao.getById(themeId, function(err, value){
             if(err) {
                 p1.reject();
                 fn(err, null);
@@ -179,6 +187,8 @@ module.exports = {
                 p1.resolve();
             }
         });
+
+        
         $.when(p1).done(function(){
             accountDao.getById(accountId, $$.m.Account, function(err, account){
                 if(err) {
@@ -282,6 +292,23 @@ module.exports = {
 
         });
 
+    },
+
+    createDefaultPageForAccount: function(accountId, websiteId, fn) {
+        var self = this;
+        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, page){
+            if(err) {
+                log.error('Error creating default page: ' + err);
+                return fn(err, null);
+            }
+            log.debug('creating page screenshot');
+            self.updatePageScreenshot(page.id(), fn);
+        });
+    },
+
+    createWebsiteForAccount: function(accountId, userId, fn) {
+        var self = this;
+        cmsDao.createWebsiteForAccount(accountId, userId, fn);
     },
 
     _createBlogPost: function(accountId, blogPost, fn) {
@@ -732,6 +759,88 @@ module.exports = {
         var self = this;
         self.log = log;
 
+        page.attributes.components = [
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "navigation",
+                    "version" : 1,
+                    "visibility" : true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                },
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "feature-block",
+                    "version" : 1,
+                    "title" : "<h1>Feature Block Title</h1>",
+                    "subtitle" : "<h3>This is the feature block subtitle.</h3>",
+                    "text" : "<h5>The Feature Block component is great for a quick testimonial or a list of<br>features for a single product. It works great with an image background and parallax.</h5>",
+                    "txtcolor" : "#888888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/feature-block_1416870905848.jpg",
+                            "width" : 838,
+                            "height" : 470,
+                            "parallax" : true,
+                            "blur" : false,
+                            "overlay" : false,
+                            "show" : false
+                        },
+                        "color" : "#f7f7f7"
+                    },
+                    "btn" : {
+                        "text" : "                &lt;p&gt;Button Text&lt;/p&gt;            ",
+                        "url" : "#",
+                        "icon" : "fa fa-rocket"
+                    },
+                    "visibility" : true
+                },
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "footer",
+                    "version" : 1,
+                    "visibility": true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#fff",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                }
+
+            ];
+
 
         self.log.debug('>> createPage', page);
         cmsDao.saveOrUpdate(page, function(err, value){
@@ -782,7 +891,13 @@ module.exports = {
         var self = this;
         self.log = log;
         self.log.debug('>> getPagesByWebsiteId');
-        cmsDao.findMany({'accountId': accountId, 'websiteId':websiteId}, $$.m.cms.Page, function(err, list){
+        var query = {
+            accountId: accountId,
+            websiteId: websiteId,
+            $or: [{secure:false},{secure:{$exists:false}}]
+
+        };
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
             if(err) {
                 self.log.error('Error getting pages by websiteId: ' + err);
                 fn(err, null);
@@ -792,6 +907,31 @@ module.exports = {
                     map[value.get('handle')] = value;
                 });
                 fn(null, map);
+            }
+        });
+    },
+
+    getSecurePage: function(accountId, pageHandle, websiteId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getSecurePage');
+
+        var query = {
+            accountId: accountId,
+            handle: pageHandle,
+            secure:true
+        }
+        if(websiteId) {
+            query.websiteId = websiteId;
+        }
+
+        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+            if(err) {
+                self.log.error('Error getting secure page: ' + err);
+                fn(err, null);
+            } else {
+                self.log.debug('<< getSecurePage');
+                fn(null, page);
             }
         });
     },
@@ -949,6 +1089,115 @@ module.exports = {
         });
     },
 
+    getSavedScreenshot: function(accountId, pageHandle, fn) {
+        var self = this;
+        log.debug('>> getSavedScreenshot');
+        //TODO: handle multiple websites per account. (non-unique page handles)
+        var query = {accountId: accountId, handle:pageHandle};
+
+        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+            if(err) {
+                log.error('Error finding page for accountId [' + accountId + '] and handle [' + pageHandle +']: ' + err);
+                return fn(err, null);
+            }
+            log.debug('<< getSavedScreenshot');
+            return fn(null, page.get('screenshot'));
+        });
+
+    },
+
+    generateScreenshot: function(accountId, pageHandle, fn) {
+        var self = this;
+        log.debug('>> generateScreenshot');
+        //TODO: handle multiple websites per account. (non-unique page handles)
+        /*
+         * Get the URL for the page.
+         * Generate URLBox URL
+         * Download URLBox image
+         * Upload image to S3
+         * Return URL for S3 image
+         */
+        accountDao.getServerUrlByAccount(accountId, function(err, serverUrl){
+            if(err) {
+                log.error('Error getting server url: ' + err);
+                return fn(err, null);
+            }
+            log.debug('got server url');
+            if(pageHandle !== 'index' && pageHandle.indexOf('blog/') == -1) {
+                serverUrl +='/page/' + pageHandle;
+            }
+            var options = {
+                width: 1280,
+                height: 1024,
+                full_page: true,
+                delay: 2500,
+                force: true
+            };
+
+
+            var name = new Date().getTime() + '.png';
+            var tempFile = {
+                name: name,
+                path: 'tmp/' + name
+            };
+            var tempFileName = tempFile.path;
+            var ssURL = urlboxhelper.getUrl(serverUrl, options);
+            var bucket = awsConfig.BUCKETS.SCREENSHOTS;
+            var subdir = 'account_' + accountId;
+
+
+
+            self._download(ssURL, tempFile, function(){
+                log.debug('stored screenshot at ' + tempFileName);
+                tempFile.type = 'image/png';
+                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+                    fs.unlink(tempFile.path, function(err, value){});
+                    if(err) {
+                        log.error('Error uploading to s3: ' + err);
+                        fn(err, null);
+                    } else {
+                        log.debug('Got the following from S3', value);
+                        log.debug('<< generateScreenshot');
+                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
+                    }
+                });
+            });
+
+        });
+    },
+
+    updatePageScreenshot: function(pageId, fn) {
+        var self = this;
+        log.debug('>> updatePageScreenshot');
+
+        cmsDao.getPageById(pageId, function(err, page){
+            if(err) {
+                log.error('Error getting page: ' + err);
+                return fn(err, null);
+            }
+            var accountId = page.get('accountId');
+            var pageHandle = page.get('handle');
+            self.generateScreenshot(accountId, pageHandle, function(err, url){
+                if(err) {
+                    log.error('Error generating screenshot: ' + err);
+                    return fn(err, null);
+                }
+                page.set('screenshot', url);
+                cmsDao.saveOrUpdate(page, function(err, savedPage){
+                    if(err) {
+                        log.error('Error updating page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< updatePageScreenshot');
+                        return fn(null, savedPage);
+                    }
+                });
+            });
+        });
+    },
+
+
+
     _addPostIdToBlogComponentPage: function(postId, page) {
         var self = this;
         var componentAry = page.get('components') || [];
@@ -994,5 +1243,32 @@ module.exports = {
 
         return postsAry;
 
+    },
+
+    //TODO: Remove this console logs
+    _download: function(uri, file, callback){
+        console.log('calling download.  Saving to: ' + file.path);
+        request.head(uri, function(err, res, body){
+            console.log('content-type:', res.headers['content-type']);
+            console.log('content-length:', res.headers['content-length']);
+            file.type = res.headers['content-type'];
+            file.size = res.headers['content-length'];
+            if(err) {
+                console.log('err getting the head for ' + uri);
+            }
+            request(uri).on('error', function(err) {
+                console.log('error getting screenshot: ' + err);
+            }).pipe(fs.createWriteStream(file.path)).on('close', callback);
+        });
+    },
+
+    _downloadToS3: function(uri,bucket,subdir, callback) {
+        var resourceName = subdir + '/' + new Date().getTime() + '.png';
+        var s3Url = s3dao.getSignedRequest(bucket, resourceName, 3600);
+        request(uri).on('error', function(err){
+            console.log('error getting screenshot: ' + err);
+        }).pipe(request.put(s3Url).on('error', function(err){
+            console.log('error during put: ' + err);
+        }).on('close', callback));
     }
 };

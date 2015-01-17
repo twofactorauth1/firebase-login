@@ -1,16 +1,22 @@
 <style>
-    .navbar-v2 #header .navbar ul.navbar-nav li a {
+    .navigation-v1 .navbar ul.navbar-nav li a {
         color:{{component.txtcolor || 'white'}};
     }
-    .navbar-v2 #header .navbar ul.navbar-nav li a {
-        color:{{component.txtcolor || 'white'}};
+    .navigation-v1 .navbar {
+        background: {{component.nav.bg}};
+    }
+    .navbar-collapse {
+        background: {{component.nav.bg}}!important;
+    }
+    .navigation-v1 .navbar ul.navbar-nav li:hover {
+        border-bottom: 4px solid {{component.nav.hover}};
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">
     <div id="header">
 
             <nav class="navbar navbar-default" role="navigation">
-                <div class="container-fluid">
+                <div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -20,8 +26,11 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand editable" href="/" data-name="{{layout.account.company.name}}">
-                            <span class="logo-1"> <img data-ng-show="layout.account.business.logo" ng-src="{{layout.account.business.logo}}" scale="0"><span data-ng-show="!layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span></span>
+                        <a class="navbar-brand" href="/" data-name="{{layout.account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
+                            <span class="logo-1">
+                                <img data-ng-show="layout.account.business.logo || component.logo.url" ng-src="{{layout.account.business.logo}}" scale="0" width="{{component.logo.width}}" height="{{component.logo.height}}">
+                                <span data-ng-show="!layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span>
+                            </span>
                         </a>
 
                     </div>
@@ -29,7 +38,7 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background:{{component.bg.color}}">
                         <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                             <li data-ng-repeat="link in mainMenu.links track by $index">
-                                <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
+                                <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-click="gotoPosition(link.linkTo)" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
                                 <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
                             </li>
                         </ul>

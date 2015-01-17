@@ -1,0 +1,70 @@
+/*
+ * ************************************************************* *
+ * Name         :  Power Tour style : clean                      *
+ * Description  :  CSS styling for the tour plugin.              *
+ * Version      :  Version 2.1.0                                 *
+ * Author       :  CreativeMilk                                  *
+ * Author URI   :  www.creativemilk.net                          *
+ * Updated      :  2014-08-27 14:13:58 UTC+02:00                 *
+ * Copyright    :  (c) 2014 CreativeMilk                         *
+ * ************************************************************* *
+ */
+ 
+#powertour-mask{
+	background-color : #000;
+	filter           : alpha(opacity=80);
+	-moz-opacity     : 0.8;
+	-khtml-opacity   : 0.8;
+	opacity          : 0.8;
+}
+.single-step{
+	position         : relative;
+	display          : none;
+	z-index          : 9001;
+	/*
+	-webkit-box-shadow : 0 0 4px 0 #ccc;
+	-moz-box-shadow    : 0 0 4px 0 #ccc;
+	box-shadow         : 0 0 4px 0 #ccc;
+	*/
+	padding          : 20px;
+	background-color : #fff;
+	color            : #333;
+	text-align       : left;
+	border           : 1px solid #ccc;
+}
+.single-step header{
+	float       : left;
+	height      : 30px;
+	width       : 100%;
+	margin      : 5px 0 10px 0;
+	line-height : 30px;
+}
+.single-step header h3{
+	margin      : 0;
+	font-size   : 18px;
+	line-height : 22px;
+}
+.single-step footer{
+	float       : left;
+	height      : auto;
+	width       : 100%;
+	margin      : 20px 0 0 0;
+	line-height : 30px;
+}
+.single-step .close-btn{
+	position         : absolute;
+	top              : -34px;
+	right            : -1px;
+	height           : 24px;
+	width            : 24px;
+	background-color : #eee;
+	font-family      : Verdana, Geneva, sans-serif;
+	font-size        : 14px;
+	font-weight      : 700;
+	color            : #333;
+	color            : #999;
+	line-height      : 18px;
+	text-align       : center;
+	text-decoration  : none;
+	border           : 1px solid #ccc;
+}

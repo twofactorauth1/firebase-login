@@ -8,6 +8,12 @@ require('./dao/analytics.dao.js');
 var _log = $$.g.getLogger("analytics_manager");
 var SEGMENTIO = 'segment.io';
 var dao = require('./dao/analytics.dao.js');
+var segmentConfig = require('../configs/segmentio.config');
+var Analytics = require('analytics-node');
+var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
+var contactDao = require('../dao/contact.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
+var async = require('async');
 
 module.exports = {
 
@@ -121,6 +127,101 @@ module.exports = {
                 fn(null, list);
             }
         });
+    },
+
+    linkUsers: function(oldId, newId, fn) {
+        var self = this;
+        _log.debug('>> linkUsers');
+        analytics.alias({
+            previousId: oldId,
+            userId: newId
+        }, function(err, value){
+            if(err) {
+                _log.error('Error calling segment to link users: ' + err);
+            } else {
+                _log.debug('Linked users: ' + value);
+            }
+            _log.debug('<< linkUsers');
+            fn(null, value);
+        });
+    },
+
+    storeSessionEvent: function(sessionEvent, fn) {
+        var self = this;
+        _log.debug('>> storeSessionEvent');
+        //check if we have one already....
+        dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
+            if(err) {
+                _log.error('Error looking for duplicate sessionEvents: ' + err);
+                fn(err, null);
+            } else if(value=== null) {
+
+
+                var fingerprint = sessionEvent.get('fingerprint');
+
+                $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
+                    if(err) {
+                        _log.error('error creating contact activity for session event: ' + err);
+                    } else {
+                        async.each(list, function(contact, cb){
+                            var contactActivity = new $$.m.ContactActivity({
+                                accountId: contact.get('accountId'),
+                                contactId: contact.id(),
+                                activityType: $$.m.ContactActivity.types.PAGE_VIEW,
+                                start: new Date()
+                            });
+                            contactActivityManager.createActivity(contactActivity, function(err, val){
+                                if(err) {
+                                    _log.error('error creating contact activity for session event: ' + err);
+                                    cb(err);
+                                } else {
+                                    cb();
+                                }
+                            });
+                        }, function(err){
+                            _log.debug('Created contact activities for session event');
+                            dao.saveOrUpdate(sessionEvent, fn);
+                        });
+                    }
+                });
+            } else {
+                //already have one.  Store a ping instead.
+                var pingEvent = new $$.m.PingEvent({
+                    session_id: sessionEvent.get('session_id'),
+                    server_time: sessionEvent.get('server_time')
+                });
+                dao.saveOrUpdate(pingEvent, fn);
+            }
+        });
+
+
+    },
+
+    findSessionEventsByFingerprint: function(fingerprint, accountId, fn) {
+        _log.debug('>> findSessionEventsByFingerprint');
+        var query = {
+            fingerprint: fingerprint,
+            accountId: accountId
+        };
+        dao.findMany(query, $$.m.SessionEvent, function(err, value){
+            if(err) {
+                _log.error('Error finding session events: ' + err);
+                fn(err, null);
+            } else {
+                _log.debug('<< findSessionEventsByFingerprint');
+                fn(null, value);
+            }
+        });
+    },
+
+    storePageEvent: function(pageEvent, fn) {
+        _log.debug('>> storePageEvent');
+        dao.saveOrUpdate(pageEvent, fn);
+    },
+
+    storePingEvent: function(pingEvent, fn) {
+        _log.debug('>> storePingEvent');
+        dao.saveOrUpdate(pingEvent, fn);
     }
 
 }

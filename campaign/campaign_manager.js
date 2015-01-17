@@ -9,7 +9,9 @@ require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
 var accountDao = require('../dao/account.dao');
+var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
+var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var courseDao = require('../dao/course.dao');
 var subscriberDao = require('../dao/subscriber.dao');
 var userDao = require('../dao/user.dao');
@@ -22,6 +24,7 @@ var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
 //todo: change it to dynamic resolution depending on env
 var hostSuffix = appConfig.subdomain_suffix;
+var async = require('async');
 
 /**
  * Constants for pipeshift
@@ -257,6 +260,81 @@ module.exports = {
         this._cancelMandrillCampaignMessages({'campaignId': campaignId, 'contactId': contactId}, callback);
     },
 
+    subscribeToCourse: function(toEmail, course, accountId, timezoneOffset, callback) {
+        var self = this;
+        self.log.debug('>> subscribeToCourse');
+
+        //getOrCreateContact for account/email
+        var p1 = $.Deferred();
+        //If customer does not exist, create as a lead
+        contactDao.getContactByEmailAndAccount(toEmail, accountId, function(err, value){
+            if(err) {
+                self.log.error('Error searching for contact: ' + err);
+                p1.reject();
+            } else if(value === null) {
+                //sweet.  The contact doesn't exist.  Let's create him/her
+                contactDao.createContactLeadFromEmail(toEmail, accountId, function(err, savedContact){
+                    if(err) {
+                        self.log.error('Error creating contact: ' + err);
+                        p1.reject();
+                    } else {
+                        self.log.debug('Created contact');
+                        p1.resolve(savedContact);
+                    }
+                });
+            } else {
+                self.log.debug('contact already exists');
+                p1.resolve(value);
+            }
+        });
+
+        $.when(p1).done(function(contact){
+            //create contact activity for subscribing to course
+            var contactActivity = new $$.m.ContactActivity({
+                accountId: accountId,
+                contactId: contact.id(),
+                activityType: $$.m.ContactActivity.types.COURSE_SUBSCRIBE,
+                start:new Date(), //datestamp
+                end:new Date()   //datestamp
+            });
+            contactActivityManager.createActivity(contactActivity, function(err, value){
+                if(err) {
+                    self.log.error('Error creating contact activity: ' + err);
+                    return callback(err, null);
+                }
+                self.log.debug('Created subscribe to course activity');
+                //addSubscriber
+                self._addSubscriberByAccount(toEmail, course, accountId, timezoneOffset, contact.id(), function(err, value){
+                    if(err) {
+                        self.log.error('Error creating subscriber: ' + err);
+                        return callback(err, null);
+                    } else {
+                        self.log.debug('Added subscriber');
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            if(err) {
+                                self.log.error('Error retrieving account: ' + err);
+                                return callback(err, null);
+                            }
+                            self.log.debug('Got account.');
+                            self.log.debug('toEmail: ' + toEmail + ', course: ' + course +', timezoneOffset:' + timezoneOffset + ', account: ' + account);
+                            self._sendVAREmails(toEmail, course, timezoneOffset, account, function (result) {
+                                self.log.debug('<< subscribeToCourse');
+                                callback(null, result);
+                            });
+                        });
+
+                    }
+                });
+
+            });
+        });
+
+
+
+
+
+    },
+
     subscribeToVARCourse: function (toEmail, courseMock, timezoneOffset, curUserId, callback) {
         var self = this;
         courseDao.getCourseById(courseMock._id, curUserId, function (err, course) {
@@ -290,6 +368,46 @@ module.exports = {
 
     },
 
+    /**
+     *
+     * @param subAry of objects: {email: x, courseId: x, subscribeTime: x}
+     * @param fn
+     */
+    bulkSubscribeToCourse: function(subAry, userId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> bulkSubscribeToCourse');
+        var timezoneOffset = 0;//TODO: calculate this.
+        accountDao.getAccountByID(accountId, function(err, account){
+            async.each(subAry, function(sub, callback){
+                courseDao.getById(sub.courseId, $$.m.Course, function(err, course){
+                    if(err) {
+                        callback('Error finding course.');
+                    }
+                    self._addSubscriber(sub.email, course, userId, timezoneOffset, function (error) {
+                        if (error) {
+                            callback('Error creating subscriber.');
+                        } else {
+                            self._sendVAREmails(sub.email, course, timezoneOffset, account, function (result) {
+                                callback();
+                            });
+                        }
+                    });
+                });
+
+            }, function(err){
+                if(err) {
+                    self.log.error('Error creating subscriptions: ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug('<< bulkSubscribe');
+                    fn(null, 'SUCCESS');
+                }
+            });
+        });
+
+
+    },
+
     getPipeshiftTemplates: function (callback) {
         mandrill_client.templates.list({}, function (result) {
             callback(null, result);
@@ -305,6 +423,23 @@ module.exports = {
                 callback(err, null);
             }
         );
+    },
+
+    getPagesByCampaign: function(accountId, campaignId, fn) {
+        var self = this;
+        self.log.debug('>> getPagesByCampaign(' + accountId + ',' + campaignId + ')');
+
+        var query = {accountId:accountId, 'components.campaignId':campaignId};
+
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, pages){
+            if(err) {
+                self.log.error('Error getting pages: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getPagesByCampaign');
+                return fn(null, pages);
+            }
+        });
     },
 
     _cancelMandrillCampaignMessages: function (query, callback) {
@@ -617,6 +752,21 @@ module.exports = {
         return result;
     },
 
+    _addSubscriberByAccount: function(toEmail, course, accountId, timezoneOffset, contactId, callback) {
+        var userNowDateUtc = this._getNowDateUtc();
+        var subscriber = new $$.m.Subscriber({
+            accountId: accountId,
+            email: toEmail,
+            contactId: contactId,
+            courseId: course.id(),
+            subscribeDate: userNowDateUtc,
+            timezoneOffset: timezoneOffset
+        });
+        subscriberDao.saveOrUpdate(subscriber, function(err, value){
+            callback(err, value);
+        });
+    },
+
     _addSubscriber: function (toEmail, course, userId, timezoneOffset, callback) {
         var userNowDateUtc = this._getNowDateUtc();
         subscriberDao.createSubscriber({email: toEmail, courseId: course.id(), subscribeDate: userNowDateUtc, userId: userId, timezoneOffset: timezoneOffset}, function (error, subscriber) {
@@ -629,45 +779,79 @@ module.exports = {
     },
 
     _sendVAREmails: function (toEmail, course, timezoneOffset, account, callback) {
+        var self = this;
+        self.log.debug('>> _sendVAREmails');
         var host = account.get('subdomain') + "." + hostSuffix;
         var templateName = course.get('template').name;
-        var self = this;
+
         //base message
         var message = self._initPipeshiftMessage(toEmail);
-        var async = false;
+        //var async = false;
         var successItemsCounter = 0;
         var videos = course.get('videos');
-        //loop through course videos
-        for (var i = 0; i < videos.length; i++) {
-            var video = videos[i];
-            message.subject = video.subject || course.get('title');
-            // adjust values for current video
-            self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/?videoId=" + video._id);
-            self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
-            self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
-            self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
-            self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
-            self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / videos.length));
-            self._setGlobalVarValue(message, VIDEO_INDEX_VAR_NAME, i + 1);
-            self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, videos.length);
+        var emails = course.get('emails');
+        var messages = [];
+        _.each(videos, function(_video){
+            messages.push({video:_video});
+        });
+        _.each(emails, function(_email){
+            messages.push({email:_email});
+        });
 
-            var sendObj = self._initVideoTemplateSendObject(templateName, message, async);
-            // schedule email
-            // if time is in the past mandrill sends email immediately
-            sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+
+        //loop through course videos and emails
+        var i = 0;
+        async.each(messages, function(msg, cb){
+            var sendObj = {};
+            if(msg.video) {
+                var video = msg.video;
+                message.subject = video.subject || course.get('title');
+                // adjust values for current video
+                self._setGlobalVarValue(message, LINK_VAR_NAME, "http://" + host + "/course/" + course.get('subdomain') + "/" + video.videoId);
+                self._setGlobalVarValue(message, PREVIEW_IMAGE_VAR_NAME, video.videoBigPreviewUrl);
+                self._setGlobalVarValue(message, TITLE_VAR_NAME, video.videoTitle);
+                self._setGlobalVarValue(message, SUBTITLE_VAR_NAME, video.videoSubtitle);
+                self._setGlobalVarValue(message, BODY_VAR_NAME, video.videoBody);
+                self._setGlobalVarValue(message, PERCENTS_VAR_NAME, Math.round(100 * (i + 1) / videos.length));
+                self._setGlobalVarValue(message, VIDEO_INDEX_VAR_NAME, i + 1);
+                self._setGlobalVarValue(message, TOTAL_VIDEOS_VAR_NAME, videos.length);
+
+                sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+                // schedule email
+                // if time is in the past mandrill sends email immediately
+                sendObj.send_at = self._getScheduleUtcDateTimeIsoString(video.scheduledDay, video.scheduledHour, video.scheduledMinute, timezoneOffset);
+
+            } else if(msg.email) {
+                var email = msg.email;
+                message.subject = email.subject || email.title || course.get('title');
+                //TODO: need to set title, picture, content
+                sendObj = self._initVideoTemplateSendObject(templateName, message, async);
+                // schedule email
+                // if time is in the past mandrill sends email immediately
+                sendObj.send_at = self._getScheduleUtcDateTimeIsoString(email.scheduledDay, email.scheduledHour, email.scheduledMinute, timezoneOffset);
+
+            }
             // send template
+            console.dir(sendObj);
+            i++;
             mandrill_client.messages.sendTemplate(sendObj, function (result) {
                 self.log.debug(result);
-                //
-                successItemsCounter++;
-                if (successItemsCounter == course.get('videos').length) {
-                    callback(null, {});
-                }
+                cb();
             }, function (e) {
                 self.log.warn('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                callback(e, null);
+                cb(e.name + ' - ' + e.message);
             });
-        }
+        }, function(err){
+            if(err) {
+                self.log.warn('An error occurred calling mandrill: ' + err);
+                return callback(err, null);
+            } else {
+                self.log.debug('<< _sendVAREmails');
+                return callback(null, {});
+            }
+        });
+
+
     }
 
 }

@@ -76,7 +76,7 @@ exports.stripe_dao_test = {
             }
             var accountId = args.accountId;
             var user = args.user;
-            stripeDao.createStripeCustomerForUser(null, user, accountId, function(err, customer){
+            stripeDao.createStripeCustomerForUser(null, user, accountId, 0, function(err, customer){
                 if(err) {
                     test.ok(false, err);
                     return test.done();
@@ -91,7 +91,7 @@ exports.stripe_dao_test = {
                         return test.done();
                     }
                     test.equals(customerId, user1.get('stripeId'));
-                    stripeDao.createStripeCustomerForUser(null, user, accountId, function(err, customer) {
+                    stripeDao.createStripeCustomerForUser(null, user, accountId, 0, function(err, customer) {
                         if (err) {
                             test.ok(false, err);
                             return test.done();

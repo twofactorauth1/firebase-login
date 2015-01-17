@@ -9,7 +9,7 @@ var baseDao = require('../../dao/base.dao.js');
 var stripeConfigs = require('../../configs/stripe.config.js');
 var appConfig = require('../../configs/app.config.js');
 var contactDao = require('../../dao/contact.dao.js');
-var userDao = require('../../dao/user.dao.js');
+var userDao = require('../../dao/user.dao');
 var subscriptionDao = require('./subscription.dao.js');
 var paymentDao = require('./payment.dao.js');
 var customerLinkDao = require('./customer_link.dao.js');
@@ -83,13 +83,17 @@ var dao = {
         });
     },
 
-    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomerForUser");
         var params = {};
         params.email = user.get('email');
         params.description = 'Customer for ' + user.get('email');
+        if(parseInt(accountBalance) > 0) {
+            self.log.debug('Setting initial account balance of ' + accountBalance);
+            params.account_balance = parseInt(accountBalance);
+        }
         params.metadata = {};
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
@@ -109,6 +113,10 @@ var dao = {
                 self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
                 var p1 = $.Deferred(), p2 = $.Deferred();
                 var savedCustomer = customer;
+                // TESTING
+                //console.log('this: ', this);
+                //console.log('userDao:', userDao);
+                //DONE TESTING
                 userDao.saveOrUpdate(user, function(err, value){
                     if (err) {
                         fn(err, value);
@@ -163,8 +171,8 @@ var dao = {
     listStripeCustomers: function(accountId, limit, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
-        var _limit = limit ||10;
-        stripe.customers.list({ limit: _limit }, function(err, customers) {
+        var _limit = limit || 0;
+        stripe.customers.list(function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
@@ -172,7 +180,7 @@ var dao = {
                 return;
             }
 
-            self.log.debug('<< listStripeCustomers');
+            self.log.debug('<< listStripeCustomers', customers);
             return fn(err, customers);
         });
     },
@@ -256,6 +264,7 @@ var dao = {
             if(err) {
                 fn(err, confirmation);
                 fn = null;
+                return;
             }
             if(contactId && contactId.length > 0) {
                 self.log.debug('removing stripeId from contact.');
@@ -783,7 +792,10 @@ var dao = {
             metadata = {};
         }
         metadata.paymentId = paymentId;
-        params.capture = capture || false;
+        if(capture === false) {
+            params.capture = false;
+        }
+
         if(statement_description && statement_description.length>0) {params.statement_description = statement_description;}
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
         if(application_fee && application_fee > 0) {params.application_fee = application_fee;}

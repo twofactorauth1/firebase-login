@@ -24,6 +24,7 @@ var contact = $$.m.ModelBase.extend({
             starred:false,          //true|false
             type:"c",               //contact_types
             stripeId: "",           //stripe ID if available
+            isAuthenticated: false, //flag to check if contact is authenticated
             _v:"0.1",
 
             created: {
@@ -166,8 +167,8 @@ var contact = $$.m.ModelBase.extend({
         details.forEach(function(detail) {
             if (detail && detail.emails != null) {
                 detail.emails.forEach(function(email) {
-                    if (emails.indexOf(email) == -1) {
-                        emails.push(email);
+                    if (emails.indexOf(email.email) == -1) {
+                        emails.push(email.email);
                     }
                 });
             }
@@ -547,6 +548,16 @@ var contact = $$.m.ModelBase.extend({
         storage: "mongo",
         table: "contacts",
         idStrategy: "increment"
+    },
+    types: {
+        CONTACT: 'c',
+        CUSTOMER: 'cu',
+        COLLEAGUE: 'co',
+        FRIEND: 'fr',
+        MEMBER: 'mb',
+        FAMILY: 'fa',
+        ADMIN: 'ad',
+        LEAD: 'ld'
     }
 });
 

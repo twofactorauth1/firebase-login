@@ -9,6 +9,7 @@ require('../utils/namespaces');
 
 var log4js = require('log4js');
 
+
 //---------------------------------------------------------
 // CUSTOMIZE THESE
 //---------------------------------------------------------
@@ -21,16 +22,16 @@ var props = {
 
 switch(process.env.NODE_ENV) {
     case 'production':
-        props.logLevel = log4js.levels.ERROR; //TODO: Change back to "ERROR"
+        props.logLevel = process.env.LOG_LEVEL || log4js.levels.WARN;
         break;
     case 'staging':
-        props.logLevel = log4js.levels.DEBUG;
+        props.logLevel = process.env.LOG_LEVEL || log4js.levels.DEBUG;
         break;
     case 'development':
-        props.logLevel = log4js.levels.DEBUG;
+        props.logLevel = process.env.LOG_LEVEL || log4js.levels.DEBUG;
         break;
     case 'testing':
-        props.logLevel = log4js.levels.DEBUG;
+        props.logLevel = process.env.LOG_LEVEL || log4js.levels.DEBUG;
         break;
 }
 

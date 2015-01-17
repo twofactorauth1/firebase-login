@@ -33,14 +33,19 @@ h1, h2, h3, h4, h5 {
     // font-family:'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
 }
 strong {
-    font-family:'LatoBold';
     font-weight: normal;
+}
+.headerbg {
+    background: #272727;
+    height: 63px;
+    position: absolute;
+    width: 100%;
 }
 .mainpanel {
     background: #e7e7e7;
 }
 .ng-scope {
-    height: 100%;
+    // height: 100%;
 }
 #main-viewport {
     height: auto;
@@ -412,6 +417,7 @@ font-weight: 900;
 
 .chosen-select {
     margin: 0;
+    padding:0;
 }
 .ckbox,
 .rdio {
@@ -603,6 +609,7 @@ font-weight: 900;
 
 #toast-container {
     height: auto!important;
+    z-index: 100000000;
 }
 
 #ngProgress {
@@ -637,13 +644,13 @@ font-weight: 900;
     top: 0;
     width: 100%;
     z-index: 99999;
-    background: #2ecc71;
-    display: none;
+    background: #29b87f!important;
+    display: none!important;
     right: 0;
     height: 50px;
 
     &.editing {
-        display: block;
+        display: block!important;
     }
 
     .btn-group {
@@ -658,10 +665,19 @@ font-weight: 900;
         height: 50px;
 
         &:hover {
-            color: white;
+            span, i, b {
+                color: #128658;
+            }
+            color: #128658;
             background: rgba(255,255,255,0.2);
         }
     }
+}
+
+.aloha-editable {
+    max-width: 100%!important;
+    margin: 0!important;
+    padding: 0!important;
 }
 
 .aloha-link-toolbar {
@@ -678,4 +694,17 @@ font-weight: 900;
     input:-ms-input-placeholder { 
         color: rgba(255,255,255,.5);
     }
+}
+
+.nopadding {
+    padding: 0!important;
+}
+#component-setting-modal .bootstrap-switch
+{
+  float:right;
+}
+.indigeweb-activity-paging
+{
+    margin:10px;
+    float:right;
 }

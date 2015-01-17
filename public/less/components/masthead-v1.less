@@ -1,8 +1,12 @@
 /********** MastHead **********/
   .navbar-v2 {
-    .masthead-v1 {
-       .home-text {
-        margin-top: 140px!important;
+    div[data-type='masthead'] {
+       .inner-page {
+        margin-top: -210px;
+      }
+      .home-text {
+        margin-top: 200px;
+        min-height: 260px;
       }
     }
   }
@@ -18,9 +22,10 @@
     height: 100%;
     overflow: hidden;
     background-size: cover!important;
+    position: relative;
 
       h4  {
-        div, i {
+        div {
           float: left;
           text-indent: 17px;
           line-height: 18px;
@@ -28,22 +33,26 @@
       }
 
       .masthead-subtitle {
-        max-width: 70%;
-        margin: 0 auto;
+        max-width: 80%;
+        margin: 15px auto;
       }
 
       .masthead-title {
         font-size: 32px;
-        padding-bottom: 20px;
+        h1 {
+          font-size: 45px;
+        }
       }
 
 
       .btn {
         height: 50px;
-        margin-top: 30px;
-
+        max-width: 200px;
+        display: block;
         .fa {
           float: left;
+          margin-right: 10px;
+          margin-top: 2px;
         }
       }
 
@@ -58,7 +67,18 @@
 
       .home-text {
         padding: 50px 30px;
-        text-shadow: 2px 1px 0px rgba(62, 92, 111, .8);
         text-align: center;
       }
   }
+
+@media (max-width: 625px) {
+  .navbar-v2 .masthead-v1 .home-text {
+    margin-top: 140px!important;
+  }
+  .masthead-v1 .masthead-subtitle {
+    max-width: 100%;
+  }
+  .navigation-v2 .navbar ul.navbar-nav li {
+    display: block;
+  }
+}

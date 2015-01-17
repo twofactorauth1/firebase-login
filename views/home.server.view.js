@@ -6,9 +6,10 @@
  */
 
 var BaseView = require('./base.server.view');
-
+var _req = null;
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
+    _req = req;
 };
 
 _.extend(view.prototype, BaseView.prototype, {
@@ -30,7 +31,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
             data.includeJs = false;
             data = self.baseData(data);
-
+            data.accounts = self.req.session.accounts;
+            //console.dir(data.accounts);
             self.resp.render('home_new', data);
             self.cleanUp();
             data = self = null;

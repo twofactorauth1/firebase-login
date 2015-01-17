@@ -8,6 +8,7 @@
 var mongoConfig = require('../configs/mongodb.config');
 var mongoskin = require('mongoskin');
 var mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe: true});
+var async = require('async');
 
 $$.g.mongos = $$.g.monogs || [];
 var mongodao = {
@@ -249,6 +250,46 @@ var mongodao = {
 
     },
 
+    _findWithFieldsLimitAndTotalMongo: function(query, skip, limit, sort, fields, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+        var _query = query || {};
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+
+        mongoColl.count(query, function(err, count){
+            var fxn = function (err, value) {
+                if (!err) {
+                    return self._wrapArrayAndCountMongo(value, fields, type, count, _skip, fn);
+                } else {
+                    self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                    fn(err, value);
+                }
+            };
+            if (fields) {
+                if (sort) {
+                    mongoColl.find(query, fields, {sort: [
+                        [sort, 'ascending']
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
+                }
+            } else {
+                if (sort) {
+                    mongoColl.find(query, {sort: [
+                        [sort, 'ascending']
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
+                }
+            }
+        });
+
+    },
+
     _aggregateMongoWithCustomStages: function (stageAry, type, fn) {
         var self = this;
 
@@ -298,6 +339,19 @@ var mongodao = {
 
         fn(null, arr);
         return arr;
+    },
+
+    _wrapArrayAndCountMongo: function(value, fields, type, count, start, fn) {
+        var self = this, arr = [], result = {};
+        value.forEach(function (item) {
+            arr.push(self._createModel(item, type, fields));
+        });
+        result.total = count;
+        result.limit = arr.length;
+        result.start = start;
+        result.results = arr;
+        fn(null, result);
+        return result;
     },
 
 
@@ -417,6 +471,7 @@ var mongodao = {
         //db.thiscollection.find().sort({"thisfieldname":-1}).limit(1)
         var self = this;
         var collection = this.getTable(type);
+        console.dir(query);
         this.mongo(collection).find(query).sort({fieldName: -1}).limit(1).toArray(function (err, values) {
             if (err) {
                 self.log.error('An error occurred: #getMaxValueMongo. ', err);
@@ -499,6 +554,65 @@ var mongodao = {
             }
         );
     },
+
+    _batchUpdateMongo: function(list, type, fn) {
+        var self = this;
+        /*
+         * This is where an actual batch update method should go.
+         */
+        var collection = this.getTable(type);
+
+        async.each(list, function(obj, callback){
+            self.mongo(collection).save(obj.toJSON('db'), function(err, result){
+                if(err) {
+                    self.log.error('error saving object in batchUpdate: ' + err);
+                    callback(err);
+                } else {
+                    callback();
+                }
+            });
+        }, function(err){
+            if(err) {
+                self.log.error('error saving object in batchUpdate: ', err);
+                fn(err, null);
+            } else {
+                fn(null, 'OK');
+            }
+        });
+
+        /*
+
+        var collection = this.getTable(type);
+        console.log('collection: ' + collection);
+        this.mongodatabase.collection(collection, function(err, mongoCollection){
+            console.dir(mongoCollection);
+            var bulk = mongoCollection.initialzeUnorderedBulkOp();
+            var count = 0;
+            for (var i = 0; i < list.length; i++) {
+                bulk.insert({number: i});
+                bulk.find({'_id': list[i].id()}).upsert().replaceOne(list[i].toJSON("db"));
+                count++;
+
+                if ( count % 1000 == 0 )
+                    bulk.execute(function(err,result) {
+                        // maybe do something with results
+                        bulk = collection.initializeUnorderedBulkOp(); // reset after execute
+                    });
+
+            }
+
+            // If your loop was not a round divisor of 1000
+            if ( count % 1000 != 0 ) {
+                bulk.execute(function(err,result) {
+                    fn(null, "OK");
+                });
+            } else {
+                fn(null, "OK");
+            }
+        });
+        */
+    },
+
     //endregion PROTECTED
 
     //region PRIVATE

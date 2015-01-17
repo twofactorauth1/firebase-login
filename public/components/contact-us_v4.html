@@ -1,60 +1,27 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="row map-component">
-        <h2 class="contact-us-title">
-            <div class="editable text-center" data-class="title" data-ng-bind-html="component.title">
-                <convert-html contents="{{component.title}}"></convert-html>
+    <div class="row ">
+        <div class="map-wrap">
+            <div tabindex="0" class="leaflet-container leaflet-fade-anim" id="map-marker" style="height: 250px; width: 100%; position: relative;">
+                <leaflet center="mapLocation" markers="markers" defaults="defaults" width="100%" height="250px"></leaflet>
             </div>
-        </h2>
-        <div class="contact-us-subtitle">
-            <div class="editable text-center" data-class="subtitle">
-                {{component.subtitle}}
-            </div>
-        </div>
-        <br>
-        <div class="col-md-2"></div>
-        <div class="col-md-4 map" data-ng-init="map=component.map">
-            <google-map center="map.center" zoom="map.zoom"></google-map>
-        </div>
-        <div class="col-md-4">
-            <form class="form-horizontal" action="" method="post">
-                <fieldset>
-
-                    <div class="form-group">
-                        <input id="firstName" name="name" type="text" placeholder="First Name" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <input id="lastName" name="name" type="text" placeholder="Last Name" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-                        <input id="email" name="email" type="text" placeholder="Email" class="form-control">
-                    </div>
-
-                    <div class="form-group">
-
-                        <div class="row">
-                            <span class="col-md-2">Topic:</span>
-                            <span class="col-md-3">
-                                <input type="radio" name="topic" value="Personal">Personal</span>
-                            <span class="col-md-3">
-                                <input type="radio" name="topic" value="Coaching">Coaching</span>
-                            <span class="col-md-3">
-                                <input type="radio" name="topic" value="Services">Services</span>
+            <div class="panel panel-default widget-weather col-sm-2 col-sm-offset-9 hidden-xs">
+                <div class="panel-body">
+                    <div class="row">
+                        
+                        <div class="col-xs-12 temp  settings" tab-active="address" data-id="{{component._id}}">
+                            <span ng-if="!geo_address_string"> Enter Address Here</span>
+                            <span ng-bind-html="geo_address_string"></span>
+                            
+                            <span ng-if="!contactPhone">Enter Phone Number here</span>
+                            <span ng-bind-html="contactPhone"></span>
+                            <span ng-if="!component.hours.length">Enter Business hours here</span>
+                            <span ng-bind-html="component.hours"></span>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <textarea class="form-control" id="message" name="message" placeholder="Message" rows="5"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="form-control btn btn-primary">Send</button>
-                    </div>
-                </fieldset>
-            </form>
+                </div>
+                <!-- panel-body -->
+            </div>
         </div>
-        <div class="col-md-2"></div>
-
-    </div>
+        </div>
+</div>
 </div>

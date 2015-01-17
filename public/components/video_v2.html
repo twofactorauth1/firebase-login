@@ -1,0 +1,43 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+
+<div class="video-block">
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="video-title">
+                <div class="editable" data-class="maintitle" data-index="{{$index}}">
+                    <span ng-bind-html="component.maintitle" />
+                </div>
+            </div>
+
+            <div class="video-subtitle">
+                <div class="editable" data-class="subtitle" data-index="{{$index}}">
+                    <span ng-bind-html="component.subtitle" />
+                </div>
+            </div>
+
+            <div class="mb20"></div>
+
+            <div class="videoblock">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <span ng-bind-html="component.videoblock | unsafe"></span>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12" ng-show="component.btn.visibility">
+                <a class="btn btn-primary btn-block center editable" data-index="{{$index}}" ng-bind="component.btn.text" data-class="btn-text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
+    </div>
+</div>

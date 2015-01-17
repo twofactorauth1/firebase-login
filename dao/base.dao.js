@@ -222,6 +222,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findWithFieldsLimitAndTotal:function(query, skip, limit, sort, fields, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._findWithFieldsLimitAndTotalMongo(query, skip, limit, sort, fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
     findAndOrder: function(query, fields, type, order_by, order_dir, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._findAndOrderMongo(query, fields, type, order_by, order_dir, fn);
@@ -328,6 +336,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
             }
         }
         return this.defaultModel.db.cache || false;
+    },
+
+    batchUpdate: function(list, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._batchUpdateMongo(list, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
     },
 
 

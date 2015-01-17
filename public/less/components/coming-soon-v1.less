@@ -7,22 +7,22 @@
 		width: 100%;
 	}
 	.logo {
-		margin: 5% auto 0;
+		margin: 0 auto 0;
 		display: block;
+		max-width: 300px;
 	}
 	div[ng-transclude] {
 		height: 100%;
 	}
 	.coming-soon-wrap {
-		background: rgba(255,255,255,0.9);
+		// background: rgba(255,255,255,0.9);
 	}
 	.heading {
 		font-size: 50px;
 		margin: 45px 0 10px;
 		text-align: center;
-		text-transform: uppercase;
 		font-weight: 700;
-		margin: 30px 0 10px;
+		margin: 0px 0 10px;
 	}
 	.text {
 		margin-bottom: 20px;
@@ -31,6 +31,7 @@
 	}
 	.inner-page {
 		padding-bottom: 15px;
+		padding-top: 0;
 	}
 	@-webkit-keyframes arrowBounce {
 	  0% {
@@ -138,4 +139,8 @@
 			animation: arrowBounce 2.5s infinite;
 		}
 	}
+}
+
+div[data-type="coming-soon"] .component-inner {
+	background: rgba(255, 255, 255, 0.9);
 }

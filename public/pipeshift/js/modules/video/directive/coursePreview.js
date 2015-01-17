@@ -22,7 +22,7 @@ angular.module('var.directives').directive('coursePreview', function () {
                     var pageData = [];
                     for (var j = 0; j < 3; j++) {
                         var video = courseVideos[i * 3 + j];
-                        if (video != null) {
+                        if (video !== null) {
                             pageData.push(video);
                         }
                     }
@@ -31,12 +31,12 @@ angular.module('var.directives').directive('coursePreview', function () {
             }
             $scope.carouselData = carouselData;
             $scope.subscribe = function () {
-                if (course.subdomain == null || course.subdomain.trim() == "") {
+                if (course.subdomain === null || course.subdomain.trim() === "") {
                     alert("Please define course subdomain first.");
                 } else {
                     $scope.modal.submited = true;
                     if ($scope.modal.emailForm.$valid) {
-                        if (course.videos.length == 0) {
+                        if (course.videos.length === 0) {
                             alert("Error: empty course");
                         } else {
                             subscribeToCourse($scope.modal.email, course);
@@ -59,10 +59,10 @@ angular.module('var.directives').directive('coursePreview', function () {
                     $videoPlayerContainer.empty();
                     $videoPlayerContainer.html("<div video-player video='selectedVideo' course-details='course'></div>");
                     $compile($videoPlayerContainer)($scope);
-                })
-            }
+                });
+            };
             $scope.videoId = $location.search().videoId;
-            if ($scope.videoId != null) {
+            if ($scope.videoId !== null) {
                 $scope.selectVideo({_id: $scope.videoId});
             }
             if ($scope.standalone && !$scope.isLoggedInAndSubscribed && course.showExitIntentModal) {
@@ -70,7 +70,7 @@ angular.module('var.directives').directive('coursePreview', function () {
             }
             $scope.share = function (shareUrl) {
                 window.open(shareUrl + $location.absUrl(), '_blank', 'scrollbars=0, resizable=1, menubar=0, left=100, top=100, width=550, height=440, toolbar=0, status=0');
-            }
+            };
             $scope.showCourseSubscribeModal = function () {
                 var modalInstance = $modal.open({
                     templateUrl: '/pipeshift/views/modal/subscribeModal.html',
@@ -80,10 +80,10 @@ angular.module('var.directives').directive('coursePreview', function () {
                     subscribeToCourse(email, course);
                 }, function () {
                 });
-            }
+            };
         },
         replace: true,
         restrict: 'E',
         templateUrl: '/pipeshift/views/directives/coursePreview.html'
-    }
+    };
 });

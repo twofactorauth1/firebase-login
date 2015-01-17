@@ -7,6 +7,7 @@
 
 var baseApi = require('../../base.api.js');
 var s3Dao = require('../../../dao/integrations/s3.dao.js');
+var route53Dao = require('../../../dao/integrations/route53.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -20,8 +21,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         //GET
-        app.get(this.url("credentials/download/:bucket/:resource"), this.isAuthApi, this.getSignedRequest.bind(this));
-        app.get(this.url("credentials/upload/:bucket/:filename"), this.isAuthApi, this.getS3UploadCredentials.bind(this));
+        app.get(this.url("credentials/download/:bucket/:resource"), this.isAuthApi.bind(this), this.getSignedRequest.bind(this));
+        app.get(this.url("credentials/upload/:bucket/:filename"), this.isAuthApi.bind(this), this.getS3UploadCredentials.bind(this));
+        app.get(this.url('route53/:name/available'), this.isAuthApi.bind(this), this.checkDomainAvailability.bind(this));
     },
 
 
@@ -51,6 +53,18 @@ _.extend(api.prototype, baseApi.prototype, {
         var credentials = s3Dao.getS3UploadCredentials(bucket, filename, redirect);
         resp.send(credentials)
         self = req = resp = null;
+    },
+
+    checkDomainAvailability: function(req, resp) {
+        var self = this;
+        self.log.debug('>> checkDomainAvailability');
+
+        var name = req.params.name;
+
+        route53Dao.checkDomainAvailability(name, function(err, value){
+            self.log.debug('<< checkDomainAvailability');
+            self.sendResultOrError(resp, err, value, 'Error checking availability');
+        });
     }
 });
 

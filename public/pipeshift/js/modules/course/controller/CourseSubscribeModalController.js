@@ -9,5 +9,4 @@ angular.module('app.modules.course').controller('CourseSubscribeModalController'
             $modalInstance.close($scope.modal.email);
         }
     }
-}])
-;
+}]);

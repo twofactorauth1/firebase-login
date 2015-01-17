@@ -1,5 +1,6 @@
 var request = require('request');
 _ = require('underscore');
+var twonetConfig = require('../../../configs/twonet.config');
 
 var twonetBase = function(){
 
@@ -9,11 +10,11 @@ _.extend(twonetBase.prototype, {
 
     RESPONSE_STATUS: { OK: "OK" },
 
-    KEY: "36ODKJ1HdJD1y29hk203",
+    KEY: twonetConfig.TWONET_KEY,
 
-    SECRET: "OMItCcxnrlI0db67HhPKkIM70ZhHZcJe",
+    SECRET: twonetConfig.TWONET_SECRET,
 
-    BASE_PATH: "https://twonetcom.qualcomm.com/kernel",
+    BASE_PATH: twonetConfig.TWONET_BASEPATH,
 
     init: function() {
         this.log = $$.g.getLogger(this.name || "twonet_base");

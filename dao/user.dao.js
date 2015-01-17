@@ -11,6 +11,7 @@ var constants = requirejs('constants/constants');
 var crypto = require('../utils/security/crypto');
 var cmsDao = require('../cms/dao/cms.dao');
 require('../models/user');
+var cookies = require("../utils/cookieutil");
 
 
 var dao = {
@@ -43,8 +44,9 @@ var dao = {
         this.findOne( {'credentials.type': socialType, 'credentials.userName': socialUsername}, fn);
     },
 
+    //TODO: This method is bad.  And you should feel bad.
     createUserFromUsernamePassword: function(username, password, email, accountToken, fn) {
-        if (_.isFunction(accountToken)) {
+        /*if (_.isFunction(accountToken)) {
              fn = accountToken;
              accountToken = null;
         }
@@ -81,42 +83,63 @@ var dao = {
                     if (accountId == null) {
                         return fn(true, "Failed to create user, no account found");
                     }
-
+                    var userId = $$.u.idutils.generateUUID();
                     var user = new $$.m.User({
+                        _id: userId,
                         username:username,
                         email:email,
                         created: {
                             date: new Date().getTime(),
                             strategy: $$.constants.user.credential_types.LOCAL,
-                            by: null, //self-created
+                            by: userId, //self-created
                             isNew: true
                         }
                     });
 
 
                     user.createOrUpdateLocalCredentials(password);
-                    user.createUserAccount(accountId, username, password, ["super","admin","member"]);
-                    cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                    var roleAry = ["super","admin","member"];
+                    user.createUserAccount(accountId, username, password, roleAry);
+
+                    self.log.debug('Initializing user security.');
+                    securityManager.initializeUserPrivileges(user.id(), username, roleAry, accountId, function(err, value){
                         if(err) {
-                            self.log.error('Error creating website for account: ' + err);
-                            fn(err, null);
-                        } else {
-                            cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
-                                if(err) {
-                                    self.log.error('Error creating default page for account: ' + err);
-                                    fn(err, null);
-                                } else {
-                                    self.saveOrUpdate(user, fn);
-                                }
-
-                            });
+                            self.log.error('Error initializing user privileges for userID: ' + user.id());
+                            return fn(err, null);
                         }
+                        self.log.debug('creating website for account');
+                        cmsDao.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                            if(err) {
+                                self.log.error('Error creating website for account: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('creating default page');
+                                cmsDao.createDefaultPageForAccount(accountId, value.id(), function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating default page for account: ' + err);
+                                        fn(err, null);
+                                    } else {
+                                        self.log.debug('saving user.');
+                                        self.saveOrUpdate(user, function(err, savedUser){
+                                            if(err) {
+                                                self.log.error('Error saving user: ' + err);
+                                                fn(err, null);
+                                            } else {
+                                                self.log.debug('<< createUserFromUsernamePassword');
+                                                fn(null, savedUser);
+                                            }
+                                        });
+                                    }
 
+                                });
+                            }
 
+                        });
                     });
 
                 });
         });
+        */
     },
 
     createUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken, refreshToken, expires, accountToken, scope, fn) {
@@ -179,14 +202,107 @@ var dao = {
                         user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                         user.createUserAccount(accountId, email, null, ["super","admin","member"]);
 
-                        self.refreshFromSocialProfile(user, socialType, true, fn);
+                        self.refreshFromSocialProfile(user, socialType, true, false, fn);
                     });
             });
         })
     },
 
+    createTempUserFromSocialProfile: function(socialType, socialId, email, firstName, lastName, username, socialUrl, accessToken,
+                                              refreshToken, expires, accountToken, scope, fn) {
+        var self = this;
+        self.log.debug('>> createTempUserFromSocialProfile');
 
-    refreshFromSocialProfile: function(user, socialType, defaultPhoto, fn) {
+        accountDao.getTempAccount(accountToken, function(err, tempAccount){
+            if(err) {
+                self.log.error('Error getting temp account: ' + err);
+                return fn(err, null);
+            } else if(tempAccount === null) {
+
+                self.log.error('Could not find account with token: ' + accountToken);
+                return fn('Temp account not found', null);
+            }
+            self.getUserByUsername(email, function(err, user) {
+                if (err) {
+                    return fn(err, null);
+                } else if(user !== null) {
+                    tempAccount.set('tempUser', user);
+                    accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                        if(err) {
+                            self.log.error('Error updating temp account: ' + err);
+                            return fn(err, null);
+                        } else {
+                            self.log.debug('<< createTempUserFromSocialProfile');
+                            return fn(null, user);
+                        }
+                    });
+                } else {
+                    //check if social user exists
+                    self.getUserBySocialId(socialType, socialId, function(err, user) {
+                        if (err) {
+                            return fn(err, null);
+                        } else if (user != null) {
+                            tempAccount.set('tempUser', user);
+                            accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                                if(err) {
+                                    self.log.error('Error updating temp account: ' + err);
+                                    return fn(err, null);
+                                } else {
+                                    self.log.debug('<< createTempUserFromSocialProfile');
+                                    return fn(null, user);
+                                }
+                            });
+                        } else {
+                            self.log.debug('creating new temp user');
+                            //need to create a temp user
+                            var user = new $$.m.User({
+                                _id: 'temp:' + $$.u.idutils.generateUUID(),
+                                username:email,
+                                email:email,
+                                first:firstName,
+                                last:lastName,
+                                created: {
+                                    date: new Date().getTime(),
+                                    by: null, //self-created
+                                    strategy: socialType,
+                                    isNew: true
+                                }
+                            });
+
+                            user.createOrUpdateLocalCredentials(null);
+                            user.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
+                            self.refreshFromSocialProfile(user, socialType, true, true, function(err, updatedUser){
+                                self.saveOrUpdateTmpUser(updatedUser, function(err, tmpUser){
+                                    self.log.debug('saved temp user with id: ' + tmpUser.id());
+                                    tempAccount.set('tempUser', tmpUser);
+                                    accountDao.saveOrUpdateTmpAccount(tempAccount, function(err, tmpAccount){
+                                        if(err) {
+                                            self.log.error('Error updating temp account: ' + err);
+                                            return fn(err, null);
+                                        } else {
+                                            self.log.debug('<< createTempUserFromSocialProfile');
+                                            return fn(null, user);
+                                        }
+                                    });
+                                });
+                            });
+
+
+
+
+
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+    },
+
+
+    refreshFromSocialProfile: function(user, socialType, defaultPhoto, tempUser, fn) {
         var self = this;
         if (_.isFunction(defaultPhoto)) {
             fn = defaultPhoto;
@@ -202,6 +318,15 @@ var dao = {
                 self.saveOrUpdate(user, fn);
             }
         };
+        if(tempUser === true) {
+            fxn = function(err, value){
+                if (!err) {
+                    self.saveOrUpdateTmpUser(value, fn);
+                } else {
+                    self.saveOrUpdateTmpUser(user, fn);
+                }
+            }
+        }
 
         switch(socialType) {
             case social.FACEBOOK:
@@ -243,6 +368,17 @@ var dao = {
     getUsersForAccount: function(accountId, fn) {
         var query = {'accounts.accountId':accountId};
         return this.findMany(query, $$.m.User, fn);
+    },
+
+    saveOrUpdateTmpUser: function(user, fn) {
+        //key, value, region, ttl
+        $$.g.cache.set(user.id(), user, "users", 3600 * 24);
+        fn(null, user);
+    },
+
+    removeTmpUser: function(user, fn) {
+        $$.g.cache.remove(user.id(), 'users');
+        fn(null, 'ok');
     }
 };
 

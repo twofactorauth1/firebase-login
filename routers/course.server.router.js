@@ -21,9 +21,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         //  COURSE
         //-------------------------------------------------
-        app.get("/campaign/:courseSubdomain", this.setup, this.showCourse.bind(this));
-        app.get("/campaign /:courseSubdomain/video/:videoId", this.setup, this.showVideo.bind(this));
-
+        app.get("/campaign/:courseSubdomain", this.setup.bind(this), this.showCourse.bind(this));
+        app.get("/campaign/:courseSubdomain/video/:videoId", this.setup.bind(this), this.showVideo.bind(this));
+        app.get("/course/:courseSubdomain", this.setup.bind(this), this.showCourse.bind(this));
+        app.get("/course/:courseSubdomain/:videoId", this.setup.bind(this), this.showVideo.bind(this));
         return this;
     },
 
@@ -36,7 +37,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
     showVideo: function (req, resp) {
         var self = this;
-
+        self.log.debug('>> showVideo');
         //todo: implement method
 
         new CourseView(req, resp).showVideo(req.params.courseSubdomain, req.params.videoId);

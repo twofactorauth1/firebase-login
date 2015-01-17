@@ -23,7 +23,7 @@
     <div class="clearfix mb15"></div>
 
     <div ng-repeat="feature in component.features track by $index">
-        <div class="col-sm-3 feature">
+        <div class="col-sm-3 feature" ng-if="component.features.length >= 4">
             <div class="feature-single feature-single-0">
                 <span class="feature-icon {{feature.icon}}"></span>
 
@@ -44,7 +44,44 @@
                 </div>
 
             </div>
+              <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+            </div>
         </div>
+
+        <div class="col-sm-4 feature" ng-if="component.features.length == 3">
+            <div class="feature-single feature-single-0">
+                <span class="feature-icon">
+                    <div class="editable" data-class="features.item.icon" data-index="{{$index}}">
+                         <span ng-bind-html="feature.icon | unsafe" />
+                    </div>
+                </span>
+
+                <div class="feature-title">
+                    <div class="editable" data-class="features.item.title" data-index="{{$index}}">
+                        <span ng-bind-html="feature.title" />
+                    </div>
+                </div>
+
+                <div class="feature-subtitle">
+                    <div class="editable" data-class="features.item.subtitle" data-index="{{$index}}">
+                        <span ng-bind-html="feature.subtitle | unsafe"></span>
+                    </div>
+                </div>
+
+                <!-- <div>
+                    <a href="{{feature.btn.url}}" class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
+                </div> -->
+
+            </div>
+             <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+            </div>
+        </div>
+
+        <div class="clearfix mb30 visible-xs"></div>
+        <hr class="visible-xs" ng-if="$index + 1 < component.features.length"></hr>
+
     </div>
 
 </div>

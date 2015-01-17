@@ -146,14 +146,6 @@ var user = $$.m.ModelBase.extend({
              */
             details: [],
             stripeId: "",           //stripe CustomerID if available.  This is separate from login credentials
-            welcome_alert: {
-                editwebsite: true,
-                commerce: true,
-                contact: true,
-                dashboard: true,
-                marketing: true,
-                marketingsingle: true
-            },
             user_preferences: {
                 default_contact_address: {
                     address1:'',
@@ -162,6 +154,22 @@ var user = $$.m.ModelBase.extend({
                     state:'',
                     zip:'',
                     country:''
+                },
+                website_default_tab : '',
+                indi_default_tab : '',
+                welcome_alert : {
+                    initial : false,
+                    editwebsite : false,
+                    commerce : false,
+                    contact : false,
+                    dashboard : false,
+                    marketing : false,
+                    marketingsingle : false
+                }
+            },
+            app_preferences: {
+                account:{
+                    default_tab: "account_information"
                 }
             }
         };
@@ -175,6 +183,7 @@ var user = $$.m.ModelBase.extend({
                 json.credentials.forEach(function(creds) {
                     delete creds.password;
                     delete creds.accessToken;
+                    delete creds.refreshToken;
                 });
             }
 
@@ -188,6 +197,35 @@ var user = $$.m.ModelBase.extend({
 
                 json.accounts.forEach(function (account) {
                     delete account.permissions;
+
+                    if (account.credentials != null) {
+                        account.credentials.forEach(function(creds) {
+                            delete creds.password;
+                            delete creds.accessToken;
+                        });
+                    }
+                });
+            }
+        }],
+        manage: [function (json, options) {
+            if (json.credentials != null) {
+                json.credentials.forEach(function(creds) {
+                    delete creds.password;
+                    delete creds.accessToken;
+                    delete creds.refreshToken;
+                });
+            }
+
+            if (json.accounts != null) {
+
+                if (options && options.accountId) {
+                    //Remove all but this account
+                    var account = _.findWhere(json.accounts, {accountId:options.accountId});
+                    json.accounts = account != null ? [account] : [];
+                }
+
+                json.accounts.forEach(function (account) {
+                    //delete account.permissions;
 
                     if (account.credentials != null) {
                         account.credentials.forEach(function(creds) {
@@ -214,7 +252,11 @@ var user = $$.m.ModelBase.extend({
                     }
                 }
             }
+            if(!String.isNullOrEmpty(json.accountUrl)) {
+                json.accountUrl = json.accountUrl.toLowerCase();
+            }
         }
+
     },
 
 
@@ -566,6 +608,8 @@ var user = $$.m.ModelBase.extend({
 
 
     createOrUpdateSocialCredentials: function(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
+        console.log('user.js >> createOrUpdateSocialCredentials');
+        console.log('refreshToken is ' + refreshToken);
         var creds = this.getCredentials(socialType);
         if (creds == null) {
             creds = {};
@@ -596,6 +640,19 @@ var user = $$.m.ModelBase.extend({
             }
         }
         return null;
+    },
+
+    removeCredentials: function(type) {
+        var credentials = this.get('credentials');
+        var targetIndex = -1;
+        for(var i=0; i<credentials.length; i++) {
+            if(credentials[i].type === type) {
+                targetIndex = i;
+            }
+        }
+        if(targetIndex !== -1) {
+            credentials.splice(targetIndex, 1);
+        }
     },
 
 
@@ -630,6 +687,7 @@ var user = $$.m.ModelBase.extend({
         if (options.refreshToken != null) {
             creds.refreshToken = options.refreshToken;
         }
+        console.log('creds.refreshToken [' + creds.refreshToken + '] and options.refreshToken[' + options.refreshToken + ']');
 
         if (options.expires != null && options.expires > 0) {
             creds.expires = options.expires;
@@ -728,13 +786,13 @@ var user = $$.m.ModelBase.extend({
         if(accounts == null) {
             return this;
         }
-        _.each(accounts, function(account, index, list){
-            if(account.id() === accountId) {
+        /*_.each(accounts, function(account, index, list){
+            if(account.accountId === accountId) {
 
             }
-        });
+        });*/
 
-        var updatedAccounts = _.filter(accounts, function(account){return account.id() !== accountId});
+        var updatedAccounts = _.filter(accounts, function(account){return account.accountId !== accountId});
         this.set('accounts', updatedAccounts);
         return this;
     },
