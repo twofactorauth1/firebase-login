@@ -697,9 +697,9 @@ define([
                         cmpVersion = selectedType.version;
                     }
                 }
-                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion, function(data) {
-                    if (data.components) {
-                        var newComponent = data.components[data.components.length - 1];
+                WebsiteService.saveComponent($scope.selectedComponent, cmpVersion, function(data) {
+                    if (data) {
+                        var newComponent = data;
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
@@ -719,22 +719,23 @@ define([
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 $scope.deactivateAloha();
-                WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
-                    //$scope.resfeshIframe();
-                    for (var i = 0; i < $scope.components.length; i++) {
-                        if ($scope.components[i]._id == componentId) {
-                            deletedType = $scope.components[i].type;
-                            $scope.components.splice(i, 1);
-                            break;
-                        }
+                for (var i = 0; i < $scope.components.length; i++) {
+                    if ($scope.components[i]._id == componentId) {
+                        deletedType = $scope.components[i].type;
+                        $scope.components.splice(i, 1);
+                        break;
                     }
-                    $scope.updateIframeComponents();
-                    $scope.componentEditing = null;
-                    $(".modal-backdrop").remove();
-                    $("#component-setting-modal").modal('hide');
-                    toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
-                    $scope.activateAloha();
-                });
+                }
+                $scope.updateIframeComponents();
+                $scope.componentEditing = null;
+                $(".modal-backdrop").remove();
+                $("#component-setting-modal").modal('hide');
+                toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                $scope.activateAloha();
+                //WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
+                    //$scope.resfeshIframe();
+                    
+               //});
             };
 
             $scope.updateIframeComponents = function(fn) {
