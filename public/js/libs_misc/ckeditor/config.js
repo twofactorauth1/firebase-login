@@ -35,6 +35,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;
 	config.extraAllowedContent =true;
 
+
 	// ALLOW <i></i>
 	config.protectedSource.push( /<i[\s\S]*?\>/g ); //allows beginning <i> tag
 	config.protectedSource.push( /<\/i[\s\S]*?\>/g ); //allows ending </i> tag
@@ -47,3 +48,5 @@ CKEDITOR.editorConfig = function( config ) {
 
 // allow i tags to be empty (for font awesome)
 	CKEDITOR.dtd.$removeEmpty['i'] = false;
+	CKEDITOR.dtd.$editable.span = true;
+	CKEDITOR.dtd.$editable.a = true;
