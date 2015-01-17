@@ -26,17 +26,18 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="/" data-name="{{layout.account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
+                        <a class="navbar-brand" href="/" data-name="{{layout.account.company.name || blog.account.company.name }}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
                             <span class="logo-1">
-                                <img data-ng-show="layout.account.business.logo || component.logo.url" ng-src="{{layout.account.business.logo}}" scale="0" width="{{component.logo.width}}" height="{{component.logo.height}}">
-                                <span data-ng-show="!layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span>
+                                <img data-ng-show="layout.account.business.logo || blog.account.business.logo || component.logo.url" ng-src="{{layout.account.business.logo || blog.account.business.logo}}" scale="0" width="{{component.logo.width}}" height="{{component.logo.height}}">
+                                <span data-ng-show="layout && !layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span>
+                                <span data-ng-show="blog && !blog.account.business.logo" ><convert-html contents="{{blog.account.business.name}}">  </convert-html> </span>
                             </span>
                         </a>
 
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="background:{{component.bg.color}}">
-                        <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                        <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists || blog.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                             <li data-ng-repeat="link in mainMenu.links track by $index">
                                 <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-click="gotoPosition(link.linkTo)" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
                                 <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
