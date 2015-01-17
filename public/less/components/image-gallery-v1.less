@@ -1,13 +1,5 @@
 .image-gallery-v1 {
 
-  .image-gallery-title {
-      text-align: center;
-  }
-
-  .image-gallery-subtitle {
-    text-align: center;
-  }
-
   .single-image {
     padding: 0;
     margin: 0;
@@ -15,6 +7,12 @@
 
   .thumbnail {
     position: relative;
+
+    a {
+      img {
+        min-height: 149px;
+      }
+    }
   }
 
   a.thumbnail .caption {
@@ -68,12 +66,15 @@
     transition: all 0.2s ease-in-out;
   }
 
-  .thumbnail img {
-    height: 240px;
-    width: 310px
-  }
+  // .thumbnail img {
+  //   height: 240px;
+  //   width: 310px
+  // }
 
   .imgHeight {
-    height: 285px;
+    max-height: 150px;
+    overflow: hidden;
+    min-height: 150px;
+    margin-bottom: 20px;
   }
 }
