@@ -867,6 +867,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
     };
 
+    window.updateWebsite = function(data) {
+      $scope.$apply(function() {
+      if(data)
+        that.website = data;
+      });
+    };
+
+
     window.updateComponents = function(data) {
       $scope.$apply(function() {
         // setNavigation({

@@ -453,7 +453,6 @@
                                                     <i class="fa fa-trash-o" ng-click="mainMenu.links.splice($index,1)"></i>
                                                     </h4>
                                                 </div>
-                                                
                                             </div>
                                     
                                         </div>
@@ -461,9 +460,47 @@
                                 </ul>
                             </div>
                             <div class="footer">
-                                <button type="button" class="btn btn-primary pull-right" ng-click="updateLinkList()" data-dismiss="modal">
-                                    Save changes
-                                </button>
+                                <div class="row form-group">                               
+                                    <div class="pull-left switch-navadd col-xs-12 col-sm-6 col-md-4">
+                                        <input bs-switch switch-size="large"  ng-model="addNavigationLink" type="checkbox" switch-label="Add Link" ng-change="initializeLinks()">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="input-group pull-left" style="margin-left: 10px;" ng-if="addNavigationLink">
+                                        <input ng-model="newLink.linkTitle" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Title" class="input-lg form-control"
+                                        type="text">
+                                        <slug from="newLink.linkTitle" to="newLink.linkUrl"></slug>
+                                        <input ng-model="newLink.linkUrl" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Label" class="input-lg form-control"
+                                        type="text">
+                                        <select ng-if="addLinkType=='page'" ng-model="newLink.linkPage" class="form-control input-lg">
+                                                <option ng-repeat="page in allPages track by $index" value="{{page.handle}}">{{page.title || page.handle}}</option>
+                                        </select>
+                                        <div class="input-group-btn dropup">
+                                            <button type="button" class="btn btn-default dropdown-toggle input-lg" data-toggle="dropdown"
+                                            aria-expanded="false">
+                                                <span ng-if="addLinkType=='page'">To Page</span>
+                                                <span ng-if="addLinkType=='section'">To Section</span>
+                                                <span
+                                                class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                                <li>
+                                                    <a ng-click="setLinkType('page')">Link to page</a>
+                                                </li>
+                                                <li class="divider"></li>
+                                                <li>
+                                                <a ng-click="setLinkType('section')">Link to section</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <button type="button" ng-click="addLinkToNav()" class="btn btn-primary pull-right">Add</button>  
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <button type="button" class="btn btn-primary pull-right" ng-click="updateLinkList()" data-dismiss="modal">
+                                        Save changes
+                                    </button>
+                                </div>
                             </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'meet-team'">

@@ -67,6 +67,7 @@ define([
             $scope.isEditing = true;
             $scope.isMobile = false;
             $scope.tabs = {};
+            $scope.addLinkType = 'page';
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -1037,6 +1038,53 @@ define([
 
             });
 
+            //Add Link to navigation
+            $scope.initializeLinks = function()
+            {
+                $scope.newLink = {linkUrl : null, linkTitle:null, linkPage: null};
+            }
+
+            $scope.setLinkType = function(lnk)
+            {
+                $scope.addLinkType = lnk;
+                $scope.initializeLinks();
+            }
+
+            $scope.addLinkToNav = function()
+            {
+                var linkTitle = null;
+                var linkUrl = null;
+                if($scope.newLink && $scope.newLink.linkPage){
+                    $scope.linkPage = _.findWhere(that.allPages, {
+                        handle: $scope.newLink.linkPage
+                    });
+                   linkTitle = $scope.linkPage.title;
+                   linkUrl = $scope.newLink.linkPage;
+                }
+                else if($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl)
+                {
+                    linkTitle = $scope.newLink.linkTitle;
+                    linkUrl = $scope.newLink.linkUrl;
+                }
+                if(linkTitle && linkUrl)
+                {
+                    $scope.website.linkLists.forEach(function(value, index) {
+                        if (value.handle === "head-menu") {                        
+                            value.links.push({                                
+                                    label: linkTitle,
+                                    type: "link",
+                                    linkTo: {
+                                        data: linkUrl,
+                                        type: $scope.addLinkType
+                                    }
+                            });
+                            $scope.initializeLinks();
+                        }
+                    });
+                }
+                
+            }
+
             //when the navigation is reordered, update the linklist in the website object
             $scope.updateLinkList = function(linkLists) {
                 var linkLabelsArr = [];
@@ -1059,6 +1107,7 @@ define([
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);  
                                     toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }
