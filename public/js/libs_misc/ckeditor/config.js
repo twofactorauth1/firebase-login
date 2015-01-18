@@ -33,8 +33,19 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = '';
 
 	config.allowedContent = true;
+	config.extraAllowedContent = true;
+
+	// // ALLOW <i></i>
+	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
+	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
 	config.extraPlugins = 'doksoft_button,lineheight,mediamanager';
 
 	config.filebrowserBrowseUrl = '';
+
+	CKEDITOR.dtd.$removeEmpty['i'] = false;
+	CKEDITOR.dtd.$removeEmpty['span'] = false;
+	CKEDITOR.dtd.$editable.span = true;
+	CKEDITOR.dtd.$editable.a = true;
+	CKEDITOR.dtd.$editable.img = true;
 };

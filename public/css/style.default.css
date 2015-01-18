@@ -22895,17 +22895,28 @@ div[data-type='campaign'] .inner-page .overlay {
   color: #ffffff;
 }
 /********** Feature List v1 **********/
+.editing .features-wrap .feature {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+.editing .features-wrap .feature:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+.editing .features-wrap .feature:hover .delete-feature .btn-delete-feature {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.editing .features-wrap .delete-feature .btn-delete-feature {
+  display: none;
+}
 .feature-list-v1 .features-wrap {
   margin: 2%;
-}
-.feature-list-v1 .feature-list-title {
-  text-align: center;
-  text-transform: uppercase;
-  color: #444444;
-}
-.feature-list-v1 .feature-list-subtitle {
-  color: #bbbbbb;
-  text-align: center;
 }
 .feature-list-v1 .feature-single {
   background: #4bb0cb;
