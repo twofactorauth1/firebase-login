@@ -65,7 +65,7 @@ require.config({
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
-        'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
+        'heatmapjs': 'libs_misc/heatmap.js-2.0/build/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
         'ngSweetAlert' : 'libs/angular-sweetalert/SweetAlert',
