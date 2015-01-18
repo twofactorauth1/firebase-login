@@ -17675,6 +17675,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-right: 52px;
   position: relative;
   height: 63px;
+  z-index: 11;
 }
 .mainpanel .pageheader h2 {
   font-size: 28px;
