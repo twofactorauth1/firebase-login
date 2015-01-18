@@ -129,7 +129,7 @@
 								</span>
 							</div>
 							<div class="col-xs-2">
-
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteUserContactFn($index)"><i class="fa fa-minus"></i></button>
 								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
 							</div>
 						</div>
@@ -328,7 +328,8 @@
 				                </span>
 				            </div>
 				            <div class="col-xs-2">
-								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessContactFn()"><i class="fa fa-plus"></i></button>
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteBusinessContactFn()"><i class="fa fa-minus"></i></button>
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessContactFn($index)"><i class="fa fa-plus"></i></button>
 							</div>
 
 				        </div>
@@ -361,6 +362,7 @@
 											</div>
 				            </div>
 				            <div class="col-xs-2">
+											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteBusinessAddressFn($index)"><i class="fa fa-minus"></i></button>
 											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessAddressFn()"><i class="fa fa-plus"></i></button>
 		                	</div>
 				        </div>
