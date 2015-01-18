@@ -519,6 +519,7 @@ define([
                                 //if contains an array of variables
                                 if (componentVar.indexOf('.item') > 0) {
                                     //get index in array
+                                    console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['data-index'].value;
                                     var third = componentVar.split(".")[2];
