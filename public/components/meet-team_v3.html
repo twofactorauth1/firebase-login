@@ -23,15 +23,15 @@
                 <div class="profile-img" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: cover;width: 220px;height: 220px;"></div>
                 <div class="team-member-meta">
                     <div class="name">
-                        <div class="editable" data-class="teamMember.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
+                        <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
                     </div>
 
                     <div class="position">
-                        <div class="editable" data-class="teamMember.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
+                        <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
                     </div>
 
                     <div class="bio">
-                        <div class="editable" data-class="teamMember.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
+                        <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
                     </div>
                     <ul class="social">
                         <li ng-repeat="(val, key) in teamMember.social" data-index="{{$index}}">

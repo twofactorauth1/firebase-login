@@ -523,12 +523,18 @@ define([
                                     var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['data-index'].value;
                                     var third = componentVar.split(".")[2];
+                                    console.log('first ', first);
+                                    console.log('second ', second);
+                                    console.log('third ', third);
                                     matchingComponent[first][second][third] = componentVarContents;
                                 }
                                 //if needs to traverse a single
                                 if (componentVar.indexOf('-') > 0) {
+                                    console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split("-")[0];
                                     var second = componentVar.split("-")[1];
+                                    console.log('first ', first);
+                                    console.log('second ', second);
                                     matchingComponent[first][second] = componentVarContents;
                                 }
                                 //simple
