@@ -11,6 +11,9 @@
     .navigation-v2 .navbar ul.navbar-nav li:hover {
         border-bottom: 4px solid {{component.nav.hover}};
     }
+    .navigation-v2 .navbar ul.navbar-nav li a.active {
+         color: {{primaryColor || '#4bb0cb'}};
+    }
 </style>
 <div ng-class="component.type+'-v'+component.version">
     <nav class="navbar navbar-default" role="navigation">
@@ -35,7 +38,7 @@
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                         <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-click="gotoPosition(link.linkTo)" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
-                        <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}">{{link.label || link.url}}</a>
+                        <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>
