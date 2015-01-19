@@ -22455,9 +22455,6 @@ i.indi-sm {
 #media-manager-modal label[for="upload_image"] {
   margin-bottom: 0 !important;
 }
-#media-manager-modal .media > * {
-  display: none;
-}
 #media-manager-modal .all .media > *:not([id]),
 #media-manager-modal .all .media #all-warning-box,
 #media-manager-modal .image .media #image-warning-box,
