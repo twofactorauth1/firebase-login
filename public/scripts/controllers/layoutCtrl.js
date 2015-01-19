@@ -1054,7 +1054,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;
       }
-      $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
+      if($scope.thumbnailSliderCollection)
+      {
+        $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
+        if($scope.thumbnailCollection.length > 1)
+        {
+          $scope.displayThumbnailPaging = true;
+        }
+      }
     }
 
     window.mobilecheck = function() {
