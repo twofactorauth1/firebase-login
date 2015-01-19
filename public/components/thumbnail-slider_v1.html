@@ -15,7 +15,7 @@
                 <ol class="carousel-indicators hidden" ng-hide="thumbnailCollection[0][0].detail">
                     <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in thumbnailCollection"></li>
                 </ol>
-                <div class="carousel-inner">
+                <div class="carousel-inner" style="height:200px">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in thumbnailCollection">
                         <div class="row">
                             <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> 
@@ -41,8 +41,8 @@
                         </div>
                     </div>
                </div>
-                <a ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}"style="background: none" data-slide="prev"></a>
-                <a ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></a>
+                <div ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
+                <div ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>
             </div>
         </div>
     </div>
