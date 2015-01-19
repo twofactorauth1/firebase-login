@@ -279,8 +279,35 @@ define([
                     $event.stopPropagation();
                 }
             };
+            $scope.createPostValidated = false;
+            $scope.validateCreatePost = function(post) {
+                if (!post.post_title || post.post_title == '') {
+                    $scope.postTitleError = true
+                } else {
+                    $scope.postTitleError = false
+                }
+                if (!post.post_author || post.post_author == '') {
+                    $scope.postAuthorError = true
+                } else {
+                    $scope.postAuthorError = false
+                }
+                if (!post.post_url || post.post_url == '') {
+                    $scope.postUrlError = true
+                } else {
+                    $scope.postUrlError = false
+                }
+                if (post && post.post_title && post.post_title != '' && post.post_author && post.post_author != '' && post.post_url && post.post_url != '') {
+                    $scope.createPostValidated = true;
+                }
+            };
 
             $scope.createPost = function(postData) {
+                $scope.validateCreatePost(postData);
+                console.log('$scope.createPostValidated ', $scope.createPostValidated);
+                if (!$scope.createPostValidated) {
+                    return false;
+                }
+
                 if(!$scope.postId)
                 {
                     var pageData = {
