@@ -81,8 +81,10 @@
                                     </ul>
                                 </div>
                                 <div class="thmb-prev">
-                                    <div>
-                                        <img ng-src="{{asset.url}}" alt="">
+                                    <div ng-switch="asset.mimeType">
+                                        <span ng-switch-when="application/pdf" class="fa fa-file-pdf-o"></span>
+                                        <span ng-switch-when="application/octet-stream" class="fa fa-file-text-o"></span>
+                                        <img ng-switch-default ng-src="{{asset.url}}" alt="">
                                     </div>
                                 </div>
                                 <h5 class="fm-title">
