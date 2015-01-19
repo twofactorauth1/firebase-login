@@ -85,6 +85,14 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleCampaignDetail = function () {
+                    return {
+                        'height': (newValue.h)-70 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
                 scope.styleIndiWelcome = function () {
                     return {
                         'height': (newValue.h)-63 + 'px',

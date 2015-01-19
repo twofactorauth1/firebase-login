@@ -12,6 +12,7 @@
 @import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
 @import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
+@import '../js/libs/jsplumb/dist/css/jsplumb.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -21947,6 +21948,108 @@ i.indi-sm {
   text-align: center;
   color: #fff !important;
   z-index: 2;
+}
+.marketing-label {
+  position: absolute;
+  top: 90px;
+  min-width: 80px;
+  left: -1px;
+}
+.marketing-icon {
+  font-size: 40px;
+  text-shadow: 2px 2px 1px white;
+  color: #000;
+}
+.marketing-icon.start {
+  font-size: 60px;
+  color: #2ecc71;
+}
+.widgets .window {
+  position: relative;
+}
+.widgets ul li {
+  display: inline-block;
+  margin-left: 10px;
+}
+.widgets ul li:first-child {
+  margin-left: 0px;
+}
+.flowchart-demo .window {
+  border: 1px solid #346789;
+  -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 0.5em;
+  border-radius: 0.5em;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  text-align: center;
+  z-index: 20;
+  position: absolute;
+  background-color: #eeeeef;
+  color: black;
+  font-family: helvetica;
+  padding: 0.5em;
+  font-size: 0.9em;
+}
+.flowchart-demo .window:hover {
+  box-shadow: 2px 2px 19px #444;
+  -o-box-shadow: 2px 2px 19px #444;
+  -webkit-box-shadow: 2px 2px 19px #444;
+  -moz-box-shadow: 2px 2px 19px #444;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
+.flowchart-demo .active {
+  border: 1px dotted green;
+}
+.flowchart-demo .hover {
+  border: 1px dotted red;
+}
+#flowchartWindow1 {
+  top: 10em;
+  left: 5em;
+}
+#flowchartWindow2 {
+  top: 10em;
+  left: 20em;
+}
+#flowchartWindow3 {
+  top: 10em;
+  left: 35em;
+}
+#flowchartWindow4 {
+  top: 10em;
+  left: 50em;
+}
+#flowchartWindow5 {
+  top: 10em;
+  left: 65em;
+}
+.flowchart-demo ._jsPlumb_connector {
+  z-index: 4;
+}
+.flowchart-demo ._jsPlumb_endpoint,
+.endpointTargetLabel,
+.endpointSourceLabel {
+  z-index: 21;
+  cursor: pointer;
+}
+.flowchart-demo .aLabel {
+  background-color: white;
+  padding: 0.4em;
+  font: 12px sans-serif;
+  color: #444;
+  z-index: 21;
+  border: 1px dotted gray;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  cursor: pointer;
+}
+.flowchart-demo .aLabel._jsPlumb_hover {
+  background-color: #5C96BC;
+  color: white;
+  border: 1px solid white;
 }
 .datepicker {
   top: 0;

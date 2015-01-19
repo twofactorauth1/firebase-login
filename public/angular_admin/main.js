@@ -136,6 +136,7 @@ require.config({
         'angularCookie': 'libs/angular-cookie/angular-cookie.min',
         'purl': 'libs/purl/purl',
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
+        'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
