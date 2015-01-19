@@ -322,31 +322,31 @@ module.exports = {
         blogPostDao.createPost(blogPost, function(err, savedPost){
             if(err) {
                 self.log.error('Error creating post: ' + err);
-                fn(err, null);
+                return fn(err, null);
             } else {
                 //store the id in the page component's array
                 cmsDao.getPageById(savedPost.get('pageId'), function(err, page){
                     if(err) {
                         self.log.error('Error getting page for post: ' + err);
-                        fn(err, null);
+                        return fn(err, null);
                     } else if(!page){
                         var msg = 'Referenced page [' + savedPost.get('pageId') + '] does not exist:';
                         self.log.error(msg);
-                        fn(msg, null);
+                        return fn(msg, null);
                     } else {
 
                         var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), page);
                         if(postAry === null) {
-                            fn('Page does not contain blog component.', null);
+                            return fn('Page does not contain blog component.', null);
                         }
 
                         cmsDao.saveOrUpdate(page, function(err, page){
                             if(err) {
                                 self.log.error('Error updating page for post: ' + err);
-                                fn(err, null);
+                                return fn(err, null);
                             } else {
                                 self.log.debug('<< createBlogPost');
-                                fn(null, savedPost);
+                                return fn(null, savedPost);
                             }
                         });
                     }
