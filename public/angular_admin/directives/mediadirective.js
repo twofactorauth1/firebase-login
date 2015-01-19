@@ -66,6 +66,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.uploadComplete = false;
                     response.files[0].filename = fileItem.file.name;
                     response.files[0].mimeType = fileItem.file.type;
+                    $scope.originalAssets.push(response.files[0]);
                     $scope.assets.push(response.files[0]);
                 };
 
@@ -104,101 +105,67 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.batch = [];
                 $scope.m = $scope.m || {};
 
-                /*
-                                $scope.m.selectAll = function () {
-                                    $scope.assets.forEach(function (v, i) {
-                                        if ($scope.showType === 'all' || v.mimeType.match($scope.showType)) {
-                                            v.checked = $scope.select_all;
-                                        }
-                                    });
-                                };
-                                $scope.m.selectStatus = function () {
-                                    var allTrue = true;
-                                    $scope.assets.forEach(function (v, i) {
-                                        if (v.checked !== true) {
-                                            allTrue = false;
-                                        }
-                                    });
-                                    $scope.select_all = allTrue === true;
-                                };
-                                $scope.m.showType = function (type) {
-                                    $scope.showType = type;
-                                };
-                                $scope.m.resetUploader = function () {
-                                    $scope.uploadComplete = false;
-                                };
-                                $scope.m.singleSelect = function (event) {
-                                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
-                                        $scope.lastSelect.checked = false;
-                                    }
-                                    $scope.lastSelect = event.target;
-                                    $scope.m.getSingleSelect();
-                                };
-                */
-                /*
-                                $scope.m.getSingleSelect = function () {
-                                    $scope.batch = [];
+                //http://en.wikipedia.org/wiki/Internet_media_type
+                $scope.typeMimes = {
+                  image: ['image/png', 'image/jpeg', 'image/gif'],
+                  video: ['video/mpeg'],
+                  audio: ['audio/mpeg'],
+                  document: ['application/octet-stream', 'application/pdf']
+                };
 
-
-                                    $scope.assets.forEach(function (v, i) {
-                                        if (v.checked)
-                                            $scope.batch.push(v);
-                                    });
-                                };
-                                $scope.m.onInsertMedia = function () {
-                                    $scope.m.getSingleSelect();
-                                    if ($scope.batch.length > 0) {
-                                        $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
-                                    }
-                                };
-                                $scope.m.singleSelect = function (event) {
-                                    if ($scope.lastSelect !== null && $scope.lastSelect.id !== event.target.id && $scope.lastSelect.checked === true) {
-                                        $scope.lastSelect.checked = false;
-                                    }
-                                    $scope.lastSelect = event.target;
-                                    $scope.m.getSingleSelect();
-                                };
-
-
-                                $scope.m.onInsertMedia = function () {
-                                    $scope.m.getSingleSelect();
-                                    if ($scope.batch.length > 0) {
-                                        $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1]);
-                                    }
-
-                                };
-                                */
 
                 $scope.m.deleteAsset = function(assetId) {
                     AssetsService.deleteAssetById(function(resp, status) {
                         if (status === 1) {
+                          $scope.originalAssets.forEach(function(v, i) {
+                            if (v._id === assetId) {
+                              $scope.originalAssets.splice(i, 1);
+                            }
+                          });
                             $scope.assets.forEach(function(v, i) {
                                 if (v._id === assetId) {
                                     $scope.assets.splice(i, 1);
                                 }
-                            })
+                            });
                         }
                     }, assetId);
                 };
                 $scope.m.batchDeleteAsset = function() {
+                  $scope.originalAssets.forEach(function(v, i) {
+                    if (v.checked)
+                      $scope.m.deleteAsset(v._id);
+                    });
                     $scope.assets.forEach(function(v, i) {
                         if (v.checked)
                             $scope.m.deleteAsset(v._id);
                     });
                 };
-                $scope.m.selectAll = function() {
+                $scope.m.selectAll = function(filter) {
+                    $scope.showType = filter;
                     $scope.batch = [];
-                    $scope.assets.forEach(function(v) {
-                        if ($scope.select_all === false) {
-                            v.checked = false;
-                        } else if ($scope.showType === 'all' || v.mimeType.match($scope.showType)) {
-                            v.checked = true;
-                            $scope.batch.push(v);
+                    $scope.assets = [];
+                    $scope.mimeList = [];
+
+                    if ($scope.showType !== 'all') {
+                      $scope.mimeList = $scope.typeMimes[$scope.showType];
+                    }
+
+                    $scope.originalAssets.forEach(function(value, index) {
+                      value.checked = $scope.select_all;
+                      if ($scope.showType === 'all') {
+                        $scope.assets.push(value);
+                        $scope.batch.push(value);
+                      } else {
+                        if ($scope.mimeList.indexOf(value.mimeType) > -1) {
+                          $scope.assets.push(value);
+                          $scope.batch.push(value);
                         }
+                      }
                     });
 
                     $scope.lastSelect = null;
                     $scope.m.selectAllStatus();
+                    console.info('Total:', $scope.originalAssets.length, 'Filtered:', $scope.assets.length);
                 };
                 /*
                                 $scope.$watch("select_all", function () {
@@ -252,6 +219,11 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.m.deleteAsset = function() {
                     AssetsService.deleteAssetById($scope.batch, function(assetId, resp, status) {
                         if (status === 1) {
+                          $scope.originalAssets.forEach(function(v, i) {
+                            if (v._id === assetId) {
+                              $scope.originalAssets.splice(i, 1);
+                            }
+                          });
                             $scope.assets.forEach(function(v, i) {
                                 if (v._id === assetId) {
                                     $scope.assets.splice(i, 1);
@@ -272,52 +244,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     console.log('asset ', asset);
 
                     var targetImage = $('#targetEditImage');
-                    // image.crossOrigin = 'anonymous';
-                    // console.log('image ', $('#targetEditImage'));
-                    // Caman('#targetEditImage', function () {
-                    //     this.brightness(100);
-                    //     this.contrast(30);
-                    //     this.sepia(60);
-                    //     this.saturation(-30);
-                    //     this.render();
-                    //   });
-
-                    // var canvas =  $('#media-manager-modal #targetCanvas')[0];
-                    // console.log('canvas ', canvas);
-                    // var ctx = canvas.getContext('2d'),
-                    // img = new Image();
-                    // img.crossOrigin = 'anonymous'; // Try to remove/comment this line
-                    // img.src = $("#originalSource").attr('src');
-                    // ctx.drawImage(img,10,20);
-                    // var imgData = JSON.parse(JSON.stringify(canvas.toDataURL("image/jpeg")));
-                    // targetImage.attr('src', imgData);
-
-                    // targetImage[0].crossOrigin = 'anonymous';
-                    // var dkrm = new Darkroom(targetImage[0], {
-                    //     // Size options
-                    //     minWidth: 100,
-                    //     minHeight: 100,
-                    //     maxWidth: 650,
-                    //     maxHeight: 500,
-
-                    //     plugins: {
-                    //         save: false,
-                    //         crop: {
-                    //             quickCropKey: 67, //key "c"
-                    //             //minHeight: 50,
-                    //             //minWidth: 50,
-                    //             //ratio: 1
-                    //         }
-                    //     },
-                    //     init: function() {
-                    //         console.log('darkroom init');
-
-                    //         //cropPlugin.requireFocus();
-                    //     }
-                    // });
-
-                    // console.log('dkrm ', dkrm);
-
                 };
 
                 $scope.m.goback = function() {
@@ -338,6 +264,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 scope.assets = [];
                 AssetsService.getAssetsByAccount(function(data) {
                     if (data instanceof Array) {
+                        scope.originalAssets = data;
                         scope.assets = data;
                     }
                 });
