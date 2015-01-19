@@ -262,4 +262,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
     };
 
+    $scope.setPostImage = function(componentId, blogpost) {
+      window.parent.setPostImage(componentId);
+      blogpost.featured_image = window.parent.postImageUrl;
+    }
+
     }]);
