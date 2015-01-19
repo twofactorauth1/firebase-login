@@ -698,8 +698,9 @@ define([
                         cmpVersion = selectedType.version;
                     }
                 }
-                console.log('cmpVersion ', cmpVersion);
-                WebsiteService.saveComponent($scope.selectedComponent, cmpVersion, function(data) {
+
+                WebsiteService.saveComponent($scope.selectedComponent, cmpVersion || 1, function(data) {
+
                     if (data) {
                         var newComponent = data;
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
@@ -787,9 +788,11 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
-                    if ($scope.componentEditing.version)
+                    if ($scope.componentEditing && $scope.componentEditing.version)
+                    {
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
-                    $scope.versionSelected = $scope.componentEditing.version;
+                        $scope.versionSelected = $scope.componentEditing.version;
+                    }
                     $scope.originalCurrentPage = angular.copy($scope.currentPage);
                 });
                 $('#feature-convert').iconpicker({

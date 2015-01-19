@@ -39,16 +39,16 @@
                         </li>
                         <li class="filter-type" style="font-size: 11px;">
                             Show:
-                            <a href="" data-active="all"        ng-click="select_all=false;showType = 'all'     ;m.selectAll()"     >All</a>
-                            <a href="" data-active="document"   ng-click="select_all=false;showType = 'document';m.selectAll()"     >Documents</a>
-                            <a href="" data-active="audio"      ng-click="select_all=false;showType = 'audio'   ;m.selectAll()"     >Audio</a>
-                            <a href="" data-active="image"      ng-click="select_all=false;showType = 'image'   ;m.selectAll()"     >Images</a>
-                            <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
+                            <a href="" data-active="all"        ng-click="m.selectAll('all')"     >All</a>
+                            <a href="" data-active="document"   ng-click="m.selectAll('document')"     >Documents</a>
+                            <a href="" data-active="audio"      ng-click="m.selectAll('audio')"     >Audio</a>
+                            <a href="" data-active="image"      ng-click="m.selectAll('image')"     >Images</a>
+                            <a href="" data-active="video"      ng-click="m.selectAll('video')"     >Videos</a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
                     <div class="media" id="assets" style="max-height:{{bodyHeight}};">
-                        <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
+                        <div ng-repeat="asset in assets" class="col-xs-12 col-sm-4" ng-show="assets.length">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
@@ -92,11 +92,7 @@
                                 <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>
                         </div>
-                        <div id="image-warning-box"> No Image</div>
-                        <div id="audio-warning-box"> No Audio</div>
-                        <div id="video-warning-box"> No Video</div>
-                        <div id="document-warning-box"> No document</div>
-                        <div id="all-warning-box"> No Media</div>
+                        <div id="warning-box" ng-hide="assets.length"> No {{showType}}</div>
                     </div>
                 </div>
                 <div class="editimage" ng-show="editingImage" style="height:{{bodyHeight}};">

@@ -255,7 +255,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if (!$location.$$search.onboarding) {
+                if ($location.$$search.authtoken) {
+                     $scope.activeTab = AccountService.getSocialTab();
+                }
+                else if (!$location.$$search.onboarding) {
                     var activeTab = $scope.userPreferences.account_default_tab;
                     if (activeTab)
                         $scope.activeTab = activeTab;

@@ -22256,9 +22256,6 @@ i.indi-sm {
 #media-manager-modal label[for="upload_image"] {
   margin-bottom: 0 !important;
 }
-#media-manager-modal .media > * {
-  display: none;
-}
 #media-manager-modal .all .media > *:not([id]),
 #media-manager-modal .all .media #all-warning-box,
 #media-manager-modal .image .media #image-warning-box,
@@ -22297,7 +22294,7 @@ i.indi-sm {
 #media-manager-modal [class*="video"] ~ #video-warning-box {
   display: none !important;
 }
-#media-manager-modal [id*="-warning-box"] {
+#media-manager-modal [id="warning-box"] {
   padding: 20px;
   color: red;
   font-size: 20px;
