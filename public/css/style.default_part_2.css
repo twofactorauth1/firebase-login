@@ -10839,6 +10839,10 @@ div[data-type="coming-soon"] .component-inner {
   max-height: 200px;
 }
 
+.thumbnail-slider-v1 div.carousel-control {
+  cursor: pointer;
+}
+
 /********** Video **********/
 
 .video-block .btn .fa {
