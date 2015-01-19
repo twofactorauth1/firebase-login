@@ -66,6 +66,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.uploadComplete = false;
                     response.files[0].filename = fileItem.file.name;
                     response.files[0].mimeType = fileItem.file.type;
+                    $scope.originalAssets.push(response.files[0]);
                     $scope.assets.push(response.files[0]);
                 };
 
@@ -130,6 +131,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     }, assetId);
                 };
                 $scope.m.batchDeleteAsset = function() {
+                  $scope.originalAssets.forEach(function(v, i) {
+                    if (v.checked)
+                      $scope.m.deleteAsset(v._id);
+                    });
                     $scope.assets.forEach(function(v, i) {
                         if (v.checked)
                             $scope.m.deleteAsset(v._id);
