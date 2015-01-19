@@ -74,6 +74,7 @@ require.config({
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
         'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
+        'mgo-angular-wizard':'libs/angular-wizard/dist/angular-wizard',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -92,6 +93,7 @@ require.config({
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
+        'campaignService': '/angular_admin/services/campaign',
         'productService': '/angular_admin/services/product',
         'navigationService': '/angular_admin/services/navigationService',
         'dashboardService': '/angular_admin/services/dashboard',
@@ -192,6 +194,7 @@ require.config({
         'colorpicker': {deps: ['spectrum']},
         'ngHeadroom': {deps: ['headroom']},
         'commonutils': {deps: ['underscore']},
+        'mgo-angular-wizard': {deps: ['underscore', 'angular']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},

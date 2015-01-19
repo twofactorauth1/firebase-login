@@ -43,7 +43,7 @@
 			<h3 ng-if="!page.screenshot">No Screenshot Available</h3>
 			<hr>
 			<div ng-if="page && page.screenshot" id="heatmapArea" style="position:relative;" class="heatmap-canvas">
-				<img ng-src="{{page.screenshot}}" err-src="" class="img-responsive">
+				<img ng-src="{{page.screenshot}}" page-scope="{{page}}" err-src="" class="img-responsive">
 			</div>
 		</div>
 		<div class="col-sm-6 col-xs-12">

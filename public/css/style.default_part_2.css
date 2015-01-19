@@ -237,20 +237,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   visibility: visible;
 }
 
-.empty {
-  width: 200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.empty .fa {
-  font-size: 74px;
-  color: #bebebe;
-  text-shadow: 1px 1px 1px white;
-  padding: 15px;
-  text-align: center;
-}
-
 .import-success {
   text-align: center;
 }
@@ -3232,6 +3218,123 @@ div.error label.error:before {
 
 .widget-profile-title .fa {
   margin-right: 7px;
+}
+
+.empty {
+  min-width: 200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.empty h2 {
+  color: white;
+}
+
+.empty .fa {
+  font-size: 125px;
+  color: #bebebe;
+  text-shadow: 1px 1px 1px white;
+  padding: 15px;
+  text-align: center;
+}
+
+.grid-list-item {
+  cursor: pointer;
+  background: #fcfcfc;
+  padding: 15px 5px;
+  font-size: 13px;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+  box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
+  margin-bottom: 20px;
+}
+
+.grid-list-item span.icon {
+  margin: 0 auto;
+  width: 75px;
+  display: block;
+}
+
+.grid-list-item span.icon i {
+  background-color: #54C8E8;
+  height: 75px;
+  line-height: 75px;
+  font-size: 29px;
+  color: white;
+  width: 75px;
+  text-align: center;
+  border-radius: 40px;
+  border: 1px solid gray;
+}
+
+@media (max-width: 767px) {
+  .grid-list-item {
+    margin-bottom: 4px;
+    padding-bottom: 0px;
+  }
+
+  .grid-list-item .thumbnail {
+    padding: 0px;
+  }
+
+  .grid-list-item .media-object {
+    border-radius: 3px;
+    width: 50px;
+    height: 50px;
+    display: inline;
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 0px;
+  }
+
+  .grid-list-item .important-star {
+    top: 23px;
+    margin-right: 20px;
+  }
+
+  .grid-list-item .important-star .fa.fa-star-o,
+  .grid-list-item .important-star .fa.fa-star {
+    font-size: 25px;
+  }
+}
+
+@media (min-width: 768px) {
+  .grid-list-item .media-object {
+    border-radius: 3px;
+    margin: 10px auto;
+    width: 110px;
+    height: 110px;
+  }
+}
+
+.grid-list-item .fa {
+  margin-right: 5px;
+}
+
+.grid-list-item .important-star {
+  position: absolute;
+  right: 0;
+  margin: 0px 13px;
+  font-size: 22px;
+}
+
+.grid-list-item .important-star .fa-star-o {
+  cursor: pointer;
+}
+
+.grid-list-item .important-star .fa-star-o:hover {
+  color: #f1c40f;
+}
+
+.grid-list-item .important-star .fa-star {
+  cursor: pointer;
+  color: #f1c40f;
+}
+
+.grid-list-item:hover {
+  background: #f3f3f3;
+  -webkit-box-shadow: 0 3px 0 rgba(51, 51, 51, 0.2);
+  box-shadow: 0 3px 0 rgba(51, 51, 51, 0.2);
 }
 
 .btn-compose-email {
@@ -6593,373 +6696,27 @@ i.indi-sm {
   font-size: 24px;
 }
 
-.campaign-list,
-.template-list {
-  padding: 0;
-}
-
-.campaign-list .fa-facebook,
-.template-list .fa-facebook {
-  background: #245f9b!important;
-}
-
-.campaign-list .fa-twitter,
-.template-list .fa-twitter {
-  background: #5dd7fc!important;
-}
-
-.campaign-list .fa-google-plus,
-.template-list .fa-google-plus {
-  background: #c1272d!important;
-}
-
-.campaign-list li.row,
-.template-list li.row {
-  border-radius: 3px;
-  background: #fcfcfc;
-  min-height: 75px;
-  line-height: 65px;
-  border-bottom: 1px solid #e4e7ea;
-}
-
-.campaign-list li.row:hover,
-.template-list li.row:hover {
-  background-color: #e4e7ea;
-  transition: background-color 1000ms linear;
-}
-
-.campaign-list .campaign-indicator,
-.template-list .campaign-indicator,
-.campaign-list .campaign-name,
-.template-list .campaign-name {
-  border-right: 1px solid #f3f3f3;
-  height: 75px;
-}
-
-.campaign-list .campaign-indicator i.active,
-.template-list .campaign-indicator i.active {
-  color: #47a865;
-}
-
-.campaign-list .campaign-indicator i.paused,
-.template-list .campaign-indicator i.paused {
-  color: red;
-}
-
-.campaign-list .people-reached,
-.template-list .people-reached {
-  text-transform: uppercase;
-}
-
-.campaign-list .people-reached .number,
-.template-list .people-reached .number {
-  color: #3cb878;
-  font-size: 30px;
-}
-
-.campaign-list .people-reached p,
-.template-list .people-reached p {
-  line-height: 15px;
-  margin: 15px 0 0 5px;
-}
-
-.campaign-list .timeframe p,
-.template-list .timeframe p {
-  display: inline-block;
-  float: right;
-  color: #c2c2c2;
-}
-
-.campaign-list .timeframe p:last-child,
-.template-list .timeframe p:last-child {
-  margin-right: 30px;
-}
-
-.campaign-list .chevron,
-.template-list .chevron {
-  font-size: 20px;
-}
-
-.marketing-single .campaign-details {
-  min-height: 100px;
-  background: white;
-  padding: 10px;
-}
-
-.marketing-single .campaign-details h4 {
-  font-weight: bold;
-  color: black;
-}
-
-.marketing-single .campaign-performance {
-  padding: 10px;
-}
-
-.marketing-single .campaign-performance h3 {
-  color: black;
-  font-weight: bold;
-  text-shadow: 1px 1px 1px #c3c5c8;
-}
-
-.marketing-single .campaign-performance .quick-stats .panel {
-  padding: 25px 0;
-}
-
-.marketing-single .campaign-performance .gender i {
-  font-size: 100px;
-  padding: 10px;
-  float: left;
-}
-
-.marketing-single .campaign-performance .gender p {
-  font-size: 24px;
-  color: black;
-  text-align: center;
-  margin: 40px 20px 0;
-  float: left;
-}
-
-.marketing-single .campaign-performance .gender span {
-  font-size: 14px;
-  color: #444;
-}
-
-.marketing-single .campaign-performance .gender .male {
-  display: block;
-  min-height: 110px;
-}
-
-.marketing-single .campaign-performance .gender .male i {
-  color: #54c8e8;
-}
-
-.marketing-single .campaign-performance .gender .male p {
-  margin: 40px 39px 0;
-}
-
-.marketing-single .campaign-performance .gender .female {
-  display: block;
-  min-height: 110px;
-}
-
-.marketing-single .campaign-performance .gender .female i {
-  color: #f26d7d;
-}
-
-.marketing-single .campaign-performance .panel-campaign-header {
-  background: #eff6f9;
-  font-weight: bold;
-  color: #b9d2e0;
-  text-shadow: 1px 1px 1px white;
-}
-
-#reportrange {
-  background: #ffffff;
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-  color: #333333;
-  padding: 8px;
-  line-height: 18px;
-  cursor: pointer;
-  float: right;
-  margin-top: 16px;
-  min-width: 200px;
-}
-
-#reportrange .caret {
-  margin-top: 8px;
-  margin-left: 2px;
-}
-
-#reportrange span {
-  padding-left: 3px;
-}
-
-.demographics .panel {
-  padding: 20px;
-}
-
-.demographics .panel h4 {
-  font-weight: bold;
-  color: black;
-}
-
-.social.fa {
-  font-size: 24px;
-  color: white;
-  width: 50px;
-  height: 50px;
-  border-radius: 40px;
-  text-align: center;
-  line-height: 50px;
-  margin-right: 10px;
-  background: #42c0fb;
-}
-
-.minimize i {
-  margin-top: 15px;
-}
-
-.campaign-component-performance .stat {
-  background: #eff6f9;
-  max-width: 100px;
-  height: 50px;
-  text-align: center;
-  line-height: 50px;
-  color: #afccdb;
-  font-size: 18px;
-  font-weight: bold;
-  text-shadow: 1px 1px 1px white;
-  border: 1px solid #d3e2ec;
-  border-radius: 10px;
-  margin: 0 auto;
-  text-transform: uppercase;
-}
-
-.campaign-component-performance .mailStaticsChart {
-  min-height: 300px;
-}
-
-.days-left p {
-  font-size: 60px;
-  color: #54c8e8;
-  font-weight: bold;
-  margin-top: 40px;
-  text-align: center;
-}
-
-.days-left span {
-  font-size: 19px;
-  font-weight: normal;
-}
-
-.campaign-overview {
-  width: 90%;
-}
-
-.campaign-overview p {
-  text-align: left;
-  float: left;
-  color: #c2c2c2;
-  font-weight: bold;
-}
-
-.campaign-overview .subtle-gray {
-  text-align: right;
-  float: right;
-  color: #444444;
-  font-weight: bold;
-}
-
-.campaign-details {
-  -webkit-box-shadow: 0 3px 5px 0 #d8dbde;
-  box-shadow: 0 3px 5px 0 #d8dbde;
-  border: 1px solid #e4e7ea;
-}
-
-.campaign-details .detail-single {
-  border-right: 1px solid #e7e7e7;
-}
-
-.campaign-details .detail-single :last {
-  border-right: none;
-}
-
-.btn-view-templates {
-  margin-right: 10px;
-}
-
-.template-messages {
-  padding-left: 0;
-  margin-top: 5px;
-}
-
-.template-messages li {
-  display: inline-block;
+.marketing #campaign-add-email .thumbnail {
   position: relative;
-  line-height: 22px;
+  overflow: hidden;
 }
 
-.template-messages li span {
-  background: #39b54a;
-  border: 1px solid #239537;
-  color: white;
-  width: 25px;
-  height: 25px;
-  border-radius: 13px;
+.marketing #campaign-add-email .thumbnail:hover .caption {
   display: block;
-  text-align: center;
-  font-weight: bold;
+}
+
+.marketing #campaign-add-email .caption {
   position: absolute;
+  top: 0;
   right: 0;
-  margin: -19px 0 0 0;
-}
-
-.template-details {
-  min-height: 100px;
-  background: white;
-  padding: 10px;
-  -webkit-box-shadow: 0 3px 5px 0 #d8dbde;
-  box-shadow: 0 3px 5px 0 #d8dbde;
-  border: 1px solid #e4e7ea;
-}
-
-.template-details .title {
-  color: #54c8e8;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.template-details .created {
-  color: #c2c2c2;
-}
-
-.marketing-templates .btn-group {
-  padding: 0;
-  height: 38px;
-  margin: 0;
-}
-
-.template-messages {
-  margin: 15px 15px 15px 15%;
-}
-
-.template-messages ul:first {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-  position: relative;
-}
-
-.template-messages li.panel-message {
-  list-style-type: none;
-  border-left: 2px solid #000;
-  margin-left: 1em;
-  width: 95%;
-}
-
-.template-messages ul:first > li.panel-message:last-child {
-  border-left: 2px solid transparent;
-}
-
-@media (max-width: 767px) {
-  .campaign-overview {
-    width: 100%;
-  }
-
-  .days-left p {
-    margin-top: 30px;
-  }
-
-  .marketing-single .campaign-performance .gender .male p,
-  .marketing-single .campaign-performance .gender .female p {
-    margin: 40px 0 0;
-  }
-
-  #reportrange {
-    float: none;
-  }
+  background: rgba(66, 139, 202, 0.75);
+  width: 100%;
+  height: 100%;
+  padding: 2%;
+  display: none;
+  text-align: center;
+  color: #fff !important;
+  z-index: 2;
 }
 
 .datepicker {

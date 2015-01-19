@@ -1,5 +1,5 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI'], function(angularAMD) {
-  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI', 'angularStepper'], function(angularAMD) {
+  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI', 'revolunet.stepper']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
@@ -59,10 +59,23 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         }))
         .state('marketing', angularAMD.route({
           url: '/marketing',
-          templateUrl: '/pipeshift/views/video/listeditor.html',
-          controller: 'ListEditorController',
-          controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+          templateUrl: '/angular_admin/views/marketing.html',
+          controller: 'MarketingCtrl',
+          controllerUrl: '/angular_admin/controllers/marketing.js'
         }))
+        .state('marketingDetail', angularAMD.route({
+          url: '/marketing/campaign/:id',
+          templateUrl: '/angular_admin/views/marketing/campaign_detail.html',
+          controller: 'CampaignDetailCtrl',
+          controllerUrl: '/angular_admin/controllers/marketing/campaign_detail.js'
+        }))
+        //depreceated videoautopilot
+        // .state('marketing', angularAMD.route({
+        //   url: '/marketing',
+        //   templateUrl: '/pipeshift/views/video/listeditor.html',
+        //   controller: 'ListEditorController',
+        //   controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+        // }))
         .state('commerce', angularAMD.route({
           url: '/commerce',
           templateUrl: '/angular_admin/views/commerce.html',

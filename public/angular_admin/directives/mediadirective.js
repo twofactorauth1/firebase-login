@@ -186,7 +186,11 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                             $scope.m.deleteAsset(v._id);
                     });
                 };
-                $scope.m.selectAll = function() {
+                $scope.m.selectAll = function(showType) {
+
+                    if (showType) {
+                        $scope.showType = showType;
+                    }
                     $scope.batch = [];
                     $scope.assets.forEach(function(v) {
                         if ($scope.select_all === false) {
