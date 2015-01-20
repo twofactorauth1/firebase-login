@@ -15,8 +15,19 @@
     </div>
     <div class="col-xs-5">
       <div class="btn btn-success pull-right btn-save-contact disabled" type="button" ng-click="customerSaveFn()">
-        <i class="fa fa-save"></i>
-        <span class="hidden-xs">Save</span>
+        <span class="visible-xs" ng-hide="saveLoading">
+         <i class="fa fa-save"></i>
+        </span>
+        <span class="visible-xs"  ng-show="saveLoading">
+         <i class="fa fa-spinner fa-spin"></i>
+         </span>
+        <span class="hidden-xs" ng-hide="saveLoading">
+         <i class="fa fa fa-save"></i> Save 
+         </span>
+        <span class="hidden-xs"  ng-show="saveLoading">
+         Saving
+         <i class="fa fa-spinner fa-spin"></i>
+         </span>
       </div>
     </div>
 

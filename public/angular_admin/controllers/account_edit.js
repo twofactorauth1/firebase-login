@@ -8,7 +8,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     $scope.$back = function() {
       window.history.back();
     };
-
+    $scope.saveLoading = false;
     UserService.getUserPreferences(function(preferences) {
       $scope.preferences = preferences;
     });
@@ -376,9 +376,10 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     };
 
     $scope.saveAccount = function() {
-
+      $scope.saveLoading = true;
       UserService.putUser($scope.user, function(user) {
         UserService.putAccount($scope.account, function(account) {
+          $scope.saveLoading = false;
           toaster.pop('success', "Account Saved", "All account information has been saved.");
           //if theme doesn;t exist, set task complete
           if (!$scope.preferences.tasks) {

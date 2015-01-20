@@ -68,6 +68,7 @@ define([
             $scope.isMobile = false;
             $scope.tabs = {};
             $scope.addLinkType = 'page';
+            $scope.saveLoading = false ; 
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -469,13 +470,14 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
+                $scope.saveLoading = true ; 
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);
                 }
                 if ($location.$$search['posthandle']) {
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
-                    $scope.isEditing = false;
+                    $scope.isEditing = true;
                 } else {
                     var componentJSON = $scope.currentPage.components;
                     var pageId = $scope.currentPage._id;
@@ -559,6 +561,7 @@ define([
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.isEditing = true;
+                         $scope.saveLoading = false;
                         //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                         //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                         //document.getElementById('iframe-website').contentWindow.location.reload(true);
@@ -576,6 +579,7 @@ define([
                         console.log('updated website settings', data);
                     });
                 }
+                
             };
 
             $scope.updatePage = function(handle, editing) {
@@ -1238,6 +1242,10 @@ define([
             window.checkIfSinglePost = function(post) {
                 if (post)
                     $scope.singlePost = true;
+            }
+
+            window.setLoading = function(value) {
+                $scope.saveLoading = value;
             }
 
         }
