@@ -25,7 +25,7 @@ define(['app',
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
-
+      $scope.saveLoading = false ; 
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,
@@ -95,6 +95,7 @@ define(['app',
       };
 
       $scope.customerSaveFn = function() {
+        $scope.saveLoading = true; 
         if ($scope.customer.details[0].phones) {
           $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
             return num.number !== "";
@@ -107,6 +108,7 @@ define(['app',
             {
               CustomerService.saveCustomer($scope.customer, function(customer) {
               $scope.customer = customer;
+              $scope.saveLoading = false; 
               if ($scope.currentState == 'customerAdd') {
                 ToasterService.setPending('success', 'Contact Created.');
                 $state.go('customerDetail', {
@@ -120,8 +122,11 @@ define(['app',
               }
             });
             }
-            else
+            else {
+              $scope.saveLoading = false; 
               ToasterService.show("warning", "Contact Name OR Email is required");
+            }
+              
         });
 
       };
@@ -337,6 +342,9 @@ define(['app',
         $scope.customer.photo = asset.url;
       };
 
+      $scope.enableSaveBtnFn = function () {
+        $('.btn-save-contact').removeClass('disabled');
+      };
     }
   ]);
 });

@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective','toaster', 'powertour'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'toaster', 'powertour'], function(app) {
   app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', 'toaster', function($scope, $stateParams, UserService, ngProgress, $location, toaster) {
     ngProgress.start();
     var phoneCharLimit = 4;
@@ -8,9 +8,9 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     $scope.$back = function() {
       window.history.back();
     };
-
+    $scope.saveLoading = false;
     UserService.getUserPreferences(function(preferences) {
-        $scope.preferences = preferences;
+      $scope.preferences = preferences;
     });
 
     // $('.accountEdit').powerTour({
@@ -27,8 +27,8 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     //               onEndTour          : function(){
 
     //                   // animate back to the top
-    //                   $('html, body').animate({scrollTop:0}, 1000, 'swing');  
-    //                   //$('html, body').animate({scrollLeft:0}, 1000, 'swing');   
+    //                   $('html, body').animate({scrollTop:0}, 1000, 'swing');
+    //                   //$('html, body').animate({scrollLeft:0}, 1000, 'swing');
     //               },
     //               onProgress : function(ui){ },
     //               steps:[
@@ -119,14 +119,14 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     // });
 
     $scope.beginOnboarding = function(type) {
-        // if (type == 'basic-info') {
-        //   $('.accountEdit').powerTour('run',0);
-        // }
+      // if (type == 'basic-info') {
+      //   $('.accountEdit').powerTour('run',0);
+      // }
     };
 
     if ($location.$$search['onboarding']) {
-        console.log('onboarding');
-        $scope.beginOnboarding($location.$$search['onboarding']);
+      console.log('onboarding');
+      $scope.beginOnboarding($location.$$search['onboarding']);
     }
 
     //business phone watch setup
@@ -153,7 +153,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     //account API call for object population
     UserService.getAccount(function(account) {
       $scope.account = account;
-      
+
       if (!$scope.account.business.phones.length)
         $scope.account.business.phones.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -174,18 +174,15 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     UserService.getUser(function(user) {
       $scope.user = user;
       $scope.fullName = [user.first, user.middle, user.last].join(' ');
-      if(!$scope.user.details[0])
-      {
+      if (!$scope.user.details[0]) {
         $scope.user.details[0] = [];
       }
-      if(!$scope.user.details[0].phones)
-        {
-          $scope.user.details[0].phones = [];
-        }
-      if(!$scope.user.details[0].addresses)
-        {
-          $scope.user.details[0].addresses = [];
-        }  
+      if (!$scope.user.details[0].phones) {
+        $scope.user.details[0].phones = [];
+      }
+      if (!$scope.user.details[0].addresses) {
+        $scope.user.details[0].addresses = [];
+      }
       if ($scope.user.details[0].phones.length == 0)
         $scope.user.details[0].phones.push({
           _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
@@ -210,6 +207,18 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         number: '',
         default: false
       });
+      $scope.businessPhoneWatchFn($scope.account.business.phones.length - 1);
+    };
+
+    $scope.deleteBusinessContactFn = function(index) {
+      $scope.account.business.phones.splice(index, 1);
+      if ($scope.account.business.phones.length === 0) {
+        $scope.account.business.phones.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+          number: '',
+          default: false
+        });
+      }
       $scope.businessPhoneWatchFn($scope.account.business.phones.length - 1);
     };
 
@@ -278,13 +287,13 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
     //   // });
     // });
 
-      // $scope.$watch('account.business.nonProfit', function(newValue, oldValue) {
-      //   if (angular.isDefined(newValue)) {
-      //     UserService.putAccount($scope.account, function(account) {
-      //       //$scope.account = account;
-      //     });
-      //   }
-      // });
+    // $scope.$watch('account.business.nonProfit', function(newValue, oldValue) {
+    //   if (angular.isDefined(newValue)) {
+    //     UserService.putAccount($scope.account, function(account) {
+    //       //$scope.account = account;
+    //     });
+    //   }
+    // });
 
     $scope.userPhoneTypeSaveFn = function(index, type) {
       var typeLabel = null;
@@ -309,14 +318,24 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       $scope.userPhoneWatchFn($scope.user.details[0].phones.length - 1);
     };
 
+    $scope.deleteUserContactFn = function(index) {
+      $scope.user.details[0].phones.splice(index, 1);
+      if ($scope.user.details[0].phones.length === 0) {
+        $scope.user.details[0].phones.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+          number: '',
+          default: false,
+          type: 'm'
+        });
+      }
+      $scope.userPhoneWatchFn($scope.user.details[0].phones.length - 1);
+    };
+
     $scope.insertMedia = function(asset) {
-      if($scope.logo)
-      {
+      if ($scope.logo) {
         $scope.account.business.logo = asset.url;
         $("#media-manager-modal").modal('hide');
-      }
-      else
-      {
+      } else {
         $scope.user.profilePhotos[0] = asset.url;
       }
     };
@@ -343,26 +362,38 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
       });
     };
 
-    $scope.toasterOptions = {'close-button':true};
+    $scope.deleteBusinessAddressFn = function(index) {
+      $scope.account.business.addresses.splice(index, 1);
+      if ($scope.account.business.addresses.length === 0) {
+        $scope.account.business.addresses.push({
+          _id: $$.u.idutils.generateUniqueAlphaNumericShort()
+        });
+      }
+    };
+
+    $scope.toasterOptions = {
+      'close-button': true
+    };
 
     $scope.saveAccount = function() {
-
+      $scope.saveLoading = true;
       UserService.putUser($scope.user, function(user) {
-          UserService.putAccount($scope.account, function(account) {
-            toaster.pop('success', "Account Saved", "All account information has been saved.");
-            //if theme doesn;t exist, set task complete
-            if (!$scope.preferences.tasks) {
-                $scope.preferences.tasks = {
-                   basic_info:false
-                };
-            }
-            if (!$scope.preferences.tasks.basic_info || $scope.preferences.tasks.basic_info == false) {
-                $scope.preferences.tasks.basic_info = true;
-                UserService.updateUserPreferences($scope.preferences, false, function() {
-                    toaster.pop('success', "You completed the Basic Info Task!", '<div class="mb15"></div><a href="/admin#/website?onboarding=select-theme" class="btn btn-primary">Next Step: Select A Theme</a>', 0, 'trustedHtml');
-                });
+        UserService.putAccount($scope.account, function(account) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Account Saved", "All account information has been saved.");
+          //if theme doesn;t exist, set task complete
+          if (!$scope.preferences.tasks) {
+            $scope.preferences.tasks = {
+              basic_info: false
             };
-          });
+          }
+          if (!$scope.preferences.tasks.basic_info || $scope.preferences.tasks.basic_info == false) {
+            $scope.preferences.tasks.basic_info = true;
+            UserService.updateUserPreferences($scope.preferences, false, function() {
+              toaster.pop('success', "You completed the Basic Info Task!", '<div class="mb15"></div><a href="/admin#/website?onboarding=select-theme" class="btn btn-primary">Next Step: Select A Theme</a>', 0, 'trustedHtml');
+            });
+          };
+        });
       });
     };
 

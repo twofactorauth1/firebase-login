@@ -1,5 +1,5 @@
 define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'websiteService', 'userService', 'keenService', 'heatmapjs', 'checkImageDirective'], function(app) {
-    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', 'keenService', function($scope, $location, ngProgress, WebsiteService, UserService, keenService) {
+    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', 'keenService', '$window', function($scope, $location, ngProgress, WebsiteService, UserService, keenService, $window) {
         ngProgress.start();
 
         $scope.$back = function() {
@@ -61,49 +61,65 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
 
                 //show heatmap
 
-                $scope.initializeHeatmap = function() {
-                    // create instance
-                    // console.log('h337 >>', h337);
-                    // var heatmapInstance = h337.create({
-                    //   container: document.querySelectorAll('.heatmap'),
-                    //   radius: 90
-                    // });
-                    // document.querySelectorAll('.heatmap').onclick = function(ev) {
-                    //   heatmapInstance.addData({
-                    //     x: ev.layerX,
-                    //     y: ev.layerY,
-                    //     value: 1
-                    //   });
-                    // };
-                    $( document ).ready(function() {
+                var w = angular.element($window);
+                w.bind('resize', function() {
+                  $scope.$apply(function() {
+                   if($scope.heatmapInstance)
+                      {
+                            $scope.heatmapInstance.cleanup();
+                            var xx = h337.create({"element":document.getElementById("heatmapArea"), "radius":25, "visible":true});
+                            xx.store.setDataSet({ max: $scope.heatmapInstance.store.max, data: $scope.heatmapDataObj }, true);
+                            //.setDataSet();
+                            $scope.heatmapInstance = xx;
+                        
+                      }
+                  });
+                });
+
+                $scope.initializeHeatmap = function() {                    
+                    $(document ).ready(function() {
                         // Get on screen image
-                        var screenImage = $(".img-thumbnail");
+                        var screenImage = $("#heatmapArea img");
+                        var heatmapArea = $("#heatmapArea");
+                            var xx = h337.create({container:document.getElementById("heatmapArea"), radius:25, visible:true});
+                            xx._renderer.setDimensions(heatmapArea.width(), heatmapArea.height());
+                            for (var i = 0; i < $scope.heatmapData.length && i < 1000; i++) {
+                                xx.addData({ x: Math.floor($scope.heatmapData[i].x), y: Math.floor($scope.heatmapData[i].y), value: 1});
+                            };
 
-                        // Create new offscreen image to test
-                        var theImage = new Image();
-                        theImage.src = screenImage.attr("src");
+                        function resetData() {
+                            console.log('xx ', xx);
+                            var screenImage = $("#heatmapArea img");
+                            console.log('width ', screenImage.width());
+                            console.log('height ', screenImage.height());
+                            xx._renderer.setDimensions(screenImage.width(), screenImage.height());
 
-                        // Get accurate measurements from that.
-                        var imageWidth = theImage.width;
-                        var imageHeight = theImage.height;
-
-                        // $('#heatmapArea').height = height;
-                        // $('#heatmapArea').width = width;
-                        console.log('imageWidth ', imageWidth);
-                        console.log('imageHeight ', imageHeight);
-
-                        var xx = h337.create({"element":document.getElementById("heatmapArea"), "radius":25, "visible":true});
-                        console.log('heatmapData >>> ', $scope.heatmapData);
-                        for (var i = 0; i < $scope.heatmapData.length && i < 1000; i++) {
-                            xx.store.addDataPoint($scope.heatmapData[i].x, $scope.heatmapData[i].y);
+                            xx.repaint();
                         };
 
-                        // xx.get("canvas").onclick = function(ev){
-                        //     var pos = h337.util.mousePosition(ev);
-                        //     xx.store.addDataPoint(pos[0],pos[1]);
-                        // };
+                        $(window).resize(function () {
+                            waitForFinalEvent(function(){
+                              console.log('Resize...');
+                              resetData();
+                            }, 500, $scope.heatmapData.length);
+                        });
+
+
                     });
                 };
+
+                var waitForFinalEvent = (function () {
+                  var timers = {};
+                  return function (callback, ms, uniqueId) {
+                    if (!uniqueId) {
+                      uniqueId = "Don't call this twice without a uniqueId";
+                    }
+                    if (timers[uniqueId]) {
+                      clearTimeout (timers[uniqueId]);
+                    }
+                    timers[uniqueId] = setTimeout(callback, ms);
+                  };
+                })();
 
             });
         });

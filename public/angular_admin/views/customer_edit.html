@@ -14,9 +14,20 @@
       <h2><i class="fa fa-users"></i><div class="hidden-xs div-header"> Edit Contact</div></h2>
     </div>
     <div class="col-xs-5">
-      <div class="btn btn-success pull-right btn-save-contact" type="button" ng-click="customerSaveFn()">
-        <i class="fa fa-save"></i>
-        <span class="hidden-xs">Save</span>
+      <div class="btn btn-success pull-right btn-save-contact disabled" type="button" ng-click="customerSaveFn()">
+        <span class="visible-xs" ng-hide="saveLoading">
+         <i class="fa fa-save"></i>
+        </span>
+        <span class="visible-xs"  ng-show="saveLoading">
+         <i class="fa fa-spinner fa-spin"></i>
+         </span>
+        <span class="hidden-xs" ng-hide="saveLoading">
+         <i class="fa fa fa-save"></i> Save 
+         </span>
+        <span class="hidden-xs"  ng-show="saveLoading">
+         Saving
+         <i class="fa fa-spinner fa-spin"></i>
+         </span>
       </div>
     </div>
 
@@ -62,7 +73,7 @@
 
                 <div class="form-group">
                   <label class="">Contact Name</label>
-                  <input id="input-fullname" class="form-control input-lg" value="  " ng-model="fullName" placeholder="full name" type="text">
+                  <input id="input-fullname" class="form-control input-lg" value="  " ng-model="fullName" placeholder="full name" type="text" ng-change="enableSaveBtnFn()">
                   <small style="margin-left:10px;">
                       <strong>first:</strong>
                       <code>
@@ -83,7 +94,7 @@
                 <div class="row">
                   <div class="form-group col-sm-6">
                     <label>Contact Type</label>
-                    <select id="select-contact-type" class="form-control input-lg" ng-model="customer.type">
+                    <select id="select-contact-type" class="form-control input-lg" ng-model="customer.type" ng-change="enableSaveBtnFn()">
 
                       <option value="cu">Customer</option>
 
@@ -160,7 +171,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Contact Information</h3>
           </div>
-          <div class="panel-body">            
+          <div class="panel-body">
             <div id="email-row" class="row">
               <div class="col-xs-1"><i class="icon-main fa fa-envelope"></i>
               </div>
@@ -169,14 +180,14 @@
 
                   <div class="row edit-email-container" ng-repeat="email in customer.details[0].emails">
                     <div class="form-group col-md-10">
-                      <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email">
+                      <input class="form-control input-edit-email  input-lg" indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="email.email"  ng-change="enableSaveBtnFn()">
                     </div>
                     <div ng-click="removeItem($index, customer.details[0].emails)" ng-show="$index > 0" class="glyphicon glyphicon-remove glyphicon-remove-icon"></div>
                   </div>
                 </div>
                 <div class="btn btn-primary btn-sm" id="btn-new-address" ng-click="customerAddEmailFn()">Add Email</div>
-              </div>             
-            </div>            
+              </div>
+            </div>
             <hr>
 
             <div class="row" id="address-row">
@@ -189,32 +200,32 @@
                       <div class="edit-address-fields">
                         <div class="form-group">
                           <label>Address Line 1</label>
-                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="address.address">
+                          <input type="text" value="" class="form-control input-address input-address-field" ng-model="address.address" ng-change="enableSaveBtnFn()">
                         </div>
 
                         <div class="form-group">
                           <label>Address Line 2</label>
-                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="address.address2">
+                          <input type="text" value="" class="form-control input-address2 input-address-field" ng-model="address.address2" ng-change="enableSaveBtnFn()">
                         </div>
 
                         <div class="form-group">
                           <label>City</label>
-                          <input type="text" value="" class="form-control input-city input-address-field" ng-model="address.city">
+                          <input type="text" value="" class="form-control input-city input-address-field" ng-model="address.city" ng-change="enableSaveBtnFn()">
                         </div>
 
                         <div class="form-group">
                           <label>State</label>
-                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.state">
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.state" ng-change="enableSaveBtnFn()">
                         </div>
 
                         <div class="form-group">
                           <label>Country</label>
-                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.country">
+                          <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.country" ng-change="enableSaveBtnFn()">
                         </div>
 
                         <div class="form-group">
                           <label>Zip Code</label>
-                          <input type="text" value="" validation-type="zip" indigeweb-validate-form-fields class="form-control input-zip input-address-field" ng-model="address.zip">
+                          <input type="text" value="" validation-type="zip" indigeweb-validate-form-fields class="form-control input-zip input-address-field" ng-model="address.zip" ng-change="enableSaveBtnFn()">
                         </div>
 
                       </div>
@@ -223,13 +234,13 @@
                     <div class="hidden-xs hidden-sm">
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" class="chk-default-shipping" ng-model="address.defaultShipping">Default Shipping
+                          <input type="checkbox" class="chk-default-shipping" ng-model="address.defaultShipping" ng-change="enableSaveBtnFn()">Default Shipping
                         </label>
                       </div>
 
                       <div class="checkbox">
                         <label>
-                          <input type="checkbox" class="chk-default-billing" ng-model="address.defaultBilling">Default Billing
+                          <input type="checkbox" class="chk-default-billing" ng-model="address.defaultBilling" ng-change="enableSaveBtnFn()">Default Billing
                         </label>
                       </div>
                     </div>
@@ -261,7 +272,7 @@
                     <div class="form-group col-xs-12 col-sm-8 col-md-10">
                       <div class="input-group input-group-lg">
                         <div class="input-group-addon">+1</div>
-                        <input class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields value="" type="text" ng-model="phone.number">
+                        <input class="input-edit-phone form-control input-lg" validation-type="phone" indigeweb-validate-form-fields value="" type="text" ng-model="phone.number" ng-change="enableSaveBtnFn()">
                         <div class="input-group-btn">
                           <button data-toggle="dropdown" class="btn btn-default btn-edit-phone-type dropdown-toggle" data-type="" type="button">
                             <span class="edit-phone-type-label" id="customer-phone-type-{{$index}}" ng-show="phone.type == 'm'">mobile</span>

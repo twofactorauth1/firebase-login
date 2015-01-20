@@ -9,6 +9,7 @@ require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
 var accountDao = require('../dao/account.dao');
+var campaignDao = require('./dao/campaign.dao');
 var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
@@ -68,6 +69,97 @@ module.exports = {
 
     findCampaignMessages: function (query, fn) {
         $$.dao.CampaignMessageDao.findMany(query, fn);
+    },
+
+    createCampaign: function(campaignObj, fn) {
+        var self = this;
+        self.log.debug('>> createCampaign');
+        campaignDao.saveOrUpdate(campaignObj, function(err, value){
+            if(err) {
+                self.log.error('Error creating campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< createCampaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    updateCampaign: function(campaignObj, fn) {
+        var self = this;
+        self.log.debug('>> updateCampaign');
+        campaignDao.saveOrUpdate(campaignObj, function(err, value){
+            if(err) {
+                self.log.error('Error updating campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< updateCampaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    addContactToCampaign: function(contactId, campaignId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> addContactToCampaign');
+
+        /*
+         * Get or create campaign flow.
+         * Add contact to running campaign
+         * Schedule first step.
+         */
+        var query = {
+            campaignId: campaignId,
+            accountId: accountId,
+            contactId: contactId
+        };
+        campaignDao.find(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error finding campaign flow: ' + err);
+                return fn(err, null);
+            } else if(value !== null) {
+                self.log.debug('Contact already part of this campaign.');
+                return fn(null, value);
+            } else {
+                campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+                    if(err) {
+                        self.log.error('Error finding campaign: ' + err);
+                        return fn(err, null);
+                    }
+                    //need to create flow.
+                    var flow = new $$.m.CampaignFlow({
+                        campaignId: campaignId,
+                        accountId: accountId,
+                        contactId: contactId,
+                        startDate: new Date(),
+                        currentStep: 1,
+                        steps: campaign.get('steps')
+                    });
+                    campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                        if(err) {
+                            self.log.error('Error saving campaign flow: ' + err);
+                            return fn(err, null);
+                        }
+                        self.log.debug('Added contact to campaign flow.');
+                        self.handleStep(flow, function(err, value){
+                            if(err) {
+                                self.log.error('Error handling initial step of campaign: ' + err);
+                                return fn(err, null);
+                            } else {
+                                self.log.debug('<< addContactToCampaign');
+                                return fn(err, savedFlow);
+                            }
+                        });
+                    });
+                });
+
+            }
+        });
+
+    },
+
+    handleStep: function(campaignFlow, fn) {
+        //TODO: this
     },
 
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {

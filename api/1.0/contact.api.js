@@ -478,7 +478,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                 if(err) {
                                                     self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
                                                 } else {
-                                                    var contactEmail = savedContact.getEmails()[0].email;
+                                                    var contactEmail = savedContact.getEmails()[0];
                                                     var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                     self.log.debug('sending email to: ',contactEmail);
                                                     var vars = [];
@@ -496,7 +496,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     self.log.error('error rendering html: ' + err);
                                                     self.log.warn('email will not be sent.');
                                                 } else {
-                                                    var contactEmail = savedContact.getEmails()[0].email;
+                                                    console.log('savedContact ', savedContact);
+                                                    var contactEmail = savedContact.getEmails()[0];
                                                     var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                     self.log.debug('sending email to: ',contactEmail);
                                                     var fromEmail = component.from_email || notificationConfig.WELCOME_FROM_EMAIL;

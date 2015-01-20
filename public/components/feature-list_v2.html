@@ -9,73 +9,74 @@
 <div ng-class="component.type+'-v'+component.version">
 
     <div class="feature-list-title">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title" />
-        </div>
-    </div>
-
-    <div class="feature-list-subtitle col-xs-8 col-xs-offset-2">
-        <div class="editable" data-class="subtitle">
-            <span ng-bind-html="component.subtitle" />
+        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
         </div>
     </div>
 
     <div class="clearfix mb15"></div>
 
-    <div ng-repeat="feature in component.features track by $index">
+    <div ng-repeat="feature in component.features track by $index" class="features-wrap">
+
         <div class="col-sm-3 feature" ng-if="component.features.length >= 4">
             <div class="feature-single feature-single-0">
-                <span class="feature-icon {{feature.icon}}"></span>
-
-                <div class="feature-title">
-                    <div class="editable" data-class="features.item.title" data-index="{{$index}}">
-                        <span ng-bind-html="feature.title" />
+                <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
                     </div>
-                </div>
-
-                <div class="feature-subtitle">
-                    <div class="editable" data-class="features.item.subtitle" data-index="{{$index}}">
-                        <span ng-bind-html="feature.subtitle"></span>
+                <div class="feature-content">
+                    <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
                     </div>
-                </div>
-
-                <div>
-                    <a href="{{feature.btn.url}}" class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
                 </div>
 
             </div>
               <div ng-if="isEditing" class="delete-feature center">
-                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
             </div>
         </div>
 
         <div class="col-sm-4 feature" ng-if="component.features.length == 3">
             <div class="feature-single feature-single-0">
-                <span class="feature-icon">
-                    <div class="editable" data-class="features.item.icon" data-index="{{$index}}">
-                         <span ng-bind-html="feature.icon | unsafe" />
+                <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
                     </div>
-                </span>
-
-                <div class="feature-title">
-                    <div class="editable" data-class="features.item.title" data-index="{{$index}}">
-                        <span ng-bind-html="feature.title" />
+                <div class="feature-content">
+                    <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
                     </div>
                 </div>
 
-                <div class="feature-subtitle">
-                    <div class="editable" data-class="features.item.subtitle" data-index="{{$index}}">
-                        <span ng-bind-html="feature.subtitle | unsafe"></span>
-                    </div>
-                </div>
-
-                <!-- <div>
-                    <a href="{{feature.btn.url}}" class="btn btn-primary feature-btn">{{feature.btn.text}}</a>
-                </div> -->
 
             </div>
              <div ng-if="isEditing" class="delete-feature center">
-                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
+            </div>
+        </div>
+
+        <div class="col-sm-6 feature" ng-if="component.features.length == 2">
+            <div class="feature-single feature-single-0">
+                <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
+                    </div>
+                <div class="feature-content">
+                    <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
+                    </div>
+                </div>
+
+
+            </div>
+             <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
+            </div>
+        </div>
+
+        <div class="col-sm-12 feature" ng-if="component.features.length == 1">
+            <div class="feature-single feature-single-0">
+                <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
+                    </div>
+                <div class="feature-content">
+                    <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
+                    </div>
+                </div>
+
+
+            </div>
+             <div ng-if="isEditing" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
             </div>
         </div>
 

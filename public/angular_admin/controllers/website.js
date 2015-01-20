@@ -67,6 +67,8 @@ define([
             $scope.isEditing = true;
             $scope.isMobile = false;
             $scope.tabs = {};
+            $scope.addLinkType = 'page';
+            $scope.saveLoading = false ; 
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -468,13 +470,14 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
+                $scope.saveLoading = true ; 
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);
                 }
                 if ($location.$$search['posthandle']) {
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
-                    $scope.isEditing = false;
+                    $scope.isEditing = true;
                 } else {
                     var componentJSON = $scope.currentPage.components;
                     var pageId = $scope.currentPage._id;
@@ -518,15 +521,22 @@ define([
                                 //if contains an array of variables
                                 if (componentVar.indexOf('.item') > 0) {
                                     //get index in array
+                                    console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['data-index'].value;
                                     var third = componentVar.split(".")[2];
+                                    console.log('first ', first);
+                                    console.log('second ', second);
+                                    console.log('third ', third);
                                     matchingComponent[first][second][third] = componentVarContents;
                                 }
                                 //if needs to traverse a single
                                 if (componentVar.indexOf('-') > 0) {
+                                    console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split("-")[0];
                                     var second = componentVar.split("-")[1];
+                                    console.log('first ', first);
+                                    console.log('second ', second);
                                     matchingComponent[first][second] = componentVarContents;
                                 }
                                 //simple
@@ -558,6 +568,7 @@ define([
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.isEditing = true;
+                         $scope.saveLoading = false;
                         //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
                         //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
                         //document.getElementById('iframe-website').contentWindow.location.reload(true);
@@ -575,6 +586,7 @@ define([
                         console.log('updated website settings', data);
                     });
                 }
+                
             };
 
             $scope.updatePage = function(handle, editing) {
@@ -645,19 +657,12 @@ define([
                 }
             }
 
-            $scope.addFeatureList = function(feature) {
-                if (feature && feature.title) {
-                    if (!$scope.featureIcon) {
-                        $scope.featureIcon = {};
-                        $scope.featureIcon.icon = 'fa-credit-card';
-                    }
+            $scope.addFeatureList = function() {
                     $scope.componentEditing.features.push({
-                        title: feature.title,
-                        subtitle: feature.subtitle,
-                        icon: 'fa ' + $scope.featureIcon.icon
+                        "top" : "<span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;text-align:center;\"></span>",
+                        "content" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
                     });
                     $scope.saveComponent();
-                }
             }
 
             $scope.updateContactUsAddress = function(location) {
@@ -665,6 +670,7 @@ define([
             }
 
             $scope.addComponent = function() {
+                console.log('add component >>> ');
                 $scope.deactivateAloha();
                 var pageId = $scope.currentPage._id;
                 if ($scope.selectedComponent.type === 'footer') {
@@ -687,18 +693,20 @@ define([
                 }
                 $scope.components = $scope.currentPage.components;
 
-                var cmpVersion = null;
-                if ($scope.selectedTheme) {
-                    var selectedType = _.findWhere($scope.selectedTheme.config.components, {
+                var cmpVersion = 1;
+                if ($scope.currentTheme) {
+                    var selectedType = _.findWhere($scope.currentTheme.config.components, {
                         type: $scope.selectedComponent.type
                     });
                     if (selectedType) {
                         cmpVersion = selectedType.version;
                     }
                 }
-                WebsiteService.addNewComponent(pageId, $scope.selectedComponent.title, $scope.selectedComponent.type, cmpVersion, function(data) {
-                    if (data.components) {
-                        var newComponent = data.components[data.components.length - 1];
+
+                WebsiteService.saveComponent($scope.selectedComponent, cmpVersion || 1, function(data) {
+
+                    if (data) {
+                        var newComponent = data;
                         var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
                         $scope.currentPage.components.splice(indexToadd, 0, newComponent);
                         //$scope.currentPage.components.push(newComponent);
@@ -706,8 +714,10 @@ define([
                         $scope.components = $scope.currentPage.components;
                         $scope.updateIframeComponents();
 
-                        // $scope.deactivateAloha();
-                        $scope.activateAloha();
+                        //TODO: get updateIframeComponents callback
+                        setTimeout(function() {
+                            $scope.activateAloha();
+                        }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     }
@@ -718,22 +728,23 @@ define([
                 var pageId = $scope.currentPage._id;
                 var deletedType;
                 $scope.deactivateAloha();
-                WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
-                    //$scope.resfeshIframe();
-                    for (var i = 0; i < $scope.components.length; i++) {
-                        if ($scope.components[i]._id == componentId) {
-                            deletedType = $scope.components[i].type;
-                            $scope.components.splice(i, 1);
-                            break;
-                        }
+                for (var i = 0; i < $scope.components.length; i++) {
+                    if ($scope.components[i]._id == componentId) {
+                        deletedType = $scope.components[i].type;
+                        $scope.components.splice(i, 1);
+                        break;
                     }
-                    $scope.updateIframeComponents();
-                    $scope.componentEditing = null;
-                    $(".modal-backdrop").remove();
-                    $("#component-setting-modal").modal('hide');
-                    toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
-                    $scope.activateAloha();
-                });
+                }
+                $scope.updateIframeComponents();
+                $scope.componentEditing = null;
+                $(".modal-backdrop").remove();
+                $("#component-setting-modal").modal('hide');
+                toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+                $scope.activateAloha();
+                //WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
+                    //$scope.resfeshIframe();
+                    
+               //});
             };
 
             $scope.updateIframeComponents = function(fn) {
@@ -781,9 +792,11 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
-                    if ($scope.componentEditing.version)
+                    if ($scope.componentEditing && $scope.componentEditing.version)
+                    {
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
-                    $scope.versionSelected = $scope.componentEditing.version;
+                        $scope.versionSelected = $scope.componentEditing.version;
+                    }
                     $scope.originalCurrentPage = angular.copy($scope.currentPage);
                 });
                 $('#feature-convert').iconpicker({
@@ -958,7 +971,7 @@ define([
                     $scope.insertMediaImage = false;
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
+                    //iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
                     return;
                 } else if ($scope.logoImage && $scope.componentEditing) {
                     $scope.logoImage = false;
@@ -1020,22 +1033,66 @@ define([
                     function(isConfirm) {
                         if (isConfirm) {
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-                            $scope.changesConfirmed = true;
                             $scope.savePage();
-                            $location.path(newUrl);
-                            offFn();
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-                            $scope.changesConfirmed = true;
-                            $location.path(newUrl);
-                            offFn();
                         }
+                        $scope.changesConfirmed = true;
+                        $location.path(newUrl);
+                        offFn();
                     });
                 } else if ($scope.changesConfirmed) {
                     //do nothing
                 }
 
             });
+
+            //Add Link to navigation
+            $scope.initializeLinks = function()
+            {
+                $scope.newLink = {linkUrl : null, linkTitle:null, linkPage: null};
+            }
+
+            $scope.setLinkType = function(lnk)
+            {
+                $scope.addLinkType = lnk;
+                $scope.initializeLinks();
+            }
+
+            $scope.addLinkToNav = function()
+            {
+                var linkTitle = null;
+                var linkUrl = null;
+                if($scope.newLink && $scope.newLink.linkPage){
+                    $scope.linkPage = _.findWhere(that.allPages, {
+                        handle: $scope.newLink.linkPage
+                    });
+                   linkTitle = $scope.linkPage.title;
+                   linkUrl = $scope.newLink.linkPage;
+                }
+                else if($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl)
+                {
+                    linkTitle = $scope.newLink.linkTitle;
+                    linkUrl = $scope.newLink.linkUrl;
+                }
+                if(linkTitle && linkUrl)
+                {
+                    $scope.website.linkLists.forEach(function(value, index) {
+                        if (value.handle === "head-menu") {                        
+                            value.links.push({                                
+                                    label: linkTitle,
+                                    type: "link",
+                                    linkTo: {
+                                        data: linkUrl,
+                                        type: $scope.addLinkType
+                                    }
+                            });
+                            $scope.initializeLinks();
+                        }
+                    });
+                }
+                
+            }
 
             //when the navigation is reordered, update the linklist in the website object
             $scope.updateLinkList = function(linkLists) {
@@ -1059,6 +1116,7 @@ define([
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);  
                                     toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }
@@ -1189,6 +1247,10 @@ define([
             window.checkIfSinglePost = function(post) {
                 if (post)
                     $scope.singlePost = true;
+            }
+
+            window.setLoading = function(value) {
+                $scope.saveLoading = value;
             }
 
         }

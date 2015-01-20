@@ -766,9 +766,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
+        for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
+        console.log('length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {
@@ -867,6 +872,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
     };
 
+    window.updateWebsite = function(data) {
+      $scope.$apply(function() {
+      if(data)
+        that.website = data;
+      });
+    };
+
+
     window.updateComponents = function(data) {
       $scope.$apply(function() {
         // setNavigation({
@@ -909,8 +922,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.addCKEditorImage = function(url) {
       console.log('addCKEditorImage ', url);
+      console.log('$scope.inlineInput ', $scope.inlineInput);
       if ($scope.inlineInput) {
-        $scope.inlineInput.insertHtml( '<img src="'+url+'"/>' );
+        console.log('inserting html');
+        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
       }
     };
 
@@ -1044,7 +1059,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;
       }
-      $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
+      if($scope.thumbnailSliderCollection)
+      {
+        $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
+        if($scope.thumbnailCollection.length > 1)
+        {
+          $scope.displayThumbnailPaging = true;
+        }
+      }
     }
 
     window.mobilecheck = function() {

@@ -65,7 +65,7 @@ require.config({
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
-        'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
+        'heatmapjs': 'libs_misc/heatmap.js-2.0/build/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
         'ngSweetAlert' : 'libs/angular-sweetalert/SweetAlert',
@@ -74,6 +74,7 @@ require.config({
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
         'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
+        'mgo-angular-wizard':'libs/angular-wizard/dist/angular-wizard',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -92,6 +93,7 @@ require.config({
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
+        'campaignService': '/angular_admin/services/campaign',
         'productService': '/angular_admin/services/product',
         'navigationService': '/angular_admin/services/navigationService',
         'dashboardService': '/angular_admin/services/dashboard',
@@ -134,6 +136,7 @@ require.config({
         'angularCookie': 'libs/angular-cookie/angular-cookie.min',
         'purl': 'libs/purl/purl',
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
+        'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -192,6 +195,7 @@ require.config({
         'colorpicker': {deps: ['spectrum']},
         'ngHeadroom': {deps: ['headroom']},
         'commonutils': {deps: ['underscore']},
+        'mgo-angular-wizard': {deps: ['underscore', 'angular']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},

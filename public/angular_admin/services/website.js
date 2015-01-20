@@ -292,6 +292,20 @@ define(['app'], function (app) {
                 fn(err, null);
             });
 		};
+		this.saveComponent = function (component, cmpVersion, fn) {
+			console.log('Saving Component >>>');
+			console.log('component ', component);
+			console.log('cmpVersion ', cmpVersion);
+			var apiUrl = baseUrl + ['cms', 'component', component.type].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson({version: cmpVersion})
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 
 	});
 });

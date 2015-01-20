@@ -1,0 +1,134 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div class="marketing">
+
+    <div class="pageheader row">
+        <div class="col-xs-8">
+            <h2><i class="fa fa-bullhorn"></i>  Marketing</h2>
+        </div>
+        <div class="col-xs-4">
+            <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs">Add</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="" data-toggle="modal" data-target="#marketing-add-campaign"> Campaign</a>
+                    </li>
+                    <li><a href="" data-toggle="modal" data-target="#marketing-add-feed"> Social Feed</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="col-xs-12 nopadding header-menu-row">
+        <div class="btn-group col-xs-12 template-btns nopadding">
+            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing?">
+                    <i class="fa fa-flag"></i>
+                    <span class="hidden-xs">Campaigns
+                </div>
+                </span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-6 tooltips" ng-class="{'active': activeTab === 'social-feed'}" ng-click="activeTab = 'social-feed'">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="Who is visiting your site?">
+                    <i class="fa fa-newspaper-o"></i>
+                    <span class="hidden-xs">Social Feed</span>
+                </div>
+            </button>
+            </div>
+        </div>
+
+        <div class="contentpanel" ng-style="styleDashboard()" indigeweb-resize>
+            <div class="campaign-section" ng-if="activeTab == 'campaigns'">
+                <div class="col-xs-12 col-sm-4" ng-repeat="campaign in campaigns track by $index">
+                    <div class="grid-list-item btn-view-product-details" data-productid="1">
+                        <a href="#/marketing/campaign/{{campaign._id}}">
+                            <div class="col-xs-12">
+                                <h4 class="title center">{{campaign.title}}</h4>
+                                <hr class="clearfix mb15">
+                                <div class="campaign-stats">
+                                    <div class="status" ng-if="campaignSettings.showStatus">
+                                        Status: <span class="data">{{campaign.status}}</span>
+                                    </div>
+                                    <div class="type" ng-if="campaignSettings.showType">
+                                        Type: <span class="data">{{campaign.type}}</span>
+                                    </div>
+                                    <div class="conversions" ng-if="campaignSettings.showContacts">
+                                        Contacts: <span class="data">{{campaign.contacts}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div ng-if="campaigns.length <= 0" class="empty">
+                    <h1 class="center"><span class="fa fa-flag-o"></span></h1>
+                    <h2 class="center">No Campaigns Yet</h2>
+                    <h3 class="center">Add campaign for them to appear here.</h3>
+                </div>
+            </div>
+            <div class="social-feed-section" ng-if="activeTab == 'social-feed'">
+                <div ng-if="feeds.length <= 0" class="empty">
+                    <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
+                    <h2 class="center">No Feeds Setup</h2>
+                    <h3 class="center">Add a Feed to get set up.</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="rightpanel">
+            <div class="rightpanel rightpanel-marketing">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#" data-toggle="tab">Settings</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane pane-settings active" id="rp-settings">
+                        <h4>No Settings Avaliable</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="marketing-add-campaign">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add New Campaign</h4>
+                </div>
+                <div class="modal-body">
+
+
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="productName">Campaign Name</label>
+                            <input type="text" class="form-control input-lg" id="campaignName" placeholder="Enter a name for your campaign" ng-model='newCampaign.name' />
+                        </div>
+                        <div class="form-group">
+                            <label for="campaignType">Campaign Type</label>
+                            <select id="campaignType" ng-model="newCampaign.type" class="form-control input-lg">
+                                <option value="autoresponder">AutoResponder</option>
+                                <!-- <option value="one_time" disabled="">One Time</option>
+                                <option value="webinar">Webinar</option>
+                                <option value="date_based" disabled="">Date Based</option>
+                                <option value="custom" disabled="">Custom</option> -->
+                            </select>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addCampaignFn()"><i class="fa fa-plus" /> Add</button>
+                </div>
+            </div>
+        </div>
+    </div>

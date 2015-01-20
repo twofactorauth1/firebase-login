@@ -15,8 +15,19 @@
 		<div class="col-xs-5">
 			<div id="saveAccount">
 				<button class="btn btn-success pull-right" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
-	                <span class="fa fa-save"></span>
-	                <span class="hidden-xs">Save</span>
+	                <span class="visible-xs" ng-hide="saveLoading">
+	                 <i class="fa fa-save"></i>
+	                </span>
+	                <span class="visible-xs"  ng-show="saveLoading">
+	                 <i class="fa fa-spinner fa-spin"></i>
+	                </span>
+	                <span class="hidden-xs" ng-hide="saveLoading">
+	                 <i class="fa fa fa-save"></i> Save 
+	                 </span>
+	                <span class="hidden-xs"  ng-show="saveLoading">
+	                 Saving
+	                 <i class="fa fa-spinner fa-spin"></i>
+	                 </span>
 	            </button>
             </div>
 		</div>
@@ -129,7 +140,7 @@
 								</span>
 							</div>
 							<div class="col-xs-2">
-
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteUserContactFn($index)"><i class="fa fa-minus"></i></button>
 								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
 							</div>
 						</div>
@@ -328,7 +339,8 @@
 				                </span>
 				            </div>
 				            <div class="col-xs-2">
-								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessContactFn()"><i class="fa fa-plus"></i></button>
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteBusinessContactFn()"><i class="fa fa-minus"></i></button>
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessContactFn($index)"><i class="fa fa-plus"></i></button>
 							</div>
 
 				        </div>
@@ -361,6 +373,7 @@
 											</div>
 				            </div>
 				            <div class="col-xs-2">
+											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteBusinessAddressFn($index)"><i class="fa fa-minus"></i></button>
 											<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addBusinessAddressFn()"><i class="fa fa-plus"></i></button>
 		                	</div>
 				        </div>
@@ -477,7 +490,7 @@
 
     <div id="model_container"></div>
 
-    <div id="step-one-account" class="single-step">
+    <div id="step-one-account" class="single-step hidden">
 
 	    <span class="connectordot-lm"><!-- custom --></span>
 	    <header>
@@ -491,7 +504,7 @@
 	    </a>
 	</div>
 
-	<div id="step-two-account" class="single-step">
+	<div id="step-two-account" class="single-step hidden">
 
 	    <span class="connectordot-rm"><!-- custom --></span>
 	    <header>
@@ -505,7 +518,7 @@
 	    </a>
 	</div>
 
-	<div id="step-three-account">
+	<div id="step-three-account" class="hidden">
 		<img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/save-account.png">
 	</div>
 </div>

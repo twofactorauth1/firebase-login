@@ -12,17 +12,22 @@ var campaign = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
-            name: null,
-            description: null,
-            templateName: null,
-            subject: null,
-            fromName: null,
-            fromEmail: null,
-            numberOfMessages: null,
-            messageDeliveryFrequency: null,
-            revision: null,
-            type: null,
-            _v:"0.1"
+            accountId: 0,
+            title: "",
+            status: "active",
+            visibility: 1,
+            startDate: null,
+            steps: [],
+
+            "created": {
+                "date": new Date(),
+                "by": null
+            },
+            "modified": {
+                "date": null,
+                "by": null
+            },
+            "_v": "0.1"
         }
     },
 
