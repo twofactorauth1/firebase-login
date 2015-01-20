@@ -30,6 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('campaigns'), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.get(this.url('campaigns/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.getPagesWithCampaign.bind(this));
+        app.get(this.url('campaigns/:id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
         app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));
         app.get(this.url('campaigns/running/contact/:id'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaignsForContact.bind(this));
         app.post(this.url('campaigns/running/contact/:id/steps/:stepNumber'), this.triggerCampaignStep.bind(this));
@@ -43,7 +44,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('accountId', accountId);
@@ -67,7 +68,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('_id', campaignId);
@@ -87,19 +88,38 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     addContactToCampaign: function(req, resp) {
-        //TODO: this.
+        var self = this;
+        self.log.debug('>> addContactToCampaign');
+        var campaignId = req.params.id;
+        var contactId = parseInt(req.params.contactid);
+        var accountId = parseInt(self.accountId(req));
+        if(!contactId || contactId ===0) {
+            return self.wrapError(resp, 400, 'Bad Request', 'Parameter contactId required.');
+        }
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.addContactToCampaign(contactId, campaignId, accountId, function(err, value){
+                    self.log.debug('<< addContactToCampaign');
+                    self.sendResultOrError(resp, err, value, "Error adding contact to campaign");
+                });
+            }
+        });
+
     },
 
     bulkAddContactToCampaign: function(req, resp) {
-
+        //TODO: this.
     },
 
     cancelRunningCampaign: function(req, resp) {
-
+        //TODO: this.
     },
 
     cancelContactInCampaign: function(req, resp) {
-
+        //TODO: this.
     },
 
     getCampaign: function (req, resp) {
@@ -219,6 +239,10 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getPagesWithCampaign');
             self.sendResultOrError(resp, err, pages, 'Error getting pages');
         });
+    },
+
+    getRunningCampaign: function(req, resp) {
+        //TODO: this
     },
 
     getRunningCampaigns: function(req, resp) {
