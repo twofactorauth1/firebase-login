@@ -27,8 +27,20 @@
             </a>
 
             <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing">
-                <i class="fa fa fa-save"></i>
-                <span class="hidden-xs">Save</span>
+                
+                <span class="visible-xs" ng-hide="saveLoading">
+                 <i class="fa fa-save"></i>
+                </span>
+                <span class="visible-xs"  ng-show="saveLoading">
+                 <i class="fa fa-spinner fa-spin"></i>
+                 </span>
+                <span class="hidden-xs" ng-hide="saveLoading">
+                 <i class="fa fa fa-save"></i> Save 
+                 </span>
+                <span class="hidden-xs"  ng-show="saveLoading">
+                 Saving
+                 <i class="fa fa-spinner fa-spin"></i>
+                 </span>
             </a>
             <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing">
                 <i class="fa fa fa-times"></i>

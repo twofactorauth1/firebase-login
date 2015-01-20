@@ -31,8 +31,8 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                        console.log('keen extraction ', data);
                        var keepGoing =  true;
                        data.result.forEach(function(value, index) {
-                        if (keepGoing && value.ip_geo_info && value.ip_geo_info.country) {
-                            $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.country, value.ip_geo_info.continent, value.ip_geo_info.postal_code], function(str) {
+                        if (keepGoing && value.ip_geo_info && value.ip_geo_info.city) {
+                            $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.postal_code], function(str) {
                             $scope.city = value.ip_geo_info.city;
                             return (str !== "" || str !== undefined || str !== null);
                             }).join(",");

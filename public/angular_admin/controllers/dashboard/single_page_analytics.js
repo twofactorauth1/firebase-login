@@ -1,5 +1,5 @@
 define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'websiteService', 'userService', 'keenService', 'heatmapjs', 'checkImageDirective'], function(app) {
-    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', 'keenService', function($scope, $location, ngProgress, WebsiteService, UserService, keenService) {
+    app.register.controller('SinglePageAnalyticsCtrl', ['$scope', '$location', 'ngProgress', 'WebsiteService', 'UserService', 'keenService', '$window', function($scope, $location, ngProgress, WebsiteService, UserService, keenService, $window) {
         ngProgress.start();
 
         $scope.$back = function() {
@@ -61,21 +61,23 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
 
                 //show heatmap
 
-                $scope.initializeHeatmap = function() {
-                    // create instance
-                    // console.log('h337 >>', h337);
-                    // var heatmapInstance = h337.create({
-                    //   container: document.querySelectorAll('.heatmap'),
-                    //   radius: 90
-                    // });
-                    // document.querySelectorAll('.heatmap').onclick = function(ev) {
-                    //   heatmapInstance.addData({
-                    //     x: ev.layerX,
-                    //     y: ev.layerY,
-                    //     value: 1
-                    //   });
-                    // };
-                    $( document ).ready(function() {
+                var w = angular.element($window);
+                w.bind('resize', function() {
+                  $scope.$apply(function() {
+                   if($scope.heatmapInstance)
+                      {
+                            $scope.heatmapInstance.cleanup();
+                            var xx = h337.create({"element":document.getElementById("heatmapArea"), "radius":25, "visible":true});
+                            xx.store.setDataSet({ max: $scope.heatmapInstance.store.max, data: $scope.heatmapDataObj }, true);
+                            //.setDataSet();
+                            $scope.heatmapInstance = xx;
+                        
+                      }
+                  });
+                });
+
+                $scope.initializeHeatmap = function() {                    
+                    $(document ).ready(function() {
                         // Get on screen image
                         var screenImage = $("#heatmapArea img");
                         var heatmapArea = $("#heatmapArea");

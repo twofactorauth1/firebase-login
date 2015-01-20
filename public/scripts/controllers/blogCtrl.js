@@ -194,6 +194,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             PostService.updatePost(pageId, post_data._id,post_data,function(data){
                 console.log(data);
                 console.log("Post Saved");
+                window.parent.window.setLoading(false);
                 if(toaster)                      
                     toaster.pop('success', "Post Saved");
             });

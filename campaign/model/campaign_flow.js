@@ -7,16 +7,16 @@
 
 require('../../models/base.model.js');
 
-var campaign = $$.m.ModelBase.extend({
+var campaign_flow = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
             _id: null,
+            campaignId: null,
             accountId: 0,
-            title: "",
-            status: "active",
-            visibility: 1,
+            contactId: 0,
             startDate: null,
+            currentStep: 1,
             steps: [],
 
             "created": {
@@ -39,11 +39,11 @@ var campaign = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "campaigns",
+        table: "campaign_flow",
         idStrategy: "uuid"
     }
 });
 
-$$.m.Campaign = campaign;
+$$.m.CampaignFlow = campaign_flow;
 
-module.exports = campaign;
+module.exports = campaign_flow;
