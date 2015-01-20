@@ -337,6 +337,9 @@ define(['app',
         $scope.customer.photo = asset.url;
       };
 
+      $scope.enableSaveBtnFn = function () {
+        $('.btn-save-contact').removeClass('disabled');
+      };
     }
   ]);
 });
