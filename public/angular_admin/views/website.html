@@ -403,11 +403,11 @@
                                     <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
                                 
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation' ">
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation' && !componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
                                     <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation'">
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation' && !componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_overlay">Add Overlay</label>
                                     <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
@@ -547,33 +547,6 @@
                                 </button>
                             </div>
                         </tab>
-                        <tab ng-if="componentEditing.type === 'feature-list'">
-                            <tab-heading>
-                                <span>Add Feature</span>
-                            </tab-heading>
-                            <div class="form-group">
-                                <label for="feature-title">Title </label>
-                                <input id="feature-title" class="form-control input-lg" type="text" ng-model="feature.title">
-                            </div>
-                            <div class="form-group">
-                                <label for="feature-subtitle">Subtitle </label>
-                                <input id="feature-subtitle" class="form-control input-lg" type="text" ng-model="feature.subtitle">
-                            </div>
-                            <div class="form-group" >
-                                <label for="feature-icon">Icon </label>
-                            
-                                <div class="panel-heading padding5" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
-                                    <p class="feature-img">
-                                        <a id="feature-convert" role="iconpicker" ></a>
-                                    </p>    
-                                </div>
-                           </div>
-                            <div class="footer">
-                                <button type="button" class="btn btn-primary pull-right" ng-click="addFeatureList(feature, component._id)" data-dismiss="modal">
-                                    Save changes
-                                </button>
-                            </div>
-                        </tab>
 
                          <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
                             <tab-heading>
@@ -624,7 +597,11 @@
                     </tabset>
                 </div>
                 <div class="modal-footer" ng-class="{hidden: hover}">
-                    <button class="btn btn-danger" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete </button>
+
+                    <button class="btn btn-danger pull-left" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete </button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="addFeatureList()" data-dismiss="modal" ng-if="componentEditing.type === 'feature-list'">
+                                    Add Feature
+                                </button>
                     <!-- <button class="btn btn-default" data-dismiss="modal" type="button">Close</button> -->
                 </div>
             </div>

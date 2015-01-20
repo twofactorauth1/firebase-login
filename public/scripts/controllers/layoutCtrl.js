@@ -766,9 +766,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
+        for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
         CKEDITOR.disableAutoInline = true;
 
         var elements = $('.editable');
+        console.log('length ', elements.length);
         elements.each(function() {
           CKEDITOR.inline(this, {
             on: {

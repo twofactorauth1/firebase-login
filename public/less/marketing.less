@@ -1,374 +1,117 @@
-.campaign-list, .template-list {
-	padding: 0;
-
-	.fa-facebook {
-		background: #245f9b!important;
-	}
-
-	.fa-twitter {
-		background: #5dd7fc!important;
-	}
-
-	.fa-google-plus {
-		background: #c1272d!important;
-	}
-
-	li.row {
-		border-radius: 3px;
-		background: #fcfcfc;
-		min-height: 75px;
-		line-height: 65px;
-		border-bottom: 1px solid #e4e7ea;
-	}
-
-	li.row:hover {
-		background-color: #e4e7ea;
-	    transition: background-color 1000ms linear;
-	}
-
-	.campaign-indicator, .campaign-name {
-		border-right: 1px solid #f3f3f3;
-		height: 75px;
-	}
-
-	.campaign-indicator {
-
-			i.active {
-				color:#47a865;
-			}
-
-			i.paused {
-				color:red;
-			}
-	}
-
-	.people-reached {
-		text-transform: uppercase;
-
-		.number {
-			color: #3cb878;
-			font-size: 30px;
-		}
-
-		p {
-			line-height: 15px;
-			margin: 15px 0 0 5px;
-		}
-	}
-
-	.timeframe {
-		p {
-			display: inline-block;
-			float: right;
-			color: #c2c2c2;
-		}
-
-		p:last-child {
-			margin-right: 30px;
-		}
-	}
-
-	.chevron {
-		font-size: 20px;
+.marketing {
+	#campaign-add-email {
+	    .thumbnail {
+	        position: relative;
+	        overflow: hidden;
+	        &:hover {
+	        	.caption {
+	        		display: block;
+	        	}
+	        }
+	    }
+	    .caption {
+	        position: absolute;
+	        top: 0;
+	        right: 0;
+	        background: rgba(66, 139, 202, 0.75);
+	        width: 100%;
+	        height: 100%;
+	        padding: 2%;
+	        display: none;
+	        text-align: center;
+	        color: #fff !important;
+	        z-index: 2;
+	    }
 	}
 }
 
-.marketing-single {
-	.campaign-details {
-		min-height: 100px;
-		background: white;
-		padding: 10px;
-
-		h4 {
-			font-weight: bold;
-			color: black;
-		}
-	}
-
-	.campaign-performance {
-		padding: 10px;
-
-		h3 {
-			color: black;
-			font-weight: bold;
-			text-shadow: 1px 1px 1px #c3c5c8;
-		}
-
-		.quick-stats .panel{
-			padding: 25px 0;
-		}
-
-		.gender {
-
-			i {
-				font-size: 100px;
-				padding: 10px;
-				float: left;
-			}
-			p {
-				font-size: 24px;
-				color: black;
-				text-align: center;
-				margin: 40px 20px 0;
-				float: left;
-			}
-			span {
-				font-size: 14px;
-				color: #444;
-			}
-			.male {
-				display: block;
-				min-height: 110px;
-				i {
-					color:#54c8e8;
-				}
-
-				p {
-					margin: 40px 39px 0;
-				}
-			}
-
-			.female {
-				display: block;
-				min-height: 110px;
-				i {
-					color:#f26d7d;
-				}
-			}
-		}
-
-		.panel-campaign-header {
-			background: #eff6f9;
-			font-weight: bold;
-			color:#b9d2e0;
-			text-shadow: 1px 1px 1px white;
-		}
-
-	}
+.marketing-label {
+	position: absolute;
+	top: 90px;
+	min-width: 80px;
+	left: -1px;
 }
 
-#reportrange {
-	background: #ffffff;
-	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-	-moz-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-	box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-	color: #333333;
-	padding: 8px;
-	line-height: 18px;
-	cursor: pointer;
-	float: right;
-	margin-top: 16px;
-	min-width: 200px;
-
-	.caret {
-		margin-top: 8px;
-		margin-left: 2px;
-	}
-
-	span {
-		padding-left: 3px;
-	}
-}
-
-.demographics .panel {
-	padding: 20px;
-
-	h4 {
-		font-weight: bold;
-		color: black;
-	}
-}
-
-.social.fa {
-	font-size: 24px;
-	color: white;
-	width: 50px;
-	height: 50px;
-	border-radius: 40px;
-	text-align: center;
-	line-height: 50px;
-	margin-right: 10px;
-	background: #42c0fb;
-}
-
-.minimize i {
-	margin-top: 15px;
-}
-
-.campaign-component-performance {
-	.stat {
-		text-align: center;
-		background: #eff6f9;
-		max-width: 100px;
-		height: 50px;
-		text-align: center;
-		line-height: 50px;
-		color: #afccdb;
-		font-size: 18px;
-		font-weight: bold;
-		text-shadow: 1px 1px 1px white;
-		border: 1px solid #d3e2ec;
-		border-radius: 10px;
-		margin: 0 auto;
-		text-transform: uppercase;
-	}
-
-    .mailStaticsChart {
-        min-height: 300px;
-    }
-}
-
-.days-left {
-	p {
+.marketing-icon {
+	font-size: 40px;
+	text-shadow: 2px 2px 1px white;
+	color: #000;
+	&.start {
 		font-size: 60px;
-		color: #54c8e8;
-		font-weight: bold;
-		margin-top: 40px;
-		text-align: center;
-	}
-
-	span {
-		font-size: 19px;
-		font-weight: normal;
+		color: #2ecc71;
 	}
 }
 
-.campaign-overview {
-	width: 90%;
-	p {
-		text-align: left;
-		float: left;
-		color: #c2c2c2;
-		font-weight: bold;
-	}
-
-	.subtle-gray {
-		text-align: right;
-		float: right;
-		color: #444444;
-		font-weight: bold;
-	}
+.widgets .window {
+	position: relative;
 }
 
-.campaign-details {
-	-webkit-box-shadow: 0 3px 5px 0 #d8dbde;
-	box-shadow: 0 3px 5px 0 #d8dbde;
-	border: 1px solid #e4e7ea;
-	.detail-single {
-		:last {
-			border-right: none;
-		}
-		border-right: 1px solid #e7e7e7;
-	}
-}
-
-.btn-view-templates {
-	margin-right: 10px;
-}
-
-.template-messages {
-	padding-left: 0;
-	margin-top: 5px;
-	li {
-		display: inline-block;
-		position: relative;
-		line-height: 22px;
-		span {
-			background: #39b54a;
-			border: 1px solid #239537;
-			color: white;
-			width: 25px;
-			height: 25px;
-			border-radius: 13px;
-			display: block;
-			text-align: center;
-			font-weight: bold;
-			position: absolute;
-			right: 0;
-			margin: -19px 0 0 0;
+.widgets {
+	ul {
+		li {
+			display: inline-block;
+			margin-left: 10px;
+			&:first-child {
+				margin-left: 0px;
 			}
 		}
-}
-
-.template-details {
-	min-height: 100px;
-	background: white;
-	padding: 10px;
-	-webkit-box-shadow: 0 3px 5px 0 #d8dbde;
-	box-shadow: 0 3px 5px 0 #d8dbde;
-	border: 1px solid #e4e7ea;
-	.title {
-		color: #54c8e8;
-		font-weight: bold;
-		text-transform: uppercase;
-	}
-	.created {
-		color: #c2c2c2;
 	}
 }
 
-.marketing-templates .btn-group {
-	padding: 0;
-	height: 38px;
-	margin: 0;
+.flowchart-demo .window { border:1px solid #346789;
+-moz-box-shadow: 0px 1px 3px rgba(0,0,0,.3);
+        -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,.3);
+        box-shadow: 0px 1px 3px rgba(0,0,0,.3);
+-moz-border-radius:0.5em;
+border-radius:0.5em;
+opacity:0.8;
+filter:alpha(opacity=80);
+
+text-align:center;
+z-index:20; position:absolute;
+background-color:#eeeeef;
+color:black;
+font-family:helvetica;padding:0.5em;
+font-size:0.9em;
 }
 
-.template-messages {
-	margin: 15px 15px 15px 15%;
-	ul:first {
-	    padding: 0;
-	    margin: 0;
-	    list-style-type: none;
-	    position: relative;
-	}
-
-	li.panel-message {
-	    list-style-type: none;
-	    border-left: 2px solid #000;
-	    margin-left: 1em;
-	    width: 95%;
-	}
-
-	// li.panel-message div {
-	//     padding-left: 1em;
-	//     position: relative;
-	// }
-
-	// li.panel-message div::before {
-	//     content: '';
-	//     position: absolute;
-	//     top: 0;
-	//     left: -2px;
-	//     bottom: 50%;
-	//     width: 0.75em;
-	//     border: 2px solid #000;
-	//     border-top: 0 none transparent;
-	//     border-right: 0 none transparent;
-	// }
-
-	ul:first > li.panel-message:last-child {
-	    border-left: 2px solid transparent;
-	}
+.flowchart-demo .window:hover {
+	box-shadow: 2px 2px 19px #444;
+   -o-box-shadow: 2px 2px 19px #444;
+   -webkit-box-shadow: 2px 2px 19px #444;
+   -moz-box-shadow: 2px 2px 19px #444;
+    opacity:0.6;
+	filter:alpha(opacity=60);
 }
 
+.flowchart-demo .active {
+	border:1px dotted green;
+}
+.flowchart-demo .hover {
+	border:1px dotted red;
+}
 
-// Small Device
-@media(max-width:767px){
-	.campaign-overview {
-		width: 100%;
-	}
+#flowchartWindow1 { top:10em;left:5em;}
+#flowchartWindow2 { top:10em; left:20em;}
+#flowchartWindow3 { top:10em;left:35em; }
+#flowchartWindow4 { top:10em; left:50em;}
+#flowchartWindow5 { top:10em; left:65em;}
+.flowchart-demo ._jsPlumb_connector { z-index:4; }
+.flowchart-demo ._jsPlumb_endpoint, .endpointTargetLabel, .endpointSourceLabel{ z-index:21;cursor:pointer; }
 
-	.days-left p {
-		margin-top: 30px;
-	}
-
-	.marketing-single .campaign-performance .gender  {
-		.male p, .female p {
-			margin: 40px 0 0;
-		}
-	 }
-
-	 #reportrange {
-	 	float: none;
-	 }
-}//end sml device
+.flowchart-demo .aLabel {
+ 	background-color:white; 
+	padding:0.4em; 
+	font:12px sans-serif; 
+	color:#444;
+	z-index:21;
+	border:1px dotted gray;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+	cursor: pointer;
+}
+.flowchart-demo .aLabel._jsPlumb_hover {
+	background-color:#5C96BC;
+	color:white;	
+	border:1px solid white;
+}

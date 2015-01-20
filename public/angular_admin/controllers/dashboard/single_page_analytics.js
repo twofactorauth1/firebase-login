@@ -79,41 +79,47 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
                 $scope.initializeHeatmap = function() {                    
                     $(document ).ready(function() {
                         // Get on screen image
-                       // var screenImage = $(".img-thumbnail");
-
-                        // Create new offscreen image to test
-                       // var theImage = new Image();
-                       // theImage.src = screenImage.attr("src");
-
-                        // Get accurate measurements from that.
-                       // var imageWidth = theImage.width;
-                       // var imageHeight = theImage.height;
-
-                        // $('#heatmapArea').height = height;
-                        // $('#heatmapArea').width = width;
-                      //  console.log('imageWidth ', imageWidth);
-                       // console.log('imageHeight ', imageHeight);
-                        
-
-                        if(document.getElementById("heatmapArea"))
-                        {
-                            var xx = h337.create({"element":document.getElementById("heatmapArea"), "radius":25, "visible":true});
-                            
-                            console.log('heatmapData >>> ', $scope.heatmapData);
-
+                        var screenImage = $("#heatmapArea img");
+                        var heatmapArea = $("#heatmapArea");
+                            var xx = h337.create({container:document.getElementById("heatmapArea"), radius:25, visible:true});
+                            xx._renderer.setDimensions(heatmapArea.width(), heatmapArea.height());
                             for (var i = 0; i < $scope.heatmapData.length && i < 1000; i++) {
-                                xx.store.addDataPoint($scope.heatmapData[i].x, $scope.heatmapData[i].y);
+                                xx.addData({ x: Math.floor($scope.heatmapData[i].x), y: Math.floor($scope.heatmapData[i].y), value: 1});
                             };
-                            $scope.heatmapInstance = xx;
-                            $scope.heatmapDataObj = xx.store.get("data");
-                        }
 
-                        // xx.get("canvas").onclick = function(ev){
-                        //     var pos = h337.util.mousePosition(ev);
-                        //     xx.store.addDataPoint(pos[0],pos[1]);
-                        // };
+                        function resetData() {
+                            console.log('xx ', xx);
+                            var screenImage = $("#heatmapArea img");
+                            console.log('width ', screenImage.width());
+                            console.log('height ', screenImage.height());
+                            xx._renderer.setDimensions(screenImage.width(), screenImage.height());
+
+                            xx.repaint();
+                        };
+
+                        $(window).resize(function () {
+                            waitForFinalEvent(function(){
+                              console.log('Resize...');
+                              resetData();
+                            }, 500, $scope.heatmapData.length);
+                        });
+
+
                     });
                 };
+
+                var waitForFinalEvent = (function () {
+                  var timers = {};
+                  return function (callback, ms, uniqueId) {
+                    if (!uniqueId) {
+                      uniqueId = "Don't call this twice without a uniqueId";
+                    }
+                    if (timers[uniqueId]) {
+                      clearTimeout (timers[uniqueId]);
+                    }
+                    timers[uniqueId] = setTimeout(callback, ms);
+                  };
+                })();
 
             });
         });

@@ -15,19 +15,19 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'forms' },
 		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-		{ name: 'links' },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi'] },
+		{ name: 'links', groups: [ 'Link', 'Unlink', 'Anchor' ] },
 		{ name: 'insert' },
 		{ name: 'styles' },
 		{ name: 'colors' },
 		{ name: 'tools' },
-		{ name: 'others' },
+		{ name: 'others'},
 		{ name: 'about' }
 	];
 
-		// The default plugins included in the basic setup define some buttons that
+	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript';
+	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript,Image';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = '';
@@ -35,19 +35,17 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;
 	config.extraAllowedContent = true;
 
+	// // ALLOW <i></i>
+	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
+	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	// ALLOW <i></i>
-	config.protectedSource.push( /<i[\s\S]*?\>/g ); //allows beginning <i> tag
-	config.protectedSource.push( /<\/i[\s\S]*?\>/g ); //allows ending </i> tag
+	config.extraPlugins = 'doksoft_button,lineheight,mediamanager';
 
-	config.extraPlugins = 'doksoft_button,doksoft_font_awesome,image2,mediamanager,widget,lineutils,clipboard';
+	config.filebrowserBrowseUrl = '';
 
-	// Dialog windows are also simplified.
-	config.removeDialogTabs = 'link:advanced';
-};
-
-// allow i tags to be empty (for font awesome)
 	CKEDITOR.dtd.$removeEmpty['i'] = false;
+	CKEDITOR.dtd.$removeEmpty['span'] = false;
 	CKEDITOR.dtd.$editable.span = true;
 	CKEDITOR.dtd.$editable.a = true;
 	CKEDITOR.dtd.$editable.img = true;
+};

@@ -149,8 +149,12 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                             $scope.m.deleteAsset(v._id);
                     });
                 };
-                $scope.m.selectAll = function(filter) {
-                    $scope.showType = filter;
+
+                $scope.m.selectAll = function(showType) {
+
+                    if (showType) {
+                        $scope.showType = showType;
+                    }
                     $scope.batch = [];
                     $scope.assets = [];
                     $scope.mimeList = [];
