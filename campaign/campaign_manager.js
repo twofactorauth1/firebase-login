@@ -9,6 +9,7 @@ require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
 var accountDao = require('../dao/account.dao');
+var campaignDao = require('./dao/campaign.dao');
 var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
@@ -68,6 +69,34 @@ module.exports = {
 
     findCampaignMessages: function (query, fn) {
         $$.dao.CampaignMessageDao.findMany(query, fn);
+    },
+
+    createCampaign: function(campaignObj, fn) {
+        var self = this;
+        self.log.debug('>> createCampaign');
+        campaignDao.saveOrUpdate(campaignObj, function(err, value){
+            if(err) {
+                self.log.error('Error creating campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< createCampaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    updateCampaign: function(campaignObj, fn) {
+        var self = this;
+        self.log.debug('>> updateCampaign');
+        campaignDao.saveOrUpdate(campaignObj, function(err, value){
+            if(err) {
+                self.log.error('Error updating campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< updateCampaign');
+                return fn(null, value);
+            }
+        });
     },
 
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {
