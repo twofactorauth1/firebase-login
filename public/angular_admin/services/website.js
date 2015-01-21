@@ -307,5 +307,12 @@ define(['app'], function (app) {
 			})
 		};
 
+		this.getPageScreenShot = function (handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', handle, 'savedscreenshot'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 	});
 });

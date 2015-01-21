@@ -226,12 +226,23 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
           $scope.$digest();
         };
 
-        window.activateAloha = function() {
-      //if ($scope.activated == false) {
+       $scope.activated = false;  
+       
+       window.checkIfActivated = function()
+       {
+           return $scope.activated;
+       } 
+       
+       window.activateAloha = function() {
+        for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
         CKEDITOR.disableAutoInline = true;
-
         var elements = $('.editable');
+        console.log('length ', elements.length);
         elements.each(function() {
+          $scope.activated = true;  
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -240,12 +251,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
-
               }
             }
           });
         });
-        $scope.activated = true;
+        
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
