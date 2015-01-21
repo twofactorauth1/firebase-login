@@ -75,6 +75,7 @@ var component = $$.m.ModelBase.extend({
              videoBranding: true,
              videoWidth: null,
              videoHeight: null,
+             videoImage: '',
             txtcolor : "#ffffff",
 
             /**

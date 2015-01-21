@@ -617,25 +617,29 @@
                             <label for="member-name">Webm Url:</label>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoWebm">
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="colorpicker">Auto Play:</label>
                             <input bs-switch ng-model="componentEditing.videoAutoPlay" type="checkbox" class="pull-right">
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" ng-show="componentEditing.videoType == 'youtube'">
                             <label for="colorpicker">Controls:</label>
                             <input bs-switch ng-model="componentEditing.videoControls" type="checkbox" class="pull-right">
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" ng-show="componentEditing.videoType == 'youtube'">
                             <label for="colorpicker">Branding:</label>
                             <input bs-switch ng-model="componentEditing.videoBranding" type="checkbox" class="pull-right">
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="member-name">Optional Width:</label>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoWidth">
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="member-name">Optional Height:</label>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoHeight">
+                          </div>
+                          <div class="form-group" ng-show="componentEditing.videoType == 'html5'">
+                            <label for="member-name">Start Video Image Url:</label>
+                            <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoImage">
                           </div>
                         </tab>
 
