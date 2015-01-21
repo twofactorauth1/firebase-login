@@ -21949,6 +21949,12 @@ i.indi-sm {
 .single-product .rightpanel.rightpanel-commerce-edit .iconpicker .fa {
   font-size: 24px;
 }
+.single-product .custom-option-type {
+  margin-top: 10px;
+}
+.single-product .custom-option-switch {
+  margin-top: 25px;
+}
 .marketing #campaign-add-email .thumbnail {
   position: relative;
   overflow: hidden;
