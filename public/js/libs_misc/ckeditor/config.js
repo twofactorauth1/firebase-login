@@ -34,7 +34,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.allowedContent = true;
 	config.extraAllowedContent = true;
-	CKEDITOR.disableAutoInline = true;
+	config.disableAutoInline = true;
 
 	// // ALLOW <i></i>
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
