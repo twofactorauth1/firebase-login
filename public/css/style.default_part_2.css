@@ -1211,7 +1211,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel-collapsed #magic-line {
   background: #50afc8;
   position: absolute;
-  width: 75px;
+  width: 74px;
   height: 75px;
   z-index: 100;
 }
@@ -5067,6 +5067,95 @@ div.error label.error:before {
   }
 }
 
+#editor-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 99999;
+  display: block;
+  width: 100%;
+  height: 54px;
+}
+
+#editor-toolbar .cke_chrome {
+  border: none;
+  border-radius: 0;
+  background: #27ae60;
+  height: 54px;
+  padding: 0;
+}
+
+#editor-toolbar .cke_chrome a.cke_button_disabled:active,
+#editor-toolbar .cke_chrome a.cke_button_disabled:focus,
+#editor-toolbar .cke_chrome a.cke_button_disabled:hover,
+#editor-toolbar .cke_chrome a.cke_button_off:active,
+#editor-toolbar .cke_chrome a.cke_button_off:focus,
+#editor-toolbar .cke_chrome a.cke_button_off:hover {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0;
+}
+
+#editor-toolbar .cke_chrome .cke_bottom,
+#editor-toolbar .cke_chrome .cke_top {
+  padding: 0;
+  background: none;
+}
+
+#editor-toolbar .cke_chrome .cke_toolgroup {
+  border: none;
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+#editor-toolbar .cke_chrome .cke_toolbar_separator {
+  display: none;
+}
+
+#editor-toolbar .cke_chrome a.cke_button {
+  height: 50px;
+  width: 40px;
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button_icon {
+  background: none!important;
+  font: normal normal normal 14px/1 FontAwesome;
+  text-align: center;
+  position: relative;
+  display: block;
+  color: white;
+  width: 100%;
+  line-height: 50px;
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__bold_icon:before {
+  content: "\f032";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__italic_icon:before {
+  content: "\f033";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__numberedlist_icon:before {
+  content: "\f0cb";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__bulletedlist_icon:before {
+  content: "\f0ca";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifyleft_icon:before {
+  content: "\f036";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifycenter_icon:before {
+  content: "\f039";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifyright_icon:before {
+  content: "\f038";
+}
+
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }
@@ -6718,6 +6807,14 @@ i.indi-sm {
 
 .single-product .rightpanel.rightpanel-commerce-edit .iconpicker .fa {
   font-size: 24px;
+}
+
+.single-product .custom-option-type {
+  margin-top: 10px;
+}
+
+.single-product .custom-option-switch {
+  margin-top: 25px;
 }
 
 .marketing #campaign-add-email .thumbnail {
