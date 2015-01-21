@@ -48,7 +48,7 @@
                     </ul>
                     <div class="clearfix"></div>
                     <div class="media" id="assets" style="max-height:{{bodyHeight}};">
-                        <div ng-repeat="asset in assets" class="col-xs-12 col-sm-4" ng-show="assets.length">
+                        <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4" ng-show="assets.length">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
