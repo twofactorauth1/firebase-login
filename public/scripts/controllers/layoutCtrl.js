@@ -752,7 +752,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.deleteFeatureList(componentId, index);
     }
 
-    $scope.activated = false;
+    
 
     window.clickImageButton = function(btn) {
       $scope.urlInput = $(btn).closest('td').prev('td').find('input');
@@ -763,7 +763,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.inlineInput = editor;
       window.parent.clickImageButton();
     }
+   
+   $scope.activated = false;  
 
+    window.checkIfActivated = function()
+       {
+           return $scope.activated;
+       }
+       
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         for(name in CKEDITOR.instances)
@@ -775,6 +782,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var elements = $('.editable');
         console.log('length ', elements.length);
         elements.each(function() {
+          $scope.activated = true;
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -788,7 +796,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
           });
         });
-        $scope.activated = true;
+        
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
