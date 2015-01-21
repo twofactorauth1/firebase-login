@@ -349,7 +349,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 
 .leftpanel-collapsed .header--fixed {
-  left: 53px;
+  left: 75px;
 }
 
 #btn-new-device {
@@ -652,7 +652,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .menutoggle,
 .menutoggle-right {
-  width: 53px;
+  width: 55px;
   height: 63px;
   font-size: 22px;
   padding: 22px 0 0 15px;
@@ -937,6 +937,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .header-left {
   padding: 0;
+  float: left;
 }
 
 .header-center .btn:last-child,
@@ -1041,7 +1042,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .leftpanelinner {
   padding: 5px 15px;
-  margin-top: 15px;
   background: #fff;
   height: 100%;
 }
@@ -1141,8 +1141,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .nav-bracket  > li.active  > a,
 .nav-bracket  > li.active  > a:hover,
 .nav-bracket  > li.active  > a:focus {
-  background-color: #54C8E8;
-  color: #fff;
+  color: #fff!important;
 }
 
 .nav-bracket li .fa,
@@ -1209,6 +1208,14 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   opacity: 0.6;
 }
 
+.leftpanel-collapsed #magic-line {
+  background: #50afc8;
+  position: absolute;
+  width: 75px;
+  height: 75px;
+  z-index: 100;
+}
+
 .leftpanel-collapsed .logopanel {
   display: none;
 }
@@ -1222,56 +1229,77 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 
 .leftpanel-collapsed .leftpanel {
-  width: 51px;
-  top: 51px;
+  width: 75px;
+  top: 63px;
 }
 
 .leftpanel-collapsed .leftpanelinner {
   padding: 0;
-}
-
-.leftpanel-collapsed .leftpanelinner li > a:hover > span {
-  display: block;
-  min-width: 73px;
-  width: auto;
-}
-
-.leftpanel-collapsed .nav-bracket {
-  margin: 5px;
+  background: #50c7e8!important;
+  border-right: 1px solid #3b93aa;
 }
 
 .leftpanel-collapsed .nav-bracket li a {
+  width: 100%;
   text-align: center;
-  border-radius: 2px;
-  padding: 10px;
-  position: relative;
+  padding: 10px 0;
+  font-weight: bold;
+  color: #307e93;
+  text-shadow: 0px 1px 1px #afeeff;
 }
 
 .leftpanel-collapsed .nav-bracket li a span {
-  position: absolute;
-  background: #fff;
-  padding: 10px 10px 10px 5px;
-  left: 40px;
-  top: 0;
-  min-width: 179px;
-  text-align: left;
-  z-index: 100;
-  display: none;
-  -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
-  box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
-  border-radius: 0 2px 2px 0;
+  width: 100%;
+  display: block;
+  text-align: center;
+  background: none!important;
+  font-size: 12px;
+  text-shadow: 0px 1px 1px #afeeff;
+  z-index: 101;
+  position: relative;
 }
 
 .leftpanel-collapsed .nav-bracket li a i {
   margin-right: 0;
+  font-weight: normal;
+  font-size: 20px;
+  z-index: 101;
+  position: relative;
+}
+
+.leftpanel-collapsed .nav-bracket li a:hover {
+  background-color: #50c7e8;
+  color: white;
+  text-shadow: 0px 1px 1px #307e93;
+  -webkit-transition: color 0.3s ease-in-out;
+  -moz-transition: color 0.3s ease-in-out;
+  -o-transition: color 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out;
+}
+
+.leftpanel-collapsed .nav-bracket li a:hover i {
+  text-shadow: 0px 1px 1px #307e93;
+}
+
+.leftpanel-collapsed .nav-bracket li a:hover span {
+  text-shadow: 0px 1px 1px #307e93;
 }
 
 .leftpanel-collapsed .nav-bracket > li.nav-parent > a {
   background-image: none;
 }
 
+.leftpanel-collapsed .nav-bracket li.active a {
+  color: white;
+}
+
 .leftpanel-collapsed .nav-bracket li.active a span {
   border-radius: 0 2px 0 0;
+  text-shadow: 0px 1px 1px #307e93;
+}
+
+.leftpanel-collapsed .nav-bracket li.active a i {
+  text-shadow: 0px 1px 1px #307e93;
 }
 
 .leftpanel-collapsed .nav-bracket ul {
@@ -1300,18 +1328,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .leftpanel-collapsed .nav-bracket li.nav-hover a span {
   display: block;
-}
-
-.leftpanel-collapsed .nav-bracket li.nav-hover ul {
-  display: block;
-  position: absolute;
-  top: 41px;
-  left: 47px;
-  margin: 0;
-  min-width: 172px;
-  background: #1d2939;
-  z-index: 100;
-  border-radius: 0 0 2px 0;
 }
 
 .leftpanel-collapsed .nav-bracket li.nav-hover.active a span {
@@ -1510,7 +1526,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 
 .mainpanel {
-  margin-left: 52px;
+  margin-left: 75px;
   height: auto;
 }
 
@@ -4583,17 +4599,9 @@ div.error label.error:before {
     position: relative;
   }
 
-  .leftpanel {
-    display: none;
-  }
-
   .mainpanel {
     margin-left: 0;
     width: 100%;
-  }
-
-  .leftpanel-collapsed .leftpanel {
-    display: none;
   }
 
   .leftpanel-collapsed .mainpanel {
@@ -4974,7 +4982,7 @@ div.error label.error:before {
     line-height: 18px;
   }
 
-  .blog-summary {
+  .l .blog-summary {
     font-size: 12px;
     line-height: 18px;
   }
@@ -5033,6 +5041,12 @@ div.error label.error:before {
 
   .pagination {
     margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  #leftnav {
+    display: none;
   }
 }
 
@@ -6019,6 +6033,16 @@ i.indi-sm {
   margin-left: -5px;
   bottom: 0;
   float: left;
+}
+
+#leftnav i.indi-sm {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/indi-sm-avatar.png') no-repeat;
+  display: block;
+  height: 35px;
+  width: 35px;
+  margin: 0 auto!important;
+  bottom: 0;
+  float: none;
 }
 
 .onboarding-popover-title {

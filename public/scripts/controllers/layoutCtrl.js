@@ -779,11 +779,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         CKEDITOR.disableAutoInline = true;
 
+
         var elements = $('.editable');
         console.log('length ', elements.length);
         elements.each(function() {
-          $scope.activated = true;
-          CKEDITOR.inline(this, {
+        $scope.activated = true;
+          CKEDITOR.replace(this, {
             on: {
               instanceReady: function(ev) {
                 var editor = ev.editor;
@@ -793,6 +794,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 });
 
               }
+            },
+            sharedSpaces: {
+              top: 'editor-toolbar'
             }
           });
         });
@@ -1532,5 +1536,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.deleteImage = function(component, index) {
       parent.$('body').trigger('delete_image', [index]);
     };
+    $scope.AddImageToGallery = function(componentId) {
+      window.parent.addImageToGallery(componentId);
+    }
   }
 ]);
