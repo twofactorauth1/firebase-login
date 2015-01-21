@@ -12,6 +12,7 @@
 @import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
 @import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
+@import '../js/libs/jsplumb/dist/css/jsplumb.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -17181,9 +17182,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .header-left {
   padding: 0;
   float: left;
-  width: 74px;
+  width: 75px;
   height: 63px;
   background: #272727;
+  border-right: 1px solid #000;
 }
 .header-center .btn:last-child,
 .header-center .btn:nth-last-child(2) {

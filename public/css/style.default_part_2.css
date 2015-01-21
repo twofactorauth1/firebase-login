@@ -938,9 +938,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .header-left {
   padding: 0;
   float: left;
-  width: 74px;
+  width: 75px;
   height: 63px;
   background: #272727;
+  border-right: 1px solid #000;
 }
 
 .header-center .btn:last-child,
