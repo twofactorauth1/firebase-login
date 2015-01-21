@@ -91,7 +91,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
         <div ng-switch on="userPreferences.customerSettings.gridViewDisplay" class="people-list">
             <div ng-switch-when="true" class="row">
                 <div>
-                    <div ng-repeat="customer in renderedCustomers track by $index" class="col-xs-12 col-sm-4 col-md-3">
+                    <div ng-repeat="customer in renderedCustomers" class="col-xs-12 col-sm-4 col-md-3">
                         <div data-contactid="{{customer._id}}" class="people-item btn-view-contact-details contact-item"
                         style="opacity:1">
                             <span data-original-title="Important Contact" title="" data-placement="top" data-toggle="tooltip"

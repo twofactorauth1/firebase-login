@@ -341,7 +341,7 @@ define([
                     }
                 }
             }
-
+            
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
                 if (!iframe)
@@ -379,6 +379,14 @@ define([
                          $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
                          var element = angular.element('#add-component-modal');
                          element.modal('show');
+                    });
+
+                    $("#iframe-website").contents().find('body').on("click", ".editable", function (e)
+                    {
+                        if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkIfActivated && !iFrame.contentWindow.checkIfActivated())
+                        {
+                            iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
+                        }
                     });
 
                     //add media modal click events to all images
@@ -566,14 +574,31 @@ define([
 
 
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.isEditing = true;
-                         $scope.saveLoading = false;
-                        //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
-                        //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
-                        //document.getElementById('iframe-website').contentWindow.location.reload(true);
+                        if(data.screenshot == null)
+                        {
+                            var getScreenShot = function() {
+                                WebsiteService.getPageScreenShot($scope.currentPage.handle, function(data) {
+                                    if(!data)
+                                    {
+                                        getScreenShot();
+                                    }
+                                    else
+                                    {
+                                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                                        $scope.saveLoading = false;
+                                    }
+                                })
+                            }
+                            getScreenShot(); 
+                        }
+                        else
+                        {
+                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                            $scope.saveLoading = false;
+                        }                        
                         iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-                        //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+                        
                     });
                     //$scope.deactivateAloha();
                     var data = {
@@ -982,7 +1007,14 @@ define([
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
-                } else {
+                } 
+                else if ($scope.imgGallery && $scope.componentEditing) {
+                    $scope.imgGallery = false;
+                    $scope.componentEditing.images.push({
+                        url : asset.url
+                    });
+                }
+                else {
                     $scope.componentEditing.bg.img.url = asset.url;
                     $scope.saveComponent();
                     return;
@@ -1151,6 +1183,15 @@ define([
 
             window.setPostImage = function(componentId) {
                 $scope.postImage = true;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.addImageToGallery = function(componentId) {
+                $scope.imgGallery = true;
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");
             }
