@@ -103,4 +103,29 @@ $(document).ready(function () {
 	$('.menutoggle-right').click(function () {
 		toggleRightMenu();
 	});
+
+    setTimeout(function() {
+        var $el, leftPos,
+            $mainNav = $("#leftnav ul");
+
+        $mainNav.append("<li id='magic-line'></li>");
+        var $magicLine = $("#magic-line");
+
+        $magicLine
+            .height('63px')
+            .css("top", $("#leftnav ul li.active").position().top)
+            .data("origTop", $magicLine.position().top)
+
+        $("#leftnav ul li").hover(function() {
+            $el = $(this);
+            topPos = $el.position().top;
+            $magicLine.stop().animate({
+                top: topPos
+            });
+        }, function() {
+            $magicLine.stop().animate({
+                top: $magicLine.data("origTop")
+            });
+        });
+    }, 2000);
 });

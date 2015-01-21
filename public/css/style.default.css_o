@@ -16050,9 +16050,6 @@ div.error label.error:before {
     margin-left: 0;
     width: 100%;
   }
-  .leftpanel-collapsed .leftpanel {
-    display: none;
-  }
   .leftpanel-collapsed .mainpanel {
     margin-left: 0;
   }

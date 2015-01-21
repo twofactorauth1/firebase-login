@@ -772,10 +772,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         CKEDITOR.disableAutoInline = true;
 
+
         var elements = $('.editable');
         console.log('length ', elements.length);
         elements.each(function() {
-          CKEDITOR.inline(this, {
+          CKEDITOR.replace(this, {
             on: {
               instanceReady: function(ev) {
                 var editor = ev.editor;
@@ -785,6 +786,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 });
 
               }
+            },
+            sharedSpaces: {
+              top: 'editor-toolbar'
             }
           });
         });
