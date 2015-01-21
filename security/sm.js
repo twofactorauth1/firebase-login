@@ -52,6 +52,7 @@ var defaultSubscriptionPrivs = [
     'analytics',
     'assets',
     'authentication',
+    'campaign',
     'cms',
     'contact',
     'courses',

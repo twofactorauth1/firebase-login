@@ -159,6 +159,10 @@ _.extend(api.prototype, baseApi.prototype, {
         })
     },
 
+    cancelContactCampaign: function (req, resp) {
+
+    },
+
 
 
     _cancelCampaign: function (req, resp) {
