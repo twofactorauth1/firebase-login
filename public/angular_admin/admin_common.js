@@ -99,4 +99,40 @@ $(document).ready(function () {
 	$('.menutoggle-right').click(function () {
 		toggleRightMenu();
 	});
+
+    setTimeout(function() {
+        var self = this;
+        var $el, topPos,
+            $mainNav = $("#leftnav ul");
+
+        $mainNav.append("<li id='magic-line'></li>");
+        var $magicLine = $("#magic-line");
+
+        $magicLine
+            .height('63px')
+            .css("top", $("#leftnav ul li.active").position().top)
+            .data("origTop", $magicLine.position().top);
+
+
+            $("#leftnav ul li").hover(function() {
+                $el = $(this);
+                topPos = $el.position().top;
+                $magicLine.stop().animate({
+                    top: topPos
+                });
+            }, function() {
+                console.log('$magicLine.data("origTop") ', $magicLine.data("origTop"));
+                $magicLine.stop().animate({
+                    top: $magicLine.data("origTop")
+                });
+            });
+
+         $("#leftnav ul li").on('click', function() {
+            var self = this;
+            $el = $(this);
+            console.log('clicked ', $el.position().top);
+            self.topPos = $el.position().top;
+            $magicLine.data("origTop", $el.position().top);
+         });
+    }, 2000);
 });
