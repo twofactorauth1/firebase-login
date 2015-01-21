@@ -23,7 +23,6 @@ var mandrillConfig = require('../configs/mandrill.config');
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 
-//todo: change it to dynamic resolution depending on env
 var hostSuffix = appConfig.subdomain_suffix;
 var async = require('async');
 
