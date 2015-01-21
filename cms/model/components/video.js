@@ -57,12 +57,24 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
+            videoType: 'youtube',
+            /**
+            *
+            *
+            */
             video : "",
+            videoMp4: '',
+            videoWebm: '',
 
             /**
              *
              *
              */
+             videoAutoPlay: false,
+             videoControls: true,
+             videoBranding: true,
+             videoWidth: null,
+             videoHeight: null,
             txtcolor : "#ffffff",
 
             /**

@@ -27,7 +27,7 @@
             </a>
 
             <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing">
-                
+
                 <span class="visible-xs" ng-hide="saveLoading">
                  <i class="fa fa-save"></i>
                 </span>
@@ -35,7 +35,7 @@
                  <i class="fa fa-spinner fa-spin"></i>
                  </span>
                 <span class="hidden-xs" ng-hide="saveLoading">
-                 <i class="fa fa fa-save"></i> Save 
+                 <i class="fa fa fa-save"></i> Save
                  </span>
                 <span class="hidden-xs"  ng-show="saveLoading">
                  Saving
@@ -402,7 +402,7 @@
                                     <label for="bg_blur">Blur BG</label>
                                     <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
-                                
+
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && !componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
                                     <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
@@ -457,22 +457,22 @@
                                                      <span ng-show="!edit[$index]">{{link.label}}</span>
                                                      <input ng-show="edit[$index]" type="text" ng-model="link.label">
                                                  </h4>
-                                                 </div>  
-                                                 <div class="col-sm-6"> 
-                                                    <h4>                           
-                                                    <i ng-show="!edit[$index]" class="fa fa-pencil-square-o" ng-click="edit[$index]=true"></i>                                    
+                                                 </div>
+                                                 <div class="col-sm-6">
+                                                    <h4>
+                                                    <i ng-show="!edit[$index]" class="fa fa-pencil-square-o" ng-click="edit[$index]=true"></i>
                                                     <i ng-show="edit[$index]" class="fa fa-times" ng-click="edit[$index]= false"></i>
                                                     <i class="fa fa-trash-o" ng-click="mainMenu.links.splice($index,1)"></i>
                                                     </h4>
                                                 </div>
                                             </div>
-                                    
+
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                             <div class="footer">
-                                <div class="row form-group">                               
+                                <div class="row form-group">
                                     <div class="pull-left switch-navadd col-xs-12 col-sm-6 col-md-4">
                                         <input bs-switch switch-size="large"  ng-model="addNavigationLink" type="checkbox" switch-label="Add Link" ng-change="initializeLinks()">
                                     </div>
@@ -505,7 +505,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <button type="button" ng-click="addLinkToNav()" class="btn btn-primary pull-right">Add</button>  
+                                        <button type="button" ng-click="addLinkToNav()" class="btn btn-primary pull-right">Add</button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -585,12 +585,58 @@
                                 <label for="location-hours">Business Hours </label>
                                 <input id="location-hours" class="form-control input-lg" type="textarea" ng-model="componentEditing.hours">
                             </div>
-                            
+
                             <div class="footer">
                                 <button type="button" class="btn btn-primary pull-right" ng-click="updateContactUsAddress()" data-dismiss="modal">
                                     Save changes
                                 </button>
                             </div>
+                        </tab>
+
+                        <tab ng-if="componentEditing.type === 'video'">
+                          <tab-heading>
+                            <span>Video</span>
+                          </tab-heading>
+                          <div class="form-group">
+                            <label for="member-name">Video Type:</label>
+                            <select id="member-name" class="form-control" ng-model="componentEditing.videoType">
+                              <option value="youtube">YouTube</option>
+                              <option value="vimeo">Vimeo</option>
+                              <option value="html5">Html4 Video</option>
+                            </select>
+                          </div>
+                          <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
+                            <label for="member-name">Url:</label>
+                            <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.video">
+                          </div>
+                          <div class="form-group" ng-show="componentEditing.videoType == 'html5'">
+                            <label for="member-name">Mp4 Url:</label>
+                            <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoMp4">
+                          </div>
+                          <div class="form-group" ng-show="componentEditing.videoType == 'html5'">
+                            <label for="member-name">Webm Url:</label>
+                            <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoWebm">
+                          </div>
+                          <div class="form-group">
+                            <label for="colorpicker">Auto Play:</label>
+                            <input bs-switch ng-model="componentEditing.videoAutoPlay" type="checkbox" class="pull-right">
+                          </div>
+                          <div class="form-group">
+                            <label for="colorpicker">Controls:</label>
+                            <input bs-switch ng-model="componentEditing.videoControls" type="checkbox" class="pull-right">
+                          </div>
+                          <div class="form-group">
+                            <label for="colorpicker">Branding:</label>
+                            <input bs-switch ng-model="componentEditing.videoBranding" type="checkbox" class="pull-right">
+                          </div>
+                          <div class="form-group">
+                            <label for="member-name">Optional Width:</label>
+                            <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoWidth">
+                          </div>
+                          <div class="form-group">
+                            <label for="member-name">Optional Height:</label>
+                            <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoHeight">
+                          </div>
                         </tab>
 
 
