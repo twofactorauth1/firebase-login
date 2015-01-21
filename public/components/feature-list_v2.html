@@ -30,6 +30,11 @@
               <div ng-if="isEditing && component.features.length > 1" class="delete-feature center">
                     <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
             </div>
+            <div ng-if="isEditing" class="add-addtional center">
+                <a href="">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
         </div>
 
         <div class="clearfix mb30 visible-xs"></div>

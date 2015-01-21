@@ -7407,6 +7407,27 @@ hr {
   color: #219265;
 }
 
+.add-addtional {
+  position: absolute;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 10px 10px 5px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  left: 50%;
+  z-index: 9998;
+  margin-top: -25px;
+  display: none;
+  -webkit-transition: font-size 0.5s;
+  -moz-transition: font-size 0.5s;
+  -o-transition: font-size 0.5s;
+  transition: font-size 0.5s;
+}
+
+.add-addtional:hover {
+  font-size: 18px;
+}
+
 body.editing .no-component {
   display: block;
   visibility: visible;
@@ -7733,6 +7754,11 @@ div[data-type='campaign'] .inner-page .overlay {
 
 .editing .features-wrap .feature:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .features-wrap .feature:hover .add-addtional {
+  display: block;
+  font-size: 28px;
 }
 
 .editing .features-wrap .feature:hover .delete-feature .btn-delete-feature {

@@ -141,6 +141,27 @@ hr {
     }
 }
 
+.add-addtional {
+  position: absolute;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 10px 10px 5px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  left: 50%;
+  z-index: 9998;
+  margin-top: -25px;
+  display: none;
+  -webkit-transition: font-size 0.5s;
+   -moz-transition: font-size 0.5s;
+     -o-transition: font-size 0.5s;
+        transition: font-size 0.5s;
+
+  &:hover {
+    font-size: 18px;
+  }
+}
+
 body.editing {
   .no-component {
     display: block;
