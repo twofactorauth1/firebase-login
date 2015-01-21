@@ -46,8 +46,7 @@ body.leftpanel-collapsed #headerbar {
 body.leftpanel-collapsed.rightmenu-open #headerbar {
   right: 240px;
 }
-body.leftpanel-collapsed.rightmenu-open .contentpanel,
-body.leftpanel-collapsed.rightmenu-open .header-menu-row {
+body.leftpanel-collapsed.rightmenu-open .contentpanel {
   margin-right: 240px;
 }
 .powertour-highlight {
