@@ -20,7 +20,7 @@
                 </div>
                 </div>
             </div>
-             <div ng-if="isEditing" class="delete-feature center">
+             <div ng-if="isEditing && component.features.length > 1" class="delete-feature center">
                     <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature">Delete</button>
             </div>
             <hr ng-if="!$last" />
