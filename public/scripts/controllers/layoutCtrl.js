@@ -1532,5 +1532,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.deleteImage = function(component, index) {
       parent.$('body').trigger('delete_image', [index]);
     };
+    $scope.AddImageToGallery = function(componentId) {
+      window.parent.addImageToGallery(componentId);
+    }
   }
 ]);

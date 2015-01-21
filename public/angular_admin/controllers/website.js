@@ -1007,7 +1007,14 @@ define([
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
-                } else {
+                } 
+                else if ($scope.imgGallery && $scope.componentEditing) {
+                    $scope.imgGallery = false;
+                    $scope.componentEditing.images.push({
+                        url : asset.url
+                    });
+                }
+                else {
                     $scope.componentEditing.bg.img.url = asset.url;
                     $scope.saveComponent();
                     return;
@@ -1176,6 +1183,15 @@ define([
 
             window.setPostImage = function(componentId) {
                 $scope.postImage = true;
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.addImageToGallery = function(componentId) {
+                $scope.imgGallery = true;
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");
             }
