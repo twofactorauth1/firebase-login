@@ -341,7 +341,7 @@ define([
                     }
                 }
             }
-
+            
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
                 if (!iframe)
@@ -379,6 +379,14 @@ define([
                          $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
                          var element = angular.element('#add-component-modal');
                          element.modal('show');
+                    });
+
+                    $("#iframe-website").contents().find('body').on("click", ".editable", function (e)
+                    {
+                        if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkIfActivated && !iFrame.contentWindow.checkIfActivated())
+                        {
+                            iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
+                        }
                     });
 
                     //add media modal click events to all images
