@@ -691,7 +691,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       var selectedName;
       switch (mode) {
         case "add":
-          if (social && social.name && social.url) {
+          if (social && social.name) {
+            if (!social.url || social.url == "") {
+              $("#social-link-url .error").html("Link url can not be blank.");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
             selectedName = _.findWhere($scope.networks, {
               name: social.name
             });
@@ -708,6 +713,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               $("#social-link-url").addClass('has-error');
               return;
             }
+          } else {
+            $("#social-link-url .error").html("Please enter link url.");
+            $("#social-link-url").addClass('has-error');
+            $("#social-link-name .error").html("Please select link icon.");
+            $("#social-link-name").addClass('has-error');
+            return;
           }
           break;
         case "update":
