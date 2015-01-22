@@ -38,3 +38,4 @@ public/css/style.default.css
 >>>>>>> origin/zeeshan_dev2
 
 configs/mongodb.config.js
+.kateproject*
