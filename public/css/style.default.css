@@ -9,10 +9,6 @@
 @import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
 @import '../js/libs/sweetalert/lib/sweet-alert.css';
 @import '../js/libs/slick-carousel/slick/slick.css';
-@import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
-@import '../js/libs_misc/powertour/css/powertour-style-clean.css';
-@import '../js/libs_misc/powertour/css/powertour-connectors.css';
-@import '../js/libs/jsplumb/dist/css/jsplumb.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -17247,6 +17243,24 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   font-size: 11px;
   opacity: 0.5;
 }
+#leftnav {
+  -webkit-box-shadow: 2px 0px 3px -2px rgba(0, 0, 0, 0.6);
+  position: fixed;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  -ms-transition: none;
+  transition: none;
+}
+#leftnav .nav-bracket > li.active > a,
+#leftnav .nav-bracket > li.focus > a,
+#leftnav .nav-bracket > li.visted > a {
+  background-color: #50afc8;
+  color: #333333;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
 .sticky-leftpanel {
   position: fixed;
   height: 100%;
@@ -17411,13 +17425,6 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-top: 5px;
   opacity: 0.6;
 }
-.leftpanel-collapsed #magic-line {
-  background: #50afc8;
-  position: absolute;
-  width: 74px;
-  height: 75px;
-  z-index: 100;
-}
 .leftpanel-collapsed .logopanel {
   display: none;
 }
@@ -17462,13 +17469,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   position: relative;
 }
 .leftpanel-collapsed .nav-bracket li a:hover {
-  background-color: #50c7e8;
   color: white;
   text-shadow: 0px 1px 1px #307e93;
-  -webkit-transition: color 0.3s ease-in-out;
-  -moz-transition: color 0.3s ease-in-out;
-  -o-transition: color 0.3s ease-in-out;
-  transition: color 0.3s ease-in-out;
+  background: #50afc8;
 }
 .leftpanel-collapsed .nav-bracket li a:hover i {
   text-shadow: 0px 1px 1px #307e93;
@@ -17478,6 +17481,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .leftpanel-collapsed .nav-bracket > li.nav-parent > a {
   background-image: none;
+}
+.leftpanel-collapsed .nav-bracket li.active {
+  background: #50afc8;
 }
 .leftpanel-collapsed .nav-bracket li.active a {
   color: white;
@@ -20597,7 +20603,6 @@ div.error label.error:before {
   border: none;
   border-radius: 0;
   background: #27ae60;
-  height: 54px;
   padding: 0;
 }
 #editor-toolbar .cke_chrome a.cke_button_disabled:active,
@@ -20623,6 +20628,12 @@ div.error label.error:before {
 }
 #editor-toolbar .cke_chrome .cke_toolbar_separator {
   display: none;
+}
+#editor-toolbar .cke_chrome .cke_button_on {
+  background: rgba(255, 255, 255, 0.5);
+}
+#editor-toolbar .cke_chrome .cke_combo_button {
+  margin-top: 13px;
 }
 #editor-toolbar .cke_chrome a.cke_button {
   height: 50px;
@@ -20654,10 +20665,28 @@ div.error label.error:before {
   content: "\f036";
 }
 #editor-toolbar .cke_chrome a.cke_button .cke_button__justifycenter_icon:before {
-  content: "\f039";
+  content: "\f037";
 }
 #editor-toolbar .cke_chrome a.cke_button .cke_button__justifyright_icon:before {
   content: "\f038";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifyblock_icon:before {
+  content: "\f039";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__link_icon:before {
+  content: "\f0c1";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__unlink_icon:before {
+  content: "\f127";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__anchor_icon:before {
+  content: "\f13d";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__mediamanager_icon:before {
+  content: "\f03e";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__fontawesome_icon:before {
+  content: "\f024";
 }
 .website .pageheader .btn-group {
   margin-bottom: 0;
@@ -20793,6 +20822,9 @@ div.error label.error:before {
   background-position: -306px -48px;
   width: 60px;
   height: 78px;
+}
+.editing .ui-sortable {
+  margin-top: 50px;
 }
 #nestable-menu {
   z-index: 999;

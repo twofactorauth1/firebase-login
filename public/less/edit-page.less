@@ -9,7 +9,6 @@
       border: none;
       border-radius: 0;
       background: #27ae60;
-      height: 54px;
       padding: 0;
       a.cke_button_disabled:active,
       a.cke_button_disabled:focus,
@@ -33,6 +32,12 @@
       }
       .cke_toolbar_separator {
         display: none;
+      }
+      .cke_button_on {
+        background: rgba(255, 255, 255, 0.5);
+      }
+      .cke_combo_button {
+        margin-top: 13px;
       }
       a.cke_button {
         height: 50px;
@@ -74,12 +79,42 @@
         }
         .cke_button__justifycenter_icon {
           &:before {
-            content: "\f039";
+            content: "\f037";
           }
         }
         .cke_button__justifyright_icon {
           &:before {
             content: "\f038";
+          }
+        }
+        .cke_button__justifyblock_icon {
+          &:before {
+            content: "\f039";
+          }
+        }
+        .cke_button__link_icon {
+          &:before {
+            content: "\f0c1";
+          }
+        }
+        .cke_button__unlink_icon {
+          &:before {
+            content: "\f127";
+          }
+        }
+        .cke_button__anchor_icon {
+          &:before {
+            content: "\f13d";
+          }
+        }
+        .cke_button__mediamanager_icon {
+          &:before {
+            content: "\f03e";
+          }
+        }
+        .cke_button__fontawesome_icon {
+          &:before {
+            content: "\f024";
           }
         }
       }
@@ -256,6 +291,10 @@
 
   }
 
+}
+
+.editing .ui-sortable {
+  margin-top: 50px;
 }
 
 #nestable-menu {
