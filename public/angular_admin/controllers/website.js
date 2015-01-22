@@ -1151,6 +1151,18 @@ define([
                 $scope.saveCustomComponent();
             }
 
+            window.addNewFeatureList = function(componentId, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                console.log('component editing >>> ', $scope.componentEditing);
+                 $scope.componentEditing.features.push({
+                        "top" : "<div style=\"text-align:center\"><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-cubes  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-cubes%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-cubes%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></span></div>",
+                        "content" : "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.<br></p><p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><a data-cke-saved-href=\"http://\" href=\"http:\" style=\"color: rgb(255, 255, 255); outline: 0px; text-align: center; -webkit-box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; border-radius: 3px; border: 1px solid rgb(18, 77, 119); display: inline-block; font-family: arial; font-size: 13px; padding: 6px 24px; text-shadow: rgb(21, 70, 130) 0px 1px 0px; background-image: linear-gradient(rgb(0, 125, 193) 5%, rgb(0, 97, 167) 100%); background-color: rgb(0, 125, 193);\">Learn More</a><br></p>"
+                    });
+                $scope.saveCustomComponent();
+            }
+
             window.clickImageButton = function() {
                 $scope.insertMediaImage = true;
                 $("#media-manager-modal").modal('show');

@@ -768,7 +768,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.deleteFeatureList(componentId, index);
     }
 
-
+    $scope.addFeatureList = function(componentId, index) {
+      window.parent.addNewFeatureList(componentId, index);
+    }
 
     window.clickImageButton = function(btn) {
       $scope.urlInput = $(btn).closest('td').prev('td').find('input');
