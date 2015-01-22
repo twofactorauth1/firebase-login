@@ -18201,6 +18201,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   text-align: center;
   font-weight: 600;
 }
+.activity-feed {
+  text-align: left;
+}
 .customer-stats {
   color: #c2c2c2;
 }

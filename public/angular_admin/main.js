@@ -13,7 +13,7 @@ require.config({
         'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
         'angular': 'libs/angular/angular',
         'angularBootstrap': 'libs/angular-bootstrap/ui-bootstrap-tpls.min',
-        'angularBootstrapSwitch': 'libs/angular-bootstrap-switch/dist/angular-bootstrap-switch',
+        'angularBootstrapSwitch': 'libs_misc/angular-bootstrap-switch/dist/angular-bootstrap-switch',
         'angularRoute': 'libs/angular-route/angular-route',
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
