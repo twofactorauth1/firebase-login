@@ -68,7 +68,7 @@ define([
             $scope.isMobile = false;
             $scope.tabs = {};
             $scope.addLinkType = 'page';
-            $scope.saveLoading = false ; 
+            $scope.saveLoading = false ;
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -337,11 +337,12 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
+                            $scope.iframeLoaded = true;
                         }, 5000)
                     }
                 }
             }
-            
+
             $scope.bindEvents = function() {
                 var iframe = document.getElementById("iframe-website");
                 if (!iframe)
@@ -358,7 +359,7 @@ define([
                     }
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function (e)
-                    { 
+                    {
                         e.preventDefault();
                         e.stopPropagation();
                     });
@@ -390,7 +391,7 @@ define([
                     });
 
                     //add media modal click events to all images
-                    
+
                     // $("#iframe-website").contents().find('body').on("click", "img", function (e)
                     // {
                     // $("#media-manager-modal").modal('show');
@@ -478,7 +479,7 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                $scope.saveLoading = true ; 
+                $scope.saveLoading = true ;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);
@@ -590,15 +591,15 @@ define([
                                     }
                                 })
                             }
-                            getScreenShot(); 
+                            getScreenShot();
                         }
                         else
                         {
                             toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                             $scope.saveLoading = false;
-                        }                        
+                        }
                         iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-                        
+
                     });
                     //$scope.deactivateAloha();
                     var data = {
@@ -611,7 +612,7 @@ define([
                         console.log('updated website settings', data);
                     });
                 }
-                
+
             };
 
             $scope.updatePage = function(handle, editing) {
@@ -768,7 +769,7 @@ define([
                 $scope.activateAloha();
                 //WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
                     //$scope.resfeshIframe();
-                    
+
                //});
             };
 
@@ -897,9 +898,9 @@ define([
                             matchingComponent[componentVar] = componentVarContents;
                         }
                     }
-                }  
                 }
-                
+                }
+
 
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -1007,7 +1008,7 @@ define([
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
-                } 
+                }
                 else if ($scope.imgGallery && $scope.componentEditing) {
                     $scope.imgGallery = false;
                     $scope.componentEditing.images.push({
@@ -1110,8 +1111,8 @@ define([
                 if(linkTitle && linkUrl)
                 {
                     $scope.website.linkLists.forEach(function(value, index) {
-                        if (value.handle === "head-menu") {                        
-                            value.links.push({                                
+                        if (value.handle === "head-menu") {
+                            value.links.push({
                                     label: linkTitle,
                                     type: "link",
                                     linkTo: {
@@ -1123,7 +1124,7 @@ define([
                         }
                     });
                 }
-                
+
             }
 
             //when the navigation is reordered, update the linklist in the website object
@@ -1148,7 +1149,7 @@ define([
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);  
+                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
                                     toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }
@@ -1194,6 +1195,14 @@ define([
                 });
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.deleteImageFromGallery = function(componentId, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.images.splice(index, 1);
+                $scope.saveCustomComponent();
             }
 
             window.changeProfilePhoto = function(componentId, customer) {
@@ -1274,7 +1283,7 @@ define([
                     $scope.currentPage = _.findWhere(that.allPages, {
                         handle: page.handle
                     });
-                   
+
                     //get components from page
                     if ($scope.currentPage && $scope.currentPage.components) {
                         $scope.components = $scope.currentPage.components;

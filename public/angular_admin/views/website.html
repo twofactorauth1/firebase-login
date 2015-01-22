@@ -26,59 +26,23 @@
                 <span class="hidden-xs">Edit</span>
             </a>
 
-            <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing">
+            <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
 
-                <span class="visible-xs" ng-hide="saveLoading">
-                 <i class="fa fa-save"></i>
-                </span>
-                <span class="visible-xs"  ng-show="saveLoading">
-                 <i class="fa fa-spinner fa-spin"></i>
-                 </span>
-                <span class="hidden-xs" ng-hide="saveLoading">
-                 <i class="fa fa fa-save"></i> Save
-                 </span>
-                <span class="hidden-xs"  ng-show="saveLoading">
-                 Saving
-                 <i class="fa fa-spinner fa-spin"></i>
+                <span>
+                     <span class="hidden-xs" ng-if="!saveLoading"> Save </span>
+                     <span class="hidden-xs" ng-if="saveLoading"> Saving </span>
+                     <i class="fa fa-spinner fa-spin" ng-if="saveLoading"></i>
                  </span>
             </a>
-            <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing">
+            <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
             </a>
-            <!--<a class="btn btn-success pull-right btn-media-manager" type="button" data-toggle="modal" data-target="#media-manager-modal">-->
-            <!--<span class="fa fa-image"></span>-->
-            <!--<span class="hidden-xs">Media</span>-->
 
             <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
-            <!--</a>-->
-
-            <!-- <a class="btn btn-success pull-right btn-create-page" data-toggle="modal" data-target="#create-page-modal"><i class="fa fa-plus"></i>
-                <span> Page</span>
-            </a>
-
-            <a class="btn btn-success pull-right btn-create-post" data-toggle="modal" data-target="#create-post-modal"><i class="fa fa-plus"></i>
-                <span> Post</span>
-            </a> -->
-
-            <!-- <div class="btn-group pull-right btn-add" ng-show="!isEditing">
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i>
-                    <span class="hidden-xs">Add</span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="" data-toggle="modal" data-target="#add-component-modal"> Component</a>
-                    </li>
-                    <li><a href="" data-toggle="modal" data-target="#create-page-modal"> Page</a>
-                    </li>
-                    <li><a href="" data-toggle="modal" data-target="#create-post-modal"> Post</a>
-                    </li>
-                </ul>
-            </div> -->
 
             <div class="clearfix"></div>
         </div>

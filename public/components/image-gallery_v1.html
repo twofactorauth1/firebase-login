@@ -19,12 +19,12 @@
         </div>
     </div>
 
-    <div class=" clearfix mb20"></div>
+    <div class="clearfix mb20"></div>
 
     <div>
         <div ng-cloak>
             <div ng-repeat="image in component.images track by $index">
-                <div class="col-sm-3 col-xs-12">
+                <div class="col-sm-3 col-xs-12 image-wrap">
                     <div class="thumbnail imgHeight single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
                             <img class="img-responsive img-gallery-{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
@@ -33,11 +33,14 @@
                             <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
                         </span>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-xs-12" ng-if="isEditing">
-                <div class="thumbnail imgHeight single-image" style="display: inline-block;color:black;">
-                    <i class="fa fa-plus-circle" title="Add Image" style="font-size: 174px; cursor:pointer" ng-click="AddImageToGallery(component._id)"></i>
+                    <div ng-if="isEditing" class="delete-single-image center">
+                        <button ng-click="DeleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                    </div>
+                    <div ng-if="isEditing" class="add-addtional center">
+                        <a href="">
+                            <i class="fa fa-plus" ng-click="AddImageToGallery(component._id)"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

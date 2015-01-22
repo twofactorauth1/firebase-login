@@ -22650,6 +22650,7 @@ hr {
   left: 50%;
   z-index: 9998;
   margin-top: -25px;
+  margin-left: -25px;
   display: none;
   -webkit-transition: font-size 0.5s;
   -moz-transition: font-size 0.5s;
@@ -25147,6 +25148,30 @@ div[data-type=blog] .container {
 div[data-type="coming-soon"] .component-inner {
   background: rgba(255, 255, 255, 0.9);
 }
+.editing .image-wrap:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+  padding-right: 6px;
+  padding-left: 6px;
+  margin-top: -4px;
+  margin-bottom: -4px;
+}
+.editing .image-wrap:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+.editing .image-wrap:hover .delete-single-image .btn-delete-single-image {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.editing .image-wrap .delete-single-image .btn-delete-single-image {
+  display: none;
+}
 .image-gallery-v1 .single-image {
   padding: 0;
   margin: 0;
@@ -25208,7 +25233,7 @@ div[data-type="coming-soon"] .component-inner {
   max-height: 150px;
   overflow: hidden;
   min-height: 150px;
-  margin-bottom: 20px;
+  margin: 10px 0 20px 0;
 }
 .image-text-v4 .title {
   text-align: center;
