@@ -159,6 +159,37 @@ module.exports = {
 
     handleStep: function(campaignFlow, fn) {
         //TODO: this
+        fn(null, null);
+    },
+
+    bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
+        //TODO: this
+        fn(null, null);
+    },
+
+    cancelRunningCampaign: function(campaignId, accountId, fn) {
+        //TODO: this
+        fn(null, null);
+    },
+
+    cancelCampaignForContact: function(accountId, campaignId, contactId, fn) {
+        //TODO: this
+        fn(null, null);
+    },
+
+    getRunningCampaign: function(accountId, runningCampaignId, fn) {
+        //TODO: this
+        fn(null, null);
+    },
+
+    getRunningCampaigns: function(accountId, fn) {
+        //TODO: this
+        fn(null, null);
+    },
+
+    getRunningCampaignsForContact: function(accountId, contactId, fn) {
+        //TODO: this
+        fn(null, null);
     },
 
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {
