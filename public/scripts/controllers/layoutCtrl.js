@@ -508,7 +508,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               scrollWheelZoom: false
             },
             markers: {
-                
+
             }
       });
 
@@ -519,7 +519,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               if(that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
                 $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
             }
-            if(!component.contact.phone && that.account.business.phones.length) 
+            if(!component.contact.phone && that.account.business.phones.length)
               $scope.contactPhone = that.account.business.phones[0].number;
             if($scope.geo_address_string){
               analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
@@ -720,6 +720,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#social-link-name").addClass('has-error');
             return;
           }
+          $("#social-link-name .error").html("");
+          $("#social-link-name").removeClass('has-error');
+          $("#social-link-url .error").html("");
+          $("#social-link-url").removeClass('has-error');
           break;
         case "update":
           if (social && social.name && social.url) {
@@ -754,6 +758,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.updateSocialNetworks(old_value, mode, social);
       // $("#socialComponentModal").modal("hide");
       $(".modal-backdrop").remove();
+      $scope.social = {};
     };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
@@ -763,7 +768,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.deleteFeatureList(componentId, index);
     }
 
-    
+
 
     window.clickImageButton = function(btn) {
       $scope.urlInput = $(btn).closest('td').prev('td').find('input');
@@ -774,14 +779,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.inlineInput = editor;
       window.parent.clickImageButton();
     }
-   
-   $scope.activated = false;  
+
+   $scope.activated = false;
 
     window.checkIfActivated = function()
        {
            return $scope.activated;
        }
-       
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         for(name in CKEDITOR.instances)
@@ -790,12 +795,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         CKEDITOR.disableAutoInline = true;
 
-
         var elements = $('.editable');
         console.log('length ', elements.length);
         elements.each(function() {
         $scope.activated = true;
-          CKEDITOR.replace(this, {
+          CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
                 var editor = ev.editor;
@@ -811,7 +815,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
           });
         });
-        
+
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
@@ -1544,8 +1548,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.addImage = function(component) {
       parent.$('body').trigger('add_image');
     };
-    $scope.deleteImage = function(component, index) {
-      parent.$('body').trigger('delete_image', [index]);
+    $scope.DeleteImageFromGallery = function(componentId, index) {
+      window.parent.deleteImageFromGallery(componentId, index);
     };
     $scope.AddImageToGallery = function(componentId) {
       window.parent.addImageToGallery(componentId);

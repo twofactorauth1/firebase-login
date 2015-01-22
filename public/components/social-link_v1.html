@@ -27,7 +27,7 @@
                 <div class="modal-body">
                     <div id="new_page">
                         <div class="form-group">
-                            <label for="Link Type">Choose a Link Type </label>
+                            <label for="Link Type">Choose a Link Type* </label>
                             <div class="modal-events col-sm-12">           
                                 <a ng-repeat="social_link in social_links" class="btn btn-social-icon btn-{{social_link.name}}" ng-click="setSelectedLink(social_link)"><i class="fa fa-{{social_link.icon}}"></i></a>  
                             </div>
@@ -38,7 +38,7 @@
                             <span class="error help-block" />
                         </div>
                         <div class="form-group" id="social-link-url">
-                            <label for="link-url">Link Url </label>
+                            <label for="link-url">Link Url* </label>
                             <input id="link-url" class="form-control input-lg" type="text" ng-model="social.url">
                             <span class="error help-block" />
                         </div> 

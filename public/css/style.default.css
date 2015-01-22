@@ -12,6 +12,7 @@
 @import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
 @import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
+@import '../js/libs/jsplumb/dist/css/jsplumb.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -3598,7 +3599,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   float: none;
 }
 .nav-stacked > li + li {
-  margin-top: 2px;
   margin-left: 0;
 }
 .nav-justified {
@@ -17182,6 +17182,10 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .header-left {
   padding: 0;
   float: left;
+  width: 75px;
+  height: 63px;
+  background: #272727;
+  border-right: 1px solid #000;
 }
 .header-center .btn:last-child,
 .header-center .btn:nth-last-child(2) {
@@ -17410,7 +17414,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel-collapsed #magic-line {
   background: #50afc8;
   position: absolute;
-  width: 75px;
+  width: 74px;
   height: 75px;
   z-index: 100;
 }
@@ -20578,6 +20582,80 @@ div.error label.error:before {
     transition: all 0.3s ease;
   }
 }
+#editor-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 99999;
+  display: block;
+  width: 100%;
+  height: 54px;
+}
+#editor-toolbar .cke_chrome {
+  border: none;
+  border-radius: 0;
+  background: #27ae60;
+  height: 54px;
+  padding: 0;
+}
+#editor-toolbar .cke_chrome a.cke_button_disabled:active,
+#editor-toolbar .cke_chrome a.cke_button_disabled:focus,
+#editor-toolbar .cke_chrome a.cke_button_disabled:hover,
+#editor-toolbar .cke_chrome a.cke_button_off:active,
+#editor-toolbar .cke_chrome a.cke_button_off:focus,
+#editor-toolbar .cke_chrome a.cke_button_off:hover {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 0;
+}
+#editor-toolbar .cke_chrome .cke_bottom,
+#editor-toolbar .cke_chrome .cke_top {
+  padding: 0;
+  background: none;
+}
+#editor-toolbar .cke_chrome .cke_toolgroup {
+  border: none;
+  border-radius: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+#editor-toolbar .cke_chrome .cke_toolbar_separator {
+  display: none;
+}
+#editor-toolbar .cke_chrome a.cke_button {
+  height: 50px;
+  width: 40px;
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button_icon {
+  background: none!important;
+  font: normal normal normal 14px/1 FontAwesome;
+  text-align: center;
+  position: relative;
+  display: block;
+  color: white;
+  width: 100%;
+  line-height: 50px;
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__bold_icon:before {
+  content: "\f032";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__italic_icon:before {
+  content: "\f033";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__numberedlist_icon:before {
+  content: "\f0cb";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__bulletedlist_icon:before {
+  content: "\f0ca";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifyleft_icon:before {
+  content: "\f036";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifycenter_icon:before {
+  content: "\f039";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__justifyright_icon:before {
+  content: "\f038";
+}
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }
@@ -22572,6 +22650,7 @@ hr {
   left: 50%;
   z-index: 9998;
   margin-top: -25px;
+  margin-left: -25px;
   display: none;
   -webkit-transition: font-size 0.5s;
   -moz-transition: font-size 0.5s;
@@ -25069,6 +25148,30 @@ div[data-type=blog] .container {
 div[data-type="coming-soon"] .component-inner {
   background: rgba(255, 255, 255, 0.9);
 }
+.editing .image-wrap:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+  padding-right: 6px;
+  padding-left: 6px;
+  margin-top: -4px;
+  margin-bottom: -4px;
+}
+.editing .image-wrap:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+.editing .image-wrap:hover .delete-single-image .btn-delete-single-image {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.editing .image-wrap .delete-single-image .btn-delete-single-image {
+  display: none;
+}
 .image-gallery-v1 .single-image {
   padding: 0;
   margin: 0;
@@ -25130,7 +25233,7 @@ div[data-type="coming-soon"] .component-inner {
   max-height: 150px;
   overflow: hidden;
   min-height: 150px;
-  margin-bottom: 20px;
+  margin: 10px 0 20px 0;
 }
 .image-text-v4 .title {
   text-align: center;

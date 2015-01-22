@@ -27,14 +27,14 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript,Image,maximize,resize';
+	config.removeButtons = 'Cut,Copy,Paste,Undo,Redo,Underline,Strike,Subscript,Superscript,Image,maximize,resize,Format,Indent,Outdent,Blockquote,lineheight,horizontalrule';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = '';
 
 	config.allowedContent = true;
 	config.extraAllowedContent = true;
-	CKEDITOR.disableAutoInline = true;
+	config.disableAutoInline = true;
 
 	// // ALLOW <i></i>
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
