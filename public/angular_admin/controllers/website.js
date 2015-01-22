@@ -326,7 +326,7 @@ define([
 
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
-                $scope.iframeLoaded = true;
+
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
                 //$scope.bindEvents();
@@ -337,6 +337,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
+                            $scope.iframeLoaded = true;
                         }, 5000)
                     }
                 }
