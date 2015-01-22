@@ -12,6 +12,7 @@ define([
     'jquery',
     'mediaDirective',
     'checkImageDirective',
+    'blockUI'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -20,12 +21,14 @@ define([
         'WebsiteService',
         'ngProgress',
         'toaster',
-        function($scope, $location, UserService, WebsiteService, ngProgress, toaster) {
+        'blockUI',
+        function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI) {
             ngProgress.start();
             var account;
             $scope.showToaster = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
-
+            
+                     
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
@@ -145,6 +148,34 @@ define([
                         }
                     }
                     $scope.pages = _pages;
+                    var editPageHandle = WebsiteService.getEditedPageHandle();
+                    if($scope.activeTab === 'pages' && editPageHandle)
+                    {
+
+                        $scope.editedPage =  _.findWhere($scope.pages, {
+                            handle: editPageHandle
+                        });
+                        if($scope.editedPage && $scope.editedPage.screenshot == null)
+                        {
+                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI'); 
+                            pagesBlockUI.start();                     
+                            var getScreenShot = function() {
+                                WebsiteService.getPageScreenShot(editPageHandle, function(data) {
+                                    if(!data)
+                                    {
+                                        getScreenShot();
+                                    }
+                                    else
+                                    {
+                                       WebsiteService.setEditedPageHandle();
+                                       $scope.editedPage.screenshot = data;
+                                       pagesBlockUI.stop();
+                                    }
+                                })
+                            }
+                            getScreenShot();
+                        }
+                    }
                 });
 
                 UserService.getUserPreferences(function(preferences) {

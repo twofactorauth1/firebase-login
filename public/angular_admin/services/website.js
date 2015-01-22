@@ -1,6 +1,15 @@
 define(['app'], function (app) {
 	app.register.service('WebsiteService', function ($http) {
 		var baseUrl = '/api/1.0/';
+		this.editPageHandle = null;
+
+		this.getEditedPageHandle = function () {
+      		return this.editPageHandle;
+    	};
+
+	    this.setEditedPageHandle = function (handle) {
+	      this.editPageHandle = handle;
+	    };
 
 		this.getWebsite = function (websiteID, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');

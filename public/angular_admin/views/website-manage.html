@@ -2,7 +2,7 @@
 <div ng-if="showOnboarding">
     <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
 </div>
-<div class="website-manage">
+<div class="website-manage" >
     <div class="pageheader row">
         <div class="col-xs-5">
             <h2><i class="fa fa-desktop"></i> Website</h2>
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
+    <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" block-ui="pagesBlockUI" indigeweb-resize>
             <div class="theme-section" ng-switch-when="themes">
                 <div class="row">
                     <div class="panel panel-success">
