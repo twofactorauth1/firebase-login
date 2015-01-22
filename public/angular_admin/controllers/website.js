@@ -337,6 +337,7 @@ define([
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
                             $scope.editPage();
+                            $scope.iframeLoaded = true;
                         }, 5000)
                     }
                 }
