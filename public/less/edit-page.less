@@ -1,4 +1,90 @@
-
+#editor-toolbar {
+    position: fixed;
+    top: 0;
+    z-index: 99999;
+    display: block;
+    width: 100%;
+    height: 54px;
+    .cke_chrome {
+      border: none;
+      border-radius: 0;
+      background: #27ae60;
+      height: 54px;
+      padding: 0;
+      a.cke_button_disabled:active,
+      a.cke_button_disabled:focus,
+      a.cke_button_disabled:hover,
+      a.cke_button_off:active,
+      a.cke_button_off:focus,
+      a.cke_button_off:hover {
+        background: rgba(255,255,255,0.5);
+        border-radius: 0;
+      }
+      .cke_bottom, .cke_top {
+        padding: 0;
+        background: none;
+      }
+      .cke_toolgroup {
+        border: none;
+        border-radius: 0;
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+      .cke_toolbar_separator {
+        display: none;
+      }
+      a.cke_button {
+        height: 50px;
+        width: 40px;
+        .cke_button_icon {
+          background: none!important;
+          font: normal normal normal 14px/1 FontAwesome;
+          text-align: center;
+          position: relative;
+          display: block;
+          color: white;
+          width: 100%;
+          line-height: 50px;
+        }
+        .cke_button__bold_icon {
+          &:before {
+            content: "\f032";
+          }
+        }
+        .cke_button__italic_icon {
+          &:before {
+            content: "\f033";
+          }
+        }
+        .cke_button__numberedlist_icon {
+          &:before {
+            content: "\f0cb";
+          }
+        }
+        .cke_button__bulletedlist_icon {
+          &:before {
+            content: "\f0ca";
+          }
+        }
+        .cke_button__justifyleft_icon {
+          &:before {
+            content: "\f036";
+          }
+        }
+        .cke_button__justifycenter_icon {
+          &:before {
+            content: "\f039";
+          }
+        }
+        .cke_button__justifyright_icon {
+          &:before {
+            content: "\f038";
+          }
+        }
+      }
+    }
+}
 .website {
   .pageheader {
     .btn-group {
