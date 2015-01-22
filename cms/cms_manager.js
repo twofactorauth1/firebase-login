@@ -340,7 +340,7 @@ module.exports = {
                         if(postAry === null) {
                             //return fn('Page does not contain blog component.', null);
                             //need to create a blog component.
-                            var blogComponent = new $$.m.cms.Blog({
+                            var blogComponent = new $$.m.cms.modules.Blog({
                                 posts: [savedPost.id()]
                             });
                             page.get('components').push(blogComponent);
@@ -475,7 +475,7 @@ module.exports = {
                 return fn(null, value);
             } else {
                 var singlePostPage = new $$.m.cms.Page(page);
-                cmsDao.saveOrUpdate(page, function(err, savedPage){
+                cmsDao.saveOrUpdate(singlePostPage, function(err, savedPage){
                     if(err) {
                         self.log.error('Error saving single-post page: ' + err);
                         return fn(err, null);
