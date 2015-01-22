@@ -215,7 +215,7 @@ module.exports = {
     createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
         log.debug('>> createWebsiteFromTheme');
         if(fn === null) {
-            fn = pageHanle;
+            fn = pageHandle;
             pageHandle = null;
         }
         //default to index page if none is specified
@@ -273,6 +273,7 @@ module.exports = {
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
+                'title': pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1),
                 'websiteId': websiteId,
                 'components': componentAry,
                 'created': {
