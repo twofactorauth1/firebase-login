@@ -720,6 +720,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#social-link-name").addClass('has-error');
             return;
           }
+          $("#social-link-name .error").html("");
+          $("#social-link-name").removeClass('has-error');
+          $("#social-link-url .error").html("");
+          $("#social-link-url").removeClass('has-error');
           break;
         case "update":
           if (social && social.name && social.url) {
@@ -754,6 +758,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.updateSocialNetworks(old_value, mode, social);
       // $("#socialComponentModal").modal("hide");
       $(".modal-backdrop").remove();
+      $scope.social = {};
     };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
