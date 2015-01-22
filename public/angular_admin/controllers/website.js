@@ -326,7 +326,7 @@ define([
 
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
-
+                $scope.iframeLoaded = true;
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
                 //$scope.bindEvents();
