@@ -26,6 +26,8 @@
 
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
 
+@import '../js/libs/jsplumb/dist/css/jsplumb.css';
+
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 
 html {
@@ -4533,7 +4535,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 
 .nav-stacked > li + li {
-  margin-top: 2px;
   margin-left: 0;
 }
 

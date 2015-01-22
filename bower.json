@@ -70,6 +70,7 @@
     "highmaps": "latest",
     "highcharts-ng": "latest",
     "isotope": "2.0.0",
+    "jsPlumb": "1.7.2",
     "jquery": "~2.1.1",
     "jquery-cookie": "~1.4.1",
     "jquery-easing": "a6f21ff77c84cee11562d36c51fb5b9c95f2eec0",
