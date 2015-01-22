@@ -45,7 +45,12 @@ module.exports = {
                 } else {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
-                    asset.set('url', value.url);
+		    if (value.url.substring(0, 5) == 'http:') {
+		      asset.set('url', value.url.substring(5, value.url.length));
+		    } else {
+		      asset.set('url', value.url);  
+		    }
+		    console.log(asset);
                     uploadPromise.resolve(value);
                 }
             });

@@ -576,30 +576,12 @@ define([
 
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         $scope.isEditing = true;
-                        if(data.screenshot == null)
-                        {
-                            var getScreenShot = function() {
-                                WebsiteService.getPageScreenShot($scope.currentPage.handle, function(data) {
-                                    if(!data)
-                                    {
-                                        getScreenShot();
-                                    }
-                                    else
-                                    {
-                                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                                        $scope.saveLoading = false;
-                                    }
-                                })
-                            }
-                            getScreenShot();
-                        }
-                        else
-                        {
-                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                            $scope.saveLoading = false;
-                        }
+                        WebsiteService.setEditedPageHandle($scope.currentPage.handle);
+                        
+                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        $scope.saveLoading = false;                       
                         iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-
+                        
                     });
                     //$scope.deactivateAloha();
                     var data = {
