@@ -11,6 +11,11 @@ define(['app', 'campaignService', 'userService'], function(app) {
             showContacts: true
         };
 
+        CampaignService.getCampaigns(function(campaigns) {
+            console.log('fetched campaigns >>> ', campaigns);
+            $scope.campaigns = campaigns;
+        });
+
         $scope.$watch('activeTab', function(newValue, oldValue) {
             if ($scope.userPreferences) {
                 $scope.userPreferences.indi_default_tab = newValue;

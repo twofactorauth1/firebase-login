@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="contentpanel" ng-style="styleDashboard()" indigeweb-resize>
+        <div class="contentpanel" ng-style="styleMarketing()" indigeweb-resize>
             <div class="campaign-section" ng-if="activeTab == 'campaigns'">
                 <div class="col-xs-12 col-sm-4" ng-repeat="campaign in campaigns track by $index">
                     <div class="grid-list-item btn-view-product-details" data-productid="1">
@@ -111,7 +111,7 @@
                     <form role="form">
                         <div class="form-group">
                             <label for="productName">Campaign Name</label>
-                            <input type="text" class="form-control input-lg" id="campaignName" placeholder="Enter a name for your campaign" ng-model='newCampaign.name' />
+                            <input type="text" class="form-control input-lg" id="campaignName" placeholder="Enter a name for your campaign" ng-model='newCampaign.title' />
                         </div>
                         <div class="form-group">
                             <label for="campaignType">Campaign Type</label>
