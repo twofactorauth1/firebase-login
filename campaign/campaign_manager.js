@@ -192,6 +192,11 @@ module.exports = {
         fn(null, null);
     },
 
+    triggerCampaignStep: function(accountId, campaignId, contactId, stepNumber, fn) {
+        //TODO: this
+        fn(null, null);
+    },
+
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {
 
         var self = this;
