@@ -534,7 +534,7 @@ define([
 
                                 var setterKey, pa;
                                 //if contains an array of variables
-                                if (componentVar.indexOf('.item') > 0) {
+                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
                                     //get index in array
                                     console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split(".")[0];
@@ -870,7 +870,7 @@ define([
 
                             var setterKey, pa;
                             //if contains an array of variables
-                            if (componentVar.indexOf('.item') > 0) {
+                            if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
                                 //get index in array
                                 var first = componentVar.split(".")[0];
                                 var second = componentEditable[i2].attributes['data-index'].value;
