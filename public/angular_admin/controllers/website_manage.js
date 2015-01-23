@@ -170,7 +170,7 @@ define([
                                     else
                                     {
                                        WebsiteService.setEditedPageHandle();
-                                       if(!data || !data.length)
+                                       if(data && data.length)
                                             $scope.editedPage.screenshot = data;
                                        pagesBlockUI.stop();
                                     }
