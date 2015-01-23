@@ -471,38 +471,6 @@
                                 </div>
                             </div>
                         </tab>
-                        <tab ng-if="componentEditing.type === 'meet-team'">
-                            <tab-heading>
-                                <span>Add Team Member</span>
-                            </tab-heading>
-                            <div class="form-group">
-                                <label for="member-name">Name </label>
-                                <input id="member-name" class="form-control input-lg" type="text" ng-model="team.name">
-                            </div>
-                            <div class="form-group">
-                                <label for="member-position">Position </label>
-                                <input id="member-position" class="form-control input-lg" type="text" ng-model="team.position">
-                            </div>
-                            <div class="form-group">
-                                <label for="member-bio">Bio Data </label>
-                                <input id="member-position" class="form-control input-lg" type="textarea" ng-model="team.bio">
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-6">
-                                    <img style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="btn-link">
-                                        <a class="btn btn-success btn-block media-modal" media-modal-show-insert="true" on-insert-mediacb="addProfilePic" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Add Profile Picture</span> </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="footer">
-                                <button type="button" class="btn btn-primary pull-right" ng-click="addTeamMember(team, component._id)" data-dismiss="modal">
-                                    Save changes
-                                </button>
-                            </div>
-                        </tab>
 
                          <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
                             <tab-heading>
