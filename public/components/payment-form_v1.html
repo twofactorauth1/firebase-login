@@ -28,7 +28,7 @@
                             <a class="btn btn-large btn-default" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
                         </div>
                         <div class="col-sm-3"></div>
-                    </div> 
+                    </div>
                     <div class="row" >
                         <div class="col-sm-12 signup-social-toolbar" ng-if="newAccount.profilePhoto">
                             <img ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto">
@@ -40,7 +40,7 @@
                         <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-envelope" /></span>
-                                <input class="form-control input-lg" type="text" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
+                                <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
                                 <span class="glyphicon form-control-feedback"></span>
                             </div>
                             <span class="error help-block" />
@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="clearfix"></div>
-                       
+
                         <hr></hr>
 
                         <!-- MEMBERSHIP -->
