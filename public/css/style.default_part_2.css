@@ -5207,6 +5207,10 @@ div.error label.error:before {
   content: "\f024";
 }
 
+#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button:before {
+  content: "\f138";
+}
+
 .website .pageheader .btn-group {
   margin-bottom: 0;
 }

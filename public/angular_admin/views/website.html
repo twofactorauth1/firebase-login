@@ -13,10 +13,7 @@
                         {{currentPage.title}}</div>
                     <span class="caret"></span>
                 </button>
-                <!-- <ul class="dropdown-menu" role="menu">
-                    <li ng-repeat="page in allPages track by $index"><a href="" ng-click="updatePage(page.handle)">{{page.title}}</a>
-                    </li>
-                </ul> -->
+
             </div>
         </div>
         <div class="col-xs-5">
@@ -37,11 +34,6 @@
             <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
-            </a>
-
-            <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertMedia" user='user' data-main='true'>
-                <i class="fa fa fa-image"></i>
-                <span class="hidden-xs">Media</span>
             </a>
 
             <div class="clearfix"></div>
