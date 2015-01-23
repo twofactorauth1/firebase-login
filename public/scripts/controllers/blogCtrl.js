@@ -252,6 +252,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                   $scope.isPageDirty = true;
                 });
               }
+            },
+            sharedSpaces: {
+              top: 'editor-toolbar'
             }
           });
         });
