@@ -796,7 +796,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             CKEDITOR.instances[name].destroy()
         }
         CKEDITOR.disableAutoInline = true;
-
         var elements = $('.editable');
         console.log('length ', elements.length);
         elements.each(function() {
@@ -809,7 +808,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
-
               }
             },
             sharedSpaces: {

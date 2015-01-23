@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-outline btn-lg btn-block" ng-click="createContactwithFormActivity(contact, $event)">Send</button>
+                    <button type="button" ng-disabled="isEditing" class="btn btn-outline btn-lg btn-block" ng-click="createContactwithFormActivity(contact, $event)">Send</button>
                 </div>
             </fieldset>
         

@@ -94,6 +94,8 @@
 				toolbar: 'insert,10'
 			} );
 
+			image.draggable = false;
+
 			// Register context menu option for editing widget.
 			if ( editor.contextMenu ) {
 				editor.addMenuGroup( 'image', 10 );
