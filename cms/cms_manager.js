@@ -1264,7 +1264,7 @@ module.exports = {
                 width: 1280,
                 height: 1024,
                 full_page: true,
-                delay: 2500,
+                delay: 3500,
                 force: true
             };
 
