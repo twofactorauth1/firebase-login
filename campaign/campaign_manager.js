@@ -190,31 +190,52 @@ module.exports = {
                     return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
                 } else {
                     var fromAddress = step.settings.from;
-                    var fromName = step.settings.fromName;//TODO: add
+                    var fromName = step.settings.fromName;
                     var toAddress = contact.getEmails()[0];
                     var toName = contact.get('first') + ' ' + contact.get('last');
-                    var subject = step.settings.subject;//TODO: add
-                    var htmlContent = step.settings.content;//TODO:add
+                    var subject = step.settings.subject;
+                    //TODO: get html from pageId
+                    //var htmlContent = step.settings.content;
                     var accountId = campaignFlow.get('accountId');
-                    var vars = step.settings.vars;//TODO: add
+                    var vars = step.settings.vars;
 
-                    mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                        vars, step.settings, function(err, value){
-                            if(err) {
-                                self.log.error('Error sending email: ', err);
-                                return fn(err, null);
+                    var pageId = step.settings.pageId;
+                    cmsDao.getPageById(pageId, function(err, page){
+                        if(err) {
+                            self.log.error('Error getting page to render: ' + err);
+                            return fn(err, null);
+                        }
+                        var component = page.get('components')[0];
+                        self.log.debug('Using this for data', component);
+                        app.render('emails/base_email', component, function(err, html) {
+                            if (err) {
+                                self.log.error('error rendering html: ' + err);
+                                self.log.warn('email will not be sent.');
+                            } else {
+                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId,
+                                    vars, step.settings, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error sending email: ', err);
+                                            return fn(err, null);
+                                        }
+                                        campaignFlow.set('lastStep', stepNumber);
+                                        campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                                            if(err) {
+                                                self.log.error('Error saving campaign flow: ' + err);
+                                                return fn(err, null);
+                                            } else {
+                                                self.log.debug('<< handleStep');
+                                                return fn(null, updatedFlow);
+                                            }
+                                        });
+                                    });
                             }
-                            campaignFlow.set(lastStep, stepNumber);
-                            campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
-                                if(err) {
-                                    self.log.error('Error saving campaign flow: ' + err);
-                                    return fn(err, null);
-                                } else {
-                                    self.log.debug('<< handleStep');
-                                    return fn(null, updatedFlow);
-                                }
-                            });
                         });
+                    });
+
+
+
+
                 }
             });
 
