@@ -1,1 +1,0 @@
-CKEDITOR.plugins.setLang(    'doksoft_font_awesome',	'en', {		title: 'Insert icon',        selectIcon: 'Select icon first!'	});

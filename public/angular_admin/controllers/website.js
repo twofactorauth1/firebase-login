@@ -382,6 +382,12 @@ define([
                          element.modal('show');
                     });
 
+                      //add click events for all the delete component buttons.
+                    $("#iframe-website").contents().find('body').on("click", ".delete-component", function (e)
+                    {
+                         $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+                    });
+
                     $("#iframe-website").contents().find('body').on("click", ".editable", function (e)
                     {
                         if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkIfActivated && !iFrame.contentWindow.checkIfActivated())
@@ -747,12 +753,7 @@ define([
                 $scope.componentEditing = null;
                 $(".modal-backdrop").remove();
                 $("#component-setting-modal").modal('hide');
-                toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 $scope.activateAloha();
-                //WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
-                    //$scope.resfeshIframe();
-
-               //});
             };
 
             $scope.updateIframeComponents = function(fn) {
