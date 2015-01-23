@@ -15456,9 +15456,6 @@ a:focus,
 a:active {
   outline: none;
 }
-strong {
-  font-weight: normal;
-}
 .headerbg {
   background: #272727;
   height: 63px;
@@ -17549,7 +17546,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   z-index: 200 !important;
 }
 .indi-li a {
-  height: 42px;
+  height: 75px;
 }
 .indi-li a i {
   margin: -8px 0 0 -7px;
@@ -22718,6 +22715,9 @@ body.editing .ui-sortable.active .fragment {
 body.editing .fragment {
   border: none;
 }
+body.editing .fragment .component-inner {
+  border: 2px solid transparent;
+}
 body.editing .fragment.dragging {
   z-index: 999999!important;
 }
@@ -22870,60 +22870,60 @@ div[data-type='campaign'] .inner-page {
 div[data-type='campaign'] .inner-page .overlay {
   margin-top: 0px;
 }
-.contact-us-v5 .angular-google-map-container {
+.contact-us-v1 p {
+  margin: 0px 0 3px;
+}
+.contact-us-v1 .widget-weather {
+  margin-top: -190px;
+  margin-left: 100px;
+}
+.contact-us-v1 .row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+.contact-us-v1 .widget-weather .temp {
+  background-color: #658CC4;
+  padding: 15px !important;
+}
+.contact-us-v1 .widget-weather .temp span {
+  display: block;
+  padding-bottom: 10px;
+}
+.contact-us-v1 .angular-google-map-container {
   height: 100%;
   width: 100%;
   position: absolute;
 }
-.contact-us-v5 .container {
+.contact-us-v1 .container {
   width: 50%;
   padding-left: 0;
   padding-right: 0;
 }
-.contact-us-v5 .map-component {
+.contact-us-v1 .map-component {
   background-color: #C5E2E2;
   margin: 5%;
   color: #000000;
 }
-.contact-us-v5 .map {
+.contact-us-v1 .map {
   height: 344px;
   margin-right: 50px;
 }
-.contact-us-v5 .contact-right {
+.contact-us-v1 .contact-right {
   padding: 0 40px 20px;
 }
-.contact-us-v5 .contact-img {
+.contact-us-v1 .contact-img {
   width: 152px;
 }
-.contact-us-v5 .contact-left {
+.contact-us-v1 .contact-left {
   color: white;
   border-radius: 5px;
   margin: 0 15px;
 }
-.contact-us-v5 .contact-left p {
+.contact-us-v1 .contact-left p {
   margin-bottom: 0;
 }
-.contact-us-v5 input[type="radio"] {
+.contact-us-v1 input[type="radio"] {
   margin-right: 5px;
-}
-.contact-us-v4 p {
-  margin: 0px 0 3px;
-}
-.contact-us-v4 .widget-weather {
-  margin-top: -190px;
-  margin-left: 100px;
-}
-.contact-us-v4 .row {
-  margin-left: 0px;
-  margin-right: 0px;
-}
-.contact-us-v4 .widget-weather .temp {
-  background-color: #658CC4;
-  padding: 15px !important;
-}
-.contact-us-v4 .widget-weather .temp span {
-  display: block;
-  padding-bottom: 10px;
 }
 .component-wrap .component > [id] .bg {
   position: absolute;
@@ -23947,92 +23947,6 @@ div[data-class='image-text'] p {
 .image-text .img-responsive {
   margin: 0 auto;
 }
-/********** Image Text v2 **********/
-.image-text-v2 .image-text-title {
-  color: #444;
-  text-align: center;
-  margin-bottom: 30px;
-  font-weight: normal;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-  display: block;
-  position: relative;
-}
-.image-text-v2 .image-text-subtitle {
-  text-shadow: 1px 1px 1px rgba(36, 135, 159, 0.8);
-  margin-top: 0px;
-  font-weight: bold;
-}
-.image-text-v2 .btn {
-  margin: 20px auto;
-}
-.image-text-v2 .image-text-text a {
-  color: white;
-  text-decoration: underline;
-}
-div[data-class='image-text'] h3 {
-  font-weight: bold;
-}
-div[data-class='text'] {
-  font-size: 14px;
-}
-div[data-class='image-text'] p {
-  font-size: 14px;
-}
-.image-text {
-  padding: 0 20px;
-  display: inline-block;
-}
-.image-text .img-responsive {
-  margin: 0 auto;
-}
-/********** Image Text v3 **********/
-.image-text-v3 .image-text-title {
-  color: #444;
-  text-align: center;
-  margin-bottom: 15px;
-  font-weight: normal;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-  display: block;
-  position: relative;
-}
-.image-text-v3 .image-text-subtitle {
-  text-shadow: 1px 1px 1px rgba(36, 135, 159, 0.8);
-  margin-top: 0px;
-  font-weight: bold;
-}
-.image-text-v3 .btn {
-  margin: 20px auto;
-}
-.image-text-v3 .image-text-text {
-  padding-left: 20px;
-}
-.image-text-v3 .image-text-text a {
-  color: white;
-  text-decoration: underline;
-}
-.image-text-v3 .section-title-border {
-  width: 70px;
-  height: 3px;
-  background: rgba(0, 0, 0, 0.13);
-  margin: 0 auto 45px;
-  border-radius: 3px;
-}
-div[data-class='image-text'] h3 {
-  font-weight: bold;
-}
-div[data-class='text'] {
-  font-size: 14px;
-}
-div[data-class='image-text'] p {
-  font-size: 14px;
-}
-.image-text {
-  padding: 0 20px;
-  display: inline-block;
-}
-.image-text .img-responsive {
-  margin: 0 auto;
-}
 /********** Shopping Cart **********/
 .order-line-items {
   padding: 0;
@@ -24784,7 +24698,7 @@ div[data-type="social"] .inner-page {
 @media only screen and (min-width: 700px) and (max-width: 1500px) {
   .footer-after {
     background: #292929;
-    padding: 20px 20px 0 20px;
+    padding: 20px 0 0 0;
     font-size: 12px;
   }
   .footer-after p {
@@ -25271,26 +25185,6 @@ div[data-type="coming-soon"] .component-inner {
   min-height: 150px;
   margin: 10px 0 20px 0;
 }
-.image-text-v4 .title {
-  text-align: center;
-  font-weight: bold;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-}
-.image-text-v4 .subtitle {
-  text-shadow: 1px 1px 1px rgba(36, 135, 159, 0.8);
-  margin-top: 0px;
-  font-weight: bold;
-}
-.image-text-v4 .para span h4 {
-  text-align: center;
-}
-.image-text-v4 .para span h5 {
-  text-align: center;
-  color: #FCB100;
-}
-.image-text-v4 .para span p {
-  text-align: left;
-}
 .header-image-text-v1 {
   background-color: #F7F7F7;
   /* fix firefox responsive images */
@@ -25625,50 +25519,6 @@ div[data-type="coming-soon"] .component-inner {
     width: 500px;
     height: 300px;
   }
-}
-/********** Image Text v5 **********/
-.image-text-v5 .image-text-title {
-  color: #444;
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: normal;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-  display: block;
-  position: relative;
-}
-.image-text-v5 .image-text-subtitle {
-  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.45);
-  margin-bottom: 5px;
-}
-.image-text-v5 .btn {
-  margin: 20px auto;
-}
-.image-text-v5 .image-text-image img {
-  margin-right: 25px auto;
-  min-width: 250px;
-}
-.image-text-v5 .image-text-panel {
-  padding: 20px;
-}
-.image-text-v5 .image-text-text a {
-  color: white;
-  text-decoration: underline;
-}
-div[data-class='image-text'] h3 {
-  font-weight: bold;
-}
-div[data-class='text'] {
-  font-size: 14px;
-}
-div[data-class='image-text'] p {
-  font-size: 14px;
-}
-.image-text {
-  padding: 0 20px;
-  display: inline-block;
-}
-.image-text .img-responsive {
-  margin: 0 auto;
 }
 /*
  * Social Buttons for Bootstrap
