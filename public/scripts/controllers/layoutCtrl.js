@@ -697,6 +697,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               $("#social-link-url").addClass('has-error');
               return;
             }
+            
+            if (social.url) {
+	      var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	      if (urlRegex.test(social.url) == false) {
+		$("#social-link-url .error").html("Link url incorrect format");
+		$("#social-link-url").addClass('has-error');
+		return;
+	      }
+	    }
             selectedName = _.findWhere($scope.networks, {
               name: social.name
             });
