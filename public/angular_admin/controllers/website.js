@@ -671,13 +671,21 @@ define([
                 }
             }
 
-            $scope.addFeatureList = function() {
-                    $scope.componentEditing.features.push({
-                        "top" : "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
-                        "content" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-                    });
-                    $scope.saveComponent();
+            $scope.addFeatureList = function () {
+                $scope.componentEditing.features.push({
+                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
+                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+                });
+                $scope.saveComponent();
             }
+
+//            $scope.addTeamMember = function () {
+//                $scope.componentEditing.features.push({
+//                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
+//                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+//                });
+//                $scope.saveComponent();
+//            }
 
             $scope.updateContactUsAddress = function(location) {
                 $scope.saveComponent();
@@ -825,8 +833,8 @@ define([
                     }
                 });
             };
+            $scope.saveComponent = function () {
 
-            $scope.saveComponent = function() {
                 var componentId = $scope.componentEditing._id;
 
                 //update single component
@@ -835,53 +843,52 @@ define([
                     _id: componentId
                 });
 
-                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
-                if(editedComponent && editedComponent.length > 0)
-                {
-                  //get all the editable variables and replace the ones in view with variables in DB
-                var componentEditable = editedComponent[0].querySelectorAll('.editable');
-                if (componentEditable.length >= 1) {
-                    for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                        var componentVar = componentEditable[i2].attributes['data-class'].value;
-                        var componentVarContents = componentEditable[i2].innerHTML;
+                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + $scope.componentEditing._id + '"]');
+                if (editedComponent && editedComponent.length > 0) {
+                    //get all the editable variables and replace the ones in view with variables in DB
+                    var componentEditable = editedComponent[0].querySelectorAll('.editable');
+                    if (componentEditable.length >= 1) {
+                        for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                            var componentVar = componentEditable[i2].attributes['data-class'].value;
+                            var componentVarContents = componentEditable[i2].innerHTML;
 
-                        //if innerhtml contains a span with the class ng-binding then remove it
-                        var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                            //if innerhtml contains a span with the class ng-binding then remove it
+                            var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
 
-                        if (span) {
-                            var spanParent = span.parentNode;
-                            var spanInner = span.innerHTML;
-                            if (spanParent.classList.contains('editable')) {
-                                componentVarContents = spanInner;
-                            } else {
-                                spanParent.innerHTML = spanInner;
-                                componentVarContents = spanParent.parentNode.innerHTML;
+                            if (span) {
+                                var spanParent = span.parentNode;
+                                var spanInner = span.innerHTML;
+                                if (spanParent.classList.contains('editable')) {
+                                    componentVarContents = spanInner;
+                                } else {
+                                    spanParent.innerHTML = spanInner;
+                                    componentVarContents = spanParent.parentNode.innerHTML;
+                                }
+                            }
+                            //remove "/n"
+                            componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                            var setterKey, pa;
+                            //if contains an array of variables
+                            if (componentVar.indexOf('.item') > 0) {
+                                //get index in array
+                                var first = componentVar.split(".")[0];
+                                var second = componentEditable[i2].attributes['data-index'].value;
+                                var third = componentVar.split(".")[2];
+                                matchingComponent[first][second][third] = componentVarContents;
+                            }
+                            //if needs to traverse a single
+                            if (componentVar.indexOf('-') > 0) {
+                                var first = componentVar.split("-")[0];
+                                var second = componentVar.split("-")[1];
+                                matchingComponent[first][second] = componentVarContents;
+                            }
+                            //simple
+                            if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                matchingComponent[componentVar] = componentVarContents;
                             }
                         }
-                        //remove "/n"
-                        componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
-                        var setterKey, pa;
-                        //if contains an array of variables
-                        if (componentVar.indexOf('.item') > 0) {
-                            //get index in array
-                            var first = componentVar.split(".")[0];
-                            var second = componentEditable[i2].attributes['data-index'].value;
-                            var third = componentVar.split(".")[2];
-                            matchingComponent[first][second][third] = componentVarContents;
-                        }
-                        //if needs to traverse a single
-                        if (componentVar.indexOf('-') > 0) {
-                            var first = componentVar.split("-")[0];
-                            var second = componentVar.split("-")[1];
-                            matchingComponent[first][second] = componentVarContents;
-                        }
-                        //simple
-                        if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                            matchingComponent[componentVar] = componentVarContents;
-                        }
                     }
-                }
                 }
 
 
