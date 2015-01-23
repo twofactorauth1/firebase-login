@@ -158,17 +158,20 @@ define([
                         if($scope.editedPage && $scope.editedPage.screenshot == null)
                         {
                             var pagesBlockUI = blockUI.instances.get('pagesBlockUI'); 
-                            pagesBlockUI.start();                     
+                            pagesBlockUI.start(); 
+                            var maxTries = 5;                    
                             var getScreenShot = function() {
                                 WebsiteService.getPageScreenShot(editPageHandle, function(data) {
-                                    if(!data)
+                                    if((!data || !data.length) && maxTries > 0)
                                     {
                                         getScreenShot();
+                                        maxTries = maxTries - 1;
                                     }
                                     else
                                     {
                                        WebsiteService.setEditedPageHandle();
-                                       $scope.editedPage.screenshot = data;
+                                       if(!data || !data.length)
+                                            $scope.editedPage.screenshot = data;
                                        pagesBlockUI.stop();
                                     }
                                 })
