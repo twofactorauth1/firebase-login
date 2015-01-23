@@ -35,12 +35,12 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;
 	config.extraAllowedContent = true;
 	config.disableAutoInline = true;
-
+	
 	// // ALLOW <i></i>
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'doksoft_button,lineheight,mediamanager,sharedspace';
+	config.extraPlugins = 'doksoft_button,lineheight,mediamanager,sharedspace,image2';
 
 	config.filebrowserBrowseUrl = '';
 

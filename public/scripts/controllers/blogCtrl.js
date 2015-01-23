@@ -273,6 +273,32 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
     };
 
+    window.addCKEditorImageInput = function(url) {
+      console.log('addCKEditorImageInput ', url);
+      if ($scope.urlInput) {
+        $scope.urlInput.val(url);
+      }
+    };
+
+    window.addCKEditorImage = function(url) {
+      console.log('addCKEditorImage ', url);
+      console.log('$scope.inlineInput ', $scope.inlineInput);
+      if ($scope.inlineInput) {
+        console.log('inserting html');
+        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
+      }
+    };
+
+    window.clickImageButton = function(btn) {
+      $scope.urlInput = $(btn).closest('td').prev('td').find('input');
+      window.parent.clickImageButton();
+    }
+
+    window.clickandInsertImageButton = function(editor) {
+      $scope.inlineInput = editor;
+      window.parent.clickImageButton();
+    }
+
     $scope.setPostImage = function(componentId, blogpost) {
       window.parent.setPostImage(componentId);
       blogpost.featured_image = window.parent.postImageUrl;
