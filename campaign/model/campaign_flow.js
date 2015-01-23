@@ -16,7 +16,7 @@ var campaign_flow = $$.m.ModelBase.extend({
             accountId: 0,
             contactId: 0,
             startDate: null,
-            currentStep: 1,
+            lastStep: 0,
             steps: [],
 
             "created": {
