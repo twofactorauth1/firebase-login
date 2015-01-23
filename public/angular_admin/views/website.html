@@ -36,6 +36,11 @@
                 <span class="hidden-xs">Cancel</span>
             </a>
 
+            <a class="btn btn-success pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+                <i class="fa fa fa-image"></i>
+                <span class="hidden-xs">Media</span>
+            </a>
+
             <div class="clearfix"></div>
         </div>
     </div>
@@ -256,7 +261,7 @@
     </div>
     <!-- /.modal -->
 
-    <!-- Add Component Modal -->
+    <!-- Component Settings Modal -->
     <div class="modal" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" indigeweb-draggable-modal aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -480,38 +485,6 @@
                                 </div>
                             </div>
                         </tab>
-                        <tab ng-if="componentEditing.type === 'meet-team'">
-                            <tab-heading>
-                                <span>Add Team Member</span>
-                            </tab-heading>
-                            <div class="form-group">
-                                <label for="member-name">Name </label>
-                                <input id="member-name" class="form-control input-lg" type="text" ng-model="team.name">
-                            </div>
-                            <div class="form-group">
-                                <label for="member-position">Position </label>
-                                <input id="member-position" class="form-control input-lg" type="text" ng-model="team.position">
-                            </div>
-                            <div class="form-group">
-                                <label for="member-bio">Bio Data </label>
-                                <input id="member-position" class="form-control input-lg" type="textarea" ng-model="team.bio">
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-6">
-                                    <img style="width: 150px; height: 150px;" class="img-responsive center" ng-src="{{ team.profilepic ? team.profilepic : '/assets/icons/blank-user.jpg' }}">
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="btn-link">
-                                        <a class="btn btn-success btn-block media-modal" media-modal-show-insert="true" on-insert-mediacb="addProfilePic" user='user'> <span class="fa fa-image"></span> <span class="hidden-xs">Add Profile Picture</span> </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="footer">
-                                <button type="button" class="btn btn-primary pull-right" ng-click="addTeamMember(team, component._id)" data-dismiss="modal">
-                                    Save changes
-                                </button>
-                            </div>
-                        </tab>
 
                          <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
                             <tab-heading>
@@ -611,14 +584,6 @@
 
                     </tabset>
                 </div>
-                <div class="modal-footer" ng-class="{hidden: hover}">
-
-                    <button class="btn btn-danger pull-left" ng-click="deleteComponent(componentEditing._id)"><i class="fa fa-trash"></i> Delete </button>
-                    <button type="button" class="btn btn-primary pull-right" ng-click="addFeatureList()" data-dismiss="modal" ng-if="componentEditing.type === 'feature-list'">
-                                    Add Feature
-                                </button>
-                    <!-- <button class="btn btn-default" data-dismiss="modal" type="button">Close</button> -->
-                </div>
             </div>
         </div>
     </div>
@@ -654,88 +619,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)">Create Page</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
-
-    <!-- Edit Component Modal -->
-    <div class="modal fade" id="edit-component-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Edit Component</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- <div class="form-group">
-                            <label for="component-title" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Name</label>
-                            <input id="component-title" class="form-control input-lg" type="text" value="">
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="component-name" class="tooltips" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Enter the Name of the component.">Component Type</label>
-                            <select id="component-edit" class=" form-control chosen-select" data-placeholder="Contact Us">
-
-                            </select>
-                        </div> -->
-                    <div class="form-group">
-                        <label for="colorpicker">Show Component:</label>
-                        <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right">
-                    </div>
-                    <div class="form-group">
-                        <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
-                        <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor">
-                    </div>
-                    <div class="form-group">
-                        <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
-                        <input class="form-control input-lg" type="text" ng-model="componentEditing.version">
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label for="colorpicker">Text Color:</label>
-                            <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false }" class="pull-right" ng-model="componentEditing.txtcolor"></spectrum-colorpicker>
-                        </div>
-                        <div class="form-group">
-                            <label for="colorpicker">Background Color:</label>
-                            <spectrum-colorpicker format="'hex'" options="{showPalette: true, clickoutFiresChange: true, showInitial: true, showInput: true, showButtons: false , allowEmpty:true,}" class="pull-right" ng-model="componentEditing.bg.color"></spectrum-colorpicker>
-                        </div>
-                        <div class="form-group">
-                            <label for="colorpicker">Show Button:</label>
-                            <input bs-switch ng-model="componentEditing.btn.visibility" type="checkbox" class="pull-right">
-                        </div>
-
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="form-group">
-                        <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                        <input class="form-control input-lg" type="text" ng-model="componentEditing.bg.img.url">
-                    </div>
-                    <div class="form-group">
-                        <label for="colorpicker">Show Background Image as Parallax:</label>
-                        <input bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right">
-                    </div>
-
-                    <div class="input-group spinner">
-                        <input type="text" class="form-control" value="42">
-                        <div class="input-group-btn-vertical">
-                            <button class="btn btn-default"><i class="fa fa-caret-up"></i>
-                            </button>
-                            <button class="btn btn-default"><i class="fa fa-caret-down"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="clearfix mb15"></div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger pull-left" data-dismiss="modal" confirm-click2 data-placement="top" confirm-click2-confirm="deleteComponent(componentEditing._id)">
-                        <i class="fa fa-trash-o"></i> Delete
-                    </button>
-                    <button type="button" class="btn btn-primary btn-edit-component" data-dismiss="modal" ng-click="saveComponent(componentEditing)">Update</button>
                 </div>
             </div>
             <!-- /.modal-content -->

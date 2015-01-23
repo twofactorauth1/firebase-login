@@ -15,7 +15,7 @@ script(type="text/javascript").
 
 script(type="text/javascript").
     var initialAlert =  "#{user.user_preferences.welcome_alert.initial}";
-    if(initialAlert == 'false') {
+    if(initialAlert && initialAlert == 'false') {
         window.location="/admin#/indi";
     }
     //- window.location="/admin#/" + (function(){

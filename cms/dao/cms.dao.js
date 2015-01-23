@@ -1284,6 +1284,7 @@ var dao = {
                     "type" : "email",
                     "version" : 1,
                     "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
                     "subtitle" : "subtitle",
                     "text" : "We're! excited to show you how Indigenous will take your business, whether it's still an idea or you're already making a name for yourself, to the next level.!<br><br>Our current clients have helped us develop a business software platform that is going to wow you and your customers with its simplicity and power, and even more importantly, give you a lot more time to do what you love, whatever it is and wherever you are.<br><br>Imagine catching that golden hour surf sesh instead of going through your client list and trying to determine who's fallen through the cracks, taking your kids to the ball game instead of working on the fourteenth draft of that newsletter you're not sure anyone reads that was supposed to go out a week ago, or being able to say yes to that impromptu trip to Bali because your workshops and lecture series are already scheduled and filled for the year.<br><br>Sounds good, right? Please stay tuned. In the meantime, check out our blog to learn more.<br><a href=\"http://www.indigenous.io/page/blog\" class=\"btn\" target=\"_blank\">Visit Our Blog</a><br>We’re looking forward to helping you tell your story.<br><br><strong>Your team at Indigenous</strong>",
