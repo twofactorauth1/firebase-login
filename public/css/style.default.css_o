@@ -13095,10 +13095,6 @@ h4,
 h5 {
   font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
 }
-strong {
-  font-family: 'LatoBold';
-  font-weight: normal;
-}
 .mb5 {
   margin-bottom: 5px;
 }

@@ -159,7 +159,7 @@ define([
                         {
                             var pagesBlockUI = blockUI.instances.get('pagesBlockUI'); 
                             pagesBlockUI.start(); 
-                            var maxTries = 5;                    
+                            var maxTries = 5;
                             var getScreenShot = function() {
                                 WebsiteService.getPageScreenShot(editPageHandle, function(data) {
                                     if((!data || !data.length) && maxTries > 0)
@@ -176,7 +176,9 @@ define([
                                     }
                                 })
                             }
-                            getScreenShot();
+                            setTimeout(function() {
+                                getScreenShot();
+                            }, 1000);
                         }
                     }
                 });

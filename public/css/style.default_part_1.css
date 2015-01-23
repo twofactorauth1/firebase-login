@@ -18827,10 +18827,6 @@ a:active {
   outline: none;
 }
 
-strong {
-  font-weight: bold;
-}
-
 .headerbg {
   background: #272727;
   height: 63px;
@@ -19980,4 +19976,8 @@ strong {
   position: absolute;
   top: 70px;
   left: 180px;
+}
+
+#contact-details-container #contact-information {
+  margin-top: 30px;
 }
