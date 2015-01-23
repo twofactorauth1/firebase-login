@@ -302,7 +302,6 @@ define(['app'], function (app) {
             });
 		};
 		this.saveComponent = function (component, cmpVersion, fn) {
-            debugger;
 			console.log('Saving Component >>>');
 			console.log('component ', component);
 			console.log('cmpVersion ', cmpVersion);
