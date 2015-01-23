@@ -163,33 +163,158 @@ module.exports = {
     },
 
     bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> bulkAddContactToCampaign');
+        campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+            if(err) {
+                self.log.error('Error finding campaign: ' + err);
+                return fn(err, null);
+            }
+            async.each(contactIdAry, function(contactId, callback){
+                //need to create flow.
+                var flow = new $$.m.CampaignFlow({
+                    campaignId: campaignId,
+                    accountId: accountId,
+                    contactId: contactId,
+                    startDate: new Date(),
+                    currentStep: 1,
+                    steps: campaign.get('steps')
+                });
+                campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                    if(err) {
+                        self.log.error('Error saving campaign flow: ' + err);
+                        return fn(err, null);
+                    }
+                    self.log.debug('Added contact to campaign flow.');
+                    self.handleStep(flow, function(err, value){
+                        if(err) {
+                            self.log.error('Error handling initial step of campaign: ' + err);
+                            callback(err);
+                        } else {
+                            self.log.debug('added contact.');
+                            callback();
+                        }
+                    });
+                });
+            }, function(err){
+                if(err) {
+                    self.log.error('Error adding contacts to campaign: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< bulkAddContactToCampaign');
+                    return fn(null, 'OK');
+                }
+            });
+
+        });
+
     },
 
+    /**
+     * This method will delete any active campaign_flow objects for this campaign and account.
+     * @param campaignId
+     * @param accountId
+     * @param fn
+     */
     cancelRunningCampaign: function(campaignId, accountId, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> cancelRunningCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: campaignId
+        };
+
+        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error deleting campaign flow: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< cancelRunning Campaign');
+                return fn(null, value);
+            }
+        });
     },
 
+    /**
+     * This method will cancel a campaign flow for a particular contact
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
     cancelCampaignForContact: function(accountId, campaignId, contactId, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> cancelRunningCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: campaignId,
+            contactId: contactId
+        };
+
+        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error deleting campaign flow: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< cancelRunning Campaign');
+                return fn(null, value);
+            }
+        });
     },
 
     getRunningCampaign: function(accountId, runningCampaignId, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> getRunningCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: runningCampaignId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error getting campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getRunningCampaign');
+                return fn(null, flow);
+            }
+        });
     },
 
     getRunningCampaigns: function(accountId, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> getRunningCampaigns');
+
+        var query = {
+            accountId: accountId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error getting campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getRunningCampaigns');
+                return fn(null, flow);
+            }
+        });
     },
 
     getRunningCampaignsForContact: function(accountId, contactId, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> getRunningCampaignsForContact');
+
+        var query = {
+            accountId: accountId,
+            contactId: contactId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error getting campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getRunningCampaignsForContact');
+                return fn(null, flow);
+            }
+        });
     },
 
     triggerCampaignStep: function(accountId, campaignId, contactId, stepNumber, fn) {
