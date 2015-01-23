@@ -65,7 +65,8 @@ var component = $$.m.ModelBase.extend({
                     parallax : false,
                     blur : false,
                     overlay: false,
-                    show: false
+                    show: false,
+                    position: "",
                 },
                 color : "#4bb0cb"
             },
