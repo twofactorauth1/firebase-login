@@ -22,6 +22,7 @@ var mandrillConfig = require('../configs/mandrill.config');
 
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
+var mandrillHelper = require('../utils/mandrillhelper');
 
 var hostSuffix = appConfig.subdomain_suffix;
 var async = require('async');
@@ -131,7 +132,7 @@ module.exports = {
                         accountId: accountId,
                         contactId: contactId,
                         startDate: new Date(),
-                        currentStep: 1,
+                        lastStep: 0,
                         steps: campaign.get('steps')
                     });
                     campaignDao.saveOrUpdate(flow, function(err, savedFlow){
@@ -140,7 +141,7 @@ module.exports = {
                             return fn(err, null);
                         }
                         self.log.debug('Added contact to campaign flow.');
-                        self.handleStep(flow, function(err, value){
+                        self.handleStep(flow, 1, function(err, value){
                             if(err) {
                                 self.log.error('Error handling initial step of campaign: ' + err);
                                 return fn(err, null);
@@ -157,9 +158,71 @@ module.exports = {
 
     },
 
-    handleStep: function(campaignFlow, fn) {
+    /**
+     * This method will execute the step in stepNumber, setting the lastStep var to stepNumber.
+     * @param campaignFlow
+     * @param stepNumber
+     * @param fn
+     */
+    handleStep: function(campaignFlow, stepNumber, fn) {
         //TODO: this
         fn(null, null);
+        var self = this;
+        self.log.debug('>> handleStep');
+
+        var step = campaignFlow.get('steps')[stepNumber];
+        if(step === null) {
+            var errorString = 'Error getting steps';
+            self.log.error(errorString);
+            return fn(errorString, null);
+        }
+
+        if(step.type === 'email') {
+            /*
+             * Schedule the email.
+             */
+            contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact){
+                if(err) {
+                    self.log.error('Error getting contact for step: ' + err);
+                    return fn(err, null);
+                } else if(contact === null) {
+                    self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
+                    return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                } else {
+                    var fromAddress = step.settings.from;
+                    var fromName = step.settings.fromName;//TODO: add
+                    var toAddress = contact.getEmails()[0];
+                    var toName = contact.get('first') + ' ' + contact.get('last');
+                    var subject = step.settings.subject;//TODO: add
+                    var htmlContent = step.settings.content;//TODO:add
+                    var accountId = campaignFlow.get('accountId');
+                    var vars = step.settings.vars;//TODO: add
+
+                    mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
+                        vars, step.settings, function(err, value){
+                            if(err) {
+                                self.log.error('Error sending email: ', err);
+                                return fn(err, null);
+                            }
+                            campaignFlow.set(lastStep, stepNumber);
+                            campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                                if(err) {
+                                    self.log.error('Error saving campaign flow: ' + err);
+                                    return fn(err, null);
+                                } else {
+                                    self.log.debug('<< handleStep');
+                                    return fn(null, updatedFlow);
+                                }
+                            });
+                        });
+                }
+            });
+
+        } else {
+            self.log.warn('Unknown step type: ' + step.type);
+            return fn(null, null);
+        }
+
     },
 
     bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
@@ -177,7 +240,7 @@ module.exports = {
                     accountId: accountId,
                     contactId: contactId,
                     startDate: new Date(),
-                    currentStep: 1,
+                    lastStep: 0,
                     steps: campaign.get('steps')
                 });
                 campaignDao.saveOrUpdate(flow, function(err, savedFlow){
@@ -186,7 +249,7 @@ module.exports = {
                         return fn(err, null);
                     }
                     self.log.debug('Added contact to campaign flow.');
-                    self.handleStep(flow, function(err, value){
+                    self.handleStep(flow, 1, function(err, value){
                         if(err) {
                             self.log.error('Error handling initial step of campaign: ' + err);
                             callback(err);
@@ -318,8 +381,28 @@ module.exports = {
     },
 
     triggerCampaignStep: function(accountId, campaignId, contactId, stepNumber, fn) {
-        //TODO: this
-        fn(null, null);
+        var self = this;
+        self.log.debug('>> triggerCampaignStep');
+
+        var query = {
+            accountId:accountId,
+            campaignId:campaignId,
+            contactId:contactId
+        };
+
+        campaignDao.findOne(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error finding running campaign: ' + err);
+                return fn(err, null);
+            }
+            if(flow.get('steps').size() > stepNumber) {
+                var errorString = 'StepNumber ' + stepNumber + ' is greater than the number of steps: ' + flow.get('steps').size();
+                self.log.error(errorString);
+                return fn(errorString, null);
+            }
+            return self.handleStep(flow, stepNumber, fn);
+        });
+
     },
 
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {

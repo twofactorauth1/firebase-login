@@ -17,6 +17,25 @@ var campaign = $$.m.ModelBase.extend({
             status: "active",
             visibility: 1,
             startDate: null,
+            /*
+             * Example Step:
+             * {
+             *      templateId" : "000000-0000-000000-00000000",
+                    "offset" : "320000", //in seconds
+                    "from" : "john@indigenous.io",
+                    "fromName" : 'John Doe',
+                    "subject" : 'Email Subject',
+                    "content": '<html><body>Stuff</body></html>',
+                    "vars": {
+
+                    },
+                    "scheduled" : {
+                        "minute":1,
+                        "hour": 2,
+                        "day":1
+                    }
+             * }
+             */
             steps: [],
 
             "created": {
