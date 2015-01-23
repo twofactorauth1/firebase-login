@@ -64,7 +64,7 @@
                     </div>
 
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
-                        <img ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
+                        <span ng-bind-html="teamMember.profilepic | unsafe" />
                     </a>
 
                     <img ng-if="!teamMember.becomeMember" ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
