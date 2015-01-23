@@ -49,7 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('accountId', accountId);
                 var createdObj = campaignObj.get('created');
-                createdObj.by = req.user;
+                createdObj.by = req.user.id();
                 campaignObj.set('created', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
                     self.log.debug('<< createCampaign');
@@ -73,7 +73,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('_id', campaignId);
                 var modified = {
-                    by: req.user,
+                    by: req.user.id(),
                     date: new Date()
                 };
                 campaignObj.set('modified', modified);
