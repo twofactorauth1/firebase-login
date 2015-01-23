@@ -136,6 +136,7 @@ require.config({
         'purl': 'libs/purl/purl',
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
         'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
+        'carousel': '/angular_admin/directives/carousel',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -239,7 +240,8 @@ require.config({
         'ngload': ['angularAMD'],
         'jPushMenu' : {deps: ['jquery']},
         'angularSlugifier': ['angular'],
-        'blockUI': ['angular']
+        'blockUI': ['angular'],
+        'carousel': ['angular','angularBootstrap']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
