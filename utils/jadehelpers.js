@@ -46,7 +46,7 @@ app.locals.formatDateDiff = $$.u.formatutils.formatDateDiffInHHMMSS;
 //-------------------------------
 app.locals.setServerProp = function(key, value) {
     var str =
-        "var hey = 'hey';if (typeof indigenous === 'undefined') indigenous = {};" +
+        "if (typeof indigenous === 'undefined') indigenous = {};" +
         "window.indigenous = window.indigeous || {};" +
             "window.indigenous.server = window.indigenous.server || {};";
 
@@ -61,7 +61,7 @@ app.locals.setServerProp = function(key, value) {
 
 app.locals.setServerProps = function(serverProps) {
     var str =
-        "var hey = 'hey1';if (typeof indigenous === 'undefined') indigenous = {};" +
+        "if (typeof indigenous === 'undefined') indigenous = {};" +
         "window.indigenous = window.indigenous || {};" +
             "window.indigenous.server = window.indigenous.server || {};";
 
