@@ -161,6 +161,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * This method returns a result before the asset is deleted.
+     * @param req
+     * @param res
+     */
     deleteAsset: function(req, res) {
         var self = this;
         self.log.debug('>> deleteAsset');
@@ -178,9 +183,14 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(res);
                 } else {
                     assetManager.deleteAsset(assetId, function(err, value){
-                        self.log.debug('<< deleteAsset');
-                        self.sendResultOrError(res, err, value, "Error deleting Asset");
+                        if(err) {
+                            self.log.error('Error deleting asset: ' + err);
+                        } else {
+                            self.log.debug('Asset was deleted');
+                        }
                     });
+                    self.log.debug('<< deleteAsset');
+                    return self.sendResult(res, "Deleted");
                 }
             });
         });
