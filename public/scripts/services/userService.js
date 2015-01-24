@@ -72,7 +72,11 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
+    var maxAttempts = 10;
+    var attemptNumber = 0;
+
     this.initializeUser = function(user, fn) {
+        var self = this;
         user.session_permanent = ipCookie("permanent_cookie");
         user.fingerprint = new Fingerprint().get();
         var apiUrl = baseUrl + ['user', 'initialize'].join('/');
@@ -85,8 +89,15 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
             fn(data);
         })
         .error(function (err) {
-            console.log('END:userService with ERROR', err);
-            fn(null);
+            console.log('Attempt #'+attemptNumber+' END:userService with ERROR', err);
+            if (attemptNumber < maxAttempts) {
+                setTimeout(function(){
+                    self.initializeUser(user, fn);
+                    attemptNumber+=1;
+                },3000);
+            } else {
+                fn(null);
+            }
         });
     };
 
