@@ -172,6 +172,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if(err || savedAsset === null) {
                 return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
             }
+            self.log.debug('Got asset: ', savedAsset);
             self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ASSET, savedAsset.get('accountId'), function(err, isAllowed) {
                 if (isAllowed !== true) {
                     return self.send403(res);
