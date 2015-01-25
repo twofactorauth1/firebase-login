@@ -35,7 +35,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;
 	config.extraAllowedContent = true;
 	config.disableAutoInline = true;
-	
+
 	// // ALLOW <i></i>
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
@@ -44,9 +44,9 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.filebrowserBrowseUrl = '';
 
-	CKEDITOR.dtd.$removeEmpty['i'] = false;
+	// CKEDITOR.dtd.$removeEmpty['i'] = false;
 	CKEDITOR.dtd.$removeEmpty['span'] = false;
 	CKEDITOR.dtd.$editable.span = true;
-	CKEDITOR.dtd.$editable.a = true;
-	CKEDITOR.dtd.$editable.img = true;
+	// CKEDITOR.dtd.$editable.a = true;
+	// CKEDITOR.dtd.$editable.img = true;
 };

@@ -22557,6 +22557,9 @@ hr {
 .btn-lg {
   font-size: 14px;
 }
+.cke_widget_drag_handler_container {
+  display: none;
+}
 .goback {
   background: #d0ecf6;
   padding: 38px;
@@ -23085,6 +23088,7 @@ div[data-type='campaign'] .inner-page .overlay {
 /********** Features list v3 **********/
 .feature-list-v3 .feature-list-title {
   text-align: center;
+  position: relative;
 }
 .feature-list-v3 .feature-list-subtitle {
   color: #fff;
@@ -23096,11 +23100,6 @@ div[data-type='campaign'] .inner-page .overlay {
   padding: 20px;
   color: white;
   transition: none!important;
-}
-.feature-list-v3 .feature-single img {
-  margin-bottom: -196px;
-  border: 1px solid #1c7c41;
-  width: 100%;
 }
 .feature-list-v3 .feature-single .feature-icon {
   font-size: 14em;
@@ -23140,6 +23139,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .feature-list-v4 .title {
   text-align: center;
+  position: relative;
 }
 .feature-list-v4 .feature-title h1,
 .feature-list-v4 .feature-title h2,
@@ -24983,10 +24983,6 @@ div[data-type=blog] .container {
   height: 100%;
 }
 .coming-soon-v1 .heading {
-  font-size: 50px;
-  margin: 45px 0 10px;
-  text-align: center;
-  font-weight: 700;
   margin: 0px 0 10px;
 }
 .coming-soon-v1 .text {

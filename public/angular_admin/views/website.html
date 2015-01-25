@@ -236,11 +236,11 @@
                         </div> -->
                         <div class="row">
 
-                            <div class="col-sm-4 col-md-3 componentOption" ng-repeat="type in componentTypes| orderBy:'title'" ng-class="{success: type.title === selectedComponent.title}" ng-click="selectComponent(type)" ng-if="type.enabled">
+                            <div class="col-xs-12 componentOption" ng-repeat="type in componentTypes| orderBy:'title'" ng-class="{success: type.title === selectedComponent.title}" ng-click="selectComponent(type)" ng-if="type.enabled">
                                 <div class="thumbnail">
                                     <div class="check-component" style="display:none"><i class="fa fa-check-circle"></i>
                                     </div>
-                                    <div class="component-icon"><i class="{{type.icon}}"></i>
+                                    <div class="component-icon"><img src="{{type.preview}}" width="100%" />
                                     </div>
                                     <div class="caption">
                                         <h5 class="center">{{type.title}}</h5>
