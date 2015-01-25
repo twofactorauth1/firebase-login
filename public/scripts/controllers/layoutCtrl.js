@@ -778,6 +778,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.addFeatureList = function(componentId, index) {
+      console.log('adding Feature >>>');
       window.parent.addNewFeatureList(componentId, index);
     }
 
@@ -799,6 +800,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
        }
 
     window.activateAloha = function() {
+      console.log('activate aloha >>>');
       //if ($scope.activated == false) {
         for(name in CKEDITOR.instances)
         {
@@ -937,13 +939,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       });
     };
     window.updateCustomComponent = function(data, networks) {
-      if (data)
+      console.log('updateCustomComponent >>>');
+      if (data) {
         $scope.currentpage.components = data;
-      else {
+        setTimeout(function() {
+          $scope.$apply(function() {
+              activateAloha();
+          });
+        });
+      } else {
         $scope.$apply(function() {
 
         });
       }
+
+
 
       if (networks)
         $scope.networks = networks;

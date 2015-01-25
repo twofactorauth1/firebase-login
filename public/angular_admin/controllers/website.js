@@ -202,11 +202,7 @@ define([
                     title: 'Feature List',
                     type: 'feature-list',
                     icon: 'fa fa-list-ul',
-                    enabled: true
-                }, {
-                    title: 'Campaign',
-                    type: 'campaign',
-                    icon: 'fa fa-bullhorn',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
                     enabled: true
                 }, {
                     title: 'Contact Us',
@@ -234,20 +230,10 @@ define([
                     icon: 'fa fa-image',
                     enabled: true
                 }, {
-                    title: 'Image Slider',
-                    type: 'image-slider',
-                    icon: 'custom image-slider',
-                    enabled: false
-                }, {
                     title: 'Image Text',
                     type: 'image-text',
                     icon: 'custom image-text',
                     enabled: true
-                }, {
-                    title: 'Logo List',
-                    type: 'logo-list',
-                    icon: 'custom logo-list',
-                    enabled: false
                 }, {
                     title: 'Meet Team',
                     type: 'meet-team',
@@ -284,11 +270,6 @@ define([
                     icon: 'fa fa-video',
                     enabled: true
                 }, {
-                    title: 'Social Links',
-                    type: 'social-link',
-                    icon: 'custom social-links',
-                    enabled: true
-                }, {
                     title: 'Text Only',
                     type: 'text-only',
                     icon: 'fa fa-file-text',
@@ -298,12 +279,10 @@ define([
                     type: 'thumbnail-slider',
                     icon: 'fa fa-like',
                     enabled: true
-                }, {
-                    title: 'Customer Account',
-                    type: 'customer-account',
-                    icon: 'fa fa-user',
-                    enabled: false
-                },
+                }
+            ];
+
+            /*****
                 {
                     title: 'Customer SignUp',
                     type: 'customer-signup',
@@ -321,8 +300,32 @@ define([
                     type: 'customer-forgot-password',
                     icon: 'fa fa-lock',
                     enabled: false
+                },
+                {
+                    title: 'Customer Account',
+                    type: 'customer-account',
+                    icon: 'fa fa-user',
+                    enabled: false
+                },
+                {
+                    title: 'Logo List',
+                    type: 'logo-list',
+                    icon: 'custom logo-list',
+                    enabled: false
+                },
+                {
+                    title: 'Image Slider',
+                    type: 'image-slider',
+                    icon: 'custom image-slider',
+                    enabled: false
+                },
+                {
+                    title: 'Campaign',
+                    type: 'campaign',
+                    icon: 'fa fa-bullhorn',
+                    enabled: false
                 }
-            ];
+            *****/
 
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
@@ -336,6 +339,7 @@ define([
                 if ($scope.isEditing) {
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
+                            console.log('editing page >>>');
                             $scope.editPage();
                             $scope.iframeLoaded = true;
                         }, 5000)
@@ -432,7 +436,7 @@ define([
             };
 
             $scope.editPage = function() {
-                console.log('edit page');
+                console.log('edit page >>>');
                 $scope.isEditing = true;
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
@@ -531,6 +535,14 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+                                console.log('componentVarContents >>> ', componentVarContents);
+                                var jHtmlObject = $(componentVarContents);
+                                var editor = jQuery("<p>").append(jHtmlObject);
+                                editor.find(".cke_reset").remove();
+                                var newHtml = editor.html();
+                                componentVarContents = newHtml;
+                                console.log('componentVarContents >>> ', componentVarContents);
+
 
                                 var setterKey, pa;
                                 //if contains an array of variables
@@ -765,6 +777,7 @@ define([
             };
 
             $scope.updateIframeComponents = function(fn) {
+                console.log('updating iframe components');
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
                 if (fn) {
@@ -778,7 +791,7 @@ define([
             };
 
             $scope.activateAloha = function() {
-                console.log('activateAloha');
+                console.log('activateAloha >>>');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -901,7 +914,7 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
-                $scope.deactivateAloha();
+                console.log('>>> activating');
                 $scope.activateAloha();
 
                 //update the scope as the temppage until save
@@ -914,6 +927,7 @@ define([
             };
 
             $scope.saveCustomComponent = function() {
+                console.log('saving custom component');
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -1160,6 +1174,7 @@ define([
             }
 
             window.addNewFeatureList = function(componentId, index) {
+                console.log('addNewFeatureList >>>');
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
@@ -1168,6 +1183,7 @@ define([
                         "top" : "<div style=\"text-align:center\"><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-cubes  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-cubes%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-cubes%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></span></div>",
                         "content" : "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.<br></p><p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><a data-cke-saved-href=\"http://\" href=\"http:\" style=\"color: rgb(255, 255, 255); outline: 0px; text-align: center; -webkit-box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; border-radius: 3px; border: 1px solid rgb(18, 77, 119); display: inline-block; font-family: arial; font-size: 13px; padding: 6px 24px; text-shadow: rgb(21, 70, 130) 0px 1px 0px; background-image: linear-gradient(rgb(0, 125, 193) 5%, rgb(0, 97, 167) 100%); background-color: rgb(0, 125, 193);\">Learn More</a><br></p>"
                     });
+                console.log('adding feature complete, need edit mode');
                 $scope.saveCustomComponent();
             }
 
