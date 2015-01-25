@@ -20953,6 +20953,7 @@ div.error label.error:before {
   z-index: 1032;
   width: 100%;
   margin-right: 10px;
+  pointer-events: none;
 }
 .componentActions span {
   background: rgba(44, 62, 80, 0.8);
@@ -20976,12 +20977,14 @@ div.error label.error:before {
 }
 .componentActions .delete {
   float: right;
+  pointer-events: all;
 }
 .componentActions .delete:hover {
   color: #d9534f;
 }
 .componentActions .settings {
   float: right;
+  pointer-events: all;
 }
 .componentActions .settings:hover {
   color: #efa022;
@@ -23262,8 +23265,7 @@ div[data-type='campaign'] .inner-page .overlay {
   z-index: 999;
 }
 .navbar-brand {
-  height: 80px;
-  max-width: 300px!important;
+  max-width: 100%!important;
   margin: 5px auto!important;
 }
 .navbar-toggle {
@@ -24978,17 +24980,19 @@ div[data-type=blog] .container {
   margin: 0 auto 0;
   display: block;
   max-width: 300px;
+  position: relative;
 }
 .coming-soon-v1 div[ng-transclude] {
   height: 100%;
 }
 .coming-soon-v1 .heading {
   margin: 0px 0 10px;
+  position: relative;
 }
 .coming-soon-v1 .text {
   margin-bottom: 20px;
-  font-size: 16px;
   text-align: center;
+  position: relative;
 }
 .coming-soon-v1 .inner-page {
   padding-bottom: 15px;

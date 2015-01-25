@@ -31,7 +31,12 @@
                         </button>
                         <a class="navbar-brand" href="/" data-name="{{layout.account.company.name || blog.account.company.name }}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
                             <span class="logo-1">
-                                <img data-ng-show="layout.account.business.logo || blog.account.business.logo || component.logo.url" ng-src="{{layout.account.business.logo || blog.account.business.logo}}" scale="0" width="{{component.logo.width}}" height="{{component.logo.height}}">
+                                <div class="nav-logo">
+                                    <div class="editable" data-class="logo" data-index="{{$index}}" ng-if="component.logo" ng-bind-html="component.logo | unsafe"></div>
+                                    <div class="editable" data-class="logo" data-index="{{$index}}" ng-if="!component.logo">
+                                        <img data-ng-show="layout.account.business.logo || blog.account.business.logo && !component.logo" ng-src="{{layout.account.business.logo || blog.account.business.logo}}">
+                                    </div>
+                                </div>
                                 <span data-ng-show="layout && !layout.account.business.logo" ><convert-html contents="{{layout.account.business.name}}">  </convert-html> </span>
                                 <span data-ng-show="blog && !blog.account.business.logo" ><convert-html contents="{{blog.account.business.name}}">  </convert-html> </span>
                             </span>

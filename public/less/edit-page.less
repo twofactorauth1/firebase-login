@@ -450,6 +450,7 @@ background: #fff!important;
   z-index: 1032;
   width: 100%;
   margin-right: 10px;
+  pointer-events: none;
   span {
     background: rgba(44,62,80,0.8);
     padding: 20px;
@@ -473,12 +474,14 @@ background: #fff!important;
   }
   .delete {
     float: right;
+    pointer-events: all;
     &:hover {
       color: #d9534f;
     }
   }
   .settings {
     float: right;
+    pointer-events: all;
     &:hover {
       color: #efa022;
     }
