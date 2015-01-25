@@ -235,20 +235,21 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.select_all = allTrue === true;
                 };
                 $scope.m.deleteAsset = function() {
-                    AssetsService.deleteAssetById($scope.batch, function(assetId, resp, status) {
-                        if (status === 1) {
+                    console.log('$scope.batch ', $scope.batch);
+                    AssetsService.deleteAssetById($scope.batch, function(resp) {
+                        if (resp === 'Deleted') {
                           $scope.originalAssets.forEach(function(v, i) {
-                            if (v._id === assetId) {
+                            if (v._id === $scope.batch[0]['_id']) {
                               $scope.originalAssets.splice(i, 1);
                             }
                           });
                             $scope.assets.forEach(function(v, i) {
-                                if (v._id === assetId) {
+                                if (v._id === $scope.batch[0]['_id']) {
                                     $scope.assets.splice(i, 1);
                                 }
                             });
                             $scope.batch.forEach(function(v, i) {
-                                if (v._id === assetId) {
+                                if (v._id === $scope.batch[0]['_id']) {
                                     $scope.batch.splice(i, 1);
                                 }
                             });
