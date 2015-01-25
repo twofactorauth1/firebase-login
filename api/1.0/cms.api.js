@@ -127,6 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
     saveOrUpdateWebsite: function(req, resp) {
 
         var self = this;
+        self.log.debug('>> saveOrUpdateWebsite');
         var settings = req.body.settings;
         var accountId = req.body.accountId;
         var websiteId = req.body._id;
@@ -137,6 +138,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(req);
             } else {
                 cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
+                    self.log.debug('<< saveOrUpdateWebsite');
                     self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
                     self = value = null;
                 });
