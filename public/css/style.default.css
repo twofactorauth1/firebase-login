@@ -20602,7 +20602,7 @@ div.error label.error:before {
 #editor-toolbar .cke_chrome {
   border: none;
   border-radius: 0;
-  background: #27ae60;
+  background: #efa022;
   padding: 0;
 }
 #editor-toolbar .cke_chrome a.cke_button_disabled:active,
@@ -20826,8 +20826,32 @@ div.error label.error:before {
   width: 60px;
   height: 78px;
 }
+.editable-title {
+  display: none;
+}
 .editing .ui-sortable {
   margin-top: 50px;
+}
+.editing .edit-wrap {
+  margin: -1px;
+  position: relative;
+}
+.editing .edit-wrap .editable:focus {
+  outline: none;
+}
+.editing .edit-wrap:hover {
+  outline: 1px dashed #efa022;
+  margin: -1px;
+}
+.editing .edit-wrap:hover .editable-title {
+  position: absolute;
+  left: 0;
+  top: -20px;
+  background: #efa022;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  padding: 0 15px;
+  display: block;
 }
 #nestable-menu {
   z-index: 999;
@@ -20964,6 +20988,7 @@ div.error label.error:before {
 }
 .componentActions .reorder {
   float: left;
+  pointer-events: all;
 }
 .componentActions .reorder:hover {
   color: #54C8E8;
@@ -23357,7 +23382,6 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
-  height: 110px;
   display: block;
   max-height: inherit;
 }
@@ -24977,9 +25001,7 @@ div[data-type=blog] .container {
   width: 100%;
 }
 .coming-soon-v1 .logo {
-  margin: 0 auto 0;
   display: block;
-  max-width: 300px;
   position: relative;
 }
 .coming-soon-v1 div[ng-transclude] {

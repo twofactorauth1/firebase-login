@@ -8,7 +8,7 @@
     .cke_chrome {
       border: none;
       border-radius: 0;
-      background: #27ae60;
+     background: #efa022;
       padding: 0;
       a.cke_button_disabled:active,
       a.cke_button_disabled:focus,
@@ -297,9 +297,34 @@
   }
 
 }
-
-.editing .ui-sortable {
-  margin-top: 50px;
+.editable-title {
+  display: none;
+}
+.editing {
+  .ui-sortable {
+    margin-top: 50px;
+  }
+  .edit-wrap {
+    margin: -1px;
+    position: relative;
+    .editable:focus {
+      outline: none;
+    }
+    &:hover {
+      outline: 1px dashed #efa022;
+      margin: -1px;
+       .editable-title {
+          position: absolute;
+          left: 0;
+          top: -20px;
+          background: #efa022;
+          border-top-right-radius: 3px;
+          border-top-left-radius: 3px;
+          padding: 0 15px;
+          display: block;
+        }
+    }
+  }
 }
 
 #nestable-menu {
@@ -460,6 +485,7 @@ background: #fff!important;
   }
   .reorder {
     float: left;
+    pointer-events: all;
     &:hover {
       color: #54C8E8;
     }
