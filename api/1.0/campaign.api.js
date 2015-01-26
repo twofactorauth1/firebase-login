@@ -33,7 +33,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('campaigns/:id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
         app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));
         app.get(this.url('campaigns/running/contact/:id'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaignsForContact.bind(this));
-        app.post(this.url('campaigns/running/contact/:id/steps/:stepNumber'), this.triggerCampaignStep.bind(this));
+        app.post(this.url('campaigns/:id/running/contact/:contactid/steps/:stepNumber'), this.setup.bind(this), this.triggerCampaignStep.bind(this));
     },
 
     createCampaign: function (req, resp) {
@@ -49,7 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('accountId', accountId);
                 var createdObj = campaignObj.get('created');
-                createdObj.by = req.user;
+                createdObj.by = req.user.id();
                 campaignObj.set('created', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
                     self.log.debug('<< createCampaign');
@@ -73,7 +73,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('_id', campaignId);
                 var modified = {
-                    by: req.user,
+                    by: req.user.id(),
                     date: new Date()
                 };
                 campaignObj.set('modified', modified);
@@ -110,120 +110,127 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * This method expects an array called "ids" in the body of the request.
+     * @param req
+     * @param resp
+     */
     bulkAddContactToCampaign: function(req, resp) {
-        //TODO: this.
+        var self = this;
+        self.log.debug('>> bulkAddContactToCampaign');
+        var campaignId = req.params.id;
+        var contactIdAry = req.body.ids;
+        self.log.debug('Got ids: ', contactIdAry);
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.bulkAddContactToCampaign(contactIdAry, campaignId, accountId, function(err, value){
+                    self.log.debug('<< bulkAddContactToCampaign');
+                    self.sendResultOrError(resp, err, value, "Error adding contacts to campaign");
+                });
+            }
+        });
+
     },
 
+    /**
+     * This method expects campaign ID in the URL
+     * @param req
+     * @param resp
+     */
     cancelRunningCampaign: function(req, resp) {
-        //TODO: this.
-    },
+        var self = this;
+        self.log.debug('>> cancelRunningCampaign');
+        var campaignId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
 
-    cancelContactInCampaign: function(req, resp) {
-        //TODO: this.
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.cancelRunningCampaign(campaignId, accountId, function(err, value){
+                    self.log.debug('<< cancelRunningCampaign');
+                    self.sendResultOrError(resp, err, value, "Error cancelling campaign");
+                });
+            }
+        });
     },
 
     getCampaign: function (req, resp) {
         var self = this;
-        //TODO: add security - VIEW_CAMPAIGN
-        campaignManager.getCampaign(req.params.id, function (err, value) {
-            if (err) {
-                var errorMsg = "There was an error getting campaign " + req.params.id + ": " + err.message;
-                self.log.error(errorMsg);
-                self.log.error(err.stack);
-                self.wrapError(resp, 500, errorMsg, err, value);
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
             } else {
-                self.sendResult(resp, value);
+                campaignManager.getCampaign(req.params.id, function (err, value) {
+                    if (err) {
+                        var errorMsg = "There was an error getting campaign " + req.params.id + ": " + err.message;
+                        self.log.error(errorMsg);
+                        self.log.error(err.stack);
+                        self.wrapError(resp, 500, errorMsg, err, value);
+                    } else {
+                        self.sendResult(resp, value);
+                    }
+                });
             }
-        })
+        });
     },
 
     findCampaigns: function (req, resp) {
         var self = this;
 
         var accountId = parseInt(self.accountId(req));
-        //TODO: add security - VIEW_CAMPAIGN
-        if (!req.query._id) {
-            req.query._id = { $ne: "__counter__" };
-        }
-        req.query.accountId = accountId;
-
-        campaignManager.findCampaigns(req.query, function (err, value) {
-            if (err) {
-                var errorMsg = "There was an error finding campaign: " + err.message;
-                self.log.error(errorMsg);
-                self.log.error(err.stack);
-                self.wrapError(resp, 500, errorMsg, err, value);
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
             } else {
-                self.sendResult(resp, value);
-            }
-        })
-    },
-
-
-
-    _cancelCampaign: function (req, resp) {
-        var self = this;
-        var accountId = parseInt(self.accountId(req));
-        //TODO: add security - MODIFY_CAMPAIGN
-
-        self.log.debug("cancel campaign " + req.params.id);
-
-        campaignManager.cancelMandrillCampaign(req.params.id, function (err, value) {
-            if (err) {
-                var errorMsg = "There was an error cancelling campaign " + req.params.id + ": " + err.message;
-                self.log.error(errorMsg);
-                self.log.error(err.stack);
-                self.wrapError(resp, 400, errorMsg, err, value);
-            } else {
-                self.sendResult(resp, value);
-            }
-        })
-    },
-
-    _cancelContactCampaign: function (req, resp) {
-        var self = this;
-        var accountId = parseInt(self.accountId(req));
-        //TODO: add security - MODIFY_CAMPAIGN
-
-        self.log.debug("cancel contact " + req.params.contactid + " in campaign " + req.params.id);
-
-        campaignManager.cancelContactMandrillCampaign(req.params.id, parseInt(req.params.contactid), function (err, value) {
-            if (err) {
-                var errorMsg = "There was an error cancelling contact " + req.params.contactid + " in campaign "
-                    + req.params.id + ": " + err.message;
-                self.log.error(errorMsg);
-                self.log.error(err.stack);
-                self.wrapError(resp, 400, errorMsg, err, value);
-            } else {
-                self.sendResult(resp, value);
-            }
-        })
-    },
-
-
-
-    _addContactToCampaign: function (req, resp) {
-        var self = this;
-
-        var accountId = parseInt(self.accountId(req));
-        //TODO: add security - MODIFY_CAMPAIGN
-
-        self.log.debug("add contact " + req.params.contactid + " to campaign " + req.params.id);
-
-        campaignManager.addContactToMandrillCampaign(
-            req.params.id,
-            parseInt(req.params.contactid),
-            req.body.arrayOfMergeVarsArrays,
-            function (err, value) {
-                if (err) {
-                    var errorMsg = "There was an error creating campaign: " + err.message;
-                    self.log.error(errorMsg);
-                    self.log.error(err.stack);
-                    self.wrapError(resp, 400, errorMsg, err, value);
-                } else {
-                    self.sendResult(resp, value);
+                if (!req.query._id) {
+                    req.query._id = { $ne: "__counter__" };
                 }
-            })
+                req.query.accountId = accountId;
+
+                campaignManager.findCampaigns(req.query, function (err, value) {
+                    if (err) {
+                        var errorMsg = "There was an error finding campaign: " + err.message;
+                        self.log.error(errorMsg);
+                        self.log.error(err.stack);
+                        self.wrapError(resp, 500, errorMsg, err, value);
+                    } else {
+                        self.sendResult(resp, value);
+                    }
+                });
+            }
+        });
+
+    },
+
+    /**
+     * This method expects campaignId and contactId in url
+     * @param req
+     * @param resp
+     */
+    cancelContactCampaign: function (req, resp) {
+        var self = this;
+        self.log.debug('>> cancelContactCampaign');
+
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        var contactId = parseInt(req.params.contactid);
+
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.cancelCampaignForContact(accountId, campaignId, contactId, function(err, value){
+                    self.log.debug('<< cancelContactCampaign');
+                    self.sendResultOrError(resp, err, value, "Error cancelling campaign");
+                });
+            }
+        });
     },
 
     getPagesWithCampaign: function(req, resp) {
@@ -233,28 +240,118 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var campaignId = req.params.id;
 
-        //TODO: add security - VIEW_CAMPAIGN
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.getPagesByCampaign(accountId, campaignId, function(err, pages){
+                    self.log.debug('<< getPagesWithCampaign');
+                    self.sendResultOrError(resp, err, pages, 'Error getting pages');
+                });
+            }
+        });
 
-        campaignManager.getPagesByCampaign(accountId, campaignId, function(err, pages){
-            self.log.debug('<< getPagesWithCampaign');
-            self.sendResultOrError(resp, err, pages, 'Error getting pages');
+
+    },
+
+    /**
+     * This method expects id url param
+     * @param req
+     * @param resp
+     */
+    getRunningCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getRunningCampaign');
+
+        var runningCampaignId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.getRunningCampaign(accountId, runningCampaignId, function(err, value){
+                    self.log.debug('<< getRunningCampaign');
+                    self.sendResultOrError(resp, err, value, 'Error getting running campaign');
+                });
+            }
+        });
+
+    },
+
+    /**
+     *
+     * @param req
+     * @param resp
+     */
+    getRunningCampaigns: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getRunningCampaigns');
+
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.getRunningCampaigns(accountId, function(err, value){
+                    self.log.debug('<< getRunningCampaigns');
+                    self.sendResultOrError(resp, err, value, 'Error getting running campaign');
+                });
+            }
         });
     },
 
-    getRunningCampaign: function(req, resp) {
-        //TODO: this
-    },
-
-    getRunningCampaigns: function(req, resp) {
-        //TODO: this
-    },
-
+    /**
+     * This method expects id url param
+     * @param req
+     * @param resp
+     */
     getRunningCampaignsForContact: function(req, resp) {
-        //TODO: this
+        var self = this;
+        self.log.debug('>> getRunningCampaignsForContact');
+
+        var accountId = parseInt(self.accountId(req));
+        var contactId = parseInt(req.params.id);
+
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.getRunningCampaignsForContact(accountId, contactId, function(err, value){
+                    self.log.debug('<< getRunningCampaignsForContact');
+                    self.sendResultOrError(resp, err, value, 'Error getting running campaigns for contact');
+                });
+            }
+        });
     },
 
+    /**
+     * This method has the following url params:
+     *  - id: campaignId
+     *  - contactid: contactId
+     *  - stepNumber: stepNumber
+     * @param req
+     * @param resp
+     * *NOTE* this method has NO security.  It can be invoked from anywhere.
+     */
     triggerCampaignStep: function(req, resp) {
         //TODO: this
+        //campaigns/:id/running/contact/:contactid/steps/:stepNumber
+        var self = this;
+        self.log.debug('>> triggerCampaignStep');
+
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        var contactId = parseInt(req.params.contactid);
+        var stepNumber = parseInt(req.params.stepNumber);
+
+        campaignManager.triggerCampaignStep(accountId, campaignId, contactId, stepNumber, function(err, value){
+            self.log.debug('<< triggerCampaignStep');
+            self.sendResultOrError(resp, err, value, 'Error triggering campaign step');
+        });
+
+
     }
 
 

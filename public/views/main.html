@@ -7,18 +7,19 @@
     <!-- This div will handle all toolbars. -->
 </div>
 <div ng-show="isEditing">
+    <div id="editor-toolbar"></div>
 </div>
 <ul ui-sortable="sortableOptions">
     <li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
-        <div class="componentActions">
-            <span class="reorder fa fa-arrows"></span>
-            <span class="hidden-component" ng-if="!component.visibility">Hidden</span>
+        <div class="componentActions" >
+            <span class="reorder fa fa-arrows" tooltip="Re-Order {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="right"></span>
             <h4 class="pull-left">{{component.type}}</h4>
-            <span class="settings fa fa-cogs" data-id="{{component._id}}"></span>
+            <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" tooltip="Delete {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
+            <span class="settings fa fa-cog" data-id="{{component._id}}" tooltip="{{component.type | cleanType}} Settings"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
         </div>
         <div ng-include="'/components/component-wrap.html'"></div>
         <div ng-class="{'zee-blur': !component.visibility}"></div>
-        <div class="add-component" data-index = "{{$index + 1}}">
+        <div class="add-component" data-index = "{{$index + 1}}" tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
             <a href="">
             <i class="fa fa-plus" tooltip-placement="bottom" tooltip="Theme"></i>
             </a>
@@ -30,7 +31,7 @@
             <h4 class="center">Add some components and start editing!</h4>
         </div>
         <div class="clearfix mb15"></div>
-        <div class="add-component" data-index = 1>
+        <div class="add-component" data-index = 1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
             <a href="">
                 <i class="fa fa-plus"></i>
             </a>
@@ -50,7 +51,7 @@
         background-color: black;
     }
     .sticking{position: fixed;
-        top: 0;
+        top: 54px;
     }
 </style>
 <script type="text/javascript">

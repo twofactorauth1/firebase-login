@@ -68,7 +68,7 @@ define([
             $scope.isMobile = false;
             $scope.tabs = {};
             $scope.addLinkType = 'page';
-            $scope.saveLoading = false ; 
+            $scope.saveLoading = false ;
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -196,58 +196,39 @@ define([
                 }, {
                     title: 'Masthead',
                     type: 'masthead',
-                    icon: 'custom masthead',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
                     enabled: true
                 }, {
                     title: 'Feature List',
                     type: 'feature-list',
-                    icon: 'fa fa-list-ul',
-                    enabled: true
-                }, {
-                    title: 'Campaign',
-                    type: 'campaign',
-                    icon: 'fa fa-bullhorn',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
                     enabled: true
                 }, {
                     title: 'Contact Us',
                     type: 'contact-us',
-                    icon: 'fa fa-map-marker',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
                     enabled: true
                 }, {
                     title: 'Coming Soon',
                     type: 'coming-soon',
-                    icon: 'fa fa-clock-o',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
                     enabled: true
                 }, {
                     title: 'Feature block',
                     type: 'feature-block',
-                    icon: 'custom feature-block',
-                    enabled: true
-                }, {
-                    title: 'Footer',
-                    type: 'footer',
-                    icon: 'custom footer',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
                     enabled: true
                 }, {
                     title: 'Image Gallery',
                     type: 'image-gallery',
-                    icon: 'fa fa-image',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
                     enabled: true
-                }, {
-                    title: 'Image Slider',
-                    type: 'image-slider',
-                    icon: 'custom image-slider',
-                    enabled: false
                 }, {
                     title: 'Image Text',
+                    version: 1,
                     type: 'image-text',
-                    icon: 'custom image-text',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
                     enabled: true
-                }, {
-                    title: 'Logo List',
-                    type: 'logo-list',
-                    icon: 'custom logo-list',
-                    enabled: false
                 }, {
                     title: 'Meet Team',
                     type: 'meet-team',
@@ -256,7 +237,8 @@ define([
                 }, {
                     title: 'Navigation',
                     type: 'navigation',
-                    icon: 'fa fa-location-arrow',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+                    version: 1,
                     enabled: true
                 }, {
                     title: 'Products',
@@ -274,36 +256,29 @@ define([
                     icon: 'custom single-post',
                     enabled: false
                 }, {
-                    title: 'Social Links',
-                    type: 'social',
-                    icon: 'custom social-links',
-                    enabled: false
+                    title: 'Social',
+                    type: 'social-link',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
+                    enabled: true
                 }, {
                     title: 'Video',
                     type: 'video',
                     icon: 'fa fa-video',
                     enabled: true
                 }, {
-                    title: 'Social Links',
-                    type: 'social-link',
-                    icon: 'custom social-links',
-                    enabled: true
-                }, {
                     title: 'Text Only',
                     type: 'text-only',
-                    icon: 'fa fa-file-text',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
                     enabled: true
                 }, {
                     title: 'Thumbnail Slider',
                     type: 'thumbnail-slider',
                     icon: 'fa fa-like',
                     enabled: true
-                }, {
-                    title: 'Customer Account',
-                    type: 'customer-account',
-                    icon: 'fa fa-user',
-                    enabled: false
-                },
+                }
+            ];
+
+            /*****
                 {
                     title: 'Customer SignUp',
                     type: 'customer-signup',
@@ -321,8 +296,38 @@ define([
                     type: 'customer-forgot-password',
                     icon: 'fa fa-lock',
                     enabled: false
+                },
+                {
+                    title: 'Customer Account',
+                    type: 'customer-account',
+                    icon: 'fa fa-user',
+                    enabled: false
+                },
+                {
+                    title: 'Logo List',
+                    type: 'logo-list',
+                    icon: 'custom logo-list',
+                    enabled: false
+                },
+                {
+                    title: 'Image Slider',
+                    type: 'image-slider',
+                    icon: 'custom image-slider',
+                    enabled: false
+                },
+                {
+                    title: 'Campaign',
+                    type: 'campaign',
+                    icon: 'fa fa-bullhorn',
+                    enabled: false
+                },
+                {
+                    title: 'Footer',
+                    type: 'footer',
+                    icon: 'custom footer',
+                    enabled: false
                 }
-            ];
+            *****/
 
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
@@ -336,7 +341,9 @@ define([
                 if ($scope.isEditing) {
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
+                            console.log('editing page >>>');
                             $scope.editPage();
+                            $scope.iframeLoaded = true;
                         }, 5000)
                     }
                 }
@@ -358,7 +365,7 @@ define([
                     }
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function (e)
-                    { 
+                    {
                         e.preventDefault();
                         e.stopPropagation();
                     });
@@ -381,8 +388,22 @@ define([
                          element.modal('show');
                     });
 
+                      //add click events for all the delete component buttons.
+                    $("#iframe-website").contents().find('body').on("click", ".delete-component", function (e)
+                    {
+                         $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+                    });
+
+                    $("#iframe-website").contents().find('body').on("click", ".editable", function (e)
+                    {
+                        if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkIfActivated && !iFrame.contentWindow.checkIfActivated())
+                        {
+                            iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
+                        }
+                    });
+
                     //add media modal click events to all images
-                    
+
                     // $("#iframe-website").contents().find('body').on("click", "img", function (e)
                     // {
                     // $("#media-manager-modal").modal('show');
@@ -417,7 +438,7 @@ define([
             };
 
             $scope.editPage = function() {
-                console.log('edit page');
+                console.log('edit page >>>');
                 $scope.isEditing = true;
                 $scope.activateAloha();
                 var iframe = document.getElementById("iframe-website");
@@ -470,7 +491,7 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                $scope.saveLoading = true ; 
+                $scope.saveLoading = true ;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);
@@ -516,10 +537,18 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+                                console.log('componentVarContents >>> ', componentVarContents);
+                                var jHtmlObject = $(componentVarContents);
+                                var editor = jQuery("<p>").append(jHtmlObject);
+                                editor.find(".cke_reset").remove();
+                                var newHtml = editor.html();
+                                componentVarContents = newHtml;
+                                console.log('componentVarContents >>> ', componentVarContents);
+
 
                                 var setterKey, pa;
                                 //if contains an array of variables
-                                if (componentVar.indexOf('.item') > 0) {
+                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
                                     //get index in array
                                     console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split(".")[0];
@@ -566,14 +595,13 @@ define([
 
 
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.isEditing = true;
-                         $scope.saveLoading = false;
-                        //iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
-                        //iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family);
-                        //document.getElementById('iframe-website').contentWindow.location.reload(true);
+                        WebsiteService.setEditedPageHandle($scope.currentPage.handle);
+
+                        toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        $scope.saveLoading = false;
                         iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-                        //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
+
                     });
                     //$scope.deactivateAloha();
                     var data = {
@@ -586,7 +614,7 @@ define([
                         console.log('updated website settings', data);
                     });
                 }
-                
+
             };
 
             $scope.updatePage = function(handle, editing) {
@@ -657,16 +685,43 @@ define([
                 }
             }
 
-            $scope.addFeatureList = function() {
-                    $scope.componentEditing.features.push({
-                        "top" : "<span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;text-align:center;\"></span>",
-                        "content" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-                    });
-                    $scope.saveComponent();
+            $scope.addFeatureList = function () {
+                $scope.componentEditing.features.push({
+                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
+                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+                });
+                $scope.saveComponent();
             }
 
+//            $scope.addTeamMember = function () {
+//                $scope.componentEditing.features.push({
+//                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
+//                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+//                });
+//                $scope.saveComponent();
+//            }
+
             $scope.updateContactUsAddress = function(location) {
-                $scope.saveComponent();
+                if ($scope.componentEditing.location.city) {
+                    $('#location-city').parents('.form-group').find('.error').html('');
+                    $('#location-city').parents('.form-group').removeClass('has-error');
+                } else {
+                    $('#location-city').parents('.form-group').addClass('has-error');
+                    $('#location-city').parents('.form-group').find('.error').html('City is required');
+                }
+
+                if ($scope.componentEditing.location.state) {
+                    $('#location-state').parents('.form-group').find('.error').html('');
+                    $('#location-state').parents('.form-group').removeClass('has-error');
+                } else {
+                    $('#location-state').parents('.form-group').addClass('has-error');
+                    $('#location-state').parents('.form-group').find('.error').html('State is required');
+                }
+
+                if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
+                    $scope.saveComponent();
+                    $('#component-setting-modal').modal('hide');
+                }
             }
 
             $scope.addComponent = function() {
@@ -718,7 +773,7 @@ define([
                         setTimeout(function() {
                             $scope.activateAloha();
                         }, 1000)
-                        //$scope.scrollToIframeComponent(newComponent.anchor);
+                        $scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     }
                 });
@@ -739,15 +794,11 @@ define([
                 $scope.componentEditing = null;
                 $(".modal-backdrop").remove();
                 $("#component-setting-modal").modal('hide');
-                toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
                 $scope.activateAloha();
-                //WebsiteService.deleteComponent($scope.currentPage._id, componentId, function(data) {
-                    //$scope.resfeshIframe();
-                    
-               //});
             };
 
             $scope.updateIframeComponents = function(fn) {
+                console.log('updating iframe components');
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
                 if (fn) {
@@ -756,12 +807,13 @@ define([
             };
 
             $scope.scrollToIframeComponent = function(section) {
+                console.log('scroll to >> ', section);
                 //document.getElementById("iframe-website").contentWindow.scrollTo(section);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.scrollTo && iFrame.contentWindow.scrollTo(section)
             };
 
             $scope.activateAloha = function() {
-                console.log('activateAloha');
+                console.log('activateAloha >>>');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -816,8 +868,8 @@ define([
                     }
                 });
             };
+            $scope.saveComponent = function () {
 
-            $scope.saveComponent = function() {
                 var componentId = $scope.componentEditing._id;
 
                 //update single component
@@ -826,55 +878,54 @@ define([
                     _id: componentId
                 });
 
-                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="'+$scope.componentEditing._id+'"]');
-                if(editedComponent && editedComponent.length > 0)
-                {
-                  //get all the editable variables and replace the ones in view with variables in DB
-                var componentEditable = editedComponent[0].querySelectorAll('.editable');
-                if (componentEditable.length >= 1) {
-                    for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                        var componentVar = componentEditable[i2].attributes['data-class'].value;
-                        var componentVarContents = componentEditable[i2].innerHTML;
+                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + $scope.componentEditing._id + '"]');
+                if (editedComponent && editedComponent.length > 0) {
+                    //get all the editable variables and replace the ones in view with variables in DB
+                    var componentEditable = editedComponent[0].querySelectorAll('.editable');
+                    if (componentEditable.length >= 1) {
+                        for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                            var componentVar = componentEditable[i2].attributes['data-class'].value;
+                            var componentVarContents = componentEditable[i2].innerHTML;
 
-                        //if innerhtml contains a span with the class ng-binding then remove it
-                        var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                            //if innerhtml contains a span with the class ng-binding then remove it
+                            var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
 
-                        if (span) {
-                            var spanParent = span.parentNode;
-                            var spanInner = span.innerHTML;
-                            if (spanParent.classList.contains('editable')) {
-                                componentVarContents = spanInner;
-                            } else {
-                                spanParent.innerHTML = spanInner;
-                                componentVarContents = spanParent.parentNode.innerHTML;
+                            if (span) {
+                                var spanParent = span.parentNode;
+                                var spanInner = span.innerHTML;
+                                if (spanParent.classList.contains('editable')) {
+                                    componentVarContents = spanInner;
+                                } else {
+                                    spanParent.innerHTML = spanInner;
+                                    componentVarContents = spanParent.parentNode.innerHTML;
+                                }
+                            }
+                            //remove "/n"
+                            componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                            var setterKey, pa;
+                            //if contains an array of variables
+                            if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
+                                //get index in array
+                                var first = componentVar.split(".")[0];
+                                var second = componentEditable[i2].attributes['data-index'].value;
+                                var third = componentVar.split(".")[2];
+                                matchingComponent[first][second][third] = componentVarContents;
+                            }
+                            //if needs to traverse a single
+                            if (componentVar.indexOf('-') > 0) {
+                                var first = componentVar.split("-")[0];
+                                var second = componentVar.split("-")[1];
+                                matchingComponent[first][second] = componentVarContents;
+                            }
+                            //simple
+                            if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                matchingComponent[componentVar] = componentVarContents;
                             }
                         }
-                        //remove "/n"
-                        componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
-                        var setterKey, pa;
-                        //if contains an array of variables
-                        if (componentVar.indexOf('.item') > 0) {
-                            //get index in array
-                            var first = componentVar.split(".")[0];
-                            var second = componentEditable[i2].attributes['data-index'].value;
-                            var third = componentVar.split(".")[2];
-                            matchingComponent[first][second][third] = componentVarContents;
-                        }
-                        //if needs to traverse a single
-                        if (componentVar.indexOf('-') > 0) {
-                            var first = componentVar.split("-")[0];
-                            var second = componentVar.split("-")[1];
-                            matchingComponent[first][second] = componentVarContents;
-                        }
-                        //simple
-                        if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                            matchingComponent[componentVar] = componentVarContents;
-                        }
                     }
-                }  
                 }
-                
+
 
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -885,7 +936,7 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
-                $scope.deactivateAloha();
+                console.log('>>> activating');
                 $scope.activateAloha();
 
                 //update the scope as the temppage until save
@@ -898,6 +949,7 @@ define([
             };
 
             $scope.saveCustomComponent = function() {
+                console.log('saving custom component');
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -982,7 +1034,14 @@ define([
                     var iFrame = document.getElementById("iframe-website");
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
-                } else {
+                }
+                else if ($scope.imgGallery && $scope.componentEditing) {
+                    $scope.imgGallery = false;
+                    $scope.componentEditing.images.push({
+                        url : asset.url
+                    });
+                }
+                else {
                     $scope.componentEditing.bg.img.url = asset.url;
                     $scope.saveComponent();
                     return;
@@ -1078,8 +1137,8 @@ define([
                 if(linkTitle && linkUrl)
                 {
                     $scope.website.linkLists.forEach(function(value, index) {
-                        if (value.handle === "head-menu") {                        
-                            value.links.push({                                
+                        if (value.handle === "head-menu") {
+                            value.links.push({
                                     label: linkTitle,
                                     type: "link",
                                     linkTo: {
@@ -1091,7 +1150,7 @@ define([
                         }
                     });
                 }
-                
+
             }
 
             //when the navigation is reordered, update the linklist in the website object
@@ -1116,7 +1175,7 @@ define([
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);  
+                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
                                     toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }
@@ -1133,6 +1192,20 @@ define([
                     _id: componentId
                 });
                 $scope.componentEditing.features.splice(index, 1);
+                $scope.saveCustomComponent();
+            }
+
+            window.addNewFeatureList = function(componentId, index) {
+                console.log('addNewFeatureList >>>');
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                console.log('component editing >>> ', $scope.componentEditing);
+                 $scope.componentEditing.features.push({
+                        "top" : "<div style=\"text-align:center\"><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-cubes  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-cubes%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-cubes%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></span></div>",
+                        "content" : "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.<br></p><p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><a data-cke-saved-href=\"http://\" href=\"http:\" style=\"color: rgb(255, 255, 255); outline: 0px; text-align: center; -webkit-box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; border-radius: 3px; border: 1px solid rgb(18, 77, 119); display: inline-block; font-family: arial; font-size: 13px; padding: 6px 24px; text-shadow: rgb(21, 70, 130) 0px 1px 0px; background-image: linear-gradient(rgb(0, 125, 193) 5%, rgb(0, 97, 167) 100%); background-color: rgb(0, 125, 193);\">Learn More</a><br></p>"
+                    });
+                console.log('adding feature complete, need edit mode');
                 $scope.saveCustomComponent();
             }
 
@@ -1153,6 +1226,23 @@ define([
                 $scope.postImage = true;
                 $("#media-manager-modal").modal('show');
                 $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.addImageToGallery = function(componentId) {
+                $scope.imgGallery = true;
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.deleteImageFromGallery = function(componentId, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.images.splice(index, 1);
+                $scope.saveCustomComponent();
             }
 
             window.changeProfilePhoto = function(componentId, customer) {
@@ -1233,7 +1323,7 @@ define([
                     $scope.currentPage = _.findWhere(that.allPages, {
                         handle: page.handle
                     });
-                   
+
                     //get components from page
                     if ($scope.currentPage && $scope.currentPage.components) {
                         $scope.components = $scope.currentPage.components;

@@ -1,4 +1,4 @@
-define(['app', 'campaignService', 'userService', 'jsPlumb', 'mgo-angular-wizard'], function(app) {
+define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
     app.register.controller('CampaignDetailCtrl', ['$scope', 'UserService', 'CampaignService', '$stateParams', '$state', function($scope, UserService, CampaignService, $stateParams, $state) {
         $scope.$back = function() {
             console.log('$scope.lastState.state ', $scope.lastState.state);
@@ -78,6 +78,20 @@ define(['app', 'campaignService', 'userService', 'jsPlumb', 'mgo-angular-wizard'
         };
 
         jsPlumb.ready(function() {
+
+            var testing = $('.newPageWidget');
+
+            jsPlumb.draggable(testing,
+                {
+                    grid: [20, 20],
+                    stop:function(params) {
+                        console.log(params);
+                        console.log("DragEND!");
+                    }
+
+
+                }
+            );
 
             var instance = jsPlumb.getInstance({
                 // default drag options

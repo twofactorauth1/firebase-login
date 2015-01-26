@@ -215,7 +215,7 @@ module.exports = {
     createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
         log.debug('>> createWebsiteFromTheme');
         if(fn === null) {
-            fn = pageHanle;
+            fn = pageHandle;
             pageHandle = null;
         }
         //default to index page if none is specified
@@ -273,6 +273,7 @@ module.exports = {
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
+                'title': pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1),
                 'websiteId': websiteId,
                 'components': componentAry,
                 'created': {
@@ -337,7 +338,19 @@ module.exports = {
 
                         var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), page);
                         if(postAry === null) {
-                            return fn('Page does not contain blog component.', null);
+                            //return fn('Page does not contain blog component.', null);
+                            //need to create a blog component.
+                            var blogComponent = new $$.m.cms.modules.Blog({
+                                posts: [savedPost.id()]
+                            });
+                            page.get('components').push(blogComponent);
+                            //asynchrounously create single-post-page if it doesn't exist.
+                            self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating single-post-page: ' + err);
+                                    return;
+                                }
+                            });
                         }
 
                         cmsDao.saveOrUpdate(page, function(err, page){
@@ -351,6 +364,127 @@ module.exports = {
                         });
                     }
                 });
+            }
+        });
+    },
+
+    _getOrCreateSinglePostPage: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> _getOrCreateSinglePostPage');
+
+        var page = {
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "single-post",
+            "title" : "Single Post",
+            "seo" : null,
+            "visibility" : {
+            "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "navigation",
+                "version" : 1,
+                "visibility" : true,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#888",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                }
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "single-post",
+                "version" : 1,
+                "visibility" : true,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#888888",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                },
+                "post_content" : ""
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : "g3297f91-53fc-47d6-b862-5ec161e0d250",
+                "type" : "footer",
+                "version" : 1,
+                "visibility" : true,
+                "txtcolor" : null,
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : null,
+                        "height" : null,
+                        "parallax" : false,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "title" : null
+            }
+        ],
+            "created" : {
+            "date" : new Date(),
+                "by" : null
+        },
+            "modified" : {
+            "date" : null,
+                "by" : null
+        },
+            "screenshot" : null
+        };
+
+        cmsDao.getPageForWebsite(websiteId, 'single-post', function(err, value){
+            if(err) {
+                self.log.error('Error getting single-post page: ' + err);
+                return fn(err, null);
+            } else if(value !== null) {
+                self.log.debug('<< _getOrCreateSinglePostPage (already created)');
+                return fn(null, value);
+            } else {
+                var singlePostPage = new $$.m.cms.Page(page);
+                cmsDao.saveOrUpdate(singlePostPage, function(err, savedPage){
+                    if(err) {
+                        self.log.error('Error saving single-post page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        self.log.debug('<< _getOrCreateSinglePostPage (new)');
+                        return fn(null, savedPage);
+                    }
+                });
+
             }
         });
     },
@@ -790,13 +924,13 @@ module.exports = {
                     "anchor" : null,
                     "type" : "feature-block",
                     "version" : 1,
-                    "title" : "<h1>Feature Block Title</h1>",
+                    "title" : "<h1>Awesome Feature Block</h1>",
                     "subtitle" : "<h3>This is the feature block subtitle.</h3>",
                     "text" : "<h5>The Feature Block component is great for a quick testimonial or a list of<br>features for a single product. It works great with an image background and parallax.</h5>",
-                    "txtcolor" : "#888888",
+                    "txtcolor" : "#ffffff",
                     "bg" : {
                         "img" : {
-                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/feature-block_1416870905848.jpg",
+                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/bg-grey_1421966329788.jpg",
                             "width" : 838,
                             "height" : 470,
                             "parallax" : true,
@@ -804,12 +938,7 @@ module.exports = {
                             "overlay" : false,
                             "show" : false
                         },
-                        "color" : "#f7f7f7"
-                    },
-                    "btn" : {
-                        "text" : "                &lt;p&gt;Button Text&lt;/p&gt;            ",
-                        "url" : "#",
-                        "icon" : "fa fa-rocket"
+                        "color" : ""
                     },
                     "visibility" : true
                 },
@@ -1130,7 +1259,7 @@ module.exports = {
                 width: 1280,
                 height: 1024,
                 full_page: true,
-                delay: 2500,
+                delay: 3500,
                 force: true
             };
 

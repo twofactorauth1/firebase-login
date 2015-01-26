@@ -19,12 +19,12 @@
     // logopanel
     .leftpanelinner
         //This is only visible to small devices
-        div.hidden
-            .media.userlogged
-                if photo
-                    img.media-object(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
-                .media-body
-                    h4 #{user.first} #{user.last}
+        //- div.hidden
+        //-     .media.userlogged
+        //-         if photo
+        //-             img.media-object(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
+        //-         .media-body
+        //-             h4 #{user.first} #{user.last}
 
         ul.nav.nav-pills.nav-stacked.nav-bracket
             li().website-li: a(href="#/website")
@@ -43,11 +43,12 @@
                 i.fa.fa-bar-chart
                 span Dashboard
             li().account-li: a(href="#/account")
-                    i.fa.fa-cog
+                    i.fa.fa-sliders
                     span Account
+            li().support-li: a(href="#/support")
+                    i.fa.fa-question-circle
+                    span Support
             li().logout-li: a(href="/logout", onclick="return confirm('Are you sure you want to sign out?')")
                     i.fa.fa-sign-out
                     span Sign Out
-            li().indi-li: a(href="#/indi")
-                    i.indi-sm
-                    span Indi
+                    div.clearfix

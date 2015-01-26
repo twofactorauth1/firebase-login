@@ -16,7 +16,8 @@ define(['app'], function (app) {
                     .error(function (data, status, headers, config){
                         fn(v._id, data, status);
                     })
-                    .finally(function () {
+                    .success(function (data, status, headers, config) {
+                        fn(data);
                     });
             })
 

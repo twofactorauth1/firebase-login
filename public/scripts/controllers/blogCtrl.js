@@ -226,12 +226,23 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
           $scope.$digest();
         };
 
-        window.activateAloha = function() {
-      //if ($scope.activated == false) {
+       $scope.activated = false;  
+       
+       window.checkIfActivated = function()
+       {
+           return $scope.activated;
+       } 
+       
+       window.activateAloha = function() {
+        for(name in CKEDITOR.instances)
+        {
+            CKEDITOR.instances[name].destroy()
+        }
         CKEDITOR.disableAutoInline = true;
-
         var elements = $('.editable');
+        console.log('length ', elements.length);
         elements.each(function() {
+          $scope.activated = true;  
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -240,12 +251,14 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
-
               }
+            },
+            sharedSpaces: {
+              top: 'editor-toolbar'
             }
           });
         });
-        $scope.activated = true;
+        
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
@@ -262,6 +275,32 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       // }
       // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
     };
+
+    window.addCKEditorImageInput = function(url) {
+      console.log('addCKEditorImageInput ', url);
+      if ($scope.urlInput) {
+        $scope.urlInput.val(url);
+      }
+    };
+
+    window.addCKEditorImage = function(url) {
+      console.log('addCKEditorImage ', url);
+      console.log('$scope.inlineInput ', $scope.inlineInput);
+      if ($scope.inlineInput) {
+        console.log('inserting html');
+        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
+      }
+    };
+
+    window.clickImageButton = function(btn) {
+      $scope.urlInput = $(btn).closest('td').prev('td').find('input');
+      window.parent.clickImageButton();
+    }
+
+    window.clickandInsertImageButton = function(editor) {
+      $scope.inlineInput = editor;
+      window.parent.clickImageButton();
+    }
 
     $scope.setPostImage = function(componentId, blogpost) {
       window.parent.setPostImage(componentId);

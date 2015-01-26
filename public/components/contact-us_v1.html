@@ -1,97 +1,27 @@
-<!--
-* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
-*
-* All use or reproduction of any or all of this content must be approved.
-* Please contact info@indigenous.io for approval or questions.
-*
--->
-
-
 <div ng-class="component.type+'-v'+component.version">
-
-    <div class="contact-us-title" ng-bind-html="component.title">
-        <div class="editable" data-class="title" data-index="{{$index}}">
-            <span ng-bind-html="component.title" />
-        </div>
-    </div>
-
-    <div class="contact-us-subtitle" ng-bind-html="component.subtitle">
-        <div class="editable" data-class="subtitle" data-index="{{$index}}">
-            <span ng-bind-html="component.subtitle" />
-        </div>
-    </div>
-
-    <div class="clearfix mb30"></div>
-
-    <div class="row">
-
-        <div class="col-sm-6">
-
-            <div class="contact-us-text">
-                <div id="para" class="editable" data-class="text">
-                    <convert-html contents="{{component.text}}"></convert-html>
-                    <span ng-show="!component.text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime similique eligendi ut error enim, rerum, at, hic dolorum temporibus libero nemo voluptas doloribus! Obcaecati ullam porro quas, quos quisquam fugiat.</span>
-                </div>
+    <div class="row ">
+        <div class="map-wrap">
+            <div tabindex="0" class="leaflet-container leaflet-fade-anim" id="map-marker" style="height: 250px; width: 100%; position: relative;">
+                <leaflet center="mapLocation" markers="markers" defaults="defaults" width="100%" height="250px"></leaflet>
             </div>
-            <div class="clearfix mb10 visible-xs"></div>
-
-            <div class="pull-left col-sm-4 col-xs-12 contact-us-image">
-                <div class="editable" data-class="imgurl">
-                    <img ng-src="{{component.imgurl}}" class="img-responsive col-sm-12 {{component.imagestyle}}">
-                </div>
-            </div>
-
-            <!--
-            <div class="map-wrap">
-                <div id="map-marker" style="height: 150px; width:100%"></div>
-            </div>
-            -->
-        </div>
-
-        <div class="col-sm-6">
-
-            <div class="contact-us-address-display-label">
-                <div class="editable" data-class="addressDisplayLabel" data-index="{{$index}}">
-                    <span ng-bind-html="component.location.addressDisplayLabel" />
-                    <span data-ng-show="!component.location.addressDisplayLabel">Enter your Address type here</span>
-                </div>
-            </div>
-
-            <div>
-                <div class="contact-us-location-address">
-                    <div class="editable" data-class="address" data-index="{{$index}}">
-                        <span ng-bind-html="component.location.address" />
-                        <span data-ng-show="!component.location.address">Address</span>
+            <div class="panel panel-default widget-weather col-sm-2 col-sm-offset-9 hidden-xs">
+                <div class="panel-body">
+                    <div class="row">
+                        
+                        <div class="col-xs-12 temp  settings" tab-active="address" data-id="{{component._id}}">
+                            <span ng-if="!geo_address_string"> Enter Address Here</span>
+                            <span ng-bind-html="geo_address_string"></span>
+                            
+                            <span ng-if="!contactPhone">Enter Phone Number here</span>
+                            <span ng-bind-html="contactPhone"></span>
+                            <span ng-if="!component.hours.length">Enter Business hours here</span>
+                            <span ng-bind-html="component.hours"></span>
+                        </div>
                     </div>
                 </div>
-                <div class="contact-us-location-address2">
-                    <div class="editable" data-class="address2" data-index="{{$index}}">
-                        <span ng-bind-html="component.location.address2" />
-                        <span data-ng-show="!component.location.address2">Address Suite or Apartment</span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="contact-us-location-city">
-                    <div class="editable" data-class="city" data-index="{{$index}}">
-                        <span ng-bind-html="component.location.city" />
-                        <span data-ng-show="!component.location.city">City</span>
-                    </div>
-                </div>
-                <div class="contact-us-location-state">
-                    <div class="editable" data-class="state" data-index="{{$index}}">
-                        <span ng-bind-html="component.location.state" />
-                        <span data-ng-show="!component.location.state">State</span>
-                    </div>
-                </div>
-                <div class="contact-us-location-zip">
-                    <div class="editable" data-class="zip" data-index="{{$index}}">
-                        <span ng-bind-html="component.location.zip" />
-                        <span data-ng-show="!component.location.zip">Zip Code</span>
-                    </div>
-                </div>
+                <!-- panel-body -->
             </div>
         </div>
-
-    </div>
+        </div>
+</div>
 </div>

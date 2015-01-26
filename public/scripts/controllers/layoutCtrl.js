@@ -386,22 +386,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
     // });
 
-    // window.scrollTo = function(section) {
-    //     console.log('>>> ', section);
-    //     if(section) {
-    //         $location.hash(section);
-    //         $anchorScroll();
+    window.scrollTo = function(section) {
+        console.log('>>> ', section);
+        if(section) {
+            $location.hash(section);
+            $anchorScroll();
 
-    //         //TODO scrollTo on click
+            //TODO scrollTo on click
 
-    //         // var offset = 0;
-    //         // var duration = 2000;
-    //         // var someElement = angular.element(document.getElementById(section));
-    //         // console.log('someElement >>>', document);
-    //         // console.log('>>> scrollTo '+ document.body.getElementById(section));
-    //         // $document.scrollToElementAnimated(someElement);
-    //     }
-    // };
+            // var offset = 0;
+            // var duration = 2000;
+            // var someElement = angular.element(document.getElementById(section));
+            // console.log('someElement >>>', document);
+            // console.log('>>> scrollTo '+ document.body.getElementById(section));
+            // $document.scrollToElementAnimated(someElement);
+        }
+    };
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
@@ -508,7 +508,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               scrollWheelZoom: false
             },
             markers: {
-                
+
             }
       });
 
@@ -519,7 +519,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               if(that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
                 $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
             }
-            if(!component.contact.phone && that.account.business.phones.length) 
+            if(!component.contact.phone && that.account.business.phones.length)
               $scope.contactPhone = that.account.business.phones[0].number;
             if($scope.geo_address_string){
               analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
@@ -691,7 +691,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       var selectedName;
       switch (mode) {
         case "add":
-          if (social && social.name && social.url) {
+          if (social && social.name) {
+            if (!social.url || social.url == "") {
+              $("#social-link-url .error").html("Link url can not be blank.");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+            
+            if (social.url) {
+	      var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	      if (urlRegex.test(social.url) == false) {
+		$("#social-link-url .error").html("Link url incorrect format");
+		$("#social-link-url").addClass('has-error');
+		return;
+	      }
+	    }
             selectedName = _.findWhere($scope.networks, {
               name: social.name
             });
@@ -708,7 +722,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               $("#social-link-url").addClass('has-error');
               return;
             }
+          } else {
+            $("#social-link-url .error").html("Please enter link url.");
+            $("#social-link-url").addClass('has-error');
+            $("#social-link-name .error").html("Please select link icon.");
+            $("#social-link-name").addClass('has-error');
+            return;
           }
+          $("#social-link-name .error").html("");
+          $("#social-link-name").removeClass('has-error');
+          $("#social-link-url .error").html("");
+          $("#social-link-url").removeClass('has-error');
           break;
         case "update":
           if (social && social.name && social.url) {
@@ -743,6 +767,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.updateSocialNetworks(old_value, mode, social);
       // $("#socialComponentModal").modal("hide");
       $(".modal-backdrop").remove();
+      $scope.social = {};
     };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
@@ -752,7 +777,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.deleteFeatureList(componentId, index);
     }
 
-    $scope.activated = false;
+    $scope.addFeatureList = function(componentId, index) {
+      console.log('adding Feature >>>');
+      window.parent.addNewFeatureList(componentId, index);
+    }
 
     window.clickImageButton = function(btn) {
       $scope.urlInput = $(btn).closest('td').prev('td').find('input');
@@ -764,6 +792,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.clickImageButton();
     }
 
+   $scope.activated = false;
+
+    window.checkIfActivated = function()
+       {
+           return $scope.activated;
+       }
+
+    function toTitleCase(str)
+    {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         for(name in CKEDITOR.instances)
@@ -771,10 +811,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             CKEDITOR.instances[name].destroy()
         }
         CKEDITOR.disableAutoInline = true;
-
         var elements = $('.editable');
-        console.log('length ', elements.length);
         elements.each(function() {
+          if(!$(this).parent().hasClass('edit-wrap')) {
+            var dataClass = $(this).data('class').replace('.item.', ' ');
+            $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
+          }
+        $scope.activated = true;
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -783,12 +826,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
-
               }
+            },
+            sharedSpaces: {
+              top: 'editor-toolbar'
             }
           });
         });
-        $scope.activated = true;
+
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
@@ -901,13 +946,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       });
     };
     window.updateCustomComponent = function(data, networks) {
-      if (data)
+      console.log('updateCustomComponent >>>');
+      if (data) {
         $scope.currentpage.components = data;
-      else {
+        setTimeout(function() {
+          $scope.$apply(function() {
+              activateAloha();
+          });
+        });
+      } else {
         $scope.$apply(function() {
 
         });
       }
+
+
 
       if (networks)
         $scope.networks = networks;
@@ -1521,8 +1574,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.addImage = function(component) {
       parent.$('body').trigger('add_image');
     };
-    $scope.deleteImage = function(component, index) {
-      parent.$('body').trigger('delete_image', [index]);
+    $scope.DeleteImageFromGallery = function(componentId, index) {
+      window.parent.deleteImageFromGallery(componentId, index);
     };
+    $scope.AddImageToGallery = function(componentId) {
+      window.parent.addImageToGallery(componentId);
+    }
   }
 ]);

@@ -25,7 +25,7 @@ elif [ "$1" = "develop" ]; then
 	export ENV_NAME="indigeweb-test-env"
 	export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
 	export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
-    export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
+    	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
 else
 	echo "No environment specified, exiting"
 	exit 80
@@ -83,6 +83,14 @@ zip -q -x *.git* node_modules/ -r "${APP_NAME}-${APP_VERSION}.zip" .
 echo Using access key $AWS_ACCESS_KEY_ID
 # delete any version with the same name (based on the short revision)
 aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}"  --delete-source-bundle
+
+# Clean up all but the most recent 100 revisions of the application
+echo "Checking for old revisions to clean up..."
+LIMIT_REVISIONS=100
+aws elasticbeanstalk describe-application-versions --application-name "${APP_NAME}" --output text \
+  --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
+  grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
+  while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
 
 echo Uploading to S3
 # upload to S3

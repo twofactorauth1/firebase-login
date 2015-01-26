@@ -60,32 +60,20 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
                 });
 
                 //show heatmap
-
-                var w = angular.element($window);
-                w.bind('resize', function() {
-                  $scope.$apply(function() {
-                   if($scope.heatmapInstance)
-                      {
-                            $scope.heatmapInstance.cleanup();
-                            var xx = h337.create({"element":document.getElementById("heatmapArea"), "radius":25, "visible":true});
-                            xx.store.setDataSet({ max: $scope.heatmapInstance.store.max, data: $scope.heatmapDataObj }, true);
-                            //.setDataSet();
-                            $scope.heatmapInstance = xx;
-                        
-                      }
-                  });
-                });
-
                 $scope.initializeHeatmap = function() {                    
                     $(document ).ready(function() {
                         // Get on screen image
                         var screenImage = $("#heatmapArea img");
                         var heatmapArea = $("#heatmapArea");
-                            var xx = h337.create({container:document.getElementById("heatmapArea"), radius:25, visible:true});
-                            xx._renderer.setDimensions(heatmapArea.width(), heatmapArea.height());
-                            for (var i = 0; i < $scope.heatmapData.length && i < 1000; i++) {
-                                xx.addData({ x: Math.floor($scope.heatmapData[i].x), y: Math.floor($scope.heatmapData[i].y), value: 1});
-                            };
+                            if(document.getElementById("heatmapArea"))
+                            {
+                                var xx = h337.create({container:document.getElementById("heatmapArea"), radius:25, visible:true});
+                                xx._renderer.setDimensions(heatmapArea.width(), heatmapArea.height());
+                                for (var i = 0; i < $scope.heatmapData.length && i < 1000; i++) {
+                                    xx.addData({ x: Math.floor($scope.heatmapData[i].x), y: Math.floor($scope.heatmapData[i].y), value: 1});
+                                }; 
+                            }
+                            
 
                         function resetData() {
                             console.log('xx ', xx);
@@ -100,7 +88,8 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
                         $(window).resize(function () {
                             waitForFinalEvent(function(){
                               console.log('Resize...');
-                              resetData();
+                              if(document.getElementById("heatmapArea"))
+                                 resetData();
                             }, 500, $scope.heatmapData.length);
                         });
 

@@ -3583,7 +3583,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   float: none;
 }
 .nav-stacked > li + li {
-  margin-top: 2px;
   margin-left: 0;
 }
 .nav-justified {
@@ -13096,10 +13095,6 @@ h4,
 h5 {
   font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
 }
-strong {
-  font-family: 'LatoBold';
-  font-weight: normal;
-}
 .mb5 {
   margin-bottom: 5px;
 }
@@ -16049,9 +16044,6 @@ div.error label.error:before {
   .mainpanel {
     margin-left: 0;
     width: 100%;
-  }
-  .leftpanel-collapsed .leftpanel {
-    display: none;
   }
   .leftpanel-collapsed .mainpanel {
     margin-left: 0;

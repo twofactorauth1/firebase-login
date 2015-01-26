@@ -100,7 +100,7 @@
                 </div>
                 <div class="row">
                     <input bs-switch ng-model="product.is_image" type="checkbox" switch-label="Image">
-                    <a ng-if="product.is_image" class="btn btn-success media-modal pull-right" on-insert-mediacb="insertMedia"
+                    <a ng-if="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia"
                     user='user'> <span class="fa fa-image"></span>  <span class="hidden-xs">Change Image</span>
                     </a>
                 </div>
@@ -249,13 +249,13 @@
                     <div class="form-group">
                         <label>Option Type</label>
                         <input bs-switch ng-model="customOption" type="checkbox" switch-label="Custom">
-                        <select class="form-control input-lg" ng-model="option.type" ng-hide='customOption'>
+                        <select class="form-control input-lg custom-option-type" ng-model="option.type" ng-hide='customOption'>
                             <option value='size'>Size</option>
                             <option value='color'>Color</option>
                             <option value='material'>Material</option>
                             <option value='style'>Style</option>
                         </select>
-                        <input type="text" placeholder="Custom Option" ng-model="option.type" ng-show='customOption'
+                        <input type="text" placeholder="Custom Option" class="form-control input-lg custom-option-type" ng-model="option.type" ng-show='customOption'
                         />
                     </div>
                 </div>
@@ -268,46 +268,57 @@
                 </div>
             </div>
             <div class="row">
-                <button ng-click="addOptionFn()">Add Option</button>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                <button class="btn btn-primary" ng-click="addOptionFn()">Add Option</button>
+            </div></div>
             </div>
             <div class="row">
-                <input bs-switch ng-model="autoGenerateVariant" type="checkbox" switch-label="Auto">
-                <p>Can auto generate <strong>{{autoGenerateVariantCount}}</strong> variants.</p>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                    <input bs-switch ng-model="autoGenerateVariant" type="checkbox" switch-label="Auto">
+                    <p>Can auto generate <strong>{{autoGenerateVariantCount}}</strong> variants.</p>
+                </div>
+            </div>
             </div>
             <div class="row" ng-repeat="variant in product.variantSettings.variants">
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" placeholder="Name" ng-model="variant.name" />
+                        <input type="text" class="form-control input-lg" placeholder="Name" ng-model="variant.name" />
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="form-group">
                         <label>Price</label>
-                        <input type="text" placeholder="Price" ng-model="variant.price" />
+                        <input type="text" class="form-control input-lg" placeholder="Price" ng-model="variant.price" />
                     </div>
                 </div>
                 <div class="col-sm-2">
                     <div class="form-group">
                         <label>SKU</label>
-                        <input type="text" placeholder="SKU" ng-model="variant.sku" />
+                        <input type="text" class="form-control input-lg" placeholder="SKU" ng-model="variant.sku" />
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
                     <div class="form-group">
                         <label>Barcode</label>
-                        <input type="text" placeholder="Barcode" ng-model="variant.barcode" />
+                        <input type="text" class="form-control input-lg" placeholder="Barcode" ng-model="variant.barcode" />
                     </div>
                 </div>
                 <div class="col-sm-2">
-                    <div class="form-group">
-                        <input bs-switch ng-model="variant.create" type="checkbox" switch-label="Create">
+                    <div class="form-group custom-option-switch">
+                        <input bs-switch ng-model="variant.create" class="form-control input-lg" type="checkbox" switch-label="Create">
                     </div>
                 </div>
 
             </div>
             <div class="row">
-                <button ng-click="addVariantFn()">Add Variant</button>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <button class="btn btn-primary" ng-click="addVariantFn()">Add Variant</button>
+                    </div>
+                </div>
             </div>
 
         </div>

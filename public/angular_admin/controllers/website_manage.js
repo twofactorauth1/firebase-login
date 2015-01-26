@@ -12,6 +12,7 @@ define([
     'jquery',
     'mediaDirective',
     'checkImageDirective',
+    'blockUI'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -20,12 +21,14 @@ define([
         'WebsiteService',
         'ngProgress',
         'toaster',
-        function($scope, $location, UserService, WebsiteService, ngProgress, toaster) {
+        'blockUI',
+        function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI) {
             ngProgress.start();
             var account;
             $scope.showToaster = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
-
+            
+                     
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
@@ -145,6 +148,39 @@ define([
                         }
                     }
                     $scope.pages = _pages;
+                    var editPageHandle = WebsiteService.getEditedPageHandle();
+                    if($scope.activeTab === 'pages' && editPageHandle)
+                    {
+
+                        $scope.editedPage =  _.findWhere($scope.pages, {
+                            handle: editPageHandle
+                        });
+                        if($scope.editedPage && $scope.editedPage.screenshot == null)
+                        {
+                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI'); 
+                            pagesBlockUI.start(); 
+                            var maxTries = 10;
+                            var getScreenShot = function() {
+                                WebsiteService.getPageScreenShot(editPageHandle, function(data) {
+                                    if((!data || !data.length) && maxTries > 0)
+                                    {
+                                        getScreenShot();
+                                        maxTries = maxTries - 1;
+                                    }
+                                    else
+                                    {
+                                       WebsiteService.setEditedPageHandle();
+                                       if(data && data.length)
+                                            $scope.editedPage.screenshot = data;
+                                       pagesBlockUI.stop();
+                                    }
+                                })
+                            }
+                            setTimeout(function() {
+                                getScreenShot();
+                            }, 5000);
+                        }
+                    }
                 });
 
                 UserService.getUserPreferences(function(preferences) {
@@ -322,11 +358,6 @@ define([
                             toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                             $('#create-post-modal').modal('hide');
                             $scope.posts.push(data);
-                            WebsiteService.createPost($scope.postId, postData, function(data) {
-                                toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                                $('#create-post-modal').modal('hide');
-                                $scope.posts.push(data);
-                            });
                         });
                     });
                 }

@@ -20,12 +20,12 @@
     // logopanel
     .leftpanelinner
         //This is only visible to small devices
-        div.hidden
-            .media.userlogged
-                if photo
-                    img.media-object(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
-                .media-body
-                    h4 #{user.first} #{user.last}
+        //- div.hidden
+        //-     .media.userlogged
+        //-         if photo
+        //-             img.media-object(alt="" src="#{photo.url}" style="max-height:40px; max-width:60px;")
+        //-         .media-body
+        //-             h4 #{user.first} #{user.last}
 
         ul.nav.nav-pills.nav-stacked.nav-bracket
             li(data-toggle="pill").contacts-li: a(href="/contacts")
@@ -44,7 +44,7 @@
                 i.fa.fa-bar-chart
                 span Dashboard
             li(): a(href="/admin1/#/account")
-                    i.fa.fa-cog
+                    i.fa.fa-sliders
                     span Account
             li(data-toggle="pill").logout-li: a(href="/logout")
                     i.fa.fa-sign-out

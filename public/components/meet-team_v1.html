@@ -6,7 +6,7 @@
 *
 -->
 <div ng-class="component.type+'-v'+component.version">
-    <div class="title"f>
+    <div class="title">
         <div class="editable" data-class="title">
             <span ng-bind-html="component.title"/>
         </div>
@@ -14,76 +14,80 @@
 
     <div class="mb30"></div>
 
-    <div class="row">
+    <div class="row team-member-wrap">
         <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left" ng-repeat="teamMember in component.teamMembers">
-            <div class="{{teamMember.becomeMember?'become-member':''}}">
+            <div class="{{teamMember.becomeMember?'become-member':''}} team-member {{isEditing ? 'edit-mode' : ''}}">
+
                 <div class="profile-img">
                     <div class="profilepic-hover">
-                        <div style="float:left;clear:left;height:15px;width:115px"></div>
-                        <div style="float:right;clear:right;height:15px;width:115px"></div>
-                        <div style="float:left;clear:left;height:15px;width: 115px;"></div>
-                        <div style="float:right;clear:right;height:15px;width:115px"></div>
-                        <div style="float:left;clear:left;height:15px;width:40px"></div>
-                        <div style="float:right;clear:right;height:15px;width:40px"></div>
-                        <div style="float:left;clear:left;height:15px;width:25px"></div>
-                        <div style="float:right;clear:right;height:15px;width:25px"></div>
-                        <div style="float:left;clear:left;height:15px;width:20px"></div>
-                        <div style="float:right;clear:right;height:15px;width:20px"></div>
-                        <div style="float:left;clear:left;height:15px;width:10px"></div>
-                        <div style="float:right;clear:right;height:15px;width:10px"></div>
-                        <div style="float:left;clear:left;height:15px;width:10px"></div>
-                        <div style="float:right;clear:right;height:15px;width:10px"></div>
-                        <div style="float:left;clear:left;height:15px;width:5px"></div>
-                        <div style="float:right;clear:right;height:15px;width:5px"></div>
-                        <div style="float:left;clear:left;height:15px;width:10px"></div>
-                        <div style="float:right;clear:right;height:15px;width:10px"></div>
-                        <div style="float:left;clear:left;height:15px;width:15px"></div>
-                        <div style="float:right;clear:right;height:15px;width:15px"></div>
-                        <div style="float:left;clear:left;height:15px;width:20px"></div>
-                        <div style="float:right;clear:right;height:15px;width:20px"></div>
-                        <div style="float:left;clear:left;height:15px;width:25px"></div>
-                        <div style="float:right;clear:right;height:15px;width:25px"></div>
-                        <div style="float:left;clear:left;height:15px;width:35px"></div>
-                        <div style="float:right;clear:right;height:15px;width:35px"></div>
-                        <div style="float:left;clear:left;height:15px;width:45px"></div>
-                        <div style="float:right;clear:right;height:15px;width:45px"></div>
-                        <div style="float:left;clear:left;height:15px;width:115px"></div>
-                        <div style="float:right;clear:right;height:15px;width:115px"></div>
+                        <div class="mask left" style="width:115px"></div>
+                        <div class="mask right" style="width:115px"></div>
+                        <div class="mask left" style="width:115px"></div>
+                        <div class="mask right" style="width:115px"></div>
+                        <div class="mask left" style="width:40px"></div>
+                        <div class="mask right" style="width:40px"></div>
+                        <div class="mask left" style="width:25px"></div>
+                        <div class="mask right" style="width:25px"></div>
+                        <div class="mask left" style="width:20px"></div>
+                        <div class="mask right" style="width:20px"></div>
+                        <div class="mask left" style="width:10px"></div>
+                        <div class="mask right" style="width:10px"></div>
+                        <div class="mask left" style="width:10px"></div>
+                        <div class="mask right" style="width:10px"></div>
+                        <div class="mask left" style="width:5px"></div>
+                        <div class="mask right" style="width:5px"></div>
+                        <div class="mask left" style="width:10px"></div>
+                        <div class="mask right" style="width:10px"></div>
+                        <div class="mask left" style="width:15px"></div>
+                        <div class="mask right" style="width:15px"></div>
+                        <div class="mask left" style="width:20px"></div>
+                        <div class="mask right" style="width:20px"></div>
+                        <div class="mask left" style="width:25px"></div>
+                        <div class="mask right" style="width:25px"></div>
+                        <div class="mask left" style="width:35px"></div>
+                        <div class="mask right" style="width:35px"></div>
+                        <div class="mask left" style="width:45px"></div>
+                        <div class="mask right" style="width:45px"></div>
+                        <div class="mask left" style="width:115px"></div>
+                        <div class="mask right" style="width:115px"></div>
                         <div class="c" style="font-size: 13px;">
                             <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}">
-                                <span ng-bind-html="teamMember.bio" />
+                                <span ng-bind-html="teamMember.bio"/>
                             </div>
                         </div>
-                    <ul class="profile-social">
-                        <li ng-repeat="(val, key) in teamMember.social">
-                            <a href="{{key}}" target="_blank">
-                                <span class="fa fa-{{val}}"></span>
-                            </a>
-                        </li>
-                    </ul>
+                        <ul class="profile-social">
+                            <li ng-repeat="(val, key) in teamMember.social">
+                                <a href="{{key}}" target="_blank">
+                                    <span class="fa fa-{{val}}"></span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
 
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
-                        <img ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
+                        <div class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
                     </a>
-
-                    <img ng-if="!teamMember.becomeMember" ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
-
                 </div>
                 <div class="name">
                     <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}">
-                        <span ng-bind-html="teamMember.name" />
+                        <span ng-bind-html="teamMember.name"/>
                     </div>
                     <div class="name-border"></div>
                 </div>
                 <div class="profile-position">
                     <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}">
-                        <span ng-bind-html="teamMember.position" />
+                        <span ng-bind-html="teamMember.position"/>
                     </div>
                 </div>
-               
                 <div ng-if="isEditing" class="delete-team-member center">
-                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </div>
+                <div ng-if="isEditing" class="add-addtional center">
+                    <a href="" ng-click="addTeamMember(component._id,$index)">
+                        <i class="fa fa-plus"></i>
+                    </a>
                 </div>
             </div>
         </div>

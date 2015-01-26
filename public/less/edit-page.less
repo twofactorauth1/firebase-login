@@ -1,4 +1,130 @@
-
+#editor-toolbar {
+    position: fixed;
+    top: 0;
+    z-index: 99999;
+    display: block;
+    width: 100%;
+    height: 54px;
+    .cke_chrome {
+      border: none;
+      border-radius: 0;
+     background: #efa022;
+      padding: 0;
+      a.cke_button_disabled:active,
+      a.cke_button_disabled:focus,
+      a.cke_button_disabled:hover,
+      a.cke_button_off:active,
+      a.cke_button_off:focus,
+      a.cke_button_off:hover {
+        background: rgba(255,255,255,0.5);
+        border-radius: 0;
+      }
+      .cke_bottom, .cke_top {
+        padding: 0;
+        background: none;
+      }
+      .cke_toolgroup {
+        border: none;
+        border-radius: 0;
+        background: none;
+        padding: 0;
+        margin: 0;
+      }
+      .cke_toolbar_separator {
+        display: none;
+      }
+      .cke_button_on {
+        background: rgba(255, 255, 255, 0.5);
+      }
+      .cke_combo_button {
+        margin-top: 13px;
+      }
+      a.cke_button {
+        height: 50px;
+        width: 40px;
+        .cke_button_icon {
+          background: none!important;
+          font: normal normal normal 14px/1 FontAwesome;
+          text-align: center;
+          position: relative;
+          display: block;
+          color: white;
+          width: 100%;
+          line-height: 50px;
+        }
+        .cke_button__bold_icon {
+          &:before {
+            content: "\f032";
+          }
+        }
+        .cke_button__italic_icon {
+          &:before {
+            content: "\f033";
+          }
+        }
+        .cke_button__numberedlist_icon {
+          &:before {
+            content: "\f0cb";
+          }
+        }
+        .cke_button__bulletedlist_icon {
+          &:before {
+            content: "\f0ca";
+          }
+        }
+        .cke_button__justifyleft_icon {
+          &:before {
+            content: "\f036";
+          }
+        }
+        .cke_button__justifycenter_icon {
+          &:before {
+            content: "\f037";
+          }
+        }
+        .cke_button__justifyright_icon {
+          &:before {
+            content: "\f038";
+          }
+        }
+        .cke_button__justifyblock_icon {
+          &:before {
+            content: "\f039";
+          }
+        }
+        .cke_button__link_icon {
+          &:before {
+            content: "\f0c1";
+          }
+        }
+        .cke_button__unlink_icon {
+          &:before {
+            content: "\f127";
+          }
+        }
+        .cke_button__anchor_icon {
+          &:before {
+            content: "\f13d";
+          }
+        }
+        .cke_button__mediamanager_icon {
+          &:before {
+            content: "\f03e";
+          }
+        }
+        .cke_button__fontawesome_icon {
+          &:before {
+            content: "\f024";
+          }
+        }
+        .cke_button__doksoft_button {
+          &:before {
+            content: "\f138";
+          }
+        }
+      }
+    }
+}
 .website {
   .pageheader {
     .btn-group {
@@ -171,6 +297,41 @@
   }
 
 }
+.editable-title {
+  display: none;
+}
+.editing {
+  .ui-sortable {
+    margin-top: 50px;
+  }
+  .edit-wrap {
+    margin: -1px;
+    position: relative;
+    .editable {
+      img {
+        max-width: 100%;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    &:hover {
+      outline: 1px dashed #efa022;
+      margin: -1px;
+       .editable-title {
+          position: absolute;
+          left: 0;
+          top: -20px;
+          background: #efa022;
+          color: #fff!important;
+          border-top-right-radius: 3px;
+          border-top-left-radius: 3px;
+          padding: 0 15px;
+          display: block;
+        }
+    }
+  }
+}
 
 #nestable-menu {
   z-index: 999;
@@ -320,6 +481,7 @@ background: #fff!important;
   z-index: 1032;
   width: 100%;
   margin-right: 10px;
+  pointer-events: none;
   span {
     background: rgba(44,62,80,0.8);
     padding: 20px;
@@ -329,6 +491,7 @@ background: #fff!important;
   }
   .reorder {
     float: left;
+    pointer-events: all;
     &:hover {
       color: #54C8E8;
     }
@@ -343,12 +506,14 @@ background: #fff!important;
   }
   .delete {
     float: right;
+    pointer-events: all;
     &:hover {
       color: #d9534f;
     }
   }
   .settings {
     float: right;
+    pointer-events: all;
     &:hover {
       color: #efa022;
     }

@@ -13,7 +13,7 @@ require.config({
         'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
         'angular': 'libs/angular/angular',
         'angularBootstrap': 'libs/angular-bootstrap/ui-bootstrap-tpls.min',
-        'angularBootstrapSwitch': 'libs/angular-bootstrap-switch/dist/angular-bootstrap-switch',
+        'angularBootstrapSwitch': 'libs_misc/angular-bootstrap-switch/dist/angular-bootstrap-switch',
         'angularRoute': 'libs/angular-route/angular-route',
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
@@ -74,7 +74,6 @@ require.config({
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
         'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
-        'mgo-angular-wizard':'libs/angular-wizard/dist/angular-wizard',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -137,6 +136,7 @@ require.config({
         'purl': 'libs/purl/purl',
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
         'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
+        'carousel': '/angular_admin/directives/carousel',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -195,7 +195,6 @@ require.config({
         'colorpicker': {deps: ['spectrum']},
         'ngHeadroom': {deps: ['headroom']},
         'commonutils': {deps: ['underscore']},
-        'mgo-angular-wizard': {deps: ['underscore', 'angular']},
         'jqueryGridster': {deps: ['jquery']},
         'c3': {deps: ['d3']},
         'angularUiRouter': {deps: ['angular']},
@@ -241,7 +240,8 @@ require.config({
         'ngload': ['angularAMD'],
         'jPushMenu' : {deps: ['jquery']},
         'angularSlugifier': ['angular'],
-        'blockUI': ['angular']
+        'blockUI': ['angular'],
+        'carousel': ['angular','angularBootstrap']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

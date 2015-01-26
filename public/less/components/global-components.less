@@ -9,6 +9,10 @@ hr {
   font-size: 14px;
 }
 
+.cke_widget_drag_handler_container {
+  display: none;
+}
+
 .goback {
   background: #d0ecf6;
   padding: 38px;
@@ -140,6 +144,29 @@ hr {
       }
     }
 }
+.component-hidden{text-align: center;padding: 5px 0;}
+
+.add-addtional {
+  position: absolute;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 10px 10px 5px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  left: 50%;
+  z-index: 9998;
+  margin-top: -25px;
+  margin-left: -25px;
+  display: none;
+  -webkit-transition: font-size 0.5s;
+   -moz-transition: font-size 0.5s;
+     -o-transition: font-size 0.5s;
+        transition: font-size 0.5s;
+
+  &:hover {
+    font-size: 18px;
+  }
+}
 
 body.editing {
   .no-component {
@@ -156,6 +183,9 @@ body.editing {
   }
   .fragment {
     border: none;
+    .component-inner {
+        border: 2px solid transparent;
+      }
     &.dragging {
       z-index: 999999!important;
     }
@@ -264,7 +294,7 @@ ol.circles-list > li:before {
 }
 
 /* BS CAROUSEL STEP */
-  
+
   .single-step.carousel-step{
     width:400px;
     height:540px;
@@ -318,8 +348,6 @@ ol.circles-list > li:before {
 @import "components/accordion-v1.less";
 @import "components/campaign.less";
 @import "components/contact-us-v1.less";
-@import "components/contact-us-v2.less";
-@import "components/contact-us-v4.less";
 @import "components/component-wrap.less";
 @import "components/default-layout.less";
 @import "components/feature-list-v1.less";
@@ -339,8 +367,6 @@ ol.circles-list > li:before {
 @import "components/testimonials-v1.less";
 @import "components/testimonials-v2.less";
 @import "components/image-text-v1.less";
-@import "components/image-text-v2.less";
-@import "components/image-text-v3.less";
 @import "components/shopping-cart-v1.less";
 @import "components/masthead-v1.less";
 @import "components/social-v1.less";
@@ -356,8 +382,6 @@ ol.circles-list > li:before {
 @import "components/pricing-table-v1.less";
 @import "components/coming-soon-v1.less";
 @import "components/image-gallery-v1.less";
-@import "components/image-text-v4.less";
-@import "components/information-list-v1.less";
 @import "components/header-image-text-v1.less";
 @import "components/information-list-v2.less";
 @import "components/triangle-text-v1.less";
@@ -365,8 +389,7 @@ ol.circles-list > li:before {
 @import "components/payment-form-v1.less";
 @import "components/thumbnail-slider-v1.less";
 @import "components/video-v1.less";
-@import "components/image-text-v5.less";
-@import "components/image-gallery-v2.less";
+
 @import "components/social-link-v1.less";
 @import "components/customer-account-v1.less";
 @import "components/customer-signup-v1.less";

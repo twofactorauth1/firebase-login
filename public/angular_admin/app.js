@@ -1,4 +1,4 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI', 'angularStepper'], function(angularAMD) {
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI', 'angularStepper','carousel'], function(angularAMD) {
   var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI', 'revolunet.stepper']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
@@ -125,11 +125,11 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'WebsiteCtrl',
           controllerUrl: '/angular_admin/controllers/website.js'
         }))
-        .state('indi', angularAMD.route({
-          url: '/indi',
-          templateUrl: '/angular_admin/views/indi.html',
-          controller: 'IndiCtrl',
-          controllerUrl: '/angular_admin/controllers/indi.js'
+        .state('support', angularAMD.route({
+          url: '/support',
+          templateUrl: '/angular_admin/views/support.html',
+          controller: 'SupportCtrl',
+          controllerUrl: '/angular_admin/controllers/support.js'
         }))
         .state('home', angularAMD.route({
           url: '/home',
@@ -172,8 +172,45 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
             p = p || $('.nav.nav-pills.nav-stacked.nav-bracket');
             toName = toState.name.split(/[A-Z]/g);
             fromName = fromState.name.split(/[A-Z]/g);
-            $('[href="#/' + toName[0] + '"]', p).parent().addClass('active')
-            $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active')
+            $('[href="#/' + toName[0] + '"]', p).parent().addClass('active');
+            $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active');
+
+            //magicline
+             // var self = this;
+             //  var $el, topPos,
+             //      $mainNav = $("#leftnav ul");
+             //      console.log('$("#magic-line") ', $("#magic-line").length);
+             //  if ($("#magic-line").length <= 0) {
+             //    $mainNav.append("<li id='magic-line'></li>");
+             //  }
+             //  var $magicLine = $("#magic-line");
+
+             //  $magicLine
+             //      .height('63px')
+             //      .css("top", $("#leftnav ul li.active").position().top)
+             //      .data("origTop", $magicLine.position().top);
+
+
+             //      $("#leftnav ul li").hover(function() {
+             //          $el = $(this);
+             //          topPos = $el.position().top;
+             //          $magicLine.stop().animate({
+             //              top: topPos
+             //          });
+             //      }, function() {
+             //          console.log('$magicLine.data("origTop") ', $magicLine.data("origTop"));
+             //          $magicLine.stop().animate({
+             //              top: $magicLine.data("origTop")
+             //          });
+             //      });
+
+             //   $("#leftnav ul li").on('click', function() {
+             //      var self = this;
+             //      $el = $(this);
+             //      console.log('clicked ', $el.position().top);
+             //      self.topPos = $el.position().top;
+             //      $magicLine.data("origTop", $el.position().top);
+             //   });
           }
         });
     }]);

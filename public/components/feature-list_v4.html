@@ -20,8 +20,13 @@
                 </div>
                 </div>
             </div>
-             <div ng-if="isEditing" class="delete-feature center">
-                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature">Delete</button>
+             <div ng-if="isEditing && component.features.length > 1" class="delete-feature center">
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
+            </div>
+            <div ng-if="isEditing" class="add-addtional center">
+                <a href="" ng-click="addFeatureList(component._id,$index)">
+                    <i class="fa fa-plus"></i>
+                </a>
             </div>
             <hr ng-if="!$last" />
         </div>
