@@ -331,9 +331,41 @@ module.exports = {
                         self.log.error('Error getting page for post: ' + err);
                         return fn(err, null);
                     } else if(!page){
-                        var msg = 'Referenced page [' + savedPost.get('pageId') + '] does not exist:';
-                        self.log.error(msg);
-                        return fn(msg, null);
+                        self.log.debug('Referenced page does not exist.  Creating default blog page.');
+                        self._createBlogPage(accountId, savedPost.get('websiteId'), function(err, blogPage){
+                            if(err) {
+                                self.log.error('Error creating blog page: ' + err);
+                                return fn(err, null);
+                            }
+                            var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), blogPage);
+                            if(postAry === null) {
+                                //return fn('Page does not contain blog component.', null);
+                                //need to create a blog component.
+                                var blogComponent = new $$.m.cms.modules.Blog({
+                                    posts: [savedPost.id()]
+                                });
+                                blogPage.get('components').push(blogComponent);
+                                //asynchrounously create single-post-page if it doesn't exist.
+                                self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating single-post-page: ' + err);
+                                        return;
+                                    }
+                                });
+                            }
+
+                            cmsDao.saveOrUpdate(blogPage, function(err, page){
+                                if(err) {
+                                    self.log.error('Error updating page for post: ' + err);
+                                    return fn(err, null);
+                                } else {
+                                    self.log.debug('<< createBlogPost');
+                                    return fn(null, savedPost);
+                                }
+                            });
+
+                        });
+
                     } else {
 
                         var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), page);
@@ -364,6 +396,140 @@ module.exports = {
                         });
                     }
                 });
+            }
+        });
+    },
+
+    _createBlogPage: function(accountId, websiteId, fn) {
+        var blogPage = {
+            "_id" : null,
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "blog",
+            "title" : "Blog",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : "76aae765-bda7-4298-b78c-f1db159eb9f4",
+                    "anchor" : null,
+                    "type" : "navigation",
+                    "version" : 1,
+                    "visibility" : true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                },
+                {
+                    "_id" : "b56556a7-b145-4c4d-9e82-6cbe7dc967c0",
+                    "anchor" : null,
+                    "type" : "blog",
+                    "version" : 1,
+                    "visibility" : true,
+                    "txtcolor" : "#444",
+                    "posts" : [
+                        {
+                            "title" : "Hello World",
+                            "content" : "this is the content",
+                            "created" : {
+                                "date" : new Date(),
+                                "by" : null
+                            },
+                            "modified" : {
+                                "date" : "",
+                                "by" : null
+                            }
+                        },
+                        {
+                            "title" : "Hello World 2",
+                            "content" : "this is the content",
+                            "created" : {
+                                "date" : new Date(),
+                                "by" : null
+                            },
+                            "modified" : {
+                                "date" : "",
+                                "by" : null
+                            }
+                        },
+                        "b6df057f-2d45-402d-a010-d43bcca00f12",
+                        "13260fd6-c854-4ed2-a830-bc75869b3b48"
+                    ],
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : "#f6f6f6"
+                    },
+                    "btn" : {
+                        "text" : "I'm Interested",
+                        "url" : "http://google.com",
+                        "icon" : "fa fa-rocket"
+                    },
+                    "post_title" : "<p>TEST MANIK POST_TEST</p>",
+                    "post_excerpt" : "<p><br></p>"
+                },
+
+                {
+                    "_id" : "g3297f91-53fc-47d6-b862-5ec161e0d250",
+                    "anchor" : "g3297f91-53fc-47d6-b862-5ec161e0d250",
+                    "type" : "footer",
+                    "version" : 1,
+                    "visibility" : true,
+                    "txtcolor" : null,
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "title" : null
+                }
+            ],
+            "screenshot" : null,
+            "secure" : false,
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : null,
+                "by" : null
+            }
+        };
+
+        cmsDao.saveOrUpdate(new $$.m.cms.Page(blogPage), function(err, value){
+            if(err) {
+                return fn(err, null);
+            } else {
+                return fn(null, value);
             }
         });
     },
