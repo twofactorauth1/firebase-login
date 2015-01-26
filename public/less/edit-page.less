@@ -307,8 +307,13 @@
   .edit-wrap {
     margin: -1px;
     position: relative;
-    .editable:focus {
-      outline: none;
+    .editable {
+      img {
+        max-width: 100%;
+      }
+      :focus {
+        outline: none;
+      }
     }
     &:hover {
       outline: 1px dashed #efa022;

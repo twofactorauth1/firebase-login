@@ -5386,7 +5386,11 @@ div.error label.error:before {
   position: relative;
 }
 
-.editing .edit-wrap .editable:focus {
+.editing .edit-wrap .editable img {
+  max-width: 100%;
+}
+
+.editing .edit-wrap .editable :focus {
   outline: none;
 }
 
@@ -9120,7 +9124,6 @@ contenthover a {
 
 .image-text-v1 .image-text-image img {
   margin: 15px auto;
-  width: 100%;
 }
 
 #paradata span h4 {

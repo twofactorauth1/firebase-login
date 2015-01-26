@@ -267,7 +267,7 @@ define([
                 }, {
                     title: 'Text Only',
                     type: 'text-only',
-                    icon: 'fa fa-file-text',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
                     enabled: true
                 }, {
                     title: 'Thumbnail Slider',
