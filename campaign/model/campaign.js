@@ -26,9 +26,9 @@ var campaign = $$.m.ModelBase.extend({
                     "fromName" : 'John Doe',
                     "subject" : 'Email Subject',
                     "content": '<html><body>Stuff</body></html>',
-                    "vars": {
+                    "vars": [{
 
-                    },
+                    }],
                     "scheduled" : {
                         "minute":1,
                         "hour": 2,

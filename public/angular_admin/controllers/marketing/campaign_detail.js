@@ -77,6 +77,36 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
             });
         };
 
+        //add step to single campaign in scope
+        $scope.addStep = function(type) {
+            console.log('addStep >>> ', type);
+            var step2add;
+            if (type === 'email') {
+                step2add = {
+                    "type": "email",
+                    "trigger": null,
+                    "index": 1,
+                    "settings" : {
+                        "templateId" : "000000-0000-000000-00000000",
+                        "offset" : "320000",
+                        "from" : "john@indigenous.io",
+                        "fromName" : 'John Doe',
+                        "subject" : 'Email Subject',
+                        "pageId": 'uuid:0000-aaaa-bbbb',
+                        "vars": {},
+                        "scheduled" : {
+                            "minute":1,
+                            "hour": 2,
+                            "day":1
+                        }
+                    }
+                };
+            }
+
+            $scope.campaign.steps.push(step2add);
+            console.log('$scope.campaign >>> ', $scope.campaign);
+        };
+
         jsPlumb.ready(function() {
 
             var testing = $('.newPageWidget');
@@ -87,11 +117,12 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
                     stop:function(params) {
                         console.log(params);
                         console.log("DragEND!");
+                        $scope.addStep('email');
                     }
-
-
                 }
             );
+
+            jsPlumb.addEndpoint(testing);
 
             var instance = jsPlumb.getInstance({
                 // default drag options

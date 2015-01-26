@@ -177,7 +177,7 @@ var mandrillHelper =  {
         var ip_pool = "Main Pool";
 
         //stepSettings.scheduled.minute, stepSettings.scheduled.hour, stepSettings.scheduled.day
-        var sendMoment = moment.hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
+        var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
         var send_at = sendMoment.utc().format('YYYY-MM-DD HH:mm:ss');
 
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
