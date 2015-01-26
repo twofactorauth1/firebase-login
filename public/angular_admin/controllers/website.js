@@ -237,7 +237,8 @@ define([
                 }, {
                     title: 'Navigation',
                     type: 'navigation',
-                    icon: 'fa fa-location-arrow',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+                    version: 1,
                     enabled: true
                 }, {
                     title: 'Products',
