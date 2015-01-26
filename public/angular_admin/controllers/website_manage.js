@@ -358,11 +358,6 @@ define([
                             toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                             $('#create-post-modal').modal('hide');
                             $scope.posts.push(data);
-                            WebsiteService.createPost($scope.postId, postData, function(data) {
-                                toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                                $('#create-post-modal').modal('hide');
-                                $scope.posts.push(data);
-                            });
                         });
                     });
                 }
