@@ -64,6 +64,8 @@
                         </ul>
                     </div>
 
+                    <div ng-if="!teamMember.becomeMember" class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
+
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
                         <div class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
                     </a>
