@@ -23850,6 +23850,10 @@ ul.nav {
 .navigation-v3 .nav {
   margin-top: 0px!important;
 }
+.navigation-v3 .navbar-brand {
+  min-width: 200px;
+  width: 100%;
+}
 .navigation-v3 .navbar-nav {
   width: 100%;
   text-align: center;
