@@ -196,43 +196,38 @@ define([
                 }, {
                     title: 'Masthead',
                     type: 'masthead',
-                    icon: 'custom masthead',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
                     enabled: true
                 }, {
                     title: 'Feature List',
                     type: 'feature-list',
-                    icon: 'fa fa-list-ul',
                     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
                     enabled: true
                 }, {
                     title: 'Contact Us',
                     type: 'contact-us',
-                    icon: 'fa fa-map-marker',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
                     enabled: true
                 }, {
                     title: 'Coming Soon',
                     type: 'coming-soon',
-                    icon: 'fa fa-clock-o',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
                     enabled: true
                 }, {
                     title: 'Feature block',
                     type: 'feature-block',
-                    icon: 'custom feature-block',
-                    enabled: true
-                }, {
-                    title: 'Footer',
-                    type: 'footer',
-                    icon: 'custom footer',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
                     enabled: true
                 }, {
                     title: 'Image Gallery',
                     type: 'image-gallery',
-                    icon: 'fa fa-image',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
                     enabled: true
                 }, {
                     title: 'Image Text',
+                    version: 1,
                     type: 'image-text',
-                    icon: 'custom image-text',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
                     enabled: true
                 }, {
                     title: 'Meet Team',
@@ -260,10 +255,10 @@ define([
                     icon: 'custom single-post',
                     enabled: false
                 }, {
-                    title: 'Social Links',
-                    type: 'social',
-                    icon: 'custom social-links',
-                    enabled: false
+                    title: 'Social',
+                    type: 'social-link',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
+                    enabled: true
                 }, {
                     title: 'Video',
                     type: 'video',
@@ -272,7 +267,7 @@ define([
                 }, {
                     title: 'Text Only',
                     type: 'text-only',
-                    icon: 'fa fa-file-text',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
                     enabled: true
                 }, {
                     title: 'Thumbnail Slider',
@@ -323,6 +318,12 @@ define([
                     title: 'Campaign',
                     type: 'campaign',
                     icon: 'fa fa-bullhorn',
+                    enabled: false
+                },
+                {
+                    title: 'Footer',
+                    type: 'footer',
+                    icon: 'custom footer',
                     enabled: false
                 }
             *****/

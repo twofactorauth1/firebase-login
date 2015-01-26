@@ -924,13 +924,13 @@ module.exports = {
                     "anchor" : null,
                     "type" : "feature-block",
                     "version" : 1,
-                    "title" : "<h1>Feature Block Title</h1>",
+                    "title" : "<h1>Awesome Feature Block</h1>",
                     "subtitle" : "<h3>This is the feature block subtitle.</h3>",
                     "text" : "<h5>The Feature Block component is great for a quick testimonial or a list of<br>features for a single product. It works great with an image background and parallax.</h5>",
-                    "txtcolor" : "#888888",
+                    "txtcolor" : "#ffffff",
                     "bg" : {
                         "img" : {
-                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/feature-block_1416870905848.jpg",
+                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/bg-grey_1421966329788.jpg",
                             "width" : 838,
                             "height" : 470,
                             "parallax" : true,
@@ -938,12 +938,7 @@ module.exports = {
                             "overlay" : false,
                             "show" : false
                         },
-                        "color" : "#f7f7f7"
-                    },
-                    "btn" : {
-                        "text" : "                &lt;p&gt;Button Text&lt;/p&gt;            ",
-                        "url" : "#",
-                        "icon" : "fa fa-rocket"
+                        "color" : ""
                     },
                     "visibility" : true
                 },

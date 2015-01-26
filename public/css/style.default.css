@@ -20602,7 +20602,7 @@ div.error label.error:before {
 #editor-toolbar .cke_chrome {
   border: none;
   border-radius: 0;
-  background: #27ae60;
+  background: #efa022;
   padding: 0;
 }
 #editor-toolbar .cke_chrome a.cke_button_disabled:active,
@@ -20826,8 +20826,36 @@ div.error label.error:before {
   width: 60px;
   height: 78px;
 }
+.editable-title {
+  display: none;
+}
 .editing .ui-sortable {
   margin-top: 50px;
+}
+.editing .edit-wrap {
+  margin: -1px;
+  position: relative;
+}
+.editing .edit-wrap .editable img {
+  max-width: 100%;
+}
+.editing .edit-wrap .editable :focus {
+  outline: none;
+}
+.editing .edit-wrap:hover {
+  outline: 1px dashed #efa022;
+  margin: -1px;
+}
+.editing .edit-wrap:hover .editable-title {
+  position: absolute;
+  left: 0;
+  top: -20px;
+  background: #efa022;
+  color: #fff!important;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  padding: 0 15px;
+  display: block;
 }
 #nestable-menu {
   z-index: 999;
@@ -20953,6 +20981,7 @@ div.error label.error:before {
   z-index: 1032;
   width: 100%;
   margin-right: 10px;
+  pointer-events: none;
 }
 .componentActions span {
   background: rgba(44, 62, 80, 0.8);
@@ -20963,6 +20992,7 @@ div.error label.error:before {
 }
 .componentActions .reorder {
   float: left;
+  pointer-events: all;
 }
 .componentActions .reorder:hover {
   color: #54C8E8;
@@ -20976,12 +21006,14 @@ div.error label.error:before {
 }
 .componentActions .delete {
   float: right;
+  pointer-events: all;
 }
 .componentActions .delete:hover {
   color: #d9534f;
 }
 .componentActions .settings {
   float: right;
+  pointer-events: all;
 }
 .componentActions .settings:hover {
   color: #efa022;
@@ -23262,8 +23294,7 @@ div[data-type='campaign'] .inner-page .overlay {
   z-index: 999;
 }
 .navbar-brand {
-  height: 80px;
-  max-width: 300px!important;
+  max-width: 100%!important;
   margin: 5px auto!important;
 }
 .navbar-toggle {
@@ -23355,7 +23386,6 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
-  height: 110px;
   display: block;
   max-height: inherit;
 }
@@ -23923,7 +23953,6 @@ contenthover a {
 }
 .image-text-v1 .image-text-image img {
   margin: 15px auto;
-  width: 100%;
 }
 #paradata span h4 {
   font-size: 22px;
@@ -24975,20 +25004,20 @@ div[data-type=blog] .container {
   width: 100%;
 }
 .coming-soon-v1 .logo {
-  margin: 0 auto 0;
   display: block;
-  max-width: 300px;
+  position: relative;
 }
 .coming-soon-v1 div[ng-transclude] {
   height: 100%;
 }
 .coming-soon-v1 .heading {
   margin: 0px 0 10px;
+  position: relative;
 }
 .coming-soon-v1 .text {
   margin-bottom: 20px;
-  font-size: 16px;
   text-align: center;
+  position: relative;
 }
 .coming-soon-v1 .inner-page {
   padding-bottom: 15px;
