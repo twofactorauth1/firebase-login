@@ -1,5 +1,6 @@
-define(['app', 'userService', 'powertour'], function(app) {
-    app.register.controller('SupportCtrl', ['$scope', 'UserService', function($scope, UserService) {
+define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
+    app.register.controller('SupportCtrl', ['$scope', 'UserService', 'NavigationService', function($scope, UserService, NavigationService) {
+        NavigationService.updateNavigation();
     	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
     		if (section && task) {
@@ -22,14 +23,14 @@ define(['app', 'userService', 'powertour'], function(app) {
 
     	$scope.$watch('activeTab', function(newValue, oldValue) {
             if ($scope.userPreferences) {
-                $scope.userPreferences.indi_default_tab = newValue;
+                $scope.userPreferences.support_default_tab = newValue;
                 $scope.savePreferencesFn();
             }
         });
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            $scope.activeTab = preferences.indi_default_tab || 'getting-started';
+            $scope.activeTab = preferences.support_default_tab || 'getting-started';
             $scope.initialWelcome = preferences.welcome_alert.initial;
         });
 

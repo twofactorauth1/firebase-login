@@ -57,26 +57,26 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'AccountChoosePlanCtrl',
           controllerUrl: '/angular_admin/controllers/account_choose_plan.js'
         }))
-        .state('marketing', angularAMD.route({
-          url: '/marketing',
-          templateUrl: '/angular_admin/views/marketing.html',
-          controller: 'MarketingCtrl',
-          controllerUrl: '/angular_admin/controllers/marketing.js'
-        }))
-        .state('marketingDetail', angularAMD.route({
-          url: '/marketing/campaign/:id',
-          templateUrl: '/angular_admin/views/marketing/campaign_detail.html',
-          controller: 'CampaignDetailCtrl',
-          controllerUrl: '/angular_admin/controllers/marketing/campaign_detail.js'
-        }))
-
-        //depreceated videoautopilot
         // .state('marketing', angularAMD.route({
         //   url: '/marketing',
-        //   templateUrl: '/pipeshift/views/video/listeditor.html',
-        //   controller: 'ListEditorController',
-        //   controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+        //   templateUrl: '/angular_admin/views/marketing.html',
+        //   controller: 'MarketingCtrl',
+        //   controllerUrl: '/angular_admin/controllers/marketing.js'
         // }))
+        // .state('marketingDetail', angularAMD.route({
+        //   url: '/marketing/campaign/:id',
+        //   templateUrl: '/angular_admin/views/marketing/campaign_detail.html',
+        //   controller: 'CampaignDetailCtrl',
+        //   controllerUrl: '/angular_admin/controllers/marketing/campaign_detail.js'
+        // }))
+
+        //depreceated videoautopilot
+        .state('marketing', angularAMD.route({
+          url: '/marketing',
+          templateUrl: '/pipeshift/views/video/listeditor.html',
+          controller: 'ListEditorController',
+          controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+        }))
         .state('commerce', angularAMD.route({
           url: '/commerce',
           templateUrl: '/angular_admin/views/commerce.html',
@@ -155,7 +155,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
     })
     .run(['$rootScope', function($rootScope) {
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
-        , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'indi'];
+        , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'support'];
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
@@ -172,45 +172,10 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
             p = p || $('.nav.nav-pills.nav-stacked.nav-bracket');
             toName = toState.name.split(/[A-Z]/g);
             fromName = fromState.name.split(/[A-Z]/g);
+            console.log('toName[0] ', toName[0]);
+            console.log('fromName[0] ', fromName[0]);
             $('[href="#/' + toName[0] + '"]', p).parent().addClass('active');
             $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active');
-
-            //magicline
-             // var self = this;
-             //  var $el, topPos,
-             //      $mainNav = $("#leftnav ul");
-             //      console.log('$("#magic-line") ', $("#magic-line").length);
-             //  if ($("#magic-line").length <= 0) {
-             //    $mainNav.append("<li id='magic-line'></li>");
-             //  }
-             //  var $magicLine = $("#magic-line");
-
-             //  $magicLine
-             //      .height('63px')
-             //      .css("top", $("#leftnav ul li.active").position().top)
-             //      .data("origTop", $magicLine.position().top);
-
-
-             //      $("#leftnav ul li").hover(function() {
-             //          $el = $(this);
-             //          topPos = $el.position().top;
-             //          $magicLine.stop().animate({
-             //              top: topPos
-             //          });
-             //      }, function() {
-             //          console.log('$magicLine.data("origTop") ', $magicLine.data("origTop"));
-             //          $magicLine.stop().animate({
-             //              top: $magicLine.data("origTop")
-             //          });
-             //      });
-
-             //   $("#leftnav ul li").on('click', function() {
-             //      var self = this;
-             //      $el = $(this);
-             //      console.log('clicked ', $el.position().top);
-             //      self.topPos = $el.position().top;
-             //      $magicLine.data("origTop", $el.position().top);
-             //   });
           }
         });
     }]);
