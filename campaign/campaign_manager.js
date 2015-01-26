@@ -210,14 +210,12 @@ module.exports = {
                         var component = page.get('components')[0];
                         self.log.debug('Using this for data', component);
                         app.render('emails/base_email', component, function(err, html) {
-                            self.log.debug('baseemail ', html);
-                            if (err && !html) {
+                            if (err) {
                                 self.log.error('error rendering html: ' + err);
                                 self.log.warn('email will not be sent.');
                             } else {
                                 mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId,
                                     vars, step.settings, function(err, value){
-                                        console.log('value ', value);
                                         if(err) {
                                             self.log.error('Error sending email: ', err);
                                             return fn(err, null);
