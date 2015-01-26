@@ -1,5 +1,5 @@
 define(['app', 'userService', 'powertour'], function(app) {
-    app.register.controller('IndiCtrl', ['$scope', 'UserService', function($scope, UserService) {
+    app.register.controller('SupportCtrl', ['$scope', 'UserService', function($scope, UserService) {
     	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
     		if (section && task) {
