@@ -355,7 +355,6 @@ define([
                      *
                      * We also need to make sure the websiteId is part of the postData object.
                      *
-                     * We also do not need to call createPost twice.
                      *
                      */
                     var pageData = {
