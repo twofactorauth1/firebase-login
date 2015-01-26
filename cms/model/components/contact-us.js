@@ -82,8 +82,8 @@ var component = $$.m.ModelBase.extend({
             location: {
                 address:"",
                 address2:"",
-                city:"",
-                state:"",
+                city:"San Diego",
+                state:"CA",
                 zip:"",
                 lat:"",
                 lon:"",

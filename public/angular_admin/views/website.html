@@ -506,10 +506,12 @@
                             <div class="form-group">
                                 <label for="location-city">City </label>
                                 <input id="location-city" class="form-control input-lg" type="text" ng-model="componentEditing.location.city">
+                                <div class="error"></div>
                             </div>
                             <div class="form-group">
                                 <label for="location-state">State </label>
                                 <input id="location-state" class="form-control input-lg" type="text" ng-model="componentEditing.location.state">
+                                <div class="error"></div>
                             </div>
                             <div class="form-group">
                                 <label for="location-zip">Zip Code </label>
@@ -525,7 +527,7 @@
                             </div>
 
                             <div class="footer">
-                                <button type="button" class="btn btn-primary pull-right" ng-click="updateContactUsAddress()" data-dismiss="modal">
+                                <button type="button" class="btn btn-primary pull-right" ng-click="updateContactUsAddress()">
                                     Save changes
                                 </button>
                             </div>
