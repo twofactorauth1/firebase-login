@@ -7,6 +7,7 @@
 
 require('../../dao/base.dao.js');
 require('../model/campaign');
+require('../model/campaign_flow');
 
 var dao = {
 
