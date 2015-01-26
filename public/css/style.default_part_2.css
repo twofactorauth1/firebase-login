@@ -5390,7 +5390,7 @@ div.error label.error:before {
   max-width: 100%;
 }
 
-.editing .edit-wrap .editable :focus {
+.editing .edit-wrap .editable:focus {
   outline: none;
 }
 

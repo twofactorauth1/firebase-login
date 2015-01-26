@@ -20839,7 +20839,7 @@ div.error label.error:before {
 .editing .edit-wrap .editable img {
   max-width: 100%;
 }
-.editing .edit-wrap .editable :focus {
+.editing .edit-wrap .editable:focus {
   outline: none;
 }
 .editing .edit-wrap:hover {
