@@ -179,7 +179,7 @@ module.exports = {
             return fn(errorString, null);
         }
 
-        if(step.type === 'email') {
+        if(step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT')) {
             /*
              * Schedule the email.
              */
@@ -225,8 +225,22 @@ module.exports = {
                                                 self.log.error('Error saving campaign flow: ' + err);
                                                 return fn(err, null);
                                             } else {
-                                                self.log.debug('<< handleStep');
-                                                return fn(null, updatedFlow);
+                                                //try to handle the next step:
+                                                if(campaignFlow.get('steps').length -1 < stepNumber) {
+                                                    self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                                        if(err) {
+                                                            self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                                            self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                                            return fn(null, updatedFlow);
+                                                        } else {
+                                                            self.log.debug('<< handleStep');
+                                                            return fn(null, updatedFlow);
+                                                        }
+                                                    });
+                                                } else {
+                                                    self.log.debug('<< handleStep');
+                                                    return fn(null, updatedFlow);
+                                                }
                                             }
                                         });
                                     });
