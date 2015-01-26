@@ -143,7 +143,7 @@ module.exports = {
                             return fn(err, null);
                         }
                         self.log.debug('Added contact to campaign flow.');
-                        self.handleStep(flow, 1, function(err, value){
+                        self.handleStep(flow, 0, function(err, value){
                             if(err) {
                                 self.log.error('Error handling initial step of campaign: ' + err);
                                 return fn(err, null);
@@ -163,7 +163,7 @@ module.exports = {
     /**
      * This method will execute the step in stepNumber, setting the lastStep var to stepNumber.
      * @param campaignFlow
-     * @param stepNumber
+     * @param stepNumber 0-based index of steps.
      * @param fn
      */
     handleStep: function(campaignFlow, stepNumber, fn) {
@@ -172,14 +172,14 @@ module.exports = {
         var self = this;
         self.log.debug('>> handleStep');
 
-        var step = campaignFlow.get('steps')[stepNumber-1];
+        var step = campaignFlow.get('steps')[stepNumber];
         if(step === null) {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
             return fn(errorString, null);
         }
 
-        if(step.type === 'email') {
+        if(step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT')) {
             /*
              * Schedule the email.
              */
@@ -196,8 +196,7 @@ module.exports = {
                     var toAddress = contact.getEmails()[0];
                     var toName = contact.get('first') + ' ' + contact.get('last');
                     var subject = step.settings.subject;
-                    //TODO: get html from pageId
-                    //var htmlContent = step.settings.content;
+
                     var accountId = campaignFlow.get('accountId');
                     var vars = step.settings.vars || [];
 
@@ -226,8 +225,22 @@ module.exports = {
                                                 self.log.error('Error saving campaign flow: ' + err);
                                                 return fn(err, null);
                                             } else {
-                                                self.log.debug('<< handleStep');
-                                                return fn(null, updatedFlow);
+                                                //try to handle the next step:
+                                                if(campaignFlow.get('steps').length -1 < stepNumber) {
+                                                    self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                                        if(err) {
+                                                            self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                                            self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                                            return fn(null, updatedFlow);
+                                                        } else {
+                                                            self.log.debug('<< handleStep');
+                                                            return fn(null, updatedFlow);
+                                                        }
+                                                    });
+                                                } else {
+                                                    self.log.debug('<< handleStep');
+                                                    return fn(null, updatedFlow);
+                                                }
                                             }
                                         });
                                     });
