@@ -167,10 +167,9 @@ module.exports = {
      * @param fn
      */
     handleStep: function(campaignFlow, stepNumber, fn) {
-        //TODO: this
-        fn(null, null);
+
         var self = this;
-        self.log.debug('>> handleStep');
+        self.log.debug('>> handleStep (' + stepNumber + ')');
 
         var step = campaignFlow.get('steps')[stepNumber];
         if(step === null) {
@@ -226,7 +225,8 @@ module.exports = {
                                                 return fn(err, null);
                                             } else {
                                                 //try to handle the next step:
-                                                if(campaignFlow.get('steps').length -1 < stepNumber) {
+                                                var steps = campaignFlow.get('steps');
+                                                if(steps.length -1 > stepNumber) {
                                                     self.handleStep(campaignFlow, stepNumber+1, function(err, value){
                                                         if(err) {
                                                             self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
@@ -238,7 +238,7 @@ module.exports = {
                                                         }
                                                     });
                                                 } else {
-                                                    self.log.debug('<< handleStep');
+                                                    self.log.debug('<< handleStep (no more steps)');
                                                     return fn(null, updatedFlow);
                                                 }
                                             }
