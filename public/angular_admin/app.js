@@ -125,11 +125,11 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'WebsiteCtrl',
           controllerUrl: '/angular_admin/controllers/website.js'
         }))
-        .state('indi', angularAMD.route({
-          url: '/indi',
-          templateUrl: '/angular_admin/views/indi.html',
-          controller: 'IndiCtrl',
-          controllerUrl: '/angular_admin/controllers/indi.js'
+        .state('support', angularAMD.route({
+          url: '/support',
+          templateUrl: '/angular_admin/views/support.html',
+          controller: 'SupportCtrl',
+          controllerUrl: '/angular_admin/controllers/support.js'
         }))
         .state('home', angularAMD.route({
           url: '/home',
