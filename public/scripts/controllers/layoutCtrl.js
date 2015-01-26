@@ -386,22 +386,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
     // });
 
-    // window.scrollTo = function(section) {
-    //     console.log('>>> ', section);
-    //     if(section) {
-    //         $location.hash(section);
-    //         $anchorScroll();
+    window.scrollTo = function(section) {
+        console.log('>>> ', section);
+        if(section) {
+            $location.hash(section);
+            $anchorScroll();
 
-    //         //TODO scrollTo on click
+            //TODO scrollTo on click
 
-    //         // var offset = 0;
-    //         // var duration = 2000;
-    //         // var someElement = angular.element(document.getElementById(section));
-    //         // console.log('someElement >>>', document);
-    //         // console.log('>>> scrollTo '+ document.body.getElementById(section));
-    //         // $document.scrollToElementAnimated(someElement);
-    //     }
-    // };
+            // var offset = 0;
+            // var duration = 2000;
+            // var someElement = angular.element(document.getElementById(section));
+            // console.log('someElement >>>', document);
+            // console.log('>>> scrollTo '+ document.body.getElementById(section));
+            // $document.scrollToElementAnimated(someElement);
+        }
+    };
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
@@ -805,7 +805,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     window.activateAloha = function() {
-      console.log('activate aloha >>>');
       //if ($scope.activated == false) {
         for(name in CKEDITOR.instances)
         {
@@ -813,11 +812,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
-        console.log('length ', elements.length);
         elements.each(function() {
-          if(!$(this).hasClass('edit-wrap')) {
+          if(!$(this).parent().hasClass('edit-wrap')) {
             var dataClass = $(this).data('class').replace('.item.', ' ');
-            console.log('dataClass ', dataClass);
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
         $scope.activated = true;

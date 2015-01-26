@@ -237,7 +237,8 @@ define([
                 }, {
                     title: 'Navigation',
                     type: 'navigation',
-                    icon: 'fa fa-location-arrow',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+                    version: 1,
                     enabled: true
                 }, {
                     title: 'Products',
@@ -753,7 +754,7 @@ define([
                         setTimeout(function() {
                             $scope.activateAloha();
                         }, 1000)
-                        //$scope.scrollToIframeComponent(newComponent.anchor);
+                        $scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     }
                 });
@@ -787,6 +788,7 @@ define([
             };
 
             $scope.scrollToIframeComponent = function(section) {
+                console.log('scroll to >> ', section);
                 //document.getElementById("iframe-website").contentWindow.scrollTo(section);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.scrollTo && iFrame.contentWindow.scrollTo(section)
             };
