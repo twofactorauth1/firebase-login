@@ -25,7 +25,7 @@ define(['app', 'campaignService', 'userService'], function(app) {
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            $scope.activeTab = preferences.indi_default_tab || 'getting-started';
+            $scope.activeTab = preferences.indi_default_tab || 'campaigns';
             $scope.initialWelcome = preferences.welcome_alert.initial;
         });
 

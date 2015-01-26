@@ -113,11 +113,13 @@ module.exports = {
             accountId: accountId,
             contactId: contactId
         };
-        campaignDao.find(query, $$.m.CampaignFlow, function(err, value){
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, value){
+            self.log.debug('value ', value);
+             self.log.debug('err ', err);
             if(err) {
                 self.log.error('Error finding campaign flow: ' + err);
                 return fn(err, null);
-            } else if(value !== null) {
+            } else if(value !== null && value.length < 0) {
                 self.log.debug('Contact already part of this campaign.');
                 return fn(null, value);
             } else {
@@ -170,7 +172,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> handleStep');
 
-        var step = campaignFlow.get('steps')[stepNumber];
+        var step = campaignFlow.get('steps')[stepNumber-1];
         if(step === null) {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
@@ -208,12 +210,14 @@ module.exports = {
                         var component = page.get('components')[0];
                         self.log.debug('Using this for data', component);
                         app.render('emails/base_email', component, function(err, html) {
-                            if (err) {
+                            self.log.debug('baseemail ', html);
+                            if (err && !html) {
                                 self.log.error('error rendering html: ' + err);
                                 self.log.warn('email will not be sent.');
                             } else {
                                 mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId,
                                     vars, step.settings, function(err, value){
+                                        console.log('value ', value);
                                         if(err) {
                                             self.log.error('Error sending email: ', err);
                                             return fn(err, null);
