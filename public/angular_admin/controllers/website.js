@@ -597,11 +597,11 @@ define([
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         $scope.isEditing = true;
                         WebsiteService.setEditedPageHandle($scope.currentPage.handle);
-                        
+
                         toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        $scope.saveLoading = false;                       
+                        $scope.saveLoading = false;
                         iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
-                        
+
                     });
                     //$scope.deactivateAloha();
                     var data = {
@@ -702,7 +702,26 @@ define([
 //            }
 
             $scope.updateContactUsAddress = function(location) {
-                $scope.saveComponent();
+                if ($scope.componentEditing.location.city) {
+                    $('#location-city').parents('.form-group').find('.error').html('');
+                    $('#location-city').parents('.form-group').removeClass('has-error');
+                } else {
+                    $('#location-city').parents('.form-group').addClass('has-error');
+                    $('#location-city').parents('.form-group').find('.error').html('City is required');
+                }
+
+                if ($scope.componentEditing.location.state) {
+                    $('#location-state').parents('.form-group').find('.error').html('');
+                    $('#location-state').parents('.form-group').removeClass('has-error');
+                } else {
+                    $('#location-state').parents('.form-group').addClass('has-error');
+                    $('#location-state').parents('.form-group').find('.error').html('State is required');
+                }
+
+                if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
+                    $scope.saveComponent();
+                    $('#component-setting-modal').modal('hide');
+                }
             }
 
             $scope.addComponent = function() {

@@ -199,7 +199,7 @@ module.exports = {
                     //TODO: get html from pageId
                     //var htmlContent = step.settings.content;
                     var accountId = campaignFlow.get('accountId');
-                    var vars = step.settings.vars;
+                    var vars = step.settings.vars || [];
 
                     var pageId = step.settings.pageId;
                     cmsDao.getPageById(pageId, function(err, page){
