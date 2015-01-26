@@ -11,11 +11,11 @@
 </div>
 <ul ui-sortable="sortableOptions">
     <li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
-        <div class="componentActions">
+        <div class="componentActions" >
             <span class="reorder fa fa-arrows" tooltip="Re-Order {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="right"></span>
             <h4 class="pull-left">{{component.type}}</h4>
-            <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" tooltip="Delete {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="bottom"></span>
-            <span class="settings fa fa-cog" data-id="{{component._id}}" tooltip="{{component.type | cleanType}} Settings"  tooltip-trigger="mouseenter" tooltip-placement="bottom"></span>
+            <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" tooltip="Delete {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
+            <span class="settings fa fa-cog" data-id="{{component._id}}" tooltip="{{component.type | cleanType}} Settings"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
         </div>
         <div ng-include="'/components/component-wrap.html'"></div>
         <div ng-class="{'zee-blur': !component.visibility}"></div>
