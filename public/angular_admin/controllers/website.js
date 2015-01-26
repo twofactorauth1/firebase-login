@@ -256,7 +256,7 @@ define([
                     enabled: false
                 }, {
                     title: 'Social',
-                    type: 'social',
+                    type: 'social-link',
                     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
                     enabled: true
                 }, {

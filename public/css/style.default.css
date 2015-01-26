@@ -20851,6 +20851,7 @@ div.error label.error:before {
   left: 0;
   top: -20px;
   background: #efa022;
+  color: #fff!important;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
   padding: 0 15px;
