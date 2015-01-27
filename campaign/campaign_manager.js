@@ -179,7 +179,7 @@ module.exports = {
         }
 
         if(step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT' ||
-            (step.trigger === 'SIGNUP' && step.triggered))) {
+            (step.trigger === 'SIGNUP' && step.triggered) || (step.trigger === 'EMAIL_OPENED' && step.triggered))) {
             /*
              * Schedule the email.
              */
@@ -213,7 +213,9 @@ module.exports = {
                                 self.log.error('error rendering html: ' + err);
                                 self.log.warn('email will not be sent.');
                             } else {
-                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId,
+                                var campaignId = campaignFlow.get('campaignId');
+                                var contactId = campaignFlow.get('contactId');
+                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId,
                                     vars, step.settings, function(err, value){
                                         if(err) {
                                             self.log.error('Error sending email: ', err);
@@ -452,8 +454,24 @@ module.exports = {
      */
     handleCampaignSignupEvent: function(accountId, campaignId, contactId, fn) {
         var self = this;
-        self.log.debug('>> handleCampaignSignupEvent');
+        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'SIGNUP', fn);
+    },
 
+    /**
+     * This method will getOrCreate a campaignFlow object, mark the first EMAIL_OPENED as triggered, handle the next.
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignEmailOpenEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
+    },
+
+    _handleSpecificCampaignEvent: function(accountId, campaignId, contactId, trigger, fn) {
+        var self = this;
+        self.log.debug('>> _handleSpecificCampaignEvent (' + trigger + ')');
         async.waterfall([
             function(callback){
                 var query = {
@@ -486,7 +504,7 @@ module.exports = {
                 var steps = flow.get('steps');
                 var i = flow.get('lastStep');
                 var nextStep = steps[i];
-                if(nextStep.trigger === 'SIGNUP') {
+                if(nextStep.trigger === trigger) {
                     nextStep.triggered = new Date();
                     campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
                         if(err) {
@@ -498,7 +516,7 @@ module.exports = {
                     });
 
                 } else {
-                    self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type SIGNUP');
+                    self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
                     callback('Unexpected trigger type');
                 }
             },
@@ -517,11 +535,10 @@ module.exports = {
                 self.log.error('Error condition: ' + err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< handleCampaignSignupEvent');
+                self.log.debug('<< _handleSpecificCampaignEvent');
                 return fn(null, 'OK');
             }
         });
-
     },
 
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {
