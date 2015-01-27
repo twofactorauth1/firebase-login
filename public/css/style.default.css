@@ -24400,18 +24400,22 @@ contenthover a {
   text-align: center;
 }
 .testimonials-v2 .carousel {
-  height: 260px;
   display: block;
 }
 .testimonials-v2 .carousel-inner {
   overflow: inherit;
 }
 .testimonials-v2 .carousel-caption {
-  position: absolute;
+  position: static;
   z-index: 10;
+  width: 50%;
+  margin: 0 auto;
   text-align: center;
   top: 0px;
   text-shadow: none;
+}
+.testimonials-v2 .slick-dots {
+  width: inherit;
 }
 .testimonials-v2 .carousel-indicators {
   bottom: 60px;

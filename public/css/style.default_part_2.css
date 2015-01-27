@@ -9823,7 +9823,6 @@ contenthover a {
 }
 
 .testimonials-v2 .carousel {
-  height: 260px;
   display: block;
 }
 
@@ -9832,11 +9831,17 @@ contenthover a {
 }
 
 .testimonials-v2 .carousel-caption {
-  position: absolute;
+  position: static;
   z-index: 10;
+  width: 50%;
+  margin: 0 auto;
   text-align: center;
   top: 0px;
   text-shadow: none;
+}
+
+.testimonials-v2 .slick-dots {
+  width: inherit;
 }
 
 .testimonials-v2 .carousel-indicators {
