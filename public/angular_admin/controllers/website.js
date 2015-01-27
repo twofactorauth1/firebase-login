@@ -938,7 +938,9 @@ define([
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
                 console.log('>>> activating');
-                $scope.activateAloha();
+                setTimeout(function() {
+                            $scope.activateAloha();
+                        }, 500)
 
                 //update the scope as the temppage until save
 
