@@ -4,6 +4,8 @@ define(['app', 'campaignService', 'userService'], function(app) {
         $scope.campaigns = [];
         $scope.feeds = [];
 
+        $scope.activeTab = 'campaigns';
+
          $scope.campaignSettings = {
             showStatus: true,
             showType: true,
@@ -25,7 +27,7 @@ define(['app', 'campaignService', 'userService'], function(app) {
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            $scope.activeTab = preferences.indi_default_tab || 'campaigns';
+            $scope.activeTab = preferences.indi_default_tab;
             $scope.initialWelcome = preferences.welcome_alert.initial;
         });
 
