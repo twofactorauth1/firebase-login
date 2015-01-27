@@ -109,20 +109,16 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
 
         jsPlumb.ready(function() {
 
-            var testing = $('.newPageWidget');
-
-            jsPlumb.draggable(testing,
-                {
-                    grid: [20, 20],
-                    stop:function(params) {
-                        console.log(params);
-                        console.log("DragEND!");
-                        $scope.addStep('email');
+            //_addEndpoints("newEmailWidget", ["RightMiddle"], ["LeftMiddle"]);
+            jsPlumb.makeTarget($("#newEmailWidget"), {
+                dropOptions:{
+                    drop:function(e, ui) {
+                        console.log("drop", ui);
+                        _addEndpoints("newEmailWidget", ["RightMiddle"], ["LeftMiddle"]);
                     }
-                }
-            );
-
-            jsPlumb.addEndpoint(testing);
+                },
+                scope:"scope"
+            });
 
             var instance = jsPlumb.getInstance({
                 // default drag options
@@ -225,14 +221,14 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
             var _addEndpoints = function(toId, sourceAnchors, targetAnchors) {
                 for (var i = 0; i < sourceAnchors.length; i++) {
                     var sourceUUID = toId + sourceAnchors[i];
-                    instance.addEndpoint("flowchart" + toId, sourceEndpoint, {
+                    instance.addEndpoint(toId, sourceEndpoint, {
                         anchor: sourceAnchors[i],
                         uuid: sourceUUID
                     });
                 }
                 for (var j = 0; j < targetAnchors.length; j++) {
                     var targetUUID = toId + targetAnchors[j];
-                    instance.addEndpoint("flowchart" + toId, targetEndpoint, {
+                    instance.addEndpoint(toId, targetEndpoint, {
                         anchor: targetAnchors[j],
                         uuid: targetUUID
                     });
@@ -242,11 +238,11 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
             // suspend drawing and initialise.
             instance.doWhileSuspended(function() {
 
-                _addEndpoints("Window5", ["RightMiddle"], ["LeftMiddle"]);
-                _addEndpoints("Window4", ["RightMiddle"], ["LeftMiddle"]);
-                _addEndpoints("Window3", ["RightMiddle"], ["LeftMiddle"]);
-                _addEndpoints("Window2", ["RightMiddle"], ["LeftMiddle"]);
-                _addEndpoints("Window1", ["RightMiddle"], []);
+                _addEndpoints("flowchartWindow5", ["RightMiddle"], ["LeftMiddle"]);
+                _addEndpoints("flowchartWindow4", ["RightMiddle"], ["LeftMiddle"]);
+                _addEndpoints("flowchartWindow3", ["RightMiddle"], ["LeftMiddle"]);
+                _addEndpoints("flowchartWindow2", ["RightMiddle"], ["LeftMiddle"]);
+                _addEndpoints("flowchartWindow1", ["RightMiddle"], []);
 
                 // listen for new connections; initialise them the same way we initialise the connections at startup.
                 instance.bind("connection", function(connInfo, originalEvent) {
@@ -257,25 +253,29 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
                 instance.draggable(jsPlumb.getSelector(".flowchart-demo .window"), {
                     grid: [20, 20]
                 });
+
+                instance.draggable(jsPlumb.getSelector(".widgets .window"), {
+                    grid: [20, 20]
+                });
                 // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
                 // method, or document.querySelectorAll:
                 //jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
 
                 // connect a few up
                 instance.connect({
-                    uuids: ["Window1RightMiddle", "Window2LeftMiddle"],
+                    uuids: ["flowchartWindow1RightMiddle", "flowchartWindow2LeftMiddle"],
                     editable: true
                 });
                 instance.connect({
-                    uuids: ["Window2RightMiddle", "Window3LeftMiddle"],
+                    uuids: ["flowchartWindow2RightMiddle", "flowchartWindow3LeftMiddle"],
                     editable: true
                 });
                 instance.connect({
-                    uuids: ["Window3RightMiddle", "Window4LeftMiddle"],
+                    uuids: ["flowchartWindow3RightMiddle", "flowchartWindow4LeftMiddle"],
                     editable: true
                 });
                 instance.connect({
-                    uuids: ["Window4RightMiddle", "Window5LeftMiddle"],
+                    uuids: ["flowchartWindow4RightMiddle", "flowchartWindow5LeftMiddle"],
                     editable: true
                 });
                 //
