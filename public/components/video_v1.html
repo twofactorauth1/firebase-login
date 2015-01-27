@@ -32,17 +32,16 @@
 
 
 
-                    <videogular vg-width="config.width" vg-height="config.height" vg-theme="config.theme.url" vg-autoplay="config.autoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive">
+                    <videogular vg-width="component.videoWidth" vg-height="component.videoHeight" vg-theme="config.theme.url" vg-autoplay="component.videoAutoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive">
                         <video class='videoPlayer' preload='metadata'>
-                            <source src='{{trustSrc(component.video.src.ogv)}}' type='video/ogv'>
-                            <source src="{{trustSrc(component.video.src.mp4)}}" type='video/mp4' />
-                            <source src="{{trustSrc(component.video.src.webm)}}" type='video/webm' />
+                            <source src="{{trustSrc(component.videoMp4)}}" type='video/mp4' ng-show="component.videoMp4"/>
+                            <source src="{{trustSrc(component.videoWebm)}}" type='video/webm' ng-show="component.videoWebm"/>
                         </video>
                         <vg-video vg-src="video" vg-youtube="rel=1;showinfo=1"></vg-video>
 
                         <vg-overlay-play></vg-overlay-play>
 
-                        <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
+                        <vg-controls vg-autohide="component.videoControls" vg-autohide-time="config.autoHideTime">
                             <!-- First element from the left -->
                             <vg-play-pause-button></vg-play-pause-button>
 
