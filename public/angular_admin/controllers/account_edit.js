@@ -1,11 +1,31 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'toaster', 'powertour'], function(app) {
-  app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', 'toaster', function($scope, $stateParams, UserService, ngProgress, $location, toaster) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'toaster', 'powertour', 'ngSweetAlert'], function(app) {
+  app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', 'toaster', 'SweetAlert', function($scope, $stateParams, UserService, ngProgress, $location, toaster, SweetAlert) {
     ngProgress.start();
     var phoneCharLimit = 4;
     if ($stateParams.focus)
       $('[name="' + $stateParams.focus + '"]').focus();
     //back button click function
     $scope.$back = function() {
+        //SweetAlert.swal({
+            //title: "Are you sure?",
+            //text: "Do you want to logout?",
+            //type: "warning",
+            //showCancelButton: true,
+            //confirmButtonColor: "#DD6B55",
+            //confirmButtonText: "Yes, want to logout!",
+            //cancelButtonText: "No, do not want to logout!",
+            //closeOnConfirm: true,
+            //closeOnCancel: true
+        //},
+        //function(isConfirm) {
+            //console.log(isConfirm);
+            //if (isConfirm) {
+                //window.location = '/logout';
+            //} else {
+                //$state.go('account');
+            //}
+        //});
+
       window.history.back();
     };
     $scope.saveLoading = false;

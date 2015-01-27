@@ -23,7 +23,7 @@ define([
                 if (isConfirm) {
                     window.location = '/logout';
                 } else {
-                    $state.go('account');
+                    window.history.back();
                 }
             });
         }
