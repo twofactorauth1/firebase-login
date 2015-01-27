@@ -109,16 +109,33 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
 
         jsPlumb.ready(function() {
 
-            //_addEndpoints("newEmailWidget", ["RightMiddle"], ["LeftMiddle"]);
-            jsPlumb.makeTarget($("#newEmailWidget"), {
-                dropOptions:{
-                    drop:function(e, ui) {
-                        console.log("drop", ui);
-                        _addEndpoints("newEmailWidget", ["RightMiddle"], ["LeftMiddle"]);
+
+            // jsPlumb.makeTarget($("#newPageWidget"), {
+            //     dropOptions:{
+            //         drop:function(e, ui) {
+            //             console.log("drop", ui);
+            //             //_addEndpoints("newPageWidget", ["RightMiddle"], ["LeftMiddle"]);
+            //         }
+            //     },
+            //     scope:"scope"
+            // });
+
+            jsPlumb.draggable($("#newPageWidget"),
+                {
+                    start: function(event, ui) {
+                        alert("You clicked x:" + event.clientX + " y:" + event.clientY);
+                    },
+                    stop:function(params) {
+                        console.log(params);
+                        console.log("DragEND!");
+                        var newWidget = $("#newPageWidget").clone().appendTo( "#flowchart-demo" );
+                        _addEndpoints(newWidget, ["RightMiddle"], ["LeftMiddle"]);
+                        $("#newPageWidget").fadeOut();
                     }
-                },
-                scope:"scope"
-            });
+
+
+                }
+            );
 
             var instance = jsPlumb.getInstance({
                 // default drag options
@@ -244,6 +261,7 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
                 _addEndpoints("flowchartWindow2", ["RightMiddle"], ["LeftMiddle"]);
                 _addEndpoints("flowchartWindow1", ["RightMiddle"], []);
 
+
                 // listen for new connections; initialise them the same way we initialise the connections at startup.
                 instance.bind("connection", function(connInfo, originalEvent) {
                     init(connInfo.connection);
@@ -254,9 +272,9 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
                     grid: [20, 20]
                 });
 
-                instance.draggable(jsPlumb.getSelector(".widgets .window"), {
-                    grid: [20, 20]
-                });
+                // instance.draggable(jsPlumb.getSelector(".widgets .window"), {
+                //     grid: [20, 20]
+                // });
                 // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
                 // method, or document.querySelectorAll:
                 //jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
