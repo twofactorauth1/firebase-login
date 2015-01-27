@@ -6,7 +6,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
   //routes
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider, blockUIConfig) {
       $urlRouterProvider.otherwise("/website");
-      
+
       $stateProvider
         .state('dashboard', angularAMD.route({
           url: '/dashboard',
@@ -136,6 +136,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           templateUrl: '/angular_admin/views/home.html',
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
+        }))
+        .state('logout', angularAMD.route({
+          url: '/logout',
+          templateUrl: '/angular_admin/views/logout.html',
+          controller: 'LogoutCtrl',
+          controllerUrl: '/angular_admin/controllers/logout.js'
         }));
         blockUIConfig.autoBlock = false;
       var authInterceptor =

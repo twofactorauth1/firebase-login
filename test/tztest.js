@@ -35,6 +35,8 @@ exports.campaign_manager_test = {
         console.log('isoString: ' + shiftedUtcDate.toISOString());
 
         var targetDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', 0);
+        console.log(targetDate.date());
+        console.log(now.getDate());
         console.log('targetDate: ' + targetDate + ' - isoString: ' + targetDate.toISOString());
     }
 }
