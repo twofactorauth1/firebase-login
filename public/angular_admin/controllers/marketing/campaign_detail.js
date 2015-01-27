@@ -103,9 +103,17 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
                 };
             }
 
+            if (type === 'page') {
+                //create page with form
+                //get page id
+                //add step to campaign
+            }
+
             $scope.campaign.steps.push(step2add);
             console.log('$scope.campaign >>> ', $scope.campaign);
         };
+
+        $scope.modify
 
         jsPlumb.ready(function() {
 
@@ -122,15 +130,20 @@ define(['app', 'campaignService', 'userService', 'jsPlumb'], function(app) {
 
             jsPlumb.draggable($("#newPageWidget"),
                 {
-                    start: function(event, ui) {
-                        alert("You clicked x:" + event.clientX + " y:" + event.clientY);
+                    start: function(event) {
+                        console.log('event ', event);
+                        //alert("You clicked x:" + event.clientX + " y:" + event.clientY);
                     },
                     stop:function(params) {
                         console.log(params);
                         console.log("DragEND!");
                         var newWidget = $("#newPageWidget").clone().appendTo( "#flowchart-demo" );
+                        jsPlumb.draggable(newWidget, { grid: [20, 20] });
                         _addEndpoints(newWidget, ["RightMiddle"], ["LeftMiddle"]);
                         $("#newPageWidget").fadeOut();
+                        setTimeout(function() {
+                            $("#newPageWidget").css({'top': '','left': ''}).fadeIn();
+                        }, 500);
                     }
 
 
