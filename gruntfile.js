@@ -341,7 +341,8 @@ module.exports = function(grunt) {
             runkeeper:['biometrics/runkeeper/adapter/test/**/*_test.js', 'biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
-            utils:['utils/test/*_test.js']
+            utils:['utils/test/*_test.js'],
+            tzTests: ['test/tztest.js']
         },
 
         //NG-Constant for angular constants
@@ -540,6 +541,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testPaymentEvents', ['nodeunit:paymentEvents']);
     grunt.registerTask('testCollater', ['nodeunit:analyticsCollater']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
-
+    grunt.registerTask('testTz', ['nodeunit:tzTests']);
     
 };
