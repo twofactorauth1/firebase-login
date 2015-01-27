@@ -464,6 +464,7 @@ define([
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
+                $scope.changesConfirmed = true;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
                 $scope.deactivateAloha();
