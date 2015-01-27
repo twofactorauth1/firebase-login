@@ -73,8 +73,8 @@ var component = $$.m.ModelBase.extend({
              videoAutoPlay: false,
              videoControls: true,
              videoBranding: true,
-             videoWidth: null,
-             videoHeight: null,
+             videoWidth: 780,
+             videoHeight: 320,
              videoImage: '',
             txtcolor : "#ffffff",
 

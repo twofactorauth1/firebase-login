@@ -21,7 +21,7 @@
 
                 <div class="simple-form-subtitle">
                     <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                        <span ng-bind-html="component.subtitle"></span>
+                        <span ng-bind-html="component.subtitle | unsafe"></span>
                     </div>
                 </div>
 

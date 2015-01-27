@@ -24036,6 +24036,11 @@ contenthover a {
   padding-bottom: 5px;
   text-align: center;
 }
+.meet-team-v1 .bio {
+  padding-bottom: 5px;
+  text-align: center;
+  width: 95%;
+}
 .meet-team-v1 .profile-img {
   max-width: 230px;
   max-height: 230px;
@@ -24113,10 +24118,8 @@ contenthover a {
   padding: 0;
   text-align: center;
   bottom: 0;
-  left: 70px;
-  margin-bottom: 25px;
-  margin-top: 10px;
-  position: absolute;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 .meet-team-v1 .profile-social li {
   display: inline-block;
@@ -24401,18 +24404,22 @@ contenthover a {
   text-align: center;
 }
 .testimonials-v2 .carousel {
-  height: 260px;
   display: block;
 }
 .testimonials-v2 .carousel-inner {
   overflow: inherit;
 }
 .testimonials-v2 .carousel-caption {
-  position: absolute;
+  position: static;
   z-index: 10;
+  width: 50%;
+  margin: 0 auto;
   text-align: center;
   top: 0px;
   text-shadow: none;
+}
+.testimonials-v2 .slick-dots {
+  width: inherit;
 }
 .testimonials-v2 .carousel-indicators {
   bottom: 60px;
