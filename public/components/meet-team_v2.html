@@ -43,9 +43,9 @@
                     </div>
                 </div>
                 <ul class="social">
-                    <li >
-                        <a href="sfdsdf" target="_blank">
-                            <span class="fa fa-linkedin"></span>
+                    <li ng-repeat="(val, key) in teamMember.social">
+                        <a href="{{key}}" target="_blank">
+                            <span class="fa fa-{{val}}"></span>
                         </a>
                     </li>
                 </ul>
