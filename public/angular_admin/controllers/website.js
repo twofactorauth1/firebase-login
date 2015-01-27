@@ -464,6 +464,7 @@ define([
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
+                $scope.changesConfirmed = true;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
                 $scope.deactivateAloha();
@@ -937,7 +938,9 @@ define([
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
                 console.log('>>> activating');
-                $scope.activateAloha();
+                setTimeout(function() {
+                            $scope.activateAloha();
+                        }, 500)
 
                 //update the scope as the temppage until save
 
