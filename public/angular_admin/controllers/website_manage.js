@@ -27,8 +27,8 @@ define([
             var account;
             $scope.showToaster = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
-            
-                     
+
+
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
@@ -157,8 +157,8 @@ define([
                         });
                         if($scope.editedPage && $scope.editedPage.screenshot == null)
                         {
-                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI'); 
-                            pagesBlockUI.start(); 
+                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI');
+                            pagesBlockUI.start();
                             var maxTries = 10;
                             var getScreenShot = function() {
                                 WebsiteService.getPageScreenShot(editPageHandle, function(data) {
@@ -284,7 +284,12 @@ define([
                 console.log('$scope.createPageValidated ', $scope.createPageValidated);
 
                 if (!$scope.createPageValidated) {
+                    $('#page-title').parents('div.form-group').addClass('has-error');
+                    $('#page-url').parents('div.form-group').addClass('has-error');
                     return false;
+                } else {
+                    $('#page-title').parents('div.form-group').removeClass('has-error');
+                    $('#page-url').parents('div.form-group').removeClass('has-error');
                 }
 
                 var websiteId = $scope.website._id;
@@ -380,7 +385,7 @@ define([
                         $scope.posts.push(data);
                     });
                 }
-                
+
             };
 
              $scope.insertMedia = function(asset) {
