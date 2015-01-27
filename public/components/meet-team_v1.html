@@ -70,18 +70,20 @@
                         <span ng-bind-html="teamMember.position"/>
                     </div>
                 </div>
-                <div class="c" style="font-size: 13px;">
+
+                        <div ng-if="!teamMember.becomeMember" class="bio">
                            <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}">
                                 <span ng-bind-html="teamMember.bio"/>
                             </div>
                         </div>
-                        <ul class="profile-social">
+                        <ul ng-if="!teamMember.becomeMember" class="profile-social">
                             <li ng-repeat="(val, key) in teamMember.social">
                                 <a href="{{key}}" target="_blank">
                                     <span class="fa fa-{{val}}"></span>
                                 </a>
                             </li>
-                        </ul> 
+                        </ul>
+                
                 <div ng-if="isEditing" class="delete-team-member center">
                     <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
                         <i class='fa fa-trash'></i>
