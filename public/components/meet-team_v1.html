@@ -51,17 +51,7 @@
                         <div class="mask left" style="width:115px"></div>
                         <div class="mask right" style="width:115px"></div>
                         <div class="c" style="font-size: 13px;">
-                            <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}">
-                                <span ng-bind-html="teamMember.bio"/>
-                            </div>
-                        </div>
-                        <ul class="profile-social">
-                            <li ng-repeat="(val, key) in teamMember.social">
-                                <a href="{{key}}" target="_blank">
-                                    <span class="fa fa-{{val}}"></span>
-                                </a>
-                            </li>
-                        </ul>
+                            
                     </div>
 
                     <div ng-if="!teamMember.becomeMember" class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
@@ -81,6 +71,17 @@
                         <span ng-bind-html="teamMember.position"/>
                     </div>
                 </div>
+                <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}">
+                                <span ng-bind-html="teamMember.bio"/>
+                            </div>
+                </div>
+                <ul class="profile-social">
+                    <li ng-repeat="(val, key) in teamMember.social">
+                        <a href="{{key}}" target="_blank">
+                            <span class="fa fa-{{val}}"></span>
+                        </a>
+                    </li>
+                </ul>
                 <div ng-if="isEditing" class="delete-team-member center">
                     <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
                         <i class='fa fa-trash'></i>
