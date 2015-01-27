@@ -5,7 +5,8 @@ define([
     app.register.controller('LogoutCtrl', [
         '$scope',
         'SweetAlert',
-        function($scope, SweetAlert) {
+        '$state',
+        function($scope, SweetAlert, $state) {
             SweetAlert.swal({
                 title: "Are you sure?",
                 text: "Do you want to logout?",
@@ -14,11 +15,16 @@ define([
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, want to logout!",
                 cancelButtonText: "No, do not want to logout!",
-                closeOnConfirm: false,
-                closeOnCancel: false
+                closeOnConfirm: true,
+                closeOnCancel: true
             },
             function(isConfirm) {
                 console.log(isConfirm);
+                if (isConfirm) {
+                    window.location = '/logout';
+                } else {
+                    $state.go('account');
+                }
             });
         }
     ]);
