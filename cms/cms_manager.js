@@ -1216,6 +1216,8 @@ module.exports = {
         var query = {};
         if(version === 'all') {
             query._id = new RegExp('' + pageId + '_.*');
+        } else if(version === 'latest'){
+            query._id = pageId;
         } else {
             query = {$or: [{_id: pageId + '_' + version},{_id: pageId}]};
         }
@@ -1228,6 +1230,29 @@ module.exports = {
                 self.log.debug('<< getPageVersions');
                 return fn(null, list);
             }
+        });
+
+    },
+
+    revertPage: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> revertPage');
+
+        self.getPageVersions(pageId, version, function(err, pageAry){
+            if(err || pageAry === null) {
+                self.log.error('Error finding version of page: ' + err);
+                return fn(err, null);
+            }
+            self.updatePage(pageId, pageAry[0], function(err, newPage){
+                if(err) {
+                    self.log.error('Error updating page: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< revertPage');
+                    return fn(null, newPage);
+                }
+            });
         });
 
     },
