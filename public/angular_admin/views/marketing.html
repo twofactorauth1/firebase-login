@@ -25,18 +25,18 @@
 
     <div class="col-xs-12 nopadding header-menu-row">
         <div class="btn-group col-xs-12 template-btns nopadding">
+            <button type="button" class="btn btn-default btn-lg col-xs-6 tooltips" ng-class="{'active': activeTab === 'social-feed'}" ng-click="activeTab = 'social-feed'">
+                <div tooltip-placement="bottom" tooltip-html-unsafe="Who is visiting your site?">
+                    <i class="fa fa-newspaper-o"></i>
+                    <span class="hidden-xs">Social Feed</span>
+                </div>
+            </button>
             <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'">
                 <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing?">
                     <i class="fa fa-flag"></i>
                     <span class="hidden-xs">Campaigns
                 </div>
                 </span>
-            </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-6 tooltips" ng-class="{'active': activeTab === 'social-feed'}" ng-click="activeTab = 'social-feed'">
-                <div tooltip-placement="bottom" tooltip-html-unsafe="Who is visiting your site?">
-                    <i class="fa fa-newspaper-o"></i>
-                    <span class="hidden-xs">Social Feed</span>
-                </div>
             </button>
             </div>
         </div>
@@ -73,11 +73,12 @@
                 </div>
             </div>
             <div class="social-feed-section" ng-if="activeTab == 'social-feed'">
-                <div ng-if="feeds.length <= 0" class="empty">
+                <div id="social-stream"></div>
+                <!-- <div ng-if="feeds.length <= 0" class="empty">
                     <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
                     <h2 class="center">No Feeds Setup</h2>
                     <h3 class="center">Add a Feed to get set up.</h3>
-                </div>
+                </div> -->
             </div>
         </div>
 

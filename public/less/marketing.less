@@ -42,8 +42,40 @@
 	}
 }
 
+.flowchart-demo {
+	.window {
+		position: relative;
+		&.start {
+			.deleteWidget {
+				display: none!important;
+			}
+		}
+		&:hover {
+			.deleteWidget {
+				display: block;
+			}
+		}
+	}
+	.deleteWidget {
+		display: none;
+		right: -7px;
+		position: absolute;
+		top: -10px;
+		font-size: 25px;
+		background: white;
+		border-radius: 65px;
+		color: #888888;
+		&:hover {
+			color: #d9534f;
+		}
+	}
+}
+
 .widgets .window {
 	position: relative;
+	.deleteWidget {
+		display: none;
+	}
 }
 
 .widgets {
@@ -93,7 +125,7 @@ font-size:0.9em;
 	border:1px dotted red;
 }
 
-#flowchartWindow1 { top:20em;left:5em;}
+#startWidget { top:20em;left:5em;}
 #flowchartWindow2 { top:20em; left:20em;}
 #flowchartWindow3 { top:20em;left:35em; }
 #flowchartWindow4 { top:20em; left:50em;}

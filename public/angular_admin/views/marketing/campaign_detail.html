@@ -48,7 +48,8 @@
                 <div class="panel-body">
                     <ul>
                         <li>
-                            <div class="window" id="newPageWidget">
+                            <div class="window" id="newPageWidget" data-type="page">
+                                <span class='fa fa-times-circle deleteWidget'></span>
                                 <span class="fa fa-file-text marketing-icon"></span><span class="label label-primary marketing-label"><strong>Page</strong></span>
                             </div>
                         </li>
@@ -79,17 +80,17 @@
 
             <div class="clearfix"></div>
 
-            <div class="demo flowchart-demo" id="flowchart-demo" style="margin:0;height: 500px;">
+            <div class="demo flowchart-demo" id="d" style="margin:0;height: 500px;">
 
-                <div class="window" id="flowchartWindow1"><span class="fa fa-arrow-right marketing-icon start"></span><span class="label label-primary marketing-label"><strong>Start</strong></span>
+                <div class="window start" id="startWidget">
+                    <span class="fa fa-arrow-right marketing-icon start"></span><span class="label label-primary marketing-label"><strong>Start</strong></span>
                 </div>
-                <div class="window" id="flowchartWindow2"><span class="fa fa-file-text marketing-icon"></span><span class="label label-primary marketing-label"><strong>Webinar Signup</strong></span>
-                </div>
-                <div class="window" id="flowchartWindow3"><span class="fa fa-file-text marketing-icon"></span><span class="label label-primary marketing-label"><strong>Thank You Page</strong></span>
-                </div>
-                <div class="window" id="flowchartWindow4"><span class="fa fa-envelope marketing-icon"></span><span class="label label-primary marketing-label"><strong>Confirmation Email</strong></span>
-                </div>
-                <div class="window" id="flowchartWindow5"><span class="fa fa-envelope marketing-icon"></span><span class="label label-primary marketing-label"><strong>Get Excited Email</strong></span>
+                <div ng-repeat="step in campaign.steps">
+                    <div class="window start" id="{{step._id}}">
+                        <span class='fa fa-times-circle deleteWidget' ng-click="deleteWidget(step._id)"></span>
+                        <span class="fa marketing-icon" ng-class="{'fa-file-text-o':step.type == 'page', 'fa-envelope':step.type == 'email'}"></span>
+                        <span class="label label-primary marketing-label"><strong>{{step.type}}</strong></span>
+                    </div>
                 </div>
             </div>
         </div>

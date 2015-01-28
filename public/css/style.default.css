@@ -12,6 +12,8 @@
 @import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
 @import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
+@import '../js/libs_misc/socialstream/css/dcsns_wall.css';
+@import '../js/libs_misc/socialstream/css/dcsns_light.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -22589,8 +22591,33 @@ i.indi-sm {
   font-size: 60px;
   color: #2ecc71;
 }
+.flowchart-demo .window {
+  position: relative;
+}
+.flowchart-demo .window.start .deleteWidget {
+  display: none!important;
+}
+.flowchart-demo .window:hover .deleteWidget {
+  display: block;
+}
+.flowchart-demo .deleteWidget {
+  display: none;
+  right: -7px;
+  position: absolute;
+  top: -10px;
+  font-size: 25px;
+  background: white;
+  border-radius: 65px;
+  color: #888888;
+}
+.flowchart-demo .deleteWidget:hover {
+  color: #d9534f;
+}
 .widgets .window {
   position: relative;
+}
+.widgets .window .deleteWidget {
+  display: none;
 }
 .widgets ul {
   height: 100px;
@@ -22635,7 +22662,7 @@ i.indi-sm {
 .flowchart-demo .hover {
   border: 1px dotted red;
 }
-#flowchartWindow1 {
+#startWidget {
   top: 20em;
   left: 5em;
 }

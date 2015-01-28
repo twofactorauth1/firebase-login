@@ -137,6 +137,9 @@ require.config({
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
         'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
         'carousel': '/angular_admin/directives/carousel',
+        'isotope': 'libs/isotope/dist/isotope.pkgd',
+        'socialStream': 'libs_misc/socialstream/js/jquery.social.stream.1.5.7.min',
+        'socialStreamWall':'libs_misc/socialstream/js/jquery.social.stream.wall.1.5',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -207,6 +210,7 @@ require.config({
         'leaflet-directive': {deps: ['leaflet', 'angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},
+        'socialStream': {deps: ['jquery']},
         'ngFileUpload': {deps: ['angular']},
         'angularStepper': {deps: ['angular']},
         'angularMoney': {deps: ['angular']},

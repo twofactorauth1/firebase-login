@@ -7653,8 +7653,39 @@ i.indi-sm {
   color: #2ecc71;
 }
 
+.flowchart-demo .window {
+  position: relative;
+}
+
+.flowchart-demo .window.start .deleteWidget {
+  display: none!important;
+}
+
+.flowchart-demo .window:hover .deleteWidget {
+  display: block;
+}
+
+.flowchart-demo .deleteWidget {
+  display: none;
+  right: -7px;
+  position: absolute;
+  top: -10px;
+  font-size: 25px;
+  background: white;
+  border-radius: 65px;
+  color: #888888;
+}
+
+.flowchart-demo .deleteWidget:hover {
+  color: #d9534f;
+}
+
 .widgets .window {
   position: relative;
+}
+
+.widgets .window .deleteWidget {
+  display: none;
 }
 
 .widgets ul {
@@ -7707,7 +7738,7 @@ i.indi-sm {
   border: 1px dotted red;
 }
 
-#flowchartWindow1 {
+#startWidget {
   top: 20em;
   left: 5em;
 }
