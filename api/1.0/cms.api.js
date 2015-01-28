@@ -344,7 +344,11 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-
+    /**
+     * This is only used to create pages.
+     * @param req
+     * @param resp
+     */
     saveOrUpdatePage: function (req, resp) {
         var self = this;
         self.log.debug('>> saveOrUpdatePage');
@@ -416,6 +420,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
 
     updatePage: function (req, res) {
         var self = this;

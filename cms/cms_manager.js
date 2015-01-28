@@ -875,7 +875,7 @@ module.exports = {
                         }
                     }
                 }
-                cmsDao.saveOrUpdate(page, fn);
+                self.updatePage(pageId, page, fn);
             }
         });
     },
@@ -988,15 +988,41 @@ module.exports = {
         //make sure the ID is set.
         page.set('_id', pageId);
 
-        cmsDao.saveOrUpdate(page, function(err, value){
+        //Handle versioning.
+        cmsDao.getPageById(pageId, function(err, existingPage){
             if(err) {
-                self.log.error('Error updating page: ' + err);
-                fn(err, null);
+                self.log.error('Error retrieving existing page: ' + err);
+                return fn(err, null);
+            } else if(existingPage == null) {
+                self.log.error('Could not find page with id: ' + pageId);
+                return fn(null, null);
             } else {
-                self.log.debug('<< udpatePage');
-                fn(null, value);
+                var currentVersion = existingPage.get('version');
+                if(currentVersion === null) {
+                    currentVersion = 0;
+                }
+                page.set('version', currentVersion+1);
+                existingPage.set('_id', pageId + '_' + currentVersion);
+                cmsDao.saveOrUpdate(existingPage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating version on page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        cmsDao.saveOrUpdate(page, function(err, value){
+                            if(err) {
+                                self.log.error('Error updating page: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('<< udpatePage');
+                                fn(null, value);
+                            }
+                        });
+                    }
+                });
             }
         });
+
+
 
     },
 
