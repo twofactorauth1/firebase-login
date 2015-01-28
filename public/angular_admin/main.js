@@ -74,6 +74,8 @@ require.config({
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
         'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
+        'socialist': 'libs_misc/jquery-socialist/jquery.socialist',
+        'isotope': 'libs/isotope/jquery.isotope',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -137,9 +139,6 @@ require.config({
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
         'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
         'carousel': '/angular_admin/directives/carousel',
-        'isotope': 'libs/isotope/dist/isotope.pkgd',
-        'socialStream': 'libs_misc/socialstream/js/jquery.social.stream.1.5.7.min',
-        'socialStreamWall':'libs_misc/socialstream/js/jquery.social.stream.wall.1.5',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -210,7 +209,6 @@ require.config({
         'leaflet-directive': {deps: ['leaflet', 'angular']},
         'xEditable': {deps: ['angular']},
         'ngCsv': {deps: ['angular']},
-        'socialStream': {deps: ['jquery']},
         'ngFileUpload': {deps: ['angular']},
         'angularStepper': {deps: ['angular']},
         'angularMoney': {deps: ['angular']},

@@ -29,9 +29,9 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
-                scope.styleMarketing = function () {
+                scope.styleMarketingSection = function () {
                     return {
-                        'height': (newValue.h) - 400 + 'px',
+                        'height': (newValue.h)-120 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };

@@ -24,7 +24,7 @@
     </div>
 
     <div class="col-xs-12 nopadding header-menu-row">
-        <div class="btn-group col-xs-12 template-btns nopadding">
+        <div class="btn-group col-xs-12 template-btns nopadding mb0">
             <button type="button" class="btn btn-default btn-lg col-xs-6 tooltips" ng-class="{'active': activeTab === 'social-feed'}" ng-click="activeTab = 'social-feed'">
                 <div tooltip-placement="bottom" tooltip-html-unsafe="Who is visiting your site?">
                     <i class="fa fa-newspaper-o"></i>
@@ -41,8 +41,8 @@
             </div>
         </div>
 
-        <div class="contentpanel" ng-style="styleMarketing()" indigeweb-resize>
-            <div class="campaign-section" ng-if="activeTab == 'campaigns'">
+        <div class="contentpanel" ng-style="styleMarketingSection()" indigeweb-resize>
+            <div class="campaign-section" ng-show="activeTab == 'campaigns'">
                 <div class="col-xs-12 col-sm-4" ng-repeat="campaign in campaigns track by $index">
                     <div class="grid-list-item btn-view-product-details" data-productid="1">
                         <a href="#/marketing/campaign/{{campaign._id}}">
@@ -72,8 +72,8 @@
                     <h3 class="center">Add campaign for them to appear here.</h3>
                 </div>
             </div>
-            <div class="social-feed-section" ng-if="activeTab == 'social-feed'">
-                <div id="social-stream"></div>
+            <div class="social-feed-section" ng-show="activeTab == 'social-feed'">
+                <div id="social-feed"></div>
                 <!-- <div ng-if="feeds.length <= 0" class="empty">
                     <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
                     <h2 class="center">No Feeds Setup</h2>
