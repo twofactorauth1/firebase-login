@@ -79,9 +79,11 @@ define([
             dateSwitch = true;
         });
 
-        $scope.selectedDate = $scope.date;
+        $scope.selectedDate = {startDate: moment().subtract('days', 29).toDate(), endDate: new Date()};
 
         $scope.pickerOptions = {
+            startDate: moment().subtract('days', 29).toDate(),
+            endDate: new Date(),
             format: 'MMMM D, YYYY',
             opens: 'left',
             ranges: {

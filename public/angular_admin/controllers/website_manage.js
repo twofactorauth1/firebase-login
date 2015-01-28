@@ -280,7 +280,7 @@ define([
             };
 
             $scope.createPage = function(page, $event) {
-
+                $scope.validateCreatePage(page);
                 console.log('$scope.createPageValidated ', $scope.createPageValidated);
 
                 if (!$scope.createPageValidated) {
@@ -348,13 +348,13 @@ define([
                 if (!$scope.createPostValidated) {
                     return false;
                 }
-                
-                 
+
+
                 postData.websiteId = $scope.website._id;
                     WebsiteService.createPost($scope.blogId, postData, function(data) {
                     toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                     $('#create-post-modal').modal('hide');
-                    $scope.posts.push(data);                   
+                    $scope.posts.push(data);
                 })
 
             };

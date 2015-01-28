@@ -22323,6 +22323,9 @@ i.indi-sm {
 .commerce .commerce-filter {
   margin: 0;
 }
+.commerce .person-name {
+  min-height: 24px;
+}
 .commerce .products-list {
   margin-top: 100px;
 }
@@ -23239,7 +23242,6 @@ body.editing .fragment.dragging {
 }
 body.editing .fragment:hover .component-inner {
   border: 2px dashed #34495e;
-  padding: 0px;
 }
 body.editing .fragment:hover .componentActions {
   display: block;

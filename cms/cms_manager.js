@@ -875,7 +875,7 @@ module.exports = {
                         }
                     }
                 }
-                cmsDao.saveOrUpdate(page, fn);
+                self.updatePage(pageId, page, fn);
             }
         });
     },
@@ -988,15 +988,41 @@ module.exports = {
         //make sure the ID is set.
         page.set('_id', pageId);
 
-        cmsDao.saveOrUpdate(page, function(err, value){
+        //Handle versioning.
+        cmsDao.getPageById(pageId, function(err, existingPage){
             if(err) {
-                self.log.error('Error updating page: ' + err);
-                fn(err, null);
+                self.log.error('Error retrieving existing page: ' + err);
+                return fn(err, null);
+            } else if(existingPage == null) {
+                self.log.error('Could not find page with id: ' + pageId);
+                return fn(null, null);
             } else {
-                self.log.debug('<< udpatePage');
-                fn(null, value);
+                var currentVersion = existingPage.get('version');
+                if(currentVersion === null) {
+                    currentVersion = 0;
+                }
+                page.set('version', currentVersion+1);
+                existingPage.set('_id', pageId + '_' + currentVersion);
+                cmsDao.saveOrUpdate(existingPage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating version on page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        cmsDao.saveOrUpdate(page, function(err, value){
+                            if(err) {
+                                self.log.error('Error updating page: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('<< udpatePage');
+                                fn(null, value);
+                            }
+                        });
+                    }
+                });
             }
         });
+
+
 
     },
 
@@ -1180,6 +1206,55 @@ module.exports = {
                 }
             }
         });
+    },
+
+    getPageVersions: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageVersions');
+
+        var query = {};
+        if(version === 'all') {
+            query._id = new RegExp('' + pageId + '_.*');
+        } else if(version === 'latest'){
+            query._id = pageId;
+        } else {
+            query = {$or: [{_id: pageId + '_' + version},{_id: pageId}]};
+        }
+
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            if(err) {
+                self.log.error('Error getting pages by version: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getPageVersions');
+                return fn(null, list);
+            }
+        });
+
+    },
+
+    revertPage: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> revertPage');
+
+        self.getPageVersions(pageId, version, function(err, pageAry){
+            if(err || pageAry === null) {
+                self.log.error('Error finding version of page: ' + err);
+                return fn(err, null);
+            }
+            self.updatePage(pageId, pageAry[0], function(err, newPage){
+                if(err) {
+                    self.log.error('Error updating page: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< revertPage');
+                    return fn(null, newPage);
+                }
+            });
+        });
+
     },
 
     getPagesByWebsiteId: function(websiteId, accountId, fn) {
