@@ -45,6 +45,8 @@ _.extend(api.prototype, baseApi.prototype, {
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
+        app.get(this.url('page/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.get(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
         app.get(this.url('page/:handle/screenshot'), this.isAuthApi.bind(this), this.generateScreenshot.bind(this));
         app.get(this.url('page/:handle/savedscreenshot'), this.isAuthApi.bind(this), this.getScreenshot.bind(this));
@@ -341,6 +343,27 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsDao.getPageById(pageId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
             self = null;
+        });
+    },
+
+    /**
+     * This method requires security.  It expects up to two url params: :id and :version
+     * @param req
+     * @param resp
+     */
+    getPageVersionsById: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPageVersionsById');
+        var pageId = req.params.id;
+        var version = 'all';
+        if(req.params.version) {
+            version = parseInt(req.params.version);
+        }
+        cmsManager.getPageVersions(pageId, version, function(err, pages){
+            self.log.debug('<< getPageVersionsById');
+            self.sendResultOrError(resp, err, pages, "Error Retrieving Page Versions");
+            self = null;
+            return;
         });
     },
 

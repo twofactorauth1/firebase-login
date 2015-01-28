@@ -1208,6 +1208,30 @@ module.exports = {
         });
     },
 
+    getPageVersions: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageVersions');
+
+        var query = {};
+        if(version === 'all') {
+            query._id = new RegExp('' + pageId + '_.*');
+        } else {
+            query = {$or: [{_id: pageId + '_' + version},{_id: pageId}]};
+        }
+
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            if(err) {
+                self.log.error('Error getting pages by version: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getPageVersions');
+                return fn(null, list);
+            }
+        });
+
+    },
+
     getPagesByWebsiteId: function(websiteId, accountId, fn) {
         var self = this;
         self.log = log;
