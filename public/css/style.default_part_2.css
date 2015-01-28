@@ -7331,6 +7331,10 @@ i.indi-sm {
   margin: 0;
 }
 
+.commerce .person-name {
+  min-height: 24px;
+}
+
 .commerce .products-list {
   margin-top: 100px;
 }
