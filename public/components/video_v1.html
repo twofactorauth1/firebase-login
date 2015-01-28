@@ -29,9 +29,9 @@
                                         </video>
                                         <vg-overlay-play></vg-overlay-play>
                                     </videogular> -->
-                    <iframe ng-show="component.videoType=='youtube'" width="{{component.videoWidth}}" height="{{component.videoHeight}}" src="{{flvVideoUrl('//www.youtube.com/embed/', component.video)}}" frameborder="0" allowfullscreen></iframe>
+                    <iframe ng-show="component.videoType=='youtube'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//www.youtube.com/embed/', component.video)}}" frameborder="0" allowfullscreen></iframe>
 
-                    <iframe ng-show="component.videoType=='vimeo'" ng-src="{{flvVideoUrl('//player.vimeo.com/video/', component.video)}}" width="{{component.videoWidth}}" height="{{component.videoHeight}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    <iframe ng-show="component.videoType=='vimeo'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//player.vimeo.com/video/', component.video)}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
                     <videogular vg-width="component.videoWidth" vg-height="component.videoHeight" vg-theme="config.theme.url" vg-autoplay="component.videoAutoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive" ng-show="component.videoType=='html5'">
                         <video class='videoPlayer' preload='metadata'>
