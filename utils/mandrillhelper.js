@@ -107,7 +107,7 @@ var mandrillHelper =  {
     },
 
 
-    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, stepSettings, fn) {
+    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> sendCampaignEmail');
