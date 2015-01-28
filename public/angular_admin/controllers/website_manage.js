@@ -348,43 +348,14 @@ define([
                 if (!$scope.createPostValidated) {
                     return false;
                 }
-
-                if(!$scope.postId)
-                {
-                    //TODO: This needs to be fixed.
-                    /*
-                     * $scope.postId needs to be the page Id of the blog page.  If this page id does not exist, a new
-                     * blog page will be created.  Send something obviously wrong (like '0') to make this happen.
-                     * Then all you need to do is call the WebsiteService.createPost() method.  The backend will take
-                     * care of the rest.
-                     *
-                     * We also need to make sure the websiteId is part of the postData object.
-                     *
-                     *
-                     */
-                    var pageData = {
-                        title: "Post",
-                        handle: "post",
-                        mainmenu: false
-                    };
-                    WebsiteService.createPage($scope.website._id, pageData, function(newpage) {
-                         $scope.pages.push(newpage);
-                         $scope.postId = newpage._id;
-                         WebsiteService.createPost($scope.postId, postData, function(data) {
-                            toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                            $('#create-post-modal').modal('hide');
-                            $scope.posts.push(data);
-                        });
-                    });
-                }
-                else
-                {
-                    WebsiteService.createPost($scope.postId, postData, function(data) {
-                        toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                        $('#create-post-modal').modal('hide');
-                        $scope.posts.push(data);
-                    });
-                }
+                
+                 
+                postData.websiteId = $scope.website._id;
+                    WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                    $('#create-post-modal').modal('hide');
+                    $scope.posts.push(data);                   
+                })
 
             };
 
