@@ -125,9 +125,9 @@ define([
                     }
                     $scope.allPages = arr;
 
-                    $scope.currentPage = _.findWhere(pages, {
-                        handle: currentPage
-                    });
+                    //$scope.currentPage = _.findWhere(pages, {
+                      //  handle: currentPage
+                    //});
 
                     if ($scope.editingPageId) {
                         $scope.currentPage = _.findWhere(pages, {
@@ -141,9 +141,9 @@ define([
                         // console.log('$scope.currentPage >>> ', $scope.currentPage);
                         // $scope.resfeshIframe();
                     } else {
-                        $scope.currentPage = _.findWhere(pages, {
-                            handle: currentPage
-                        });
+                        //$scope.currentPage = _.findWhere(pages, {
+                        //    handle: currentPage
+                        //});
                     }
                     //get components from page
                     if ($scope.currentPage) {
@@ -154,7 +154,7 @@ define([
                             }
                         }
                     } else {
-                        console.error('Falied to retrieve Page');
+                        console.log('Falied to retrieve Page');
                     }
 
                 });
