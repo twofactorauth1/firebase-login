@@ -22597,15 +22597,67 @@ i.indi-sm {
   padding: 0;
   margin: 0;
 }
+.marketing .toolbar .filter li.rss a {
+  background-color: #FF9800;
+}
+.marketing .toolbar .filter li.flickr a {
+  background-color: #f90784;
+}
+.marketing .toolbar .filter li.delicious a {
+  background-color: #3271CB;
+}
+.marketing .toolbar .filter li.twitter a {
+  background-color: #4ec2dc;
+}
+.marketing .toolbar .filter li.facebook a {
+  background-color: #3b5998;
+}
+.marketing .toolbar .filter li.google a {
+  background-color: #2d2d2d;
+}
+.marketing .toolbar .filter li.youtube a {
+  background-color: #DF1F1C;
+}
+.marketing .toolbar .filter li.pinterest a {
+  background-color: #CB2528;
+}
+.marketing .toolbar .filter li.lastfm a {
+  background-color: #C90E12;
+}
+.marketing .toolbar .filter li.dribbble a {
+  background-color: #F175A8;
+}
+.marketing .toolbar .filter li.vimeo a {
+  background-color: #4EBAFF;
+}
+.marketing .toolbar .filter li.stumbleupon a {
+  background-color: #EB4924;
+}
+.marketing .toolbar .filter li.deviantart a {
+  background-color: #EB4924;
+}
+.marketing .toolbar .filter li.tumblr a {
+  background-color: #365472;
+}
+.marketing .toolbar .filter li.instagram a {
+  background-color: #413A33;
+}
 .marketing .toolbar .filter li a {
   padding: 4px 3px 0 3px;
-  margin: 0 1px 1px 0;
+  margin: 0 3px 1px 0;
   display: block;
   float: left;
   background: #777;
-  height: 28px;
-  width: 30px;
+  color: #fff;
+  line-height: 45px;
+  height: 50px;
+  font-weight: bold;
+  width: 50px;
+  font-size: 24px;
   text-align: center;
+}
+.marketing .toolbar .filter li a i {
+  line-height: 40px!important;
 }
 .marketing .toolbar .filter li img {
   margin: 0;
@@ -22613,7 +22665,7 @@ i.indi-sm {
 }
 .marketing .toolbar .filter .link-all {
   color: #fff;
-  line-height: 14px;
+  line-height: 38px;
   padding: 7px 7px 4px 7px;
   text-shadow: 0 0 1px #555;
   font-weight: bold;
@@ -22630,6 +22682,9 @@ i.indi-sm {
   height: 200px;
   position: relative;
 }
+.stream li .post-content {
+  padding: 15px;
+}
 .stream li .post-bottom-bar {
   height: 40px;
   background: #888;
@@ -22638,6 +22693,59 @@ i.indi-sm {
   width: 100%;
   bottom: 0;
   position: absolute;
+  color: white;
+  /* feeds network specific styles */
+}
+.stream li .post-bottom-bar i {
+  font-size: 35px;
+}
+.stream li .post-bottom-bar span {
+  line-height: 30px;
+}
+.stream li .post-bottom-bar.rss {
+  background-color: #FF9800;
+}
+.stream li .post-bottom-bar.flickr {
+  background-color: #f90784;
+}
+.stream li .post-bottom-bar.delicious {
+  background-color: #3271CB;
+}
+.stream li .post-bottom-bar.twitter {
+  background-color: #4ec2dc;
+}
+.stream li .post-bottom-bar.facebook {
+  background-color: #3b5998;
+}
+.stream li .post-bottom-bar.google {
+  background-color: #2d2d2d;
+}
+.stream li .post-bottom-bar.youtube {
+  background-color: #DF1F1C;
+}
+.stream li .post-bottom-bar.pinterest {
+  background-color: #CB2528;
+}
+.stream li .post-bottom-bar.lastfm {
+  background-color: #C90E12;
+}
+.stream li .post-bottom-bar.dribbble {
+  background-color: #F175A8;
+}
+.stream li .post-bottom-bar.vimeo {
+  background-color: #4EBAFF;
+}
+.stream li .post-bottom-bar.stumbleupon {
+  background-color: #EB4924;
+}
+.stream li .post-bottom-bar.deviantart {
+  background-color: #EB4924;
+}
+.stream li .post-bottom-bar.tumblr {
+  background-color: #365472;
+}
+.stream li .post-bottom-bar.instagram {
+  background-color: #413A33;
 }
 .marketing-label {
   position: absolute;

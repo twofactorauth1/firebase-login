@@ -24,72 +24,177 @@
         }
     }
     /* Filter */
-
+    
     .toolbar {
         margin-bottom: 25px;
         padding: 0;
-		width: 100%;
-		overflow: hidden;
-		position: relative;
-
-	    .filter {
-	        padding: 0;
-	        margin: 0 0 15px 0;
-		    li {
-		        display: inline;
-		        background: none;
-		        padding: 0;
-		        margin: 0;
-		        a {
-			        padding: 4px 3px 0 3px;
-			        margin: 0 1px 1px 0;
-			        display: block;
-			        float: left;
-			        background: #777;
-			        height: 28px;
-			        width: 30px;
-					text-align: center;
-			    }
-			    img {
-			        margin: 0;
-			        height: 24px;
-			    }
-		    }
-		    .link-all {
-		        color: #fff;
-		        line-height: 14px;
-		        padding: 7px 7px 4px 7px;
-		        text-shadow: 0 0 1px #555;
-		        font-weight: bold;
-		    }	    
-		}
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        .filter {
+            padding: 0;
+            margin: 0 0 15px 0;
+            li {
+                display: inline;
+                background: none;
+                padding: 0;
+                margin: 0;
+                &.rss a{
+                    background-color: #FF9800;
+                }
+                &.flickr a{
+                    background-color: #f90784;
+                }
+                &.delicious a{
+                    background-color: #3271CB;
+                }
+                &.twitter a{
+                    background-color: #4ec2dc;
+                }
+                &.facebook a{
+                    background-color: #3b5998;
+                }
+                &.google a{
+                    background-color: #2d2d2d;
+                }
+                &.youtube a{
+                    background-color: #DF1F1C;
+                }
+                &.pinterest a{
+                    background-color: #CB2528;
+                }
+                &.lastfm a{
+                    background-color: #C90E12;
+                }
+                &.dribbble a{
+                    background-color: #F175A8;
+                }
+                &.vimeo a{
+                    background-color: #4EBAFF;
+                }
+                &.stumbleupon a{
+                    background-color: #EB4924;
+                }
+                &.deviantart a{
+                    background-color: #EB4924;
+                }
+                &.tumblr a{
+                    background-color: #365472;
+                }
+                &.instagram a{
+                    background-color: #413A33;
+                }
+                a {
+                    padding: 4px 3px 0 3px;
+                    margin: 0 3px 1px 0;
+                    display: block;
+                    float: left;
+                    background: #777;
+                    color: #fff;
+                    line-height: 45px;
+                    height: 50px;
+                    font-weight: bold;
+                    width: 50px;
+                    font-size: 24px;
+                    text-align: center;
+                    i {
+                    	line-height: 40px!important;
+                    }
+                }
+                img {
+                    margin: 0;
+                    height: 24px;
+                }
+            }
+            .link-all {
+                color: #fff;
+                line-height: 38px;
+                padding: 7px 7px 4px 7px;
+                text-shadow: 0 0 1px #555;
+                font-weight: bold;
+            }
+        }
     }
-
 }
-
 .stream {
-	li {
-	overflow: hidden;
-		.post-inner {
-			background-color: #FFFFFF;
-			line-height: 1.35em;
-			-webkit-box-shadow: 0 0px 7px rgba(0,0,0,0.2);
-			-moz-box-shadow: 0 0px 7px rgba(0,0,0,0.2);
-			box-shadow: 0 0px 7px rgba(0,0,0,0.2);
-			height: 200px;
-			position: relative;
-		}
-		.post-bottom-bar {
-			height: 40px;
-			background: #888;
-			padding: 5px;
-			display: block;
-			width: 100%;
-			bottom: 0;
-			position: absolute;
-			color: white;
-		}
-	}
+    li {
+        overflow: hidden;
+        .post-inner {
+            background-color: #FFFFFF;
+            line-height: 1.35em;
+            -webkit-box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+            height: 200px;
+            position: relative;
+        }
+        .post-content {
+            padding: 15px;
+        }
+        .post-bottom-bar {
+            height: 40px;
+            background: #888;
+            padding: 5px;
+            display: block;
+            width: 100%;
+            bottom: 0;
+            position: absolute;
+            color: white;
+            i {
+                font-size: 35px;
+            }
+            span {
+                line-height: 30px;
+            }
+            /* feeds network specific styles */
+            
+            &.rss {
+                background-color: #FF9800;
+            }
+            &.flickr {
+                background-color: #f90784;
+            }
+            &.delicious {
+                background-color: #3271CB;
+            }
+            &.twitter {
+                background-color: #4ec2dc;
+            }
+            &.facebook {
+                background-color: #3b5998;
+            }
+            &.google {
+                background-color: #2d2d2d;
+            }
+            &.youtube {
+                background-color: #DF1F1C;
+            }
+            &.pinterest {
+                background-color: #CB2528;
+            }
+            &.lastfm {
+                background-color: #C90E12;
+            }
+            &.dribbble {
+                background-color: #F175A8;
+            }
+            &.vimeo {
+                background-color: #4EBAFF;
+            }
+            &.stumbleupon {
+                background-color: #EB4924;
+            }
+            &.deviantart {
+                background-color: #EB4924;
+            }
+            &.tumblr {
+                background-color: #365472;
+            }
+            &.instagram {
+                background-color: #413A33;
+            }
+        }
+    }
 }
 .marketing-label {
     position: absolute;

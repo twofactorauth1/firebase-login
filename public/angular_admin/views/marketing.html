@@ -73,15 +73,15 @@
                 </div>
             </div>
             <div class="social-feed-section" ng-show="activeTab == 'social-feed'">
-                <div ng-if="feed.length <= 0" class="empty">
+                <!-- <div ng-if="feed.length <= 0" class="empty">
                     <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
                     <h2 class="center">No Feeds Setup</h2>
                     <h3 class="center">Add a Feed to get set up.</h3>
-                </div>
+                </div> -->
                 <div ng-if="feed.length > 0">
                     <div class="toolbar">
                         <ul id="filter" class="option-set filter">
-                            <li><a href="#filter" data-group="filter" data-filter="*" class="selected link-all">all</a>
+                            <li><a href="#filter" data-group="filter" data-filter="*" class="link-all">all</a>
                             </li>
                             <li class="active {{type}}" ng-repeat="type in feedTypes">
                                 <a href="#filter" rel="{{type}}" data-group="filter" data-filter=".{{type}}">
@@ -97,9 +97,9 @@
                             <div class="post-content">
                                 {{post.message}}
                             </div>
-                            <div class="post-bottom-bar">
-                                <i class="fa fa-twitter"></i>
-                                <span>Tweeted at </span>
+                            <div class="post-bottom-bar {{post.type}}">
+                                <i class="fa fa-{{post.type}} pull-left"></i>
+                                <span>Tweeted {{post.date | timeAgoFilter}}</span>
                             </div>
                             </div>
                         </li>

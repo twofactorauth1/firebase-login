@@ -1,4 +1,4 @@
-define(['app', 'campaignService', 'userService', 'socialService'], function(app) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter'], function(app) {
     app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', function($scope, UserService, CampaignService, SocialService) {
 
         $scope.campaigns = [];
@@ -53,6 +53,7 @@ define(['app', 'campaignService', 'userService', 'socialService'], function(app)
                     $scope.feedTypes.push('twitter');
                     SocialService.getUserTweets(social[i].socialId, function(tweets) {
                         for (var i = 0; i < tweets.length; i++) {
+                            tweets[i].type = 'twitter';
                             $scope.feed.push(tweets[i]);
                         };
                     });
