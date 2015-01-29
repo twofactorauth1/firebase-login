@@ -516,7 +516,7 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
 
-        var url = '/' + myFacebookId + '/posts'
+        var url = '/' + myFacebookId + '/feed'
             , apiOptions = {
                 access_token: accessToken
                 , limit: 15
