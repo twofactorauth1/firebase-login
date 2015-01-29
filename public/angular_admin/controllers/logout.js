@@ -13,8 +13,8 @@ define([
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, want to logout!",
-                cancelButtonText: "No, do not want to logout!",
+                confirmButtonText: "Yes, I want to logout!",
+                cancelButtonText: "No, I do not want to logout!",
                 closeOnConfirm: true,
                 closeOnCancel: true
             },
