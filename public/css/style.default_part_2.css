@@ -2473,6 +2473,19 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   }
 }
 
+.toggle-left-nav .mainpanel {
+  margin-left: 0px;
+}
+
+.toggle-left-nav .mainpanel .pageheader {
+  padding-left: 75px;
+}
+
+.toggle-left-nav .mainpanel .leftpanel-collapsed .header--fixed,
+.toggle-left-nav .mainpanel .header--fixed {
+  left: 20px;
+}
+
 .profile-name {
   margin: 0;
   margin-bottom: 10px;
@@ -11177,6 +11190,12 @@ div[data-type=single-post] .container {
 .single-post-v1 .container.row-fluid {
   max-width: 1100px;
   margin: 0 auto;
+}
+
+.single-post-v1 .post_text_div {
+  min-width: 50%;
+  display: inline-block;
+  padding-left: 5px;
 }
 
 .single-blog .blog-meta {
