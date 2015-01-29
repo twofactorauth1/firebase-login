@@ -186,6 +186,8 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         });
     }]);
 
+    /*
+     * This snippet will log all events emitted to the root scope.
     app.config(['$provide', function ($provide) {
         $provide.decorator('$rootScope', function ($delegate) {
             var _emit = $delegate.$emit;
@@ -198,7 +200,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
             return $delegate;
         });
     }]);
-
+   */
   $('#preloader').fadeOut();
 
   angularAMD.bootstrap(app);
