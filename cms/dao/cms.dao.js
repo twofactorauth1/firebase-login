@@ -812,9 +812,9 @@ var dao = {
     updateWebsiteSettings: function(newSettings, accountId, websiteId, fn) {
         var self = this,
             website;
-        console.log('New Settings: ' + JSON.stringify(newSettings));
+        self.log.debug('New Settings: ' + JSON.stringify(newSettings));
         //ensure website exists and belongs to this account
-        this.getById(websiteId, Website, function(err, value) {
+        self.getById(websiteId, Website, function(err, value) {
             if (err) {
                 fn(err, value);
                 accountId = websiteId = fn = null;
@@ -834,21 +834,21 @@ var dao = {
             }
 
             var settings = value.get('settings');
-            console.log('Website Settings: ' + JSON.stringify(settings));
+            self.log.debug('Website Settings: ' + JSON.stringify(settings));
             if (settings == null) {
                 settings = newSettings;
                 value.set('settings', settings);
-                console.log('Website Settings2: ' + JSON.stringify(value.get('settings')));
+                self.log.debug('Website Settings2: ' + JSON.stringify(value.get('settings')));
             } else {
                 settings = newSettings;
                 value.set('settings', settings);
             }
 
-            self.saveOrUpdate(value, function() {
+            self.saveOrUpdate(value, function(err, saved) {
                 console.log('saved');
+                return fn(null, saved);
             });
-            accountId = website = null;
-            return;
+            
         });
     },
 
