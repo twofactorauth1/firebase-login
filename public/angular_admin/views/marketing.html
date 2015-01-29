@@ -73,12 +73,38 @@
                 </div>
             </div>
             <div class="social-feed-section" ng-show="activeTab == 'social-feed'">
-                <div id="social-feed"></div>
-                <!-- <div ng-if="feeds.length <= 0" class="empty">
+                <div ng-if="feed.length <= 0" class="empty">
                     <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
                     <h2 class="center">No Feeds Setup</h2>
                     <h3 class="center">Add a Feed to get set up.</h3>
-                </div> -->
+                </div>
+                <div ng-if="feed.length > 0">
+                    <div class="toolbar">
+                        <ul id="filter" class="option-set filter">
+                            <li><a href="#filter" data-group="filter" data-filter="*" class="selected link-all">all</a>
+                            </li>
+                            <li class="active {{type}}" ng-repeat="type in feedTypes">
+                                <a href="#filter" rel="{{type}}" data-group="filter" data-filter=".{{type}}">
+                                    <i class="fa fa-{{type}}"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <ul class="stream">
+                    <!-- {"_id":"KRhN3fN5PM7m8jM7","type":"tw","sourceId":"558849048631721984","postType":"tweet","from":{"sourceId":2346197179,"name":"Indigenous"},"date":1422074970000,"message":"Do you know what a \"pogi\" is? Read more about about our own in-house pogi and how she answers, \"So what do you do?\": https://t.co/jHwa6HlbT0"} -->
+                        <li ng-repeat="post in feed" class="col-sm-3 mb20 {{post.type}}">
+                            <div class="post-inner">
+                            <div class="post-content">
+                                {{post.message}}
+                            </div>
+                            <div class="post-bottom-bar">
+                                <i class="fa fa-twitter"></i>
+                                <span>Tweeted at </span>
+                            </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 

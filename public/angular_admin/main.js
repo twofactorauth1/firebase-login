@@ -86,6 +86,7 @@ require.config({
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
         'twoNetService': '/angular_admin/services/two_net',
+        'socialService': '/angular_admin/services/social',
         'assetsService': '/angular_admin/services/assets',
         'geocodeService': '/angular_admin/services/geocode',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',

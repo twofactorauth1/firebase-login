@@ -1,5 +1,5 @@
-define(['app', 'campaignService', 'userService'], function(app) {
-    app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', function($scope, UserService, CampaignService) {
+define(['app', 'campaignService', 'userService', 'socialService'], function(app) {
+    app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', function($scope, UserService, CampaignService, SocialService) {
 
         $scope.campaigns = [];
         $scope.feeds = [];
@@ -41,6 +41,26 @@ define(['app', 'campaignService', 'userService'], function(app) {
                 $('#marketing-add-campaign').modal('hide');
             });
         };
+
+
+        $scope.feed = [];
+        $scope.feedTypes = [];
+
+        UserService.getUserSocial(function(social) {
+            console.log('social ', social);
+            for (var i = 0; i < social.length; i++) {
+                if (social[i].type == 'tw') {
+                    $scope.feedTypes.push('twitter');
+                    SocialService.getUserTweets(social[i].socialId, function(tweets) {
+                        for (var i = 0; i < tweets.length; i++) {
+                            $scope.feed.push(tweets[i]);
+                        };
+                    });
+                }
+            };
+        });
+
+
 
     }]);
 });
