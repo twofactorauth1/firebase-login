@@ -59,7 +59,10 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                     $scope.london.lng = parseFloat(data.lon);
                                     $scope.markers.mainMarker.lat = parseFloat(data.lat);
                                     $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                                }
+                                } 
+                                else 
+                                    $('.map-wrap').addClass("blur-map");
+
                                 mapBlockUI.stop();
                             });
                         }
@@ -79,6 +82,8 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                 $scope.markers.mainMarker.lat = parseFloat(data.lat);
                                 $scope.markers.mainMarker.lng = parseFloat(data.lon);
                             }
+                            else 
+                                $('.map-wrap').addClass("blur-map");
                             mapBlockUI.stop();
                         });
                     }

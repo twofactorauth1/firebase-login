@@ -16,8 +16,8 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, want to go back!",
-                    cancelButtonText: "No, do not want to leave!",
+                    confirmButtonText: "Yes, I want to go back!",
+                    cancelButtonText: "No, I do not want to leave!",
                     closeOnConfirm: true,
                     closeOnCancel: true
                 },

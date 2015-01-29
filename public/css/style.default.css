@@ -17261,6 +17261,13 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   display: inline-block;
   margin-right: 15px;
 }
+.blur-map {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
 .account {
   overflow: hidden;
   background: #e4e7ea;
@@ -18001,6 +18008,14 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .indi-li a i {
   margin: -8px 0 0 -7px;
 }
+.beta-li span {
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: 20px;
+  color: blue;
+  padding-top: 10px;
+}
 .rightmenu-open .rightpanel {
   display: block;
   right: 0;
@@ -18289,22 +18304,34 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 @media (max-width: 1024px) {
   .mainpanel .pageheader,
   .mainpanel .contentpanel {
-    margin-left: 75px;
+    padding-left: 75px;
   }
 }
 @media (max-width: 767px) {
   .leftpanel-show .mainpanel .pageheader {
-    margin-left: 0px;
+    padding-left: 0px;
   }
   .mainpanel .pageheader {
-    margin-left: 75px;
+    padding-left: 75px;
   }
   .mainpanel .pageheader h2 {
-    padding-left: 5px;
+    padding-left: 15px;
     font-size: 20px;
-    padding-left: 0;
     margin: 0 0 0 0;
   }
+  .website-manage .pageheader h2 {
+    font-size: 24px;
+  }
+}
+.toggle-left-nav .mainpanel {
+  margin-left: 0px;
+}
+.toggle-left-nav .mainpanel .pageheader {
+  padding-left: 75px;
+}
+.toggle-left-nav .mainpanel .leftpanel-collapsed .header--fixed,
+.toggle-left-nav .mainpanel .header--fixed {
+  left: 20px;
 }
 .profile-name {
   margin: 0;
@@ -20199,6 +20226,9 @@ div.error label.error:before {
 .iconpicker-popover {
   z-index: 9999!important;
 }
+.btn-header {
+  padding: 6px 6px;
+}
 .dataTables_length .chosen-container {
   min-width: 75px;
 }
@@ -20862,6 +20892,9 @@ div.error label.error:before {
   .website .pageheader .fa,
   .website-manage .pageheader .fa {
     font-size: 14px;
+  }
+  .pageheader .fa.website-manage-icon {
+    font-size: 20px;
   }
   .website .pageheader .col-xs-5,
   .website-manage .pageheader .col-xs-5 {
@@ -25491,6 +25524,11 @@ div[data-type=single-post] .container {
 .single-post-v1 .container.row-fluid {
   max-width: 1100px;
   margin: 0 auto;
+}
+.single-post-v1 .post_text_div {
+  min-width: 50%;
+  display: inline-block;
+  padding-left: 5px;
 }
 .single-blog .blog-meta {
   margin-top: 15px;

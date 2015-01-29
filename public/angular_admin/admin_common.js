@@ -92,6 +92,12 @@ $(document).ready(function () {
 		toggleLeftMenu();
 	});
 
+    $('.header-left').click(function () {
+        $("#leftnav").toggle();
+        var body = $('body');
+        body.toggleClass('toggle-left-nav');
+    });
+
     $(document).click(function() {
         //closeLeftMenu();
      });

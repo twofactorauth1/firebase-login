@@ -21,7 +21,7 @@
                 <div class="col-sm-3 col-xs-12 image-wrap">
                     <div class="thumbnail imgHeight single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
-                            <img class="img-responsive img-gallery-{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
+                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
                         </a>
                         <span class="caption" ng-if="isEditing">
                             <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>

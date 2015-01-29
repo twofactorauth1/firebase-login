@@ -125,9 +125,9 @@ define([
                     }
                     $scope.allPages = arr;
 
-                    $scope.currentPage = _.findWhere(pages, {
-                        handle: currentPage
-                    });
+                    //$scope.currentPage = _.findWhere(pages, {
+                      //  handle: currentPage
+                    //});
 
                     if ($scope.editingPageId) {
                         $scope.currentPage = _.findWhere(pages, {
@@ -141,9 +141,9 @@ define([
                         // console.log('$scope.currentPage >>> ', $scope.currentPage);
                         // $scope.resfeshIframe();
                     } else {
-                        $scope.currentPage = _.findWhere(pages, {
-                            handle: currentPage
-                        });
+                        //$scope.currentPage = _.findWhere(pages, {
+                        //    handle: currentPage
+                        //});
                     }
                     //get components from page
                     if ($scope.currentPage) {
@@ -154,7 +154,7 @@ define([
                             }
                         }
                     } else {
-                        console.error('Falied to retrieve Page');
+                        console.log('Falied to retrieve Page');
                     }
 
                 });
@@ -235,10 +235,22 @@ define([
                     icon: 'fa fa-users',
                     enabled: false
                 }, {
-                    title: 'Navigation',
+                    title: 'Navigation 1',
                     type: 'navigation',
                     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
                     version: 1,
+                    enabled: true
+                }, {
+                    title: 'Navigation 2',
+                    type: 'navigation',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v2.jpg',
+                    version: 2,
+                    enabled: true
+                }, {
+                    title: 'Navigation 3',
+                    type: 'navigation',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v3.jpg',
+                    version: 3,
                     enabled: true
                 }, {
                     title: 'Products',
@@ -402,17 +414,21 @@ define([
                         }
                     });
 
-                    //add media modal click events to all images
+                    //add media modal click events to all images in image gallery
 
-                    // $("#iframe-website").contents().find('body').on("click", "img", function (e)
-                    // {
-                    // $("#media-manager-modal").modal('show');
-                    //     $scope.imageChange = true;
-                    //     $scope.componentArrTarget = e.currentTarget;
-                    //     $scope.componentEditing = _.findWhere($scope.components, {
-                    //         _id: $(e.currentTarget).closest('.component').data('id')
-                    //     });
-                    // });
+                     $("#iframe-website").contents().find('body').on("click", ".image-gallery", function (e)
+                     {
+                        e.preventDefault();
+                        e.stopPropagation();
+                     $("#media-manager-modal").modal('show');                     
+                     $(".insert-image").removeClass("ng-hide");
+                         $scope.imageChange = true;
+                         $scope.componentArrTarget = e.currentTarget;
+                         $scope.componentImageIndex = e.currentTarget.attributes["data-index"].value;
+                         $scope.componentEditing = _.findWhere($scope.components, {
+                             _id: $(e.currentTarget).closest('.component').data('id')
+                         });
+                     });
                 };
 
                 if (iframeDoc.getElementById('body')) {
@@ -1009,6 +1025,8 @@ define([
                         $scope.componentEditing.features[targetIndex].imgurl = asset.url;
                     } else if (type == 'simple-form') {
                         $scope.componentEditing.imgurl = asset.url;
+                    } else if (type == 'image-gallery') {
+                       $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
                     } else {
                         console.log('unknown component or image location');
                     }
