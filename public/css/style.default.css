@@ -18315,6 +18315,16 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
     font-size: 24px;
   }
 }
+.toggle-left-nav .mainpanel {
+  margin-left: 0px;
+}
+.toggle-left-nav .mainpanel .pageheader {
+  padding-left: 75px;
+}
+.toggle-left-nav .mainpanel .leftpanel-collapsed .header--fixed,
+.toggle-left-nav .mainpanel .header--fixed {
+  left: 20px;
+}
 .profile-name {
   margin: 0;
   margin-bottom: 10px;

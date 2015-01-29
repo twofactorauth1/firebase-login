@@ -16,8 +16,7 @@ define(['angularAMD'], function (angularAMD) {
                         width = "99%";
                     return {
                         'height': (newValue.h)-70 + 'px',
-                        'width': width,
-                        'overflow-y' : 'scroll'
+                        'width': width
                     };
                 };
 
