@@ -414,17 +414,21 @@ define([
                         }
                     });
 
-                    //add media modal click events to all images
+                    //add media modal click events to all images in image gallery
 
-                    // $("#iframe-website").contents().find('body').on("click", "img", function (e)
-                    // {
-                    // $("#media-manager-modal").modal('show');
-                    //     $scope.imageChange = true;
-                    //     $scope.componentArrTarget = e.currentTarget;
-                    //     $scope.componentEditing = _.findWhere($scope.components, {
-                    //         _id: $(e.currentTarget).closest('.component').data('id')
-                    //     });
-                    // });
+                     $("#iframe-website").contents().find('body').on("click", ".image-gallery", function (e)
+                     {
+                        e.preventDefault();
+                        e.stopPropagation();
+                     $("#media-manager-modal").modal('show');                     
+                     $(".insert-image").removeClass("ng-hide");
+                         $scope.imageChange = true;
+                         $scope.componentArrTarget = e.currentTarget;
+                         $scope.componentImageIndex = e.currentTarget.attributes["data-index"].value;
+                         $scope.componentEditing = _.findWhere($scope.components, {
+                             _id: $(e.currentTarget).closest('.component').data('id')
+                         });
+                     });
                 };
 
                 if (iframeDoc.getElementById('body')) {
@@ -1021,6 +1025,8 @@ define([
                         $scope.componentEditing.features[targetIndex].imgurl = asset.url;
                     } else if (type == 'simple-form') {
                         $scope.componentEditing.imgurl = asset.url;
+                    } else if (type == 'image-gallery') {
+                       $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
                     } else {
                         console.log('unknown component or image location');
                     }
