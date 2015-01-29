@@ -74,6 +74,8 @@ require.config({
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
         'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
+        'socialist': 'libs_misc/jquery-socialist/jquery.socialist',
+        'isotope': 'libs/isotope/jquery.isotope',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -84,6 +86,7 @@ require.config({
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
         'twoNetService': '/angular_admin/services/two_net',
+        'socialService': '/angular_admin/services/social',
         'assetsService': '/angular_admin/services/assets',
         'geocodeService': '/angular_admin/services/geocode',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
