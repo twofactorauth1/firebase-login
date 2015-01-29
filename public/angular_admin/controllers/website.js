@@ -235,10 +235,22 @@ define([
                     icon: 'fa fa-users',
                     enabled: false
                 }, {
-                    title: 'Navigation',
+                    title: 'Navigation 1',
                     type: 'navigation',
                     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
                     version: 1,
+                    enabled: true
+                }, {
+                    title: 'Navigation 2',
+                    type: 'navigation',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v2.jpg',
+                    version: 2,
+                    enabled: true
+                }, {
+                    title: 'Navigation 3',
+                    type: 'navigation',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v3.jpg',
+                    version: 3,
                     enabled: true
                 }, {
                     title: 'Products',
