@@ -14,9 +14,10 @@
                         <div class="et_pt_blogentry clearfix">
                             <h2 class="et_pt_title">
                             <div data-class="post_title">
-                                 <input type="text" ng-if="isEditing" ng-model="blog.post.post_title"/>
-                                <span ng-if="!isEditing" ng-show="blog.post.post_title">{{blog.post.post_title}}</span>
-                                <span ng-if="!isEditing" ng-show="!blog.post.post_title">Enter Post Title</span>
+                                <div ng-if="blog.post.post_title" class="post_title_div blog_post_title editable" data-class="post_title"><span> {{blog.post.post_title}}</span></div>
+                                <div class="editable post_title_div blog_post_title" ng-if="!blog.post.post_title" data-class="post_title">
+                                    <span> Enter Post Title</span>
+                                </div>
                             </div>
                         </h2>
                             <div class="blog-meta">
@@ -25,12 +26,15 @@
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.created_date | date: 'fullDate' }} </span>
                             </div>
-                            <div ng-show="blog.post.post_author">
-                                <input type="text" ng-if="isEditing" ng-model="blog.post.post_author" /> Posted by <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
+                            <div ng-if="blog.post.post_author">
+                                 Posted by 
+                                  <div  ng-if="isEditing" class="post_text_div editable blog_post_author" data-class="post_author"><span> {{blog.post.post_author}}</span></div>
+                                <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
                             </div>
 
-                            <div ng-show="blog.post.post_category">
-                                <input type="text" ng-if="isEditing" ng-model="blog.post.post_category" /> in
+                            <div ng-if="blog.post.post_category">
+                                in 
+                                <div ng-if="isEditing" class="post_text_div editable blog_post_category" data-class="post_category"><span> {{blog.post.post_category}}</span></div>
                                 <a ng-if="!isEditing" href="/category/{{blog.post.post_category}}">{{blog.post.post_category}}</a>
                             </div>
 
