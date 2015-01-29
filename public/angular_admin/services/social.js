@@ -8,5 +8,12 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+        this.getFBPosts = function (socialId, fn) {
+            var apiUrl = baseUrl + ['facebook', 'posts', socialId].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
     });
 });

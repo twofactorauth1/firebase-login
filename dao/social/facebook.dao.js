@@ -317,6 +317,10 @@ var dao = {
 
 
     getUserPosts: function (user, socialId, fn) {
+        var self = this;
+        self.log.info("facebook dao: getUserPosts >>> ");
+        self.log.info("facebook dao: user >>> ", user);
+        self.log.info("facebook dao: socialId >>> ", socialId);
         var key = "posts";
         return this._getStreamPart(user, socialId, key, fn);
     },
@@ -336,6 +340,7 @@ var dao = {
 
     _getStreamPart: function (user, socialId, key, fn) {
         var self = this;
+        self.log.info("facebook dao: _getStreamPart >>> ");
         var accessToken = this._getAccessToken(user);
 
         if (accessToken == null) {
@@ -345,7 +350,11 @@ var dao = {
         var path = socialId + "/" + key + "?limit=500";
         var url = this._generateUrl(path, accessToken);
 
+        self.log.info("_getStreamPart: path >>> ", path);
+        self.log.info("_getStreamPart: url >>> ", url);
+
         return this._makeRequest(url, function (err, value) {
+            self.log.info("_getStreamPart: fb value >>> ", value);
             if (err) {
                 return fn(err, value);
             }

@@ -42,7 +42,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             });
         };
 
-
         $scope.feed = [];
         $scope.feedTypes = [];
 
@@ -55,6 +54,17 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         for (var i = 0; i < tweets.length; i++) {
                             tweets[i].type = 'twitter';
                             $scope.feed.push(tweets[i]);
+                        };
+                    });
+                }
+                if (social[i].type == 'fb') {
+                    $scope.feedTypes.push('facebook');
+                    console.log('getting facebook posts');
+                    SocialService.getFBPosts(social[i].socialId, function(posts) {
+                        console.log('fb posts return: ', posts);
+                        for (var i = 0; i < posts.length; i++) {
+                            posts[i].type = 'facebook';
+                            $scope.feed.push(posts[i]);
                         };
                     });
                 }
