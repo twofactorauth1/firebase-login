@@ -43,7 +43,22 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         };
 
         $scope.feed = [];
+        $scope.displayedFeed = [];
         $scope.feedTypes = [];
+
+        $scope.filterFeed = function(type) {
+            console.log('filter feed >>> ', type);
+            if (type != 'all') {
+                $scope.displayedFeed = [];
+                for (var i = 0; i < $scope.feed.length; i++) {
+                    if ($scope.feed[i].type == type) {
+                        $scope.displayedFeed.push($scope.feed[i]);
+                    }
+                }
+            } else {
+                $scope.displayedFeed = $scope.feed;
+            }
+        };
 
         UserService.getUserSocial(function(social) {
             console.log('social ', social);
@@ -60,7 +75,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 if (social[i].type == 'fb') {
                     $scope.feedTypes.push('facebook');
                     console.log('getting facebook posts');
-                    SocialService.getFBPosts(social[i].socialId, function(posts) {
+                    SocialService.getFBPosts("636552113048686", function(posts) {
                         console.log('fb posts return: ', posts);
                         for (var i = 0; i < posts.length; i++) {
                             posts[i].type = 'facebook';
@@ -68,7 +83,19 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         };
                     });
                 }
+                if (social[i].type == 'go') {
+                    $scope.feedTypes.push('google-plus');
+                    console.log('getting google plus');
+                    SocialService.getGooglePlusPosts(social[i].socialId, function(posts) {
+                        console.log('google plus posts return: ', posts);
+                        for (var i = 0; i < posts.length; i++) {
+                            posts[i].type = 'google-plus';
+                            $scope.feed.push(posts[i]);
+                        };
+                    });
+                }
             };
+            $scope.displayedFeed = $scope.feed;
         });
 
 
