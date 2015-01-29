@@ -105,6 +105,8 @@ var dao = {
 
 
     getTweetsForUser: function(user, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting tweets ', twitterId);
         if (_.isFunction(twitterId)) {
             fn = twitterId;
             twitterId = null;
@@ -118,12 +120,16 @@ var dao = {
 
         var url = this._generateUrl(path, params);
 
+        self.log.debug('>> getting tweets params ', params);
+        self.log.debug('>> getting tweets url ', url);
+
         this._makeRequest(url, user, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
             var tweets = JSON.parse(value);
+            self.log.debug('>> tweets ', tweets);
 
             if (tweets.length > 0) {
                 var result = [];
@@ -169,7 +175,10 @@ var dao = {
 
 
     _getAccessToken: function(user) {
+        var self = this;
+        self.log.debug('>> _getAccessToken ', user);
         var credentials = user.getCredentials($$.constants.user.credential_types.TWITTER);
+        self.log.debug('>> credentials ', credentials);
         if (credentials == null) {
             return null;
         }
@@ -215,6 +224,8 @@ var dao = {
 
 
     _makeRequest: function(url, user, fn) {
+        var self = this;
+        self.log.debug('>> _makeRequest ', user);
         var oauth = new OAuth(
             '',                      //REquest URL (not in use)
             '',                      //Access URL (not in use)
@@ -226,7 +237,9 @@ var dao = {
         );
 
         var accessToken = this._getAccessToken(user);
+        self.log.debug('>> _makeRequest accessToken ', accessToken);
         var accessTokenSecret = this._getAccessTokenSecret(user);
+        self.log.debug('>> _makeRequest accessTokenSecret ', accessTokenSecret);
 
         if (accessToken == null || accessTokenSecret == null) {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "Cannot make twitter request");

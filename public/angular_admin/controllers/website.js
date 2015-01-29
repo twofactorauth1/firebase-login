@@ -233,7 +233,7 @@ define([
                     title: 'Meet Team',
                     type: 'meet-team',
                     icon: 'fa fa-users',
-                    enabled: true
+                    enabled: false
                 }, {
                     title: 'Navigation',
                     type: 'navigation',
@@ -244,12 +244,12 @@ define([
                     title: 'Products',
                     type: 'products',
                     icon: 'fa fa-money',
-                    enabled: true
+                    enabled: false
                 }, {
                     title: 'Simple form',
                     type: 'simple-form',
                     icon: 'custom simple-form',
-                    enabled: true
+                    enabled: false
                 }, {
                     title: 'Single Post',
                     type: 'single-post',
@@ -264,7 +264,7 @@ define([
                     title: 'Video',
                     type: 'video',
                     icon: 'fa fa-video',
-                    enabled: true
+                    enabled: false
                 }, {
                     title: 'Text Only',
                     type: 'text-only',
@@ -274,7 +274,7 @@ define([
                     title: 'Thumbnail Slider',
                     type: 'thumbnail-slider',
                     icon: 'fa fa-like',
-                    enabled: true
+                    enabled: false
                 }
             ];
 
@@ -464,6 +464,7 @@ define([
 
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
+                $scope.changesConfirmed = true;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
                 $scope.deactivateAloha();
@@ -937,7 +938,9 @@ define([
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
                 console.log('>>> activating');
-                $scope.activateAloha();
+                setTimeout(function() {
+                            $scope.activateAloha();
+                        }, 500)
 
                 //update the scope as the temppage until save
 

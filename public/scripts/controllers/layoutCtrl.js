@@ -346,6 +346,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       return $sce.trustAsResourceUrl(src);
     }
 
+    $scope.flvVideoUrl = function(iframeUrl, url) {
+        var parsedUrl = urlParser.parse(url);
+        var retUrl = iframeUrl + parsedUrl.id;
+        return $sce.trustAsResourceUrl(retUrl);
+    };
+
     $scope.config = {
       width: 780,
       height: 320,
@@ -697,7 +703,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               $("#social-link-url").addClass('has-error');
               return;
             }
-            
+
             if (social.url) {
 	      var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 	      if (urlRegex.test(social.url) == false) {

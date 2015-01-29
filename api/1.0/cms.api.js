@@ -45,6 +45,10 @@ _.extend(api.prototype, baseApi.prototype, {
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
+        app.get(this.url('page/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.get(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.post(this.url('page/:id/revert'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
+        app.post(this.url('page/:id/revert/:version'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
         app.get(this.url('page/:handle/screenshot'), this.isAuthApi.bind(this), this.generateScreenshot.bind(this));
         app.get(this.url('page/:handle/savedscreenshot'), this.isAuthApi.bind(this), this.getScreenshot.bind(this));
@@ -344,7 +348,70 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method requires security.  It expects up to two url params: :id and :version
+     * @param req
+     * @param resp
+     */
+    getPageVersionsById: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPageVersionsById');
+        var pageId = req.params.id;
+        var version = 'all';
+        var accountId = parseInt(self.accountId(req));
+        if(req.params.version) {
+            version = parseInt(req.params.version);
+        }
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getPageVersions(pageId, version, function(err, pages){
+                    self.log.debug('<< getPageVersionsById');
+                    self.sendResultOrError(resp, err, pages, "Error Retrieving Page Versions");
+                    self = null;
+                    return;
+                });
+            }
+        });
 
+    },
+
+    /**
+     * This method requires security.  It expects up to two url params: :id, and :version
+     * @param req
+     * @param resp
+     */
+    revertPage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> revertPage');
+        var pageId = req.params.id;
+        var version = 'latest';
+        var accountId = parseInt(self.accountId(req));
+        if(req.params.version) {
+            version = parseInt(req.params.version);
+        }
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.revertPage(pageId, version, function(err, page){
+                    self.log.debug('<< revertPage');
+                    self.sendResultOrError(resp, err, page, "Error reverting page version");
+                    self = null;
+                    return;
+                });
+            }
+        });
+
+    },
+
+    /**
+     * This is only used to create pages.
+     * @param req
+     * @param resp
+     */
     saveOrUpdatePage: function (req, resp) {
         var self = this;
         self.log.debug('>> saveOrUpdatePage');
@@ -416,6 +483,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
 
     updatePage: function (req, res) {
         var self = this;

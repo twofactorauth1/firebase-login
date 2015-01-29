@@ -107,7 +107,7 @@ var mandrillHelper =  {
     },
 
 
-    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, stepSettings, fn) {
+    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> sendCampaignEmail');
@@ -177,8 +177,11 @@ var mandrillHelper =  {
         var ip_pool = "Main Pool";
 
         //stepSettings.scheduled.minute, stepSettings.scheduled.hour, stepSettings.scheduled.day
-        var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
-        var send_at = sendMoment.utc().format('YYYY-MM-DD HH:mm:ss');
+        //var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
+        var send_at = self._getScheduleUtcDateTimeIsoString(stepSettings.scheduled.day, stepSettings.scheduled.hour,
+            stepSettings.scheduled.minute, stepSettings.offset||0);
+
+        self.log.debug('send_at: ' + send_at);
 
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
             self.log.debug(result);
@@ -189,6 +192,20 @@ var mandrillHelper =  {
             // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
             fn(e, null);
         });
+    },
+
+    _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
+        /*var now = new Date();
+        now.setHours(hoursValue);
+        now.setMinutes(minutesValue);
+        now.setSeconds(0);
+        var offsetToUse = timezoneOffset - now.getTimezoneOffset();
+        console.log('Pieces: ' + now.getHours() + ", " + now.getMinutes() + "," + timezoneOffset + "," + offsetToUse);
+        var shiftedUtcDate = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + daysShift,
+            now.getUTCHours(), now.getUTCMinutes() - offsetToUse, now.getUTCSeconds());
+        console.log('shiftedUTCDate: ' + shiftedUtcDate);*/
+        var shiftedUtcDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', daysShift);
+        return shiftedUtcDate.toISOString();
     }
 }
 

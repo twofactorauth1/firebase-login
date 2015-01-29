@@ -27,8 +27,8 @@ define([
             var account;
             $scope.showToaster = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
-            
-                     
+
+
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
@@ -157,8 +157,8 @@ define([
                         });
                         if($scope.editedPage && $scope.editedPage.screenshot == null)
                         {
-                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI'); 
-                            pagesBlockUI.start(); 
+                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI');
+                            pagesBlockUI.start();
                             var maxTries = 10;
                             var getScreenShot = function() {
                                 WebsiteService.getPageScreenShot(editPageHandle, function(data) {
@@ -280,11 +280,16 @@ define([
             };
 
             $scope.createPage = function(page, $event) {
-
+                $scope.validateCreatePage(page);
                 console.log('$scope.createPageValidated ', $scope.createPageValidated);
 
                 if (!$scope.createPageValidated) {
+                    $('#page-title').parents('div.form-group').addClass('has-error');
+                    $('#page-url').parents('div.form-group').addClass('has-error');
                     return false;
+                } else {
+                    $('#page-title').parents('div.form-group').removeClass('has-error');
+                    $('#page-url').parents('div.form-group').removeClass('has-error');
                 }
 
                 var websiteId = $scope.website._id;
@@ -344,43 +349,14 @@ define([
                     return false;
                 }
 
-                if(!$scope.postId)
-                {
-                    //TODO: This needs to be fixed.
-                    /*
-                     * $scope.postId needs to be the page Id of the blog page.  If this page id does not exist, a new
-                     * blog page will be created.  Send something obviously wrong (like '0') to make this happen.
-                     * Then all you need to do is call the WebsiteService.createPost() method.  The backend will take
-                     * care of the rest.
-                     *
-                     * We also need to make sure the websiteId is part of the postData object.
-                     *
-                     *
-                     */
-                    var pageData = {
-                        title: "Post",
-                        handle: "post",
-                        mainmenu: false
-                    };
-                    WebsiteService.createPage($scope.website._id, pageData, function(newpage) {
-                         $scope.pages.push(newpage);
-                         $scope.postId = newpage._id;
-                         WebsiteService.createPost($scope.postId, postData, function(data) {
-                            toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                            $('#create-post-modal').modal('hide');
-                            $scope.posts.push(data);
-                        });
-                    });
-                }
-                else
-                {
-                    WebsiteService.createPost($scope.postId, postData, function(data) {
-                        toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                        $('#create-post-modal').modal('hide');
-                        $scope.posts.push(data);
-                    });
-                }
-                
+
+                postData.websiteId = $scope.website._id;
+                    WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                    $('#create-post-modal').modal('hide');
+                    $scope.posts.push(data);
+                })
+
             };
 
              $scope.insertMedia = function(asset) {

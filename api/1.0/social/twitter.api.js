@@ -40,6 +40,8 @@ _.extend(api.prototype, baseApi.prototype, {
         */
 
         app.post(this.url('status'), this.isAuthApi.bind(this), this.updateStatus.bind(this));
+
+        app.get(this.url('tweets/:twitterId'), this.isAuthApi.bind(this), this.getTweetsForUser.bind(this));
     },
 
     updateStatus: function(req, resp) {
@@ -50,6 +52,17 @@ _.extend(api.prototype, baseApi.prototype, {
         twitterDao.post(req.user, status, function(err, value){
             self.log.debug('<< shareLink');
             self.sendResultOrError(resp, err, value, 'Error posting status update', 500);
+        });
+    },
+
+    getTweetsForUser: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTweetsForUser');
+
+        var twitterId = req.params.twitterId;
+        twitterDao.getTweetsForUser(req.user, twitterId, function(err, value){
+            self.log.debug('<< tweets');
+            self.sendResultOrError(resp, err, value, 'Error getting tweets for user', 500);
         });
     }
 });

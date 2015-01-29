@@ -22322,6 +22322,9 @@ i.indi-sm {
 .commerce .commerce-filter {
   margin: 0;
 }
+.commerce .person-name {
+  min-height: 24px;
+}
 .commerce .products-list {
   margin-top: 100px;
 }
@@ -22554,6 +22557,9 @@ i.indi-sm {
 .single-product .custom-option-switch {
   margin-top: 25px;
 }
+.marketing {
+  /* Filter */
+}
 .marketing #campaign-add-email .thumbnail {
   position: relative;
   overflow: hidden;
@@ -22574,6 +22580,173 @@ i.indi-sm {
   color: #fff !important;
   z-index: 2;
 }
+.marketing .toolbar {
+  margin-bottom: 25px;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.marketing .toolbar .filter {
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+.marketing .toolbar .filter li {
+  display: inline;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+.marketing .toolbar .filter li.rss a {
+  background-color: #FF9800;
+}
+.marketing .toolbar .filter li.flickr a {
+  background-color: #f90784;
+}
+.marketing .toolbar .filter li.delicious a {
+  background-color: #3271CB;
+}
+.marketing .toolbar .filter li.twitter a {
+  background-color: #4ec2dc;
+}
+.marketing .toolbar .filter li.facebook a {
+  background-color: #3b5998;
+}
+.marketing .toolbar .filter li.google a {
+  background-color: #2d2d2d;
+}
+.marketing .toolbar .filter li.youtube a {
+  background-color: #DF1F1C;
+}
+.marketing .toolbar .filter li.pinterest a {
+  background-color: #CB2528;
+}
+.marketing .toolbar .filter li.lastfm a {
+  background-color: #C90E12;
+}
+.marketing .toolbar .filter li.dribbble a {
+  background-color: #F175A8;
+}
+.marketing .toolbar .filter li.vimeo a {
+  background-color: #4EBAFF;
+}
+.marketing .toolbar .filter li.stumbleupon a {
+  background-color: #EB4924;
+}
+.marketing .toolbar .filter li.deviantart a {
+  background-color: #EB4924;
+}
+.marketing .toolbar .filter li.tumblr a {
+  background-color: #365472;
+}
+.marketing .toolbar .filter li.instagram a {
+  background-color: #413A33;
+}
+.marketing .toolbar .filter li a {
+  padding: 4px 3px 0 3px;
+  margin: 0 3px 1px 0;
+  display: block;
+  float: left;
+  background: #777;
+  color: #fff;
+  line-height: 45px;
+  height: 50px;
+  font-weight: bold;
+  width: 50px;
+  font-size: 24px;
+  text-align: center;
+}
+.marketing .toolbar .filter li a i {
+  line-height: 40px!important;
+}
+.marketing .toolbar .filter li img {
+  margin: 0;
+  height: 24px;
+}
+.marketing .toolbar .filter .link-all {
+  color: #fff;
+  line-height: 38px;
+  padding: 7px 7px 4px 7px;
+  text-shadow: 0 0 1px #555;
+  font-weight: bold;
+}
+.stream li {
+  overflow: hidden;
+}
+.stream li .post-inner {
+  background-color: #FFFFFF;
+  line-height: 1.35em;
+  -webkit-box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 7px rgba(0, 0, 0, 0.2);
+  height: 200px;
+  position: relative;
+}
+.stream li .post-content {
+  padding: 15px;
+}
+.stream li .post-bottom-bar {
+  height: 40px;
+  background: #888;
+  padding: 5px;
+  display: block;
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+  color: white;
+  /* feeds network specific styles */
+}
+.stream li .post-bottom-bar i {
+  font-size: 35px;
+}
+.stream li .post-bottom-bar span {
+  line-height: 30px;
+}
+.stream li .post-bottom-bar.rss {
+  background-color: #FF9800;
+}
+.stream li .post-bottom-bar.flickr {
+  background-color: #f90784;
+}
+.stream li .post-bottom-bar.delicious {
+  background-color: #3271CB;
+}
+.stream li .post-bottom-bar.twitter {
+  background-color: #4ec2dc;
+}
+.stream li .post-bottom-bar.facebook {
+  background-color: #3b5998;
+}
+.stream li .post-bottom-bar.google {
+  background-color: #2d2d2d;
+}
+.stream li .post-bottom-bar.youtube {
+  background-color: #DF1F1C;
+}
+.stream li .post-bottom-bar.pinterest {
+  background-color: #CB2528;
+}
+.stream li .post-bottom-bar.lastfm {
+  background-color: #C90E12;
+}
+.stream li .post-bottom-bar.dribbble {
+  background-color: #F175A8;
+}
+.stream li .post-bottom-bar.vimeo {
+  background-color: #4EBAFF;
+}
+.stream li .post-bottom-bar.stumbleupon {
+  background-color: #EB4924;
+}
+.stream li .post-bottom-bar.deviantart {
+  background-color: #EB4924;
+}
+.stream li .post-bottom-bar.tumblr {
+  background-color: #365472;
+}
+.stream li .post-bottom-bar.instagram {
+  background-color: #413A33;
+}
 .marketing-label {
   position: absolute;
   top: 90px;
@@ -22589,12 +22762,41 @@ i.indi-sm {
   font-size: 60px;
   color: #2ecc71;
 }
+.flowchart-demo .window {
+  position: relative;
+}
+.flowchart-demo .window.start .deleteWidget {
+  display: none!important;
+}
+.flowchart-demo .window:hover .deleteWidget {
+  display: block;
+}
+.flowchart-demo .deleteWidget {
+  display: none;
+  right: -7px;
+  position: absolute;
+  top: -10px;
+  font-size: 25px;
+  background: white;
+  border-radius: 65px;
+  color: #888888;
+}
+.flowchart-demo .deleteWidget:hover {
+  color: #d9534f;
+}
 .widgets .window {
   position: relative;
+}
+.widgets .window .deleteWidget {
+  display: none;
+}
+.widgets ul {
+  height: 100px;
 }
 .widgets ul li {
   display: inline-block;
   margin-left: 10px;
+  width: 90px;
 }
 .widgets ul li:first-child {
   margin-left: 0px;
@@ -22631,24 +22833,24 @@ i.indi-sm {
 .flowchart-demo .hover {
   border: 1px dotted red;
 }
-#flowchartWindow1 {
-  top: 10em;
+#startWidget {
+  top: 20em;
   left: 5em;
 }
 #flowchartWindow2 {
-  top: 10em;
+  top: 20em;
   left: 20em;
 }
 #flowchartWindow3 {
-  top: 10em;
+  top: 20em;
   left: 35em;
 }
 #flowchartWindow4 {
-  top: 10em;
+  top: 20em;
   left: 50em;
 }
 #flowchartWindow5 {
-  top: 10em;
+  top: 20em;
   left: 65em;
 }
 .flowchart-demo ._jsPlumb_connector {
@@ -23209,7 +23411,6 @@ body.editing .fragment.dragging {
 }
 body.editing .fragment:hover .component-inner {
   border: 2px dashed #34495e;
-  padding: 0px;
 }
 body.editing .fragment:hover .componentActions {
   display: block;
@@ -24036,6 +24237,10 @@ contenthover a {
   padding-bottom: 5px;
   text-align: center;
 }
+.meet-team-v1 .bio {
+  padding-bottom: 5px;
+  text-align: center;
+}
 .meet-team-v1 .profile-img {
   max-width: 230px;
   max-height: 230px;
@@ -24113,10 +24318,8 @@ contenthover a {
   padding: 0;
   text-align: center;
   bottom: 0;
-  left: 70px;
-  margin-bottom: 25px;
-  margin-top: 10px;
-  position: absolute;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 .meet-team-v1 .profile-social li {
   display: inline-block;
@@ -24401,18 +24604,22 @@ contenthover a {
   text-align: center;
 }
 .testimonials-v2 .carousel {
-  height: 260px;
   display: block;
 }
 .testimonials-v2 .carousel-inner {
   overflow: inherit;
 }
 .testimonials-v2 .carousel-caption {
-  position: absolute;
+  position: static;
   z-index: 10;
+  width: 50%;
+  margin: 0 auto;
   text-align: center;
   top: 0px;
   text-shadow: none;
+}
+.testimonials-v2 .slick-dots {
+  width: inherit;
 }
 .testimonials-v2 .carousel-indicators {
   bottom: 60px;

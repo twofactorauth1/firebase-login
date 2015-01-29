@@ -35,6 +35,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('insights/:metric/:period'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
         app.get(this.url('insights/:metric/:period/:breakdown'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
 
+        app.get(this.url('posts/:socialId'), this.isAuthApi.bind(this), this.getPosts.bind(this));
+
         app.post(this.url('share/link'), this.isAuthApi.bind(this), this.shareLink.bind(this));
     },
 
@@ -161,7 +163,9 @@ _.extend(api.prototype, baseApi.prototype, {
     // Get Post function
     getPosts: function(req, resp) {
         var self = this;
-        facebookDao.getPosts(req.user, function(err, value) {
+        self.log.debug('getPosts >>');
+        var socialId = req.params.socialId;
+        facebookDao.getUserPosts(req.user, socialId, function(err, value) {
             if (!err) {
                 resp.send(value);
             } else {

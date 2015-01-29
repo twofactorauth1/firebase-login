@@ -9,6 +9,7 @@ var baseApi = require('../base.api');
 var accountDao = require('../../dao/account.dao');
 var contactDao = require('../../dao/contact.dao');
 var cmsDao = require('../../cms/dao/cms.dao');
+var campaignManager = require('../../campaign/campaign_manager');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager.js');
 var userManager = require('../../dao/user.manager');
 var cookies = require('../../utils/cookieutil');
@@ -450,6 +451,21 @@ _.extend(api.prototype, baseApi.prototype, {
                             req.flash("error", 'There was a problem signing up.  Please try again later.');
                             return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
                         } else {
+                            /*
+                             * If there is a campaign associated with this signup, update it async.
+                             */
+                            if(req.query.campaignId) {
+                                self.log.debug('Updating campaign with id: ' + req.query.campaignId);
+                                campaignManager.handleCampaignSignupEvent(value.id(), req.query.campaignId, savedContact.id(), function(err, value){
+                                    if(err) {
+                                        self.log.error('Error handling campaign signup: ' + err);
+                                        return;
+                                    } else {
+                                        self.log.debug('Handled signup.');
+                                        return;
+                                    }
+                                });
+                            }
                             /*
                              * Send welcome email.  This is done asynchronously.
                              *
