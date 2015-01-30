@@ -24,7 +24,7 @@
     "angular-mocks": "~1.2.0",
     "angular-moment": "~0.8.2",
     "angular-money-directive": "~1.0.2",
-    "AngularJS-Toaster": "*",
+    "AngularJS-Toaster": "0.4.9",
     "angular-parallax": "2dc44354c4693fd38fcbeebbc99df1cba0154b53",
     "angular-resource": "1.2.16",
     "angular-route": "~1.2.4",
