@@ -9,18 +9,21 @@ define(['app'], function (app) {
                 });
         };
 
-        this.deleteAssetById = function (assets, fn) {
-            assets.forEach(function (v, i){
-                var apiUrl = baseUrl + ['assets', v._id].join('/');
-                $http.delete(apiUrl)
-                    .error(function (data, status, headers, config){
-                        fn(v._id, data, status);
-                    })
-                    .success(function (data, status, headers, config) {
-                        fn(data);
-                    });
-            })
+        this.deleteAssets = function (assets, fn) {
+            assets.forEach(function (v, i) {
+                this.deleteAssetById( v._id, fn );
+            }, this);
+        };
 
+        this.deleteAssetById = function(assetId, fn) {
+            var apiUrl = baseUrl + ['assets', assetId].join('/');
+            $http.delete(apiUrl)
+                .error(function (data, status, headers, config) {
+                    fn(data, status);
+                })
+                .success(function (data, status, headers, config) {
+                    fn(data, status);
+                });
         };
     });
 });
