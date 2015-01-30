@@ -1045,6 +1045,7 @@ define([
                     $scope.changeblobImage = false;
                     $scope.blog_post.featured_image = asset.url;
                     var iFrame = document.getElementById("iframe-website");
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.setBlogImage && iFrame.contentWindow.setBlogImage(asset.url);
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
                 }

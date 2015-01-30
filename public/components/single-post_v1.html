@@ -8,14 +8,73 @@
 <div ng-class="component.type+'-v'+component.version">
     <div id="content-area">
         <div class="container clearfix row-fluid">
-            <div id="main-area" class="col-xs-12">
+            <div id="main-area" class="col-xs-12">                
+                <section class="entry clearfix" ng-if="isEditing">
+                        <div class="single-blog responsive clearfix"
+                             data-postId="{{blog.post._id}}">
+                            <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
+                                <h2 class="blog-title">
+                                    <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
+                                        <div class="post_title"
+                                             data-ng-if="blog.post.post_title">
+                                            {{blog.post.post_title}}
+                                        </div>
+                                    </a>
+                                </h2>
+
+                                <div class="blog-meta">
+                                   <span data-ng-if="blog.post.created.date">
+                                     • {{blog.post.created.date | date: 'fullDate'}}
+                                    </span>
+                                     <span data-ng-if="blog.post.post_author">
+                                       Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
+                                    </span>
+                                     <span data-ng-if="blog.post.post_category">
+                                      in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
+                                    </span>
+                                </div>
+                                
+                                <ul class="post_tags" data-ng-if="blog.post.post_tags">
+                                    <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
+                                </ul>
+
+                                <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
+                                    <img ng-src="{{blog.post.featured_image}}"/>
+                                </div>
+                                <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
+                                        <span class="fa fa-edit"></span>
+                                        <span class="hidden-xs">Change Image</span>
+                                </a>
+                                <!-- end .thumb -->
+
+                                <div class="entry-excerpt"><p>
+
+                                    <div class="editable post_excerpt_div" data-class="post_excerpt"
+                                         data-ng-if="blog.post.post_excerpt">
+                                        {{blog.post.post_excerpt}}
+                                    </div>
+                                    <div class="editable post_excerpt_div" data-class="post_excerpt"
+                                         data-ng-if="!blog.post.post_excerpt">Enter Post Excerpt
+                                    </div>
+                                    </p></div>
+                                    <a type="button" ng-click="refreshPost()" class="btn btn-orange pull-right"><span>Refresh Post Preview</span></a>
+                                    
+                                   <div class="clearfix"></div>
+                                   <hr></hr>
+                            </div>
+
+                            <!-- end .et_pt_blogentry -->
+
+                        </div>
+                        <!-- end #et_pt_blog -->
+                </section>
                 <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                         <div class="et_pt_blogentry clearfix">
                             <h2 class="et_pt_title">
                             <div data-class="post_title">
-                                <div ng-if="blog.post.post_title" class="post_title_div blog_post_title editable" data-class="post_title"><span> {{blog.post.post_title}}</span></div>
-                                <div class="editable post_title_div blog_post_title" ng-if="!blog.post.post_title" data-class="post_title">
+                                <div ng-if="blog.post.post_title" ng-model="blog.post.post_title" class="post_title_div blog_post_title editable" data-class="post_title"><span> {{blog.post.post_title}}</span></div>
+                                <div ng-model="blog.post.post_title" class="editable post_title_div blog_post_title" ng-if="!blog.post.post_title" data-class="post_title">
                                     <span> Enter Post Title</span>
                                 </div>
                             </div>
@@ -38,9 +97,6 @@
                                 <a ng-if="!isEditing" href="/category/{{blog.post.post_category}}">{{blog.post.post_category}}</a>
                             </div>
 
-                            <!--{{!-- {{#if comment_count}}
-                            • {{comment_count}} comments
-                            {{/if}} --}}-->
                         </div>
 
                         <div ng-show="blog.post.post_tags">

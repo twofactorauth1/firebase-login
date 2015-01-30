@@ -195,7 +195,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
             var post_category_container = $('.blog_post_category');
             if(post_category_container.length > 0)
-                post_data.post_category = post_category_container.text();        
+                post_data.post_category = post_category_container.text();  
+
+            
+            var post_excerpt_container = $('.post_excerpt_div');
+            if(post_excerpt_container.length > 0)
+                post_data.post_excerpt = post_excerpt_container.text();
             
             var postImageUrl = window.parent.getPostImageUrl();
             if(postImageUrl)
@@ -211,6 +216,37 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     toaster.pop('success', "Post Saved");
             });
         };
+        $scope.refreshPost = function()
+        {
+            var post_content_container = $('.post_content_div');
+            if(post_content_container.length > 0)
+                that.post.post_content = post_content_container.html();
+
+            var post_title_container = $('.blog_post_title');
+            if(post_title_container.length > 0)
+                that.post.post_title = post_title_container.text(); 
+
+            var post_author_container = $('.blog_post_author');
+            if(post_author_container.length > 0)
+                that.post.post_author = post_author_container.text(); 
+
+            var post_category_container = $('.blog_post_category');
+            if(post_category_container.length > 0)
+                that.post.post_category = post_category_container.text();  
+            
+            var post_excerpt_container = $('.post_excerpt_div');
+            if(post_excerpt_container.length > 0)
+                that.post.post_excerpt = post_excerpt_container.text();
+        }
+        $scope.changeBlogImage = function(blogpost) {
+          window.parent.changeBlogImage(blogpost);
+        }
+
+        window.setBlogImage = function(url) {
+           $scope.$apply(function() {
+            that.post.featured_image = url;
+          })
+        }
 
         window.updatePostMode = function() {
             console.log('post cancel');
