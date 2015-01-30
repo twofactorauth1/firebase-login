@@ -21,5 +21,8 @@ block content
 
                 div.welcome-text
                     h4.nomargin Redirecting
-                    p.mt5.mb20 You are leave the site;
+                    p.mt5.mb20 You are leave the site in 3 sec;
                     a(href='//#{next}') #{next}
+    script.
+        var next = '//#{next}';
+        setTimeout(function() {window.location = next;}, 3000);
