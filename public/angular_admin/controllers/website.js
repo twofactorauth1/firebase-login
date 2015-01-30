@@ -20,6 +20,7 @@ define([
     'bootstrap-iconpicker-font-awesome',
     'bootstrap-iconpicker',
     'ngSweetAlert',
+    'blockUI',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -34,10 +35,11 @@ define([
         'CourseService',
         'NavigationService',
         'SweetAlert',
-        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert) {
+        'blockUI',
+        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             ngProgress.start();
-
+            
             if ($location.$$search['pagehandle']) {
                 document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
             }
@@ -55,7 +57,8 @@ define([
             $scope.$back = function() {
                 window.history.back();
             };
-
+            var editBlockUI = blockUI.instances.get('editBlockUI');
+                editBlockUI.start("Initializing Edit Mode");
             var iFrame = document.getElementById("iframe-website");
             var subdomainCharLimit = 4;
             $scope.primaryFontStack = '';
@@ -343,7 +346,7 @@ define([
 
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
-
+                
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
                 //$scope.bindEvents();
@@ -356,9 +359,11 @@ define([
                             console.log('editing page >>>');
                             $scope.editPage();
                             $scope.iframeLoaded = true;
+                            editBlockUI.stop();
                         }, 5000)
                     }
                 }
+                
             }
 
             $scope.bindEvents = function() {
@@ -420,7 +425,7 @@ define([
                      {
                         e.preventDefault();
                         e.stopPropagation();
-                     $("#media-manager-modal").modal('show');                     
+                     $("#media-manager-modal").modal('show');
                      $(".insert-image").removeClass("ng-hide");
                          $scope.imageChange = true;
                          $scope.componentArrTarget = e.currentTarget;
@@ -765,15 +770,7 @@ define([
                 }
                 $scope.components = $scope.currentPage.components;
 
-                var cmpVersion = 1;
-                if ($scope.currentTheme) {
-                    var selectedType = _.findWhere($scope.currentTheme.config.components, {
-                        type: $scope.selectedComponent.type
-                    });
-                    if (selectedType) {
-                        cmpVersion = selectedType.version;
-                    }
-                }
+                var cmpVersion = $scope.selectedComponent.version;
 
                 WebsiteService.saveComponent($scope.selectedComponent, cmpVersion || 1, function(data) {
 
@@ -1053,6 +1050,7 @@ define([
                     $scope.changeblobImage = false;
                     $scope.blog_post.featured_image = asset.url;
                     var iFrame = document.getElementById("iframe-website");
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.setBlogImage && iFrame.contentWindow.setBlogImage(asset.url);
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
                 }

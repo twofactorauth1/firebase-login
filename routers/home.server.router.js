@@ -54,12 +54,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
         app.get("/admin/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        
+
         app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
         app.get("/admin1/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
 
         app.get("/demo", this.setup.bind(this), this.demo.bind(this));
         app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
+
+        app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
         return this;
     },
@@ -271,6 +273,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         }
 
+    },
+
+    externalRedirect: function(req, resp) {
+        resp.render('redirect', {next: req.query.next});
     }
 });
 

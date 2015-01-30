@@ -1,0 +1,28 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+
+extends snippets/_layout
+
+block content
+    section
+        .signinpanel
+            if account
+                if account.business.logo
+                    img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
+                else
+                    h1.center.company-title #{account.company.name}
+            else
+                span.logo
+
+            form(role="form", action="/login" method="post")
+
+                div.welcome-text
+                    h4.nomargin Redirecting
+                    p.mt5.mb20 You are leave the site in 3 sec;
+                    a(href='//#{next}') #{next}
+    script.
+        var next = '//#{next}';
+        setTimeout(function() {window.location = next;}, 3000);

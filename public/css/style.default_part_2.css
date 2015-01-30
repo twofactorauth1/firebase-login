@@ -8377,6 +8377,11 @@ i.indi-sm {
   margin-top: 0;
 }
 
+#media-manager-modal .modal-footer.upload {
+  height: calc(100% - 60px);
+  overflow: auto;
+}
+
 #media-manager-modal .single-filemanager .filemanager-options {
   margin: 0;
 }
