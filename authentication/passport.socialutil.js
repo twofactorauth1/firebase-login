@@ -14,7 +14,8 @@ module.exports = {
     handleLoginCallback: function(socialType, req, accessToken, refreshToken, options, profile, scope, done) {
         var email, firstName, lastName, socialId, username, profileUrl, name;
         console.log('>>handleLoginCallback(' + socialType +',req,' + accessToken + ',' + refreshToken +',' + options + ',' + profile + ',' + scope + ')');
-
+        console.dir(profile);
+        
         name = profile.displayName;
         socialId = profile.id;
         username = profile.username;
