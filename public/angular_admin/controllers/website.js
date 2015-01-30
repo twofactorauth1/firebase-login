@@ -765,8 +765,7 @@ define([
                 }
                 $scope.components = $scope.currentPage.components;
 
-                var cmpVersion = $scope.selectComponent.version;
-
+                var cmpVersion = $scope.selectedComponent.version;
 
                 WebsiteService.saveComponent($scope.selectedComponent, cmpVersion || 1, function(data) {
 
