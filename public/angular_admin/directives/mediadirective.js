@@ -122,39 +122,11 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                   document: ['application/octet-stream', 'application/pdf']
                 };
 
+                $scope.m.selectTriggerFn = function (status) {
+                    $scope.select_all = status;
+                    $scope.m.selectAll();
+                };
 
-                $scope.m.deleteAsset = function(assetId) {
-                    AssetsService.deleteAssetById(function(resp, status) {
-                        if (status === 1) {
-                          $scope.originalAssets.forEach(function(v, i) {
-                            if (v._id === assetId) {
-                              $scope.originalAssets.splice(i, 1);
-                            }
-                          });
-                            $scope.assets.forEach(function(v, i) {
-                                if (v._id === assetId) {
-                                    $scope.assets.splice(i, 1);
-                                }
-                            });
-                        }
-                    }, assetId);
-                };
-                $scope.m.batchDeleteAsset = function() {
-                  $scope.originalAssets.forEach(function(v, i) {
-                    if (v.checked)
-                      $scope.m.deleteAsset(v._id);
-                    });
-                    $scope.assets.forEach(function(v, i) {
-                        if (v.checked)
-                            $scope.m.deleteAsset(v._id);
-                    });
-                };
-		
-		$scope.m.selectTriggerFn = function (status) {
-		  $scope.select_all = status;
-		  $scope.m.selectAll();
-		};
-		
                 $scope.m.selectAll = function(showType) {
 
                     if (showType) {
@@ -185,11 +157,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.m.selectAllStatus();
                     console.info('Total:', $scope.originalAssets.length, 'Filtered:', $scope.assets.length);
                 };
-                /*
-                                $scope.$watch("select_all", function () {
-                                    $scope.m.selectAll();
-                                });
-                */
+
                 $scope.m.singleSelect = function(asset) {
                     $scope.singleSelected = true;
                     $timeout(function() {
@@ -209,10 +177,11 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                             $scope.m.selectAllStatus();
                         } else if ($scope.isSingleSelect) {
                             $scope.batch.forEach(function(v) {
-                                if (asset._id === v._id) {} else {
+                                if (asset._id !== v._id) {
                                     v.checked = false;
                                 }
                             });
+
                             $scope.batch = [];
                             $scope.batch.push(asset);
 
@@ -234,10 +203,11 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     });
                     $scope.select_all = allTrue === true;
                 };
+
                 $scope.m.deleteAsset = function() {
                     console.log('$scope.batch ', $scope.batch);
-                    AssetsService.deleteAssetById($scope.batch, function(resp) {
-                        if (resp === 'Deleted') {
+                    AssetsService.deleteAssets($scope.batch, function(resp, status) {
+                        if ( status === 200 ) {
                           $scope.originalAssets.forEach(function(v, i) {
                             if (v._id === $scope.batch[0]['_id']) {
                               $scope.originalAssets.splice(i, 1);
@@ -283,8 +253,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 scope.assets = [];
                 AssetsService.getAssetsByAccount(function(data) {
                     if (data instanceof Array) {
-                        scope.originalAssets = data;
-                        scope.assets = data;
+                        scope.originalAssets = data.slice(0);
+                        scope.assets = data.slice(0);
                     }
                 });
                 element.attr("data-toggle", "modal");
