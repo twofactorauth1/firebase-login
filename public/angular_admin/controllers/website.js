@@ -420,7 +420,7 @@ define([
                      {
                         e.preventDefault();
                         e.stopPropagation();
-                     $("#media-manager-modal").modal('show');                     
+                     $("#media-manager-modal").modal('show');
                      $(".insert-image").removeClass("ng-hide");
                          $scope.imageChange = true;
                          $scope.componentArrTarget = e.currentTarget;
@@ -765,15 +765,8 @@ define([
                 }
                 $scope.components = $scope.currentPage.components;
 
-                var cmpVersion = 1;
-                if ($scope.currentTheme) {
-                    var selectedType = _.findWhere($scope.currentTheme.config.components, {
-                        type: $scope.selectedComponent.type
-                    });
-                    if (selectedType) {
-                        cmpVersion = selectedType.version;
-                    }
-                }
+                var cmpVersion = $scope.selectComponent.version;
+
 
                 WebsiteService.saveComponent($scope.selectedComponent, cmpVersion || 1, function(data) {
 
