@@ -7,6 +7,7 @@
 
 var socialconfigDao = require('./dao/socialconfig.dao');
 var log = $$.g.getLogger("socialconfig_manager");
+var twitterDao = require('../dao/social/twitter.dao');
 
 module.exports = {
 
@@ -87,6 +88,42 @@ module.exports = {
         }
 
 
+    },
+
+    fetchTrackedObject: function(accountId, objIndex, fn) {
+        var self = this;
+        log.debug('>> fetchTrackedObject');
+        self.getSocialConfig(accountId, null, function(err, config){
+            if(err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            if(objIndex >= config.get('trackedObjects').length) {
+                log.error('Invalid index: ' + objIndex + ' is greater than number of tracked objects: ' + config.get('trackedObjects').length);
+                return fn('Invalid index', null);
+            }
+            var trackedObject = config.get('trackedObjects')[objIndex];
+            var socialAccount = config.getSocialAccountById(trackedObject.socialId);
+            if(socialAccount.type === 'tw') {
+                return self._handleTwitterTrackedObject(socialAccount, trackedObject, fn);
+            } else if (trackedObject.type === 'fb'){
+                return fn(null, null);
+            } else {
+                return fn(null, null);
+            }
+
+
+        });
+    },
+
+    _handleTwitterTrackedObject: function(socialAccount, trackedObject, fn) {
+        var self = this;
+        if(trackedObject.type === 'feed') {
+            return twitterDao.getTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret, socialAccount.socialId, fn);
+        }
+
+
     }
+
 
 };

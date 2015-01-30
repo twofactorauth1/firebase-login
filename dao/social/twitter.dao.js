@@ -103,6 +103,50 @@ var dao = {
         });
     },
 
+    getTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting tweets ', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "statuses/user_timeline.json";
+        var params = {
+            user_id: twitterId,
+            count: 200
+        };
+
+        var url = this._generateUrl(path, params);
+
+        self.log.debug('>> getting tweets params ', params);
+        self.log.debug('>> getting tweets url ', url);
+
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            if (err) {
+                return fn(err, value);
+            }
+
+            var tweets = JSON.parse(value);
+            self.log.debug('>> tweets ', tweets);
+            if (tweets.length > 0) {
+                var result = [];
+
+                var processTweet = function (tweet, cb) {
+                    result.push(new Post().convertFromTwitterTweet(tweet));
+                    cb();
+                };
+
+                async.eachLimit(tweets, 10, processTweet, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, tweets);
+            }
+        });
+
+    },
+
 
     getTweetsForUser: function(user, twitterId, fn) {
         var self = this;
@@ -245,6 +289,28 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "Cannot make twitter request");
         }
 
+        oauth.get(url, accessToken, accessTokenSecret, function (err, body, response) {
+            console.log('URL [%s]', url);
+            if (!err && response.statusCode == 200) {
+                fn(null, body);
+            } else {
+                fn(err, response, body);
+            }
+        });
+    },
+
+    _makeRequestWithTokens: function(url, accessToken, accessTokenSecret, fn) {
+        var self = this;
+        self.log.debug('>> _makeRequestWithTokens');
+        var oauth = new OAuth(
+            '',                      //REquest URL (not in use)
+            '',                      //Access URL (not in use)
+            twitterConfig.CLIENT_ID,
+            twitterConfig.CLIENT_SECRET,
+            '1.0',
+            '',                     //Callback URL, not in use
+            'HMAC-SHA1'
+        );
         oauth.get(url, accessToken, accessTokenSecret, function (err, body, response) {
             console.log('URL [%s]', url);
             if (!err && response.statusCode == 200) {

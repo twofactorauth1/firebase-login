@@ -26,6 +26,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
 
+        app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
+
     },
 
     /**
@@ -99,6 +101,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.updateSocialConfig(socialConfig, function(err, config){
                     self.log.debug('<< updateSocialConfig');
                     self.sendResultOrError(resp, err, config, "Error updating social config");
+                });
+            }
+        });
+    },
+
+    fetchTrackedObject: function(req, resp) {
+        var self = this;
+        self.log.debug('>> fetchTrackedObject');
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var objIndex = parseInt(req.params.index);
+                var accountId = parseInt(self.accountId(req));
+                socialConfigManager.fetchTrackedObject(accountId, objIndex, function(err, feed){
+                    self.log.debug('<< fetchTrackedObject');
+                    self.sendResultOrError(resp, err, feed, "Error fetching tracked objects");
                 });
             }
         });
