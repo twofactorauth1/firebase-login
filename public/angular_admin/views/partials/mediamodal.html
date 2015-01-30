@@ -13,7 +13,7 @@
                     <span class="fa fa-image"></span> Media Manager
                 </h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" ng-if="uploader.queue.length <= 0">
                 <div class="row filemanager {{showType}}" ng-if="!editingImage">
                     <ul class="filemanager-options">
                         <li class="checked">
@@ -110,7 +110,7 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" ng-class="{upload: uploader.queue.length > 0}">
                 <div class="row" ng-if="editingImage">
                     <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
                     <button class="btn btn-primary"><i class="fa fa-history"></i> Restore</button>
