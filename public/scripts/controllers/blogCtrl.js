@@ -281,17 +281,25 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
            return $scope.activated;
        } 
        
-       window.activateAloha = function() {
+       function toTitleCase(str)
+    {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
+    window.activateAloha = function() {
+      //if ($scope.activated == false) {
         for(name in CKEDITOR.instances)
         {
             CKEDITOR.instances[name].destroy()
         }
         CKEDITOR.disableAutoInline = true;
-        //CKEDITOR.dtd.$editable.span = 1
         var elements = $('.editable');
-        console.log('length ', elements.length);
         elements.each(function() {
-          $scope.activated = true;  
+          if(!$(this).parent().hasClass('edit-wrap')) {
+            var dataClass = $(this).data('class').replace('.item.', ' ');
+            $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
+          }
+        $scope.activated = true;
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -307,7 +315,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
           });
         });
-        
+
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
