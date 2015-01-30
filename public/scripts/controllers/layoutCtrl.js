@@ -812,6 +812,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
+        $scope.isEditing = true;
         for(name in CKEDITOR.instances)
         {
             CKEDITOR.instances[name].destroy()
