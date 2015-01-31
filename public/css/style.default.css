@@ -22588,12 +22588,6 @@ i.indi-sm {
 .marketing {
   /* Filter */
 }
-.marketing .btn span.glyphicon {
-  opacity: 0;
-}
-.marketing .btn.active span.glyphicon {
-  opacity: 1;
-}
 .marketing .stream-filter .avatar {
   width: 50px;
   float: left;
