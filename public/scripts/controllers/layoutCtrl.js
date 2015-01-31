@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
-    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'campaignService',
+    function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, campaignService) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -145,14 +145,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                             userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {});
                         }
 
-
                     });
                 }
 
-
                 $scope.currentpage = that.pages;
-
-
 
                 if ($route.current.params.custid != null) {
                     $scope.custid = $route.current.params.custid;
@@ -483,7 +479,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     $('#cart-checkout-modal').modal('hide');
                 });
             });
-
         };
 
 
@@ -613,8 +608,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     that.customer = data;
                 });
         }
-
-
 
         $scope.social_links = [{
             name: "adn",
@@ -1024,7 +1017,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function() {
                 this.style.setProperty('font-family', font, 'important');
             });
-
         };
 
         if (!window.oldScope) {
@@ -1154,12 +1146,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $scope.subscriptionPlanInterval = interval;
             $scope.subscriptionPlanOneTimeFee = parseInt(cost);
         };
+
         $scope.monthly_sub_cost = 49.95;
         $scope.yearly_sub_cost = 32.91;
         $scope.selected_sub_cost = $scope.monthly_sub_cost;
 
-        $scope.createUser = function(user) {
+        $scope.createUser = function(user, componentId) {
             console.log('user', user);
+            console.log('componentId ', componentId);
+
+            var formComponent;
+
+            for (var i = 0; i < $scope.currentpage.components.length; i++) {
+              if($scope.currentpage.components[i]._id === componentId) {
+                 formComponent = $scope.currentpage.components[i];
+              }
+            }
+
             var fingerprint = new Fingerprint().get();
             var sessionId = ipCookie("session_cookie")["id"];
 
@@ -1204,6 +1207,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                         console.log('data ', data);
                         user.email = "";
                         user.success = true;
+
+                        //if campaignId exists
+                        if(formComponent.campaignId) {
+                          console.log('campaignId ', formComponent.campaignId);
+                          //call the add to campaign
+                          campaignService.addContactToCampaign(formComponent.campaignId, data._id, function(contactData) {
+                            console.log('contactData >>> ', contactData);
+                          });
+                          //navigate to thank you page
+                        }
 
                         setTimeout(function() {
                             $scope.$apply(function() {
