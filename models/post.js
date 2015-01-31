@@ -76,7 +76,7 @@ var post = $$.m.ModelBase.extend({
             obj.date = new Date(post.created_time).getTime();
         }
 
-        if (post.to && post.to.data && post.to.data.length > 0) {
+        if (post.to && post.to.data && post.to.data.length > 0 && post.to.forEach) {
             obj.to = [];
             post.to.forEach(function(toObj) {
                 obj.to.push({

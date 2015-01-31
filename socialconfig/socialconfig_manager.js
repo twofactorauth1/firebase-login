@@ -8,6 +8,7 @@
 var socialconfigDao = require('./dao/socialconfig.dao');
 var log = $$.g.getLogger("socialconfig_manager");
 var twitterDao = require('../dao/social/twitter.dao');
+var facebookDao = require('../dao/social/facebook.dao');
 
 module.exports = {
 
@@ -86,7 +87,48 @@ module.exports = {
                 }
             });
         }
+    },
 
+    addSocialAccount: function(accountId, socialType, socialId, accessToken, refreshToken, expires, username, profileUrl, scope, fn) {
+        var self = this;
+        log.debug('>> addSocialAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config){
+            if(err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var creds = {};
+            creds.type = socialType;
+            creds.socialId = socialId;
+            creds.accessToken = accessToken;
+            if (socialType == $$.constants.social.types.TWITTER) {
+                creds.accessTokenSecret = refreshToken;
+            } else {
+                creds.refreshToken = refreshToken;
+            }
+            if (expires != null && expires > 0) {
+                creds.expires = new Date().getTime() + (expires*1000);
+            }
+            creds.username = username;
+            creds.socialUrl = profileUrl;
+            creds.scope = scope;
+
+            creds.id = $$.u.idutils.generateUUID();
+            var socialAccounts = config.get('socialAccounts');
+            socialAccounts.push(creds);
+            socialconfigDao.saveOrUpdate(config, function(err, value){
+                if(err) {
+                    log.error('Error saving social config: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('<< addSocialAccount');
+                    return fn(null, value);
+                }
+
+            });
+
+        });
 
     },
 
@@ -106,8 +148,8 @@ module.exports = {
             var socialAccount = config.getSocialAccountById(trackedObject.socialId);
             if(socialAccount.type === 'tw') {
                 return self._handleTwitterTrackedObject(socialAccount, trackedObject, fn);
-            } else if (trackedObject.type === 'fb'){
-                return fn(null, null);
+            } else if (socialAccount.type === 'fb'){
+                return self._handleFacebookTrackedObject(socialAccount, trackedObject, fn);
             } else {
                 return fn(null, null);
             }
@@ -130,6 +172,13 @@ module.exports = {
         }
 
 
+    },
+
+    _handleFacebookTrackedObject: function(socialAccount, trackedObject, fn) {
+        var self = this;
+        if(trackedObject.type === 'feed') {
+            return facebookDao.getTokenStream(socialAccount.accessToken, socialAccount.socialId, fn);
+        }
     }
 
 
