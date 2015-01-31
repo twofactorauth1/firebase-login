@@ -103,7 +103,22 @@ var dao = {
         });
     },
 
-    getTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+    getHomeTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/home_timeline.json', fn);
+    },
+
+    getUserTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/user_timeline.json', fn);
+    },
+
+    getMentionsTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/mentions_timeline.json', fn);
+    },
+
+    getTweetsForId: function(accessToken, accessTokenSecret, twitterId, timeline, fn) {
         var self = this;
         self.log.debug('>> getting tweets ', twitterId);
         if (_.isFunction(twitterId)) {
@@ -111,7 +126,8 @@ var dao = {
             twitterId = null;
         }
 
-        var path = "statuses/user_timeline.json";
+        //var path = "statuses/user_timeline.json";
+        var path = timeline;
         var params = {
             user_id: twitterId,
             count: 200

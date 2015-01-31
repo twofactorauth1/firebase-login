@@ -119,7 +119,14 @@ module.exports = {
     _handleTwitterTrackedObject: function(socialAccount, trackedObject, fn) {
         var self = this;
         if(trackedObject.type === 'feed') {
-            return twitterDao.getTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret, socialAccount.socialId, fn);
+            return twitterDao.getHomeTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'user') {
+            return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'mentions') {
+            return twitterDao.getMentionsTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
         }
 
 
