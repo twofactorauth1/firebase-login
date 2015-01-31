@@ -22588,6 +22588,25 @@ i.indi-sm {
 .marketing {
   /* Filter */
 }
+.marketing .stream-filter .avatar {
+  width: 50px;
+  float: left;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+.marketing .stream-filter .filter-heading {
+  margin: 0;
+}
+.marketing .stream-filter .filter-text {
+  margin: 0;
+}
+.marketing .stream-filter .glyphicon-chevron-right,
+.marketing .stream-filter .glyphicon-chevron-down {
+  margin-top: 13px;
+}
+.marketing .stream-filter hr {
+  margin: 5px 0!important;
+}
 .marketing #campaign-add-email .thumbnail {
   position: relative;
   overflow: hidden;
