@@ -39,6 +39,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         app.get("/signup/:socialtype", this.setupForSocialAuth.bind(this), this.socialSignup.bind(this));
 
         app.get("/inapplogin/:socialtype", this.isAuth.bind(this), this.inAppSocialLogin.bind(this));
+        app.get("/socialconfig/:socialtype", this.isAuth.bind(this), this.addSocialConfig.bind(this));
 
         app.get("/oauth2/callback", this.socialLoginCallback.bind(this));
         app.get("/oauth2/postlogin", this.redirectAfterOauth.bind(this));
@@ -99,6 +100,31 @@ _.extend(router.prototype, baseRouter.prototype, {
             }
         });
 
+    },
+
+    addSocialConfig: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addSocialConfig');
+        var appState = req.query.state;
+        var state = self.getState(self.accountId(req), 'socialconfig', req.params.socialtype);
+
+        state.userId = req.user.id();
+        state.appState = req.query.state;
+        state.appStateDetail = req.query.detail;
+        state.forceApprovalPrompt = true;//this may not be needed
+
+        var referringUrl = req.query['redirectTo'] || '/admin/account';
+        authenticationDao.getAuthenticatedUrlForAccount(self.accountId(req), state.userId, referringUrl, 90, function(err, value){
+            if(err) {
+                self.log.error('Error getting referring url for: ' + referringUrl);
+                self.log.debug('<< addSocialConfig redirecting to /login');
+                resp.redirect('/login');
+            } else {
+                state.redirectUrl = encodeURIComponent(value);
+                self.log.debug('<< addSocialConfig');
+                resp.redirect(self.getInternalAuthRedirect(state));
+            }
+        });
     },
 
 

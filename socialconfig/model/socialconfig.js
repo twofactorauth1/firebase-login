@@ -51,6 +51,20 @@ var socialconfig = $$.m.ModelBase.extend({
         }
     },
 
+    getSocialAccountById: function(id) {
+        var account = null;
+        account = _.find(this.attributes.socialAccounts, function(_account){return _account.id === id});
+        return account;
+    },
+
+    getSocialAccountsByType: function(type) {
+        var accounts = [];
+        _.each(this.attributes.socialAccounts, function(_account){if(_account.type === type){accounts.push(_account);}});
+        return accounts;
+    },
+
+
+
 
     initialize: function(options) {
 

@@ -26,6 +26,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
 
+        app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
+
     },
 
     /**
@@ -55,11 +57,70 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createSocialConfig: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createSocialConfig');
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var socialConfig = new $$.m.SocialConfig(req.body);
+                var accountId = parseInt(self.accountId(req));
+                socialConfig.set('accountId', accountId);
+                socialConfigManager.createSocialConfig(socialConfig, function(err, config){
+                    self.log.debug('<< createSocialConfig');
+                    self.sendResultOrError(resp, err, config, "Error creating social config");
+                });
+            }
+        });
+
+
+
 
     },
 
     updateSocialConfig: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateSocialConfig');
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var socialConfig = new $$.m.SocialConfig(req.body);
+                var accountId = parseInt(self.accountId(req));
+                if(req.params.id) {
+                    socialConfig.set('_id', req.params.id);
+                }
+                /*
+                 * If the accountId and socialConfig.accountId do not match
+                 * return an error.  This could be an innocent mistake... or something
+                 * malicious.
+                 */
+                if(socialConfig.get('accountId') !== accountId) {
+                    return self.wrapError(resp, 400, 'Bad Request', 'The social config does not match one belonging to this account.');
+                }
+                socialConfigManager.updateSocialConfig(socialConfig, function(err, config){
+                    self.log.debug('<< updateSocialConfig');
+                    self.sendResultOrError(resp, err, config, "Error updating social config");
+                });
+            }
+        });
+    },
 
+    fetchTrackedObject: function(req, resp) {
+        var self = this;
+        self.log.debug('>> fetchTrackedObject');
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var objIndex = parseInt(req.params.index);
+                var accountId = parseInt(self.accountId(req));
+                socialConfigManager.fetchTrackedObject(accountId, objIndex, function(err, feed){
+                    self.log.debug('<< fetchTrackedObject');
+                    self.sendResultOrError(resp, err, feed, "Error fetching tracked objects");
+                });
+            }
+        });
     }
 
 
