@@ -89,7 +89,7 @@
                                 <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
                             </div>
 
-                            <div ng-show="blog.post.post_category">
+                            <div ng-if="blog.post.post_category">
                                 in 
                                 <div ng-if="isEditing" class="post_text_div">
                                     <div ng-if="isEditing" class="editable blog_post_category" data-class="post_category"><span> {{blog.post.post_category}}</span></div>

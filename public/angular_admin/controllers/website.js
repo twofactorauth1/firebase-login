@@ -343,7 +343,7 @@ define([
                     enabled: false
                 }
             *****/
-
+            $scope.activated = false;
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
                 
@@ -411,12 +411,15 @@ define([
                          $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
                     });
 
-                    $("#iframe-website").contents().find('body').on("click", ".editable", function (e)
-                    {
-                        if(iFrame && iFrame.contentWindow && iFrame.contentWindow.checkIfActivated && !iFrame.contentWindow.checkIfActivated())
+                    $("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function (e)
                         {
-                            iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
-                        }
+                            if(!$scope.activated)
+                            {
+                                $scope.activated = true;
+                                setTimeout(function() {
+                                    iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha();
+                                }, 100)
+                            }
                     });
 
                     //add media modal click events to all images in image gallery
@@ -461,7 +464,7 @@ define([
             $scope.editPage = function() {
                 console.log('edit page >>>');
                 $scope.isEditing = true;
-                $scope.activateAloha();
+
                 var iframe = document.getElementById("iframe-website");
                  console.log('triggering edit mode');
                 if (iframe.contentWindow.triggerEditMode)
@@ -472,13 +475,10 @@ define([
                     $scope.post_data = iframe.contentWindow.getPostData();
                     $scope.single_post = true;
                 }
-                // var src = iframe.src;
-                // iframe.setAttribute("src", src+"/?editor=true");`
-
+                $scope.bindEvents();
                 $scope.backup['website'] = angular.copy($scope['website']);
                 UserService.getUserPreferences(function(preferences) {
                     preferences.lastPageHandle = $scope.pageSelected;
-
                     UserService.updateUserPreferences(preferences, false, function() {});
                 });
             };

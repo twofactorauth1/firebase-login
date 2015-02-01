@@ -798,13 +798,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.clickImageButton();
     }
 
-   $scope.activated = false;
-
-    window.checkIfActivated = function()
-       {
-           return $scope.activated;
-       }
-
+   
     function toTitleCase(str)
     {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
@@ -824,7 +818,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var dataClass = $(this).data('class').replace('.item.', ' ');
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
-        $scope.activated = true;
+         // $scope.activated = true;
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
