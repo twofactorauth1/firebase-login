@@ -128,6 +128,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 console.log('$scope.newSubscription >>> ', $scope.newSubscription);
                 $scope.newSubscription.amount = $scope.newSubscription.amount * 100;
                 PaymentService.postCreatePlan($scope.newSubscription, function(subscription) {
+                	subscription.signup_fee = $scope.signup_fee;
                     $scope.plans.push(subscription);
                     var price =  parseInt(subscription.amount);
                     if ('stripePlans' in $scope.product.product_attributes) {
