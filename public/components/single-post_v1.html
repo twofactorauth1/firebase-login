@@ -48,20 +48,15 @@
                                 <!-- end .thumb -->
 
                                 <div class="entry-excerpt"><p>
-
-                                    <div class="editable post_excerpt_div" data-class="post_excerpt"
-                                         data-ng-if="blog.post.post_excerpt">
+                                    <div class="editable post_excerpt_div" data-class="post_excerpt">
                                         {{blog.post.post_excerpt}}
-                                    </div>
-                                    <div class="editable post_excerpt_div" data-class="post_excerpt"
-                                         data-ng-if="!blog.post.post_excerpt">Enter Post Excerpt
-                                    </div>
+                                    </div>                                    
                                     </p></div>
                                     <a type="button" ng-click="refreshPost()" class="btn btn-orange pull-right"><span>Refresh Post Preview</span></a>
                                     
                                    <div class="clearfix"></div>
                                    <hr></hr>
-                            </div>
+                                </div>
 
                             <!-- end .et_pt_blogentry -->
 
@@ -73,8 +68,8 @@
                         <div class="et_pt_blogentry clearfix">
                             <h2 class="et_pt_title">
                             <div data-class="post_title">
-                                <div ng-if="blog.post.post_title" ng-model="blog.post.post_title" class="post_title_div blog_post_title editable" data-class="post_title"><span> {{blog.post.post_title}}</span></div>
-                                <div ng-model="blog.post.post_title" class="editable post_title_div blog_post_title" ng-if="!blog.post.post_title" data-class="post_title">
+                                <div ng-if="blog.post.post_title" class="post_title_div blog_post_title editable" data-class="post_title"><span> {{blog.post.post_title}}</span></div>
+                                <div class="editable post_title_div blog_post_title" ng-if="!blog.post.post_title" data-class="post_title">
                                     <span> Enter Post Title</span>
                                 </div>
                             </div>
@@ -85,17 +80,22 @@
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.created_date | date: 'fullDate' }} </span>
                             </div>
-                            <div ng-if="blog.post.post_author">
+                            <div ng-show="blog.post.post_author">
                                  Posted by 
-                                  <div  ng-if="isEditing" class="post_text_div editable blog_post_author" data-class="post_author"><span> {{blog.post.post_author}}</span></div>
+                                 <div ng-if="isEditing" class="post_text_div">
+                                    <div  ng-if="isEditing" class="editable blog_post_author" data-class="post_author"><span> {{blog.post.post_author}}</span></div>
+                                 </div>
+                                  
                                 <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
                             </div>
 
-                            <div ng-if="blog.post.post_category">
+                            <div ng-show="blog.post.post_category">
                                 in 
-                                <div ng-if="isEditing" class="post_text_div editable blog_post_category" data-class="post_category"><span> {{blog.post.post_category}}</span></div>
-                                <a ng-if="!isEditing" href="/category/{{blog.post.post_category}}">{{blog.post.post_category}}</a>
-                            </div>
+                                <div ng-if="isEditing" class="post_text_div">
+                                    <div ng-if="isEditing" class="editable blog_post_category" data-class="post_category"><span> {{blog.post.post_category}}</span></div>
+                                    <a ng-if="!isEditing" href="/category/{{blog.post.post_category}}">{{blog.post.post_category}}</a>
+                                    </div>
+                                </div>
 
                         </div>
 
