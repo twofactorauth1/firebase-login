@@ -970,6 +970,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
         };
 
+
         window.addCKEditorImage = function(url) {
             console.log('addCKEditorImage ', url);
             console.log('$scope.inlineInput ', $scope.inlineInput);
@@ -1007,6 +1008,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             window.oldScope.$digest();
         };
 
+    function toTitleCase(str)
+    {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
         window.triggerFontUpdate = function(font) {
             WebFont.load({
                 google: {
@@ -1022,6 +1028,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if (!window.oldScope) {
             window.oldScope = $scope;
         }
+
         $scope.sortingLog = [];
 
         $scope.wait;
@@ -1036,6 +1043,24 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 ui.placeholder.height('60px');
                 // ui.item.sortable('refreshPositions');
                 angular.element(ui.item[0].parentNode).sortable("refresh");
+
+        CKEDITOR.disableAutoInline = true;
+        var elements = $('.editable');
+        elements.each(function() {
+          if(!$(this).parent().hasClass('edit-wrap')) {
+            var dataClass = $(this).data('class').replace('.item.', ' ');
+            $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
+          }
+         // $scope.activated = true;
+          CKEDITOR.inline(this, {
+            on: {
+              instanceReady: function(ev) {
+                var editor = ev.editor;
+                editor.setReadOnly(false);
+                editor.on('change', function() {
+                  $scope.isPageDirty = true;
+                });
+              }
             },
             update: function(e, ui) {
                 console.log('sorting update');
