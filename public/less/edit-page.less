@@ -122,9 +122,44 @@
             content: "\f138";
           }
         }
+
+      }
+      .cke_combo_button {
+        background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+        border: medium none;
+        border-radius: 0;
+        display: table-cell;
+        float: none;
+        height: 50px;
+        margin: 0;cursor: pointer;
+        padding: 2px 10px;
+        vertical-align: middle;
+      }
+      .cke_combo_button span {
+        color: #fff;
+      }
+
+      .cke_combo_button .cke_combo_arrow {
+
+          border-top: 3px solid #fff;
+      }
+      .cke_combo_button:hover, .cke_combo_on .cke_combo_button {
+          background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+      }
+      div.cke_combopanel{
+          background-color: #efa022;
+          border: medium none;
+          border-radius: 0;
+          height: auto ;
+          margin-top: 1px;
+          max-width: 200px;
+          overflow: visible;
+          visibility: visible;
+          width: auto
       }
     }
 }
+
 .website {
   .pageheader {
     .btn-group {
@@ -795,4 +830,24 @@ input[type='file'] {
 }
 .ribbon-green:after {
   right: 0;
+}
+
+
+
+body.cke_ltr {
+    background: none repeat scroll 0 0 transparent !important;
+ }
+h1.cke_panel_grouptitle:first-child {
+    background: none repeat scroll 0 0 transparent !important;
+    border: medium none !important;
+    border-radius: 0 !important;
+    color: #fff !important;
+}
+.cke_panel_listItem a 
+{
+    border: medium none !important;
+    border-radius: 0 !important;
+}
+.cke_panel_listItem a:active, .cke_panel_listItem a:focus, .cke_panel_listItem a:hover {
+    background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5) !important;
 }

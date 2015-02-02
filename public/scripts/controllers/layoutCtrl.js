@@ -1013,36 +1013,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
-        window.triggerFontUpdate = function(font) {
-            WebFont.load({
-                google: {
-                    families: [font, 'undefined']
-                }
-            });
 
-            $('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function() {
-                this.style.setProperty('font-family', font, 'important');
-            });
-        };
-
-        if (!window.oldScope) {
-            window.oldScope = $scope;
-        }
-
-        $scope.sortingLog = [];
-
-        $scope.wait;
-
-        $scope.sortableOptions = {
-            handle: '.reorder',
-            start: function(e, ui) {
-                console.log('ui >>> ', ui);
-                ui.item[0].parentNode.className += ' active';
-                ui.item[0].className += ' dragging';
-                clearTimeout($scope.wait);
-                ui.placeholder.height('60px');
-                // ui.item.sortable('refreshPositions');
-                angular.element(ui.item[0].parentNode).sortable("refresh");
+    window.activateAloha = function() {
+      //if ($scope.activated == false) {
+        $scope.isEditing = true;        
 
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
@@ -1052,6 +1026,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
          // $scope.activated = true;
+        if(!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -1124,6 +1099,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     }
                 });
             }
+          });
+        }
+
         });
 
         $scope.bindThumbnailSlider = function(width, is_mobile) {
