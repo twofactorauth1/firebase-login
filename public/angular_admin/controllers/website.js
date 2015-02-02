@@ -21,6 +21,7 @@ define([
     'bootstrap-iconpicker',
     'ngSweetAlert',
     'blockUI',
+    'adminValidationDirective',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
