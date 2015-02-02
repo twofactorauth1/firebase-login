@@ -985,7 +985,7 @@ define([
 
                 WebsiteService.deletePage(pageId, websiteId, title, function(data) {
                     toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
-                    $scope.updatePage("index");
+                    $location.path("/admin#/website");
                 });
             };
 

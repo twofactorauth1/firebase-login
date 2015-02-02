@@ -171,6 +171,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
             PostService.deletePost(pageId, post_data._id, function(data) {
                 toaster.pop('success', "Post deleted successfully");
+                $location.path("/admin#/website");
             });
         };
 
