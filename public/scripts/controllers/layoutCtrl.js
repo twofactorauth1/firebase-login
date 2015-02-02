@@ -804,13 +804,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
+    
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        $scope.isEditing = true;
-        for(name in CKEDITOR.instances)
-        {
-            CKEDITOR.instances[name].destroy()
-        }
+        $scope.isEditing = true;        
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
         elements.each(function() {
@@ -819,6 +816,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
          // $scope.activated = true;
+        if(!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -833,6 +831,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               top: 'editor-toolbar'
             }
           });
+        }
         });
 
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
