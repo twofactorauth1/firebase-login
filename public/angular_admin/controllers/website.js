@@ -39,7 +39,7 @@ define([
         function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             ngProgress.start();
-            
+
             if ($location.$$search['pagehandle']) {
                 document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
             }
@@ -346,7 +346,7 @@ define([
             $scope.activated = false;
             document.getElementById("iframe-website").onload = function() {
                 console.log('iframe onload');
-                
+
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
                 //$scope.bindEvents();
@@ -363,7 +363,7 @@ define([
                         }, 5000)
                     }
                 }
-                
+
             }
 
             $scope.bindEvents = function() {
@@ -418,7 +418,7 @@ define([
                                 $scope.activated = true;
                                 setTimeout(function() {
                                     iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha();
-                                }, 100)
+                                }, 1000)
                             }
                     });
 
@@ -747,7 +747,7 @@ define([
             }
 
             $scope.addComponent = function() {
-                console.log('add component >>> ');                
+                console.log('add component >>> ');
                 //$scope.deactivateAloha();
                 var pageId = $scope.currentPage._id;
                 if ($scope.selectedComponent.type === 'footer') {
