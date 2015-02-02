@@ -24,18 +24,23 @@
         <!-- <div class="tab-content container" ng-repeat="productSection in component['product-sections'] track by $index"> -->
 
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" ng-repeat="product in layout.products track by $index">
+            <div data-class="product-section-id" class="row" ng-repeat="product in layout.products track by $index">
                 <div class="product" id="{{product.id}}">
                     <div>
                         <div class="col-sm-3 col-xs-12 product-img" ng-if="product.icon">
-                            <div class="img-wrap">
+                            <div ng-if="product.is_image" class="img-wrap">
                                 <img ng-src="{{product.icon}}" class="img-responsive">
+                                
+                            </div>
+                            <div ng-if="!product.is_image" class="img-wrap">
+                                <i class="fa {{product.icon}}"></i>
                             </div>
                         </div>
+
                         <!-- <div class="col-sm-3 col-xs-12 editable product-img" ng-if="product.icon">
                             <i class="{{product.icon}}"></i>
                         </div> -->
-                        <div class="col-sm-9 col-xs-12 product-content">
+                        <div class="col-sm-9 col-xs-12 product-content pull-right">
                             <h4>{{product.name}}</h4>
 
                             <h5>$ {{product.regular_price}}</h5>
