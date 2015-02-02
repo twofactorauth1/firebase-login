@@ -21744,10 +21744,10 @@ input[type='file'] {
   right: 0;
 }
 body.cke_ltr {
-  background: none repeat scroll 0 0 red !important;
+  background: none repeat scroll 0 0 transparent !important;
 }
 h1.cke_panel_grouptitle:first-child {
-  background: none repeat scroll 0 0 red !important;
+  background: none repeat scroll 0 0 transparent !important;
   border: medium none !important;
   border-radius: 0 !important;
   color: #fff !important;
@@ -23354,6 +23354,12 @@ hr {
   -webkit-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   -moz-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+}
+.btn-big {
+  max-width: 300px!important;
+  height: 70px!important;
+  line-height: 55px;
+  font-size: 24px;
 }
 .goback span {
   color: black;
