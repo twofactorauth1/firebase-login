@@ -16,7 +16,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.firstTime = false;
 
             $scope.redirectUrl = encodeURIComponent('/admin#/account');
-            
+
+            $scope.currentHost = window.location.host;
+
             $scope.plusOneMonth = function(date) {
                 var date = moment(date);
                 return date.add(1, 'months').format('MMMM D, YYYY');
