@@ -21,6 +21,7 @@ define([
     'bootstrap-iconpicker',
     'ngSweetAlert',
     'blockUI',
+    'adminValidationDirective',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -475,7 +476,7 @@ define([
                     $scope.post_data = iframe.contentWindow.getPostData();
                     $scope.single_post = true;
                 }
-                $scope.bindEvents();
+                $scope.activateAloha();
                 $scope.backup['website'] = angular.copy($scope['website']);
                 UserService.getUserPreferences(function(preferences) {
                     preferences.lastPageHandle = $scope.pageSelected;
