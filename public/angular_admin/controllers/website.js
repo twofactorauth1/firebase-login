@@ -986,12 +986,14 @@ define([
 
                 WebsiteService.deletePage(pageId, websiteId, title, function(data) {
                     toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
+                    $(".menutoggle-right").click();
                     $location.path("/admin#/website");
                 });
             };
 
             //delete post
             $scope.deletePost = function(post_data) {
+                $(".menutoggle-right").click();
                 iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
             };
 
