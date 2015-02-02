@@ -6064,6 +6064,19 @@ h4,
   border-color: #16a085;
   color: white;
 }
+.btn-light-green {
+  background-color: #2abb9b;
+  border-bottom: 4px solid #1f8972;
+  color: white;
+}
+.btn-light-green:hover,
+.btn-light-green:active,
+.btn-light-green.active,
+.open .dropdown-toggle.btn-light-green {
+  background-color: #1f8972;
+  border-color: #1f8972;
+  color: white;
+}
 .btn-white {
   background: #fff;
   border: 1px solid #ccc;
@@ -24669,6 +24682,9 @@ contenthover a {
   position: relative;
   min-height: 400px;
 }
+.testimonials-v1 .testimonials .slick-dots {
+  bottom: -15px !important;
+}
 .testimonials-v1 .testimonials .single-testimonial {
   border-bottom: 1px solid #eee;
   padding-bottom: 25px;
@@ -24728,6 +24744,7 @@ contenthover a {
 }
 .testimonials-v2 .slick-dots {
   width: inherit;
+  bottom: -15px !important;
 }
 .testimonials-v2 .carousel-indicators {
   bottom: 60px;
