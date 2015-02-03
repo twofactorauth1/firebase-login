@@ -23807,7 +23807,6 @@ div[data-type='campaign'] .inner-page .overlay {
   padding: 20px;
   border-radius: 5px;
   border-bottom: 4px solid #2f93b6;
-  color: white;
 }
 .feature-list-v1 .feature-single .feature-icon {
   color: #3b9db7;
@@ -23850,9 +23849,6 @@ div[data-type='campaign'] .inner-page .overlay {
   background-size: 15% auto;
 }
 /********** Features list v2 **********/
-.feature-list-v2 {
-  color: #fff;
-}
 .feature-list-v2 .feature-list-title {
   text-align: center;
   position: relative;
@@ -23903,7 +23899,6 @@ div[data-type='campaign'] .inner-page .overlay {
   min-height: 320px;
   margin: 10px;
   padding: 20px;
-  color: white;
   transition: none!important;
 }
 .feature-list-v3 .feature-single .feature-icon {

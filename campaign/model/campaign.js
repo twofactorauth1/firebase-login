@@ -33,6 +33,13 @@ var campaign = $$.m.ModelBase.extend({
                         "minute":1,
                         "hour": 2,
                         "day":1
+                    },
+                    "sendAt" : {
+                        "year":2015,
+                        "month":2,
+                        "day":15,
+                        "hour":13,
+                        "minute":0
                     }
              * }
              */

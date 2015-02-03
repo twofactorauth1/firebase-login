@@ -117,6 +117,7 @@ require.config({
         'scrollerDirective': '/angular_admin/directives/scroller',
         'truncateDirective': '/angular_admin/directives/truncate',
         'adminValidationDirective': '/angular_admin/directives/form_validations',
+        'intervalCountValidationDirective': '/angular_admin/directives/interval_count_validation',
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',

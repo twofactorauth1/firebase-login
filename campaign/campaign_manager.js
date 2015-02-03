@@ -194,6 +194,8 @@ module.exports = {
                     var fromAddress = step.settings.from;
                     var fromName = step.settings.fromName;
                     var toAddress = contact.getEmails()[0];
+                    self.log.debug('contact.getEmails: ', contact.getEmails());
+                    self.log.debug('contact:', contact);
                     var toName = contact.get('first') + ' ' + contact.get('last');
                     var subject = step.settings.subject;
 

@@ -110,7 +110,7 @@ var mandrillHelper =  {
     sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> sendCampaignEmail');
+        self.log.debug('>> sendCampaignEmail (to:' + toAddress + ')');
         vars.push({
             "name": "SENDDATE",
             "content": moment().format('MMM Do, YYYY')
@@ -178,8 +178,22 @@ var mandrillHelper =  {
 
         //stepSettings.scheduled.minute, stepSettings.scheduled.hour, stepSettings.scheduled.day
         //var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
-        var send_at = self._getScheduleUtcDateTimeIsoString(stepSettings.scheduled.day, stepSettings.scheduled.hour,
-            stepSettings.scheduled.minute, stepSettings.offset||0);
+        var send_at = null;
+        if(stepSettings.scheduled) {
+            send_at = self._getScheduleUtcDateTimeIsoString(stepSettings.scheduled.day, stepSettings.scheduled.hour,
+                stepSettings.scheduled.minute, stepSettings.offset||0);
+        } else if(stepSettings.sendAt) {
+            send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month,
+                stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+            if(moment(send_at).isBefore()) {
+                self.log.debug('Skipping email because ' + send_at + ' is in the past.');
+                return fn(null, "Skipped.");
+            }
+        } else {
+            //send it now?
+            self.log.debug('No scheduled or sendAt specified.');
+            send_at = moment().utc().toISOString();
+        }
 
         self.log.debug('send_at: ' + send_at);
 
@@ -206,6 +220,11 @@ var mandrillHelper =  {
         console.log('shiftedUTCDate: ' + shiftedUtcDate);*/
         var shiftedUtcDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', daysShift);
         return shiftedUtcDate.toISOString();
+    },
+
+    _getUtcDateTimeIsoString: function(year, month, day, hour, minutes, timezoneOffset) {
+        var utcDate = moment().utc().year(year).month(month).date(day).hours(hour).minutes(minutes).add('minutes', timezoneOffset);
+        return utcDate.toISOString();
     }
 }
 
