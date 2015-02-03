@@ -356,7 +356,7 @@
                             <h4>New Subscription</h4>
                             <hr>
                             <div class="clearfix"></div>
-                            <form>
+                            <form name="subscriptionForm" novalidate >
                                 <div class="col-sm-6">
                                     <div class="p20">
                                         <div class="form-group hidden">
@@ -365,43 +365,58 @@
                                             ng-model='newSubscription.planId' />
                                         </div>
                                         <div class="form-group">
-                                            <label for="amount">Amount</label>
+                                            <label for="amount">Amount*</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter the amount for the plan."><i class="fa fa-info-circle" /></span>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan"
-                                                ng-model='newSubscription.amount'
+                                                <input type="text" name="amount" class="form-control input-lg" id="amount" placeholder="Enter amount for the plan"
+                                                ng-model='newSubscription.amount' required
                                                 money/>
-
                                             </div>
+                                            <div class="error-container" 
+                                            ng-show="subscriptionForm.amount.$dirty && subscriptionForm.amount.$invalid ">
+                                            <small class="error" 
+                                                ng-show="subscriptionForm.amount.$error.required">
+                                                Amount is required.
+                                            </small>                                        
+                                      </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="interval">Interval</label>
+                                            <label for="interval">Interval*</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Select time interval"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
-                                                <select id="interval" ng-model="newSubscription.interval" class="form-control input-lg">
+                                                <select id="interval" name="interval" ng-model="newSubscription.interval" class="form-control input-lg" required>
                                                     <option value="week">Week</option>
                                                     <option value="month">Month</option>
                                                     <option value="year">Year</option>
                                                 </select>
-
+                                            </div>
+                                             <div class="error-container" 
+                                                ng-show="subscriptionForm.interval.$dirty && subscriptionForm.interval.$invalid ">
+                                                <small class="error" 
+                                                    ng-show="subscriptionForm.interval.$error.required">
+                                                    Please select Plan Interval.
+                                                </small>                                        
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="interval_count">Interval Count</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
-                                                <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type"
+                                                <input type="number" name="interval_count" validation-type="interval_count" interval-count-validate="interval_count" class="form-control input-lg" id="interval_count" placeholder="Enter a interval count for the interval type"
                                                 ng-model='newSubscription.interval_count'
                                                 />
-
+                                            </div>
+                                             <div class="error-container" 
+                                                ng-show="subscriptionForm.interval_count.$dirty && subscriptionForm.interval_count.$invalid ">
+                                                  <small class="error" ng-show="subscriptionForm.interval_count.$error.maxInterval">That username is taken, please try another</small>                                  
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="interval_count">Signup Fee</label>
+                                            <label for="signup_fee">Signup Fee</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter a one time signup fee"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
-                                                <input type="text" class="form-control input-lg" id="interval_count" placeholder="Enter a one time signup fee"
+                                                <input type="text" class="form-control input-lg" id="signup_fee" placeholder="Enter a one time signup fee"
                                                 ng-model='signup_fee'
                                                 />
 
@@ -412,12 +427,19 @@
                                 <div class="col-sm-6">
                                     <div class="p20">
                                         <div class="form-group">
-                                            <label for="name">Name</label>
+                                            <label for="name">Name*</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Enter name for plan"><i class="fa fa-info-circle" /></span>
                                             <div class="input-subscription">
-                                                <input type="text" class="form-control input-lg" id="name" placeholder="Enter name for plan"
-                                                ng-model='newSubscription.name'
+                                                <input type="text" name="name" class="form-control input-lg" id="name" placeholder="Enter name for plan"
+                                                ng-model='newSubscription.name' required
                                                 />
+                                            </div>
+                                             <div class="error-container" 
+                                                ng-show="subscriptionForm.name.$dirty && subscriptionForm.name.$invalid ">
+                                                <small class="error" 
+                                                    ng-show="subscriptionForm.name.$error.required">
+                                                    Name for plan is required.
+                                                </small>                                        
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -444,13 +466,13 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <button class="btn btn-lg btn-block btn-success" ng-click="addSubscriptionFn(true)"
+                                    <button class="btn btn-lg btn-block btn-success" ng-disabled="subscriptionForm.$invalid" ng-click="addSubscriptionFn(true)"
                                     ng-hide="planEdit">
                                         <span class="fa fa-plus"></span>Add</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="col-sm-6">
-                                        <button class="btn btn-lg btn-block btn-success" ng-click="editSubscriptionFn(newSubscription.id)"
+                                        <button class="btn btn-lg btn-block btn-success" ng-disabled="subscriptionForm.$invalid"  ng-click="editSubscriptionFn(newSubscription.id)"
                                         ng-show="planEdit">
                                             <span class="fa fa-plus"></span>Update</button>
                                     </div>
