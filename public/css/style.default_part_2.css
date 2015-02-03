@@ -6644,11 +6644,11 @@ input[type='file'] {
 }
 
 body.cke_ltr {
-  background: none repeat scroll 0 0 red !important;
+  background: none repeat scroll 0 0 transparent !important;
 }
 
 h1.cke_panel_grouptitle:first-child {
-  background: none repeat scroll 0 0 red !important;
+  background: none repeat scroll 0 0 transparent !important;
   border: medium none !important;
   border-radius: 0 !important;
   color: #fff !important;
@@ -9095,7 +9095,6 @@ div[data-type='campaign'] .inner-page .overlay {
   padding: 20px;
   border-radius: 5px;
   border-bottom: 4px solid #2f93b6;
-  color: white;
 }
 
 .feature-list-v1 .feature-single .feature-icon {
@@ -9146,10 +9145,6 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 
 /********** Features list v2 **********/
-
-.feature-list-v2 {
-  color: #fff;
-}
 
 .feature-list-v2 .feature-list-title {
   text-align: center;
@@ -9211,7 +9206,6 @@ div[data-type='campaign'] .inner-page .overlay {
   min-height: 320px;
   margin: 10px;
   padding: 20px;
-  color: white;
   transition: none!important;
 }
 
