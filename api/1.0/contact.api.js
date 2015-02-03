@@ -454,9 +454,13 @@ _.extend(api.prototype, baseApi.prototype, {
                             /*
                              * If there is a campaign associated with this signup, update it async.
                              */
-                            if(req.query.campaignId) {
-                                self.log.debug('Updating campaign with id: ' + req.query.campaignId);
-                                campaignManager.handleCampaignSignupEvent(value.id(), req.query.campaignId, savedContact.id(), function(err, value){
+                            if(req.query.campaignId || req.body.campaignId) {
+                                var campaignId = req.query.campaignId;
+                                if(req.body.campaignId) {
+                                    campaignId = req.body.campaignId;
+                                }
+                                self.log.debug('Updating campaign with id: ' + campaignId);
+                                campaignManager.handleCampaignSignupEvent(value.id(), campaignId, savedContact.id(), function(err, value){
                                     if(err) {
                                         self.log.error('Error handling campaign signup: ' + err);
                                         return;
@@ -466,6 +470,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                     }
                                 });
                             }
+                            //TODO: add a param to not send the welcome.
+
                             /*
                              * Send welcome email.  This is done asynchronously.
                              *
