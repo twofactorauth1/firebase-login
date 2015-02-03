@@ -408,8 +408,23 @@ define([
 
                       //add click events for all the delete component buttons.
                     $("#iframe-website").contents().find('body').on("click", ".delete-component", function (e)
-                    {
-                         $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+                    {	
+                    	 SweetAlert.swal({
+	                        title: "Are you sure?",
+	                        text: "Do you want to delete this component?",
+	                        type: "warning",
+	                        showCancelButton: true,
+	                        confirmButtonColor: "#DD6B55",
+	                        confirmButtonText: "Yes, delete it!",
+	                        cancelButtonText: "No, do not delete it!",
+	                        closeOnConfirm: true,
+	                        closeOnCancel: true
+	                    },
+	                    function(isConfirm) {
+	                        if (isConfirm) {
+	                         $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+	                        };
+	                    });
                     });
 
                     $("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function (e)
