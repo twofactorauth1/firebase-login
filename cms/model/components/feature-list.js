@@ -88,9 +88,9 @@ var component = $$.m.ModelBase.extend({
                     parallax : false,
                     blur : false,
                     overlay: true,
-                    show: false
+                    show: true
                 },
-                color : ""
+                color : "#0B4C6B"
             },
 
             /**
