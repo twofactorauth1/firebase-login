@@ -7,12 +7,8 @@
 
 var baseDao = require('../base.dao');
 var request = require('request');
-var crypto = require('crypto');
-var paging = require('../../utils/paging');
-var contactDao = require('../contact.dao');
-var userDao = require('../user.dao');
 var async = require('async');
-var querystring = require('querystring');
+var config = require('../../configs/gtm.config');
 
 var moment   = require('moment');
 
@@ -56,6 +52,10 @@ var dao = {
             }
         });
 
+    },
+
+    addRegistrantForWebinar: function(webinarId, resendConfirmation, registrantInfo, fn) {
+        return this.addRegistrant(config.organizerId, webinarId, resendConfirmation, config.accessToken, registrantInfo, fn );
     }
 
     //endregion

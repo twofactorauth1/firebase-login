@@ -14,6 +14,7 @@ var facebookConfig = require('../configs/facebook.config');
 var twitterConfig = require('../configs/twitter.config');
 var googleConfig = require('../configs/google.config');
 var linkedInConfig = require('../configs/linkedin.config');
+var gtmConfig = require('../configs/gtm.config');
 var authenticationDao = require('../dao/authentication.dao');
 var accountDao = require('../dao/account.dao');
 
@@ -290,6 +291,8 @@ _.extend(router.prototype, baseRouter.prototype, {
                 return googleConfig;
             case "linkedin":
                 return linkedInConfig;
+            case "gtm":
+                return gtmConfig;
         }
     }
 });
