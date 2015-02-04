@@ -7,9 +7,7 @@
 -->
 <div ng-class="component.type+'-v'+component.version">
     <div class="title">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title"/>
-        </div>
+        <div class="editable" data-class="title" ng-bind-html="component.title"></div>
     </div>
 
     <div class="mb30"></div>
@@ -50,7 +48,7 @@
                         <div class="mask right" style="width:45px"></div>
                         <div class="mask left" style="width:115px"></div>
                         <div class="mask right" style="width:115px"></div>
-                        
+
                     </div>
 
                     <div ng-if="!teamMember.becomeMember" class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
@@ -60,30 +58,24 @@
                     </a>
                 </div>
                 <div class="name">
-                    <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}">
-                        <span ng-bind-html="teamMember.name"/>
-                    </div>
+                    <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name"></div>
                     <div class="name-border"></div>
                 </div>
                 <div class="profile-position">
-                    <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}">
-                        <span ng-bind-html="teamMember.position"/>
-                    </div>
+                    <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position"></div>
                 </div>
 
-                        <div ng-if="!teamMember.becomeMember" class="bio">
-                           <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}">
-                                <span ng-bind-html="teamMember.bio"/>
-                            </div>
-                        </div>
-                        <ul ng-if="!teamMember.becomeMember" class="profile-social">
-                            <li ng-repeat="(val, key) in teamMember.social">
-                                <a href="{{key}}" target="_blank">
-                                    <span class="fa fa-{{val}}"></span>
-                                </a>
-                            </li>
-                        </ul>
-                
+                <div ng-if="!teamMember.becomeMember" class="bio">
+                    <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio"></div>
+                </div>
+                <ul ng-if="!teamMember.becomeMember" class="profile-social">
+                    <li ng-repeat="(val, key) in teamMember.social">
+                        <a href="{{key}}" target="_blank">
+                            <span class="fa fa-{{val}}"></span>
+                        </a>
+                    </li>
+                </ul>
+
                 <div ng-if="isEditing" class="delete-team-member center">
                     <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
                         <i class='fa fa-trash'></i>

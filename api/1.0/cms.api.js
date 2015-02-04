@@ -529,7 +529,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 cmsManager.deletePage(pageId, function (err, value) {
                     self.log.debug('<< deletePage');
+                    self.log.debug('err:', err);
+                    self.log.debug('value:', value);
                     self.sendResultOrError(res, err, value, "Error deleting Page");
+                    self.log.debug('sent');
                     self = null;
                 });
             }
