@@ -1604,16 +1604,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addImageToThumbnail(componentId);
     }
 
-
-  $('body').on("DOMNodeInserted", ".feature", function (e)
-  {   
-    setTimeout(function() {
-    var maxHeight = Math.max.apply(null, $("div.feature").map(function ()
+$scope.inserted = false;
+ if(!$scope.activated)
+  $('body').on("DOMNodeInserted", ".feature-height", function (e)
+  { 
+    if(!$scope.inserted)
     {
-        return $(this).height();
-    }).get());
-    $scope.maxHeight = maxHeight + "px";
-    }, 1000)
+      setTimeout(function() {
+      $scope.inserted = true;
+      var maxHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+      {
+          return $(this).height();
+      }).get());
+      $scope.maxHeight = maxHeight + 10 + "px";
+      }, 1000)
+   }
   })
   }
 ]);
