@@ -1,3 +1,21 @@
+.onboard-vid {
+  width: 100%;
+}
+
+.data {
+  float: right;
+  font-weight: 900;
+}
+
+.mt0 {
+  margin-top: 0;
+}
+
+.chosen-select {
+  margin: 0;
+  padding: 0;
+}
+
 .ckbox,
 .rdio {
   position: relative;
@@ -7716,6 +7734,11 @@ i.indi-sm {
   /* Filter */
 }
 
+.marketing .stream-filter .label {
+  padding: 4px 8px!important;
+  box-shadow: none;
+}
+
 .marketing .stream-filter .avatar {
   width: 50px;
   float: left;
@@ -7891,6 +7914,12 @@ i.indi-sm {
 
 .stream li .post-content {
   padding: 15px;
+}
+
+.stream li .post-content img {
+  max-width: 75px;
+  height: 75px;
+  display: block;
 }
 
 .stream li .post-bottom-bar {
@@ -8570,6 +8599,13 @@ hr {
   -webkit-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   -moz-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+}
+
+.btn-big {
+  max-width: 300px!important;
+  height: 70px!important;
+  line-height: 55px;
+  font-size: 24px;
 }
 
 .goback span {
@@ -10147,6 +10183,10 @@ contenthover a {
   min-height: 400px;
 }
 
+.testimonials-v1 .testimonials .slick-dots {
+  bottom: -15px !important;
+}
+
 .testimonials-v1 .testimonials .single-testimonial {
   border-bottom: 1px solid #eee;
   padding-bottom: 25px;
@@ -10218,6 +10258,7 @@ contenthover a {
 
 .testimonials-v2 .slick-dots {
   width: inherit;
+  bottom: -15px !important;
 }
 
 .testimonials-v2 .carousel-indicators {

@@ -41,7 +41,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('status'), this.isAuthApi.bind(this), this.updateStatus.bind(this));
 
-        app.get(this.url('tweets/:twitterId'), this.isAuthApi.bind(this), this.getTweetsForUser.bind(this));
+        app.get(this.url('tweets/:twitterId'), this.isAuthApi.bind(this), this.getTweets.bind(this));
+        app.get(this.url('followers/:twitterId'), this.isAuthApi.bind(this), this.getFollowers.bind(this));
     },
 
     updateStatus: function(req, resp) {
@@ -55,14 +56,25 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    getTweetsForUser: function(req, resp) {
+    getTweets: function(req, resp) {
         var self = this;
-        self.log.debug('>> getTweetsForUser');
+        self.log.debug('>> getTweets');
 
         var twitterId = req.params.twitterId;
         twitterDao.getTweetsForUser(req.user, twitterId, function(err, value){
             self.log.debug('<< tweets');
             self.sendResultOrError(resp, err, value, 'Error getting tweets for user', 500);
+        });
+    },
+
+    getFollowers: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFollowers');
+
+        var twitterId = req.params.twitterId;
+        twitterDao.getFollowers(req.user, twitterId, function(err, value){
+            self.log.debug('<< followers');
+            self.sendResultOrError(resp, err, value, 'Error getting followers for user', 500);
         });
     }
 });

@@ -7480,6 +7480,21 @@ h4,
   color: white;
 }
 
+.btn-light-green {
+  background-color: #2abb9b;
+  border-bottom: 4px solid #1f8972;
+  color: white;
+}
+
+.btn-light-green:hover,
+.btn-light-green:active,
+.btn-light-green.active,
+.open .dropdown-toggle.btn-light-green {
+  background-color: #1f8972;
+  border-color: #1f8972;
+  color: white;
+}
+
 .btn-white {
   background: #fff;
   border: 1px solid #ccc;
@@ -19778,22 +19793,4 @@ a:active {
 .center {
   text-align: center;
   margin: 0 auto;
-}
-
-.onboard-vid {
-  width: 100%;
-}
-
-.data {
-  float: right;
-  font-weight: 900;
-}
-
-.mt0 {
-  margin-top: 0;
-}
-
-.chosen-select {
-  margin: 0;
-  padding: 0;
 }

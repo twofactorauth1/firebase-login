@@ -178,6 +178,27 @@ var post = $$.m.ModelBase.extend({
 
         this.set(obj);
         return this;
+    },
+
+    convertFromTwitterFollower: function(follower) {
+        var obj = {
+            _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
+            type: $$.constants.social.types.TWITTER,
+            sourceId: follower.id_str,
+            postType: "follower",
+            from: {
+                name: follower.screen_name,
+                description: follower.description,
+                profileimg: follower.profile_background_image_url_https
+            }
+        };
+
+        if (follower.created_at) {
+            obj.date = new Date(follower.created_at).getTime();
+        };
+
+        this.set(obj);
+        return this;
     }
 
 
