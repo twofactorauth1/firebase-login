@@ -289,8 +289,8 @@ define([
                 }, {
                     title: 'Thumbnail Slider',
                     type: 'thumbnail-slider',
-                    icon: 'fa fa-like',
-                    enabled: false
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail-slider.jpg',
+                    enabled: true
                 }
             ];
 
@@ -440,7 +440,7 @@ define([
 
                     //add media modal click events to all images in image gallery
 
-                     $("#iframe-website").contents().find('body').on("click", ".image-gallery", function (e)
+                     $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail", function (e)
                      {
                         e.preventDefault();
                         e.stopPropagation();
@@ -449,6 +449,10 @@ define([
                          $scope.imageChange = true;
                          $scope.componentArrTarget = e.currentTarget;
                          $scope.componentImageIndex = e.currentTarget.attributes["data-index"].value;
+                         if(e.currentTarget.attributes["parent-index"] && e.currentTarget.attributes["number-per-page"])
+                         {
+                            $scope.componentImageIndex = (parseInt(e.currentTarget.attributes["parent-index"].value) * parseInt(e.currentTarget.attributes["number-per-page"].value)) + parseInt(e.currentTarget.attributes["data-index"].value);
+                         }
                          $scope.componentEditing = _.findWhere($scope.components, {
                              _id: $(e.currentTarget).closest('.component').data('id')
                          });
@@ -1041,6 +1045,8 @@ define([
                         $scope.componentEditing.imgurl = asset.url;
                     } else if (type == 'image-gallery') {
                        $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
+                    } else if (type == 'thumbnail-slider') {
+                       $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;   
                     } else {
                         console.log('unknown component or image location');
                     }
@@ -1074,6 +1080,12 @@ define([
                 else if ($scope.imgGallery && $scope.componentEditing) {
                     $scope.imgGallery = false;
                     $scope.componentEditing.images.push({
+                        url : asset.url
+                    });
+                }
+                else if ($scope.imgThumbnail && $scope.componentEditing) {
+                    $scope.imgThumbnail = false;
+                    $scope.componentEditing.thumbnailCollection.push({
                         url : asset.url
                     });
                 }
@@ -1278,6 +1290,23 @@ define([
                     _id: componentId
                 });
                 $scope.componentEditing.images.splice(index, 1);
+                $scope.saveCustomComponent();
+            }
+
+             window.addImageToThumbnail = function(componentId) {
+                $scope.imgThumbnail = true;
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $("#media-manager-modal").modal('show');
+                $(".insert-image").removeClass("ng-hide");
+            }
+
+            window.deleteImageFromThumbnail = function(componentId, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.thumbnailCollection.splice(index, 1);
                 $scope.saveCustomComponent();
             }
 

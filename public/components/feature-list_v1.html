@@ -6,6 +6,12 @@
 *
 -->
 
+<style>
+.feature-height{
+    min-height: {{maxHeight || '100px'}}
+}
+</style>
+
 <div ng-class="component.type+'-v'+component.version">
 
     <div class="feature-list-title">
@@ -15,7 +21,7 @@
     <div class="clearfix mb15"></div>
 
     <div class="row features-wrap">
-        <div class="feature" ng-class="{'col-sm-6':component.features.length > 1, 'col-sm-12':component.features.length < 1}" data-ng-repeat="feature in component.features track by $index">
+        <div class="feature feature-height" ng-class="{'col-sm-6':component.features.length > 1, 'col-sm-12':component.features.length < 1}" data-ng-repeat="feature in component.features track by $index">
             <div class="feature-single feature-single-{{$index}}">
                 <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
                     </div>

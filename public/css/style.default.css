@@ -26286,6 +26286,37 @@ div[data-type="coming-soon"] .component-inner {
 .payment-form-v1 .profilePhoto {
   margin: 0 auto;
 }
+.thumbnail-slider-v1 .single-image {
+  padding: 0;
+  margin: 0;
+}
+.thumbnail-slider-v1 .imgHeight {
+  overflow: hidden;
+}
+.thumbnail-slider-v1 .editing .image-wrap:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+  padding-right: 6px;
+  padding-left: 6px;
+  margin-top: -4px;
+  margin-bottom: -4px;
+}
+.thumbnail-slider-v1 .editing .image-wrap:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+.thumbnail-slider-v1 .editing .image-wrap:hover .delete-single-image .btn-delete-single-image {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.thumbnail-slider-v1 .editing .image-wrap .delete-single-image .btn-delete-single-image {
+  display: none;
+}
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
   width: 100%;
@@ -26305,6 +26336,7 @@ div[data-type="coming-soon"] .component-inner {
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
+  overflow: inherit;
 }
 .thumbnail-slider-v1 div.carousel-control {
   cursor: pointer;

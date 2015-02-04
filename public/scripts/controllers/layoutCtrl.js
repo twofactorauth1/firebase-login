@@ -942,6 +942,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if ($scope.currentpage.components[i].type == 'contact-us') {
             $scope.updateContactUsMap($scope.currentpage.components[i]);
           }
+          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+            var w = angular.element($window);
+            var check_if_mobile = mobilecheck();
+            $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            var winWidth = w.width();
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+          }
         };
       });
     };
@@ -960,10 +967,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
       }
 
-
-
       if (networks)
         $scope.networks = networks;
+
+      for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+            var w = angular.element($window);
+            var check_if_mobile = mobilecheck();
+            $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            var winWidth = w.width();
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+          }
+      };
     };
 
     window.addCKEditorImageInput = function(url) {
@@ -1112,13 +1127,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;
       }
+      $scope.imagesPerPage = number_of_arr;
       if($scope.thumbnailSliderCollection)
       {
         $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
-        if($scope.thumbnailCollection.length > 1)
-        {
-          $scope.displayThumbnailPaging = true;
-        }
+        if($scope.thumbnailCollection.length > 1)        
+          $scope.displayThumbnailPaging = true;        
+        else
+          $scope.displayThumbnailPaging = false;
       }
     }
 
@@ -1580,5 +1596,29 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.AddImageToGallery = function(componentId) {
       window.parent.addImageToGallery(componentId);
     }
+    $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
+      var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
+      window.parent.deleteImageFromThumbnail(componentId, index);
+    };
+    $scope.addImageToThumbnail = function(componentId) {
+      window.parent.addImageToThumbnail(componentId);
+    }
+
+$scope.inserted = false;
+ if(!$scope.activated)
+  $('body').on("DOMNodeInserted", ".feature-height", function (e)
+  { 
+    if(!$scope.inserted)
+    {
+      setTimeout(function() {
+      $scope.inserted = true;
+      var maxHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+      {
+          return $(this).height();
+      }).get());
+      $scope.maxHeight = maxHeight + 10 + "px";
+      }, 500)
+   }
+  })
   }
 ]);
