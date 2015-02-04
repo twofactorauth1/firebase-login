@@ -57,26 +57,26 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'AccountChoosePlanCtrl',
           controllerUrl: '/angular_admin/controllers/account_choose_plan.js'
         }))
-        .state('marketing', angularAMD.route({
-          url: '/marketing',
-          templateUrl: '/angular_admin/views/marketing.html',
-          controller: 'MarketingCtrl',
-          controllerUrl: '/angular_admin/controllers/marketing.js'
-        }))
-        .state('marketingDetail', angularAMD.route({
-          url: '/marketing/campaign/:id',
-          templateUrl: '/angular_admin/views/marketing/campaign_detail.html',
-          controller: 'CampaignDetailCtrl',
-          controllerUrl: '/angular_admin/controllers/marketing/campaign_detail.js'
-        }))
-
-        //depreceated videoautopilot
         // .state('marketing', angularAMD.route({
         //   url: '/marketing',
-        //   templateUrl: '/pipeshift/views/video/listeditor.html',
-        //   controller: 'ListEditorController',
-        //   controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+        //   templateUrl: '/angular_admin/views/marketing.html',
+        //   controller: 'MarketingCtrl',
+        //   controllerUrl: '/angular_admin/controllers/marketing.js'
         // }))
+        // .state('marketingDetail', angularAMD.route({
+        //   url: '/marketing/campaign/:id',
+        //   templateUrl: '/angular_admin/views/marketing/campaign_detail.html',
+        //   controller: 'CampaignDetailCtrl',
+        //   controllerUrl: '/angular_admin/controllers/marketing/campaign_detail.js'
+        // }))
+
+        //depreceated videoautopilot
+        .state('marketing', angularAMD.route({
+          url: '/marketing',
+          templateUrl: '/pipeshift/views/video/listeditor.html',
+          controller: 'ListEditorController',
+          controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+        }))
         .state('commerce', angularAMD.route({
           url: '/commerce',
           templateUrl: '/angular_admin/views/commerce.html',
