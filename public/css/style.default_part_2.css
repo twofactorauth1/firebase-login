@@ -7734,6 +7734,11 @@ i.indi-sm {
   /* Filter */
 }
 
+.marketing .stream-filter .label {
+  padding: 4px 8px!important;
+  box-shadow: none;
+}
+
 .marketing .stream-filter .avatar {
   width: 50px;
   float: left;
@@ -7909,6 +7914,12 @@ i.indi-sm {
 
 .stream li .post-content {
   padding: 15px;
+}
+
+.stream li .post-content img {
+  max-width: 75px;
+  height: 75px;
+  display: block;
 }
 
 .stream li .post-bottom-bar {

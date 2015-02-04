@@ -79,7 +79,6 @@ var dao = {
         });
     },
 
-
     refreshUserFromProfile: function(user, defaultPhoto, fn) {
         if (_.isFunction(defaultPhoto)) {
             fn = defaultPhoto;
@@ -204,6 +203,51 @@ var dao = {
                 });
             } else {
                 fn(null, tweets);
+            }
+        });
+    },
+
+    getFollowers: function(user, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting followers ', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "followers/list.json";
+        var params = {
+            user_id: twitterId || this._getTwitterId(user),
+            count: 200
+        };
+
+        var url = this._generateUrl(path, params);
+
+        self.log.debug('>> getting followers params ', params);
+        self.log.debug('>> getting followers url ', url);
+
+        this._makeRequest(url, user, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var followers = JSON.parse(value);
+            self.log.debug('>> followers ', followers['users']);
+
+            if (followers['users'].length > 0) {
+                var result = [];
+
+                var processFollower = function (follower, cb) {
+                    result.push(new Post().convertFromTwitterFollower(follower));
+                    cb();
+                };
+
+                async.eachLimit(followers['users'], 10, processFollower, function (cb) {
+                    self.log.debug('>> result ', result);
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, followers['users']);
             }
         });
     },
