@@ -374,7 +374,7 @@
                             </div>
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK].status">
-                                    <a href="/inapplogin/facebook?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                  <a href="/redirect/?next={{currentHost}}/inapplogin/facebook?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK].status">
@@ -417,7 +417,7 @@
                             </div>
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group" ng-hide="userSocial[credentialTypes.GOOGLE].status">
-                                    <a href="/inapplogin/google?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                    <a href="/redirect/?next={{currentHost}}/inapplogin/google?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.GOOGLE].status">
@@ -444,7 +444,7 @@
                             </div>
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group" ng-hide="userSocial[credentialTypes.LINKEDIN].status">
-                                    <a href="/inapplogin/linkedin?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                    <a href="/redirect/?next={{currentHost}}/inapplogin/linkedin?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.LINKEDIN].status">
@@ -471,7 +471,7 @@
                             </div>
                             <div class="btn-group btn-group-justified">
                                 <div class="btn-group" ng-hide="userSocial[credentialTypes.TWITTER].status">
-                                    <a href="/inapplogin/twitter?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
+                                    <a href="/redirect/?next={{currentHost}}/inapplogin/twitter?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
                                         <span class="fa fa-plug"></span>Connect</a>
                                 </div>
                                 <div class="btn-group" ng-show="userSocial[credentialTypes.TWITTER].status">
@@ -491,7 +491,7 @@
                             <h3>Stripe</h3>
                             <p ng-show="!userSocial[credentialTypes.STRIPE].status">Stripe Allows you to recieve payments on your website.</p>
                             <p>
-                                <a href="/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
+                                <a href="/redirect/?next={{currentHost}}/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
                                     <span class="fa fa-plug"></span>Connect</a>
                             </p>
                             <div class="toggle-modern">

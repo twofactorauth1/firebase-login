@@ -29,6 +29,8 @@ var component = $$.m.ModelBase.extend({
              * navigation directly to thise component
              */
             anchor: null,
+            
+            txtcolor : "#444",
 
 
             /**

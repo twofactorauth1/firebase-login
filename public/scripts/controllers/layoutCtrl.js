@@ -705,13 +705,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             if (social.url) {
-	      var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-	      if (urlRegex.test(social.url) == false) {
-		$("#social-link-url .error").html("Link url incorrect format");
-		$("#social-link-url").addClass('has-error');
-		return;
-	      }
-	    }
+          var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+          if (urlRegex.test(social.url) == false) {
+        $("#social-link-url .error").html("Link url incorrect format");
+        $("#social-link-url").addClass('has-error');
+        return;
+          }
+        }
             selectedName = _.findWhere($scope.networks, {
               name: social.name
             });
@@ -798,24 +798,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.clickImageButton();
     }
 
-   $scope.activated = false;
-
-    window.checkIfActivated = function()
-       {
-           return $scope.activated;
-       }
-
+   
     function toTitleCase(str)
     {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
+    
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        for(name in CKEDITOR.instances)
-        {
-            CKEDITOR.instances[name].destroy()
-        }
+        $scope.isEditing = true;        
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
         elements.each(function() {
@@ -823,7 +815,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var dataClass = $(this).data('class').replace('.item.', ' ');
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
-        $scope.activated = true;
+         // $scope.activated = true;
+        if(!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -838,6 +831,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               top: 'editor-toolbar'
             }
           });
+        }
         });
 
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
@@ -948,6 +942,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if ($scope.currentpage.components[i].type == 'contact-us') {
             $scope.updateContactUsMap($scope.currentpage.components[i]);
           }
+          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+            var w = angular.element($window);
+            var check_if_mobile = mobilecheck();
+            $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            var winWidth = w.width();
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+          }
         };
       });
     };
@@ -966,10 +967,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
       }
 
-
-
       if (networks)
         $scope.networks = networks;
+
+      for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+            var w = angular.element($window);
+            var check_if_mobile = mobilecheck();
+            $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            var winWidth = w.width();
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+          }
+      };
     };
 
     window.addCKEditorImageInput = function(url) {
@@ -1118,13 +1127,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (width <= 750 || is_mobile) {
         number_of_arr = 1;
       }
+      $scope.imagesPerPage = number_of_arr;
       if($scope.thumbnailSliderCollection)
       {
         $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
-        if($scope.thumbnailCollection.length > 1)
-        {
-          $scope.displayThumbnailPaging = true;
-        }
+        if($scope.thumbnailCollection.length > 1)        
+          $scope.displayThumbnailPaging = true;        
+        else
+          $scope.displayThumbnailPaging = false;
       }
     }
 
@@ -1586,5 +1596,29 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.AddImageToGallery = function(componentId) {
       window.parent.addImageToGallery(componentId);
     }
+    $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
+      var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
+      window.parent.deleteImageFromThumbnail(componentId, index);
+    };
+    $scope.addImageToThumbnail = function(componentId) {
+      window.parent.addImageToThumbnail(componentId);
+    }
+
+$scope.inserted = false;
+ if(!$scope.activated)
+  $('body').on("DOMNodeInserted", ".feature-height", function (e)
+  { 
+    if(!$scope.inserted)
+    {
+      setTimeout(function() {
+      $scope.inserted = true;
+      var maxHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+      {
+          return $(this).height();
+      }).get());
+      $scope.maxHeight = maxHeight + 10 + "px";
+      }, 500)
+   }
+  })
   }
 ]);

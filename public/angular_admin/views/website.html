@@ -46,8 +46,9 @@
     </div>
 
     <img ng-show="isMobile" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/iphone-background.png">
+    <div block-ui="editBlockUI">
     <iframe id="iframe-website" name="iframe-website" src="" ng-style="styleWebsite()" indigeweb-resize></iframe>
-
+    </div>
     <div class="rightpanel rightpanel-website">
         <tabset>
             <!-- <tab>
@@ -240,7 +241,7 @@
                                 <div class="thumbnail">
                                     <div class="check-component" style="display:none"><i class="fa fa-check-circle"></i>
                                     </div>
-                                    <div class="component-icon"><img src="{{type.preview}}" width="100%" />
+                                    <div class="component-icon"><img ng-src="{{type.preview}}" width="100%" />
                                     </div>
                                     <div class="caption">
                                         <h5 class="center">{{type.title}}</h5>
@@ -515,11 +516,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="location-zip">Zip Code </label>
-                                <input id="location-zip" class="form-control input-lg" type="text" ng-model="componentEditing.location.zip">
+                                <input id="location-zip" validation-type="zip" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.location.zip">
                             </div>
                             <div class="form-group">
                                 <label for="contact-phone">Phone number </label>
-                                <input id="contact-phone" class="form-control input-lg" type="text" ng-model="componentEditing.contact.phone">
+                                <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.contact.phone">
                             </div>
                             <div class="form-group">
                                 <label for="location-hours">Business Hours </label>

@@ -1,7 +1,7 @@
 <div ng-if="newLeads">
     <div class="smart-timeline">
         <ul class="smart-timeline-list">
-            <li ng-repeat="activity in activities">
+            <li ng-repeat="activity in activities|orderBy:'start':true">
                 <div class="col-xs-12">
                     <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon"> <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32"> </a>
                     <div class="smart-timeline-time">

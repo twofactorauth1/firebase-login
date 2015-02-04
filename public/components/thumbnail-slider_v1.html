@@ -1,28 +1,34 @@
-<style>
-
-</style>
-
-<div class="thumbnail-slider-v1">
+<div ng-class="component.type+'-v'+component.version">
     <div class="col-md-12"><br>
         <div class="title center">
-            <div class="editable" data-class="title" data-index="{{$index}}">
-                <span ng-bind-html="component.title"/></span>
+            <div class="editable" data-class="title" ng-bind-html="component.title | unsafe" data-index="{{$index}}">
             </div>
         </div>
         <br>
         <div class="well" style="background: none">
-            <div id="myCarousel-{{component.anchor}}" class="carousel slide">
+            <div id="myCarousel-{{component.anchor}}" active="1" class="carousel slide">
                 <ol class="carousel-indicators hidden" ng-hide="thumbnailCollection[0][0].detail">
                     <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in thumbnailCollection"></li>
                 </ol>
                 <div class="carousel-inner" style="height:200px">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in thumbnailCollection">
                         <div class="row">
-                            <div class="col-sm-3 hideText" data-ng-repeat="image in collection"> 
-                            <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 70px;background: none;">
-                                <img src="{{image.url}}" alt="Image" class="img-responsive hover" style="max-height: 100px; margin:{{image.margin}}; " />
-                                <!--<span style="color: {{collection.imagetextcolor}};" >{{image.text}}</span> -->
-                            </a>
+                            <div class="col-sm-3 hideText"  data-ng-repeat="image in collection"> 
+                                <div class="image-wrap">
+                                    <div class="imgHeight single-image">
+                                    <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 70px;background: none;">
+                                        <img src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" data-index="{{$index}}" parent-index = "{{$parent.$index}}" number-per-page="{{imagesPerPage}}" style="max-height: 100px; margin:{{image.margin}}; " />
+                                    </a>
+                                    </div>
+                                    <div ng-if="isEditing" class="delete-single-image center">
+                                        <button ng-click="deleteImageFromThumbnail(component._id, $index, $parent.$parent.$index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                                    </div>
+                                    <div ng-if="isEditing" class="add-addtional center">
+                                        <a href="">
+                                            <i class="fa fa-plus" ng-click="addImageToThumbnail(component._id)"></i>
+                                        </a>
+                                    </div>
+                                </div>
                                 <h4 ng-show="thumbnailCollection[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
                                 <p ng-show="image.detail">{{image.detail}}</p>
                             </div>

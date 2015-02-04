@@ -1,5 +1,53 @@
-.thumbnail-slider-v1{
+.thumbnail-slider-v1{ 
 
+  .single-image {
+    padding: 0;
+    margin: 0;
+  }
+
+  
+  .imgHeight {
+    overflow: hidden;
+  }
+
+  .editing .image-wrap {
+  &:hover {
+    border: 4px dashed rgba(0,0,0,0.4);
+    padding-right: 6px;
+    padding-left: 6px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+    
+
+    .add-addtional {
+      display: block;
+      font-size: 28px;
+    }
+
+    .delete-single-image {
+      .btn-delete-single-image {
+        background: rgba(0,0,0,0.5);
+        display: block;
+        border: 0;
+        color: #ffffff;
+        padding: 10px 15px;
+        position: absolute;
+        top: 0;
+        right:0;
+      }
+    }
+
+  }
+
+  .delete-single-image {
+    .btn-delete-single-image {
+      display: none;
+    }
+  }
+
+  
+
+}
   .hideText .text {
     position:relative;
     width: 100%;
@@ -23,10 +71,12 @@
 
   .carousel-inner {
     max-height: 200px;
+    overflow: inherit;
   }
   div.carousel-control
   {
     cursor:pointer;
   }
+
 }
 

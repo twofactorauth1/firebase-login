@@ -329,6 +329,7 @@ module.exports = function(grunt) {
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
             google: ['test/google.dao_test.js'],
+            gtm: ['test/gtm.dao_test.js'],
             linkedin: ['test/linkedin.dao_test.js'],
             payments: ['payments/tests/*_test.js'],
             paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
@@ -543,5 +544,5 @@ module.exports = function(grunt) {
     grunt.registerTask('testCollater', ['nodeunit:analyticsCollater']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
     grunt.registerTask('testTz', ['nodeunit:tzTests']);
-    
+    grunt.registerTask('testGtm', ['nodeunit:gtm']);
 };

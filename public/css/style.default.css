@@ -6064,6 +6064,19 @@ h4,
   border-color: #16a085;
   color: white;
 }
+.btn-light-green {
+  background-color: #2abb9b;
+  border-bottom: 4px solid #1f8972;
+  color: white;
+}
+.btn-light-green:hover,
+.btn-light-green:active,
+.btn-light-green.active,
+.open .dropdown-toggle.btn-light-green {
+  background-color: #1f8972;
+  border-color: #1f8972;
+  color: white;
+}
 .btn-white {
   background: #fff;
   border: 1px solid #ccc;
@@ -17261,6 +17274,13 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   display: inline-block;
   margin-right: 15px;
 }
+.blur-map {
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
 .account {
   overflow: hidden;
   background: #e4e7ea;
@@ -18001,6 +18021,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .indi-li a i {
   margin: -8px 0 0 -7px;
 }
+.beta-li {
+  text-align: center;
+}
 .rightmenu-open .rightpanel {
   display: block;
   right: 0;
@@ -18289,22 +18312,34 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 @media (max-width: 1024px) {
   .mainpanel .pageheader,
   .mainpanel .contentpanel {
-    margin-left: 75px;
+    padding-left: 75px;
   }
 }
 @media (max-width: 767px) {
   .leftpanel-show .mainpanel .pageheader {
-    margin-left: 0px;
+    padding-left: 0px;
   }
   .mainpanel .pageheader {
-    margin-left: 75px;
+    padding-left: 75px;
   }
   .mainpanel .pageheader h2 {
-    padding-left: 5px;
+    padding-left: 15px;
     font-size: 20px;
-    padding-left: 0;
     margin: 0 0 0 0;
   }
+  .website-manage .pageheader h2 {
+    font-size: 24px;
+  }
+}
+.toggle-left-nav .mainpanel {
+  margin-left: 0px;
+}
+.toggle-left-nav .mainpanel .pageheader {
+  padding-left: 75px;
+}
+.toggle-left-nav .mainpanel .leftpanel-collapsed .header--fixed,
+.toggle-left-nav .mainpanel .header--fixed {
+  left: 20px;
 }
 .profile-name {
   margin: 0;
@@ -20199,6 +20234,9 @@ div.error label.error:before {
 .iconpicker-popover {
   z-index: 9999!important;
 }
+.btn-header {
+  padding: 6px 6px;
+}
 .dataTables_length .chosen-container {
   min-width: 75px;
 }
@@ -20863,6 +20901,9 @@ div.error label.error:before {
   .website-manage .pageheader .fa {
     font-size: 14px;
   }
+  .pageheader .fa.website-manage-icon {
+    font-size: 20px;
+  }
   .website .pageheader .col-xs-5,
   .website-manage .pageheader .col-xs-5 {
     padding-left: 2px;
@@ -21141,6 +21182,39 @@ div.error label.error:before {
 }
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button:before {
   content: "\f138";
+}
+#editor-toolbar .cke_chrome .cke_combo_button {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+  border: medium none;
+  border-radius: 0;
+  display: table-cell;
+  float: none;
+  height: 50px;
+  margin: 0;
+  cursor: pointer;
+  padding: 2px 10px;
+  vertical-align: middle;
+}
+#editor-toolbar .cke_chrome .cke_combo_button span {
+  color: #fff;
+}
+#editor-toolbar .cke_chrome .cke_combo_button .cke_combo_arrow {
+  border-top: 3px solid #fff;
+}
+#editor-toolbar .cke_chrome .cke_combo_button:hover,
+#editor-toolbar .cke_chrome .cke_combo_on .cke_combo_button {
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);
+}
+#editor-toolbar .cke_chrome div.cke_combopanel {
+  background-color: #efa022;
+  border: medium none;
+  border-radius: 0;
+  height: auto ;
+  margin-top: 1px;
+  max-width: 200px;
+  overflow: visible;
+  visibility: visible;
+  width: auto;
 }
 .website .pageheader .btn-group {
   margin-bottom: 0;
@@ -21681,6 +21755,24 @@ input[type='file'] {
 }
 .ribbon-green:after {
   right: 0;
+}
+body.cke_ltr {
+  background: none repeat scroll 0 0 transparent !important;
+}
+h1.cke_panel_grouptitle:first-child {
+  background: none repeat scroll 0 0 transparent !important;
+  border: medium none !important;
+  border-radius: 0 !important;
+  color: #fff !important;
+}
+.cke_panel_listItem a {
+  border: medium none !important;
+  border-radius: 0 !important;
+}
+.cke_panel_listItem a:active,
+.cke_panel_listItem a:focus,
+.cke_panel_listItem a:hover {
+  background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5) !important;
 }
 .blog-item {
   background: #fcfcfc;
@@ -22560,6 +22652,29 @@ i.indi-sm {
 .marketing {
   /* Filter */
 }
+.marketing .stream-filter .label {
+  padding: 4px 8px!important;
+  box-shadow: none;
+}
+.marketing .stream-filter .avatar {
+  width: 50px;
+  float: left;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+.marketing .stream-filter .filter-heading {
+  margin: 0;
+}
+.marketing .stream-filter .filter-text {
+  margin: 0;
+}
+.marketing .stream-filter .glyphicon-chevron-right,
+.marketing .stream-filter .glyphicon-chevron-down {
+  margin-top: 13px;
+}
+.marketing .stream-filter hr {
+  margin: 5px 0!important;
+}
 .marketing #campaign-add-email .thumbnail {
   position: relative;
   overflow: hidden;
@@ -22684,6 +22799,11 @@ i.indi-sm {
 }
 .stream li .post-content {
   padding: 15px;
+}
+.stream li .post-content img {
+  max-width: 75px;
+  height: 75px;
+  display: block;
 }
 .stream li .post-bottom-bar {
   height: 40px;
@@ -23138,6 +23258,10 @@ i.indi-sm {
 #media-manager-modal .modal-footer {
   margin-top: 0;
 }
+#media-manager-modal .modal-footer.upload {
+  height: calc(100% - 60px);
+  overflow: auto;
+}
 #media-manager-modal .single-filemanager .filemanager-options {
   margin: 0;
 }
@@ -23252,6 +23376,12 @@ hr {
   -webkit-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   -moz-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+}
+.btn-big {
+  max-width: 300px!important;
+  height: 70px!important;
+  line-height: 55px;
+  font-size: 24px;
 }
 .goback span {
   color: black;
@@ -23686,7 +23816,6 @@ div[data-type='campaign'] .inner-page .overlay {
   padding: 20px;
   border-radius: 5px;
   border-bottom: 4px solid #2f93b6;
-  color: white;
 }
 .feature-list-v1 .feature-single .feature-icon {
   color: #3b9db7;
@@ -23729,9 +23858,6 @@ div[data-type='campaign'] .inner-page .overlay {
   background-size: 15% auto;
 }
 /********** Features list v2 **********/
-.feature-list-v2 {
-  color: #fff;
-}
 .feature-list-v2 .feature-list-title {
   text-align: center;
   position: relative;
@@ -23782,7 +23908,6 @@ div[data-type='campaign'] .inner-page .overlay {
   min-height: 320px;
   margin: 10px;
   padding: 20px;
-  color: white;
   transition: none!important;
 }
 .feature-list-v3 .feature-single .feature-icon {
@@ -24561,6 +24686,9 @@ contenthover a {
   position: relative;
   min-height: 400px;
 }
+.testimonials-v1 .testimonials .slick-dots {
+  bottom: -15px !important;
+}
 .testimonials-v1 .testimonials .single-testimonial {
   border-bottom: 1px solid #eee;
   padding-bottom: 25px;
@@ -24620,6 +24748,7 @@ contenthover a {
 }
 .testimonials-v2 .slick-dots {
   width: inherit;
+  bottom: -15px !important;
 }
 .testimonials-v2 .carousel-indicators {
   bottom: 60px;
@@ -25492,6 +25621,11 @@ div[data-type=single-post] .container {
   max-width: 1100px;
   margin: 0 auto;
 }
+.single-post-v1 .post_text_div {
+  min-width: 50%;
+  display: inline-block;
+  padding-left: 5px;
+}
 .single-blog .blog-meta {
   margin-top: 15px;
   margin-bottom: 30px;
@@ -26152,6 +26286,37 @@ div[data-type="coming-soon"] .component-inner {
 .payment-form-v1 .profilePhoto {
   margin: 0 auto;
 }
+.thumbnail-slider-v1 .single-image {
+  padding: 0;
+  margin: 0;
+}
+.thumbnail-slider-v1 .imgHeight {
+  overflow: hidden;
+}
+.thumbnail-slider-v1 .editing .image-wrap:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+  padding-right: 6px;
+  padding-left: 6px;
+  margin-top: -4px;
+  margin-bottom: -4px;
+}
+.thumbnail-slider-v1 .editing .image-wrap:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+.thumbnail-slider-v1 .editing .image-wrap:hover .delete-single-image .btn-delete-single-image {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.thumbnail-slider-v1 .editing .image-wrap .delete-single-image .btn-delete-single-image {
+  display: none;
+}
 .thumbnail-slider-v1 .hideText .text {
   position: relative;
   width: 100%;
@@ -26171,6 +26336,7 @@ div[data-type="coming-soon"] .component-inner {
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
+  overflow: inherit;
 }
 .thumbnail-slider-v1 div.carousel-control {
   cursor: pointer;

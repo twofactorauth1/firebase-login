@@ -312,9 +312,13 @@ var dao = {
     //region STREAM
     getUserStream: function (user, socialId, fn) {
         var key = "feed";
-        return this._getStreamPart(user, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, fn);
     },
 
+    getTokenStream: function(accessToken, socialId, fn) {
+        var key = 'feed';
+        return this._getStreamPart(null, accessToken, socialId, key, fn);
+    },
 
     getUserPosts: function (user, socialId, fn) {
         var self = this;
@@ -322,26 +326,36 @@ var dao = {
         self.log.info("facebook dao: user >>> ", user);
         self.log.info("facebook dao: socialId >>> ", socialId);
         var key = "posts";
-        return this._getStreamPart(user, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, fn);
     },
 
+    getTokenPosts: function(accessToken, socialId, fn) {
+        var self = this;
+        var key = "posts";
+        return self._getStreamPart(null, accessToken, socialId, key, fn);
+    },
 
     getUserStatuses: function (user, socialId, fn) {
         var key = "statuses";
-        return this._getStreamPart(user, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, fn);
     },
 
 
     getUserTagged: function (user, socialId, fn) {
         var key = "tagged";
-        return this._getStreamPart(user, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, fn);
     },
 
 
-    _getStreamPart: function (user, socialId, key, fn) {
+    _getStreamPart: function (user, _accessToken, socialId, key, fn) {
         var self = this;
         self.log.info("facebook dao: _getStreamPart >>> ");
-        var accessToken = this._getAccessToken(user);
+        var accessToken = _accessToken;
+
+        if(user) {
+            var accessToken = this._getAccessToken(user);
+        }
+
 
         if (accessToken == null) {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
@@ -516,7 +530,7 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
 
-        var url = '/' + myFacebookId + '/posts'
+        var url = '/' + myFacebookId + '/feed'
             , apiOptions = {
                 access_token: accessToken
                 , limit: 15

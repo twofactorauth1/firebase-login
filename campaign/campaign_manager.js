@@ -194,6 +194,8 @@ module.exports = {
                     var fromAddress = step.settings.from;
                     var fromName = step.settings.fromName;
                     var toAddress = contact.getEmails()[0];
+                    self.log.debug('contact.getEmails: ', contact.getEmails());
+                    self.log.debug('contact:', contact);
                     var toName = contact.get('first') + ' ' + contact.get('last');
                     var subject = step.settings.subject;
 
@@ -258,6 +260,34 @@ module.exports = {
                 }
             });
 
+        } else if(step.type === 'landing'){
+            //there is nothing to do here.
+            campaignFlow.set('lastStep', stepNumber);
+            step.executed = new Date();
+            campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                if(err) {
+                    self.log.error('Error saving campaign flow: ' + err);
+                    return fn(err, null);
+                } else {
+                    //try to handle the next step:
+                    var steps = campaignFlow.get('steps');
+                    if(steps.length -1 > stepNumber) {
+                        self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                            if(err) {
+                                self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                return fn(null, updatedFlow);
+                            } else {
+                                self.log.debug('<< handleStep');
+                                return fn(null, updatedFlow);
+                            }
+                        });
+                    } else {
+                        self.log.debug('<< handleStep (no more steps)');
+                        return fn(null, updatedFlow);
+                    }
+                }
+            });
         } else {
             self.log.warn('Unknown step type: ' + step.type);
             return fn(null, null);

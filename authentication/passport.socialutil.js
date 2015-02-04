@@ -8,13 +8,15 @@
 var authenticationDao = require('../dao/authentication.dao');
 var userDao = require('../dao/user.dao');
 var cookies = require("../utils/cookieutil");
+var socialConfigManager = require('../socialconfig/socialconfig_manager');
 
 module.exports = {
 
     handleLoginCallback: function(socialType, req, accessToken, refreshToken, options, profile, scope, done) {
         var email, firstName, lastName, socialId, username, profileUrl, name;
         console.log('>>handleLoginCallback(' + socialType +',req,' + accessToken + ',' + refreshToken +',' + options + ',' + profile + ',' + scope + ')');
-
+        console.dir(profile);
+        
         name = profile.displayName;
         socialId = profile.id;
         username = profile.username;
@@ -80,6 +82,20 @@ module.exports = {
                     }
                 }
             });
+        } else if(authMode === 'socialconfig'){
+            socialConfigManager.addSocialAccount(req.session.state.accountId, socialType, socialId, accessToken,
+                refreshToken, options.expires, username, profileUrl, scope, function(err, value){
+                    if(err) {
+                        return done(null, false, err);
+                    } else {
+                        if(value !== null) {
+                            return done(null, value);
+                        } else {
+                            return done(null, false, {message: 'Social config not created.'});
+                        }
+                    }
+
+                });
         } else {
             //Logging in as usual.
             authenticationDao.authenticateBySocialLogin(req, socialType, socialId, email, username, profileUrl, accessToken, refreshToken, options.expires, scope, function(err, value) {
