@@ -1617,7 +1617,7 @@ $scope.inserted = false;
           return $(this).height();
       }).get());
       $scope.maxHeight = maxHeight + 10 + "px";
-      }, 1000)
+      }, 500)
    }
   })
   }
