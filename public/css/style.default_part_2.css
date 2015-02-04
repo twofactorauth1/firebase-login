@@ -12090,7 +12090,6 @@ div[data-type="coming-soon"] .component-inner {
 
 .thumbnail-slider-v1 .imgHeight {
   overflow: hidden;
-  min-height: 210px;
 }
 
 .thumbnail-slider-v1 .editing .image-wrap:hover {
@@ -12099,8 +12098,6 @@ div[data-type="coming-soon"] .component-inner {
   padding-left: 6px;
   margin-top: -4px;
   margin-bottom: -4px;
-  min-height: 210px;
-  min-width: 230px;
 }
 
 .thumbnail-slider-v1 .editing .image-wrap:hover .add-addtional {
