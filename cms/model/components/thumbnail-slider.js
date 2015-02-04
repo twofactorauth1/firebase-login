@@ -63,7 +63,56 @@ var component = $$.m.ModelBase.extend({
             thumbnailCollection : [
                 {
                     text : "Thumbnail Image",
-                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_114/or-st_logo_horizontal_hi_res_1417334410262.png",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
                     width : 250,
                     height : 175,
                     margin : "0 auto 0"

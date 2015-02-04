@@ -247,13 +247,13 @@ define([
                 }, {
                     title: 'Navigation 2',
                     type: 'navigation',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v2.jpg',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
                     version: 2,
                     enabled: true
                 }, {
                     title: 'Navigation 3',
                     type: 'navigation',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v3.jpg',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
                     version: 3,
                     enabled: true
                 }, {
@@ -289,7 +289,7 @@ define([
                 }, {
                     title: 'Thumbnail Slider',
                     type: 'thumbnail-slider',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail-slider.jpg',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
                     enabled: true
                 }
             ];
