@@ -1603,5 +1603,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.addImageToThumbnail = function(componentId) {
       window.parent.addImageToThumbnail(componentId);
     }
+
+
+  $('body').on("DOMNodeInserted", ".feature", function (e)
+  {   
+    setTimeout(function() {
+    var maxHeight = Math.max.apply(null, $("div.feature").map(function ()
+    {
+        return $(this).height();
+    }).get());
+    $scope.maxHeight = maxHeight + "px";
+    }, 1000)
+  })
   }
 ]);
