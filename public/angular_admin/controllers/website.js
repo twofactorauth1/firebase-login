@@ -59,7 +59,7 @@ define([
                 window.history.back();
             };
             var editBlockUI = blockUI.instances.get('editBlockUI');
-                editBlockUI.start("Initializing Edit Mode");
+            editBlockUI.start("Initializing Edit Mode");
             var iFrame = document.getElementById("iframe-website");
             var subdomainCharLimit = 4;
             $scope.primaryFontStack = '';
@@ -72,7 +72,7 @@ define([
             $scope.isMobile = false;
             $scope.tabs = {};
             $scope.addLinkType = 'page';
-            $scope.saveLoading = false ;
+            $scope.saveLoading = false;
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });
@@ -130,7 +130,7 @@ define([
                     $scope.allPages = arr;
 
                     //$scope.currentPage = _.findWhere(pages, {
-                      //  handle: currentPage
+                    //  handle: currentPage
                     //});
 
                     if ($scope.editingPageId) {
@@ -191,108 +191,106 @@ define([
             });
 
             //an array of component types and icons for the add component modal
-            $scope.componentTypes = [
-                {
-                    title: 'Blog',
-                    type: 'blog',
-                    icon: 'custom blog',
-                    enabled: false
-                }, {
-                    title: 'Masthead',
-                    type: 'masthead',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
-                    enabled: true
-                }, {
-                    title: 'Feature List',
-                    type: 'feature-list',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
-                    enabled: true
-                }, {
-                    title: 'Contact Us',
-                    type: 'contact-us',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
-                    enabled: true
-                }, {
-                    title: 'Coming Soon',
-                    type: 'coming-soon',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
-                    enabled: true
-                }, {
-                    title: 'Feature block',
-                    type: 'feature-block',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
-                    enabled: true
-                }, {
-                    title: 'Image Gallery',
-                    type: 'image-gallery',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
-                    enabled: true
-                }, {
-                    title: 'Image Text',
-                    version: 1,
-                    type: 'image-text',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
-                    enabled: true
-                }, {
-                    title: 'Meet Team',
-                    type: 'meet-team',
-                    icon: 'fa fa-users',
-                    enabled: false
-                }, {
-                    title: 'Navigation 1',
-                    type: 'navigation',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
-                    version: 1,
-                    enabled: true
-                }, {
-                    title: 'Navigation 2',
-                    type: 'navigation',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
-                    version: 2,
-                    enabled: true
-                }, {
-                    title: 'Navigation 3',
-                    type: 'navigation',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
-                    version: 3,
-                    enabled: true
-                }, {
-                    title: 'Products',
-                    type: 'products',
-                    icon: 'fa fa-money',
-                    enabled: false
-                }, {
-                    title: 'Simple form',
-                    type: 'simple-form',
-                    icon: 'custom simple-form',
-                    enabled: false
-                }, {
-                    title: 'Single Post',
-                    type: 'single-post',
-                    icon: 'custom single-post',
-                    enabled: false
-                }, {
-                    title: 'Social',
-                    type: 'social-link',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
-                    enabled: true
-                }, {
-                    title: 'Video',
-                    type: 'video',
-                    icon: 'fa fa-video',
-                    enabled: false
-                }, {
-                    title: 'Text Only',
-                    type: 'text-only',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
-                    enabled: true
-                }, {
-                    title: 'Thumbnail Slider',
-                    type: 'thumbnail-slider',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
-                    enabled: true
-                }
-            ];
+            $scope.componentTypes = [{
+                title: 'Blog',
+                type: 'blog',
+                icon: 'custom blog',
+                enabled: false
+            }, {
+                title: 'Masthead',
+                type: 'masthead',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
+                enabled: true
+            }, {
+                title: 'Feature List',
+                type: 'feature-list',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
+                enabled: true
+            }, {
+                title: 'Contact Us',
+                type: 'contact-us',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
+                enabled: true
+            }, {
+                title: 'Coming Soon',
+                type: 'coming-soon',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
+                enabled: true
+            }, {
+                title: 'Feature block',
+                type: 'feature-block',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
+                enabled: true
+            }, {
+                title: 'Image Gallery',
+                type: 'image-gallery',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
+                enabled: true
+            }, {
+                title: 'Image Text',
+                version: 1,
+                type: 'image-text',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
+                enabled: true
+            }, {
+                title: 'Meet Team',
+                type: 'meet-team',
+                icon: 'fa fa-users',
+                enabled: true
+            }, {
+                title: 'Navigation 1',
+                type: 'navigation',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+                version: 1,
+                enabled: true
+            }, {
+                title: 'Navigation 2',
+                type: 'navigation',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
+                version: 2,
+                enabled: true
+            }, {
+                title: 'Navigation 3',
+                type: 'navigation',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
+                version: 3,
+                enabled: true
+            }, {
+                title: 'Products',
+                type: 'products',
+                icon: 'fa fa-money',
+                enabled: false
+            }, {
+                title: 'Simple form',
+                type: 'simple-form',
+                icon: 'custom simple-form',
+                enabled: false
+            }, {
+                title: 'Single Post',
+                type: 'single-post',
+                icon: 'custom single-post',
+                enabled: false
+            }, {
+                title: 'Social',
+                type: 'social-link',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
+                enabled: true
+            }, {
+                title: 'Video',
+                type: 'video',
+                icon: 'fa fa-video',
+                enabled: false
+            }, {
+                title: 'Text Only',
+                type: 'text-only',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
+                enabled: true
+            }, {
+                title: 'Thumbnail Slider',
+                type: 'thumbnail-slider',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
+                enabled: true
+            }];
 
             /*****
                 {
@@ -346,7 +344,6 @@ define([
             *****/
             $scope.activated = false;
             document.getElementById("iframe-website").onload = function() {
-                console.log('iframe onload');
 
                 ngProgress.complete();
                 $scope.updatePage($location.$$search['pagehandle'], true);
@@ -357,7 +354,6 @@ define([
                 if ($scope.isEditing) {
                     if ($("#iframe-website").contents().find("body").length) {
                         setTimeout(function() {
-                            console.log('editing page >>>');
                             $scope.editPage();
                             $scope.iframeLoaded = true;
                             editBlockUI.stop();
@@ -382,81 +378,73 @@ define([
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
                     }
                     //Disable all links in edit
-                    $("#iframe-website").contents().find('body').on("click", ".component a", function (e)
-                    {
+                    $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                     });
 
                     //add click events for all the settings buttons
-                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function (e)
-                    {
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function(e) {
                         if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
-                           $scope.tabs.address = true;
+                            $scope.tabs.address = true;
                         $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                         var element = angular.element('#component-setting-modal');
                         element.modal('show');
                     });
 
-                     //add click events for all the add component buttons.
-                    $("#iframe-website").contents().find('body').on("click", ".add-component", function (e)
-                    {
-                         $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
-                         var element = angular.element('#add-component-modal');
-                         element.modal('show');
+                    //add click events for all the add component buttons.
+                    $("#iframe-website").contents().find('body').on("click", ".add-component", function(e) {
+                        $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                        var element = angular.element('#add-component-modal');
+                        element.modal('show');
                     });
 
-                      //add click events for all the delete component buttons.
-                    $("#iframe-website").contents().find('body').on("click", ".delete-component", function (e)
-                    {	
-                    	 SweetAlert.swal({
-	                        title: "Are you sure?",
-	                        text: "Do you want to delete this component?",
-	                        type: "warning",
-	                        showCancelButton: true,
-	                        confirmButtonColor: "#DD6B55",
-	                        confirmButtonText: "Yes, delete it!",
-	                        cancelButtonText: "No, do not delete it!",
-	                        closeOnConfirm: true,
-	                        closeOnCancel: true
-	                    },
-	                    function(isConfirm) {
-	                        if (isConfirm) {
-	                         $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
-	                        };
-	                    });
+                    //add click events for all the delete component buttons.
+                    $("#iframe-website").contents().find('body').on("click", ".delete-component", function(e) {
+                        SweetAlert.swal({
+                                title: "Are you sure?",
+                                text: "Do you want to delete this component?",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Yes, delete it!",
+                                cancelButtonText: "No, do not delete it!",
+                                closeOnConfirm: true,
+                                closeOnCancel: true
+                            },
+                            function(isConfirm) {
+                                if (isConfirm) {
+                                    $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+                                };
+                            });
                     });
 
-                    $("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function (e)
-                        {
-                            if(!$scope.activated)
-                            {
-                                $scope.activated = true;
-                                setTimeout(function() {
-                                    iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha();
-                                }, 1000)
-                            }
+                    $("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
+                        if (!$scope.activated) {
+                            $scope.activated = true;
+                            setTimeout(function() {
+                                iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha();
+                            }, 1000)
+                        }
                     });
 
                     //add media modal click events to all images in image gallery
 
-                     $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail", function (e)
-                     {
+                    $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail", function(e) {
                         e.preventDefault();
                         e.stopPropagation();
-                     $("#media-manager-modal").modal('show');
-                     $(".insert-image").removeClass("ng-hide");
-                         $scope.imageChange = true;
-                         $scope.componentArrTarget = e.currentTarget;
-                         $scope.componentImageIndex = e.currentTarget.attributes["data-index"].value;
-                         if(e.currentTarget.attributes["parent-index"] && e.currentTarget.attributes["number-per-page"])
-                         {
+                        $("#media-manager-modal").modal('show');
+                        $(".insert-image").removeClass("ng-hide");
+                        $scope.imageChange = true;
+                        $scope.componentArrTarget = e.currentTarget;
+                        $scope.componentImageIndex = e.currentTarget.attributes["data-index"].value;
+                        if (e.currentTarget.attributes["parent-index"] && e.currentTarget.attributes["number-per-page"]) {
                             $scope.componentImageIndex = (parseInt(e.currentTarget.attributes["parent-index"].value) * parseInt(e.currentTarget.attributes["number-per-page"].value)) + parseInt(e.currentTarget.attributes["data-index"].value);
-                         }
-                         $scope.componentEditing = _.findWhere($scope.components, {
-                             _id: $(e.currentTarget).closest('.component').data('id')
-                         });
-                     });
+                        }
+                        $scope.componentEditing = _.findWhere($scope.components, {
+                            _id: $(e.currentTarget).closest('.component').data('id')
+                        });
+                    });
                 };
 
                 if (iframeDoc.getElementById('body')) {
@@ -482,11 +470,9 @@ define([
             };
 
             $scope.editPage = function() {
-                console.log('edit page >>>');
                 $scope.isEditing = true;
 
                 var iframe = document.getElementById("iframe-website");
-                 console.log('triggering edit mode');
                 if (iframe.contentWindow.triggerEditMode)
                     iframe.contentWindow.triggerEditMode();
 
@@ -533,7 +519,7 @@ define([
 
             //TODO: use scope connection
             $scope.savePage = function() {
-                $scope.saveLoading = true ;
+                $scope.saveLoading = true;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);
@@ -579,35 +565,26 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-                                console.log('componentVarContents >>> ', componentVarContents);
                                 var jHtmlObject = $(componentVarContents);
                                 var editor = jQuery("<p>").append(jHtmlObject);
                                 editor.find(".cke_reset").remove();
                                 var newHtml = editor.html();
                                 componentVarContents = newHtml;
-                                console.log('componentVarContents >>> ', componentVarContents);
 
 
                                 var setterKey, pa;
                                 //if contains an array of variables
                                 if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
                                     //get index in array
-                                    console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['data-index'].value;
                                     var third = componentVar.split(".")[2];
-                                    console.log('first ', first);
-                                    console.log('second ', second);
-                                    console.log('third ', third);
                                     matchingComponent[first][second][third] = componentVarContents;
                                 }
                                 //if needs to traverse a single
                                 if (componentVar.indexOf('-') > 0) {
-                                    console.log('matchingComponent ', matchingComponent);
                                     var first = componentVar.split("-")[0];
                                     var second = componentVar.split("-")[1];
-                                    console.log('first ', first);
-                                    console.log('second ', second);
                                     matchingComponent[first][second] = componentVarContents;
                                 }
                                 //simple
@@ -673,9 +650,7 @@ define([
                 }
 
                 if ($location.$$search['posthandle']) {
-                    console.log('post handle detected');
                     route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
-                    console.log('route ', route);
                     //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
                 }
 
@@ -727,7 +702,7 @@ define([
                 }
             }
 
-            $scope.addFeatureList = function () {
+            $scope.addFeatureList = function() {
                 $scope.componentEditing.features.push({
                     "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
                     "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
@@ -735,13 +710,13 @@ define([
                 $scope.saveComponent();
             }
 
-//            $scope.addTeamMember = function () {
-//                $scope.componentEditing.features.push({
-//                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
-//                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-//                });
-//                $scope.saveComponent();
-//            }
+            //            $scope.addTeamMember = function () {
+            //                $scope.componentEditing.features.push({
+            //                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
+            //                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+            //                });
+            //                $scope.saveComponent();
+            //            }
 
             $scope.updateContactUsAddress = function(location) {
                 if ($scope.componentEditing.location.city) {
@@ -767,7 +742,6 @@ define([
             }
 
             $scope.addComponent = function() {
-                console.log('add component >>> ');
                 //$scope.deactivateAloha();
                 var pageId = $scope.currentPage._id;
                 if ($scope.selectedComponent.type === 'footer') {
@@ -804,9 +778,9 @@ define([
                         $scope.updateIframeComponents();
                         //TODO: get updateIframeComponents callback
                         setTimeout(function() {
-                            $scope.activateAloha();
-                        }, 1000)
-                        //$scope.scrollToIframeComponent(newComponent.anchor);
+                                $scope.activateAloha();
+                            }, 1000)
+                            //$scope.scrollToIframeComponent(newComponent.anchor);
                         toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     }
                 });
@@ -831,7 +805,6 @@ define([
             };
 
             $scope.updateIframeComponents = function(fn) {
-                console.log('updating iframe components');
                 //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
                 if (fn) {
@@ -840,13 +813,11 @@ define([
             };
 
             $scope.scrollToIframeComponent = function(section) {
-                console.log('scroll to >> ', section);
                 //document.getElementById("iframe-website").contentWindow.scrollTo(section);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.scrollTo && iFrame.contentWindow.scrollTo(section)
             };
 
             $scope.activateAloha = function() {
-                console.log('activateAloha >>>');
                 //document.getElementById("iframe-website").contentWindow.activateAloha();
                 $scope.bindEvents();
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
@@ -877,8 +848,7 @@ define([
 
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
                     $scope.componentEditingVersions = versions;
-                    if ($scope.componentEditing && $scope.componentEditing.version)
-                    {
+                    if ($scope.componentEditing && $scope.componentEditing.version) {
                         $scope.componentEditing.version = $scope.componentEditing.version.toString();
                         $scope.versionSelected = $scope.componentEditing.version;
                     }
@@ -901,7 +871,7 @@ define([
                     }
                 });
             };
-            $scope.saveComponent = function () {
+            $scope.saveComponent = function() {
 
                 var componentId = $scope.componentEditing._id;
 
@@ -969,10 +939,9 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
-                console.log('>>> activating');
                 setTimeout(function() {
-                            $scope.activateAloha();
-                        }, 500)
+                    $scope.activateAloha();
+                }, 500)
 
                 //update the scope as the temppage until save
 
@@ -984,7 +953,6 @@ define([
             };
 
             $scope.saveCustomComponent = function() {
-                console.log('saving custom component');
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -1044,9 +1012,9 @@ define([
                     } else if (type == 'simple-form') {
                         $scope.componentEditing.imgurl = asset.url;
                     } else if (type == 'image-gallery') {
-                       $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
+                        $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
                     } else if (type == 'thumbnail-slider') {
-                       $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;   
+                        $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
                     } else {
                         console.log('unknown component or image location');
                     }
@@ -1076,20 +1044,17 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.setBlogImage && iFrame.contentWindow.setBlogImage(asset.url);
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                     return;
-                }
-                else if ($scope.imgGallery && $scope.componentEditing) {
+                } else if ($scope.imgGallery && $scope.componentEditing) {
                     $scope.imgGallery = false;
                     $scope.componentEditing.images.push({
-                        url : asset.url
+                        url: asset.url
                     });
-                }
-                else if ($scope.imgThumbnail && $scope.componentEditing) {
+                } else if ($scope.imgThumbnail && $scope.componentEditing) {
                     $scope.imgThumbnail = false;
                     $scope.componentEditing.thumbnailCollection.push({
-                        url : asset.url
+                        url: asset.url
                     });
-                }
-                else {
+                } else {
                     $scope.componentEditing.bg.img.url = asset.url;
                     $scope.saveComponent();
                     return;
@@ -1126,28 +1091,28 @@ define([
                 if (isDirty && !$scope.changesConfirmed) {
                     event.preventDefault();
 
-                SweetAlert.swal({
-                        title: "Are you sure?",
-                        text: "Do you want to save your changes?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Yes, save changes!",
-                        cancelButtonText: "No, do not save changes!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    },
-                    function(isConfirm) {
-                        if (isConfirm) {
-                            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-                            $scope.savePage();
-                        } else {
-                            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-                        }
-                        $scope.changesConfirmed = true;
-                        $location.path(newUrl);
-                        offFn();
-                    });
+                    SweetAlert.swal({
+                            title: "Are you sure?",
+                            text: "Do you want to save your changes?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Yes, save changes!",
+                            cancelButtonText: "No, do not save changes!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        },
+                        function(isConfirm) {
+                            if (isConfirm) {
+                                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                                $scope.savePage();
+                            } else {
+                                SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                            }
+                            $scope.changesConfirmed = true;
+                            $location.path(newUrl);
+                            offFn();
+                        });
                 } else if ($scope.changesConfirmed) {
                     //do nothing
                 }
@@ -1155,44 +1120,42 @@ define([
             });
 
             //Add Link to navigation
-            $scope.initializeLinks = function()
-            {
-                $scope.newLink = {linkUrl : null, linkTitle:null, linkPage: null};
+            $scope.initializeLinks = function() {
+                $scope.newLink = {
+                    linkUrl: null,
+                    linkTitle: null,
+                    linkPage: null
+                };
             }
 
-            $scope.setLinkType = function(lnk)
-            {
+            $scope.setLinkType = function(lnk) {
                 $scope.addLinkType = lnk;
                 $scope.initializeLinks();
             }
 
-            $scope.addLinkToNav = function()
-            {
+            $scope.addLinkToNav = function() {
                 var linkTitle = null;
                 var linkUrl = null;
-                if($scope.newLink && $scope.newLink.linkPage){
+                if ($scope.newLink && $scope.newLink.linkPage) {
                     $scope.linkPage = _.findWhere(that.allPages, {
                         handle: $scope.newLink.linkPage
                     });
-                   linkTitle = $scope.linkPage.title;
-                   linkUrl = $scope.newLink.linkPage;
-                }
-                else if($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl)
-                {
+                    linkTitle = $scope.linkPage.title;
+                    linkUrl = $scope.newLink.linkPage;
+                } else if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
                     linkTitle = $scope.newLink.linkTitle;
                     linkUrl = $scope.newLink.linkUrl;
                 }
-                if(linkTitle && linkUrl)
-                {
+                if (linkTitle && linkUrl) {
                     $scope.website.linkLists.forEach(function(value, index) {
                         if (value.handle === "head-menu") {
                             value.links.push({
-                                    label: linkTitle,
-                                    type: "link",
-                                    linkTo: {
-                                        data: linkUrl,
-                                        type: $scope.addLinkType
-                                    }
+                                label: linkTitle,
+                                type: "link",
+                                linkTo: {
+                                    data: linkUrl,
+                                    type: $scope.addLinkType
+                                }
                             });
                             $scope.initializeLinks();
                         }
@@ -1244,16 +1207,13 @@ define([
             }
 
             window.addNewFeatureList = function(componentId, index) {
-                console.log('addNewFeatureList >>>');
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                console.log('component editing >>> ', $scope.componentEditing);
-                 $scope.componentEditing.features.push({
-                        "top" : "<div style=\"text-align:center\"><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-cubes  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-cubes%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-cubes%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></span></div>",
-                        "content" : "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.<br></p><p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><a data-cke-saved-href=\"http://\" href=\"http:\" style=\"color: rgb(255, 255, 255); outline: 0px; text-align: center; -webkit-box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; border-radius: 3px; border: 1px solid rgb(18, 77, 119); display: inline-block; font-family: arial; font-size: 13px; padding: 6px 24px; text-shadow: rgb(21, 70, 130) 0px 1px 0px; background-image: linear-gradient(rgb(0, 125, 193) 5%, rgb(0, 97, 167) 100%); background-color: rgb(0, 125, 193);\">Learn More</a><br></p>"
-                    });
-                console.log('adding feature complete, need edit mode');
+                $scope.componentEditing.features.push({
+                    "top": "<div style=\"text-align:center\"><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-cubes  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-cubes%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-cubes%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></span></div>",
+                    "content": "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.<br></p><p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><a data-cke-saved-href=\"http://\" href=\"http:\" style=\"color: rgb(255, 255, 255); outline: 0px; text-align: center; -webkit-box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; border-radius: 3px; border: 1px solid rgb(18, 77, 119); display: inline-block; font-family: arial; font-size: 13px; padding: 6px 24px; text-shadow: rgb(21, 70, 130) 0px 1px 0px; background-image: linear-gradient(rgb(0, 125, 193) 5%, rgb(0, 97, 167) 100%); background-color: rgb(0, 125, 193);\">Learn More</a><br></p>"
+                });
                 $scope.saveCustomComponent();
             }
 
@@ -1293,7 +1253,7 @@ define([
                 $scope.saveCustomComponent();
             }
 
-             window.addImageToThumbnail = function(componentId) {
+            window.addImageToThumbnail = function(componentId) {
                 $scope.imgThumbnail = true;
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
