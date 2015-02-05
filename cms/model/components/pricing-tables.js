@@ -38,13 +38,7 @@ var component = $$.m.ModelBase.extend({
              * The label for the component
              * (optional)
              */
-            title:"<h1>Pricing Table</h1>",
-
-            /**
-             * A description that appears at the top of the component
-             * (optional)
-             */
-            subtitle:"",
+            title:"<h1>Pricing Table</h1>",            
 
             txtcolor: "#444",
 
@@ -52,8 +46,8 @@ var component = $$.m.ModelBase.extend({
                 {
                     title : "<h1>This is title</h1>",
                     subtitle : "<h3>This is the subtitle.</h3>",
-                    text : 'this is text',
-                    price : '<span>$9.99/per month</span>',
+                    text : 'This is text',
+                    price : '$9.99/per month',
                     features: [
                         {
                             title : "<h4>This is the feature title</h4>",

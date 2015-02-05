@@ -821,8 +821,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       var newTable = {
         title : "<h1>This is title</h1>",
         subtitle : "<h3>This is the subtitle.</h3>",
-        text : 'this is text',
-        price : '<span>$9.99/per month</span>',
+        text : 'This is text',
+        price : '$9.99/per month',
         features: [
             {
                 title : "<h4>This is the feature title</h4>",

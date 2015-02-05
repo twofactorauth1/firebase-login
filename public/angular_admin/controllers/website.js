@@ -578,21 +578,37 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-                                var jHtmlObject = $(componentVarContents);
-                                var editor = jQuery("<p>").append(jHtmlObject);
-                                editor.find(".cke_reset").remove();
-                                var newHtml = editor.html();
-                                componentVarContents = newHtml;
 
+                                    var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                    if(regex.test(componentVarContents))
+                                    {
+                                        var jHtmlObject = $(componentVarContents);
+                                        var editor = jQuery("<p>").append(jHtmlObject);
+                                        editor.find(".cke_reset").remove();
+                                        var newHtml = editor.html();
+                                        componentVarContents = newHtml; 
+                                    }
+                                    
 
                                 var setterKey, pa;
                                 //if contains an array of variables
-                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
+                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
                                     //get index in array
                                     var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['data-index'].value;
                                     var third = componentVar.split(".")[2];
                                     matchingComponent[first][second][third] = componentVarContents;
+                                }
+                                //if contains an array of array variables
+                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                                    //get parent index in array
+                                    var first = componentVar.split(".")[0];                                    
+                                    var second = componentEditable[i2].attributes['parent-data-index'].value;
+                                    //get child index in array
+                                    var third = componentVar.split(".")[2];
+                                    var fourth = componentEditable[i2].attributes['data-index'].value;
+                                    var last = componentVar.split(".")[3];
+                                    matchingComponent[first][second][third][fourth][last] = componentVarContents;
                                 }
                                 //if needs to traverse a single
                                 if (componentVar.indexOf('-') > 0) {
