@@ -290,7 +290,13 @@ define([
                 type: 'thumbnail-slider',
                 preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
                 enabled: true
-            }];
+            }, {
+                    title: 'Top Bar',
+                    type: 'top-bar',
+                    icon: 'fa fa-info',
+                    enabled: true
+            }
+            ];
 
             /*****
                 {
