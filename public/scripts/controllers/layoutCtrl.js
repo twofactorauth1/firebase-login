@@ -394,7 +394,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.scrollTo = function(section) {
         console.log('>>> ', section);
-        if(section) {
+        if(section && angular.isString(section)) {
             $location.hash(section);
             $anchorScroll();
 
