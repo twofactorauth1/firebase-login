@@ -45,7 +45,7 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
                 keenService.singleExtraction(params, function(data) {
                       for (var i = 0; i < data.result.length; i++) {
                          var actions = data.result[i].pageActions;
-                          if (actions  && actions.length > 0) {
+                          if (actions.length > 0 && actions != 'undefined') {
                                 for (var j = 0; j < actions.length; j++) {
                                     for (var k = 0; k < actions[j].length; k++) {
                                         if (actions[j][k].type === 'mm') {
