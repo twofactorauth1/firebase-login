@@ -394,7 +394,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.scrollTo = function(section) {
         console.log('>>> ', section);
-        if(section) {
+        if(section && angular.isString(section)) {
             $location.hash(section);
             $anchorScroll();
 
@@ -705,7 +705,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             if (social.url) {
-          var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+          var urlRegex = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
           if (urlRegex.test(social.url) == false) {
         $("#social-link-url .error").html("Link url incorrect format");
         $("#social-link-url").addClass('has-error');
@@ -796,6 +796,47 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     window.clickandInsertImageButton = function(editor) {
       $scope.inlineInput = editor;
       window.parent.clickImageButton();
+    }
+
+    $scope.deletePricingTable = function(componentId, index) {
+      window.parent.deletePricingTable(componentId, index);
+    }
+
+    $scope.deletePricingTableFeature = function(componentId, index, parentIndex) {
+      window.parent.deletePricingTableFeature(componentId, index, parentIndex);
+    }
+
+
+    $scope.addPricingTableFeature = function(componentId, index, parentIndex) {
+      var newFeature =
+        {
+            title : "<h4>This is the feature title</h4>",
+            subtitle : "<b>This is the feature subtitle</b>",
+        }
+      window.parent.addPricingTableFeature(componentId, newFeature, index, parentIndex);
+    }
+
+    $scope.addPricingTable = function(componentId, index) {
+
+      var newTable = {
+        title : "<h1>This is title</h1>",
+        subtitle : "<h3>This is the subtitle.</h3>",
+        text : 'This is text',
+        price : '$9.99/per month',
+        features: [
+            {
+                title : "<h4>This is the feature title</h4>",
+                subtitle : "<b>This is the feature subtitle</b>",
+            }
+        ],
+        btn : {
+            text : "Get it now",
+            url : "#",
+            icon : "fa fa-rocket"
+        }
+      }
+
+      window.parent.addPricingTable(componentId, newTable, index);
     }
 
    
