@@ -260,7 +260,14 @@ define([
                 type: 'products',
                 icon: 'fa fa-money',
                 enabled: false
-            }, {
+            },
+            {
+                title: 'Pricing Tables',
+                type: 'pricing-tables',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
+                enabled: true
+            },
+             {
                 title: 'Simple form',
                 type: 'simple-form',
                 icon: 'custom simple-form',
@@ -1372,6 +1379,38 @@ define([
 
             window.setLoading = function(value) {
                 $scope.saveLoading = value;
+            }
+
+            window.deletePricingTable = function(componentId, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables.splice(index, 1);
+                $scope.saveCustomComponent();
+            }
+
+            window.addPricingTable = function(componentId, newTable, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables.splice(index, 0, newTable);
+                $scope.saveCustomComponent();
+            }
+
+             window.deletePricingTableFeature = function(componentId, index, parentIndex) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables[parentIndex].features.splice(index, 1);
+                $scope.saveCustomComponent();
+            }
+
+            window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables[parentIndex].features.splice(index, 0, newTable);
+                $scope.saveCustomComponent();
             }
 
         }

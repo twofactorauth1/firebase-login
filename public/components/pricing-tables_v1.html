@@ -1,46 +1,69 @@
-<div class="pricing-table-title">
-    <div class="editable">
-        <span ng-bind-html="component.title"></span>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="pricing-table-title">
+        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
+        </div>
     </div>
+    <div class="row pricing-table-wrap">
+    <div ng-repeat="table in component.tables track by $index">
+        <div class="col-md-8 col-md-offset-2 pricing-table {{isEditing ? 'edit-mode' : ''}}" id="home-box">
+            <div class="pricing_header">
+                <div class="editable" data-class="table_title" ng-bind-html="table.title | unsafe"></div>
+                <div class="editable" data-class="table_subtitle" ng-bind-html="table.subtitle | unsafe"></div>
+                <p class="editable" ng-bind-html="table.text | unsafe" data-class="table_text"></p>
+                <div class="space"></div>
+            </div>
+            <ul class="list-group">
+                <li ng-repeat="feature in table.features" class="list-group-item">
+                    <div class="pricing-table-feature {{isEditing ? 'edit-mode' : ''}}">
+                        <div class="text-center">
+                            <div class="editable" data-class="feature_title" ng-bind-html="feature.title | unsafe">
+                               <span class="fa fa-check"></span></div>
+                        </div>
+                        <div class="text-center">
+                            <div class="editable" data-class="feature_subtitle" ng-bind-html="feature.subtitle | unsafe">
+                            </div>
+                        </div>
+                        <div ng-if="isEditing" class="delete-pricing-table-feature center">
+                            <button ng-click="deletePricingTableFeature(component._id,$index, $parent.$parent.$index)" class="ng-scope btn-delete-pricing-table-feature">
+                                <i class='fa fa-trash'></i>
+                            </button>
+                        </div>
+                    <div ng-if="isEditing" class="add-addtional-feature center">
+                        <a href="" ng-click="addPricingTableFeature(component._id,$index, $parent.$parent.$index)">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
+
+                    <div>
+                </li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-12 price center">
+                    <div class="editable" data-class="price" ng-bind-html="table.price | unsafe"></div>
+                </div>
+            </div>
+
+
+            <div class="row btn-add">
+                <div class="col-md-12 text-center" class="editable" data-class="table-btn-text" >
+                    <a class="btn btn-primary" href="{{table.btn.url}}">{{table.btn.text}}</a>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+            </div>
+                <div ng-if="isEditing" class="delete-pricing-table center">
+                    <button ng-click="deletePricingTable(component._id,$index)" class="ng-scope btn-delete-pricing-table">
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </div>
+                <div ng-if="isEditing" class="add-addtional center">
+                    <a href="" ng-click="addPricingTable(component._id,$index)">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+        </div>
 </div>
-
-<div ng-repeat="table in component.tables track by $index">
-    <div class="col-md-8 col-md-offset-2" id="home-box">
-        <div class="pricing_header">
-            <h1>{{table['title']}}</h1>
-
-            <h3>{{table['subtitle']}}</h3>
-
-            <p>{{table['text']}}</p>
-
-            <div class="space"></div>
-        </div>
-        <ul class="list-group">
-            <li ng-repeat="feature in table['features']" class="list-group-item">
-                <div class="text-center">
-                    <h4>
-                        <span class="fa fa-check"></span>{{feature.title}}</h4>
-                </div>
-                <div class="text-center">
-                    <p><b>{{feature.subtitle}}</b>
-                    </p>
-                </div>
-            </li>
-        </ul>
-
-        <div class="row">
-            <div class="col-md-12 price center">
-                <span ng-bind-html="table.price"></span>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <a class="btn btn-primary btn-lg" href="{{table.btn.url}}">{{table.btn.text}}</a>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-        </div>
-    </div>
+</div>
 </div>
