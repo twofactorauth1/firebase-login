@@ -1,0 +1,54 @@
+<style>
+    .top-bar-v1 .navbar ul.navbar-nav li a,.top-bar-v1 .navbar ul.left-navbar-nav li a, .top-bar-v1 .navbar ul.navbar-nav li div {
+        color:{{component.txtcolor }}!important;
+    }
+    .top-bar-v1 .navbar {
+        background: {{component.bg.color || 'white'}};
+        border: none;
+        border-radius: 0;
+    }
+    .top-bar-v1 .navbar-collapse {
+        background: {{component.bg.color}}!important;
+    }
+
+    .top-bar-v1 .navbar ul.navbar-nav li a.active {
+         color: {{primaryColor || '#4bb0cb'}};
+    }
+</style>
+<div ng-class="component.type+'-v'+component.version">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+
+        <div id="navbar" class="navbar-collapse collapse main-block ">
+           <ul class="nav left-navbar-nav left-block">
+            <li><a href="https://www.facebook.com/"><i class="fa fa-facebook fa-lg"></i></a></li>
+            <li><a href="https://twitter.com/"><i class="fa fa-twitter fa-lg"></i></a></li>
+            <li><a href="https://www.linkedin.com"><i class="fa fa-linkedin fa-lg"></i></a></li>
+            <li><a href="https://www.gmail.com"><i class="fa fa-google-plus fa-lg"></i></a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right right-block">
+            <li class="hour-block">
+              <div class="navbar-text navbar-right"><i class="fa fa-clock-o fa-lg "></i> &nbsp;
+                <div class="editable" data-class="businessHours" ng-bind-html="component.businessHours | unsafe">
+                </div>
+             </div>
+            </li>
+            <li class="phone-block">
+                <div class="navbar-text navbar-right"> <i class="fa fa-phone fa-lg"></i> &nbsp;
+                    <div class="editable" data-class="phone" ng-bind-html="component.phone | unsafe"></div>
+                </div>
+            </li>
+            <li class="phone-block">
+                <div class="navbar-text navbar-right"> <i class="fa fa-envelope-o fa-lg"></i> &nbsp;
+                    <div class="editable" data-class="email" ng-bind-html="component.email | unsafe"></div>
+                </div>
+            </li>
+          </ul>
+
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+</div>

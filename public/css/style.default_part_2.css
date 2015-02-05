@@ -9393,6 +9393,35 @@ div[data-type='campaign'] .inner-page .overlay {
   padding: 15px;
 }
 
+/********** Topbar **********/
+
+.top-bar-v1 .navbar {
+  min-height: 50px;
+}
+
+.top-bar-v1 .left-block {
+  padding: 0;
+  margin: 10px !important;
+}
+
+.top-bar-v1 .right-block {
+  margin: 5px !important;
+}
+
+.top-bar-v1 .right-block .edit-wrap,
+.top-bar-v1 .right-block .editable {
+  display: inline-block;
+}
+
+.top-bar-v1 .hour-block div.navbar-right {
+  margin-right: 15px !important;
+}
+
+.top-bar-v1 .phone-block div.navbar-right {
+  margin-left: 15px;
+  margin-right: 15px !important;
+}
+
 /********** Navbar **********/
 
 .navbar-nav li.social a {
