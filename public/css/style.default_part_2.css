@@ -8747,7 +8747,8 @@ hr {
   padding: 5px 0;
 }
 
-.add-addtional {
+.add-addtional,
+.add-addtional-feature {
   position: absolute;
   background: rgba(44, 62, 80, 0.8);
   padding: 10px 10px 5px;
@@ -8765,7 +8766,8 @@ hr {
   transition: font-size 0.5s;
 }
 
-.add-addtional:hover {
+.add-addtional:hover,
+.add-addtional-feature:hover {
   font-size: 18px;
 }
 
@@ -11441,6 +11443,71 @@ div[data-type=blog] .container {
   }
 }
 
+.editing .pricing-table-wrap .pricing-table {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .pricing-table-wrap .pricing-table-feature {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .pricing-table-wrap .pricing-table.edit-mode,
+.editing .pricing-table-wrap .pricing-table-feature.edit-mode {
+  padding-top: 30px;
+}
+
+.editing .pricing-table-wrap .pricing-table:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .pricing-table-wrap .pricing-table-feature:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .pricing-table-wrap .pricing-table:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .pricing-table-wrap .pricing-table:hover .delete-pricing-table .btn-delete-pricing-table {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .pricing-table-wrap .pricing-table-feature:hover .add-addtional-feature {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .pricing-table-wrap .pricing-table-feature:hover .delete-pricing-table-feature .btn-delete-pricing-table-feature {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .pricing-table-wrap .delete-pricing-table .btn-delete-pricing-table {
+  display: none;
+}
+
+.editing .pricing-table-wrap .delete-pricing-table-feature .btn-delete-pricing-table-feature {
+  display: none;
+}
+
 .pricing-tables-v1 .container {
   padding-top: 40px;
 }
@@ -11451,7 +11518,9 @@ div[data-type=blog] .container {
 }
 
 .pricing-tables-v1 .pricing-table-title {
+  font-weight: bold;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .pricing-tables-v1 #home-box > h2 {
@@ -11463,6 +11532,10 @@ div[data-type=blog] .container {
 
 .pricing-tables-v1 .price {
   font-size: 25px;
+}
+
+.pricing-tables-v1 .btn-add {
+  margin-top: 10px;
 }
 
 .pricing-tables-v1 .pricing_header {
