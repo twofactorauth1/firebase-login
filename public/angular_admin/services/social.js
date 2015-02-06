@@ -1,6 +1,8 @@
 define(['app'], function (app) {
     app.register.service('SocialService', function ($http) {
         var baseUrl = '/api/1.0/social/';
+
+        //Twitter
         this.getTwitterFeed = function (twitterId, fn) {
             var apiUrl = baseUrl + ['twitter', 'tweets', twitterId].join('/');
             $http.get(apiUrl)
@@ -22,6 +24,15 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+        this.getTwitterProfile = function (fn) {
+            var apiUrl = baseUrl + ['twitter', 'profile'].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        //Facebook
         this.getFBPosts = function (socialId, fn) {
             var apiUrl = baseUrl + ['facebook', 'posts', socialId].join('/');
             $http.get(apiUrl)
@@ -29,6 +40,15 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+        this.getFBProfile = function (fn) {
+            var apiUrl = baseUrl + ['facebook', 'profile'].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        //Google Plus
         this.getGooglePlusPosts = function (socialId, fn) {
             // var apiUrl = baseUrl + ['facebook', 'posts', socialId].join('/');
             // $http.get(apiUrl)
