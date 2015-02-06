@@ -9441,6 +9441,28 @@ div[data-type='campaign'] .inner-page .overlay {
   margin-right: 15px !important;
 }
 
+.top-bar-v1 .add-addtional {
+  bottom: -20px;
+}
+
+.editing .main-block .left-block {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .main-block .left-block.edit-mode {
+  padding: 20px;
+}
+
+.editing .main-block .left-block:hover {
+  border: 3px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .main-block .left-block:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
 /********** Navbar **********/
 
 .navbar-nav li.social a {
@@ -9971,6 +9993,41 @@ contenthover a {
 
 /********** Meet Team  v2**********/
 
+.editing .meet-team-v2 .team-member-wrap .team-member {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .meet-team-v2 .team-member-wrap .team-member.edit-mode {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.editing .meet-team-v2 .team-member-wrap .team-member:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .meet-team-v2 .team-member-wrap .team-member:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .meet-team-v2 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .meet-team-v2 .team-member-wrap .delete-team-member .btn-delete-team-member {
+  display: none;
+}
+
 .meet-team-v2 {
   /* Small devices (tablets, 768px and up) */
 }
@@ -10018,6 +10075,44 @@ contenthover a {
 }
 
 /********** Meet Team v3 **********/
+
+.editing .meet-team-v3 .team-member-wrap .team-member {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .meet-team-v3 .team-member-wrap .team-member.edit-mode {
+  margin: 5px;
+}
+
+.editing .meet-team-v3 .team-member-wrap .team-member:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .meet-team-v3 .team-member-wrap .add-addtional {
+  bottom: -20px;
+}
+
+.editing .meet-team-v3 .team-member-wrap .team-member:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .meet-team-v3 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .meet-team-v3 .team-member-wrap .delete-team-member .btn-delete-team-member {
+  display: none;
+}
 
 .meet-team-v3 {
   /* 
@@ -10140,6 +10235,44 @@ contenthover a {
   }
 }
 
+.editing .meet-team-v4 .team-member-wrap .team-member {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .meet-team-v4 .team-member-wrap .team-member.edit-mode {
+  padding: 5px;
+}
+
+.editing .meet-team-v4 .team-member-wrap .team-member:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .meet-team-v4 .team-member-wrap .add-addtional {
+  bottom: -20px;
+}
+
+.editing .meet-team-v4 .team-member-wrap .team-member:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .meet-team-v4 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .meet-team-v4 .team-member-wrap .delete-team-member .btn-delete-team-member {
+  display: none;
+}
+
 .meet-team-v4 {
   /* Small devices (tablets, 768px and up) */
 }
@@ -10170,6 +10303,40 @@ contenthover a {
   .meet-team-v4 .team-member-container {
     margin: 0;
   }
+}
+
+.editing .meet-team-v5 .team-member-wrap .team-member {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .meet-team-v5 .team-member-wrap .team-member.edit-mode {
+  padding-top: 20px;
+}
+
+.editing .meet-team-v5 .team-member-wrap .team-member:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .meet-team-v5 .team-member-wrap .team-member:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .meet-team-v5 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .meet-team-v5 .team-member-wrap .delete-team-member .btn-delete-team-member {
+  display: none;
 }
 
 .meet-team-v5 {

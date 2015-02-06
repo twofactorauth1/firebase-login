@@ -55,7 +55,28 @@ var component = $$.m.ModelBase.extend({
             businessHours: "<span> Mon-Sat: 7:00 - 17:00</span>",
             email: "<span> info@indigenous.com</span>",
             phone: "<span>+123-456-7890</span>",
-
+            networks: [
+                {
+                    "name" : "facebook",
+                    "url" : "http://www.facebook.com",
+                    "icon" : "facebook"
+                },
+                {
+                    "name" : "twitter",
+                    "url" : "http://www.twitter.com",
+                    "icon" : "twitter"
+                },
+                {
+                    "name" : "linkedin",
+                    "url" : "http://www.linkedin.com",
+                    "icon" : "linkedin"
+                },
+                {
+                    "name" : "google-plus",
+                    "url" : "http://plus.google.com",
+                    "icon" : "google-plus"
+                }
+            ],
             /**
              *
              *

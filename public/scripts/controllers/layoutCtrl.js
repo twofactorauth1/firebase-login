@@ -778,6 +778,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
     }
+    $scope.addTeamMember = function(componentId, index) {
+      var newTeam = {
+        "name" : "<p>First Last</p>",
+        "position" : "<p>Position of Person</p>",
+        "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
+        "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
+        "social" : {
+            "linkedin" : "http://www.linkedin.com/"
+        }
+      }
+      window.parent.addTeamMember(componentId, newTeam, index);
+    }
 
     $scope.deleteFeatureList = function(componentId, index) {
       window.parent.deleteFeatureList(componentId, index);
@@ -829,11 +841,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 subtitle : "<b>This is the feature subtitle</b>",
             }
         ],
-        btn : {
-            text : "Get it now",
-            url : "#",
-            icon : "fa fa-rocket"
-        }
+        btn : "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
       }
 
       window.parent.addPricingTable(componentId, newTable, index);

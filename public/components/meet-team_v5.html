@@ -12,23 +12,22 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row team-member-wrap">
     <div class="col-md-8 col-md-offset-2">
-        <div class="col-md-6 text-center" ng-repeat="member in component.teamMembers">
+        <div class="col-md-6 text-center team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="member in component.teamMembers">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <img ng-src="{{member.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}}" />
+                    <img ng-src="{{member.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}} meet-team-image" data-index="{{$index}}"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 text-center para">
-                    <h4>{{member.name}}</h4>
-                    <h5>{{member.position}}</h5>
-                    <span ng-bind-html="member.bio"></span>
-
+                <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="member.name | unsafe"></div>
+                <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="member.position | unsafe"></div>
+                <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="member.bio | unsafe"></div>
                 </div>
             </div>
-             <div class="row">
+            <div class="row">
                 <ul class="social">
                 <li ng-repeat="(val, key) in member.social">
                     <a href="{{key}}" target="_blank">
@@ -36,13 +35,17 @@
                     </a>
                 </li>
                 </ul>
-        </div>
-            <div ng-if="isEditing" class="row">
-                <div class="delete-team-member center">
-                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
-                </div>
+            </div> 
+            <div ng-if="isEditing" class="delete-team-member center">
+                <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
+                    <i class='fa fa-trash'></i>
+                </button>
             </div>
-            
+            <div ng-if="isEditing" class="add-addtional center">
+                <a href="" ng-click="addTeamMember(component._id,$index)">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
         </div>
     </div>
     <div class="col-md-2">&nbsp;</div>

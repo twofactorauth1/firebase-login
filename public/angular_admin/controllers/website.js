@@ -392,8 +392,10 @@ define([
                     }
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
+                        if(!$(this).hasClass("clickable-link")) {
+                            e.preventDefault();
+                            e.stopPropagation();    
+                        }
                     });
 
                     //add click events for all the settings buttons
@@ -443,7 +445,7 @@ define([
 
                     //add media modal click events to all images in image gallery
 
-                    $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail", function(e) {
+                    $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         $("#media-manager-modal").modal('show');
@@ -1022,13 +1024,6 @@ define([
 
             //insertmedia into various components
             $scope.insertMedia = function(asset) {
-                if ($scope.componentEditing && $scope.componentEditing.type == "meet-team") {
-                    if (!$scope.team) {
-                        $scope.team = {}
-                    }
-                    $scope.team.profilepic = asset.url;
-                    return;
-                }
                 if ($scope.imageChange) {
                     $scope.imageChange = false;
                     var type = $scope.componentEditing.type;
@@ -1044,7 +1039,10 @@ define([
                         $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
                     } else if (type == 'thumbnail-slider') {
                         $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
-                    } else {
+                    } else if (type == 'meet-team') {
+                        $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
+                    }
+                     else {
                         console.log('unknown component or image location');
                     }
                     $scope.bindEvents();
@@ -1426,6 +1424,13 @@ define([
                     _id: componentId
                 });
                 $scope.componentEditing.tables[parentIndex].features.splice(index, 0, newTable);
+                $scope.saveCustomComponent();
+            }
+            window.addTeamMember = function(componentId, newTeam, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.teamMembers.splice(index, 0, newTeam);
                 $scope.saveCustomComponent();
             }
 

@@ -54,11 +54,7 @@ var component = $$.m.ModelBase.extend({
                             subtitle : "<b>This is the feature subtitle</b>",
                         }
                     ],
-                    btn : {
-                        text : "Get it now",
-                        url : "#",
-                        icon : "fa fa-rocket"
-                    }
+                    btn : "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
                 }
             ]
         }

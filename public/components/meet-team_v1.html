@@ -16,7 +16,7 @@
         <div class="col-xs-12 col-sm-4 col-md-3 profilepic pull-left" ng-repeat="teamMember in component.teamMembers">
             <div class="{{teamMember.becomeMember?'become-member':''}} team-member {{isEditing ? 'edit-mode' : ''}}">
 
-                <div class="profile-img">
+                <div class="profile-img meet-team-image" data-index="{{$index}}">
                     <div class="profilepic-hover">
                         <div class="mask left" style="width:115px"></div>
                         <div class="mask right" style="width:115px"></div>
@@ -51,7 +51,11 @@
 
                     </div>
 
-                    <div ng-if="!teamMember.becomeMember" class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
+                    <div ng-if="!teamMember.becomeMember">
+                            <img ng-if="!teamMember.becomeMember" ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img img-thumbnail img-circle" style="width: 229px;height: 230px"  />
+                    </div>
+
+
 
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
                         <div class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
@@ -70,7 +74,7 @@
                 </div>
                 <ul ng-if="!teamMember.becomeMember" class="profile-social">
                     <li ng-repeat="(val, key) in teamMember.social">
-                        <a href="{{key}}" target="_blank">
+                        <a href="{{key}}" data-cke-saved-href="{{key}}" target="_blank">
                             <span class="fa fa-{{val}}"></span>
                         </a>
                     </li>
