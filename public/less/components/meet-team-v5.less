@@ -1,3 +1,39 @@
+.editing .meet-team-v5 .team-member-wrap {
+  .team-member {
+    border: 4px solid rgba(0, 0, 0, 0);
+    position: relative;
+  }
+  .team-member.edit-mode {
+    padding-top: 20px;
+  }
+  .team-member:hover {
+    border: 4px dashed rgba(0, 0, 0, 0.4);
+  }
+  .team-member:hover {
+    .add-addtional {
+      display: block;
+      font-size: 28px;
+    }
+    .delete-team-member {
+      .btn-delete-team-member {
+        background: rgba(0, 0, 0, 0.5);
+        display: block;
+        border: 0;
+        color: #ffffff;
+        padding: 10px 15px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1050;
+      }
+    }
+  }
+  .delete-team-member {
+    .btn-delete-team-member {
+      display: none;
+    }
+  }
+}
 .meet-team-v5{
   .para  h4{
     text-align: center;
