@@ -392,8 +392,11 @@ define([
                     }
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
+                        if(!$(this).hasClass("clickable-link")) {
+                            e.preventDefault();
+                            e.stopPropagation();    
+                        }
+                        
                     });
 
                     //add click events for all the settings buttons
