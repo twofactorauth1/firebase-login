@@ -46,9 +46,7 @@
 
 
             <div class="row btn-add">
-                <div class="col-md-12 text-center" class="editable" data-class="table-btn-text" >
-                    <a class="btn btn-primary" href="{{table.btn.url}}">{{table.btn.text}}</a>
-                </div>
+                <div class="editable center" data-class="tables.item.btn" data-index="{{$index}}" ng-bind-html="table.btn | unsafe"></div>
                 <br/>
                 <br/>
                 <br/>
