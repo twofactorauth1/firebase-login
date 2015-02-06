@@ -207,6 +207,51 @@ var dao = {
         });
     },
 
+    getProfleForUser: function(user, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting tweets ', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "account/verify_credentials.json";
+        var params = {
+            user_id: twitterId || this._getTwitterId(user),
+            count: 200
+        };
+
+        var url = this._generateUrl(path, params);
+
+        self.log.debug('>> getting tweets params ', params);
+        self.log.debug('>> getting tweets url ', url);
+
+        this._makeRequest(url, user, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var profile = JSON.parse(value);
+            self.log.debug('>> profile ', profile);
+            fn(null, profile);
+
+            // if (profile.length > 0) {
+            //     var result = [];
+
+            //     var processTweet = function (tweet, cb) {
+            //         result.push(new Post().convertFromTwitterTweet(tweet));
+            //         cb();
+            //     };
+
+            //     async.eachLimit(tweets, 10, processTweet, function (cb) {
+            //         return fn(null, result);
+            //     });
+            // } else {
+            //     fn(null, tweets);
+            // }
+        });
+    },
+
     getFollowers: function(user, twitterId, fn) {
         var self = this;
         self.log.debug('>> getting followers ', twitterId);
