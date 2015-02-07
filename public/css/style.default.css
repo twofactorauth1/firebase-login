@@ -23501,7 +23501,8 @@ hr {
   padding: 5px 0;
 }
 .add-addtional,
-.add-addtional-feature {
+.add-addtional-feature,
+.add-addtional-team {
   position: absolute;
   background: rgba(44, 62, 80, 0.8);
   padding: 10px 10px 5px;
@@ -23519,7 +23520,8 @@ hr {
   transition: font-size 0.5s;
 }
 .add-addtional:hover,
-.add-addtional-feature:hover {
+.add-addtional-feature:hover,
+.add-addtional-team:hover {
   font-size: 18px;
 }
 body.editing .no-component {
@@ -24363,6 +24365,21 @@ contenthover a {
   height: 170px;
 }
 /********** Meet Team **********/
+.editing .team-member-wrap .social-link {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+.editing .team-member-wrap .social-link.edit-mode {
+  padding-top: 30px;
+}
+.editing .team-member-wrap .social-link:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+.editing .team-member-wrap .social-link:hover .add-addtional-team {
+  display: block;
+  font-size: 20px !important;
+  top: 0px;
+}
 .editing .team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
@@ -24422,7 +24439,7 @@ contenthover a {
   height: 229px;
   position: absolute;
   border-radius: 130px;
-  z-index: 99999;
+  z-index: 999;
   overflow: hidden;
   text-align: center;
   line-height: 18px;
@@ -24510,6 +24527,21 @@ contenthover a {
   text-align: center;
 }
 /********** Meet Team  v2**********/
+.editing .meet-team-v2 .team-member-wrap .social-link {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+.editing .meet-team-v2 .team-member-wrap .social-link.edit-mode {
+  padding-top: 30px;
+}
+.editing .meet-team-v2 .team-member-wrap .social-link:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+.editing .meet-team-v2 .team-member-wrap .social-link:hover .add-addtional-team {
+  display: block;
+  font-size: 20px !important;
+  top: 0px;
+}
 .editing .meet-team-v2 .team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
@@ -24579,6 +24611,21 @@ contenthover a {
   }
 }
 /********** Meet Team v3 **********/
+.editing .meet-team-v3 .team-member-wrap .social-link {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+.editing .meet-team-v3 .team-member-wrap .social-link.edit-mode {
+  padding-top: 30px;
+}
+.editing .meet-team-v3 .team-member-wrap .social-link:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+.editing .meet-team-v3 .team-member-wrap .social-link:hover .add-addtional-team {
+  display: block;
+  font-size: 20px !important;
+  top: 0px;
+}
 .editing .meet-team-v3 .team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
@@ -24712,6 +24759,21 @@ contenthover a {
     margin: 0;
   }
 }
+.editing .meet-team-v4 .team-member-wrap .social-link {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+.editing .meet-team-v4 .team-member-wrap .social-link.edit-mode {
+  padding-top: 30px;
+}
+.editing .meet-team-v4 .team-member-wrap .social-link:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+.editing .meet-team-v4 .team-member-wrap .social-link:hover .add-addtional-team {
+  display: block;
+  font-size: 20px !important;
+  top: 0px;
+}
 .editing .meet-team-v4 .team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
@@ -24769,6 +24831,21 @@ contenthover a {
   .meet-team-v4 .team-member-container {
     margin: 0;
   }
+}
+.editing .meet-team-v5 .team-member-wrap .social-link {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+.editing .meet-team-v5 .team-member-wrap .social-link.edit-mode {
+  padding-top: 30px;
+}
+.editing .meet-team-v5 .team-member-wrap .social-link:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+.editing .meet-team-v5 .team-member-wrap .social-link:hover .add-addtional-team {
+  display: block;
+  font-size: 20px !important;
+  top: 0px;
 }
 .editing .meet-team-v5 .team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
