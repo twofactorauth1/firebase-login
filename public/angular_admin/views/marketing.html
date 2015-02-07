@@ -31,10 +31,10 @@
                     <span class="hidden-xs">Social Feed</span>
                 </div>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'">
+            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'" disabled="true">
                 <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing?">
                     <i class="fa fa-flag"></i>
-                    <span class="hidden-xs">Campaigns
+                    <span class="hidden-xs">Campaigns <span class="label label-primary">Coming Soon</span>
                 </div>
                 </span>
             </button>
@@ -79,100 +79,20 @@
                     <h3 class="center">Add a Feed to get set up.</h3>
                 </div> -->
                 <div class="col-sm-3 stream-filter">
-                    <div class="toolbar hidden">
-                        <ul id="filter" class="option-set filter">
-                            <li><a href="" data-group="filter" data-filter="*" class="link-all" ng-click="filterFeed('all')">all</a>
-                            </li>
-                            <li class="active {{feedType.type}}" ng-repeat="feedType in feedTypes">
-                                <a href="" rel="{{feedType.type}}" data-group="filter" data-filter=".{{feedType.type}}" ng-click="filterFeed(feedType.type)">
-                                    <i class="fa fa-{{feedType.type}}"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <accordion close-others="oneAtATime" class="hidden">
-                        <accordion-group is-open="type.open" disabled="disabled">
-                            <accordion-heading>
-                                <div class="pull-left">
-                                    <input type="checkbox" name="all" class="pull-left" checked="checked">
-                                    <h4 class="filter-heading pull-left">All Networks</h4>
-                                </div>
-                            </accordion-heading>
-                        </accordion-group>
-                        <accordion-group is-open="type.open" ng-repeat="type in feedTypes">
-                            <accordion-heading>
-                                <div class="col-xs-12 ckbox ckbox-success">
-                                    <input type="checkbox" name="all" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                    <label for="all"></label>
-                                </div>
-                                <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_2_400x400.png" class="avatar pull-left" />
-                                <div class="pull-left">
-                                    <h4 class="filter-heading">Indigenous</h4>
-                                    <p class="filter-text">{{type}}</p>
-                                </div>
-                                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                                <div class="clearfix"></div>
-                            </accordion-heading>
-                            <!-- TWITTER -->
-                            <!-- <div class="col-xs-12 ckbox ckbox-success">
-                                    <input type="checkbox" name="mentions" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                    <label for="mentions">Mentions</label>
-                                    <hr></hr>
-                                </div>
-                                <div class="col-xs-12 ckbox ckbox-success">
-                                    <input type="checkbox" name="retweets" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                    <label for="retweets">Retweets</label>
-                                    <hr></hr>
-                                </div> -->
-                            <div class="col-xs-12 ckbox ckbox-success" ng-if="type == 'twitter'">
-                                <input type="checkbox" name="tweets" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                <label for="tweets">Tweets</label>
-                                <hr></hr>
-                            </div>
-                            <div class="col-xs-12 ckbox ckbox-success" ng-if="type == 'twitter'">
-                                <input type="checkbox" name="followers" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                <label for="followers">Followers</label>
-                                <hr></hr>
-                            </div>
-                            <!--  <div class="col-xs-12 ckbox ckbox-success">
-                                    <input type="checkbox" name="dm-inbox" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                    <label for="dm-inbox">DM Inbox</label>
-                                    <hr></hr>
-                                </div>
-                                <div class="col-xs-12 ckbox ckbox-success">
-                                    <input type="checkbox" name="dm-outbox" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                    <label for="dm-outbox">DM Outbox</label>
-                                    <hr></hr>
-                                </div>
-                                <div class="col-xs-12 ckbox ckbox-success">
-                                    <input type="checkbox" name="dm-outbox" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                    <label for="dm-outbox">Scheduled</label>
-                                    <hr></hr>
-                                </div> -->
-
-                            <!-- FACEBOOK -->
-
-                            <div class="col-xs-12 ckbox ckbox-success" ng-if="type == 'facebook'">
-                                <input type="checkbox" name="likes" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                <label for="likes">Likes</label>
-                                <hr></hr>
-                            </div>
-                            <div class="col-xs-12 ckbox ckbox-success" ng-if="type == 'facebook'">
-                                <input type="checkbox" name="posts" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                                <label for="posts">Posts</label>
-                                <hr></hr>
-                            </div>
-                        </accordion-group>
-                    </accordion>
-
-
                     <accordion>
                         <accordion-group is-open="item.open" ng-repeat="type in feedTypes">
                             <accordion-heading>
-                                <input type="checkbox" class="pull-left glyphicon" ng-click="filterFeed(type, $event)" checked="checked"/>{{type}}
-                                <img src="https://abs.twimg.com/sticky/default_profile_images/default_profile_2_400x400.png" class="avatar pull-left" />
-                                <span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': item.open, 'glyphicon-chevron-down': !item.open}"></span>
-                                <div class="clearfix"></div>
+                                <div class="feedTypeDetail">
+                                    <input type="checkbox" class="pull-left glyphicon" ng-click="filterFeed(type.type, $event)" checked="checked" />
+                                    <img ng-src="{{type.picture.data.url || type.profile_image_url_https}}" class="avatar pull-left" />
+                                    <div class="pull-left">
+                                        <h4>{{type.name}}</h4>
+                                        <p><span class="fa fa-{{type.type}}-square"></span> {{type.type}}</p>
+                                    </div>
+
+                                    <span class="glyphicon pull-right" ng-class="{'glyphicon-chevron-up': item.open, 'glyphicon-chevron-down': !item.open}"></span>
+                                    <div class="clearfix"></div>
+                                </div>
                             </accordion-heading>
                             <!--  <div ng-repeat="data in item.content">
                                         <input type="checkbox" class="pull-left glyphicon" ng-click="filterSubitemClick(data, item.title, $event)" ng-checked="master" value="{{data}}" />{{data}}
@@ -188,14 +108,16 @@
                                     <label for="retweets">Retweets</label>
                                     <hr></hr>
                                 </div> -->
-                            <div class="col-xs-12" ng-if="type == 'twitter'">
+                            <div class="col-xs-12" ng-if="type.type == 'twitter'">
                                 <input type="checkbox" name="tweets" class="ng-pristine ng-untouched ng-valid" checked="checked">
                                 <label for="tweets">Tweets</label>
+                                <span class="pull-right label label-primary">{{tweetsLength}}</span>
                                 <hr></hr>
                             </div>
-                            <div class="col-xs-12" ng-if="type == 'twitter'">
+                            <div class="col-xs-12" ng-if="type.type == 'twitter'">
                                 <input type="checkbox" name="followers" class="ng-pristine ng-untouched ng-valid" checked="checked">
                                 <label for="followers">Followers</label>
+                                <span class="pull-right label label-primary">{{followersLength}}</span>
                                 <hr></hr>
                             </div>
                             <!--  <div class="col-xs-12 ckbox ckbox-success">
@@ -216,13 +138,13 @@
 
                             <!-- FACEBOOK -->
 
-                            <div class="col-xs-12" ng-if="type == 'facebook'">
+                            <div class="col-xs-12" ng-if="type.type == 'facebook'">
                                 <input type="checkbox" name="likes" class="ng-pristine ng-untouched ng-valid" checked="checked">
                                 <label for="likes">Likes</label>
-                                <span class="pull-right label label-primary">14</span>
+                                <span class="pull-right label label-primary">--</span>
                                 <hr></hr>
                             </div>
-                            <div class="col-xs-12" ng-if="type == 'facebook'">
+                            <div class="col-xs-12" ng-if="type.type == 'facebook'">
                                 <input type="checkbox" name="posts" class="ng-pristine ng-untouched ng-valid" checked="checked">
                                 <label for="posts">Posts</label>
                                 <span class="pull-right label label-primary">{{fbPostsLength}}</span>
@@ -233,8 +155,39 @@
 
                 </div>
                 <div ng-if="feed.length > 0" class="col-sm-9">
+                    <div class="submit-post-form">
+                        <div class="panel panel-dark panel-alt timeline-post hidden">
+                            <div class="panel-body">
+                                <textarea placeholder="Write something..." class="form-control"></textarea>
+                            </div>
+                            <!-- panel-body -->
+                            <div class="panel-footer">
+                                <div class="timeline-btns pull-left hidden">
+                                    <a href="" class="tooltips hidden" data-toggle="tooltip" title="" data-original-title="Add Photo"><i class="glyphicon glyphicon-picture"></i></a>
+                                    <a href="" class="tooltips hidden" data-toggle="tooltip" title="" data-original-title="Add Video"><i class="glyphicon glyphicon-facetime-video"></i></a>
+                                </div>
+                                <div class="pull-left">
+                                    <div class="form-horizontal" style="margin-left: 20px;">
+                                        <div class="form-group mb0">
+                                            <label for="post-to" class="pull-left control-label" style="padding: 0;margin-right: 10px;font-size: 14px;">Post To: </label>
+                                            <div class="pull-left">
+                                                <select class="form-control mb0">
+                                                    <option>Facebook</option>
+                                                    <option>Twitter</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--timeline-btns -->
+                                <button class="btn btn-primary pull-right">Submit Post</button>
+                            </div>
+                            <!-- panel-footer -->
+                        </div>
+                    </div>
                     <ul class="stream">
-                        <li ng-repeat="post in displayedFeed track by $index | orderBy: 'date':true" class="col-sm-4 mb20">
+                        <li ng-repeat="post in displayedFeed | orderBy: 'date':true" class="col-sm-4 mb20">
                             <div ng-if="post.type == 'facebook'">
                                 <div class="post-inner">
                                     <div class="post-content">

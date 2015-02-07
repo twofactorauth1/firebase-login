@@ -43,6 +43,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('tweets/:twitterId'), this.isAuthApi.bind(this), this.getTweets.bind(this));
         app.get(this.url('followers/:twitterId'), this.isAuthApi.bind(this), this.getFollowers.bind(this));
+        app.get(this.url('profile'), this.isAuthApi.bind(this), this.getProfile.bind(this));
     },
 
     updateStatus: function(req, resp) {
@@ -75,6 +76,17 @@ _.extend(api.prototype, baseApi.prototype, {
         twitterDao.getFollowers(req.user, twitterId, function(err, value){
             self.log.debug('<< followers');
             self.sendResultOrError(resp, err, value, 'Error getting followers for user', 500);
+        });
+    },
+
+    getProfile: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getprofile');
+
+        var twitterId = req.params.twitterId;
+        twitterDao.getProfleForUser(req.user, twitterId, function(err, value){
+            self.log.debug('<< profile');
+            self.sendResultOrError(resp, err, value, 'Error getting profile for user', 500);
         });
     }
 });

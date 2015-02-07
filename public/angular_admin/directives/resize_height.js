@@ -30,7 +30,7 @@ define(['angularAMD'], function (angularAMD) {
 
                 scope.styleMarketingSection = function () {
                     return {
-                        'height': (newValue.h)-120 + 'px',
+                        'height': (newValue.h)-109 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
