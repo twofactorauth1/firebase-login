@@ -983,7 +983,7 @@ define([
                 // });
             };
 
-            $scope.saveCustomComponent = function() {
+            $scope.saveCustomComponent = function(networks) {
                 var componentId = $scope.componentEditing._id;
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -992,7 +992,7 @@ define([
                     }
                 }
                 $scope.currentPage.components = $scope.components;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, $scope.componentEditing.networks);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, networks ? networks : $scope.componentEditing.networks);
             };
 
             //delete page
@@ -1362,11 +1362,51 @@ define([
                 }
             }
 
-            window.getSocialNetworks = function(componentId) {
+            window.updateTeamNetworks = function(old_value, mode, new_value, parent_index) {
+                var selectedName;
+                switch (mode) {
+                    case "add":
+                        if (new_value && new_value.name && new_value.url) {
+                            $scope.componentEditing.teamMembers[parent_index].networks.push({
+                                name: new_value.name,
+                                url: new_value.url,
+                                icon: new_value.icon
+                            });
+                            $scope.saveCustomComponent($scope.componentEditing.teamMembers[parent_index].networks);
+                        }
+                        break;
+                    case "update":
+                        if (new_value && new_value.name && new_value.url) {
+                            selectedName = _.findWhere($scope.componentEditing.teamMembers[parent_index].networks, {
+                                name: old_value.name
+                            });
+                            selectedName.name = new_value.name;
+                            selectedName.url = new_value.url;
+                            selectedName.icon = new_value.icon;
+                            $scope.saveCustomComponent($scope.componentEditing.teamMembers[parent_index].networks);
+                        }
+                        break;
+                    case "delete":
+                        selectedName = _.findWhere($scope.componentEditing.teamMembers[parent_index].networks, {
+                            name: old_value.name
+                        });
+                        if (selectedName) {
+                            var index = $scope.componentEditing.teamMembers[parent_index].networks.indexOf(selectedName)
+                            $scope.componentEditing.teamMembers[parent_index].networks.splice(index, 1);
+                            $scope.saveCustomComponent($scope.componentEditing.teamMembers[parent_index].networks);
+                        }
+                        break;
+                }
+            }
+
+            window.getSocialNetworks = function(componentId, nested, parent_index) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                return $scope.componentEditing.networks;
+                if(nested)
+                    return $scope.componentEditing.teamMembers[parent_index].networks;
+                else
+                    return $scope.componentEditing.networks;
             }
 
             window.updateAdminPageScope = function(page) {

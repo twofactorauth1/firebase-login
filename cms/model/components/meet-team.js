@@ -38,36 +38,52 @@ var component = $$.m.ModelBase.extend({
                     "position" : "<p>Position of Person</p>",
                     "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
                     "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-                    "social" : {
-                        "linkedin" : "http://www.linkedin.com/"
-                    }
+                    "networks": [
+                        {
+                            "name" : "linkedin",
+                            "url" : "http://www.linkedin.com",
+                            "icon" : "linkedin"
+                        }
+                    ]
                 },
                 {
                     "name" : "<p>First Last</p>",
                     "position" : "<p>Position of Person</p>",
                     "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
                     "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-                    "social" : {
-                        "linkedin" : "http://www.linkedin.com/"
-                    }
+                    "networks": [
+                        {
+                            "name" : "linkedin",
+                            "url" : "http://www.linkedin.com",
+                            "icon" : "linkedin"
+                        }
+                    ]
                 },
                 {
                     "name" : "<p>First Last</p>",
                     "position" : "<p>Position of Person</p>",
                     "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
                     "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-                    "social" : {
-                        "linkedin" : "http://www.linkedin.com/"
-                    }
+                    "networks": [
+                        {
+                            "name" : "linkedin",
+                            "url" : "http://www.linkedin.com",
+                            "icon" : "linkedin"
+                        }
+                    ]
                 },
                 {
                     "name" : "<p>First Last</p>",
                     "position" : "<p>Position of Person</p>",
                     "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
                     "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-                    "social" : {
-                        "linkedin" : "http://www.linkedin.com/"
-                    }
+                    "networks": [
+                        {
+                            "name" : "linkedin",
+                            "url" : "http://www.linkedin.com",
+                            "icon" : "linkedin"
+                        }
+                    ]
                 }
             ],
 
