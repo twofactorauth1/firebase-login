@@ -669,9 +669,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       icon: "yahoo"
     }]
 
-    $scope.setSelectedSocialLink = function(link, id, update) {
+    $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
       if (!$scope.social)
         $scope.social = {};
+      if(nested)
+        $scope.meetTeamIndex = index;
+      else
+        $scope.meetTeamIndex = null;
       if (update) {
         $scope.social.selectedLink = link.name;
         $scope.social.name = link.name;
@@ -684,7 +688,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $("#social-link-name").removeClass('has-error');
       $("#social-link-url .error").html("");
       $("#social-link-url").removeClass('has-error');
-      $scope.networks = window.parent.getSocialNetworks(id);
+      $scope.networks = window.parent.getSocialNetworks(id, nested, index);
     }
     $scope.setSelectedLink = function(social_link) {
       $scope.social.name = social_link.name;
@@ -770,23 +774,38 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           }
           break;
       }
-      window.parent.updateSocialNetworks(old_value, mode, social);
-      // $("#socialComponentModal").modal("hide");
-      $(".modal-backdrop").remove();
+      if($scope.meetTeamIndex !== null)
+        window.parent.updateTeamNetworks(old_value, mode, social,$scope.meetTeamIndex);
+      else  
+        window.parent.updateSocialNetworks(old_value, mode, social);      
       $scope.social = {};
+      $scope.meetTeamIndex = null;
+      if($("#meetteamSocialModal").length)
+        $("#meetteamSocialModal").modal("hide");
+      if($("#socialComponentModal").length)
+        $("#socialComponentModal").modal("hide");
+      if($("#topbarSocialComponentModal").length)
+        $("#topbarSocialComponentModal").modal("hide");      
+      $(".modal-backdrop").remove();
     };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
     }
+
     $scope.addTeamMember = function(componentId, index) {
+      // to do: the information should fetch from component model
       var newTeam = {
         "name" : "<p>First Last</p>",
         "position" : "<p>Position of Person</p>",
         "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
         "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-        "social" : {
-            "linkedin" : "http://www.linkedin.com/"
-        }
+        "networks": [
+                        {
+                            "name" : "linkedin",
+                            "url" : "http://www.linkedin.com",
+                            "icon" : "linkedin"
+                        }
+                    ]
       }
       window.parent.addTeamMember(componentId, newTeam, index);
     }
@@ -820,6 +839,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.addPricingTableFeature = function(componentId, index, parentIndex) {
+      // to do: the information should fetch from component model
       var newFeature =
         {
             title : "<h4>This is the feature title</h4>",
@@ -829,7 +849,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.addPricingTable = function(componentId, index) {
-
+      // to do: the information should fetch from component model
       var newTable = {
         title : "<h1>This is title</h1>",
         subtitle : "<h3>This is the subtitle.</h3>",
