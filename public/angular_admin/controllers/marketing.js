@@ -1,4 +1,4 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService'], function(app) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore'], function(app) {
     app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, UserService, CampaignService, SocialService, SocialConfigService) {
 
         $scope.campaigns = [];
@@ -46,24 +46,21 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.displayedFeed = [];
 
         $scope.filterFeed = function(type, $event) {
+            console.log('filterFeed ', type);
             $event.stopPropagation();
-            console.log('type ', type);
-            console.log('event ', $event.currentTarget.checked);
             if (type != 'all') {
-                for (var i = 0; i < $scope.feed.length; i++) {
-                    if ($scope.feed[i].type == type) {
-                        console.log('$scope.feed[i].type ', $scope.feed[i].type);
-                        if ($event.currentTarget.checked) {
-                            console.log('pushing into display');
+                if ($event.currentTarget.checked) {
+                    for (var i = 0; i < $scope.feed.length; i++) {
+                        if ($scope.feed[i].type == type) {
                             $scope.displayedFeed.push($scope.feed[i]);
-                        } else {
-                            console.log('removing from display');
-                            $scope.displayedFeed.push($scope.feed[i]);
-                            for (var j = 0; j < $scope.displayedFeed.length; j++) {
-                                if ($scope.displayedFeed[j].id == $scope.feed[i].id) {
-                                    $scope.displayedFeed.splice(j, 1);
-                                }
-                            }
+                        }
+                    }
+                    setTimeout(function() { $scope.$apply(); },1);
+                } else {
+                    for (var i = 0; i < $scope.feed.length; i++) {
+                        if ($scope.feed[i].type == type) {
+                            var itemToRemove = _.find($scope.displayedFeed, function(value) { return value._id == $scope.feed[i]._id; });
+                            $scope.displayedFeed = _.filter($scope.displayedFeed, function(o) { return o._id != itemToRemove._id; });
                         }
                     }
                 }
@@ -124,12 +121,15 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             return trackedObjects;
         };
 
+        $scope.tweetsLength = 0;
+        $scope.followersLength = 0;
+
         $scope.handleTwitterFeeds = function(trackedObjects, id) {
-            $scope.feedTypes.push('twitter');
             var trackedTwitterObjects = $scope.getTrackedObjects(trackedObjects, id);
             for (var i = 0; i < trackedTwitterObjects.length; i++) {
                 if (trackedTwitterObjects[i].type == 'feed') {
                     SocialService.getTwitterFeed(trackedTwitterObjects[i].socialId, function(tweets) {
+                        $scope.tweetsLength = tweets.length;
                         for (var i = 0; i < tweets.length; i++) {
                             tweets[i].type = 'twitter';
                             $scope.feed.push(tweets[i]);
@@ -139,6 +139,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 if (trackedTwitterObjects[i].type == 'follower') {
                     SocialService.getTwitterFollowers(trackedTwitterObjects[i].socialId, function(followers) {
                         console.log('followers ', followers);
+                        $scope.followersLength = followers.length;
                         for (var i = 0; i < followers.length; i++) {
                             followers[i].type = 'twitter';
                             $scope.feed.push(followers[i]);
@@ -152,16 +153,26 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             for (var i = 0; i < config.socialAccounts.length; i++) {
                 var thisSocial = config.socialAccounts[i];
                 if (thisSocial.type == 'tw') {
+                    SocialService.getTwitterProfile(function(profile) {
+                        console.log('Twitter Profile: ', profile);
+                        profile.type = 'twitter';
+                        $scope.feedTypes.push(profile);
+                    });
                     $scope.handleTwitterFeeds(config.trackedObjects, thisSocial.id);
                 }
                 if (thisSocial.type == 'fb') {
-                    $scope.feedTypes.push('facebook');
                     SocialService.getFBPosts("636552113048686", function(posts) {
                         for (var i = 0; i < posts.length; i++) {
                             posts[i].type = 'facebook';
                             $scope.fbPostsLength +=1;
                             $scope.feed.push(posts[i]);
                         };
+                    });
+
+                    SocialService.getFBProfile(function(profile) {
+                        console.log('FB Profile: ', profile);
+                        profile.type = 'facebook';
+                        $scope.feedTypes.push(profile);
                     });
                 }
                 if (thisSocial.type == 'go') {

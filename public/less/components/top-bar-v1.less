@@ -1,0 +1,51 @@
+/********** Topbar **********/
+.top-bar-v1 {
+  .navbar {
+    min-height: 50px;
+  }
+  .left-block {
+      padding: 0;
+      margin: 10px !important;
+
+  }
+  .right-block{
+    margin: 5px !important;
+    .edit-wrap, .editable {
+      display: inline-block;
+    }
+  }
+  .hour-block{
+
+    div.navbar-right{
+      margin-right: 15px !important;
+    }
+  }
+  .phone-block{
+
+    div.navbar-right{
+        margin-left: 15px;
+        margin-right: 15px !important;
+      }
+  }
+  .add-addtional {
+  bottom: -20px;
+  }
+}
+.editing .main-block {
+  .left-block {
+    border: 4px solid rgba(0, 0, 0, 0);
+    position: relative;
+  }
+  .left-block.edit-mode {
+    padding: 20px;
+  }
+  .left-block:hover {
+    border: 3px dashed rgba(0, 0, 0, 0.4);
+  }
+  .left-block:hover {
+    .add-addtional {
+      display: block;
+      font-size: 28px;
+    }
+  }
+}

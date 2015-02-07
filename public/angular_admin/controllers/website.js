@@ -260,7 +260,14 @@ define([
                 type: 'products',
                 icon: 'fa fa-money',
                 enabled: false
-            }, {
+            },
+            {
+                title: 'Pricing Tables',
+                type: 'pricing-tables',
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
+                enabled: true
+            },
+             {
                 title: 'Simple form',
                 type: 'simple-form',
                 icon: 'custom simple-form',
@@ -290,7 +297,13 @@ define([
                 type: 'thumbnail-slider',
                 preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
                 enabled: true
-            }];
+            }, {
+                    title: 'Top Bar',
+                    type: 'top-bar',
+                    icon: 'fa fa-info',
+                    enabled: true
+            }
+            ];
 
             /*****
                 {
@@ -379,8 +392,10 @@ define([
                     }
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
+                        if(!$(this).hasClass("clickable-link")) {
+                            e.preventDefault();
+                            e.stopPropagation();    
+                        }
                     });
 
                     //add click events for all the settings buttons
@@ -430,7 +445,7 @@ define([
 
                     //add media modal click events to all images in image gallery
 
-                    $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail", function(e) {
+                    $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {
                         e.preventDefault();
                         e.stopPropagation();
                         $("#media-manager-modal").modal('show');
@@ -565,21 +580,37 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-                                var jHtmlObject = $(componentVarContents);
-                                var editor = jQuery("<p>").append(jHtmlObject);
-                                editor.find(".cke_reset").remove();
-                                var newHtml = editor.html();
-                                componentVarContents = newHtml;
 
+                                    var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                    if(regex.test(componentVarContents))
+                                    {
+                                        var jHtmlObject = $(componentVarContents);
+                                        var editor = jQuery("<p>").append(jHtmlObject);
+                                        editor.find(".cke_reset").remove();
+                                        var newHtml = editor.html();
+                                        componentVarContents = newHtml; 
+                                    }
+                                    
 
                                 var setterKey, pa;
                                 //if contains an array of variables
-                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
+                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
                                     //get index in array
                                     var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['data-index'].value;
                                     var third = componentVar.split(".")[2];
                                     matchingComponent[first][second][third] = componentVarContents;
+                                }
+                                //if contains an array of array variables
+                                if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                                    //get parent index in array
+                                    var first = componentVar.split(".")[0];                                    
+                                    var second = componentEditable[i2].attributes['parent-data-index'].value;
+                                    //get child index in array
+                                    var third = componentVar.split(".")[2];
+                                    var fourth = componentEditable[i2].attributes['data-index'].value;
+                                    var last = componentVar.split(".")[3];
+                                    matchingComponent[first][second][third][fourth][last] = componentVarContents;
                                 }
                                 //if needs to traverse a single
                                 if (componentVar.indexOf('-') > 0) {
@@ -993,13 +1024,6 @@ define([
 
             //insertmedia into various components
             $scope.insertMedia = function(asset) {
-                if ($scope.componentEditing && $scope.componentEditing.type == "meet-team") {
-                    if (!$scope.team) {
-                        $scope.team = {}
-                    }
-                    $scope.team.profilepic = asset.url;
-                    return;
-                }
                 if ($scope.imageChange) {
                     $scope.imageChange = false;
                     var type = $scope.componentEditing.type;
@@ -1015,7 +1039,10 @@ define([
                         $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
                     } else if (type == 'thumbnail-slider') {
                         $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
-                    } else {
+                    } else if (type == 'meet-team') {
+                        $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
+                    }
+                     else {
                         console.log('unknown component or image location');
                     }
                     $scope.bindEvents();
@@ -1366,6 +1393,45 @@ define([
 
             window.setLoading = function(value) {
                 $scope.saveLoading = value;
+            }
+
+            window.deletePricingTable = function(componentId, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables.splice(index, 1);
+                $scope.saveCustomComponent();
+            }
+
+            window.addPricingTable = function(componentId, newTable, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables.splice(index, 0, newTable);
+                $scope.saveCustomComponent();
+            }
+
+             window.deletePricingTableFeature = function(componentId, index, parentIndex) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables[parentIndex].features.splice(index, 1);
+                $scope.saveCustomComponent();
+            }
+
+            window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.tables[parentIndex].features.splice(index, 0, newTable);
+                $scope.saveCustomComponent();
+            }
+            window.addTeamMember = function(componentId, newTeam, index) {
+                $scope.componentEditing = _.findWhere($scope.components, {
+                    _id: componentId
+                });
+                $scope.componentEditing.teamMembers.splice(index, 0, newTeam);
+                $scope.saveCustomComponent();
             }
 
         }

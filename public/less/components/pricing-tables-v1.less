@@ -1,3 +1,76 @@
+.editing .pricing-table-wrap {
+ 
+  .pricing-table {
+    border: 4px solid rgba(0, 0, 0, 0);
+    position: relative;
+  }
+
+  .pricing-table-feature {
+    border: 2px solid rgba(0, 0, 0, 0);
+    position: relative;
+  }
+  .pricing-table.edit-mode, .pricing-table-feature.edit-mode {
+    padding-top: 30px;
+  }
+
+  .pricing-table:hover {
+    border: 4px dashed rgba(0, 0, 0, 0.4);
+  }
+
+  .pricing-table-feature:hover {
+    border: 2px dashed rgba(0, 0, 0, 0.4);
+  }
+
+  .pricing-table:hover {
+    .add-addtional {
+      display: block;
+      font-size: 28px;
+    }
+    .delete-pricing-table {
+      .btn-delete-pricing-table {
+        background: rgba(0, 0, 0, 0.5);
+        display: block;
+        border: 0;
+        color: #ffffff;
+        padding: 10px 15px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1050;
+      }
+    }
+  }
+  .pricing-table-feature:hover {
+    .add-addtional-feature {
+      display: block;
+      font-size: 28px;
+    }
+    .delete-pricing-table-feature {
+      .btn-delete-pricing-table-feature {
+        background: rgba(0, 0, 0, 0.5);
+        display: block;
+        border: 0;
+        color: #ffffff;
+        padding: 10px 15px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1050;
+      }
+    }
+  }
+  .delete-pricing-table {
+    .btn-delete-pricing-table {
+      display: none;
+    }
+  }
+  .delete-pricing-table-feature {
+    .btn-delete-pricing-table-feature {
+      display: none;
+    }
+  }
+}
+
 .pricing-tables-v1 {
 
      .container {
@@ -10,7 +83,9 @@
     }
 
     .pricing-table-title {
+        font-weight: bold;
         text-align: center;
+        text-transform: uppercase;
     }
 
     #home-box > h2 {
@@ -22,6 +97,9 @@
 
     .price {
         font-size: 25px;
+    }
+    .btn-add {
+        margin-top: 10px;
     }
 
      .pricing_header {

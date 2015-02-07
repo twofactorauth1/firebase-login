@@ -17,10 +17,11 @@
 
     <div class="mb30"></div>
 
-    <div class="row">
+    <div class="row team-member-wrap">
         <div class="col-sm-4 col-md-3 col-xs-12 text-center team-member-container wow fadeInDown animated" ng-repeat="teamMember in component.teamMembers">
-            <div class="team-member">
-                <div class="profile-img" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: cover;width: 220px;height: 220px;"></div>
+            <div class="team-member {{isEditing ? 'edit-mode' : ''}}">
+                <div class="profile-img meet-team-image" data-index="{{$index}}" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: cover;width: 212px;height: 220px;">
+                </div>
                 <div class="team-member-meta">
                     <div class="name">
                         <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
@@ -39,13 +40,18 @@
                                 <span class="fa fa-{{val}}"></span>
                             </a>
                         </li>
-                    </ul>
-                    <div ng-if="isEditing" class="delete-team-member center">
-                        <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
-                    </div>
-
+                    </ul>                    
                 </div>
-
+                <div ng-if="isEditing" class="delete-team-member center">
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </div>
+                <div ng-if="isEditing" class="add-addtional center">
+                    <a href="" ng-click="addTeamMember(component._id,$index)">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

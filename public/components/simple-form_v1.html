@@ -14,14 +14,12 @@
             <div class="inner-page row">
 
                 <div class="simple-form-title" >
-                    <div class="editable" data-class="title" data-index="{{$index}}">
-                        <span ng-bind-html="component.title | unsafe"/>
+                    <div class="editable" data-class="title" ng-bind-html="component.maintitle | unsafe" data-index="{{$index}}">
                     </div>
                 </div>
 
                 <div class="simple-form-subtitle">
-                    <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                        <span ng-bind-html="component.subtitle | unsafe"></span>
+                    <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe" data-index="{{$index}}">
                     </div>
                 </div>
 
