@@ -20,22 +20,22 @@
                             <div class="ckbox ckbox-default">
                                 <input type="checkbox"
                                        id="selectall"
-                                       ng-model="select_all"
-                                       ng-change="m.selectTriggerFn(select_all)">
+                                       ng-model="selectModel.select_all"
+                                       ng-change="m.selectTriggerFn(selectModel.select_all)" />
                                 <label for="selectall">Select All</label>
                             </div>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-envelope-o"></i><span class="hidden-xs">Email</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-envelope-o"></i><span class="hidden-xs">Email</span></a>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
                         </li>
                         <li>
-                            <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                         </li>
                         <li class="filter-type" style="font-size: 11px;">
                             Show:
