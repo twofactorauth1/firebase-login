@@ -128,7 +128,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.m.selectAll();
                 };
 
-                $scope.m.selectAll = function(showType) {
+                $scope.m.selectAll = function(showType, filterOnly) {
+                    filterOnly = filterOnly || false;
 
                     if (showType) {
                         $scope.showType = showType;
@@ -142,7 +143,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     }
 
                     $scope.originalAssets.forEach(function(value, index) {
-                      value.checked = value.checked || $scope.selectModel.select_all;
+                      if ( !filterOnly ) {
+                        value.checked = $scope.selectModel.select_all;
+                      }
+
                       if ($scope.showType === 'all') {
                         $scope.assets.push(value);
                         if ( value.checked ) {
@@ -157,8 +161,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                         }
                       }
                     });
-
                     $scope.lastSelect = null;
+                    $scope.m.selectAllStatus();
                 };
 
                 $scope.m.singleSelect = function(asset) {
