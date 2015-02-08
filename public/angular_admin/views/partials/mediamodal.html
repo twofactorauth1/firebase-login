@@ -117,7 +117,7 @@
                     <button class="btn btn-primary"><i class="fa fa-save"></i> Save Image</button>
                 </div>
                 <div class="row" ng-if="!editingImage">
-                    <div class="col-md-offset-8 col-md-4">
+                    <div class="col-md-offset-7 col-md-5">
                         <label for="upload_image" class="btn btn-primary ">
                             <span ng-if="uploader.queue.length <= 0" ng-show="!isMobile">From Computer</span>
                             <span ng-if="uploader.queue.length <= 0" ng-show="isMobile">From Mobile</span>
@@ -154,7 +154,7 @@
                             <tbody>
                                 <tr ng-repeat="item in uploader.queue">
                                     <td>
-                                        <strong>{{ item.file.name }}</strong>
+                                        <span class="word-wrap"><strong>{{ item.file.name }}</strong></span>
                                     </td>
                                     <td ng-show="uploader.isHTML5" nowrap>
                                         {{ item.file.size/1024/1024|number:2 }} MB
