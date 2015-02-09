@@ -25,7 +25,7 @@ define(['app',
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
-      $scope.saveLoading = false ; 
+      $scope.saveLoading = false ;
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,
@@ -95,7 +95,7 @@ define(['app',
       };
 
       $scope.customerSaveFn = function() {
-        $scope.saveLoading = true; 
+        $scope.saveLoading = true;
         if ($scope.customer.details[0].phones) {
           $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
             return num.number !== "";
@@ -108,7 +108,7 @@ define(['app',
             {
               CustomerService.saveCustomer($scope.customer, function(customer) {
               $scope.customer = customer;
-              $scope.saveLoading = false; 
+              $scope.saveLoading = false;
               if ($scope.currentState == 'customerAdd') {
                 ToasterService.setPending('success', 'Contact Created.');
                 $state.go('customerDetail', {
@@ -123,10 +123,10 @@ define(['app',
             });
             }
             else {
-              $scope.saveLoading = false; 
+              $scope.saveLoading = false;
               ToasterService.show("warning", "Contact Name OR Email is required");
             }
-              
+
         });
 
       };
@@ -316,7 +316,7 @@ define(['app',
       }
 
       $scope.$watch('fullName', function(newValue, oldValue) {
-        if (newValue) {
+        if (newValue !== undefined) {
           var nameSplit = newValue.split(' ');
           if (nameSplit.length >= 3) {
             $scope.customer.first = nameSplit[0];
