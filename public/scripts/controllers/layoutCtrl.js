@@ -1231,6 +1231,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       return newArr;
     }
 
+
     $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
       $scope.newAccount.membership = planId;
       $scope.subscriptionPlanAmount = amount;
@@ -1306,10 +1307,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               name = 'John Doe';
             }
 
+              var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+            console.log('hash ', hash.toString(CryptoJS.enc.Hex));
             //send data to intercom
             window.intercomSettings = {
               name: user.first + ' ' + user.last,
               email: user.email,
+              user_hash: hash.toString(CryptoJS.enc.Hex),
               created_at: new Date().getTime(),
               app_id: "b3st2skm"
             };
