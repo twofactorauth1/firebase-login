@@ -2,7 +2,7 @@
 <div class="indi-assistant">
 
     <div class="pageheader row">
-        <div class="col-xs-12">
+        <div class="col-xs-7">
             <h2><i class="fa fa-question-circle"></i> Support</h2>
         </div>
     </div>
@@ -29,171 +29,178 @@
         </div>
     </div> -->
 
-    <div>
-        <div class="header-menu-row">
-            <div class="btn-group col-xs-12 template-btns">
-                <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-pages" ng-class="{'active': activeTab === 'getting-started'}" ng-click="showToaster = false; activeTab = 'getting-started'">
-                    <i class="fa fa-file-text-o"></i>
-                    <span class="hidden-xs">Getting Started
-                    </span>
-                </button>
-                <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-posts" ng-class="{'active': activeTab === 'help-topics'}" ng-click="showToaster = false; activeTab = 'help-topics'">
-                    <i class="fa fa-newspaper-o"></i>
-                    <span class="hidden-xs">Help Topics</span>
-                </button>
-            </div>
+    <div class="header-menu-row">
+        <div class="btn-group col-xs-12 template-btns">
+            <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-pages" ng-class="{'active': activeTab === 'getting-started'}" ng-click="showToaster = false; activeTab = 'getting-started'">
+                <i class="fa fa-file-text-o"></i>
+                <span class="hidden-xs">Getting Started
+                </span>
+            </button>
+            <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-posts" ng-class="{'active': activeTab === 'help-topics'}" ng-click="showToaster = false; activeTab = 'help-topics';">
+                <i class="fa fa-newspaper-o"></i>
+                <span class="hidden-xs">Help Topics</span>
+            </button>
         </div>
+    </div>
 
-        <div class="contentpanel pull-left" ng-style="styleIndi()" indigeweb-resize>
-
-            <div ng-switch="activeTab">
-                <div class="getting-started-section" ng-switch-when="getting-started">
-                    <div>
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <div class="avatar col-sm-1 col-sm-offset-2 col-xs-12">
-                                    <h1 style="font-size:65px"><i class="fa fa-question-circle"></i></h1>
-                                    <div class="visible-xs clearfix mb20"></div>
-                                </div>
-                                <div class="content col-sm-7 col-xs-12">
-                                    <h5>Getting the Most Out of Indigenous</h3>
-                                    <h4>Complete the tasks below and your business will will truly be launched and ready to accept customers. Complete all 9 tasks and recieve a 30min Phone Consultation worth $75!</h4>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
+    <div class="contentpanel" ng-switch="activeTab" ng-style="styleIndi()" indigeweb-resize>
+            <div class="getting-started-section" ng-switch-when="getting-started">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="avatar col-sm-1 col-sm-offset-2 col-xs-12">
+                            <h1 style="font-size:65px"><i class="fa fa-question-circle"></i></h1>
+                            <div class="visible-xs clearfix mb20"></div>
                         </div>
-                    </div>
-                    <div class="panel panel-default widget-messaging">
-                        <div class="profile panel-body ">
-                            <ul class="task-list">
-                                <li class="complete">
-                                    <h1 class="pull-left"><i class="fa fa-check-circle-o"></i></h1>
-                                    <small class="pull-right done">COMPLETE</small>
-                                    <h3 class="pull-left">Sign Up For Indigenous</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>You completed the most difficult task of starting to take control of your business.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('account/edit', 'basic-info')" ng-class="{complete: userPreferences.tasks.basic_info }">
-                                    <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.basic_info , 'fa-circle-o' : !userPreferences.tasks.basic_info }"></i></h1>
-                                    <small class="pull-right done" ng-if="userPreferences.tasks.basic_info">COMPLETE</small>
-                                    <h3 class="pull-left">Basic Account Information</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Enter the basic information about your business like your address and logo.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('website', 'select-theme')" ng-class="{complete: userPreferences.tasks.select_theme }">
-                                    <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.select_theme , 'fa-circle-o' : !userPreferences.tasks.select_theme }"></i></h1>
-                                    <small class="pull-right done" ng-if="userPreferences.tasks.select_theme">COMPLETE</small>
-                                    <h3 class="pull-left">Select A Theme</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Select a theme for your front facing website where your customers can visit.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('account', 'connect-social')">
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
-                                    <h3 class="pull-left">Connect Social Accounts</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Connect your social account so you can import contacts and create marketing campaigns.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('customer', 'create-contact')">
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
-                                    <h3 class="pull-left">Import / Create Contacts</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Import your contact from your various accounts or create them.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('marketing', 'create-campaign')">
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
-                                    <h3 class="pull-left">Create First Campaign</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Create your first campaign to start getting vistors.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('commerce', 'add-product')">
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
-                                    <h3 class="pull-left">Import / Create Products</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Import or create new products to start selling and creating revenue.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li ng-click="startTask('wesbite', 'add-post')">
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
-                                    <h3 class="pull-left">Create First Blog Post</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Keep everyone up to date and informed with a regular blog.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                                <li>
-                                    <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                    <small class="pull-right"></small>
-                                    <h3 class="pull-left">Discover the Dashboard</h3>
-                                    <div class="clearfix mb5"></div>
-                                    <div class="task-desc">
-                                        <p><b>Now evetything is set up, its time to start trakcing.</b>
-                                            <p>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-                            </ul>
+                        <div class="content col-sm-7 col-xs-12">
+                            <h3>Getting the Most Out of Indigenous</h3>
+                            <h4>Complete the tasks below and your business will will truly be launched and ready to accept customers. Complete all 9 tasks and recieve a 30min Phone Consultation worth $75!</h4>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
-                <div class="help-topics-section" ng-switch-when="help-topics">
-                    <div class="panel-group" id="accordion" ng-repeat="topic in topics">
-                        <div class="panel pane-default">
+
+                <div class="panel panel-default widget-messaging">
+                    <div class="profile panel-body">
+                        <ul class="task-list">
+                            <li class="complete">
+                                <h1 class="pull-left"><i class="fa fa-check-circle-o"></i></h1>
+                                <small class="pull-right done">COMPLETE</small>
+                                <h3 class="pull-left">Sign Up For Indigenous</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>You completed the most difficult task of starting to take control of your business.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('account/edit', 'basic-info')" ng-class="{complete: userPreferences.tasks.basic_info }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.basic_info , 'fa-circle-o' : !userPreferences.tasks.basic_info }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.basic_info">COMPLETE</small>
+                                <h3 class="pull-left">Basic Account Information</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Enter the basic information about your business like your address and logo.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('website', 'select-theme')" ng-class="{complete: userPreferences.tasks.select_theme }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.select_theme , 'fa-circle-o' : !userPreferences.tasks.select_theme }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.select_theme">COMPLETE</small>
+                                <h3 class="pull-left">Select A Theme</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Select a theme for your front facing website where your customers can visit.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('account', 'connect-social')">
+                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                <small class="pull-right"></small>
+                                <h3 class="pull-left">Connect Social Accounts</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Connect your social account so you can import contacts and create marketing campaigns.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('customer', 'create-contact')">
+                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                <small class="pull-right"></small>
+                                <h3 class="pull-left">Import / Create Contacts</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Import your contact from your various accounts or create them.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('marketing', 'create-campaign')">
+                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                <small class="pull-right"></small>
+                                <h3 class="pull-left">Create First Campaign</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Create your first campaign to start getting vistors.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('commerce', 'add-product')">
+                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                <small class="pull-right"></small>
+                                <h3 class="pull-left">Import / Create Products</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Import or create new products to start selling and creating revenue.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('wesbite', 'add-post')">
+                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                <small class="pull-right"></small>
+                                <h3 class="pull-left">Create First Blog Post</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Keep everyone up to date and informed with a regular blog.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li>
+                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
+                                <small class="pull-right"></small>
+                                <h3 class="pull-left">Discover the Dashboard</h3>
+                                <div class="clearfix mb5"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Now evetything is set up, its time to start trakcing.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="help-topics-section" ng-switch-when="help-topics">
+                <div class="row">
+                <div class="col-xs-12 panel-group" id="accordion">
+                        <div class="panel pane-default" ng-repeat="topic in topics">
+                            <span ng-init="topic[$index] = false" />
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index}}" ng-click="topic[$index]= !topic[$index]" ng-style="{'background-color':'#5BC0DE', 'color':'white'}" class="collapsed">
-                                        <span class="glyphicon glyphicon-plus-sign" ng-hide="topic[$index]">{{flag}}</span>
+                                    <a data-toggle="collapse" data-target="#collapse{{$index}}" ng-click="topic[$index] = !topic[$index]" style="background-color: #5BC0DE; color: white;" class="collapsed">
+                                        <span ng-hide="topic[$index]" class="glyphicon glyphicon-plus-sign">{{flag}}</span>
                                         <span ng-show="topic[$index]" class="glyphicon glyphicon-minus-sign">{{flag}}</span> {{topic.title}}
                                     </a>
                                 </h4>
                             </div>
-                            <div id="collapse{{$index}}" class="panel-collapse collapse" ng-style="{'background-color':topic[$index]?component.bg.color:''}">
+                            <div id="collapse{{$index}}" class="panel-collapse collapse">
                                 <div class="panel-body">
                                     {{topic.text}}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>
                 </div>
             </div>
-        </div>
-
-        <div class="rightpanel rightpanel-website">
-        </div>
     </div>
+
+    <div class="rightpanel rightpanel-website">
+    </div>
+
     <div id="step-1" class="single-step carousel-step">
         <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-wrap="false" data-interval="0">
 
