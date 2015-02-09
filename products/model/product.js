@@ -56,7 +56,8 @@ var product = $$.m.ModelBase.extend({
                 by: null
             },
             _v:"0.1",
-            is_image : false
+            is_image : false,
+            starred: false
         }
     },
 

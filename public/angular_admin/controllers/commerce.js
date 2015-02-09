@@ -95,13 +95,16 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             } else if (newValue == 3) {
                 $scope.productOrder = 'created.date';
                 $scope.productSortReverse = false;
-            } else if (newValue == 4) {
-                $scope.productOrder = 'last';
-                $scope.productSortReverse = false;
-            } else if (newValue == 5) {
-                $scope.productOrder = 'lastActivity';
-                $scope.productSortReverse = true;
-            } else if (newValue == 4) {
+            } 
+            //else if (newValue == 4) {
+              //  $scope.productOrder = 'last';
+               // $scope.productSortReverse = false;
+            //} 
+            //else if (newValue == 5) {
+              //  $scope.productOrder = 'lastActivity';
+                //$scope.productSortReverse = true;
+            //}
+             else if (newValue == 4) {
                 $scope.productOrder = 'total_sales';
                 $scope.productSortReverse = false;
             } else if (newValue == 5) {
@@ -112,7 +115,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 $scope.productSortReverse = true;
             } else if (newValue == 7) {
                 $scope.productOrder = 'starred';
-                $scope.productSortReverse = false;
+                $scope.productSortReverse = true;
             }
         });
         var initializeSortOrder = 0;
@@ -143,7 +146,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                     $scope.productSortReverse = true;
                 } else if (newValue == 7) {
                     $scope.productOrder = 'starred';
-                    $scope.productSortReverse = false;
+                    $scope.productSortReverse = true;
                 }
                 if (newValue && $scope.userPreferences && $scope.userPreferences.commerceSettings) {
                     $scope.userPreferences.commerceSettings.productOrder = $scope.productOrder;
