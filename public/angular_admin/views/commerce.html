@@ -112,6 +112,13 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                       <div class="emails-opened"  ng-if="commerceSettings.showProductType">
                         <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
                       </div>
+                      <div class="emails-opened">
+                        <i class="fa fa-envelope"></i> Status: <span class="data">{{product.status}}</span>
+                      </div>
+                      <div class="emails-opened" ng-if='product.cost'>
+                        <i class="fa fa-money"></i> cost: <span class="data">${{product.cost}}</span>
+                      </div>
+
                     </div>
                   </div>
                 </a>

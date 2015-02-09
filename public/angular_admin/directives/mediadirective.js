@@ -33,8 +33,6 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                         name: "SizeLimit",
                         fn: function(item) {
                             switch (item.type.substring(0, item.type.indexOf('/'))) {
-                                case "image":
-                                    console.log('image type');
                                 case "video":
                                     if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
                                         return true;
@@ -42,6 +40,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                                         ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
                                     }
                                     break;
+                                case "image":
                                 case "audio":
                                 case "document":
                                 default:
@@ -101,7 +100,9 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.isSingleSelect = true;
                 $scope.showType = "all";
                 $scope.editingImage = false;
-                $scope.select_all = false;
+                $scope.selectModel = {
+                    select_all: false
+                };
                 $scope.batch = [];
                 $scope.m = $scope.m || {};
                 $scope.isMobile =  false;
@@ -123,11 +124,12 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 };
 
                 $scope.m.selectTriggerFn = function (status) {
-                    $scope.select_all = status;
+                    $scope.selectModel.select_all = status;
                     $scope.m.selectAll();
                 };
 
-                $scope.m.selectAll = function(showType) {
+                $scope.m.selectAll = function(showType, filterOnly) {
+                    filterOnly = filterOnly || false;
 
                     if (showType) {
                         $scope.showType = showType;
@@ -141,21 +143,26 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     }
 
                     $scope.originalAssets.forEach(function(value, index) {
-                      value.checked = $scope.select_all;
+                      if ( !filterOnly ) {
+                        value.checked = $scope.selectModel.select_all;
+                      }
+
                       if ($scope.showType === 'all') {
                         $scope.assets.push(value);
-                        $scope.batch.push(value);
+                        if ( value.checked ) {
+                            $scope.batch.push(value);
+                        }
                       } else {
                         if ($scope.mimeList.indexOf(value.mimeType) > -1) {
                           $scope.assets.push(value);
-                          $scope.batch.push(value);
+                          if ( value.checked ) {
+                            $scope.batch.push(value);
+                          }
                         }
                       }
                     });
-
                     $scope.lastSelect = null;
                     $scope.m.selectAllStatus();
-                    console.info('Total:', $scope.originalAssets.length, 'Filtered:', $scope.assets.length);
                 };
 
                 $scope.m.singleSelect = function(asset) {
@@ -195,17 +202,19 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 };
 
                 $scope.m.selectAllStatus = function() {
-                    var allTrue = true;
-                    $scope.assets.forEach(function(v, i) {
-                        if (v.checked !== true) {
-                            allTrue = false;
-                        }
-                    });
-                    $scope.select_all = allTrue === true;
+                    var allTrue = false;
+                    if ( $scope.assets.length > 0 ) {
+                        allTrue = true;
+                        $scope.assets.forEach(function(v, i) {
+                            if (v.checked !== true) {
+                                allTrue = false;
+                            }
+                        });
+                    }
+                    $scope.selectModel.select_all = allTrue;
                 };
 
                 $scope.m.deleteAsset = function() {
-                    console.log('$scope.batch ', $scope.batch);
                     AssetsService.deleteAssets($scope.batch, function(resp, status) {
                         if ( status === 200 ) {
                           $scope.originalAssets.forEach(function(v, i) {
@@ -224,13 +233,13 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                                 }
                             });
                         }
+                        $scope.selectModel.select_all = false;
                     });
                 };
 
                 $scope.m.editImage = function(asset) {
                     $scope.editingImage = true;
                     $scope.singleAsset = asset;
-                    console.log('asset ', asset);
 
                     var targetImage = $('#targetEditImage');
                 };

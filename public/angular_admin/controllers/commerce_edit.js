@@ -26,7 +26,8 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             $scope.signup_fee = null;
 
             ProductService.getProduct($scope.productId, function(product) {
-                $scope.product = product;
+                $scope.originalProduct = angular.copy(product);
+                $scope.product = angular.copy(product);
                 var promises = [];
                 if (angular.isDefined($scope.product.icon) && !$scope.product.is_image)
                     $('#convert').iconpicker('setIcon', $scope.product.icon);
@@ -63,11 +64,11 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                     $scope.userPreferences = preferences;
                     if ($scope.userPreferences.default_product_icon) {
                         $('#convert-pref').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
-                        if ($scope.product.icon === undefined && !$scope.product.is_image) {
+                        if ($scope.originalProduct.icon === undefined && !$scope.originalProduct.is_image) {
                             $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
                         }
                     }
-                    if ($scope.product.status === undefined) {
+                    if ($scope.originalProduct.status === undefined) {
                         $scope.product.status = $scope.userPreferences.default_product_status;
                     }
                     $scope.showToaster = true;
@@ -108,11 +109,10 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             $scope.savePreferencesFn = function() {
                 UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function(preferences) {
                     $scope.userPreferences = preferences;
-                    if ($scope.product.icon === undefined) {
+                    if ($scope.originalProduct.icon !== $scope.product.icon) {
                         $('#convert').iconpicker('setIcon', $scope.userPreferences.default_product_icon);
                     }
-
-                    if ($scope.product.status === undefined) {
+                    if ($scope.originalProduct.status !== $scope.product.status) {
                         $scope.product.status = $scope.userPreferences.default_product_status;
                     }
                 });
@@ -147,7 +147,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             price: price,
                         }];
                     }
-                    
+
 
                     productPlanStatus[subscription.id] = true;
                     $scope.saveProductFn();
@@ -178,6 +178,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
 
                 console.log('$scope.product >>> ', $scope.product);
                 ProductService.saveProduct($scope.product, function(product) {
+                    $scope.originalProduct = angular.copy(product);
                     console.log('Save Product >>> ', product);
                     $scope.saveLoading = false;
                 });
@@ -216,7 +217,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                             $scope.product.product_attributes.stripePlans.splice(index, 1);
                         }
                     });
-                    
+
                     if (fn) {
                         fn();
                     }
@@ -243,7 +244,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 var price = {};
                 if (hash[0] && hash[0].price) {
                     price = _.min(hash, function(p){ return p.price; });
-                    
+
                     return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
                                     return (str !== "");
                                 }).join(" ");

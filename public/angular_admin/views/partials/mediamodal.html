@@ -20,30 +20,30 @@
                             <div class="ckbox ckbox-default">
                                 <input type="checkbox"
                                        id="selectall"
-                                       ng-model="select_all"
-                                       ng-change="m.selectTriggerFn(select_all)">
+                                       ng-model="selectModel.select_all"
+                                       ng-change="m.selectTriggerFn(selectModel.select_all)" />
                                 <label for="selectall">Select All</label>
                             </div>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-envelope-o"></i><span class="hidden-xs">Email</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-envelope-o"></i><span class="hidden-xs">Email</span></a>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
                         </li>
                         <li>
-                            <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                         </li>
                         <li class="filter-type" style="font-size: 11px;">
                             Show:
-                            <a href="" data-active="all"        ng-click="m.selectAll('all')"     >All</a>
-                            <a href="" data-active="document"   ng-click="m.selectAll('document')"     >Documents</a>
-                            <a href="" data-active="audio"      ng-click="m.selectAll('audio')"     >Audio</a>
-                            <a href="" data-active="image"      ng-click="m.selectAll('image')"     >Images</a>
-                            <a href="" data-active="video"      ng-click="m.selectAll('video')"     >Videos</a>
+                            <a href="" data-active="all"        ng-click="m.selectAll('all', true)"       >All</a>
+                            <a href="" data-active="document"   ng-click="m.selectAll('document', true)"  >Documents</a>
+                            <a href="" data-active="audio"      ng-click="m.selectAll('audio', true)"     >Audio</a>
+                            <a href="" data-active="image"      ng-click="m.selectAll('image', true)"     >Images</a>
+                            <a href="" data-active="video"      ng-click="m.selectAll('video', true)"     >Videos</a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -117,7 +117,7 @@
                     <button class="btn btn-primary"><i class="fa fa-save"></i> Save Image</button>
                 </div>
                 <div class="row" ng-if="!editingImage">
-                    <div class="col-md-offset-8 col-md-4">
+                    <div class="col-md-offset-7 col-md-5">
                         <label for="upload_image" class="btn btn-primary ">
                             <span ng-if="uploader.queue.length <= 0" ng-show="!isMobile">From Computer</span>
                             <span ng-if="uploader.queue.length <= 0" ng-show="isMobile">From Mobile</span>
@@ -154,7 +154,7 @@
                             <tbody>
                                 <tr ng-repeat="item in uploader.queue">
                                     <td>
-                                        <strong>{{ item.file.name }}</strong>
+                                        <span class="word-wrap"><strong>{{ item.file.name }}</strong></span>
                                     </td>
                                     <td ng-show="uploader.isHTML5" nowrap>
                                         {{ item.file.size/1024/1024|number:2 }} MB
