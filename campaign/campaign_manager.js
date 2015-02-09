@@ -193,7 +193,7 @@ module.exports = {
                 } else {
                     var fromAddress = step.settings.from;
                     var fromName = step.settings.fromName;
-                    var toAddress = contact.getEmails()[0];
+                    var toAddress = contact.getEmails()[0].email;
                     self.log.debug('contact.getEmails: ', contact.getEmails());
                     self.log.debug('contact:', contact);
                     var toName = contact.get('first') + ' ' + contact.get('last');
@@ -210,7 +210,7 @@ module.exports = {
                         }
                         var component = page.get('components')[0];
                         self.log.debug('Using this for data', component);
-                        app.render('emails/base_email', component, function(err, html) {
+                        app.render('emails/base_email_campaign', component, function(err, html) {
                             if (err) {
                                 self.log.error('error rendering html: ' + err);
                                 self.log.warn('email will not be sent.');
@@ -987,6 +987,7 @@ module.exports = {
     _sendMessageToMandrill: function (campaign, contactId, contactName, contactEmail, sendAt, mergeVarsArray, callback) {
 
         var self = this;
+        self.log.debug("_sendMessageToMandrill >>> ");
 
         var message = {
             "subject": campaign.attributes.subject,

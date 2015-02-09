@@ -110,7 +110,7 @@ var mandrillHelper =  {
     sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> sendCampaignEmail (to:' + toAddress + ')');
+        console.log('sendCampaignEmail >>>');
         vars.push({
             "name": "SENDDATE",
             "content": moment().format('MMM Do, YYYY')
@@ -183,7 +183,8 @@ var mandrillHelper =  {
             send_at = self._getScheduleUtcDateTimeIsoString(stepSettings.scheduled.day, stepSettings.scheduled.hour,
                 stepSettings.scheduled.minute, stepSettings.offset||0);
         } else if(stepSettings.sendAt) {
-            send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month,
+            console.log('send at month >>> ', stepSettings.sendAt.month);
+            send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1,
                 stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
             if(moment(send_at).isBefore()) {
                 self.log.debug('Skipping email because ' + send_at + ' is in the past.');
@@ -195,10 +196,14 @@ var mandrillHelper =  {
             send_at = moment().utc().toISOString();
         }
 
+        self.log.debug('message: ' + JSON.stringify(message));
+        self.log.debug('async: ' + async);
+        self.log.debug('ip_pool: ' + ip_pool);
         self.log.debug('send_at: ' + send_at);
 
+
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
-            self.log.debug(result);
+            self.log.debug('result >>> ', result);
             fn(null, result);
         }, function(e) {
             // Mandrill returns the error as an object with name and message keys

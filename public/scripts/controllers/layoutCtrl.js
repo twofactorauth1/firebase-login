@@ -1241,7 +1241,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.yearly_sub_cost = 32.91;
     $scope.selected_sub_cost = $scope.monthly_sub_cost;
 
-    $scope.createUser = function(user) {
+    $scope.createUser = function(user, component) {
       console.log('user', user);
       var fingerprint = new Fingerprint().get();
       var sessionId = ipCookie("session_cookie")["id"];
@@ -1262,17 +1262,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $("#user_email .glyphicon").addClass('glyphicon-remove');
           return;
         }
+
+        var skipWelcomeEmail;
+
+        if (component.skipWelcomeEmail) {
+          skipWelcomeEmail = true;
+        }
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
           details: [{
             emails: []
-          }]
+          }],
+          campaignId: component.campaignId,
+          skipWelcomeEmail: skipWelcomeEmail
         };
         formatted.details[0].emails.push({
           email: user.email
         });
         //create contact
+        console.log('formatted ', formatted);
         userService.addContact(formatted, function(data, err) {
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
@@ -1288,6 +1297,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('data ', data);
             user.email = "";
             user.success = true;
+
+            var name;
+
+            if (user.first && user.last) {
+              name = user.first + ' ' + user.last;
+            } else {
+              name = 'John Doe';
+            }
+
+            //send data to intercom
+            window.intercomSettings = {
+              name: user.first + ' ' + user.last,
+              email: user.email,
+              created_at: new Date().getTime(),
+              app_id: "b3st2skm"
+            };
 
             setTimeout(function() {
               $scope.$apply(function() {

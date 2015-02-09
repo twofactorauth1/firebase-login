@@ -286,7 +286,7 @@ define([
                 title: 'Video',
                 type: 'video',
                 icon: 'fa fa-video',
-                enabled: false
+                enabled: true
             }, {
                 title: 'Text Only',
                 type: 'text-only',
