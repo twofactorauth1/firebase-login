@@ -237,7 +237,7 @@ define(['app',
             $scope.customer.type = $scope.userPreferences.default_customer_type;
           }
           if ($scope.customer.details[0].addresses.length === 0) {
-            $scope.customer.details[0].addresses.push({});
+            //$scope.customer.details[0].addresses.push({});
             $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
             $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
             $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
@@ -245,7 +245,7 @@ define(['app',
           }
         } else {
           $scope.customer.type = $scope.userPreferences.default_customer_type;
-          $scope.customer.details[0].addresses.push({});
+          //$scope.customer.details[0].addresses.push({});
           $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
           $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
           $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
