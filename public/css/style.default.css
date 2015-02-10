@@ -21900,7 +21900,7 @@ h1.cke_panel_grouptitle:first-child {
   top: 0;
   left: 0;
 }
-.panel-blog .blog-img img {
+.single-blog .entry-content img {
   width: 100%;
 }
 .blogsingle-title {
