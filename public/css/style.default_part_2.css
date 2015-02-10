@@ -9152,6 +9152,11 @@ div[data-type='campaign'] .inner-page .overlay {
   margin: 2%;
 }
 
+.feature-list-v1 .feature-list-title {
+  text-align: center;
+  position: relative;
+}
+
 .feature-list-v1 .feature-single {
   background: #4bb0cb;
   min-height: 320px;
@@ -9313,6 +9318,11 @@ div[data-type='campaign'] .inner-page .overlay {
 
 .feature-list-v4 {
   /* fix firefox responsive images */
+}
+
+.feature-list-v4 .feature-list-title {
+  text-align: center;
+  position: relative;
 }
 
 .feature-list-v4 .title {
