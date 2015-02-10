@@ -29,14 +29,14 @@
                                         </video>
                                         <vg-overlay-play></vg-overlay-play>
                                     </videogular> -->
-                    <iframe ng-show="component.videoType=='youtube'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//www.youtube.com/embed/', component.video)}}" frameborder="0" allowfullscreen></iframe>
+                    <iframe ng-if="component.videoType=='youtube'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//www.youtube.com/embed/', component.video)}}" frameborder="0" allowfullscreen></iframe>
 
-                    <iframe ng-show="component.videoType=='vimeo'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//player.vimeo.com/video/', component.video)}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    <iframe ng-if="component.videoType=='vimeo'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//player.vimeo.com/video/', component.video)}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-                    <videogular vg-width="component.videoWidth" vg-height="component.videoHeight" vg-theme="config.theme.url" vg-autoplay="component.videoAutoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive" ng-show="component.videoType=='html5'">
+                    <videogular vg-width="component.videoWidth" vg-height="component.videoHeight" vg-theme="config.theme.url" vg-autoplay="component.videoAutoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive" ng-if="component.videoType=='html5'">
                         <video class='videoPlayer' preload='metadata'>
-                            <source src="{{trustSrc(component.videoMp4)}}" type='video/mp4' ng-show="component.videoMp4"/>
-                            <source src="{{trustSrc(component.videoWebm)}}" type='video/webm' ng-show="component.videoWebm"/>
+                            <source src="{{trustSrc(component.videoMp4)}}" type='video/mp4' ng-if="component.videoMp4"/>
+                            <source src="{{trustSrc(component.videoWebm)}}" type='video/webm' ng-if="component.videoWebm"/>
                         </video>
                         <vg-video vg-src="video" vg-youtube="rel=1;showinfo=1"></vg-video>
 
@@ -69,7 +69,7 @@
             </div>
 
 
-            <div class="col-xs-12" ng-show="component.btn.visibility" class="editable" data-index="{{$index}}" data-class="btn-text">
+            <div class="col-xs-12" ng-if="component.btn.visibility" class="editable" data-index="{{$index}}" data-class="btn-text">
                 <a class="btn btn-primary btn-block center" ng-bind="component.btn.text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
             </div>
 
