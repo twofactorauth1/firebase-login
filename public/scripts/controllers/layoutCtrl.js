@@ -780,8 +780,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
       if($scope.meetTeamIndex !== null)
         window.parent.updateTeamNetworks(old_value, mode, social,$scope.meetTeamIndex);
-      else  
-        window.parent.updateSocialNetworks(old_value, mode, social);      
+      else
+        window.parent.updateSocialNetworks(old_value, mode, social);
       $scope.social = {};
       $scope.meetTeamIndex = null;
       if($("#meetteamSocialModal").length)
@@ -789,7 +789,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if($("#socialComponentModal").length)
         $("#socialComponentModal").modal("hide");
       if($("#topbarSocialComponentModal").length)
-        $("#topbarSocialComponentModal").modal("hide");      
+        $("#topbarSocialComponentModal").modal("hide");
       $(".modal-backdrop").remove();
     };
     $scope.deleteTeamMember = function(componentId, index) {
@@ -871,16 +871,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
-   
+
     function toTitleCase(str)
     {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
-    
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        $scope.isEditing = true;        
+        $scope.isEditing = true;
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
         elements.each(function() {
@@ -1020,7 +1020,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var check_if_mobile = mobilecheck();
             $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);
           }
         };
       });
@@ -1049,7 +1049,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var check_if_mobile = mobilecheck();
             $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);
           }
       };
     };
@@ -1204,8 +1204,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if($scope.thumbnailSliderCollection)
       {
         $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
-        if($scope.thumbnailCollection.length > 1)        
-          $scope.displayThumbnailPaging = true;        
+        if($scope.thumbnailCollection.length > 1)
+          $scope.displayThumbnailPaging = true;
         else
           $scope.displayThumbnailPaging = false;
       }
@@ -1420,6 +1420,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     };
 
+    userService.getTmpAccount(function(data) {
+      $scope.tmpAccount = data;
+    });
+
     $scope.createAccount = function(newAccount) {
       //validate
       //email
@@ -1475,74 +1479,72 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
       //end validate
       $scope.isFormValid = true;
-      userService.getTmpAccount(function(data) {
-        var tmpAccount = data;
-        tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-        userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-          console.log('Saved the temp account.  Account token is: ' + data.token);
-          var newUser = {
-            username: newAccount.email,
-            password: newAccount.password,
-            email: newAccount.email,
-            accountToken: data.token,
-            coupon: newAccount.coupon
-          };
-          console.log('newUser.accountToken: ' + newUser.accountToken);
-          //get the token
-          PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
-            if (error) {
-              console.info(error);
-              $scope.$apply(function() {
-                $scope.isFormValid = false;
-              })
-              switch (error.param) {
-                case "number":
-                  $("#card_number .error").html(error.message);
-                  $("#card_number").addClass('has-error');
-                  break;
-                case "exp_year":
-                  $("#card_expiry .error").html(error.message);
-                  $("#card_expiry").addClass('has-error');
-                  break;
-                case "cvc":
-                  $("#card_cvc .error").html(error.message);
-                  $("#card_cvc").addClass('has-error');
-                  break;
-              }
-            } else {
-              newUser.cardToken = token;
-              newUser.plan = $scope.newAccount.membership;
-              newUser.anonymousId = window.analytics.user().anonymousId();
-              newUser.permanent_cookie = ipCookie("permanent_cookie");
-              newUser.fingerprint = new Fingerprint().get();
-              if ($scope.subscriptionPlanOneTimeFee) {
-                newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
-              }
-              userService.initializeUser(newUser, function(data) {
-                if (data && data.accountUrl) {
-                    /*
-                     * I'm not sure why these lines were added.  The accountUrl is a string.
-                     * It will never have a host attribute.
-                     *
-                     * var currentHost = $.url(window.location.origin).attr('host');
-                     * var futureHost = $.url(data.accountUrl).attr('host');
-                     * if (currentHost.indexOf(futureHost) > -1) {
-                     *      window.location = data.accountUrl;
-                     * } else {
-                     *      window.location = currentHost;
-                     * }
-                     */
-
-                    window.location = data.accountUrl;
-                } else {
-                  $scope.isFormValid = false;
-                }
-              });
+      var tmpAccount = $scope.tmpAccount;
+      tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+      userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+        console.log('Saved the temp account.  Account token is: ' + data.token);
+        var newUser = {
+          username: newAccount.email,
+          password: newAccount.password,
+          email: newAccount.email,
+          accountToken: data.token,
+          coupon: newAccount.coupon
+        };
+        console.log('newUser.accountToken: ' + newUser.accountToken);
+        //get the token
+        PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
+          if (error) {
+            console.info(error);
+            $scope.$apply(function() {
+              $scope.isFormValid = false;
+            })
+            switch (error.param) {
+              case "number":
+                $("#card_number .error").html(error.message);
+                $("#card_number").addClass('has-error');
+                break;
+              case "exp_year":
+                $("#card_expiry .error").html(error.message);
+                $("#card_expiry").addClass('has-error');
+                break;
+              case "cvc":
+                $("#card_cvc .error").html(error.message);
+                $("#card_cvc").addClass('has-error');
+                break;
             }
+          } else {
+            newUser.cardToken = token;
+            newUser.plan = $scope.newAccount.membership;
+            newUser.anonymousId = window.analytics.user().anonymousId();
+            newUser.permanent_cookie = ipCookie("permanent_cookie");
+            newUser.fingerprint = new Fingerprint().get();
+            if ($scope.subscriptionPlanOneTimeFee) {
+              newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
+            }
+            userService.initializeUser(newUser, function(data) {
+              if (data && data.accountUrl) {
+                  /*
+                   * I'm not sure why these lines were added.  The accountUrl is a string.
+                   * It will never have a host attribute.
+                   *
+                   * var currentHost = $.url(window.location.origin).attr('host');
+                   * var futureHost = $.url(data.accountUrl).attr('host');
+                   * if (currentHost.indexOf(futureHost) > -1) {
+                   *      window.location = data.accountUrl;
+                   * } else {
+                   *      window.location = currentHost;
+                   * }
+                   */
 
-          });
+                  window.location = data.accountUrl;
+              } else {
+                $scope.isFormValid = false;
+              }
+            });
+          }
 
         });
+
       });
     };
 
@@ -1709,7 +1711,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 $scope.inserted = false;
  if(!$scope.activated)
   $('body').on("DOMNodeInserted", ".feature-height", function (e)
-  { 
+  {
     if(!$scope.inserted)
     {
       setTimeout(function() {
