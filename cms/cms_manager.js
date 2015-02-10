@@ -1002,7 +1002,9 @@ module.exports = {
                     currentVersion = 0;
                 }
                 page.set('version', currentVersion+1);
+                page.set('latest', true);
                 existingPage.set('_id', pageId + '_' + currentVersion);
+                existingPage.set('latest', false);
                 cmsDao.saveOrUpdate(existingPage, function(err, value){
                     if(err) {
                         self.log.error('Error updating version on page: ' + err);
@@ -1091,6 +1093,7 @@ module.exports = {
                     "anchor" : null,
                     "type" : "navigation",
                     "version" : 1,
+                    "latest": true,
                     "visibility" : true,
                     "title" : "Title",
                     "subtitle" : "Subtitle.",
@@ -1264,17 +1267,31 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $or: [{secure:false},{secure:{$exists:false}}]
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+
 
         };
+        self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            self.log.debug('end query');
             if(err) {
                 self.log.error('Error getting pages by websiteId: ' + err);
                 fn(err, null);
             } else {
                 var map = {};
                 _.each(list, function(value){
-                    map[value.get('handle')] = value;
+                    if(map[value.get('handle')] === undefined) {
+                        map[value.get('handle')] = value;
+                    } else {
+                        var currentVersion = map[value.get('handle')].get('version');
+                        if(value.get('version') > currentVersion) {
+                            map[value.get('handle')] = value;
+                        }
+                    }
+
                 });
                 fn(null, map);
             }
