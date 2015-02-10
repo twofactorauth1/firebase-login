@@ -348,7 +348,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.flvVideoUrl = function(iframeUrl, url) {
         var parsedUrl = urlParser.parse(url);
-        var retUrl = iframeUrl + parsedUrl.id;
+        var retUrl = "";
+        if(parsedUrl)
+          retUrl = iframeUrl + parsedUrl.id;
+        else
+          retUrl = iframeUrl
         return $sce.trustAsResourceUrl(retUrl);
     };
 
