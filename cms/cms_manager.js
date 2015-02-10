@@ -1056,7 +1056,10 @@ module.exports = {
 								self.log.error('Error updating website linklists by handle: ' + err);
 								fn(err, page);
 							} else {
-								cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                                var query = {};
+                                query._id = new RegExp('' + pageId + '(_.*)*');
+                                cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
+								//cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
 									if (err) {
 										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
 										fn(err, null);
@@ -1070,7 +1073,10 @@ module.exports = {
 					}
 				});
 			} else {
-				cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                var query = {};
+                query._id = new RegExp('' + pageId + '(_.*)*');
+                cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
+                //cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
 					if (err) {
 						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
 						fn(err, null);
@@ -1535,7 +1541,7 @@ module.exports = {
             //check if the length is greater than 5kb.  If not, do it again.
             self._checkSize(ssURL, function(err, size){
                 if(parseInt(size) < 5000) {
-                    options.delay = 5000;
+                    options.delay = 9000;
                     ssURL = urlboxhelper.getUrl(serverUrl, options);
                     log.debug('Increasing delay to 5000 for ' + serverUrl);
                 }
