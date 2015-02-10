@@ -12131,164 +12131,39 @@ div[data-type="coming-soon"] .component-inner {
   text-align: center;
 }
 
-.payment-form-v1 .selected .well {
-  border: 1px solid #2ecc71!important;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+.payment-form-v1 h1,
+.payment-form-v1 h2,
+.payment-form-v1 h3,
+.payment-form-v1 h4,
+.payment-form-v1 h5,
+.payment-form-v1 p {
+  font-family: 'Raleway', sans-serif !important;
 }
 
-.payment-form-v1 .notSelected .well {
-  background: #f0fafb!important;
+.payment-form-v1 .top-signup {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
 }
 
-.payment-form-v1 .glyphicon-refresh-animate {
-  -animation: spin .7s infinite linear;
-  -ms-animation: spin .7s infinite linear;
-  -webkit-animation: spinw .7s infinite linear;
-  -moz-animation: spinm .7s infinite linear;
+.payment-form-v1 .top-signup h1 {
+  font-size: 55px;
+  color: #f9b439;
 }
 
-@keyframes spin {
-  from {
-    transform: scale(1) rotate(0deg);
-  }
-
-  to {
-    transform: scale(1) rotate(360deg);
-  }
+.payment-form-v1 .top-signup h1 i {
+  font-family: 'FontAwesome' !important;
 }
 
-@-webkit-keyframes spinw {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-
-  to {
-    -webkit-transform: rotate(360deg);
-  }
+.payment-form-v1 .top-signup h4 {
+  color: #808080;
 }
 
-@-moz-keyframes spinm {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-
-  to {
-    -moz-transform: rotate(360deg);
-  }
+.payment-form-v1 .social-signup {
+  background: #4bafca;
+  color: #ffffff;
 }
 
-.payment-form-v1 .panel {
-  padding: 15px;
-  background: none;
-  border: none;
-  box-shadow: none;
-  -webkit-box-shadow: none;
-}
-
-.payment-form-v1 .panel .wrap {
-  margin: 0 auto;
-  max-width: 780px;
-  border: 1px solid #dddddd;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-}
-
-.payment-form-v1 .panel .panel-header {
-  padding: 30px;
-  background: #f0fafb;
-  border-bottom: 1px solid #e4f3f6;
-}
-
-.payment-form-v1 .panel .panel-header h1 {
-  color: #57b0cf;
-}
-
-.payment-form-v1 .panel .panel-header h3 {
-  color: #444444;
-}
-
-.payment-form-v1 .panel .panel-header .row {
-  text-align: center;
-}
-
-.payment-form-v1 .panel .panel-body {
-  padding: 23px;
-}
-
-.payment-form-v1 .panel .submit-signup {
-  margin: 15px auto;
-  text-align: center;
-}
-
-.payment-form-v1 .panel .credit-card-input {
-  margin: 0 auto;
-}
-
-.payment-form-v1 .panel .well.well-calm {
-  background: #f0fafb;
-  border: 1px solid #e5f3f6;
-  padding: 0;
-}
-
-.payment-form-v1 .panel .well.well-calm h2 {
-  background: #53afce;
-  padding: 10px 0;
-  color: white;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-}
-
-.payment-form-v1 .panel .well.well-calm h2 span {
-  font-size: 14px;
-}
-
-.payment-form-v1 .panel .well.well-calm h4 {
-  padding: 10px 0;
-  color: #444;
-  text-shadow: 1px 1px 1px #ffffff;
-}
-
-.payment-form-v1 .panel .has-feedback .form-control-feedback {
-  top: 5px;
-}
-
-.payment-form-v1 .certificates {
-  padding: 0;
-  text-align: center;
-}
-
-.payment-form-v1 .certificates li {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
-  width: 132px;
-  height: 131px;
-  padding: 10px;
-  list-style-type: none;
-  text-align: center;
-  display: inline-block;
-  margin-right: 15px;
-  vertical-align: top;
-}
-
-.payment-form-v1 .certificates li .larger {
-  font-size: 24px;
-  padding-top: 12px;
-  vertical-align: middle;
-  line-height: normal;
-}
-
-.payment-form-v1 .signup-social-toolbar {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.payment-form-v1 .signup-social-toolbar .btn {
-  min-width: 75px;
-}
-
-.payment-form-v1 .signup-social-toolbar i.fa {
-  font-size: 36px;
-}
-
-.payment-form-v1 .profilePhoto {
-  margin: 0 auto;
+.payment-form-v1 .social-signup h2 {
+  font-weight: 700;
 }
 
 .thumbnail-slider-v1 .single-image {
