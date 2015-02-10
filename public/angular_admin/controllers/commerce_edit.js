@@ -159,7 +159,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             };
 
             $scope.editSubscriptionFn = function(planId) {
-                $scope.planDeleteFn(planId, false, function() {
+                $scope.planDeleteFn(planId, false, false, function() {
                     $scope.addSubscriptionFn(false);
                     $scope.editCancelFn();
                     ToasterService.show('success', 'Plan updated.');
@@ -203,7 +203,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                 };
             };
 
-            $scope.planDeleteFn = function(planId, showToast, fn) {
+            $scope.planDeleteFn = function(planId, showToast, saveProduct, fn) {
                 var fn = fn || false;
                 PaymentService.deletePlan(planId, function() {
                     $scope.plans.forEach(function(value, index) {
@@ -222,7 +222,9 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
                         fn();
                     }
 
-                    $scope.saveProductFn();
+                    if (saveProduct) {
+                      $scope.saveProductFn();
+                    }
 
                 }, showToast);
             };
