@@ -317,7 +317,7 @@ define(['app',
 
       $scope.$watch('fullName', function(newValue, oldValue) {
         if (newValue !== undefined) {
-          var nameSplit = newValue.split(' ');
+          var nameSplit = newValue.match(/\S+/g);
           if (nameSplit.length >= 3) {
             $scope.customer.first = nameSplit[0];
             $scope.customer.middle = nameSplit[1];
