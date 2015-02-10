@@ -17382,6 +17382,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   vertical-align: middle;
   text-align: center;
 }
+.accountEdit .help-block {
+  margin: 0px;
+}
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;

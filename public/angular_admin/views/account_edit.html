@@ -1,10 +1,11 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
 <div class="accountEdit">
+	<form name="accountForm" novalidate>
 	<div class="pageheader">
 		<div class="col-xs-7">
 			<button ng-click="$back()"
- class="btn btn-success pull-left"
-				type="button">
+ 					class="btn btn-success pull-left"
+					type="button">
 				<span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
 			</button>
 			<h2>
@@ -14,7 +15,7 @@
 
 		<div class="col-xs-5">
 			<div id="saveAccount">
-				<button class="btn btn-success pull-right" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
+				<button class="btn btn-success pull-right" ng-disabled="accountForm.$invalid" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
 	                <span class="visible-xs" ng-hide="saveLoading">
 	                 <i class="fa fa-save"></i>
 	                </span>
@@ -121,7 +122,7 @@
 									</div>
 
 								</div>
-								<span style="margin-top: -15px;" class="col-xs-10"> 
+								<span class="col-xs-10"> 
 								<small>e.g.303-555-5555
 										<!-- (<span class="skype_c2c_print_container notranslate">303-555-5555</span><span
 										id="skype_c2c_container" class="skype_c2c_container notranslate"
@@ -335,7 +336,7 @@
 				                    </div>
 
 				                </div>
-				                <span style="margin-top:-15px;" class="col-xs-10">
+				                <span class="col-xs-10">
 				                    <small>e.g. (303-555-5555)</small>
 				                </span>
 				            </div>
@@ -388,7 +389,7 @@
 
 		</div>
 	</div>
-
+</form>
 	 <div class="rightpanel rightpanel-account">
         <ul class="nav nav-tabs nav-justified">
             <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
