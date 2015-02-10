@@ -215,6 +215,10 @@ _.extend(router.prototype, baseRouter.prototype, {
             self.log.debug('approvalPrompt set to force');
         }
 
+        if (req.query.error && req.user) {
+          options.failureRedirect = state.failureRedirect;
+        }
+
         self.log.debug('<< _socialLogin');
         passport.authenticate(type, options)(req,resp,next);
     },
