@@ -1,5 +1,6 @@
 $(document).ready(function () {
-    $('.toggle-menu').jPushMenu({closeOnClickOutside: false});
+    if($('.toggle-menu').jPushMenu)
+       $('.toggle-menu').jPushMenu({closeOnClickOutside: false});
     
 	function openLeftMenu() {
 	    var body = $('body');
