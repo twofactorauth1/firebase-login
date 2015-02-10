@@ -97,9 +97,6 @@ script(src="scripts/directives/carousel.js")
 script(src="scripts/filters/offset.js")
 script(src="scripts/filters/cleanType.js")
 
-if includeEditor
-    include _aloha_editor
-
 if account._id == 6 || account._id == 37
     // begin olark code
     script(data-cfasync='false', type='text/javascript').
@@ -126,3 +123,6 @@ if account._id == 6 || account._id == 37
       |  powered by 
       a(href='http://www.olark.com?welcome', title='Olark live chat software') Olark live chat software
     // end olark code
+
+if includeEditor
+    include _aloha_editor
