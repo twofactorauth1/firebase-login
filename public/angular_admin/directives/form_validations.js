@@ -39,10 +39,12 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 						if (!result) {
 							parent_div.addClass('has-error');
 							parent_div.find('span.error').remove();
-							parent_div.append("<span class='error help-block'>Please enter a valid Zip code</span>")
+							parent_div.append("<span class='error help-block'>Please enter a valid Zip code</span>");
+							ctrl.$setValidity('zipError', false);
 						} else {
 							parent_div.removeClass('has-error');
 							parent_div.find('span.error').remove();
+							ctrl.$setValidity('zipError', true);
 						}
 						break;
 					}
