@@ -1310,7 +1310,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
             console.log('hash ', hash.toString(CryptoJS.enc.Hex));
             //send data to intercom
-            window.intercomSettings = {
+            $window.intercomSettings = {
               name: user.first + ' ' + user.last,
               email: user.email,
               user_hash: hash.toString(CryptoJS.enc.Hex),
