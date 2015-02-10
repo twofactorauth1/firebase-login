@@ -27,8 +27,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
-                    console.log("current Page");
-                   // console.log($scope.$parent)
+                    // console.log("current Page");
+                    // console.log($scope.$parent)
             }
         });
 
@@ -175,7 +175,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
         };
 
-         window.savePostMode=function(toaster){ 
+         window.savePostMode=function(toaster){
 
             var post_data =  angular.copy(that.post);
             post_data.post_tags.forEach(function(v,i) {
@@ -188,21 +188,21 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
             var post_title_container = $('.blog_post_title');
             if(post_title_container.length > 0)
-                post_data.post_title = post_title_container.text(); 
+                post_data.post_title = post_title_container.text();
 
             var post_author_container = $('.blog_post_author');
             if(post_author_container.length > 0)
-                post_data.post_author = post_author_container.text(); 
+                post_data.post_author = post_author_container.text();
 
             var post_category_container = $('.blog_post_category');
             if(post_category_container.length > 0)
-                post_data.post_category = post_category_container.text();  
+                post_data.post_category = post_category_container.text();
 
-            
+
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 post_data.post_excerpt = post_excerpt_container.text();
-            
+
             var postImageUrl = window.parent.getPostImageUrl();
             if(postImageUrl)
             {
@@ -213,7 +213,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 console.log(data);
                 console.log("Post Saved");
                 window.parent.window.setLoading(false);
-                if(toaster)                      
+                if(toaster)
                     toaster.pop('success', "Post Saved");
             });
         };
@@ -225,16 +225,16 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
             var post_title_container = $('.blog_post_title');
             if(post_title_container.length > 0)
-                that.post.post_title = post_title_container.text(); 
+                that.post.post_title = post_title_container.text();
 
             var post_author_container = $('.blog_post_author');
             if(post_author_container.length > 0)
-                that.post.post_author = post_author_container.text(); 
+                that.post.post_author = post_author_container.text();
 
             var post_category_container = $('.blog_post_category');
             if(post_category_container.length > 0)
-                that.post.post_category = post_category_container.text();  
-            
+                that.post.post_category = post_category_container.text();
+
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 that.post.post_excerpt = post_excerpt_container.text();
@@ -283,7 +283,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        $scope.isEditing = true;        
+        $scope.isEditing = true;
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
         elements.each(function() {
