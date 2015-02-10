@@ -1520,7 +1520,7 @@ module.exports = {
                 if(parseInt(size) < 5000) {
                     options.delay = 5000;
                     ssURL = urlboxhelper.getUrl(serverUrl, options);
-                    log.debug('Increasing delay to 5000.');
+                    log.debug('Increasing delay to 5000 for ' + serverUrl);
                 }
                 self._download(ssURL, tempFile, function(){
                     log.debug('stored screenshot at ' + tempFileName);
