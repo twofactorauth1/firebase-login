@@ -73,7 +73,7 @@
 								<div class="form-group">
 									<label class="">Owner Name</label> <input id="input-fullname"
 										class="form-control input-lg" ng-model='fullName'
-										placeholder="full name" type="text" ng-change='setFormDirtyFn()'> <small
+										placeholder="Full name" type="text" ng-change='setFormDirtyFn()'> <small
 										style="margin-left: 10px;"> <strong>first:</strong> <code>
 											<span id="hint-first">{{user.first}}</span>
 										</code> <strong>middle:</strong> <code>
@@ -97,7 +97,7 @@
 										<div class="form-group col-xs-12">
 											<div class="input-group">
 								                <label class="input-group-addon input-lg">+1 </label>
-								                <input class="input-edit-phone form-control input-lg" ng-model='phone.number'
+								                <input class="input-edit-phone form-control input-lg" ng-model='phone.number' indigeweb-validate-form-fields validation-type="phone"
 													type="text" ng-change='setFormDirtyFn()'>
 								                <span class="input-group-btn">
 								                <button type="button"
@@ -166,7 +166,7 @@
 										<input class="form-control input-edit-map input-lg" placeholder="State" ng-model='address.state' type="text" ng-change="userSaveFn(address.state)">
 									</div>
 									<div class="form-group">
-										<input class="form-control input-edit-map input-lg" placeholder="Zip" ng-model='address.zip' type="text" ng-change="userSaveFn(address.zip)">
+										<input class="form-control input-edit-map input-lg" placeholder="Zip" indigeweb-validate-form-fields validation-type="zip" ng-model='address.zip' type="text" ng-change="userSaveFn(address.zip)">
 									</div>
 									<div class="form-group">
 										<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="userSaveFn(address.country)">
@@ -244,7 +244,7 @@
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Name</label>
-				                    <input id="input-business-name" type="text" class="form-control input-lg" ng-model='account.business.name' placeholder="business name" name="business-name" ng-change='setFormDirtyFn()'>
+				                    <input id="input-business-name" type="text" class="form-control input-lg" ng-model='account.business.name' placeholder="Business name" name="business-name" ng-change='setFormDirtyFn()'>
 				                </div>
 				            </div>
 				        </div>
