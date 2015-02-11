@@ -378,40 +378,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     }
 
-     $scope.gotoPosition = function(pos) {
-      // set the location.hash to the id of
-      // the element you wish to scroll to.
-       if(pos.data && !$scope.isEditing)
-        {
-         setTimeout(function() {
-         $location.hash(pos.data);
-          $anchorScroll();
-        }, 300)
-        }
-    };
-
     // $scope.$on('$locationChangeStart', function(event, next, current) {
     //     console.log('location changed '+event+' '+next+' '+current);
     //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
     //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
     // });
 
-    window.scrollTo = function(section) {
-        console.log('>>> ', section);
-        if(section && angular.isString(section)) {
-            $location.hash(section);
-            $anchorScroll();
-
-            //TODO scrollTo on click
-
-            // var offset = 0;
-            // var duration = 2000;
-            // var someElement = angular.element(document.getElementById(section));
-            // console.log('someElement >>>', document);
-            // console.log('>>> scrollTo '+ document.body.getElementById(section));
-            // $document.scrollToElementAnimated(someElement);
-        }
-    };
+   
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
