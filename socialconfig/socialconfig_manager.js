@@ -186,6 +186,8 @@ module.exports = {
             return facebookDao.getTokenStream(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'pages') {
             return facebookDao.getPages(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.type === 'likes') {
+            return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, fn);
         }
     }
 
