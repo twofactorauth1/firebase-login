@@ -64,10 +64,26 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         });
 
         $scope.toggleProductType = true;
-        
+
         $scope.$watch('toggleProductType', function(value) {
             if (angular.isDefined(value)) {
                 $scope.commerceSettings.showProductType = value;
+            }
+        });
+
+        $scope.toggleProductStatus = true;
+
+        $scope.$watch('toggleProductStatus', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showProductStatus = value;
+            }
+        });
+
+        $scope.toggleProductCost = true;
+
+        $scope.$watch('toggleProductCost', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showProductCost = value;
             }
         });
 
@@ -95,11 +111,11 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             } else if (newValue == 3) {
                 $scope.productOrder = 'created.date';
                 $scope.productSortReverse = false;
-            } 
+            }
             //else if (newValue == 4) {
               //  $scope.productOrder = 'last';
                // $scope.productSortReverse = false;
-            //} 
+            //}
             //else if (newValue == 5) {
               //  $scope.productOrder = 'lastActivity';
                 //$scope.productSortReverse = true;

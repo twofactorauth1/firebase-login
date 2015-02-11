@@ -27,7 +27,13 @@ block content
                     p 
                       h4 Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
     script.
-        var next = '//#{next}';
+        var next = decodeURIComponent('//#{next}');
+        //console.log('next: ' + next);
+        if(next.indexOf('?') != -1) {
+            var nextAry = next.split('?');
+            next = nextAry[0] + '?' + encodeURIComponent(nextAry[1]);
+            //console.log('next is now: ' + next);
+        }
         var secLeft = 4;
         var intervalFn = function() {
         	secLeft -= 1;

@@ -112,10 +112,10 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                       <div class="emails-opened"  ng-if="commerceSettings.showProductType">
                         <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
                       </div>
-                      <div class="emails-opened">
+                      <div class="emails-opened" ng-if='commerceSettings.showProductStatus'>
                         <i class="fa fa-envelope"></i> Status: <span class="data">{{product.status}}</span>
                       </div>
-                      <div class="emails-opened" ng-if='product.cost'>
+                      <div class="emails-opened" ng-if='product.cost && commerceSettings.showProductCost'>
                         <i class="fa fa-money"></i> cost: <span class="data">${{product.cost}}</span>
                       </div>
 
@@ -248,11 +248,11 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
               <label for="showProductType">Type</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductStatus" checked="true">
+              <input type="checkbox" value="1" id="showProductStatus" ng-model='toggleProductStatus' checked="true">
               <label for="showProductStatus">Status</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductCost" checked="true">
+              <input type="checkbox" value="1" id="showProductCost" ng-model='toggleProductCost' checked="true">
               <label for="showProductCost">Cost</label>
             </div>
           </div>

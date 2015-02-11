@@ -325,6 +325,11 @@ var dao = {
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
+    getLikedPages: function(accessToken, socialId, fn) {
+        var key = 'likes';
+        return this._getStreamPart(null, accessToken, socialId, key, fn);
+    },
+
     getUserPosts: function (user, socialId, fn) {
         var self = this;
         self.log.info("facebook dao: getUserPosts >>> ");
