@@ -1165,6 +1165,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                   .then(function(data) {
                     data.forEach(function(value, index) {
                       $scope.subscriptionPlans.push(value.data);
+                      if ($scope.subscriptionPlans.length === 1) {
+                        var plan = $scope.subscriptionPlans[0];
+                        $scope.selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, $scope.planStatus[plan.id].signup_fee);
+                      }
                     });
                   })
                   .catch(function(err) {
@@ -1237,6 +1241,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
+      console.log('selectSubscriptionPlanFn >>>');
       $scope.newAccount.membership = planId;
       $scope.subscriptionPlanAmount = amount;
       $scope.subscriptionPlanInterval = interval;
@@ -1314,7 +1319,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
             console.log('hash ', hash.toString(CryptoJS.enc.Hex));
             //send data to intercom
-            window.intercomSettings = {
+            $window.intercomSettings = {
               name: user.first + ' ' + user.last,
               email: user.email,
               user_hash: hash.toString(CryptoJS.enc.Hex),
