@@ -169,6 +169,12 @@ module.exports = {
         } else if(trackedObject.type === 'mentions') {
             return twitterDao.getMentionsTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'numberTweets') {
+            return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'numberFollowers') {
+            return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
         }
 
 
