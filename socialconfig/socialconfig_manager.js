@@ -178,6 +178,8 @@ module.exports = {
         var self = this;
         if(trackedObject.type === 'feed') {
             return facebookDao.getTokenStream(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.typ === 'pages') {
+            return facebookDao.getPages(socialAccount.accessToken, socialAccount.socialId, fn);
         }
     }
 
