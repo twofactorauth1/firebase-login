@@ -270,8 +270,8 @@ define([
              {
                 title: 'Simple form',
                 type: 'simple-form',
-                icon: 'custom simple-form',
-                enabled: false
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/simple-form.jpg',
+                enabled: true
             }, {
                 title: 'Single Post',
                 type: 'single-post',
@@ -286,7 +286,7 @@ define([
                 title: 'Video',
                 type: 'video',
                 icon: 'fa fa-video',
-                enabled: false
+                enabled: true
             }, {
                 title: 'Text Only',
                 type: 'text-only',
@@ -984,15 +984,91 @@ define([
             };
 
             $scope.saveCustomComponent = function(networks) {
-                var componentId = $scope.componentEditing._id;
-                var componentIndex;
-                for (var i = 0; i < $scope.components.length; i++) {
-                    if ($scope.components[i]._id === componentId) {
-                        $scope.components[i] = $scope.componentEditing
-                    }
-                }
-                $scope.currentPage.components = $scope.components;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, networks ? networks : $scope.componentEditing.networks);
+                    var currentComponentId = $scope.componentEditing._id;
+
+                    //foreach components by class .component
+                    var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+                    for (var i = 0; i < editedPageComponents.length; i++) {
+                        var componentId = editedPageComponents[i].attributes['data-id'].value;
+                        if(currentComponentId == componentId)
+                        {
+                            var matchingComponent = _.findWhere($scope.currentPage.components, {
+                            _id: componentId
+                            });
+                            //get all the editable variables and replace the ones in view with variables in DB
+                            var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
+                            if (componentEditable.length >= 1) {
+                                for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                                    var componentVar = componentEditable[i2].attributes['data-class'].value;
+                                    var componentVarContents = componentEditable[i2].innerHTML;
+
+                                    //if innerhtml contains a span with the class ng-binding then remove it
+                                    var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+
+                                    if (span) {
+                                        var spanParent = span.parentNode;
+                                        var spanInner = span.innerHTML;
+                                        if (spanParent.classList.contains('editable')) {
+                                            componentVarContents = spanInner;
+                                        } else {
+                                            spanParent.innerHTML = spanInner;
+                                            componentVarContents = spanParent.parentNode.innerHTML;
+                                        }
+                                    }
+                                    //remove "/n"
+                                    componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                                        var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                        if(regex.test(componentVarContents))
+                                        {
+                                            var jHtmlObject = $(componentVarContents);
+                                            var editor = jQuery("<p>").append(jHtmlObject);
+                                            editor.find(".cke_reset").remove();
+                                            var newHtml = editor.html();
+                                            componentVarContents = newHtml; 
+                                        }
+                                        
+
+                                    var setterKey, pa;
+                                    //if contains an array of variables
+                                    if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
+                                        //get index in array
+                                        var first = componentVar.split(".")[0];
+                                        var second = componentEditable[i2].attributes['data-index'].value;
+                                        var third = componentVar.split(".")[2];
+                                        if(matchingComponent[first][second])
+                                            matchingComponent[first][second][third] = componentVarContents;
+                                    }
+                                    //if contains an array of array variables
+                                    if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                                        //get parent index in array
+                                        var first = componentVar.split(".")[0];                                    
+                                        var second = componentEditable[i2].attributes['parent-data-index'].value;
+                                        //get child index in array
+                                        var third = componentVar.split(".")[2];
+                                        var fourth = componentEditable[i2].attributes['data-index'].value;
+                                        var last = componentVar.split(".")[3];
+                                        if(matchingComponent[first][second][third][fourth])
+                                            matchingComponent[first][second][third][fourth][last] = componentVarContents;
+                                    }
+                                    //if needs to traverse a single
+                                    if (componentVar.indexOf('-') > 0) {
+                                        var first = componentVar.split("-")[0];
+                                        var second = componentVar.split("-")[1];
+                                        if(matchingComponent[first])
+                                            matchingComponent[first][second] = componentVarContents;
+                                    }
+                                    //simple
+                                    if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                        matchingComponent[componentVar] = componentVarContents;
+                                    }
+                                }
+                            }
+
+                        }
+                    };
+                    //$scope.currentPage.components = $scope.components;
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, networks ? networks : $scope.componentEditing.networks);
             };
 
             //delete page
@@ -1238,8 +1314,8 @@ define([
                     _id: componentId
                 });
                 $scope.componentEditing.features.push({
-                    "top": "<div style=\"text-align:center\"><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-cubes  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-cubes%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-cubes%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></span></div>",
-                    "content": "<p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.<br></p><p style=\"text-align: center;\"><br></p><p style=\"text-align: center;\"><a data-cke-saved-href=\"http://\" href=\"http:\" style=\"color: rgb(255, 255, 255); outline: 0px; text-align: center; -webkit-box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; box-shadow: rgb(84, 163, 247) 0px 1px 0px 0px inset; border-radius: 3px; border: 1px solid rgb(18, 77, 119); display: inline-block; font-family: arial; font-size: 13px; padding: 6px 24px; text-shadow: rgb(21, 70, 130) 0px 1px 0px; background-image: linear-gradient(rgb(0, 125, 193) 5%, rgb(0, 97, 167) 100%); background-color: rgb(0, 125, 193);\">Learn More</a><br></p>"
+                    "top" : "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%23ffffff%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
+                    "content" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
                 });
                 $scope.saveCustomComponent();
             }

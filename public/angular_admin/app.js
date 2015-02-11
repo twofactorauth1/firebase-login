@@ -165,7 +165,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
-          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
+          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail', 'singlePageAnalytics'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,
@@ -181,7 +181,10 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
             console.log('toName[0] ', toName[0]);
             console.log('fromName[0] ', fromName[0]);
             $('[href="#/' + toName[0] + '"]', p).parent().addClass('active');
-            $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active');
+            if (excludeList.indexOf(fromState.name) == -1)
+              $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active');
+            else
+              $('[href="#/' + $rootScope.lastState.state + '"]', p).parent().removeClass('active');
           }
         });
     }]);

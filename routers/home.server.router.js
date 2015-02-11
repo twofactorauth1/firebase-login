@@ -276,7 +276,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     externalRedirect: function(req, resp) {
-        resp.render('redirect', {next: req.query.next});
+        resp.render('redirect', {next: encodeURIComponent(req.query.next)});
     }
 });
 

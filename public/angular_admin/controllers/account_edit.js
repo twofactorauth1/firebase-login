@@ -253,7 +253,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         //user fullname PUT call
         $scope.$watch('fullName', function(newValue, oldValue) {
             if (newValue) {
-                var nameSplit = newValue.split(' ');
+                var nameSplit = newValue.match(/\S+/g);
                 if (nameSplit.length >= 3) {
                     $scope.user.first = nameSplit[0];
                     $scope.user.middle = nameSplit[1];

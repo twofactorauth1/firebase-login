@@ -14,7 +14,7 @@
             <div class="inner-page row">
 
                 <div class="simple-form-title" >
-                    <div class="editable" data-class="title" ng-bind-html="component.maintitle | unsafe" data-index="{{$index}}">
+                    <div class="editable" data-class="maintitle" ng-bind-html="component.maintitle | unsafe" data-index="{{$index}}">
                     </div>
                 </div>
 
@@ -35,7 +35,7 @@
                 <div class="clearfix mb15 visible-xs"></div>
                 <div class="col-sm-3">
                     <div class="clear">
-                        <button class="btn btn-outline pull-right btn-block" ng-disabled="isEditing" ng-click="createUser(user, component._id)">{{component.submitBtn || "I'm Interested"}} <i class="fa fa-arrow-circle-o-right"></i>
+                        <button class="btn btn-outline pull-right btn-block" ng-disabled="isEditing" ng-click="createUser(user, component)">{{component.submitBtn || "I'm Interested"}} <i class="fa fa-arrow-circle-o-right"></i>
                         </button>
                     </div>
                 </div>

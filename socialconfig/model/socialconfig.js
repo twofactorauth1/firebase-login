@@ -33,7 +33,7 @@ var socialconfig = $$.m.ModelBase.extend({
              * Objects in this array are like the following:
              * {
              *   socialId: uuid, //points to object in socialAccounts
-             *   type: feed, //feed, wall, messages, search, user, etc
+             *   type: feed, //feed, wall, messages, search, user, pages, numberTweets, numberFollowers
              *   term: "",//search term, username, etc
              * }
              */

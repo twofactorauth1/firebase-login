@@ -1,201 +1,293 @@
+<link href='http://fonts.googleapis.com/css?family=Raleway:700,300' rel='stylesheet' type='text/css'>
 <div ng-class="component.type+'-v'+component.version">
-    <section>
-        <span class="logo"></span>
-        <div class="panel row">
-            <div class="wrap">
-                <div class="panel-header">
-                    <h1 class="center">Are you ready to...</h1>
-                    <div class="clearfix"></div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <h4><i class="fa fa-check"></i> Tell your story</h4>
-                        </div>
-                        <div class="col-sm-4">
-                            <h4><i class="fa fa-check"></i> Build your client base</h4>
-                        </div>
-                        <div class="col-sm-4">
-                            <h4><i class="fa fa-check"></i> Increase revenue</h4>
-                        </div>
-                    </div>
+    <div class="top-signup">
+        <div class="inner-page">
+            <img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="center" style="display: block;">
+            <div class="clearfix mb40"></div>
+            <h1 class="center">Are you ready to...</h1>
+            <div class="clearfix mb40"></div>
+            <div>
+                <div class="col-xs-4">
+                    <h1 class="center"><i class="fa fa-bullhorn"></i></h1>
+                    <h4 class="center"> Tell your story</h4>
+                    <div class="visible-xs mb30"></div>
                 </div>
-                <div class="panel-body">
-                     <div class="row social btn-toolbar">
-                        <div class="col-sm-3"></div>
-                        <div class="col-sm-6 signup-social-toolbar">
-                            <a ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default" ><i class="fa fa-facebook"></i></a>
-                            <a  ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default"><i class="fa fa-twitter"></i></a>
-                            <a class="btn btn-large btn-default" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
-                            <a class="btn btn-large btn-default" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
-                        </div>
-                        <div class="col-sm-3"></div>
-                    </div>
-                    <div class="row" >
-                        <div class="col-sm-12 signup-social-toolbar" ng-if="newAccount.profilePhoto">
-                            <img ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto">
-                        </div>
-                    </div>
-                    <fieldset ng-disabled="isFormValid">
-                        <!-- EMAIL AND PASSOWORD -->
-
-                        <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-envelope" /></span>
-                                <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
-                                <span class="glyphicon form-control-feedback"></span>
-                            </div>
-                            <span class="error help-block" />
-                        </div>
-
-
-                        <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock" /></span>
-                                <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
-                                <span class="glyphicon form-control-feedback"></span>
-                            </div>
-                            <span class="error" />
-                        </div>
-
-                        <!-- Business Name -->
-
-                        <div id="business-name" class="form-group col-xs-12 has-feedback">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-building" /></span>
-                                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
-                                <span class="glyphicon form-control-feedback"></span>
-                            </div>
-                            <span class="error" />
-                        </div>
-
-                        <div class="clearfix"></div>
-
-                        <hr></hr>
-
-                        <!-- MEMBERSHIP -->
-
-                        <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
-                            <div class="well well-calm">
-                                <h4 class="center">{{plan.name}}</h4>
-                                <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
-                                <div class="mb30"></div>
-                                <div class="col-xs-12 mb15">
-                                    <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
-                                    <a type="button" class="btn btn-green btn-block center active" ng-if="newAccount.membership == plan.id">Selected</a>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-
-                        <div class="clearfix"></div>
-
-                        <!-- PAYMENT DETAILS -->
-
-                        <div class="row" ng-show="subscriptionPlanAmount">
-                            <div class="col-xs-12 mb30">
-                                <div class="col-sm-2">
-                                    <h3 class="center">Amount:</h3>
-                                </div>
-                                <div class="col-sm-10">
-
-                                    <h4>Only</h4>  <i class="fa fa-usd fa-1"></i>{{(subscriptionPlanAmount/100).toFixed(2)}}/{{subscriptionPlanInterval}}&nbsp;+&nbsp;<i class="fa fa-usd fa-1"></i>{{subscriptionPlanOneTimeFee}}(One Time Fee)
-                                    <!--
-                                <h4>Only $49.00/month (when you prepay $588.00 for 12 months)
-                                    <br/>Save $576.00. Pays for itself in 6 months.
-                                    <br/>Keep Locked In Rate for next year.
-                                </h4>
-                                -->
-                                </div>
-                            </div>
-
-                            <div class="col-xs-12">
-                                <div class="row">
-                                    <div class="card-wrapper"></div>
-                                </div>
-                                <div class="row" style="min-height: 10px">
-                                </div>
-                                <div class="row">
-                                    <div class="active">
-                                        <form name="card-details" action="">
-                                            <div class="row">
-                                                <div id="card_number" class="form-group small-6 columns col-sm-6">
-                                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
-                                                    <span class="error help-block" />
-                                                </div>
-                                                <div class="visible-xs mb20"></div>
-                                                <div id="card_name" class="form-group small-6 columns col-sm-6">
-                                                    <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
-                                                    <span class="error help-block" />
-                                                </div>
-                                            </div>
-                                            <div class="clearfix mb20"></div>
-                                            <div class="row">
-                                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
-                                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
-                                                    <span class="error help-block" />
-                                                </div>
-                                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
-                                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
-                                                    <span class="error help-block" />
-                                                </div>
-                                            </div>
-                                            <div class="clearfix mb20"></div>
-                                        </form>
-                                    </div>
-                                    <!-- Coupon DETAILS -->
-                                    <div id="coupon-name" class="form-group col-xs-12">
-                                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
-                                        <span class="error" />
-                                    </div>
-                                </div>
-
-                                <div class="clearfix"></div>
-
-                                <hr></hr>
-
-
-                                <!-- BUY -->
-
-                                <div class="submit-signup">
-                                    <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Become
-                                an Indigenous Member Now</a>
-                                </div>
-                                <p class="center">By clicking this button you agree to the Indigenous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
-                            </div>
-                        </div>
-
-                    </fieldset>
+                <div class="col-xs-4">
+                    <h1 class="center"><i class="fa fa-thumbs-up"></i></h1>
+                    <h4 class="center">Build your client base</h4>
+                    <div class="visible-xs mb30"></div>
+                </div>
+                <div class="col-xs-4">
+                    <h1 class="center"><i class="fa fa-line-chart"></i></h1>
+                    <h4 class="center"> Increase revenue</h4>
+                    <div class="visible-xs mb30"></div>
                 </div>
             </div>
+            <div class="clearfix mb20"></div>
         </div>
-        <ul class="certificates">
-            <li>
-                <div class="larger">100%</div>
-                <div class="clearfix"></div>Secure Data</li>
-            <li>
-                <div class="larger">30 Day</div>
-                <div class="clearfix"></div>Money Back Guarantee</li>
-            <li>
-                <div class="larger">No Risk</div>
-                <div class="clearfix"></div>Cancel Anytime</li>
-            <li>
-                <div class="larger">Live</div>
-                <div class="clearfix"></div>Customer Support</li>
-        </ul>
-    </section>
+    </div>
+    <div class="social-signup">
+        <div class="inner-page">
+            <h2 class="center">Sign up for Indigenous</h2>
+            <div class="clearfix mb20"></div>
+            <div class="col-sm-12 signup-social-toolbar" ng-if="newAccount.profilePhoto">
+                <img ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto">
+            </div>
+            <div class="social btn-toolbar">
+                <p class="pull-left">Connect with: </p>
+                <div class="signup-social-toolbar pull-left">
+                    <a ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default facebook"><i class="fa fa-facebook"></i></a>
+                    <a ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default twitter"><i class="fa fa-twitter"></i></a>
+                    <a class="btn btn-large btn-default google-plus" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
+                    <a class="btn btn-large btn-default linkedin" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
+                </div>
+            </div>
+            <p class="center">or use your email address in a form below</p>
+        </div>
+    </div>
+    <div class="account-info-signup">
+        <div class="inner-page">
+            <h4>Account Info</h4>
+            <!-- Business Name -->
+
+            <div id="business-name" class="form-group col-xs-12 has-feedback">
+                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
+                <span class="glyphicon form-control-feedback"></span>
+                <span class="error help-block" />
+            </div>
+
+            <!-- EMAIL AND PASSOWORD -->
+
+            <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
+                <span class="glyphicon form-control-feedback"></span>
+                <span class="error help-block" />
+            </div>
+
+
+            <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
+                <span class="glyphicon form-control-feedback"></span>
+                <span class="error help-block" />
+            </div>
+
+        </div>
+        <div class="clearfix mb40"></div>
+    </div>
+    <div class="price-signup">
+        <div class="inner-page">
+            <div ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
+                <h4 class="center">{{plan.name}}</h4>
+                <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+                <div class="clearfix mb15"></div>
+                <p class="center">+ <i class="fa fa-usd fa-1"></i>{{subscriptionPlanOneTimeFee}} One Time Setup Fee</p>
+                <div class="mb30"></div>
+                <div class="col-xs-12 mb15">
+                    <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
+                    <a type="button" class="btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
+                </div>
+                <div class="clearfix"></div>
+                <div class="assertions">
+                    <div class="col-xs-4 center"><span>100%</span>
+                        <br> Secure
+                        <br> Data</div>
+                    <div class="col-xs-4 center"><span>No</span>
+                        <br> Hidden
+                        <br> Fees</div>
+                    <div class="col-xs-4 center"><span>Live</span>
+                        <br> Customer
+                        <br> Support</div>
+                </div>
+                <div class="clearfix mb20"></div>
+            </div>
+        </div>
+    </div>
+    <div class="payment-signup">
+        <div class="inner-page">
+            <h4>Payment Info</h4>
+            <form name="card-details" action="" class="form-group col-xs-12 mb0">
+                <div class="row">
+                    <div id="card_number" class="form-group small-6 columns col-sm-6">
+                        <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                        <span class="error help-block" />
+                    </div>
+                    <div class="visible-xs mb20"></div>
+                    <div id="card_name" class="form-group small-6 columns col-sm-6">
+                        <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                        <span class="error help-block" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="card_expiry" class="form-group small-3 columns col-xs-6">
+                        <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                        <span class="error help-block" />
+                    </div>
+                    <div id="card_cvc" class="form-group small-3 columns col-xs-6">
+                        <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                        <span class="error help-block" />
+                    </div>
+                </div>
+            </form>
+            <!-- Coupon DETAILS -->
+            <div id="coupon-name" class="form-group col-xs-12">
+                <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
+                <span class="error" />
+            </div>
+
+            <div class="clearfix mb30"></div>
+
+            <!-- BUY -->
+
+            <div class="submit-signup mb10">
+                <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="fa fa-spinner fa-spin"></span> Become an Indigenous Member Now</a>
+            </div>
+            <p class="center">By clicking this button you agree to the Indigenous.io <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Use</a>.</p>
+        </div>
+    </div>
 </div>
 
 
-<!-- Add Component Modal -->
+<!-- Terms of Service Modal -->
 <div class="modal fade" id="terms-of-service">
     <div class="modal-dialog">
         <div class="modal-content">
             <form>
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Terms of Service</h4>
+                    <h4 class="modal-title">Indigenous Terms of Use</h4>
                 </div>
                 <div class="modal-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel, possimus, quasi. Necessitatibus praesentium, dolorem blanditiis modi mollitia, non veritatis. In laboriosam maxime vitae! Atque minima voluptates nisi aspernatur nihil. Quos, necessitatibus sint veritatis dolores magnam minima debitis sunt totam sit reiciendis! Suscipit eveniet placeat, velit totam repellendus illo quam quae aliquam voluptatibus deserunt nihil corporis, odio voluptate reiciendis dolorum non asperiores aut. Impedit doloribus aspernatur quasi ea tempora vitae odio eaque reiciendis omnis. Quia, nisi facilis vel non optio in, sit a! Molestiae placeat quae, nostrum officiis, iusto ea at repellat et atque consequatur! Id ut sapiente illo? Quas, deserunt?
+                    <h3>Subscription Use Agreement</h3>
+                    <p class="p1"><span class="s1">IMPORTANT - READ CAREFULLY: THIS SUBSCRIPTION USE AGREEMENT (THE "AGREEMENT") IS A LEGAL AGREEMENT BETWEEN YOU AND ANY COMPANY YOU REPRESENT (COLLECTIVELY, "YOU" AND "YOUR") AND INDIGENOUS SOFTWARE, INC. ("INDIGENOUS").</span>
+                    </p>
+                    <p class="p1"><span class="s1">THIS AGREEMENT APPLIES TO (1) ALL SUBSCRIPTIONS FOR INDIGENOUS HOSTED SOFTWARE AS A SERVICE (SAAS) SOLUTIONS AND (2) ANY OTHER RELATED SERVICES THAT INDIGENOUS MAY PROVIDE TO YOU IN CONNECTION WITH SUCH SAAS SOLUTIONS.</span>
+                    </p>
+                    <p class="p1"><span class="s1">PLEASE READ THE AGREEMENT CAREFULLY BEFORE CONTINUING YOUR SUBSCRIPTION REGISTRATION. BY CLICKING THE "I ACCEPT" BUTTON OR OTHERWISE ACCEPTING THIS AGREEMENT AS SET FORTH IN ANY ONLINE OR PRINTED ORDER FORM REFERENCING THIS AGREEMENT, YOU AND ANY COMPANY YOU REPRESENT AGREE TO FOLLOW AND BE BOUND BY THE TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU ARE AGREEING TO THIS AGREEMENT ON BEHALF OF YOUR COMPANY, YOU ARE REPRESENTING TO US THAT YOU HAVE THE AUTHORITY TO BIND YOUR COMPANY TO THIS AGREEMENT, AND THE TERM "YOU" SHALL REFER TO YOUR COMPANY. IF YOU DO NOT HAVE SUCH AUTHORITY, OR IF YOU DO NOT AGREE TO ALL TERMS AND CONDITIONS OF THIS AGREEMENT, YOU MUST CHOOSE THE "CANCEL" BUTTON AND YOU SHALL NOT BE PERMITTED TO USE THE INDIGENOUS SERVICE.</span>
+                    </p>
+                    <p class="p2"><span class="s1">1. DEFINITIONS</span>
+                    </p>
+                    <p class="p1"><span class="s1">For purposes of this Agreement, the definitions set forth below apply:</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2">Authorized User</span><span class="s1">" means any of Your employees, consultants, contractors or agents authorized by Your administrator to access and use the Indigenous Service on behalf of Your business, in each case subject to such person's agreement to be bound by the terms of this Agreement.</span>
+                    </p>
+                    <p class="p3"><span class="s1">"Consulting Services" means the professional services provided to you by us, which may include training services, installation, integration or other consulting services.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2">Front End Code</span><span class="s1">" means our user interface display and usability platform. This includes, but is not limited to, the layout, color scheme, HTML pages and source code, etc.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2">Indigenous Materials</span><span class="s1">" means any documentation, user guides or other similar materials provided by Indigenous to You in connection with Your use of the Indigenous Service.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2">Indigenous Service</span><span class="s1">" means any of the Indigenous set of SaaS solutions that are developed, operated, and maintained by Indigenous (and its third party service providers) and that are subscribed to through an Indigenous branded or controlled website (or Indigenous partner website) that includes a link to this Agreement. The definition of Indigenous Service does not include any separate professional Services (as defined below) that may be purchased by You from Indigenous.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2">Order Form" means any online or written subscription order form for the Indigenous Service or for Services submitted by You either during an online subscription process or separately signed by You and submitted to Indigenous, and any future purchase order or order form that makes reference to this Agreement</span><span class="s3">. Most Orders are completed through our online payment process. The purchase form may be referred to as a "Statement of Work" if you are purchasing only Consulting Services.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2"><i>Services</i></span><span class="s1">" means any implementation, training or other professional services provided by Indigenous to You pursuant to the terms of an Order Form.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2"><i>Sites</i></span><span class="s1">" refers to our publicly available websites.</span>
+                    </p>
+                    <p class="p4"><span class="s2"><i>"Subscription Service</i></span><span class="s1"><i>"</i> means our web-based business operating platform that you have subscribed to by an Order Form, and developed, operated, and maintained by us, accessible via http://www.indigenous.com or another designated URL, and any ancillary products and services, including website hosting, that we provide to you.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2"><i>Subscription Term</i></span><span class="s1">" means the use term for the Indigenous Service set forth on Your Order Form and any additional renewals of such term.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2"><i>Third Party Content</i></span><span class="s1">" means the content, including software code, that an Indigenous partner or other third party may bundle with the Indigenous Service, for a specific market or niche offering.</span>
+                    </p>
+                    <p class="p3"><span class="s2">"Users</span><span class="s1">" means your employees, representatives, consultants, contractors or agents who are authorized to use the Subscription Service for your benefit and have unique user identifications and passwords for the Subscription Service.</span>
+                    </p>
+                    <p class="p1"><span class="s1">"</span><span class="s2"><i>Your Data</i></span><span class="s1">" means registration information, information concerning Your Authorized Users and customers and contacts, business, marketing and financial information, and any similar data that You upload to the Indigenous Service.</span>
+                    </p>
+                    <p class="p2"><span class="s1"><b>2. USE RIGHTS AND RESTRICTIONS</b></span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>2.1 Use Rights; Restrictions.</b> Subject to the terms of this Agreement, Indigenous grants to You during the Subscription Term the non-transferable (except as permitted below), non-exclusive right to permit Your Authorized Users to access and use the Indigenous Service (and any Indigenous Materials provided to You) to allow You to perform the various business functions that the Indigenous Service is designed to perform, subject to the following restrictions: (i) Your use of the Indigenous Service may not be on behalf of third parties unless a separate agreement between You and Indigenous permits use of the Indigenous Service on behalf of Your clients (and in such case limited to use on behalf of clients for whom You have purchased access and use rights); (ii) except as expressly permitted herein or in a separate partner agreement between You and Indigenous, You may not license, sell, rent, lease, transfer, assign, distribute, display, host, outsource otherwise commercially exploit or make the Indigenous Service or the Indigenous Materials available to any third party; (iii) You may not modify, make derivative works of, disassemble, reverse compile, or reverse engineer any part of the Indigenous Service or Indigenous Materials (provided that reverse engineering is prohibited only to the extent such prohibition is not contrary to applicable law), or access or use the Indigenous Service or Indigenous Materials in order to build a similar or competitive product or service; (iv) Your use of the Indigenous Service must not cause undue strain or stress on the Indigenous network through excessive API calls or other non-standard use; and (v) Your use of the Indigenous Service must comply with the separate Indigenous Acceptable Use Policy posted on the Indigenous website (</span><span class="s4">www.Indigenous.io</span><span class="s1">) as updated by Indigenous from time to time.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>2.2 Technical Support.</b> During the Subscription Term, You will be entitled at no extra charge to access online user guides, knowledge bases and self-help tools, and any additional standard technical support resources (collectively, "Technical Support") for the Indigenous Service offered by Indigenous from time to time, the terms of conditions of which may be described and updated from time to time on the support or customer care sections of the relevant Indigenous website (<a href="http://www.Indigenous"><span class="s4">www.Indigenous</span>
+                        </a>
+                        </span><span class="s4">.io</span><span class="s1">). Indigenous reserves the right to modify the posted terms and conditions for Technical Support, at any time at its sole discretion.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>2.3 Intellectual Property Rights.</b> Indigenous shall retain all right, title and interest (including all copyrights, patents, service marks, trademarks and other intellectual property rights) in and to the Indigenous Service and Indigenous Materials (including application development, business and technical methodologies, and implementation and business processes, used by Indigenous to develop or provide the Indigenous Service or Indigenous Materials), and any and all updates, enhancements, customizations, revisions, modifications, future releases and any other changes relating to any of the foregoing. Except for the limited access and use rights granted pursuant to this Agreement, You do not acquire any interest in the Indigenous Service or Indigenous Materials. You agree that any suggestions, enhancement requests, feedback, recommendations or other information provided by You or any of Your Authorized Users relating to the Indigenous Service or the Indigenous Materials may be used by Indigenous without restriction or obligation to You.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>2.4 Additional Restrictions.</b> You are expressly prohibited from using any Front End Code for any purpose outside of the intended design and implementation of Your authorized use of the Indigenous Service. Any replication or use of any aspect of the Front End Code or other Indigenous application or Services for any purpose designed or intended to compete with Indigenous's solutions is strictly prohibited.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>2.5 Ownership of Your Data.</b> As between You and Indigenous, Your Data and any similar data provided to Indigenous outside of the uploading process (either in hard copy or electronic format) is and shall remain Your property. To enable Indigenous to provide You with the Indigenous Service, and subject to the terms and conditions of this Agreement, You hereby grant to Indigenous a non-exclusive right to use, copy, distribute and display Your Data solely in connection with Indigenous's operation of the Indigenous Service on Your behalf. You, not Indigenous, shall have sole responsibility for the accuracy, integrity, and reliability of Your Data, and Indigenous will not be responsible or liable for the deletion, correction, destruction, damage, loss or failure to store any of Your Data. Indigenous will protect any of Your Data provided to Indigenous as confidential in accordance with Article IV below.</span>
+                    </p>
+                    <p class="p6"><span class="s5"><b>2.6 Your Indigenous Account and Site.</b> </span><span class="s1">If you create a blog on the Site, you are responsible for maintaining the security of your account and blog, and you are fully responsible for all activities that occur under the account and any other actions taken in connection with the blog. You must not describe or assign keywords to your blog in a misleading or unlawful manner, including in a manner intended to trade on the name or reputation of others, and Indigenous may change or remove any description or keyword that it considers inappropriate or unlawful, or otherwise likely to cause Indigenous liability. You must immediately notify Indigenous of any unauthorized uses of your blog, your account or any other breaches of security. Indigenous will not be liable for any acts or omissions by You, including any damages of any kind incurred as a result of such acts or omissions.</span>
+                    </p>
+                    <p class="p6"><span class="s5"><b>2.7 Responsibility of Contributors.</b> </span><span class="s1"><b> </b>If you operate a blog, comment on a blog, post material to the Site, post links on the Site, or otherwise make (or allow any third party to make) material available by means of the Site (any such material, “Content”), You are entirely responsible for the content of, and any harm resulting from, that Content. That is the case regardless of what form the Content takes, which includes, but is not limited to text, photo, video, audio, or code. By making Content available, you represent and warrant that your content does not violate these terms or the </span><span class="s4">Acceptable Use Policy</span><span class="s1">. By submitting Content to Indigenous for inclusion on your Site, you grant Indigenous a world-wide, royalty-free, and non-exclusive license to reproduce, modify, adapt and publish the Content solely for the purpose of displaying, distributing, and promoting your blog. This license allows Indigenous to make publicly-posted content available to third parties selected by Indigenous so that these third parties can analyze and distribute (but not publicly display) your content through their services.</span>
+                    </p>
+                    <p class="p7"><span class="s1">You also give other Indigenous users permission to share your Content on other Indigenous Sites and add their own Content to it (aka to reblog your Content), so long as they use only a portion of your post and they give you credit as the original author by linking back to your site.</span>
+                    </p>
+                    <p class="p7"><span class="s1">If you delete Content, Indigenous will use reasonable efforts to remove it from the Site, but you acknowledge that caching or references to the Content may not be made immediately unavailable.</span>
+                    </p>
+                    <p class="p7"><span class="s1">Without limiting any of those representations or warranties, Indigenous has the right (though not the obligation) to, in Indigenous’s sole discretion (i) refuse or remove any content that, in Indigenous’s reasonable opinion, violates any Indigenous policy or is in any way harmful or objectionable, or (ii) terminate or deny access to and use of the Site to any individual or entity for any reason, in Indigenous’s sole discretion. Indigenous will have no obligation to provide a refund of any amounts previously paid.</span>
+                    </p>
+                    <p class="p7"><span class="s5"><b>2.8 Responsibility of Website Visitors.</b> </span><span class="s1">Indigenous has not reviewed, and cannot review, all of the material, including computer software, posted to the Site, and cannot therefore be responsible for that material’s content, use or effects. By operating the Site, Indigenous does not represent or imply that it endorses the material there posted, or that it believes such material to be accurate, useful or non-harmful. You are responsible for taking precautions as necessary to protect yourself and your computer systems from viruses, worms, Trojan horses, and other harmful or destructive content. The Site may contain content that is offensive, indecent, or otherwise objectionable, as well as content containing technical inaccuracies, typographical mistakes, and other errors. The Site may also contain material that violates the privacy or publicity rights, or infringes the intellectual property and other proprietary rights, of third parties, or the downloading, copying or use of which is subject to additional terms and conditions, stated or unstated. Indigenous disclaims any responsibility for any harm resulting from the use by visitors of the Site, or from any downloading by those visitors of content there posted.</span>
+                    </p>
+                    <p class="p7"><span class="s5"><b>2.9 Content Posted on Other Sites.</b> </span><span class="s1">We have not reviewed, and cannot review, all of the material, including computer software, made available through the websites and webpages to which Indigenous links and that link to Indigenous. Indigenous does not have any control over those non-Indigenous websites and webpages, and is not responsible for their contents or their use. By linking to a non-Indigenous website or webpage, Indigenous does not represent or imply that it endorses such website or webpage. You are responsible for taking precautions as necessary to protect yourself and your computer systems from viruses, worms, Trojan horses, and other harmful or destructive content. Indigenous disclaims any responsibility for any harm resulting from your use of non-Indigenous websites and webpages.</span>
+                    </p>
+                    <p class="p7"><span class="s5"><b>2.10 Domain Names.</b> </span><span class="s1">If you are registering a domain name, using or transferring a previously registered domain name, you acknowledge and agree that use of the domain name is also subject to the policies of the Internet Corporation for Assigned Names and Numbers (“ICANN”) and the <a href="http://www.secureserver.net/agreements/showdoc.aspx?pageid=7959&amp;prog_id=391143"><span class="s6">Domain Name Registration and Customer Service Agreement</span>
+                        </a>
+                        </span><span class="s6">.</span>
+                    </p>
+                    <p class="p8"><span class="s1"><b>3. FE</b></span><span class="s5"><b>ES</b></span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>3.1 Fees.</b> The fees for the Subscription Service and any additional Services ("Fees") are set forth in the Order Form and are payable in advance, irrevocable and non-refundable except as set forth in the Order Form and this Agreement. You agree to provide Indigenous with complete and accurate billing and contact information. Where payment by credit card is indicated in the Order Form, or You otherwise provide Indigenous with credit card information, You authorize Indigenous to bill such credit card (a) at the time that You order the Indigenous Service or other Services set forth in the Order Form, (b) for any billing frequency otherwise established in the Order Form, and (c) at the time of any renewal, for the amount charged plus any applicable sales taxes for any renewed Subscription Term. If Indigenous, in its discretion, permits You to make payment using a method other than a credit card, Indigenous will invoice You at the time of the initial Order Form and thereafter on a monthly basis in advance of the relevant billing period, and all such amounts invoiced will be due within ten (10) days of Your receipt of Indigenous's invoice. Late payments shall be subject to a service charge of one and one-half percent (1.5%) per month, or the maximum charge permitted by law, whichever is less.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>3.2 Taxes.</b> You shall pay all personal property, sales, use, value-added, withholding and similar taxes (other than taxes on Indigenous's net income) arising from the transactions described in this Agreement, even if such amounts are not listed on an Order Form. To the extent You are exempt from sales or other taxes, You agree to provide Indigenous, upon request, with the appropriate exemption certificate.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>3.3 Non-Payment; Other Suspension Rights.</b> Indigenous may terminate the Indigenous Service if the billing or contact information provided by You is false or fraudulent. Indigenous also reserves the right, in its discretion, to suspend Your access and/or use of the Indigenous Service: (i) where any payment is due but unpaid and You have been requested but failed to promptly cure such payment failure; or (ii) in the event a dispute arises on Your account as to who at Your business has authority to act or manage Your account and Indigenous is not promptly provided with written instructions from the interested parties associated with Your account that fully resolves the dispute. You acknowledge and agree that it a dispute arises as to management of Your account, then (i) if the listed owner of the account is a corporation, limited liability company or other registered entity, Indigenous may rely on public records (to the extent available) concerning the appropriate authorized executives or managers of Your entity; or (ii) if the listed owner is a dba or sole proprietorship, or any other entity for which public records of control are not readily accessible online, Indigenous may assume that the person or entity that has been making payments on Your account has the authority to manage the account. You agree that Indigenous shall not be liable to You nor to any third party for any suspension of the Indigenous Service resulting from Your non-payment of Fees or from a dispute as to the management rights to Your account.</span>
+                    </p>
+                    <p class="p2"><span class="s1"><b>4. CONFIDENTIALITY; USE OF NAMES</b></span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>4.1 Confidential Information.</b> For purposes of this Agreement, confidential information shall include the business terms in the Order Form, Your Data, the Indigenous Service and the Indigenous Materials, and any information that is clearly identified in writing at the time of disclosure as confidential or that should be reasonably understood to be confidential by the receiving party given the nature of the information and the circumstances of its disclosure ("Confidential Information"). Each party agrees: (a) to receive and maintain in confidence all Confidential Information disclosed to it by the other party or by a third-party; (b) not to use the Confidential Information of the other party except to the extent necessary to perform its obligations or exercise rights hereunder; (c) to limit the internal dissemination of Confidential Information to those employees and contractors of the recipient who have a need to know and an obligation to protect it; and (d) to protect the confidentiality thereof in the same manner as it protects the confidentiality of similar information and data of its own (at all times exercising at least a reasonable degree of care in the protection of such Confidential Information). Indigenous will restrict its employees' access to Your Confidential Information to only those employees necessary to successfully provide the Indigenous Service. Indigenous may disclose Confidential Information on a need-to-know basis to its contractors who have executed written agreements requiring them to maintain such information in strict confidence and use it only to facilitate the performance of their services for Indigenous in connection with the performance of this Agreement. Confidential Information shall not include information that: (1) is known publicly; (2) is generally known in the industry before disclosure; (3) has become known publicly, without fault of the recipient, subsequent to disclosure by the disclosing party; or (4) the recipient becomes aware of from a third party not bound by non-disclosure obligations to the disclosing party and with the lawful right to disclose such information to the recipient. This Section will not be construed to prohibit the disclosure of Confidential Information to the extent that such disclosure is required by law or order of a court or other governmental authority. The parties agree to give the other party prompt notice of the receipt of any subpoena or other similar request for such disclosure.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>4.2 Credit Card Information.</b> Indigenous agrees that it will retain and store any provided credit card information only for the minimum amount of time required for business, legal and/or regulatory purposes, and will use standard industry practices to protect such information from unauthorized access, disclosure or use.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>4.3 Use of Names in Marketing.</b> You may use Indigenous's name and credentials in an appropriate and acceptable manner for Your standard marketing promotions, provided that You agree to cease or alter such use at Indigenous's request where such use is contrary to Indigenous's branding policies, could cause any brand confusion in the market or is otherwise objectionable to Indigenous. Similarly, Indigenous may use Your business name in an appropriate and acceptable manner for standard marketing promotions, provided that Indigenous agrees to cease or alter such use at Your request where such use is contrary to Your branding policies, could cause any brand confusion in the market or is otherwise objectionable to You. Acceptable and standard marketing promotions include, but are not limited to: client listings, press releases, surveys, interviews, reputable business publications, television, and web site presentation and promotion, etc.</span>
+                    </p>
+                    <p class="p2"><span class="s1"><b>5. TERM &amp; TERMINATION</b></span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>5.1 Standard Term.</b> Unless a different Term is specified in a signed Order Form between You and Indigenous, the Initial Term of Your subscription to an Indigenous Service will begin on the submission or execution of Your Order Form and shall continue on a month to basis until the subscription is terminated as provided for in this Article 5. The term of this Agreement will automatically terminate when all active Subscription Terms have been terminated.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>5.2 Termination without Cause.</b> Either party may terminate the Subscription Term to an Indigenous Service by providing thirty (30) days' prior written notice to the other party. Indigenous's termination rights are in addition to any suspension rights it may have under this Agreement or the incorporated Acceptable Use Policy.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>5.3 Effect of Termination.</b> Upon termination of the Subscription Term, all Fees then due and payable to Indigenous must be paid in full. Contingent upon its receipt of all such Fees, Indigenous will continue to make Your Data available for downloading through the termination date. In addition, for a period of thirty (30) days following termination, You may arrange for the downloading of Your Data by contacting Indigenous. Following this (30) day grace period, Indigenous may remove Your Data from the production environment for the Indigenous Service. The provisions of this Agreement which by their nature are intended to survive expiration or termination shall survive, including but not limited to obligations concerning confidentiality, protection of intellectual property, indemnification and payment of unpaid Fees and expenses.</span>
+                    </p>
+                    <p class="p2"><span class="s1"><b>6. WARRANTIES/LIMITATION OF LIABILITY/INDEMNITY</b></span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>6.1 Limited Warranties.</b> Indigenous warrants for a period of thirty (30) days following their delivery that all professional Services provided hereunder will be performed in a workmanlike manner, in conformity with the professional standards for comparable services in the industry. For any breach of this warranty timely reported by You, Your exclusive remedy shall be the re-performance of the deficient Services, and if Indigenous is unable to re-perform the deficient Services as warranted, You shall be entitled to recover the portion of the Fees paid to Indigenous for such deficient Services, and such refund shall be Indigenous's entire liability. You warrant that Your business shall, at all times, comply with, and shall remain solely responsible for compliance with, all applicable federal, state and local laws and regulations, as well as the Indigenous Acceptable Use Policy, in connection with Your use of the Indigenous Service, and You agree to indemnify and hold Indigenous harmless from and against any third party or government claims, including all related damages, costs and expenses (including reasonable attorneys' fees), that arise due to Your violation of law or breach of this warranty in Your use of the Indigenous Service.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>6.2 Indigenous Not Responsible for Third Party Content.</b> The Indigenous Service may be bundled by third parties (including but not limited to Indigenous marketing or content partners) with Third Party Content designed to facilitate use of the Indigenous Service in certain market niches or to customize the Indigenous Service for use by certain categories of target customers. To the extent that You either purchase the Indigenous Service from such third parties or acquire the Third Party Content or configuration services from such third parties (even though you may purchase the core Indigenous Service directly from Indigenous), Indigenous does not warrant in any manner and will not be responsible for such Third Party Content and You agree to look solely to the relevant third party provider (and not Indigenous) if and to the extent that you have any complaints or issues relating to the Third Party Content or its interaction with an Indigenous Service.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>6.3 Warranty Disclaimers.</b> EACH PARTY DISCLAIMS ALL OTHER WARRANTIES, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, TITLE, UNINTERRUPTED SERVICE OR FITNESS FOR A PARTICULAR PURPOSE. YOU ACKNOWLEDGE THAT INDIGENOUS SPECIFICALLY DISCLAIMS ALL WARRANTIES RELATING TO THE INDIGENOUS SERVICE.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>6.4 Limitation of Liability.</b> IN NO EVENT WILL INDIGENOUS BE LIABLE TO YOU FOR ANY INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES, INCLUDING, BUT NOT LIMITED TO, LOSS OF DATA, LOSS OF BUSINESS OR OTHER LOSS ARISING OUT OF OR RESULTING FROM THIS AGREEMENT EVEN IF IT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE FOREGOING SHALL APPLY REGARDLESS OF WHETHER SUCH LIABILITY SOUNDS IN CONTRACT, NEGLIGENCE, TORT, STRICT LIABILITY OR ANY OTHER THEORY OF LEGAL LIABILITY. IN ADDITION, IN NO EVENT WILL INDIGENOUS'S CUMULATIVE LIABILITY UNDER THIS AGREEMENT EXCEED THE AMOUNT PAID BY YOU TO INDIGENOUS DURING THE SIX MONTH PERIOD PRECEDING THE ALLEGED LIABILITY EVENT.</span>
+                    </p>
+                    <p class="p2"><span class="s1"><b>7. GENERAL PROVISIONS</b></span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.1 Notice.</b> Notices regarding this Agreement to Indigenous shall be in writing and sent by first class mail or overnight courier (if from within the United States), or international courier, addressed to Indigenous, Attn. Contracts Administrator, 5580 La Jolla Blvd., #471, La Jolla, CA 92037. Indigenous may give notice applicable to Indigenous's general customer base by means of a general notice on the Indigenous Service portal, and notices specific to You by electronic mail to Your designated contact's email address on record with Indigenous, or by written communication sent by first class mail or overnight courier (if to an address within the United States), or international courier, to Your address on record in Indigenous's account information. All notices shall be deemed to have been given three (3) days after mailing or posting (if sent by first class mail), upon delivery in the case of courier, or twelve (12) hours after sending by confirmed facsimile, email or posting to the Indigenous Service portal.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.2 Assignment.</b> You may not assign this Agreement without providing prior notice to and obtaining the consent of Indigenous, which shall not be unreasonably denied provided Your account is in good standing. Any purported assignment in violation of this Section shall be void.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.3 Integration; Modification.</b> This Agreement and the information incorporated into this Agreement by written reference (including reference to information contained in a URL or referenced policy), together with any applicable Order Form, represent the parties' entire understanding relating to the Indigenous Service, the Indigenous Materials and the Services, and supersede any prior or contemporaneous, conflicting or additional communications. The terms and conditions of this Agreement may only be amended by written agreement of the parties.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.4 Governing Law; Arbitration.</b> This Agreement shall be governed by the laws of the State of California without giving effect to conflict of laws principles. Any and all disputes, controversies and claims arising out of or relating to this Agreement or concerning the respective rights or obligations of the parties hereto shall be settled and determined by arbitration before a panel of one (1) arbitrator in San Diego County, California, pursuant to the Commercial Rules of the American Arbitration Association then in effect. Judgment upon the award rendered may be entered in any court having jurisdiction or application may be made to such court for a judicial acceptance of the award and an order of enforcement. The parties agree that the arbitrator shall have the power to award damages, injunctive relief and reasonable attorneys' fees and expenses to the prevailing party.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.5 Force Majeure.</b> Except for Your obligation to pay Fees for the Indigenous Service or other Services rendered, neither party will be responsible for failure of performance due to causes beyond its control. Such causes include (without limitation) accidents, acts of God, labor disputes, actions of any government agency, shortage of materials, acts of terrorism, or the stability or availability of the Internet or a portion thereof.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.6 Export.</b> You agree that U.S. export control laws and other applicable export and import laws govern Your use of the Indigenous Service, including Indigenous technology. You represent that You are neither a citizen of an embargoed country nor prohibited end user under applicable U.S. export or anti-terrorism laws, regulations and lists. You agree not to use or export, nor allow a third party to use or export, the Indigenous Service or technology in any manner that would violate applicable law, including but not limited to applicable export and import control laws and regulations.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.7 Severability.</b> If any provision of this Agreement is determined to be illegal or unenforceable, that provision will be limited to the minimum extent necessary so that this Agreement shall otherwise remain in full force and effect.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.8 Relationship of Parties.</b> No joint venture, partnership, employment, or agency relationship exists between Indigenous and You as a result of this Agreement or use of the Indigenous Service.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.9 Waiver.</b> The failure of either party to enforce any right or provision in this Agreement shall not constitute a waiver of such right or provision unless acknowledged and agreed to by such party in writing.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.10 Invalidity; Waivers.</b> If any provision or portion of this Agreement is held invalid, illegal, void or unenforceable as it appears in this Agreement by reason of any rule of law, administrative or judicial provision or public policy, then such provision shall be construed as being enforceable to the extent such rule of law, administrative or judicial provision or public policy allows. All other provisions of this Agreement shall nevertheless remain in full force and effect. Neither of the parties shall be deemed to have waived any of its rights, powers or remedies hereunder unless the waiving party expresses such a waiver in writing.</span>
+                    </p>
+                    <p class="p5"><span class="s1"><b>7.11 Government End Use.</b> If You are an agency or unit of the U.S. Government ("Government"), the Indigenous Service is provided for ultimate Government use solely in accordance with the provisions of the Federal Acquisition Regulation ("FAR") and supplements thereto, including the Department of Defense ("DoD") FAR Supplement ("DFARS", set forth in this Section. Government technical data and software rights related to the Services include only those rights customarily provided to the public as defined in this Agreement. This customary commercial license is provided in accordance with FAR §12.211 (Technical Data) and FAR §12.212 (Computer Software) and, for DoD transactions, DFARS § 252.227-7015 (Technical Data - Commercial Items) and DFARS § 252.227.7202-3 (Rights in Commercial Computer Software or Computer Software Documentation). If the Government has a need for rights not conveyed under these terms, it must negotiate with Indigenous to determine if there are acceptable terms for transferring such rights, and a mutually acceptable written addendum specifically conveying such rights must be included in any applicable contract or agreement.</span>
+                    </p>
+                    <p class="p5"><span class="s1"> </span>
+                    </p>
+                    <p class="p9"><span class="s1">Copyright 2015, Indigenous Software, Inc. Any rights not expressly granted herein are reserved by Indigenous.</span>
+                    </p>
                 </div>
             </form>
         </div>

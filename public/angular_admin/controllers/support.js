@@ -66,8 +66,8 @@ define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
                                 onEndTour          : function(){
                                     console.log('tour ended');
                                     // animate back to the top
-                                    $('html, body').animate({scrollTop:0}, 1000, 'swing');  
-                                    //$('html, body').animate({scrollLeft:0}, 1000, 'swing');   
+                                    $('html, body').animate({scrollTop:0}, 1000, 'swing');
+                                    //$('html, body').animate({scrollLeft:0}, 1000, 'swing');
                                     $scope.userPreferences.welcome_alert.initial = true;
                                     $scope.savePreferencesFn();
                                 },

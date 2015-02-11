@@ -1002,7 +1002,9 @@ module.exports = {
                     currentVersion = 0;
                 }
                 page.set('version', currentVersion+1);
+                page.set('latest', true);
                 existingPage.set('_id', pageId + '_' + currentVersion);
+                existingPage.set('latest', false);
                 cmsDao.saveOrUpdate(existingPage, function(err, value){
                     if(err) {
                         self.log.error('Error updating version on page: ' + err);
@@ -1054,7 +1056,10 @@ module.exports = {
 								self.log.error('Error updating website linklists by handle: ' + err);
 								fn(err, page);
 							} else {
-								cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                                var query = {};
+                                query._id = new RegExp('' + pageId + '(_.*)*');
+                                cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
+								//cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
 									if (err) {
 										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
 										fn(err, null);
@@ -1068,7 +1073,10 @@ module.exports = {
 					}
 				});
 			} else {
-				cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                var query = {};
+                query._id = new RegExp('' + pageId + '(_.*)*');
+                cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
+                //cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
 					if (err) {
 						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
 						fn(err, null);
@@ -1091,6 +1099,7 @@ module.exports = {
                     "anchor" : null,
                     "type" : "navigation",
                     "version" : 1,
+                    "latest": true,
                     "visibility" : true,
                     "title" : "Title",
                     "subtitle" : "Subtitle.",
@@ -1264,17 +1273,31 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $or: [{secure:false},{secure:{$exists:false}}]
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+
 
         };
+        self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            self.log.debug('end query');
             if(err) {
                 self.log.error('Error getting pages by websiteId: ' + err);
                 fn(err, null);
             } else {
                 var map = {};
                 _.each(list, function(value){
-                    map[value.get('handle')] = value;
+                    if(map[value.get('handle')] === undefined) {
+                        map[value.get('handle')] = value;
+                    } else {
+                        var currentVersion = map[value.get('handle')].get('version');
+                        if(value.get('version') > currentVersion) {
+                            map[value.get('handle')] = value;
+                        }
+                    }
+
                 });
                 fn(null, map);
             }
@@ -1515,23 +1538,33 @@ module.exports = {
             var bucket = awsConfig.BUCKETS.SCREENSHOTS;
             var subdir = 'account_' + accountId;
 
-
-
-            self._download(ssURL, tempFile, function(){
-                log.debug('stored screenshot at ' + tempFileName);
-                tempFile.type = 'image/png';
-                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
-                    fs.unlink(tempFile.path, function(err, value){});
-                    if(err) {
-                        log.error('Error uploading to s3: ' + err);
-                        fn(err, null);
-                    } else {
-                        log.debug('Got the following from S3', value);
-                        log.debug('<< generateScreenshot');
-                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
-                    }
+            //check if the length is greater than 5kb.  If not, do it again.
+            self._checkSize(ssURL, function(err, size){
+                if(parseInt(size) < 5000) {
+                    options.delay = 9000;
+                    ssURL = urlboxhelper.getUrl(serverUrl, options);
+                    log.debug('Increasing delay to 5000 for ' + serverUrl);
+                }
+                self._download(ssURL, tempFile, function(){
+                    log.debug('stored screenshot at ' + tempFileName);
+                    tempFile.type = 'image/png';
+                    s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+                        fs.unlink(tempFile.path, function(err, value){});
+                        if(err) {
+                            log.error('Error uploading to s3: ' + err);
+                            fn(err, null);
+                        } else {
+                            log.debug('Got the following from S3', value);
+                            log.debug('<< generateScreenshot');
+                            fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
+                        }
+                    });
                 });
+
+
             });
+
+
 
         });
     },
@@ -1629,6 +1662,18 @@ module.exports = {
             request(uri).on('error', function(err) {
                 console.log('error getting screenshot: ' + err);
             }).pipe(fs.createWriteStream(file.path)).on('close', callback);
+        });
+    },
+
+    _checkSize: function(uri, callback) {
+        request.head(uri, function(err, res, body){
+            if(err) {
+                log.error('checksize error: ' + err);
+                callback(null, 0);
+            }
+            var length = res.headers['content-length'];
+            log.debug('checksize length: ' + length);
+            callback(null, length);
         });
     },
 
