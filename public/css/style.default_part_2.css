@@ -5916,10 +5916,19 @@ div.error label.error:before {
   color: white;
   width: 100%;
   line-height: 50px;
+  opacity: 0.8;
 }
 
 #editor-toolbar .cke_chrome a.cke_button .cke_button__bold_icon:before {
   content: "\f032";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__undo_icon:before {
+  content: "\f0e2";
+}
+
+#editor-toolbar .cke_chrome a.cke_button .cke_button__redo_icon:before {
+  content: "\f01e";
 }
 
 #editor-toolbar .cke_chrome a.cke_button .cke_button__italic_icon:before {

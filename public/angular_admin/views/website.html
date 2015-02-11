@@ -295,6 +295,8 @@
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
                                     <label for="bg_hide">Show Background Image</label>
                                     <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                    <br>
+                                    <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-horizontal hidden" ng-if="componentEditing.type === 'navigation'">
