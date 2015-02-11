@@ -169,6 +169,12 @@ module.exports = {
         } else if(trackedObject.type === 'mentions') {
             return twitterDao.getMentionsTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'numberTweets') {
+            return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'numberFollowers') {
+            return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
         }
 
 
@@ -178,6 +184,8 @@ module.exports = {
         var self = this;
         if(trackedObject.type === 'feed') {
             return facebookDao.getTokenStream(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.type === 'pages') {
+            return facebookDao.getPages(socialAccount.accessToken, socialAccount.socialId, fn);
         }
     }
 

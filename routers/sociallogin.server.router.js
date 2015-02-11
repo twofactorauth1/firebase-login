@@ -88,6 +88,11 @@ _.extend(router.prototype, baseRouter.prototype, {
             console.dir(req.query);
         }
 
+        if (req.query.error) {
+          self.log.debug('state.failureRedirect set');
+          state.failureRedirect = '/admin#/account';
+        }
+
         var referringUrl = req.query['redirectTo'] || '/admin/account';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
             if(err) {
@@ -215,7 +220,7 @@ _.extend(router.prototype, baseRouter.prototype, {
             self.log.debug('approvalPrompt set to force');
         }
 
-        if (req.query.error && req.user) {
+        if (state.failureRedirect) {
           options.failureRedirect = state.failureRedirect;
         }
 

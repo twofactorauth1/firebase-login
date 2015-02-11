@@ -297,6 +297,41 @@ var dao = {
         });
     },
 
+    getFollowersForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        var path = "followers/list.json";
+        var params = {
+            user_id: twitterId,
+            count: 200
+        };
+        var url = this._generateUrl(path, params);
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            if (err) {
+                return fn(err, value);
+            }
+
+            var followers = JSON.parse(value);
+            self.log.debug('>> followers ', followers['users']);
+
+            if (followers['users'].length > 0) {
+                var result = [];
+
+                var processFollower = function (follower, cb) {
+                    result.push(new Post().convertFromTwitterFollower(follower));
+                    cb();
+                };
+
+                async.eachLimit(followers['users'], 10, processFollower, function (cb) {
+                    self.log.debug('>> result ', result);
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, followers['users']);
+            }
+        });
+
+    },
+
     post: function(user, status, fn) {
         var self = this;
         self.log.debug('>> post');
