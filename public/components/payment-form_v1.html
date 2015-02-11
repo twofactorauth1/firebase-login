@@ -7,17 +7,17 @@
             <h1 class="center">Are you ready to...</h1>
             <div class="clearfix mb40"></div>
             <div>
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                     <h1 class="center"><i class="fa fa-bullhorn"></i></h1>
                     <h4 class="center"> Tell your story</h4>
                     <div class="visible-xs mb30"></div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                     <h1 class="center"><i class="fa fa-thumbs-up"></i></h1>
                     <h4 class="center">Build your client base</h4>
                     <div class="visible-xs mb30"></div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                     <h1 class="center"><i class="fa fa-line-chart"></i></h1>
                     <h4 class="center"> Increase revenue</h4>
                     <div class="visible-xs mb30"></div>
@@ -29,22 +29,60 @@
     <div class="social-signup">
         <div class="inner-page">
             <h2 class="center">Sign up for Indigenous</h2>
-            <div class="clearfix mb40"></div>
+            <div class="clearfix mb20"></div>
             <div class="social btn-toolbar">
-                <div class="col-sm-3">Connect with: </div>
-                <div class="col-sm-6 signup-social-toolbar">
-                    <a ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default"><i class="fa fa-facebook"></i></a>
-                    <a ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default"><i class="fa fa-twitter"></i></a>
-                    <a class="btn btn-large btn-default" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
-                    <a class="btn btn-large btn-default" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
+                <p class="pull-left">Connect with: </p>
+                <div class="signup-social-toolbar pull-left">
+                    <a ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default facebook"><i class="fa fa-facebook"></i></a>
+                    <a ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default twitter"><i class="fa fa-twitter"></i></a>
+                    <a class="btn btn-large btn-default google-plus" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
+                    <a class="btn btn-large btn-default linkedin" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
                 </div>
-                <div class="col-sm-3"></div>
             </div>
             <p class="center">or use your email address in a form below</p>
         </div>
     </div>
-    <div class="account-info-signup"></div>
-    <div class="price-signup"></div>
+    <div class="account-info-signup">
+        <div class="inner-page">
+            <h4>Account Info</h4>
+            <!-- Business Name -->
+
+            <div id="business-name" class="form-group col-xs-12 has-feedback">
+                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
+                <span class="glyphicon form-control-feedback"></span>
+                <span class="error help-block" />
+            </div>
+
+            <!-- EMAIL AND PASSOWORD -->
+
+            <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
+                <span class="glyphicon form-control-feedback"></span>
+                <span class="error help-block" />
+            </div>
+
+
+            <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
+                <span class="glyphicon form-control-feedback"></span>
+                <span class="error help-block" />
+            </div>
+
+        </div>
+        <div class="clearfix mb40"></div>
+    </div>
+    <div class="price-signup">
+        <div ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
+            <h4 class="center">{{plan.name}}</h4>
+            <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+            <div class="mb30"></div>
+            <div class="col-xs-12 mb15">
+                <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length <= 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
+                <a type="button" class="btn btn-green btn-block center active" ng-if="newAccount.membership == plan.id">Selected</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
     <div class="payment-signup"></div>
 </div>
 
