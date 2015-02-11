@@ -26408,6 +26408,15 @@ div[data-type="coming-soon"] .component-inner {
 }
 .payment-form-v1 .price-signup {
   background: #3cb878;
+  color: #ffffff;
+}
+.payment-form-v1 .price-signup h2 {
+  font-size: 54px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.payment-form-v1 .price-signup h2 span {
+  font-size: 24px;
 }
 .thumbnail-slider-v1 .single-image {
   padding: 0;

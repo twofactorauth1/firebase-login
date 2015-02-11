@@ -270,8 +270,8 @@ define([
              {
                 title: 'Simple form',
                 type: 'simple-form',
-                icon: 'custom simple-form',
-                enabled: false
+                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/simple-form.jpg',
+                enabled: true
             }, {
                 title: 'Single Post',
                 type: 'single-post',
