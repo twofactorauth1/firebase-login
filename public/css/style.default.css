@@ -26283,11 +26283,94 @@ div[data-type="coming-soon"] .component-inner {
 .payment-form-v1 h5,
 .payment-form-v1 p,
 .payment-form-v1 input,
-.payment-form-v1 span {
+.payment-form-v1 span,
+.payment-form-v1 .assertions {
   font-family: 'Raleway', sans-serif !important;
 }
 .payment-form-v1 .glyphicon {
   font-family: 'Glyphicons Halflings' !important;
+}
+.payment-form-v1 .fa {
+  font-family: 'FontAwesome' !important;
+}
+.payment-form-v1 #terms-of-service p.p1 {
+  margin: 0.0px 0.0px 14.4px 0.0px;
+  line-height: 19.2px;
+  font: 11.5px Helvetica;
+  color: #323333;
+}
+.payment-form-v1 #terms-of-service p.p2 {
+  margin: 0.0px 0.0px 15.0px 0.0px;
+  line-height: 15.0px;
+  font: 14.0px Arial;
+  color: #323333;
+}
+.payment-form-v1 #terms-of-service p.p3 {
+  margin: 0.0px 0.0px 14.4px 0.0px;
+  line-height: 19.2px;
+  font: 11.5px Helvetica;
+  color: #272727;
+}
+.payment-form-v1 #terms-of-service p.p4 {
+  margin: 0.0px 0.0px 18.0px 0.0px;
+  line-height: 21.0px;
+  font: 11.5px Helvetica;
+  color: #272727;
+}
+.payment-form-v1 #terms-of-service p.p5 {
+  margin: 0.0px 0.0px 14.4px 30.0px;
+  line-height: 19.2px;
+  font: 11.5px Helvetica;
+  color: #323333;
+}
+.payment-form-v1 #terms-of-service p.p6 {
+  margin: 0.0px 0.0px 14.4px 30.0px;
+  line-height: 19.2px;
+  font: 11.5px Helvetica;
+  color: #444444;
+}
+.payment-form-v1 #terms-of-service p.p7 {
+  margin: 0.0px 0.0px 16.8px 30.0px;
+  line-height: 18.0px;
+  font: 11.5px Helvetica;
+  color: #444444;
+}
+.payment-form-v1 #terms-of-service p.p8 {
+  margin: 0.0px 0.0px 15.0px 0.0px;
+  line-height: 15.0px;
+  font: 14.0px Helvetica;
+  color: #272727;
+}
+.payment-form-v1 #terms-of-service p.p9 {
+  margin: 0.0px 0.0px 10.0px 0.0px;
+  line-height: 19.2px;
+  font: 11.5px Helvetica;
+  color: #323333;
+}
+.payment-form-v1 #terms-of-service span.s1 {
+  letter-spacing: 0px;
+}
+.payment-form-v1 #terms-of-service span.s2 {
+  text-decoration: underline ;
+  letter-spacing: 0px;
+}
+.payment-form-v1 #terms-of-service span.s3 {
+  text-decoration: underline ;
+  letter-spacing: 0.0px;
+  color: #272727;
+}
+.payment-form-v1 #terms-of-service span.s4 {
+  text-decoration: underline ;
+  letter-spacing: 0.0px;
+  color: #1e497d;
+}
+.payment-form-v1 #terms-of-service span.s5 {
+  letter-spacing: 0.0px;
+  color: #323333;
+}
+.payment-form-v1 #terms-of-service span.s6 {
+  letter-spacing: 0.0px;
+  color: #1e497d;
 }
 .payment-form-v1 .top-signup {
   background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
@@ -26295,6 +26378,7 @@ div[data-type="coming-soon"] .component-inner {
 .payment-form-v1 .top-signup h1 {
   font-size: 55px;
   color: #f9b439;
+  font-weight: bold;
 }
 .payment-form-v1 .top-signup h1 i {
   font-family: 'FontAwesome' !important;
@@ -26343,51 +26427,88 @@ div[data-type="coming-soon"] .component-inner {
 .payment-form-v1 .social-signup .linkedin {
   background: #007bb6;
 }
-.payment-form-v1 .account-info-signup h4 {
+.payment-form-v1 .social-signup:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  width: 0;
+  height: 0;
+  border-top: solid 25px #4bafca;
+  border-left: solid 25px transparent;
+  border-right: solid 25px transparent;
+  display: block;
+}
+.payment-form-v1 .account-info-signup:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  width: 0;
+  height: 0;
+  border-top: solid 25px #ffffff;
+  border-left: solid 25px transparent;
+  border-right: solid 25px transparent;
+  display: block;
+}
+.payment-form-v1 .account-info-signup h4,
+.payment-form-v1 .payment-signup h4 {
   padding-left: 10px;
   color: #808080;
 }
-.payment-form-v1 .account-info-signup input {
+.payment-form-v1 .account-info-signup input,
+.payment-form-v1 .payment-signup input {
   -webkit-box-shadow: 0px 0px 0 3px #f3f7f8;
   -moz-box-shadow: 0px 0px 0 3px #f3f7f8;
   box-shadow: 0px 0px 0 3px #f3f7f8;
   color: #007fbc;
   font-size: 14px;
 }
-.payment-form-v1 .account-info-signup input:focus {
+.payment-form-v1 .account-info-signup input:focus,
+.payment-form-v1 .payment-signup input:focus {
   border: 1px solid #4bafca;
   -webkit-box-shadow: 0px 0px 0 3px #e0f1fc;
   -moz-box-shadow: 0px 0px 0 3px #e0f1fc;
   box-shadow: 0px 0px 0 3px #e0f1fc;
 }
-.payment-form-v1 .account-info-signup .has-success .form-control {
+.payment-form-v1 .account-info-signup .has-success .form-control,
+.payment-form-v1 .payment-signup .has-success .form-control {
   border-color: #2ecc71;
 }
-.payment-form-v1 .account-info-signup .has-success .glyphicon {
+.payment-form-v1 .account-info-signup .has-success .glyphicon,
+.payment-form-v1 .payment-signup .has-success .glyphicon {
   color: #2ecc71;
 }
-.payment-form-v1 .account-info-signup .has-error .form-control {
+.payment-form-v1 .account-info-signup .has-error .form-control,
+.payment-form-v1 .payment-signup .has-error .form-control {
   border-color: #e74c3c;
 }
-.payment-form-v1 .account-info-signup .has-error .glyphicon {
+.payment-form-v1 .account-info-signup .has-error .glyphicon,
+.payment-form-v1 .payment-signup .has-error .glyphicon {
   color: #e74c3c;
 }
-.payment-form-v1 .account-info-signup .has-error .help-block {
+.payment-form-v1 .account-info-signup .has-error .help-block,
+.payment-form-v1 .payment-signup .has-error .help-block {
   color: #e74c3c;
 }
-.payment-form-v1 .account-info-signup ::-webkit-input-placeholder {
+.payment-form-v1 .account-info-signup ::-webkit-input-placeholder,
+.payment-form-v1 .payment-signup ::-webkit-input-placeholder {
   color: #cdcdcd;
 }
-.payment-form-v1 .account-info-signup :-moz-placeholder {
+.payment-form-v1 .account-info-signup :-moz-placeholder,
+.payment-form-v1 .payment-signup :-moz-placeholder {
   color: #cdcdcd;
 }
-.payment-form-v1 .account-info-signup ::-moz-placeholder {
+.payment-form-v1 .account-info-signup ::-moz-placeholder,
+.payment-form-v1 .payment-signup ::-moz-placeholder {
   color: #cdcdcd;
 }
-.payment-form-v1 .account-info-signup :-ms-input-placeholder {
+.payment-form-v1 .account-info-signup :-ms-input-placeholder,
+.payment-form-v1 .payment-signup :-ms-input-placeholder {
   color: #cdcdcd;
 }
-.payment-form-v1 .account-info-signup .has-feedback .form-control-feedback {
+.payment-form-v1 .account-info-signup .has-feedback .form-control-feedback,
+.payment-form-v1 .payment-signup .has-feedback .form-control-feedback {
   position: absolute;
   top: 8px;
   right: 8px;
@@ -26401,8 +26522,43 @@ div[data-type="coming-soon"] .component-inner {
   font-weight: bold;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
+.payment-form-v1 .price-signup h2 i {
+  font-size: 30px;
+}
 .payment-form-v1 .price-signup h2 span {
   font-size: 24px;
+}
+.payment-form-v1 .price-signup .assertions {
+  color: #1b7144;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  font-size: 20px;
+}
+.payment-form-v1 .price-signup .assertions span {
+  font-size: 35px;
+  font-weight: bold;
+}
+.payment-form-v1 .price-signup:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  width: 0;
+  height: 0;
+  border-top: solid 25px #3cb878;
+  border-left: solid 25px transparent;
+  border-right: solid 25px transparent;
+  display: block;
+}
+.payment-form-v1 .payment-signup .submit-signup .btn {
+  max-width: 430px;
+  display: block;
+  font-size: 18px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.5);
+  height: 60px;
+  line-height: 30px;
 }
 .thumbnail-slider-v1 .single-image {
   padding: 0;

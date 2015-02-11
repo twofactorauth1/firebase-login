@@ -1165,6 +1165,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                   .then(function(data) {
                     data.forEach(function(value, index) {
                       $scope.subscriptionPlans.push(value.data);
+                      if ($scope.subscriptionPlans.length === 1) {
+                        var plan = $scope.subscriptionPlans[0];
+                        $scope.selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, $scope.planStatus[plan.id].signup_fee);
+                      }
                     });
                   })
                   .catch(function(err) {
@@ -1237,6 +1241,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
+      console.log('selectSubscriptionPlanFn >>>');
       $scope.newAccount.membership = planId;
       $scope.subscriptionPlanAmount = amount;
       $scope.subscriptionPlanInterval = interval;
