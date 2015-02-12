@@ -56,7 +56,8 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
     };
 
     $scope.finishOnboarding = function() {
-      console.log('were finished');
+      $scope.userPreferences.tasks.create_campaign = true;
+      UserService.updateUserPreferences($scope.userPreferences, false, function() {});
     };
 
     if ($location.$$search['onboarding']) {
