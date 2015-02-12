@@ -114,6 +114,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             var trackedObjects = [];
             for (var i = 0; i < objects.length; i++) {
                 if (objects[i].socialId == id) {
+                    objects.index = i;
                     trackedObjects.push(objects[i]);
                 }
             }
@@ -128,7 +129,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             var trackedTwitterObjects = $scope.getTrackedObjects(trackedObjects, id);
             for (var i = 0; i < trackedTwitterObjects.length; i++) {
                 if (trackedTwitterObjects[i].type == 'feed') {
-                    SocialService.getTwitterFeed(trackedTwitterObjects[i].socialId, function(tweets) {
+                    SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, function(tweets){
                         $scope.tweetsLength = tweets.length;
                         for (var i = 0; i < tweets.length; i++) {
                             tweets[i].type = 'twitter';
@@ -137,7 +138,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     });
                 }
                 if (trackedTwitterObjects[i].type == 'follower') {
-                    SocialService.getTwitterFollowers(trackedTwitterObjects[i].socialId, function(followers) {
+                    SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, function(followers){
                         console.log('followers ', followers);
                         $scope.followersLength = followers.length;
                         for (var i = 0; i < followers.length; i++) {
@@ -150,31 +151,72 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         };
 
         SocialConfigService.getAllSocialConfig(function(config){
+            var socialAccountMap = {};
+            for (var i=0; i<config.socialAccounts.length; i++) {
+                socialAccountMap[config.socialAccounts[i].id] = config.socialAccounts[i].type;
+            }
+            console.log('the map:');
+            console.dir(socialAccountMap);
+            //handle each tracked object
+            for (var i=0; i<config.trackedObjects.length; i++) {
+                var obj = config.trackedObjects[i];
+                console.log('handling object:', obj);
+                if(obj.type === 'feed') {
+                    if(socialAccountMap[obj.socialId] === 'tw') {
+                        SocialConfigService.getTrackedObject(i, function(tweets){
+                            $scope.tweetsLength = tweets.length;
+                            for (var i = 0; i < tweets.length; i++) {
+                                tweets[i].type = 'twitter';
+                                $scope.feed.push(tweets[i]);
+                            };
+                        });
+                    } else if(socialAccountMap[obj.socialId] === 'fb') {
+                        SocialConfigService.getTrackedObject(i, function(posts){
+                            for (var i = 0; i < posts.length; i++) {
+                                posts[i].type = 'facebook';
+                                $scope.fbPostsLength +=1;
+                                $scope.feed.push(posts[i]);
+                            };
+                        });
+                    }
+                } else if(obj.type === 'pages') {
+
+                } else if(obj.type === 'likes') {
+
+                } else if(obj.type === 'user') {
+
+                } else if(obj.type === 'mentions') {
+
+                } else if(obj.type === 'numberTweets') {
+
+                } else if(obj.type === 'numberFollowers') {
+
+                } else if(obj.type === 'profile') {
+                    if(socialAccountMap[obj.socialId] === 'tw') {
+                        SocialConfigService.getTrackedObject(i, function(profile){
+                            console.log('Twitter Profile: ', profile);
+                            profile.type = 'twitter';
+                            $scope.feedTypes.push(profile);
+                        });
+                    } else if(socialAccountMap[obj.socialId] === 'fb') {
+                        SocialConfigService.getTrackedObject(i, function(profile){
+                            console.log('Facebook profile: ', profile);
+                            profile.type = 'facebook';
+                            $scope.feedTypes.push(profile);
+                        });
+
+                    }
+                }
+            }
+            $scope.displayedFeed = $scope.feed;
+
+
+            /*
+             * Social config does not yet have google plus posts.  Next TODO.
+             */
             for (var i = 0; i < config.socialAccounts.length; i++) {
                 var thisSocial = config.socialAccounts[i];
-                if (thisSocial.type == 'tw') {
-                    SocialService.getTwitterProfile(function(profile) {
-                        console.log('Twitter Profile: ', profile);
-                        profile.type = 'twitter';
-                        $scope.feedTypes.push(profile);
-                    });
-                    $scope.handleTwitterFeeds(config.trackedObjects, thisSocial.id);
-                }
-                if (thisSocial.type == 'fb') {
-                    SocialService.getFBPosts("636552113048686", function(posts) {
-                        for (var i = 0; i < posts.length; i++) {
-                            posts[i].type = 'facebook';
-                            $scope.fbPostsLength +=1;
-                            $scope.feed.push(posts[i]);
-                        };
-                    });
 
-                    SocialService.getFBProfile(function(profile) {
-                        console.log('FB Profile: ', profile);
-                        profile.type = 'facebook';
-                        $scope.feedTypes.push(profile);
-                    });
-                }
                 if (thisSocial.type == 'go') {
                     $scope.feedTypes.push('google-plus');
                     console.log('getting google plus');

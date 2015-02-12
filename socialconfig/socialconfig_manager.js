@@ -175,6 +175,9 @@ module.exports = {
         } else if(trackedObject.type === 'numberFollowers') {
             return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'profile') {
+            return twitterDao.getProfleForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
         }
 
 
@@ -188,6 +191,8 @@ module.exports = {
             return facebookDao.getPages(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'likes') {
             return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.type === 'profile') {
+            return facebookDao.getProfile(socialAccount.socialId, socialAccount.accessToken, fn);
         }
     }
 
