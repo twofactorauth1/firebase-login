@@ -65,12 +65,15 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.FACEBOOK,
             sourceId: post.id,
-            postType: post.type,
-            from: {
+            postType: post.type
+        };
+
+        if(post.from) {
+            obj.from = {
                 sourceId: post.from.id,
                 name: post.from.name
-            }
-        };
+            };
+        }
 
         if (post.created_time) {
             obj.date = new Date(post.created_time).getTime();

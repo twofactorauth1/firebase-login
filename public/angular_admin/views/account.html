@@ -768,7 +768,7 @@
                                 <h5 class="center">+ <i class="fa fa-usd fa-1"></i>{{planStatus[plan.id].signup_fee}}(One Time Fee)</h5>
                                 <div class="mb30"></div>
                                 <div class="col-xs-12 mb15">
-                                    <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)">Choose</a>
+                                  <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)" ng-class="{'disabled': plan.id==subscription.plan.id}">Choose</a>
                                     <a type="button" class="btn btn-green btn-block center active" ng-if="subscription.plan.id == plan.id">Selected</a>
                                 </div>
                                 <div class="clearfix"></div>

@@ -112,6 +112,13 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                       <div class="emails-opened"  ng-if="commerceSettings.showProductType">
                         <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
                       </div>
+                      <div class="emails-opened" ng-if='commerceSettings.showProductStatus'>
+                        <i class="fa fa-envelope"></i> Status: <span class="data">{{product.status}}</span>
+                      </div>
+                      <div class="emails-opened" ng-if='product.cost && commerceSettings.showProductCost'>
+                        <i class="fa fa-money"></i> cost: <span class="data">${{product.cost}}</span>
+                      </div>
+
                     </div>
                   </div>
                 </a>
@@ -138,14 +145,14 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
                 <a href="#/commerce/edit/{{product._id}}">
                   <div class="media">
                     <div class="vcenter img-outer">
-                    <div class="col-xs-5 hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
+                    <div class="hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
                       <span ng-if="!product.is_image" class="icon media-object"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
                       </span>
                       <img ng-if = "product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">
                     </div>
                     </div>
 
-                    <div class="media-body col-xs-7 hidden-xs vcenter">
+                    <div class="media-body hidden-xs vcenter">
                       <h4 class="person-name">{{product.name}}</h4>
                     </div>
                   </div>
@@ -241,11 +248,11 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
               <label for="showProductType">Type</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductStatus" checked="true">
+              <input type="checkbox" value="1" id="showProductStatus" ng-model='toggleProductStatus' checked="true">
               <label for="showProductStatus">Status</label>
             </div>
             <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductCost" checked="true">
+              <input type="checkbox" value="1" id="showProductCost" ng-model='toggleProductCost' checked="true">
               <label for="showProductCost">Cost</label>
             </div>
           </div>
@@ -276,7 +283,7 @@ onFinishCallback='finishOnboarding'></onboarding-popover>
             <label for="productType">Type</label>
             <select id="productType" ng-model="newProduct.type" class="form-control input-lg">
               <option value="subscription">Subscription</option>
-              <option value="physical" disabled="">Physical</option>
+              <option value="physical" >Physical</option>
               <option value="digital">Digital</option>
               <option value="external_link">External Link</option>
             </select>

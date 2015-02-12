@@ -504,11 +504,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     } else {
                                                         var contactEmail = savedContact.getEmails()[0];
                                                         var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
-                                                        self.log.debug('sending email to: ',contactEmail);
+                                                        self.log.debug('sending email to: ', contactEmail);
                                                         var vars = [];
                                                         mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
-                                                            notificationConfig.WELCOME_FROM_NAME, contactEmail, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                            htmlContent, value.id(), savedContact.id(), vars, function(err, result){});
+                                                            notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                                            '<h1>hey</h1>', value.id(), savedContact.id(), vars, function(err, result){});
                                                     }
 
                                                 });
@@ -524,11 +524,26 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         var contactEmail = savedContact.getEmails()[0];
                                                         var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                         self.log.debug('sending email to: ',contactEmail);
+
+
                                                         var fromEmail = component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
                                                         var fromName = component.from_name || notificationConfig.WELCOME_FROM_NAME;
                                                         var emailSubject = component.email_subject || notificationConfig.WELCOME_EMAIL_SUBJECT;
                                                         var vars = [];
-                                                        mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, value.id(), savedContact.id(), vars, function(err, result){});
+
+                                                        self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
+                                                        self.log.debug('notificationConfig.WELCOME_FROM_NAME ', notificationConfig.WELCOME_FROM_NAME);
+                                                        self.log.debug('contactEmail.email ', contactEmail.email);
+                                                        self.log.debug('contactName ', contactName);
+                                                        self.log.debug('notificationConfig.WELCOME_EMAIL_SUBJECT ', notificationConfig.WELCOME_EMAIL_SUBJECT);
+                                                        self.log.debug('value.id() ', value.id());
+                                                        self.log.debug('savedContact.id() ', savedContact.id());
+                                                        self.log.debug('vars ', vars);
+                                                        self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
+
+                                                        mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail.email, contactName, emailSubject, html, value.id(), savedContact.id(), vars, function(err, result){
+                                                            self.log.debug('result: ', result);
+                                                        });
                                                     }
                                                 });
                                             }

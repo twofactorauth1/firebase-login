@@ -13,6 +13,23 @@ script(type="text/javascript", src="//maps.googleapis.com/maps/api/js?v=3.exp&se
 script(type="text/javascript").
     (function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}}; js=d.createElement(s);fs=d.getElementsByTagName(s)[0]; js.src='https://apis.google.com/js/platform.js'; fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};}(window,document,'script'));
 
+script.
+    (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/b3st2skm';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
+
+script(src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js")
+script(src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js")
+
+script(type="text/javascript").
+    var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+    console.log('hash ', hash.toString(CryptoJS.enc.Hex));
+    window.intercomSettings = {
+      name: '#{user.first} #{user.last}',
+      email: '#{user.email}',
+      user_hash: hash.toString(CryptoJS.enc.Hex),
+      created_at: new Date().getTime(),
+      app_id: "b3st2skm"
+    };
+
 script(type="text/javascript").
     var initialAlert =  "#{user.user_preferences.welcome_alert.initial}";
     if(!initialAlert === "false") {

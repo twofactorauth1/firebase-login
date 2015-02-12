@@ -348,7 +348,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.flvVideoUrl = function(iframeUrl, url) {
         var parsedUrl = urlParser.parse(url);
-        var retUrl = iframeUrl + parsedUrl.id;
+        var retUrl = "";
+        if(parsedUrl)
+          retUrl = iframeUrl + parsedUrl.id;
+        else
+          retUrl = iframeUrl
         return $sce.trustAsResourceUrl(retUrl);
     };
 
@@ -374,40 +378,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     }
 
-     $scope.gotoPosition = function(pos) {
-      // set the location.hash to the id of
-      // the element you wish to scroll to.
-       if(pos.data && !$scope.isEditing)
-        {
-         setTimeout(function() {
-         $location.hash(pos.data);
-          $anchorScroll();
-        }, 300)
-        }
-    };
-
     // $scope.$on('$locationChangeStart', function(event, next, current) {
     //     console.log('location changed '+event+' '+next+' '+current);
     //     $scope.currentLoc = next.replace("?editor=true", "").substr(next.lastIndexOf('/') + 1);
     //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
     // });
 
-    window.scrollTo = function(section) {
-        console.log('>>> ', section);
-        if(section && angular.isString(section)) {
-            $location.hash(section);
-            $anchorScroll();
-
-            //TODO scrollTo on click
-
-            // var offset = 0;
-            // var duration = 2000;
-            // var someElement = angular.element(document.getElementById(section));
-            // console.log('someElement >>>', document);
-            // console.log('>>> scrollTo '+ document.body.getElementById(section));
-            // $document.scrollToElementAnimated(someElement);
-        }
-    };
+   
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
@@ -669,9 +646,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       icon: "yahoo"
     }]
 
-    $scope.setSelectedSocialLink = function(link, id, update) {
+    $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
       if (!$scope.social)
         $scope.social = {};
+      if(nested)
+        $scope.meetTeamIndex = index;
+      else
+        $scope.meetTeamIndex = null;
       if (update) {
         $scope.social.selectedLink = link.name;
         $scope.social.name = link.name;
@@ -684,7 +665,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $("#social-link-name").removeClass('has-error');
       $("#social-link-url .error").html("");
       $("#social-link-url").removeClass('has-error');
-      $scope.networks = window.parent.getSocialNetworks(id);
+      $scope.networks = window.parent.getSocialNetworks(id, nested, index);
     }
     $scope.setSelectedLink = function(social_link) {
       $scope.social.name = social_link.name;
@@ -770,23 +751,38 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           }
           break;
       }
-      window.parent.updateSocialNetworks(old_value, mode, social);
-      // $("#socialComponentModal").modal("hide");
-      $(".modal-backdrop").remove();
+      if($scope.meetTeamIndex !== null)
+        window.parent.updateTeamNetworks(old_value, mode, social,$scope.meetTeamIndex);
+      else
+        window.parent.updateSocialNetworks(old_value, mode, social);
       $scope.social = {};
+      $scope.meetTeamIndex = null;
+      if($("#meetteamSocialModal").length)
+        $("#meetteamSocialModal").modal("hide");
+      if($("#socialComponentModal").length)
+        $("#socialComponentModal").modal("hide");
+      if($("#topbarSocialComponentModal").length)
+        $("#topbarSocialComponentModal").modal("hide");
+      $(".modal-backdrop").remove();
     };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
     }
+
     $scope.addTeamMember = function(componentId, index) {
+      // to do: the information should fetch from component model
       var newTeam = {
         "name" : "<p>First Last</p>",
         "position" : "<p>Position of Person</p>",
         "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
         "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-        "social" : {
-            "linkedin" : "http://www.linkedin.com/"
-        }
+        "networks": [
+                        {
+                            "name" : "linkedin",
+                            "url" : "http://www.linkedin.com",
+                            "icon" : "linkedin"
+                        }
+                    ]
       }
       window.parent.addTeamMember(componentId, newTeam, index);
     }
@@ -820,6 +816,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.addPricingTableFeature = function(componentId, index, parentIndex) {
+      // to do: the information should fetch from component model
       var newFeature =
         {
             title : "<h4>This is the feature title</h4>",
@@ -829,7 +826,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.addPricingTable = function(componentId, index) {
-
+      // to do: the information should fetch from component model
       var newTable = {
         title : "<h1>This is title</h1>",
         subtitle : "<h3>This is the subtitle.</h3>",
@@ -847,16 +844,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
-   
+
     function toTitleCase(str)
     {
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 
-    
+
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        $scope.isEditing = true;        
+        $scope.isEditing = true;
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
         elements.each(function() {
@@ -996,7 +993,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var check_if_mobile = mobilecheck();
             $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);
           }
         };
       });
@@ -1025,7 +1022,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var check_if_mobile = mobilecheck();
             $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile);            
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile);
           }
       };
     };
@@ -1141,6 +1138,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                   .then(function(data) {
                     data.forEach(function(value, index) {
                       $scope.subscriptionPlans.push(value.data);
+                      if ($scope.subscriptionPlans.length === 1) {
+                        var plan = $scope.subscriptionPlans[0];
+                        $scope.selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, $scope.planStatus[plan.id].signup_fee);
+                      }
                     });
                   })
                   .catch(function(err) {
@@ -1180,8 +1181,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if($scope.thumbnailSliderCollection)
       {
         $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
-        if($scope.thumbnailCollection.length > 1)        
-          $scope.displayThumbnailPaging = true;        
+        if($scope.thumbnailCollection.length > 1)
+          $scope.displayThumbnailPaging = true;
         else
           $scope.displayThumbnailPaging = false;
       }
@@ -1211,7 +1212,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       return newArr;
     }
 
+
     $scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
+      console.log('selectSubscriptionPlanFn >>>');
       $scope.newAccount.membership = planId;
       $scope.subscriptionPlanAmount = amount;
       $scope.subscriptionPlanInterval = interval;
@@ -1221,7 +1224,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.yearly_sub_cost = 32.91;
     $scope.selected_sub_cost = $scope.monthly_sub_cost;
 
-    $scope.createUser = function(user) {
+    $scope.createUser = function(user, component) {
       console.log('user', user);
       var fingerprint = new Fingerprint().get();
       var sessionId = ipCookie("session_cookie")["id"];
@@ -1242,17 +1245,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $("#user_email .glyphicon").addClass('glyphicon-remove');
           return;
         }
+
+        var skipWelcomeEmail;
+
+        if (component.skipWelcomeEmail) {
+          skipWelcomeEmail = true;
+        }
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
           details: [{
             emails: []
-          }]
+          }],
+          campaignId: component.campaignId,
+          skipWelcomeEmail: skipWelcomeEmail
         };
         formatted.details[0].emails.push({
           email: user.email
         });
         //create contact
+        console.log('formatted ', formatted);
         userService.addContact(formatted, function(data, err) {
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
@@ -1268,6 +1280,25 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.log('data ', data);
             user.email = "";
             user.success = true;
+
+            var name;
+
+            if (user.first && user.last) {
+              name = user.first + ' ' + user.last;
+            } else {
+              name = 'John Doe';
+            }
+
+              var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+            console.log('hash ', hash.toString(CryptoJS.enc.Hex));
+            //send data to intercom
+            $window.intercomSettings = {
+              name: user.first + ' ' + user.last,
+              email: user.email,
+              user_hash: hash.toString(CryptoJS.enc.Hex),
+              created_at: new Date().getTime(),
+              app_id: "b3st2skm"
+            };
 
             setTimeout(function() {
               $scope.$apply(function() {
@@ -1367,6 +1398,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     };
 
+    userService.getTmpAccount(function(data) {
+      $scope.tmpAccount = data;
+    });
+
     $scope.createAccount = function(newAccount) {
       //validate
       //email
@@ -1422,74 +1457,72 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
       //end validate
       $scope.isFormValid = true;
-      userService.getTmpAccount(function(data) {
-        var tmpAccount = data;
-        tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-        userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-          console.log('Saved the temp account.  Account token is: ' + data.token);
-          var newUser = {
-            username: newAccount.email,
-            password: newAccount.password,
-            email: newAccount.email,
-            accountToken: data.token,
-            coupon: newAccount.coupon
-          };
-          console.log('newUser.accountToken: ' + newUser.accountToken);
-          //get the token
-          PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
-            if (error) {
-              console.info(error);
-              $scope.$apply(function() {
-                $scope.isFormValid = false;
-              })
-              switch (error.param) {
-                case "number":
-                  $("#card_number .error").html(error.message);
-                  $("#card_number").addClass('has-error');
-                  break;
-                case "exp_year":
-                  $("#card_expiry .error").html(error.message);
-                  $("#card_expiry").addClass('has-error');
-                  break;
-                case "cvc":
-                  $("#card_cvc .error").html(error.message);
-                  $("#card_cvc").addClass('has-error');
-                  break;
-              }
-            } else {
-              newUser.cardToken = token;
-              newUser.plan = $scope.newAccount.membership;
-              newUser.anonymousId = window.analytics.user().anonymousId();
-              newUser.permanent_cookie = ipCookie("permanent_cookie");
-              newUser.fingerprint = new Fingerprint().get();
-              if ($scope.subscriptionPlanOneTimeFee) {
-                newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
-              }
-              userService.initializeUser(newUser, function(data) {
-                if (data && data.accountUrl) {
-                    /*
-                     * I'm not sure why these lines were added.  The accountUrl is a string.
-                     * It will never have a host attribute.
-                     *
-                     * var currentHost = $.url(window.location.origin).attr('host');
-                     * var futureHost = $.url(data.accountUrl).attr('host');
-                     * if (currentHost.indexOf(futureHost) > -1) {
-                     *      window.location = data.accountUrl;
-                     * } else {
-                     *      window.location = currentHost;
-                     * }
-                     */
-
-                    window.location = data.accountUrl;
-                } else {
-                  $scope.isFormValid = false;
-                }
-              });
+      var tmpAccount = $scope.tmpAccount;
+      tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+      userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+        console.log('Saved the temp account.  Account token is: ' + data.token);
+        var newUser = {
+          username: newAccount.email,
+          password: newAccount.password,
+          email: newAccount.email,
+          accountToken: data.token,
+          coupon: newAccount.coupon
+        };
+        console.log('newUser.accountToken: ' + newUser.accountToken);
+        //get the token
+        PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
+          if (error) {
+            console.info(error);
+            $scope.$apply(function() {
+              $scope.isFormValid = false;
+            })
+            switch (error.param) {
+              case "number":
+                $("#card_number .error").html(error.message);
+                $("#card_number").addClass('has-error');
+                break;
+              case "exp_year":
+                $("#card_expiry .error").html(error.message);
+                $("#card_expiry").addClass('has-error');
+                break;
+              case "cvc":
+                $("#card_cvc .error").html(error.message);
+                $("#card_cvc").addClass('has-error');
+                break;
             }
+          } else {
+            newUser.cardToken = token;
+            newUser.plan = $scope.newAccount.membership;
+            newUser.anonymousId = window.analytics.user().anonymousId();
+            newUser.permanent_cookie = ipCookie("permanent_cookie");
+            newUser.fingerprint = new Fingerprint().get();
+            if ($scope.subscriptionPlanOneTimeFee) {
+              newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
+            }
+            userService.initializeUser(newUser, function(data) {
+              if (data && data.accountUrl) {
+                  /*
+                   * I'm not sure why these lines were added.  The accountUrl is a string.
+                   * It will never have a host attribute.
+                   *
+                   * var currentHost = $.url(window.location.origin).attr('host');
+                   * var futureHost = $.url(data.accountUrl).attr('host');
+                   * if (currentHost.indexOf(futureHost) > -1) {
+                   *      window.location = data.accountUrl;
+                   * } else {
+                   *      window.location = currentHost;
+                   * }
+                   */
 
-          });
+                  window.location = data.accountUrl;
+              } else {
+                $scope.isFormValid = false;
+              }
+            });
+          }
 
         });
+
       });
     };
 
@@ -1656,7 +1689,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 $scope.inserted = false;
  if(!$scope.activated)
   $('body').on("DOMNodeInserted", ".feature-height", function (e)
-  { 
+  {
     if(!$scope.inserted)
     {
       setTimeout(function() {

@@ -43,13 +43,20 @@
                             <span ng-bind-html="teamMember.bio"/>
                         </div>
                     </div>
-                    <ul class="social">
-                        <li ng-repeat="(val, key) in teamMember.social">
-                            <a href="{{key}}" target="_blank">
-                                <span class="fa fa-{{val}}"></span>
+                    <div class="social-link {{isEditing ? 'edit-mode' : ''}}">
+                        <ul class="social">
+                        <li ng-repeat="network in teamMember.networks">
+                            <a ng-if="!isEditing" href="{{network.url}}" target="_blank">
+                                <span class="fa fa-{{network.icon}}"></span>
                             </a>
+                            <a ng-if="isEditing" href="#" ng-click="setSelectedSocialLink(network, component._id, true, true, $parent.$parent.$index)" class="clickable-link" data-toggle="modal" data-target="#meetteamSocialModal"><span class="fa fa-{{network.icon}}"></span></a>
                         </li>
+                        
                     </ul>
+                    <div ng-if="isEditing" class="add-addtional-team center">
+                        <a ng-if="isEditing" class="clickable-link" data-toggle="modal" ng-click="setSelectedSocialLink(network, component._id, false, true, $parent.$parent.$index)" data-target="#meetteamSocialModal"><i class="fa fa-plus"></i></a>
+                    </div>
+                </div>
                 </div>
                 <div ng-if="isEditing" class="delete-team-member center">
                     <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
@@ -65,3 +72,4 @@
         </div>
     </div>
 </div>
+<div ng-if="isEditing" ng-include="'/components/meet-team-social-links.html'"></div>

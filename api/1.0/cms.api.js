@@ -531,7 +531,12 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< deletePage');
                     self.log.debug('err:', err);
                     self.log.debug('value:', value);
-                    self.sendResultOrError(res, err, value, "Error deleting Page");
+                    if(err) {
+                        self.wrapError(res, 500, err, "Error deleting page");
+                    } else {
+                        self.send200(res);
+                    }
+                    //self.sendResultOrError(res, err, value, "Error deleting Page");
                     self.log.debug('sent');
                     self = null;
                 });

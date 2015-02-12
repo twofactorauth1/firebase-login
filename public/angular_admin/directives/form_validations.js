@@ -22,15 +22,17 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 							}
 							break;
 						case "phone":
-							var regex = /^\s*$|(^\d{10}$)|(^\d{3}-\d{3}-\d{4}$)|(^\(\d{3}\)\d{3}-\d{4}$)/;
+							var regex = /^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
 							var result = regex.test(el.val());
 							if (!result) {
 								parent_div.addClass('has-error');
 								parent_div.find('span.error').remove();
-								parent_div.append("<span class='error help-block'>Please enter a valid number</span>")
+								parent_div.append("<span class='error help-block'>Please enter a valid number</span>");
+								ctrl.$setValidity('phoneError', false);
 							} else {
 								parent_div.removeClass('has-error');
 								parent_div.find('span.error').remove();
+								ctrl.$setValidity('phoneError', true);
 							}
 							break;
 						case "zip":
@@ -39,10 +41,12 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 						if (!result) {
 							parent_div.addClass('has-error');
 							parent_div.find('span.error').remove();
-							parent_div.append("<span class='error help-block'>Please enter a valid Zip code</span>")
+							parent_div.append("<span class='error help-block'>Please enter a valid Zip code</span>");
+							ctrl.$setValidity('zipError', false);
 						} else {
 							parent_div.removeClass('has-error');
 							parent_div.find('span.error').remove();
+							ctrl.$setValidity('zipError', true);
 						}
 						break;
 					}
