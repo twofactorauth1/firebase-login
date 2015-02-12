@@ -526,7 +526,17 @@
                             </div>
                             <div class="form-group">
                                 <label for="location-hours">Business Hours </label>
-                                <input id="location-hours" class="form-control input-lg" type="textarea" ng-model="componentEditing.hours">
+                                <div class="col-xs-12" ng-repeat="val in componentEditing.hours">
+
+                                    <label class="col-xs-1" for="val.day">{{val.day}}:</label>
+                                    <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <label class="col-xs-2" for="colorpicker">Closed:</label>
+                                     <input class="" ng-model="val.closed" type="checkbox" > 
+                                </div>
+                                
                             </div>
 
                             <div class="footer">

@@ -21,7 +21,7 @@ define([
     'bootstrap-iconpicker',
     'ngSweetAlert',
     'blockUI',
-    'adminValidationDirective',
+    'adminValidationDirective','constants',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -73,6 +73,7 @@ define([
             $scope.tabs = {};
             $scope.addLinkType = 'page';
             $scope.saveLoading = false;
+            $scope.hours = $$.constants.contact.business_hour_times;
             $scope.components.sort(function(a, b) {
                 return a.i > b.i;
             });

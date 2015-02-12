@@ -15,6 +15,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     //displays the year dynamically for the footer
     var d = new Date();
+    $scope.currentDate = new Date();
     $scope.copyrightYear = d.getFullYear();
 
     $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
@@ -1040,6 +1041,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if ($scope.inlineInput) {
         console.log('inserting html');
         $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
+      } else if($scope.urlInput) {
+        $scope.urlInput.val(url);
       }
     };
 

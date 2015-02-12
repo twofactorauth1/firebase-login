@@ -336,7 +336,17 @@ var dao = {
             websiteId: websiteId,
             handle: pageName
         };
-        this.findOne(query, Page, fn);
+        this.findMany(query, Page, function(err, pages){
+            //only return the latest.
+            var version = -1;
+            var pageToReturn = null;
+            _.each(pages, function(page){
+                if(page.get('version') > version) {
+                    pageToReturn = page;
+                }
+            });
+            return fn(null, pageToReturn);
+        });
     },
 
     getPageByType: function(accountId, websiteId, pageType, fn) {
