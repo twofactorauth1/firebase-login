@@ -155,12 +155,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             for (var i=0; i<config.socialAccounts.length; i++) {
                 socialAccountMap[config.socialAccounts[i].id] = config.socialAccounts[i].type;
             }
-            console.log('the map:');
-            console.dir(socialAccountMap);
+            //console.log('the map:');
+            //console.dir(socialAccountMap);
             //handle each tracked object
             for (var i=0; i<config.trackedObjects.length; i++) {
                 var obj = config.trackedObjects[i];
-                console.log('handling object:', obj);
+                //console.log('handling object:', obj);
                 if(obj.type === 'feed') {
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(tweets){
@@ -190,7 +190,16 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 } else if(obj.type === 'numberTweets') {
 
                 } else if(obj.type === 'numberFollowers') {
-
+                    if(socialAccountMap[obj.socialId] === 'tw') {
+                        SocialConfigService.getTrackedObject(i, function(followers){
+                            console.log('followers ', followers);
+                            $scope.followersLength = followers.length;
+                            for (var i = 0; i < followers.length; i++) {
+                                followers[i].type = 'twitter';
+                                $scope.feed.push(followers[i]);
+                            };
+                        });
+                    }
                 } else if(obj.type === 'profile') {
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(profile){
