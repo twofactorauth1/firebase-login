@@ -146,9 +146,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('wesbite', 'add-post')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('website', 'add-post')" ng-class="{complete: userPreferences.tasks.add_post }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_post , 'fa-circle-o' : !userPreferences.tasks.add_post }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_post">COMPLETE</small>
                                 <h3 class="pull-left">Create First Blog Post</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
@@ -158,9 +158,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li>
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('dashboard', 'dashboard')" ng-class="{complete: userPreferences.tasks.dashboard }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.dashboard , 'fa-circle-o' : !userPreferences.tasks.dashboard }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.dashboard">COMPLETE</small>
                                 <h3 class="pull-left">Discover the Dashboard</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
