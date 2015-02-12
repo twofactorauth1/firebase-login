@@ -24336,6 +24336,12 @@ ul.nav {
   list-style-type: circle;
   list-style-position: inside;
 }
+.feature-block-v1 ul li h1,
+.feature-block-v1 ul li h3,
+.feature-block-v1 ul li h4,
+.feature-block-v1 ul li h5 {
+  display: inline-block;
+}
 div[data-type="feature-block"] .component-inner {
   min-height: 340px;
 }
