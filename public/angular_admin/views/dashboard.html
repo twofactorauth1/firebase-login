@@ -2,6 +2,10 @@
     !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.1.0/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);
 </script>
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div ng-if="showOnboarding">
+  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+  on-finish-callback='finishOnboarding'></onboarding-popover>
+</div>
 <div class="dashboard">
     <div class="pageheader row">
         <h2 class="pull-left"><i class="fa fa-bar-chart"></i> Dashboard</h2>
@@ -162,7 +166,7 @@
                                     <div class="title center">
                                         <span count-to="{{pageviews}}" value="0" duration="1"></span>
                                         <div class="clearfix visible-xs"></div>
-                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i> 
+                                        <span class="percent" ng-class="{'decrease': pageviewsPercent < 0, 'increase': pageviewsPercent > 0 }"><i ng-class="{'fa fa-chevron-down': pageviewsPercent < 0, 'fa fa-chevron-up': pageviewsPercent > 0 }"></i>
                                             <span count-to="{{pageviewsPercent}}" value="0" duration="1"></span>%
                                         </span>
                                     </div>
@@ -394,7 +398,7 @@
             <div class="row">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
-                        
+
                             <span class="keen-metric-title mb10">Other Revenue</span>
                             <span class="keen-metric-value col-sm-6">
                                 <div class="center" ng-show="totalRevenue != null">{{totalRevenue | formatCurrency}}</div>
@@ -409,12 +413,12 @@
                                 </div>
                             </span>
                             <div class="clearfix"></div>
-                       
+
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
-                        
+
                             <span class="keen-metric-title mb10">Average Revenue per Customer</span>
                             <span class="keen-metric-value col-sm-6">
                                 <div class="center" ng-show="arpu != null">{{arpu | formatCurrency}}</div>
@@ -429,12 +433,12 @@
                                 </div>
                             </span>
                             <div class="clearfix"></div>
-                        
+
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
-                        
+
                             <span class="keen-metric-title mb10">Annual Run Rate</span>
                             <span class="keen-metric-value col-sm-6">
                                 <div class="center" ng-show="annualRunRate != null">{{annualRunRate | formatCurrency}}</div>
@@ -449,7 +453,7 @@
                                 </div>
                             </span>
                             <div class="clearfix"></div>
-                        
+
                     </div>
                 </div>
 
@@ -457,7 +461,7 @@
             <div class="row hidden">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
-                        
+
                             <span class="keen-metric-title mb10">Lifetime Value</span>
                             <span class="keen-metric-value col-sm-6">
                                 <div class="center" ng-show="lifetimeValue != null">{{lifetimeValue | formatCurrency}}</div>
@@ -472,12 +476,12 @@
                                 </div>
                             </span>
                             <div class="clearfix"></div>
-                        
+
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
-                        
+
                             <span class="keen-metric-title mb10">User Churn</span>
                             <span class="keen-metric-value col-sm-6">
                                 <div class="center" ng-show="annualRunRate != null">{{userChurn}}%</div>
@@ -492,7 +496,7 @@
                                 </div>
                             </span>
                             <div class="clearfix"></div>
-                        
+
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
@@ -507,7 +511,7 @@
             <div class="row hidden">
                 <div class="col-sm-6 col-md-4">
                     <div class="keen-widget keen-metric" ng-class="{'decrease': totalRevenuePercent < 0, 'increase': totalRevenuePercent > 0 }">
-                        
+
                             <span class="keen-metric-title mb10">Total Customers</span>
                             <span class="keen-metric-value col-sm-6">
                                 <div class="center" ng-show="totalCustomers != null">{{totalCustomers}}</div>
@@ -522,7 +526,7 @@
                                 </div>
                             </span>
                             <div class="clearfix"></div>
-                       
+
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-4">
