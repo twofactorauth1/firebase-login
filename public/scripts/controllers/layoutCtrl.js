@@ -15,6 +15,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     //displays the year dynamically for the footer
     var d = new Date();
+    $scope.currentDate = new Date();
     $scope.copyrightYear = d.getFullYear();
 
     $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {

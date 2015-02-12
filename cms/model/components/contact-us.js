@@ -74,7 +74,13 @@ var component = $$.m.ModelBase.extend({
              *  "sunday: "closed"
              * ]
              */
-            hours: [],
+            hours: [{day: "Mon", start:"9:00 am",end:"5:00 pm",closed:false},
+               {day: "Tue", start:"9:00 am",end:"5:00 pm",closed:false},
+               {day: "Wed", start:"9:00 am",end:"5:00 pm",closed:false},
+               {day: "Thu", start:"9:00 am",end:"5:00 pm",closed:false},
+               {day: "Fri", start:"9:00 am",end:"5:00 pm",closed:false},
+               {day: "Sat", start:"",end:"",closed:true},
+               {day: "Sun", start:"",end:"",closed:true}],
 
             /**
              * The location object
