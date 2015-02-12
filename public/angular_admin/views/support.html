@@ -110,9 +110,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('customer', 'create-contact')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('customer', 'create-contact')" ng-class="{complete: userPreferences.tasks.create_contact }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_contact , 'fa-circle-o' : !userPreferences.tasks.create_contact }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.create_contact">COMPLETE</small>
                                 <h3 class="pull-left">Import / Create Contacts</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
