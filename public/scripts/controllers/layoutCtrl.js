@@ -104,22 +104,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           route = route.replace('/', '');
           if (!angular.isDefined(data[route])) {
             route = 'coming-soon';
-            if (!angular.isDefined(data[route])) {
-              var pageData = {
-                title: 'Coming Soon',
-                handle: 'coming-soon',
-                mainmenu: false
-              };
-              var websiteId = that.account.website.websiteId;
-              pageService.createPage(websiteId, pageData, function(newpage) {
-                var cmpVersion = 1;
-                var pageId = newpage._id;
-                pageService.addNewComponent(pageId, pageData.title, pageData.handle, cmpVersion, function(data) {
-                  window.location.reload();
-                });
-                that.pages = newpage;
+            var pageData = {
+              title: 'Coming Soon',
+              handle: 'coming-soon',
+              mainmenu: false
+            };
+            var websiteId = that.account.website.websiteId;
+            pageService.createPage(websiteId, pageData, function(newpage) {
+              var cmpVersion = 1;
+              var pageId = newpage._id;
+              pageService.addNewComponent(pageId, pageData.title, pageData.handle, cmpVersion, function(data) {
+                window.location.reload();
               });
-            }
+              that.pages = newpage;
+            });
           }
           if (angular.isDefined(data[route]))
             that.pages = data[route];
@@ -351,7 +349,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
         if(parsedUrl)
-          retUrl = iframeUrl + parsedUrl.id;
+          retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0';
         else
           retUrl = iframeUrl
         return $sce.trustAsResourceUrl(retUrl);

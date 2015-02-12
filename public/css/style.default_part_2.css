@@ -10896,8 +10896,16 @@ div[data-class='image-text'] p {
   margin: 0px!important;
 }
 
+.simple-form-v1 .simple-form-title {
+  padding-left: 10px;
+}
+
 .simple-form-v1 .simple-form-subtitle {
   margin: 0 10px;
+}
+
+.simple-form-v1 #user_email {
+  padding-left: 20px;
 }
 
 .simple-form-v1 .thank-you {
