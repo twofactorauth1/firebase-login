@@ -89,6 +89,11 @@ define([
                 }
             };
 
+            $scope.finishOnboarding = function() {
+              $scope.userPreferences.tasks.add_post = true;
+              UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+            };
+
             if ($location.$$search['onboarding']) {
                 $scope.beginOnboarding($location.$$search['onboarding']);
             }
