@@ -51,7 +51,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.finishOnboarding = function() {
-                console.log('were finished');
+                console.log('were finished on boarding');
             };
 
             if ($location.$$search.onboarding) {
