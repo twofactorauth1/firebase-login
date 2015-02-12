@@ -348,7 +348,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
         if(parsedUrl)
-          retUrl = iframeUrl + parsedUrl.id;
+          retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0';
         else
           retUrl = iframeUrl
         return $sce.trustAsResourceUrl(retUrl);
