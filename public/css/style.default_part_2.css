@@ -9007,7 +9007,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 
 .contact-us-v1 .widget-weather {
-  margin-top: -190px;
+  margin-top: -250px;
   margin-left: 100px;
 }
 
@@ -9018,12 +9018,15 @@ div[data-type='campaign'] .inner-page .overlay {
 
 .contact-us-v1 .widget-weather .temp {
   background-color: #658CC4;
-  padding: 15px !important;
+  padding: 14px !important;
 }
 
 .contact-us-v1 .widget-weather .temp span {
+  padding-bottom: 5px;
+}
+
+.contact-us-v1 .widget-weather .temp span.blocked {
   display: block;
-  padding-bottom: 10px;
 }
 
 .contact-us-v1 .angular-google-map-container {
@@ -9069,6 +9072,10 @@ div[data-type='campaign'] .inner-page .overlay {
 
 .contact-us-v1 input[type="radio"] {
   margin-right: 5px;
+}
+
+.contact-us-v1 .current-day {
+  font-weight: bold;
 }
 
 .component-wrap .component > [id] .bg {
@@ -9758,6 +9765,13 @@ ul.nav {
   text-shadow: 1px 1px 1px black;
   list-style-type: circle;
   list-style-position: inside;
+}
+
+.feature-block-v1 ul li h1,
+.feature-block-v1 ul li h3,
+.feature-block-v1 ul li h4,
+.feature-block-v1 ul li h5 {
+  display: inline-block;
 }
 
 div[data-type="feature-block"] .component-inner {

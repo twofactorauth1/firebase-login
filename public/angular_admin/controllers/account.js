@@ -51,7 +51,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.finishOnboarding = function() {
-                console.log('were finished');
+                $scope.userPreferences.tasks.connect_social = true;
+                UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 
             if ($location.$$search.onboarding) {

@@ -98,9 +98,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('account', 'connect-social')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('account', 'connect-social')" ng-class="{complete: userPreferences.tasks.connect_social }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.connect_social , 'fa-circle-o' : !userPreferences.tasks.connect_social }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.connect_social">COMPLETE</small>
                                 <h3 class="pull-left">Connect Social Accounts</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
@@ -110,9 +110,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('customer', 'create-contact')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('customer', 'create-contact')" ng-class="{complete: userPreferences.tasks.create_contact }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_contact , 'fa-circle-o' : !userPreferences.tasks.create_contact }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.create_contact">COMPLETE</small>
                                 <h3 class="pull-left">Import / Create Contacts</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
@@ -122,9 +122,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('marketing', 'create-campaign')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('marketing', 'create-campaign')" ng-class="{complete: userPreferences.tasks.create_campaign }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_campaign , 'fa-circle-o' : !userPreferences.tasks.create_campaign }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.create_campaign">COMPLETE</small>
                                 <h3 class="pull-left">Create First Campaign</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
@@ -134,9 +134,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('commerce', 'add-product')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('commerce', 'add-product')" ng-class="{complete: userPreferences.tasks.add_product }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_product , 'fa-circle-o' : !userPreferences.tasks.add_product }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_product">COMPLETE</small>
                                 <h3 class="pull-left">Import / Create Products</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
@@ -146,9 +146,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('wesbite', 'add-post')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('website', 'add-post')" ng-class="{complete: userPreferences.tasks.add_post }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_post , 'fa-circle-o' : !userPreferences.tasks.add_post }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_post">COMPLETE</small>
                                 <h3 class="pull-left">Create First Blog Post</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
@@ -158,9 +158,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li>
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('dashboard', 'dashboard')" ng-class="{complete: userPreferences.tasks.dashboard }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.dashboard , 'fa-circle-o' : !userPreferences.tasks.dashboard }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.dashboard">COMPLETE</small>
                                 <h3 class="pull-left">Discover the Dashboard</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">

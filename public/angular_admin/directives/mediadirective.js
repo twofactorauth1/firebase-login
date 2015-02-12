@@ -264,6 +264,9 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     if (data instanceof Array) {
                         scope.originalAssets = data.slice(0);
                         scope.assets = data.slice(0);
+                        if (scope.insertMediaType) {
+                          scope.m.selectAll(scope.insertMediaType, true);
+                        }
                     }
                 });
                 element.attr("data-toggle", "modal");

@@ -3,7 +3,7 @@
         margin: 0px 0 3px;
     }
     .widget-weather {
-        margin-top: -190px;
+        margin-top: -250px;
         margin-left: 100px;
     }
     .row {
@@ -12,11 +12,14 @@
     }
     .widget-weather .temp {
         background-color: #658CC4;
-        padding: 15px !important;
+        padding: 14px !important;
     }
     .widget-weather .temp span {
+        padding-bottom: 5px;
+    }
+
+    .widget-weather .temp span.blocked {
         display: block;
-        padding-bottom: 10px;
     }
     .angular-google-map-container {
         height: 100%;
@@ -53,5 +56,8 @@
     }
     input[type="radio"] {
         margin-right: 5px;
+    }
+    .current-day {
+    font-weight: bold;
     }
 }
