@@ -134,9 +134,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('commerce', 'add-product')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('commerce', 'add-product')" ng-class="{complete: userPreferences.tasks.add_product }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_product , 'fa-circle-o' : !userPreferences.tasks.add_product }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_product">COMPLETE</small>
                                 <h3 class="pull-left">Import / Create Products</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">

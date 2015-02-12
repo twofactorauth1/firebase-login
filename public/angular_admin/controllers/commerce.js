@@ -25,7 +25,8 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         };
 
         $scope.finishOnboarding = function() {
-            console.log('were finished');
+          $scope.userPreferences.tasks.add_product = true;
+          UserService.updateUserPreferences($scope.userPreferences, false, function() {});
         };
 
         if ($location.$$search['onboarding']) {
