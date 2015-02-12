@@ -98,9 +98,9 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('account', 'connect-social')">
-                                <h1 class="pull-left"><i class="fa fa-circle-o"></i></h1>
-                                <small class="pull-right"></small>
+                            <li ng-click="startTask('account', 'connect-social')" ng-class="{complete: userPreferences.tasks.connect_social }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.connect_social , 'fa-circle-o' : !userPreferences.tasks.connect_social }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.connect_social">COMPLETE</small>
                                 <h3 class="pull-left">Connect Social Accounts</h3>
                                 <div class="clearfix mb5"></div>
                                 <div class="task-desc">
