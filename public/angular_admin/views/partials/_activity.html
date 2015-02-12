@@ -206,9 +206,17 @@
                                     <span class="label label-default">PAGE VIEW</span>
                                 </p>
                                 <span ng-if="!activity.customer">[deleted]</span>
-                                <p ng-if = "activity.customer">
-                                    {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.
-                                </p>
+                                <p ng-if="activity.customer && activity.customer.first">
+                                    {{activity.customer.first+' '+activity.customer.last}}
+                                    viewed {{activity.attributes.page}}
+                                    for {{activity.attributes.timespent}}.</p>
+                                            <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
+                                                {{activity.customer.details[0].emails[0]}}
+                                                viewed {{activity.attributes.page}}
+                                                for {{activity.attributes.timespent}}.</p>
+                                            <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                                Unknown viewed {{activity.attributes.page}}
+                                                for {{activity.attributes.timespent}}.</p>
                                 <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                             </div>
                             <div ng-switch-when="CONTACT_FORM">
@@ -402,9 +410,16 @@
                                                 <span class="label label-default">{{activity.activityType}}</span>
                                             </p>
                                             <span ng-if="!activity.customer">[deleted]</span>
-                                            <p ng-if="activity.customer">
-                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}
+                                            <p ng-if="activity.customer && activity.customer.first">
+                                                {{activity.customer.first+' '+activity.customer.last}}
                                                 viewed {{activity.attributes.page}}
+                                                for {{activity.attributes.timespent}}.</p>
+                                            <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
+                                                {{activity.customer.details[0].emails[0]}}
+                                                viewed {{activity.attributes.page}}
+                                                for {{activity.attributes.timespent}}.</p>
+                                            <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                                Unknown viewed {{activity.attributes.page}}
                                                 for {{activity.attributes.timespent}}.</p>
                                             <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                         </div>
