@@ -160,7 +160,7 @@ define([
                 $scope.visitDuration = data.visitDuration;
                 $scope.visitDurationPercent = data.visitDurationPercent;
                 $scope.avgSessionData = data.avgSessionData;
-                $scope.displayVisitors = $scope.visitors.length;
+                $scope.displayVisitors = $scope.visitors > 0;
                 $scope.renderAnalyticsCharts();
             });
         };
