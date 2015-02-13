@@ -288,6 +288,10 @@
                                     <label for="colorpicker">Text Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
+                                <div class="form-group" ng-show="componentEditing.type == 'navigation'">
+                                    <label for="colorpicker">Active Text Color:</label>
+                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
