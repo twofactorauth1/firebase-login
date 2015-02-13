@@ -872,7 +872,7 @@ define([
                         type: $scope.componentEditing.type
                     }).title;
 
-                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.txtcolor)
+                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
 
                 });
