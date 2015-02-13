@@ -59,7 +59,7 @@ var jsincludegenerator = {
         dataAry = _.reject(dataAry, function(line){
             return line.lastIndexOf('http', 0) === 0;
         });
-        console.log('returning: ', dataAry);
+        //console.log('returning: ', dataAry);
         return dataAry;
 
     },

@@ -15,6 +15,8 @@ process.env.NODE_ENV = "testing";
 require('moment');
 require('moment-timezone');
 
+var blogPostDao = require('../cms/dao/blogpost.dao');
+
 exports.campaign_manager_test = {
 
     testTimezoneConverter: function (test) {
@@ -38,5 +40,17 @@ exports.campaign_manager_test = {
         console.log(targetDate.date());
         console.log(now.getDate());
         console.log('targetDate: ' + targetDate + ' - isoString: ' + targetDate.toISOString());
+        test.ok(true);
+        test.done();
+    },
+
+    testDistinct: function(test) {
+        console.log('starting testDistinct');
+        blogPostDao.distinct('post_author', {accountId:6}, $$.m.cms.BlogPost, function(err, value){
+            console.log('error: ', err);
+            console.log('value: ', value);
+            test.ok(true);
+            test.done();
+        });
     }
 }

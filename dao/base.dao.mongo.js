@@ -613,6 +613,15 @@ var mongodao = {
         */
     },
 
+    _distinctMongo: function(key, query, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+
+        return self.mongo(collection).distinct(key, query, fn);
+
+    },
+
     //endregion PROTECTED
 
     //region PRIVATE

@@ -251,7 +251,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 $scope.currentAccount.membership = account.billing.subscriptionId;
                 /*
                  * If the account is locked, do not allow state changes away from account.
-                 */
+                 * Commenting this out until we know for sure that we should allow logins from locked accounts.
+
                 if(account.locked === true) {
                     $rootScope.$on('$stateChangeStart',
                         function(event, toState, toParams, fromState, fromParams){
@@ -260,6 +261,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                             // a 'transition prevented' error
                         });
                 }
+                */
             });
 
             $scope.setActiveTab = function(tab) {
