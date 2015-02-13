@@ -3,11 +3,16 @@
  *
  * */
 'use strict';
-mainApp.factory('pagesService', ['websiteService','$http', function (websiteService, $http) {
-    var websiteObject, pages = [];
+mainApp.factory('pagesService', ['websiteService','$http', '$location', function (websiteService, $http, $location) {
+    var websiteObject, pages = {};
 
     return function (callback) {
-        //todo get handle (page name)
+        var path = $location.$$path.replace('/page/', '');
+
+        if ( path == "/" || path == "" ) {
+            path = "index";
+        }
+
         websiteService(function (err, data) {
             if (err) {
                 console.log(err, "PageService >> WebsiteService ERROR");
@@ -18,18 +23,23 @@ mainApp.factory('pagesService', ['websiteService','$http', function (websiteServ
 	            	callback("data is null", null);
 	            }
             else {
-                if (pages.length != 0) {
+                // if (pages.hasOwnProperty(path)) {
+                if ( _.has( pages, path ) ) {
+                    console.log(pages, path);
+                    console.log( _.has(pages, path));
+                    console.log('++++++++++');
                     callback(null, pages);
                 } else {
                     websiteObject = data;
                     //API is getting only one page but we need page arrays
-                    $http.get('/api/1.0/cms/website/' + websiteObject._id + '/pages', { cache: true})
+                    $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + path, { cache: true})
                     .success(function (page) {
                             if (page !== null) {
                                 //TODO
                                 //Temp page pushing array
-                                pages = page;
-                                callback(null, page);
+                                pages[page.handle] = page;
+                                console.log(pages);
+                                callback(null, pages);
                             } else {
                                 callback("page not found",null);
                             }

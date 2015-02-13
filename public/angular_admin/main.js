@@ -175,7 +175,8 @@ require.config({
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'angularConfig' : 'scripts/config',
-        'angularSlugifier': 'libs/angular-slugify/angular-slugify'
+        'angularSlugifier': 'libs/angular-slugify/angular-slugify',
+        'ui.sortable':'libs_misc/ng-sortable/dist/ng-sortable'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -246,7 +247,8 @@ require.config({
         'jPushMenu' : {deps: ['jquery']},
         'angularSlugifier': ['angular'],
         'blockUI': ['angular'],
-        'carousel': ['angular','angularBootstrap']
+        'carousel': ['angular','angularBootstrap'],
+        'ui.sortable': ['angular']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
