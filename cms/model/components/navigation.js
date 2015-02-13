@@ -49,6 +49,8 @@ var component = $$.m.ModelBase.extend({
              */
             txtcolor: null,
 
+            activetxtcolor: null,
+
             /**
              *
              *

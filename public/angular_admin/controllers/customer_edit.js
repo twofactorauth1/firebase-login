@@ -9,7 +9,7 @@ define(['app',
   'toasterService',
   'mediaDirective',
   'userService',
-  'geocodeService',
+  'geocodeService','constants',
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -26,6 +26,7 @@ define(['app',
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
       $scope.saveLoading = false ;
+      $scope.countries = $$.constants.contact.country_codes;
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,

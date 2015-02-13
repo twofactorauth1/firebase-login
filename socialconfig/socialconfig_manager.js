@@ -31,6 +31,31 @@ module.exports = {
         });
     },
 
+    createSocialConfigFromUser: function(accountId, user, fn) {
+        var self = this;
+        log.debug('>> createSocialConfigFromUser');
+        var socialConfig = new $$.m.SocialConfig({accountId:accountId});
+        var creds = user.get('credentials');
+        var socialAccounts = socialConfig.get('socialAccounts') || [];
+        _.each(creds, function(cred){
+            if(cred.type !== 'lo') {
+                cred.id = $$.u.idutils.generateUUID();
+                socialAccounts.push(cred);
+            }
+        });
+        socialConfig.set('socialAccounts', socialAccounts);
+
+        socialconfigDao.saveOrUpdate(socialConfig, function(err, value){
+            if(err) {
+                log.error('Error creating socialconfig: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< createSocialConfigFromUser');
+                fn(null, value);
+            }
+        });
+    },
+
     getSocialConfig: function(accountId, configId, fn) {
         var self = this;
         log.debug('>> getSocialConfig');
@@ -175,6 +200,9 @@ module.exports = {
         } else if(trackedObject.type === 'numberFollowers') {
             return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'profile') {
+            return twitterDao.getProfleForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
         }
 
 
@@ -188,6 +216,8 @@ module.exports = {
             return facebookDao.getPages(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'likes') {
             return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.type === 'profile') {
+            return facebookDao.getProfile(socialAccount.socialId, socialAccount.accessToken, fn);
         }
     }
 

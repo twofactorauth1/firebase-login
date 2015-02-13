@@ -37,7 +37,8 @@ var mainApp = angular
         'angular-jqcloud',
         'socialLinks',
         'slick',
-        'leaflet-directive'
+        'leaflet-directive',
+        'ui.sortable'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
         if(window.history && window.history.pushState){

@@ -222,7 +222,8 @@
 
                           <div class="form-group">
                             <label>Country</label>
-                            <input type="text" value="" class="form-control input-state input-address-field" ng-model="address.country" ng-change="enableSaveBtnFn()">
+                            <select class="form-control input-state input-address-field" ng-model="address.country" ng-change="enableSaveBtnFn()" ng-options="item.data as item.label for item in countries">
+                                    </select>
                           </div>
 
                           <div class="form-group">

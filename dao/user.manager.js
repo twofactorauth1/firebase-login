@@ -14,6 +14,7 @@ var securityManager = require('../security/sm')(true);
 var contactDao = require('./contact.dao');
 var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
+var socialConfigManager = require('../socialconfig/socialconfig_manager');
 
 var mandrillHelper = require('../utils/mandrillhelper');
 var notificationConfig = require('../configs/notification.config');
@@ -49,7 +50,12 @@ module.exports = {
                     }
                     var userId = savedUser.id();
                     log.debug('Created user with id: ' + userId);
-
+                    socialConfigManager.createSocialConfigFromUser(accountId, savedUser, function(err, value){
+                        if(err) {
+                            log.error('Error creating social config for account:' + accountId);
+                        }
+                        return;
+                    });
 
                     /*
                      * Send welcome email.  This is done asynchronously.

@@ -118,7 +118,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 //http://en.wikipedia.org/wiki/Internet_media_type
                 $scope.typeMimes = {
                   image: ['image/png', 'image/jpeg', 'image/gif'],
-                  video: ['video/mpeg'],
+                  video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv'],
                   audio: ['audio/mpeg'],
                   document: ['application/octet-stream', 'application/pdf']
                 };
