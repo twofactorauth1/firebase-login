@@ -1,6 +1,6 @@
 define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2', 'productService'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService',
-        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService) {
+    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService', '$rootScope',
+        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService, $rootScope) {
             ngProgress.start();
             NavigationService.updateNavigation();
             $scope.showToaster = false;
@@ -249,6 +249,17 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             UserService.getAccount(function(account) {
                 $scope.account = account;
                 $scope.currentAccount.membership = account.billing.subscriptionId;
+                /*
+                 * If the account is locked, do not allow state changes away from account.
+                 */
+                if(account.locked === true) {
+                    $rootScope.$on('$stateChangeStart',
+                        function(event, toState, toParams, fromState, fromParams){
+                            event.preventDefault();
+                            // transitionTo() promise will be rejected with
+                            // a 'transition prevented' error
+                        });
+                }
             });
 
             $scope.setActiveTab = function(tab) {
