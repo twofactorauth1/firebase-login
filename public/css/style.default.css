@@ -23563,7 +23563,7 @@ body.editing .fragment .component-inner {
   border: 2px solid transparent;
 }
 body.editing .fragment.dragging {
-  z-index: 999999!important;
+  z-index: 99999!important;
 }
 body.editing .fragment:hover .component-inner {
   border: 2px dashed #34495e;
@@ -23583,8 +23583,18 @@ body.editing .fragment:hover .add-component {
 .ui-sortable .dragging {
   height: 60px!important;
 }
+.ui-sortable .as-sortable-placeholder {
+  height: 60px!important;
+}
 .ui-sortable .componentActions h4 {
   display: none;
+}
+.as-sortable-drag {
+  position: absolute;
+  pointer-events: none;
+  z-index: 9999;
+  list-style: none;
+  opacity: 0.9;
 }
 ul.ui-sortable.active .fragment {
   height: 60px!important;

@@ -1122,6 +1122,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.planStatus = {};
     $scope.$watch('currentpage.components', function(newValue, oldValue) {
       if (newValue) {
+        $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
           if (value && value.type === 'payment-form') {
             var productId = value.productId;

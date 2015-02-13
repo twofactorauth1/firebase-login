@@ -8824,7 +8824,7 @@ body.editing .fragment .component-inner {
 }
 
 body.editing .fragment.dragging {
-  z-index: 999999!important;
+  z-index: 99999!important;
 }
 
 body.editing .fragment:hover .component-inner {
@@ -8850,8 +8850,20 @@ body.editing .fragment:hover .add-component {
   height: 60px!important;
 }
 
+.ui-sortable .as-sortable-placeholder {
+  height: 60px!important;
+}
+
 .ui-sortable .componentActions h4 {
   display: none;
+}
+
+.as-sortable-drag {
+  position: absolute;
+  pointer-events: none;
+  z-index: 9999;
+  list-style: none;
+  opacity: 0.9;
 }
 
 ul.ui-sortable.active .fragment {
