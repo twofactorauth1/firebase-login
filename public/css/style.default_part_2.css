@@ -11771,6 +11771,160 @@ div[data-type=blog] .container {
   }
 }
 
+.editing .pricing-table-wrap .pricing-table {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .pricing-table-wrap .pricing-table-feature {
+  border: 2px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .pricing-table-wrap .pricing-table.edit-mode,
+.editing .pricing-table-wrap .pricing-table-feature.edit-mode {
+  padding-top: 30px;
+}
+
+.editing .pricing-table-wrap .pricing-table:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .pricing-table-wrap .pricing-table-feature:hover {
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .pricing-table-wrap .pricing-table:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .pricing-table-wrap .pricing-table:hover .delete-pricing-table .btn-delete-pricing-table {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .pricing-table-wrap .pricing-table-feature:hover .add-addtional-feature {
+  display: block;
+  font-size: 28px;
+}
+
+.editing .pricing-table-wrap .pricing-table-feature:hover .delete-pricing-table-feature .btn-delete-pricing-table-feature {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .pricing-table-wrap .delete-pricing-table .btn-delete-pricing-table {
+  display: none;
+}
+
+.editing .pricing-table-wrap .delete-pricing-table-feature .btn-delete-pricing-table-feature {
+  display: none;
+}
+
+.pricing-tables-v1 .container {
+  padding-top: 40px;
+}
+
+.pricing-tables-v1 #details {
+  font-family: "Quicksand", sans-serif;
+  font-size: 60px;
+}
+
+.pricing-tables-v1 .pricing-table-title {
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.pricing-tables-v1 #home-box > h2 {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #75b1ae;
+}
+
+.pricing-tables-v1 .price {
+  font-size: 25px;
+}
+
+.pricing-tables-v1 .btn-add {
+  margin-top: 10px;
+}
+
+.pricing-tables-v1 .pricing_header {
+  background: #FAFAFA;
+  box-shadow: 0 0 2px #c2c2c2;
+}
+
+.pricing-tables-v1 .pricing_header h1,
+.pricing-tables-v1 .pricing_header h3,
+.pricing-tables-v1 .pricing_header p {
+  text-align: center;
+  opacity: .95;
+  padding-top: 32px;
+  padding-bottom: 20px;
+  text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
+  font-weight: normal;
+}
+
+.pricing-tables-v1 .pricing_header h1,
+.pricing-tables-v1 .pricing_header h3 {
+  color: black;
+}
+
+.pricing-tables-v1 .pricing_header h1 {
+  font-size: 28px;
+  margin-bottom: 0px;
+  padding-bottom: 6px;
+}
+
+.pricing-tables-v1 .pricing_header h3 {
+  font-size: 19px;
+  margin-top: 0px;
+  padding: 0px;
+}
+
+.pricing-tables-v1 .pricing_header p {
+  padding-top: 0px;
+  max-width: 655px;
+  margin: 0 auto;
+}
+
+.pricing-tables-v1 .list-group-item:first-child {
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+
+.pricing-tables-v1 .btn {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 500;
+}
+
+.pricing-tables-v1 .off {
+  text-decoration: line-through;
+  color: #565656;
+}
+
+.pricing-tables-v1 .space {
+  height: 2px;
+  background-color: #75b1ae;
+}
+
 .coming-soon-v1 {
   height: 100%;
 }
