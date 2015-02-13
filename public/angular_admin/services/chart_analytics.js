@@ -790,7 +790,11 @@ define(['app', 'keenService'], function(app) {
 
                     var sessionsPercent = self.calculatePercentage(_totalSessions, sessionsPreviousData);
 
-                    var visitDuration = self.secToTime(results[9].result);
+                    var secsToConv = 0;
+                    if (results[9].result && _totalSessions) {
+                      secsToConv = results[9].result / _totalSessions;
+                    }
+                    var visitDuration = self.secToTime(secsToConv);
 
                     if (results[15].result == null) {
                         results[15].result = 0;
