@@ -304,14 +304,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
         async.waterfall([
             function(callback){
-                if(password1 === null) {
+                if(!password1) {
                     self.log.debug('Creating user from social');
                     userManager.createAccountAndUserFromTempAccount(accountToken, fingerprint, sendWelcomeEmail, function(err, accountAndUser){
                         if(err) {
                             self.log.error('Error creating account or user: ' + err);
                             return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
                         }
-                        callback(null, user, accountAndUser.account);
+                        callback(null, accountAndUser.user, accountAndUser.account);
                     });
                 } else {
                     userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
