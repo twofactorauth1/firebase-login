@@ -94,8 +94,8 @@ mongoStore.on('connect', function () {
     log.info("Session store is ready for use");
 });
 
-mongoStore.on('error', function () {
-    log.error("An error occurred connecting to MongoDB Session Storage");
+mongoStore.on('error', function (err) {
+    log.error("An error occurred connecting to MongoDB Session Storage", err);
 });
 
 

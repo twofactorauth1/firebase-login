@@ -111,6 +111,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/blog/tag/:tag'), this.setup.bind(this), this.getPostsByTag.bind(this));
         app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi.bind(this), this.reorderPosts.bind(this));
         app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.reorderBlogPost.bind(this));
+
+        //authors, tags, categories, titles
+        app.get(this.url('blog/authors'), this.setup.bind(this), this.getBlogAuthors.bind(this));
+        app.get(this.url('blog/tags'), this.setup.bind(this), this.getBlogTags.bind(this));
+        app.get(this.url('blog/categories'), this.setup.bind(this), this.getBlogCategories.bind(this));
+        app.get(this.url('blog/titles'), this.setup.bind(this), this.getBlogTitles.bind(this));
     },
 
 
@@ -1432,6 +1438,54 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsManager.getSecurePage(accountId, pageHandle, websiteId, function(err, page){
             self.log.debug('<< getSecurePage');
             self.sendResultOrError(resp, err, page, 'Error getting secure page');
+            self = null;
+        });
+    },
+
+    getBlogAuthors: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogAuthors');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostAuthors(accountId, function(err, value){
+            self.log.debug('<< getBlogAuthors');
+            self.sendResultOrError(resp, err, value, 'Error getting blog authors');
+            self = null;
+        });
+    },
+
+    getBlogTags: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogTags');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostTags(accountId, function(err, value){
+            self.log.debug('<< getBlogTags');
+            self.sendResultOrError(resp, err, value, 'Error getting blog tags');
+            self = null;
+        });
+    },
+
+    getBlogCategories: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogCategories');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostCategories(accountId, function(err, value){
+            self.log.debug('<< getBlogCategories');
+            self.sendResultOrError(resp, err, value, 'Error getting blog categories');
+            self = null;
+        });
+    },
+
+    getBlogTitles: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogTitles');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostTitles(accountId, function(err, value){
+            self.log.debug('<< getBlogTitles');
+            self.sendResultOrError(resp, err, value, 'Error getting blog titles');
             self = null;
         });
     }

@@ -1041,6 +1041,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if ($scope.inlineInput) {
         console.log('inserting html');
         $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
+      } else if($scope.urlInput) {
+        $scope.urlInput.val(url);
       }
     };
 

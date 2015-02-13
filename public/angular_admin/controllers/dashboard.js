@@ -21,7 +21,7 @@ define([
     'navigationService',
     'chartAnalyticsService',
     'chartCommerceService',
-    'userService','activityDirective'
+    'userService','activityDirective','ngOnboarding'
     ], function(app) {
     app.register.controller('DashboardCtrl',
         ['$scope',
@@ -36,7 +36,34 @@ define([
         'ChartAnalyticsService',
         'ChartCommerceService',
         'UserService',
-    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService) {
+        '$location',
+    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService, $location) {
+      UserService.getUserPreferences(function(preferences) {
+          $scope.userPreferences = preferences;
+      });
+
+      $scope.beginOnboarding = function(type) {
+          if (type == 'dashboard') {
+              $scope.stepIndex = 0;
+              $scope.showOnboarding = true;
+              $scope.onboardingSteps = [{
+                  overlay: true,
+                  title: 'Task: Explore Dashboard',
+                  description: "Checkout various stats and analytics about your site.",
+                  position: 'centered',
+                  width: 400
+              }];
+          }
+      };
+
+      $scope.finishOnboarding = function() {
+        $scope.userPreferences.tasks.dashboard = true;
+        UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+      };
+
+      if ($location.$$search['onboarding']) {
+          $scope.beginOnboarding($location.$$search['onboarding']);
+      }
 
         ngProgress.start();
         NavigationService.updateNavigation();

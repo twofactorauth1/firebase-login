@@ -1,6 +1,7 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
 <div ng-if="showOnboarding">
-    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
+  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+  on-finish-callback='finishOnboarding'></onboarding-popover>
 </div>
 <div class="website-manage" >
     <div class="pageheader row">

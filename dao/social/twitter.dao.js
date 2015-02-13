@@ -252,6 +252,28 @@ var dao = {
         });
     },
 
+    getProfleForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getProfleForId', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "account/verify_credentials.json";
+        var params = {
+            user_id: twitterId,
+            count: 200
+        };
+        var url = this._generateUrl(path, params);
+
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            var profile = JSON.parse(value);
+            self.log.debug('>> profile ', profile);
+            fn(null, profile);
+        });
+    },
+
     getFollowers: function(user, twitterId, fn) {
         var self = this;
         self.log.debug('>> getting followers ', twitterId);

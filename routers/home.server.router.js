@@ -285,7 +285,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     serveMainHtml: function(req, resp) {
         var self = this;
         var accountId = self.accountId(req);
-        if(accountId !== appConfig.mainAccountID) {
+        if(accountId !== appConfig.mainAccountID && accountId !== 7) {//7 is a made-up account launch.
             //resp.redirect("/");
             resp.status(404);
             resp.render('404.html', {title: '404: File Not Found'});

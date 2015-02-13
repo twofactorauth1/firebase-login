@@ -39,7 +39,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             };
 
             $scope.finishOnboarding = function() {
-                console.log('were finished');
+              $scope.userPreferences.tasks.create_contact = true;
+              UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 
             if ($location.$$search['onboarding']) {
@@ -183,7 +184,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                                     //if ($scope.customerOrder === 'first') {
                                         $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
                                             if (elem.first) {
-                                                return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1 || 
+                                                return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1 ||
                                                 elem.last.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
                                             }
                                             else if(newValue == "")
@@ -204,9 +205,9 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                                                     var email = value.email;
                                                 }
                                                 match = email.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
-                                            });  
+                                            });
                                         }
-                                        
+
                                         return match;
                                     });
                                 }
@@ -220,7 +221,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                             $scope.customerScrollFn();
 
                         } else {
-                            $scope.customerFilter = {};                           
+                            $scope.customerFilter = {};
                         }
                     }
                     initializeSearchBar += 1;

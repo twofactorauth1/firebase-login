@@ -8,5 +8,13 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+
+        this.getTrackedObject = function(id, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        }
     });
 });
