@@ -131,7 +131,7 @@
                             </div>
                             <h3 class="panel-title">Visitor Overview</h3>
                         </div>
-                        <div class="panel-body">
+                        <div ng-if="displayVisitors" class="panel-body">
                             <div class="analytics-overview-wrap">
                                 <highchart config="analyticsOverviewConfig" id="analytics-overview-chart"></highchart>
                             </div>
@@ -168,6 +168,10 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div ng-if="!displayVisitors" class="col-xs-12 top-four">
+                                There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors
+                                <a class="btn btn-primary" type="button" href="/admin#/marketing">Make A Social Post</a>
                         </div>
                     </div>
                 </div>
