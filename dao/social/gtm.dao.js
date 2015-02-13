@@ -34,7 +34,7 @@ var dao = {
          *
          */
         var self = this;
-        self.log.debug('>> addRegistrant');
+        self.log.debug('>> addRegistrant', registrantInfo);
 
         var url = self.GOTO_WEBINAR_URL + 'organizers/' + organizerId + '/webinars/' + webinarId + '/registrants?resendConfirmation=' + resendConfirmation;
         var options = {

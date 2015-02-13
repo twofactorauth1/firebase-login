@@ -27,6 +27,9 @@ var mandrillHelper = require('../utils/mandrillhelper');
 var hostSuffix = appConfig.subdomain_suffix;
 var async = require('async');
 
+var gtmDao = require('../dao/social/gtm.dao');
+var gtmConfig = require('../configs/gtm.config');
+
 /**
  * Constants for pipeshift
  * */
@@ -288,6 +291,63 @@ module.exports = {
                     }
                 }
             });
+        } else if(step.type === 'webinar'){
+
+            contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact) {
+                if (err) {
+                    self.log.error('Error getting contact for step: ' + err);
+                    return fn(err, null);
+                } else if (contact === null) {
+                    self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
+                    return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                } else {
+                    var registrantInfo = {
+                        "firstName": contact.get('first'),
+                        "lastName": contact.get('last'),
+                        "email": contact.getEmails()[0].email
+                    }
+                    var organizerId = step.settings.organizerId;
+                    var webinarId = step.settings.webinarId;
+                    var resendConfirmation = true;
+                    if(step.settings.resendConfirmation) {
+                        resendConfirmation = step.settings.resendConfirmation;
+                    }
+                    var accessToken = gtmConfig.accessToken;
+                    gtmDao.addRegistrant(organizerId, webinarId, resendConfirmation, accessToken, registrantInfo, function(err, value){
+                        if(err) {
+                            self.log.error('Error registering for webinar: ' + err);
+                            return fn(err, null);
+                        }
+                        campaignFlow.set('lastStep', stepNumber);
+                        step.executed = new Date();
+                        campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                            if(err) {
+                                self.log.error('Error saving campaign flow: ' + err);
+                                return fn(err, null);
+                            } else {
+                                //try to handle the next step:
+                                var steps = campaignFlow.get('steps');
+                                if(steps.length -1 > stepNumber) {
+                                    self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                            self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                            return fn(null, updatedFlow);
+                                        } else {
+                                            self.log.debug('<< handleStep');
+                                            return fn(null, updatedFlow);
+                                        }
+                                    });
+                                } else {
+                                    self.log.debug('<< handleStep (no more steps)');
+                                    return fn(null, updatedFlow);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
         } else {
             self.log.warn('Unknown step type: ' + step.type);
             return fn(null, null);

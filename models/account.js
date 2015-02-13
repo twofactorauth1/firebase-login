@@ -63,6 +63,8 @@ var account = $$.m.ModelBase.extend({
                 "cardToken": '' //optional. Not sure if we need this if we have the customer reference
             },
 
+            "locked": true,// this setting needs to be removed to access the site
+
             _v:"0.1"
         }
     },

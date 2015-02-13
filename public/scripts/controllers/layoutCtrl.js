@@ -12,6 +12,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.$url = $location.$$url;
     $scope.tagCloud = [];
     $scope.isPageDirty = false;
+    $scope.currentcomponents = [];
 
     //displays the year dynamically for the footer
     var d = new Date();
@@ -1093,26 +1094,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.wait;
 
     $scope.sortableOptions = {
-      handle: '.reorder',
-      start: function(e, ui) {
+      dragStart: function(e, ui) {
         console.log('ui >>> ', ui);
-        ui.item[0].parentNode.className += ' active';
-        ui.item[0].className += ' dragging';
+        //$(".as-sortable-placeholder").height(60);        
+        //e.dest.sortableScope.element.addClass("active");
+        e.source.itemScope.element.addClass(" dragging");
         clearTimeout($scope.wait);
-        ui.placeholder.height('60px');
-        // ui.item.sortable('refreshPositions');
-        angular.element(ui.item[0].parentNode).sortable("refresh");
+       // e.source.itemScope.element.parent()[0].style.position = "absolute";
+        //e.source.itemScope.element[0].style.position = "relative";
       },
       update: function(e, ui) {
         console.log('sorting update');
       },
-      stop: function(e, ui) {
-        ui.item[0].classList.remove('dragging');
+      dragEnd: function(e, ui) {
+        e.dest.sortableScope.element.removeClass("dragging");        
         $scope.wait = setTimeout(function() {
-          ui.item[0].parentNode.classList.remove('active');
+          $(".ui-sortable").removeClass("active");
         }, 1500);
-        // var componentId = ui.item[0].querySelectorAll('.component')[0].attributes['data-id'].value;
-        // var newOrder = ui.item.index();
       }
     };
 
@@ -1122,6 +1120,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.planStatus = {};
     $scope.$watch('currentpage.components', function(newValue, oldValue) {
       if (newValue) {
+        $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
           if (value && value.type === 'payment-form') {
             var productId = value.productId;

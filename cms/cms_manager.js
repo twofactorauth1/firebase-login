@@ -1600,6 +1600,68 @@ module.exports = {
     },
 
 
+    getDistinctBlogPostAuthors: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostAuthors');
+
+        blogPostDao.distinct('post_author', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostAuthors');
+                return fn(null, value);
+            }
+        });
+
+    },
+
+    getDistinctBlogPostTitles: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostTitles');
+
+        blogPostDao.distinct('post_title', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostTitles');
+                return fn(null, value);
+            }
+        });
+    },
+
+    getDistinctBlogPostCategories : function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostCategories');
+
+        blogPostDao.distinct('post_category', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostCategories');
+                return fn(null, value);
+            }
+        });
+    },
+
+    getDistinctBlogPostTags: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostTags');
+
+        blogPostDao.distinct('post_tags', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostTags');
+                return fn(null, value);
+            }
+        });
+    },
+
+
 
     _addPostIdToBlogComponentPage: function(postId, page) {
         var self = this;

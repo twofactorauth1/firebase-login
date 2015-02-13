@@ -90,6 +90,7 @@ define([
         $scope.trafficSourcesConfig.loading = true;
         $scope.newVsReturningConfig.loading = true;
         $scope.customerOverviewConfig.loading = true;
+        $scope.displayVisitors = true;
         $scope.date = {
             startDate: moment().subtract('days', 29).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
             endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
@@ -159,7 +160,7 @@ define([
                 $scope.visitDuration = data.visitDuration;
                 $scope.visitDurationPercent = data.visitDurationPercent;
                 $scope.avgSessionData = data.avgSessionData;
-
+                $scope.displayVisitors = $scope.visitors > 0;
                 $scope.renderAnalyticsCharts();
             });
         };
