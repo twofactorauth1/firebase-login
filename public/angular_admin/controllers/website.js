@@ -871,6 +871,10 @@ define([
                     $scope.componentEditing.title = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).title;
+
+                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.txtcolor)
+                        $scope.componentEditing.bg.img.show = true;
+
                 });
                 //open right sidebar and component tab
                 // document.body.className += ' leftpanel-collapsed rightmenu-open';
