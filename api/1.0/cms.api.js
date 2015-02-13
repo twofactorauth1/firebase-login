@@ -1455,7 +1455,15 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getBlogTags: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogTags');
+        var accountId = parseInt(self.accountId(req));
 
+        cmsManager.getDistinctBlogPostTags(accountId, function(err, value){
+            self.log.debug('<< getBlogTags');
+            self.sendResultOrError(resp, err, value, 'Error getting blog tags');
+            self = null;
+        });
     },
 
     getBlogCategories: function(req, resp) {
@@ -1465,7 +1473,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.getDistinctBlogPostCategories(accountId, function(err, value){
             self.log.debug('<< getBlogCategories');
-            self.sendResultOrError(resp, err, value, 'Error getting blog authors');
+            self.sendResultOrError(resp, err, value, 'Error getting blog categories');
             self = null;
         });
     },
@@ -1477,7 +1485,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.getDistinctBlogPostTitles(accountId, function(err, value){
             self.log.debug('<< getBlogTitles');
-            self.sendResultOrError(resp, err, value, 'Error getting blog authors');
+            self.sendResultOrError(resp, err, value, 'Error getting blog titles');
             self = null;
         });
     }

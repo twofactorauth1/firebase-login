@@ -1646,6 +1646,21 @@ module.exports = {
         });
     },
 
+    getDistinctBlogPostTags: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostTags');
+
+        blogPostDao.distinct('post_tags', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostTags');
+                return fn(null, value);
+            }
+        });
+    },
+
 
 
     _addPostIdToBlogComponentPage: function(postId, page) {
