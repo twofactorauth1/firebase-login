@@ -4,7 +4,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.campaigns = [];
         $scope.feeds = [];
 
-        $scope.activeTab = 'campaigns';
+        $scope.activeTab = 'social-feed';
 
         $scope.campaignSettings = {
             showStatus: true,
