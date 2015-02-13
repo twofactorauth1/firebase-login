@@ -23590,7 +23590,6 @@ body.editing .fragment:hover .add-component {
   display: none;
 }
 .as-sortable-drag {
-  position: absolute;
   pointer-events: none;
   z-index: 9999;
   list-style: none;

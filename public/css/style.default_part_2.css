@@ -8859,7 +8859,6 @@ body.editing .fragment:hover .add-component {
 }
 
 .as-sortable-drag {
-  position: absolute;
   pointer-events: none;
   z-index: 9999;
   list-style: none;
