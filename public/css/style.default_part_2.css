@@ -959,6 +959,11 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   visibility: visible;
 }
 
+#contact-edit-container .input-address-field {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
 .import-success {
   text-align: center;
 }

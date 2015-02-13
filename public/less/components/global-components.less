@@ -194,7 +194,7 @@ body.editing {
         border: 2px solid transparent;
       }
     &.dragging {
-      z-index: 999999!important;
+      z-index: 99999!important;
     }
     &:hover {
       .component-inner {
@@ -220,11 +220,22 @@ body.editing {
   .dragging {
     height: 60px!important;
   }
+  .as-sortable-placeholder {
+    height: 60px!important;    
+  }
   .componentActions {
     h4 {
         display: none;
       }
   }
+}
+
+.as-sortable-drag {
+    position: absolute;
+    pointer-events: none;
+    z-index: 9999;
+    list-style:none;
+    opacity: 0.9;
 }
 
 ul.ui-sortable.active {

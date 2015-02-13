@@ -9,10 +9,10 @@
 <div ng-show="isEditing">
     <div id="editor-toolbar"></div>
 </div>
-<ul ui-sortable="sortableOptions">
-    <li ng-repeat="component in currentpage.components" class="fragment {{transitionState}}"  style="position: relative;" last-item >
-        <div class="componentActions" >
-            <span class="reorder fa fa-arrows" tooltip="Re-Order {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="right"></span>
+<ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
+    <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
+        <div class="componentActions" as-sortable-item-handle>
+            <span  class="reorder fa fa-arrows" tooltip="Re-Order {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="right"></span>
             <h4 class="pull-left">{{component.type}}</h4>
             <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" tooltip="Delete {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
             <span class="settings fa fa-cog" data-id="{{component._id}}" tooltip="{{component.type | cleanType}} Settings"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
@@ -25,7 +25,7 @@
             </a>
         </div>
     </li>
-    <li ng-if="(currentpage.components.length===0)" class="no-component">
+    <li ng-if="currentpage && currentpage.components && currentpage.components.length===0" class="no-component">
         <div class="well empty-page">
             <h1 class="center">This Page is Empty.</h1>
             <h4 class="center">Add some components and start editing!</h4>
