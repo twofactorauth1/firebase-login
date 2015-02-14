@@ -659,6 +659,22 @@ module.exports = {
         blogPostDao.getById(postId, fn);
     },
 
+    getBlogPostByTitle: function(accountId, title, fn) {
+        var query = {
+            accountId: accountId,
+            post_title: title
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
+    getBlogPostByUrl: function(accountId, url, fn) {
+        var query = {
+            accountId: accountId,
+            post_url: url
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
     updateBlogPost: function(accountId, blogPost, fn) {
         var self = this;
         console.dir('blogPost '+JSON.stringify(blogPost));
