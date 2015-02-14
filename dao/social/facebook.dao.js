@@ -127,7 +127,7 @@ var dao = {
     },
 
 
-    getProfile: function (profileId, accessToken, fn) {
+    getProfile: function (accessToken, profileId, fn) {
         var self = this;
         var fields = "email,picture,first_name,last_name,middle_name,name";
 
@@ -752,6 +752,21 @@ var dao = {
             } else {
                 self.log.debug('<< shareLink', res);
                 fn(null, res.id);
+            }
+        });
+    },
+
+    getMessages: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> getMessages');
+        var urlOptions = {access_token: accessToken};
+        FB.api('/me/inbox', urlOptions, function(res) {
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< getMessages', res);
+                fn(null, res);
             }
         });
     },

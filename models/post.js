@@ -157,7 +157,7 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
-            postType: "tweet",
+            postType: "tweet"
         };
 
         if(tweet.user) {

@@ -223,7 +223,9 @@ module.exports = {
         } else if (trackedObject.type === 'likes') {
             return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'profile') {
-            return facebookDao.getProfile(socialAccount.socialId, socialAccount.accessToken, fn);
+            return facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.type === 'messages') {
+            return facebookDao.getMessages(socialAccount.accessToken, socialAccount.socialId, fn);
         }
     }
 
