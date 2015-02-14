@@ -203,6 +203,12 @@ module.exports = {
         } else if(trackedObject.type === 'profile') {
             return twitterDao.getProfleForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
+        } else if(trackedObject.type === 'search') {
+            return twitterDao.getSearchResults(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, trackedObject.term, fn);
+        } else if(trackedObject.type === 'messages') {
+            return twitterDao.getDirectMessages(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
         }
 
 
