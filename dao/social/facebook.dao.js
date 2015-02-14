@@ -127,7 +127,7 @@ var dao = {
     },
 
 
-    getProfile: function (profileId, accessToken, fn) {
+    getProfile: function (accessToken, profileId, fn) {
         var self = this;
         var fields = "email,picture,first_name,last_name,middle_name,name";
 
@@ -316,7 +316,7 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, fn) {
-        var key = 'feed';
+        var key = 'feed?fields=comments,likes';
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
@@ -371,7 +371,12 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
 
-        var path = socialId + "/" + key + "?limit=500";
+        var path = socialId + "/" + key;
+        if(path.indexOf("?") === -1) {
+            path = path + "?limit=500";
+        } else {
+            path = path + "&limit=500";
+        }
         var url = this._generateUrl(path, accessToken);
 
         self.log.info("_getStreamPart: path >>> ", path);
@@ -752,6 +757,21 @@ var dao = {
             } else {
                 self.log.debug('<< shareLink', res);
                 fn(null, res.id);
+            }
+        });
+    },
+
+    getMessages: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> getMessages');
+        var urlOptions = {access_token: accessToken};
+        FB.api('/me/inbox', urlOptions, function(res) {
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< getMessages', res);
+                fn(null, res);
             }
         });
     },
