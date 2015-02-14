@@ -10,9 +10,11 @@ define(['app'], function (app) {
         };
 
         this.getTrackedObject = function(id, fn) {
+            console.log('id >>> ', id);
             var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
             $http.get(apiUrl)
                 .success(function (data, status, headers, config) {
+                    console.log('getTrackedObject >>> ', data);
                     fn(data);
                 });
         }

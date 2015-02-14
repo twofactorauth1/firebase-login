@@ -4,7 +4,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.campaigns = [];
         $scope.feeds = [];
 
-        $scope.activeTab = 'campaigns';
+        $scope.activeTab = 'social-feed';
 
         $scope.campaignSettings = {
             showStatus: true,
@@ -160,7 +160,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             //handle each tracked object
             for (var i=0; i<config.trackedObjects.length; i++) {
                 var obj = config.trackedObjects[i];
-                //console.log('handling object:', obj);
+                // console.log('handling object:', obj);
                 if(obj.type === 'feed') {
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(tweets){
@@ -190,6 +190,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 } else if(obj.type === 'numberTweets') {
 
                 } else if(obj.type === 'numberFollowers') {
+                    console.log('numberFollowers >>> ', socialAccountMap[obj.socialId]);
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(followers){
                             console.log('followers ', followers);
@@ -201,7 +202,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         });
                     }
                 } else if(obj.type === 'profile') {
+                    console.log('profile >>> ', obj.type);
+                    console.log('socialAccountMap[obj.socialId] >>> ', socialAccountMap[obj.socialId]);
                     if(socialAccountMap[obj.socialId] === 'tw') {
+                        console.log('this is twitter >>> ', i);
                         SocialConfigService.getTrackedObject(i, function(profile){
                             console.log('Twitter Profile: ', profile);
                             profile.type = 'twitter';
