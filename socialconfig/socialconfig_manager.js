@@ -226,6 +226,14 @@ module.exports = {
             return facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'messages') {
             return facebookDao.getMessages(socialAccount.accessToken, socialAccount.socialId, fn);
+        } else if (trackedObject.type === 'search' || trackedObject.type === 'search-user') {
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'user', trackedObject.term, fn);
+        } else if (trackedObject.type === 'search-page') {
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'page', trackedObject.term, fn);
+        } else if (trackedObject.type === 'search-event') {
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'event', trackedObject.term, fn);
+        } else if (trackedObject.type === 'search-group') {
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'group', trackedObject.term, fn);
         }
     }
 
