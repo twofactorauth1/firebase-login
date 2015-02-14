@@ -356,6 +356,32 @@ var dao = {
         return this._getStreamPart(user, null, socialId, key, fn);
     },
 
+    getTokenSearch: function(accessToken, socialId, searchType, term, fn) {
+        var self = this;
+        var url = this.GRAPH_API_URL +'search?q=' + term + '&type=' + searchType + '&access_token=' + accessToken + '&limit=500';
+        return this._makeRequest(url, function (err, value) {
+            self.log.info("_getStreamPart: fb value >>> ", value);
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value && value.data && value.data.length > 0) {
+                var result = [];
+
+                var processPost = function (_post, cb) {
+                    result.push(new Post().convertFromFacebookPost(_post));
+                    cb();
+                };
+
+                async.eachLimit(value.data, 10, processPost, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                return fn(null, value.data);
+            }
+        });
+    },
+
 
     _getStreamPart: function (user, _accessToken, socialId, key, fn) {
         var self = this;
