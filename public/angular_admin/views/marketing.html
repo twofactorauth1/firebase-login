@@ -291,19 +291,22 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-xs-3 left-panel">
-                        <ul class="integrations">
-                            <li ng-click="facebookFeed === true" ng-class="'active': facebookFeed"><i class="fa fa-facebook-square"></i> <span class="hidden-xs">Facebook</span>
+                        <ul class="integrations" ng-init="feed = 'facebook'">
+                            <li ng-click="feed = 'facebook'" ng-class="{active: feed == 'facebook'}"><i class="fa fa-facebook-square"></i> <span class="hidden-xs">Facebook</span>
                             </li>
-                            <li ng-click="facebookFeed === true"><i class="fa fa-linkedin-square"></i> <span class="hidden-xs">LinkedIn</span>
+                            <li ng-click="feed = 'linkedin'" ng-class="{active: feed == 'linkedin'}"><i class="fa fa-linkedin-square"></i> <span class="hidden-xs">LinkedIn</span>
                             </li>
-                            <li><i class="fa fa-google-plus-square"></i> <span class="hidden-xs">Google Plus</span>
+                            <li ng-click="feed = 'google-plus'" ng-class="{active: feed == 'google-plus'}"><i class="fa fa-google-plus-square"></i> <span class="hidden-xs">Google Plus</span>
                             </li>
-                            <li><i class="fa fa-twitter-square"></i> <span class="hidden-xs">Twitter</span>
+                            <li ng-click="feed = 'twitter'" ng-class="{active: feed == 'twitter'}"><i class="fa fa-twitter-square"></i> <span class="hidden-xs">Twitter</span>
                             </li>
                         </ul>
                     </div>
                     <div class="col-xs-9 right-panel">
-
+                        <div ng-show="feed == 'facebook'">Facebook</div>
+                        <div ng-show="feed == 'twitter'">Twitter</div>
+                        <div ng-show="feed == 'google-plus'">Google Plus</div>
+                        <div ng-show="feed == 'linkedin'">LinkedIn</div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
