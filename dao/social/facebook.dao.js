@@ -316,7 +316,7 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, fn) {
-        var key = 'feed';
+        var key = 'feed?fields=comments,likes';
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
@@ -371,7 +371,12 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
 
-        var path = socialId + "/" + key + "?limit=500";
+        var path = socialId + "/" + key;
+        if(path.indexOf("?") === -1) {
+            path = path + "?limit=500";
+        } else {
+            path = path + "&limit=500";
+        }
         var url = this._generateUrl(path, accessToken);
 
         self.log.info("_getStreamPart: path >>> ", path);
