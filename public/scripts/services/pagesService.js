@@ -21,6 +21,14 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
             path = 'single-post';
         }
 
+        if ( path === 'blog' ||
+             path === '/blog' ||
+             path.indexOf("tag/") > -1 ||
+             path.indexOf("category/") > -1 ||
+             path.indexOf("author/") > -1 ) {
+                path = 'blog';
+        }
+
         websiteService(function (err, data) {
             if (err) {
                 // console.log(err, "PageService >> WebsiteService ERROR");
