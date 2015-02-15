@@ -21904,7 +21904,7 @@ input[type='file'] {
   left: 0;
 }
 .single-blog .entry-content img {
-  width: 100%;
+  max-width: 100%;
 }
 .blogsingle-title {
   font-family: 'LatoRegular';

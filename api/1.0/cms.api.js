@@ -100,6 +100,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.setup.bind(this), this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup.bind(this), this.listBlogPosts.bind(this));
+        app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
@@ -1132,6 +1133,19 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsManager.getBlogPost(accountId, blogPostId, function (err, value) {
             self.log.debug('<< getBlogPost');
             self.sendResultOrError(res, err, value, "Error getting Blog Post");
+            self = null;
+        });
+    },
+
+    getBlogPostByTitle: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogPostByTitle');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostTitle = req.params.title;
+
+        cmsManager.getBlogPostByUrl(accountId, blogPostTitle, function(err, value){
+            self.log.debug('<< getBlogPostByTitle');
+            self.sendResultOrError(resp, err, value, "Error getting Blog Post");
             self = null;
         });
     },

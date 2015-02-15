@@ -53,7 +53,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         });
 
         postsService(function(err, data){
-            console.log('BlogCtrl: postsService >>> ', post);
             if(err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
