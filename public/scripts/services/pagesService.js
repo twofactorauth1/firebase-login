@@ -13,38 +13,35 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
             path = "index";
         }
 
+        if (path.indexOf("blog/") > -1) {
+            path = 'single-post';
+        }
+
+        if (path.indexOf("post/") > -1) {
+            path = 'single-post';
+        }
+
         websiteService(function (err, data) {
             if (err) {
-                console.log(err, "PageService >> WebsiteService ERROR");
+                // console.log(err, "PageService >> WebsiteService ERROR");
                 callback(err, null)
-            }
-	        else if(!data)
-	            {
-	            	callback("data is null", null);
-	            }
-            else {
-                // if (pages.hasOwnProperty(path)) {
+            } else if (!data) {
+                    callback("data is null", null);
+            } else {
                 if ( _.has( pages, path ) ) {
-                    console.log(pages, path);
-                    console.log( _.has(pages, path));
-                    console.log('++++++++++');
                     callback(null, pages);
                 } else {
                     websiteObject = data;
-                    //API is getting only one page but we need page arrays
                     $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + path, { cache: true})
-                    .success(function (page) {
+                        .success(function (page) {
                             if (page !== null) {
-                                //TODO
-                                //Temp page pushing array
                                 pages[page.handle] = page;
-                                console.log(pages);
                                 callback(null, pages);
                             } else {
                                 callback("page not found",null);
                             }
                         }).error(function (err) {
-                            console.log("PageService >> DB-Hit >> ERROR");
+                            // console.log("PageService >> DB-Hit >> ERROR");
                             callback(err,null);
                         });
                 }
