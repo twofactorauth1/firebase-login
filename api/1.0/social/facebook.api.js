@@ -35,6 +35,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('insights/:metric/:period'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
         app.get(this.url('insights/:metric/:period/:breakdown'), this.isAuthApi.bind(this), this.getAppInsights.bind(this));
 
+        app.get(this.url('pages'), this.isAuthApi.bind(this), this.getPages.bind(this));
+        app.get(this.url('page/:pageId'), this.isAuthApi.bind(this), this.getPageInfo.bind(this));
+        app.get(this.url('pagepic/:pageId'), this.isAuthApi.bind(this), this.getPageProfilePic.bind(this));
+
         app.get(this.url('posts/:socialId'), this.isAuthApi.bind(this), this.getPosts.bind(this));
 
         app.post(this.url('share/link'), this.isAuthApi.bind(this), this.shareLink.bind(this));
@@ -63,6 +67,47 @@ _.extend(api.prototype, baseApi.prototype, {
                 self = null;
             } else {
                 self.wrapError(resp, 500, "Error retrieving facebook profile", err, value);
+                self = null;
+            }
+        });
+    },
+
+    getPages: function(req, resp) {
+        var self = this;
+        facebookDao.getPages(req.user, function(err, value) {
+            if (!err) {
+                resp.send(value);
+                self = null;
+            } else {
+                self.wrapError(resp, 500, "Error retrieving facebook pages", err, value);
+                self = null;
+            }
+        });
+    },
+
+    getPageInfo: function(req, resp) {
+        var self = this;
+        var pageId = req.params.pageId;
+        facebookDao.getPageInfo(req.user, pageId, function(err, value) {
+            if (!err) {
+                resp.send(value);
+                self = null;
+            } else {
+                self.wrapError(resp, 500, "Error retrieving facebook page info", err, value);
+                self = null;
+            }
+        });
+    },
+
+    getPageProfilePic: function(req, resp) {
+        var self = this;
+        var pageId = req.params.pageId;
+        facebookDao.getPageProfilePic(req.user, pageId, function(err, value) {
+            if (!err) {
+                resp.send(value);
+                self = null;
+            } else {
+                self.wrapError(resp, 500, "Error retrieving facebook page profile pic", err, value);
                 self = null;
             }
         });

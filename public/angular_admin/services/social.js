@@ -10,6 +10,7 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+
         this.getTwitterFollowers = function (twitterId, fn) {
             var apiUrl = baseUrl + ['twitter', 'followers', twitterId].join('/');
             $http.get(apiUrl)
@@ -17,6 +18,7 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+
         this.getTwitterUser = function (twitterId, fn) {
             var apiUrl = baseUrl + ['twitter', 'tweets', twitterId].join('/');
             $http.get(apiUrl)
@@ -24,6 +26,7 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+
         this.getTwitterProfile = function (fn) {
             var apiUrl = baseUrl + ['twitter', 'profile'].join('/');
             $http.get(apiUrl)
@@ -40,6 +43,31 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+
+        this.getFBPages = function (fn) {
+            var apiUrl = baseUrl + ['facebook', 'pages'].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getFBPageInfo = function (pageId, fn) {
+            var apiUrl = baseUrl + ['facebook', 'page', pageId].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getFBPageProfilePic = function (pageId, fn) {
+            var apiUrl = baseUrl + ['facebook', 'pagepic', pageId].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         this.getFBProfile = function (fn) {
             var apiUrl = baseUrl + ['facebook', 'profile'].join('/');
             $http.get(apiUrl)

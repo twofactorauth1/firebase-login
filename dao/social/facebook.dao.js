@@ -165,6 +165,45 @@ var dao = {
     },
     //endregion
 
+    getPages: function(user, fn) {
+        var self = this;
+        self.log.info("getPages >>> ");
+        var socialId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        var key = 'accounts';
+        return this._getStreamPart(null, accessToken, socialId, key, fn);
+    },
+
+    getPageInfo: function(user, pageId, fn) {
+        var self = this;
+        self.log.info("getPageInfo >>> ");
+        var socialId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        var key = '';
+        return this._getStreamPart(null, accessToken, pageId, key, fn);
+    },
+
+    getPageProfilePic: function(user, pageId, fn) {
+        var self = this;
+        self.log.info("getPageProfilePic >>> ");
+        var socialId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        var key = 'picture';
+        return this._getStreamPart(null, accessToken, pageId, key, fn);
+    },
+
 
     //region FRIENDS & IMPORT
     getFriendsForUser: function (user, fn) {
@@ -320,11 +359,6 @@ var dao = {
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
-    getPages: function(accessToken, socialId, fn) {
-        var key = 'accounts';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
-    },
-
     getLikedPages: function(accessToken, socialId, fn) {
         var key = 'likes';
         return this._getStreamPart(null, accessToken, socialId, key, fn);
@@ -410,11 +444,12 @@ var dao = {
 
         return this._makeRequest(url, function (err, value) {
             self.log.info("_getStreamPart: fb value >>> ", value);
+            self.log.info("_getStreamPart: key >>> ", key);
             if (err) {
                 return fn(err, value);
             }
 
-            if (value && value.data && value.data.length > 0) {
+            if (value && value.data && value.data.length > 0 && key.length > 0) {
                 var result = [];
 
                 var processPost = function (_post, cb) {
@@ -426,7 +461,8 @@ var dao = {
                     return fn(null, result);
                 });
             } else {
-                return fn(null, value.data);
+                var thisval = value.data || value;
+                return fn(null, thisval);
             }
         });
     },
