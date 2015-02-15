@@ -303,7 +303,11 @@
                         </ul>
                     </div>
                     <div class="col-xs-9 right-panel">
-                        <div ng-show="modalfeed == 'facebook'">Facebook</div>
+                        <div ng-show="modalfeed == 'facebook'">
+                            <ul>
+                                <li ng-repeat="page in fbAdminPages"><img src="{{page.profilePic}}"> {{page.name}}</li>
+                            </ul>
+                        </div>
                         <div ng-show="modalfeed == 'twitter'">Twitter</div>
                         <div ng-show="modalfeed == 'google-plus'">Google Plus</div>
                         <div ng-show="modalfeed == 'linkedin'">LinkedIn</div>

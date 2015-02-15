@@ -177,6 +177,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         });
                     }
                 } else if(obj.type === 'pages') {
+                    console.log('has pages >>>');
+                    console.log('obj ', obj);
 
                 } else if(obj.type === 'likes') {
 
@@ -200,6 +202,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(profile){
                             profile.type = 'twitter';
+                            console.log('profile ', profile);
                             $scope.feedTypes.push(profile);
                         });
                     } else if(socialAccountMap[obj.socialId] === 'fb') {
@@ -231,6 +234,20 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 }
             };
             $scope.displayedFeed = $scope.feed;
+        });
+
+        SocialService.getFBPages(function(pages){
+            console.log('pages ', pages);
+            $scope.fbAdminPages = [];
+            for (var i = 0; i < pages.length; i++) {
+                var sourceId = pages[i].sourceId;
+                SocialService.getFBPageInfo(sourceId, function(pageInfo){
+                    SocialService.getFBPageProfilePic(sourceId, function(pagePic){
+                        pageInfo.profilePic = pagePic;
+                        $scope.fbAdminPages.push(pageInfo);
+                    });
+                });
+            };
         });
 
     }]);
