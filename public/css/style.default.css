@@ -22430,6 +22430,7 @@ i.indi-sm {
   margin-top: 100px;
 }
 .commerce .commerce-item {
+  min-height: 320px;
   cursor: pointer;
   background: #fcfcfc;
   padding: 15px 5px;
