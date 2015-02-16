@@ -53,7 +53,7 @@ var socialconfig = $$.m.ModelBase.extend({
 
     getSocialAccountById: function(id) {
         var account = null;
-        account = _.find(this.attributes.socialAccounts, function(_account){return _account.id === id});
+        account = _.find(this.attributes.socialAccounts, function(_account){return _account.socialId === id});
         return account;
     },
 
