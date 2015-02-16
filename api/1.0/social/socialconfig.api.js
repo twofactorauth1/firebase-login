@@ -28,6 +28,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
 
+
+
+        app.get(this.url('facebook/:socialAccountId/pages'), this.isAuthApi.bind(this), this.getFacebookPages.bind(this));
+        app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
+        app.post(this.url('facebook/:socialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
+
     },
 
     /**
@@ -121,6 +127,52 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    getFacebookPages: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPages');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookPages(accountId, socialAccountId, function(err, pages){
+                    self.log.debug('<< getFacebookPages');
+                    self.sendResultOrError(resp, err, pages, "Error fetching pages");
+                });
+            }
+        });
+
+    },
+
+    getFacebookPageInfo: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPageInfo');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var pageId = req.params.pageId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookPageInfo(accountId, socialAccountId, pageId, function(err, page){
+                    self.log.debug('<< getFacebookPages');
+                    self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
+    },
+
+
+
+    createFacebookPost: function(req, resp) {
+
     }
 
 

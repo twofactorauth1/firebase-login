@@ -191,6 +191,11 @@ var dao = {
         return this._getStreamPart(null, accessToken, pageId, key, fn);
     },
 
+    getTokenPageInfo: function(accessToken, socialId, pageId, fn) {
+        var key = '?fields=picture';
+        return this._getStreamPart(null, accessToken, pageId, key, fn);
+    },
+
     getPageProfilePic: function(user, pageId, fn) {
         var self = this;
         self.log.info("getPageProfilePic >>> ");
@@ -365,7 +370,7 @@ var dao = {
     },
 
     getTokenAdminPages: function(accessToken, socialId, fn) {
-        var key = "accounts";
+        var key = "accounts?fields=picture";
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
@@ -424,7 +429,7 @@ var dao = {
 
     _getStreamPart: function (user, _accessToken, socialId, key, fn) {
         var self = this;
-        self.log.info("facebook dao: _getStreamPart >>> ");
+        self.log.info("facebook dao: _getStreamPart >>> " + _accessToken);
         var accessToken = _accessToken;
 
         if(user) {

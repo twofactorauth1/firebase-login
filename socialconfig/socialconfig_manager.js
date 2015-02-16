@@ -183,6 +183,44 @@ module.exports = {
         });
     },
 
+    getFacebookPages: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookPages');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if(socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            facebookDao.getTokenAdminPages(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getFacebookPageInfo: function(accountId, socialAccountId, pageId, fn) {
+        var self = this;
+        log.debug('>> getFacebookPageInfo');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            facebookDao.getTokenPageInfo(socialAccount.accessToken, socialAccount.socialId, pageId, fn);
+        });
+
+    },
+
     _handleTwitterTrackedObject: function(socialAccount, trackedObject, fn) {
         var self = this;
         if(trackedObject.type === 'feed') {
