@@ -7466,6 +7466,7 @@ i.indi-sm {
 }
 
 .commerce .commerce-item {
+  min-height: 320px;
   cursor: pointer;
   background: #fcfcfc;
   padding: 15px 5px;

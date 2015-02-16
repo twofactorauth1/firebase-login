@@ -1,6 +1,6 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2', 'productService'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService', '$rootScope',
-        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService, $rootScope) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2', 'productService', 'socialConfigService'], function(app) {
+    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService', '$rootScope', 'SocialConfigService',
+        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService, $rootScope, SocialConfigService) {
             ngProgress.start();
             NavigationService.updateNavigation();
             $scope.showToaster = false;
@@ -24,9 +24,19 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 return date.add(1, 'months').format('MMMM D, YYYY');
             };
 
+
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
+
+            SocialConfigService.getAllSocialConfig(function(data) {
+              data.socialAccounts.forEach(function(value, index) {
+                $scope.userSocial[value.type].status = true;
+                $scope.userSocial[value.type].image = value.image;
+                $scope.userSocial[value.type].username = value.username;
+              });
+            });
+
             $scope.onboardingSteps = [];
             $scope.showOnboarding = false;
             $scope.stepIndex = 0;
@@ -369,21 +379,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 NavigationService.updateNavigation2(user);
             };
 
-            UserService.getUser(function(user) {
-                $scope.user = user;
-                angular.forEach($scope.user.profilePhotos, function(value, index) {
-                    if (value.type && $scope.userSocial) {
-                        $scope.userSocial[value.type].image = value.url;
-                    }
-                });
-            });
-
-            UserService.getUserSocial(function(social) {
-                social.forEach(function(value, index) {
-                    $scope.userSocial[value.type].username = value.username;
-                    $scope.userSocial[value.type].status = true;
-                });
-            });
         }
     ]);
 });

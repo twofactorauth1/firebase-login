@@ -84,5 +84,13 @@ define(['app'], function (app) {
             //         fn(data);
             //     });
         };
+
+        this.getFBPageSocialConfig = function(socialId, fn) {
+          var apiUrl = baseUrl + ['socialconfig', 'facebook', socialId, 'pages'].join('/');
+          $http.get(apiUrl)
+          .success(function(data, status, headers, config) {
+            fn(data);
+          });
+        };
     });
 });
