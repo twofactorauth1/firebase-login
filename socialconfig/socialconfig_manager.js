@@ -141,7 +141,33 @@ module.exports = {
 
             creds.id = $$.u.idutils.generateUUID();
             var socialAccounts = config.get('socialAccounts');
-            socialAccounts.push(creds);
+
+            var updatedCred = false;
+            socialAccounts.forEach(function(value, index) {
+              if (value.type == socialType && value.socialId == socialId) {
+                socialAccounts[index].accessToken = creds.accessToken;
+                if (creds.accessTokenSecret) {
+                  socialAccounts[index].accessTokenSecret = creds.accessTokenSecret;
+                }
+
+                if (creds.refreshToken) {
+                  socialAccounts[index].refreshToken = creds.refreshToken;
+                }
+
+                if (creds.expires) {
+                  socialAccounts[index].expires = creds.expires;
+                }
+
+                socialAccounts[index].username = creds.username;
+                socialAccounts[index].socialUrl = creds.socialUrl;
+                socialAccounts[index].scope = creds.scope;
+                var updatedCred = true;
+              }
+            });
+            if (updatedCred == false) {
+              socialAccounts.push(creds);
+            }
+
             socialconfigDao.saveOrUpdate(config, function(err, value){
                 if(err) {
                     log.error('Error saving social config: ' + err);
@@ -237,7 +263,7 @@ module.exports = {
             }
 
             facebookDao.createPostWithToken(socialAccount.accessToken, socialAccount.socialId, message, fn);
-            
+
         });
     },
 
