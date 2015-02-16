@@ -22,7 +22,7 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 							}
 							break;
 						case "phone":
-							var regex = /^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
+							var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
 							var result = regex.test(el.val());
 							if (!result) {
 								parent_div.addClass('has-error');
