@@ -116,11 +116,11 @@
                 <div ng-if="!single_post" class="rightpanelinner">
                     <div class="form-group">
                         <label>Title:</label>
-                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
+                        <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
                     </div>
                     <div class="form-group" ng-hide="currentPage.handle == 'index'">
                         <label>URL:</label>
-                        <input id="edit-page-url" class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
+                        <input class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
                     </div>
                     <div class="form-group" ng-hide="currentPage.handle == 'index'">
                         <label>Show:</label>
@@ -271,7 +271,7 @@
                         <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
                         <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
                       </div>
-                    <h4 class="modal-title">{{componentEditing.title | htmlToPlaintext}} Settings</h4>
+                    <h4 class="modal-title">{{(componentEditing.title || '') | htmlToPlaintext}} Settings</h4>
                 </div>
                 <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
                     <tabset>
