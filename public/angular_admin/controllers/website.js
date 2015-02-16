@@ -533,28 +533,6 @@ define([
                 // iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerFontUpdate && iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
             };
 
-            $scope.editPageValidated = false;
-
-            $scope.validateEditPage = function(page) {
-                if (page.handle == '') {
-                    $scope.handleError = true;
-                    $('#edit-page-url').parents('div.form-group').addClass('has-error');
-                } else {
-                    $scope.handleError = false;
-                    $('#edit-page-url').parents('div.form-group').removeClass('has-error');
-                }
-                if (page.title == '') {
-                    $scope.titleError = true;
-                    $('#edit-page-title').parents('div.form-group').addClass('has-error');
-                } else {
-                    $scope.titleError = false;
-                    $('#edit-page-title').parents('div.form-group').removeClass('has-error');
-                }
-                if (page && page.title && page.title != '' && page.handle && page.handle != '') {
-                    $scope.editPageValidated = true;
-                }
-            };
-
             //TODO: use scope connection
             $scope.savePage = function() {
                 $scope.saveLoading = true;
@@ -566,24 +544,6 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = true;
                 } else {
-                    $scope.validateEditPage($scope.currentPage);
-                    console.log('$scope.editPageValidated ', $scope.editPageValidated);
-
-                    if (!$scope.editPageValidated) {
-                        $scope.saveLoading = false;
-                        toaster.pop('error', "Page Title or URL can not be blank.");
-                        return false;
-                    } else {
-                      for (var i = 0; i < that.allPages.length; i++) {
-                        if (that.allPages[i].handle === $scope.currentPage.handle && that.allPages[i]._id != $scope.currentPage._id) {
-                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                            $scope.saveLoading = false;
-                            $('#edit-page-url').parents('div.form-group').addClass('has-error');
-                            return false;
-                            }
-                        };  
-                        
-                    }
                     var componentJSON = $scope.currentPage.components;
                     var pageId = $scope.currentPage._id;
 
@@ -1532,12 +1492,11 @@ define([
 
             window.updateAdminPageScope = function(page) {
                 $scope.singlePost = false;
-                if (page._id !== $scope.currentPage._id) {
-                    $scope.currentPage = _.findWhere(that.allPages, {
-                        handle: page.handle
-                    });
-
-                    //get components from page
+                console.log("Updating admin scope")
+                if (!$scope.currentPage)
+                {
+                    $scope.currentPage = page;
+                     //get components from page
                     if ($scope.currentPage && $scope.currentPage.components) {
                         $scope.components = $scope.currentPage.components;
                     } else {
@@ -1545,6 +1504,7 @@ define([
                     }
                     $scope.originalCurrentPage = angular.copy($scope.currentPage);
                 }
+               
             }
 
             window.checkIfSinglePost = function(post) {
