@@ -24,17 +24,19 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 return date.add(1, 'months').format('MMMM D, YYYY');
             };
 
-            SocialConfigService.getAllSocialConfig(function(data) {
-              console.log(data);
-            });
-            // 
-            // SocialConfigService.getTrackedObject(function(data) {
-            //   console.log(data);
-            // });
 
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
+
+            SocialConfigService.getAllSocialConfig(function(data) {
+              data.socialAccounts.forEach(function(value, index) {
+                $scope.userSocial[value.type].status = true;
+                $scope.userSocial[value.type].image = value.image;
+                $scope.userSocial[value.type].username = value.username;
+              });
+            });
+
             $scope.onboardingSteps = [];
             $scope.showOnboarding = false;
             $scope.stepIndex = 0;
@@ -377,21 +379,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 NavigationService.updateNavigation2(user);
             };
 
-            UserService.getUser(function(user) {
-                $scope.user = user;
-                angular.forEach($scope.user.profilePhotos, function(value, index) {
-                    if (value.type && $scope.userSocial) {
-                        $scope.userSocial[value.type].image = value.url;
-                    }
-                });
-            });
-
-            UserService.getUserSocial(function(social) {
-                social.forEach(function(value, index) {
-                    $scope.userSocial[value.type].username = value.username;
-                    $scope.userSocial[value.type].status = true;
-                });
-            });
         }
     ]);
 });
