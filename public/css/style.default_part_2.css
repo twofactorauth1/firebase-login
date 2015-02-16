@@ -7754,6 +7754,23 @@ i.indi-sm {
   padding: 0;
 }
 
+.marketing #marketing-add-feed .fb-admin-pages li {
+  height: 50px;
+  line-height: 50px;
+  text-indent: 10px;
+}
+
+.marketing #marketing-add-feed .fb-admin-pages li img {
+  height: 40px;
+  margin: 4px 0;
+}
+
+.marketing #marketing-add-feed .fb-admin-pages li .fa-plus-square {
+  line-height: 50px;
+  font-size: 20px;
+  color: #27ae60;
+}
+
 .marketing #marketing-add-feed .left-panel {
   padding-left: 0;
 }

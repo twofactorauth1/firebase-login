@@ -201,7 +201,8 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
         var key = 'picture';
-        return this._getStreamPart(null, accessToken, pageId, key, fn);
+        var path = pageId + "/" + key;
+        return fn(null, self._generateUrl(path, accessToken));
     },
 
 
@@ -963,6 +964,7 @@ var dao = {
         var self = this;
         request(url, function (err, resp, body) {
             if (!err) {
+                self.log.debug('>> body ', body);
                 var result = JSON.parse(body);
                 self._isAuthenticationError(result, fn);
             } else {

@@ -304,8 +304,8 @@
                     </div>
                     <div class="col-xs-9 right-panel">
                         <div ng-show="modalfeed == 'facebook'">
-                            <ul>
-                                <li ng-repeat="page in fbAdminPages"><img src="{{page.profilePic}}"> {{page.name}}</li>
+                            <ul class="fb-admin-pages">
+                                <li ng-repeat="page in fbAdminPages"><img src="{{page.profilePic}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span></li>
                             </ul>
                         </div>
                         <div ng-show="modalfeed == 'twitter'">Twitter</div>
@@ -314,9 +314,9 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addFeedFn()"><i class="fa fa-plus" /> Add</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

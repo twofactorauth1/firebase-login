@@ -41,6 +41,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             });
         };
 
+        $scope.addPageFeed = function(page) {
+            console.log('adding page feed ', page);
+        };
+
         $scope.feed = [];
         $scope.displayedFeed = [];
 
@@ -242,7 +246,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             for (var i = 0; i < pages.length; i++) {
                 var sourceId = pages[i].sourceId;
                 SocialService.getFBPageInfo(sourceId, function(pageInfo){
-                    SocialService.getFBPageProfilePic(sourceId, function(pagePic){
+                    SocialService.getFBPageProfilePic(pageInfo.id, function(pagePic){
                         pageInfo.profilePic = pagePic;
                         $scope.fbAdminPages.push(pageInfo);
                     });
