@@ -140,47 +140,82 @@ module.exports = {
             creds.scope = scope;
 
             creds.id = $$.u.idutils.generateUUID();
-            var socialAccounts = config.get('socialAccounts');
-
-            var updatedCred = false;
-            socialAccounts.forEach(function(value, index) {
-              if (value.type == socialType && value.socialId == socialId) {
-                socialAccounts[index].accessToken = creds.accessToken;
-                if (creds.accessTokenSecret) {
-                  socialAccounts[index].accessTokenSecret = creds.accessTokenSecret;
-                }
-
-                if (creds.refreshToken) {
-                  socialAccounts[index].refreshToken = creds.refreshToken;
-                }
-
-                if (creds.expires) {
-                  socialAccounts[index].expires = creds.expires;
-                }
-
-                socialAccounts[index].username = creds.username;
-                socialAccounts[index].socialUrl = creds.socialUrl;
-                socialAccounts[index].scope = creds.scope;
-                var updatedCred = true;
-              }
-            });
-            if (updatedCred == false) {
-              socialAccounts.push(creds);
-            }
-            config.set('socialAccounts', socialAccounts);
-            socialconfigDao.saveOrUpdate(config, function(err, value){
+            //add the profile pic
+            self._addProfilPicToCreds(creds, function(err, value){
                 if(err) {
-                    log.error('Error saving social config: ' + err);
                     return fn(err, null);
-                } else {
-                    log.debug('<< addSocialAccount');
-                    return fn(null, value);
                 }
+                creds = value;
+                var socialAccounts = config.get('socialAccounts');
 
+                var updatedCred = false;
+                socialAccounts.forEach(function(value, index) {
+                    if (value.type == socialType && value.socialId == socialId) {
+                        socialAccounts[index].accessToken = creds.accessToken;
+                        if (creds.accessTokenSecret) {
+                            socialAccounts[index].accessTokenSecret = creds.accessTokenSecret;
+                        }
+
+                        if (creds.refreshToken) {
+                            socialAccounts[index].refreshToken = creds.refreshToken;
+                        }
+
+                        if (creds.expires) {
+                            socialAccounts[index].expires = creds.expires;
+                        }
+
+                        socialAccounts[index].username = creds.username;
+                        socialAccounts[index].socialUrl = creds.socialUrl;
+                        socialAccounts[index].scope = creds.scope;
+                        updatedCred = true;
+                    }
+                });
+                if (updatedCred == false) {
+                    socialAccounts.push(creds);
+                }
+                config.set('socialAccounts', socialAccounts);
+                socialconfigDao.saveOrUpdate(config, function(err, value){
+                    if(err) {
+                        log.error('Error saving social config: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< addSocialAccount');
+                        return fn(null, value);
+                    }
+
+                });
             });
+
 
         });
 
+    },
+
+    _addProfilPicToCreds: function(creds, fn) {
+        var self = this;
+        var social = $$.constants.social.types;
+        switch(creds.type) {
+            case social.FACEBOOK:
+                facebookDao.getProfile(creds.accessToken, creds.socialId, function(err, value){
+                    if(err) {
+                        return fn(err, null);
+                    }
+                    if (value.picture != null && value.picture.data != null) {
+                        creds.image = value.picture.data.url;
+                    }
+                    return fn(null, creds);
+                });
+            case social.TWITTER:
+                return fn(null, creds);
+            case social.GOOGLE:
+                return fn(null, creds);
+            case social.LINKEDIN:
+                return fn(null, creds);
+            default:
+                return process.nextTick(function() {
+                    return fn(null, creds);
+                });
+        }
     },
 
     fetchTrackedObject: function(accountId, objIndex, fn) {
