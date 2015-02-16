@@ -206,7 +206,18 @@ module.exports = {
                     return fn(null, creds);
                 });
             case social.TWITTER:
-                return fn(null, creds);
+                twitterDao.getProfleForId(creds.accessToken, creds.accessTokenSecret, creds.socialId, function(err, value){
+                    if(err) {
+                        return fn(err, null);
+                    }
+                    if(value.profile_image_url_https) {
+                        creds.image = value.profile_image_url_https;
+                    } else {
+                        console.dir(value);
+                    }
+                    return fn(null, creds);
+                });
+
             case social.GOOGLE:
                 return fn(null, creds);
             case social.LINKEDIN:
@@ -222,7 +233,7 @@ module.exports = {
         var self = this;
         log.debug('>> fetchTrackedObject');
         self.getSocialConfig(accountId, null, function(err, config){
-            if(err) {
+            if(err || config === null) {
                 log.error('Error getting social config: ' + err);
                 return fn(err, null);
             }
