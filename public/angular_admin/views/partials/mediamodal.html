@@ -39,11 +39,39 @@
                         </li>
                         <li class="filter-type" style="font-size: 11px;">
                             Show:
-                            <a href="" data-active="all"        ng-click="m.selectAll('all', true)"       ng-class="{'disabled': insertMediaType !== undefined}">All</a>
-                            <a href="" data-active="document"   ng-click="m.selectAll('document', true)"  ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'document'}">Documents</a>
-                            <a href="" data-active="audio"      ng-click="m.selectAll('audio', true)"     ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'audio'}">Audio</a>
-                            <a href="" data-active="image"      ng-click="m.selectAll('image', true)"     ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'image'}">Images</a>
-                            <a href="" data-active="video"      ng-click="m.selectAll('video', true)"     ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'video'}">Videos</a>
+                            <a href=""
+                               data-active="all"
+                               ng-click="insertMediaType !== undefined || m.selectAll('all', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined}">
+                                All
+                            </a>
+
+                            <a href=""
+                               data-active="document"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'document' || m.selectAll('document', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'document'}">
+                                Documents
+                            </a>
+
+                            <a href=""
+                               data-active="audio"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'audio' || m.selectAll('audio', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'audio'}">
+                                Audio
+                            </a>
+
+                            <a href=""
+                               data-active="image"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'image' || m.selectAll('image', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'image'}">
+                                Images
+                            </a>
+
+                            <a href="" data-active="video"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'video' || m.selectAll('video', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'video'}">
+                                Videos
+                            </a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
