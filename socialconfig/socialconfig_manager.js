@@ -167,7 +167,7 @@ module.exports = {
             if (updatedCred == false) {
               socialAccounts.push(creds);
             }
-
+            config.set('socialAccounts', socialAccounts);
             socialconfigDao.saveOrUpdate(config, function(err, value){
                 if(err) {
                     log.error('Error saving social config: ' + err);
