@@ -7,6 +7,23 @@ script(src="https://js.stripe.com/v2/?tmp")
 script(src="../js/indigenous.js")
 script(src="../js/ng-indigenous.js")
 
+script(type='text/javascript').
+    adroll_adv_id = "QEWFBVIXY5CKJEMIWJXZBA";
+    adroll_pix_id = "PWMOJHYCJBHEVDT6DQ5RTN";
+    (function () {
+    var oldonload = window.onload;
+    window.onload = function(){
+       __adroll_loaded=true;
+       var scr = document.createElement("script");
+       var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+       scr.setAttribute('async', 'true');
+       scr.type = "text/javascript";
+       scr.src = host + "/j/roundtrip.js";
+       ((document.getElementsByTagName('head') || [null])[0] ||
+        document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+       if(oldonload){oldonload()}};
+    }());
+
 if account._id == 6 || account._id == 37
     // begin olark code
     script(data-cfasync='false', type='text/javascript').
