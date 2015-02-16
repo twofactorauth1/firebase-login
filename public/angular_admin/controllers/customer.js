@@ -379,7 +379,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                             $('#import-contacts-modal').modal('hide');
                             ToasterService.show('success', "Contacts being imported.");
                         } else
-                            $window.location.href = "/socialconfig/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
+                            $window.location.href = "/inapplogin/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
                     });
                 };
 
@@ -389,7 +389,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                             $('#import-contacts-modal').modal('hide');
                             ToasterService.show('success', "Contacts being imported.");
                         } else
-                            $window.location.href = "/socialconfig/linkedin?redirectTo=" + encodeURIComponent('/admin#/customer');
+                            $window.location.href = "/inapplogin/linkedin?redirectTo=" + encodeURIComponent('/admin#/customer');
                     });
                 };
 
@@ -399,7 +399,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                             $('#import-contacts-modal').modal('hide');
                             ToasterService.show('success', "Contacts being imported.");
                         } else
-                            $window.location.href = "/socialconfig/google?redirectTo=" + encodeURIComponent('/admin#/customer');
+                            $window.location.href = "/inapplogin/google?redirectTo=" + encodeURIComponent('/admin#/customer');
                     });
                 };
 
