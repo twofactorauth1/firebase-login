@@ -865,6 +865,8 @@ define([
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
                     });
+                    if($scope.componentEditing)
+                    {
                     $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).icon;
@@ -874,6 +876,8 @@ define([
 
                     if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
+                    }
+                    
 
                 });
                 //open right sidebar and component tab
@@ -882,14 +886,17 @@ define([
                 // var last = nodes[nodes.length - 1];
                 // angular.element(last).triggerHandler('click');
 
-                WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
-                    $scope.componentEditingVersions = versions;
-                    if ($scope.componentEditing && $scope.componentEditing.version) {
-                        $scope.componentEditing.version = $scope.componentEditing.version.toString();
-                        $scope.versionSelected = $scope.componentEditing.version;
-                    }
-                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
-                });
+                if($scope.componentEditing)
+                {
+                    WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
+                        $scope.componentEditingVersions = versions;
+                        if ($scope.componentEditing && $scope.componentEditing.version) {
+                            $scope.componentEditing.version = $scope.componentEditing.version.toString();
+                            $scope.versionSelected = $scope.componentEditing.version;
+                        }
+                        $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                    });
+                 }
                 $('#feature-convert').iconpicker({
                     iconset: 'fontawesome',
                     icon: 'fa-credit-card',
@@ -1495,14 +1502,16 @@ define([
                 console.log("Updating admin scope")
                 if (!$scope.currentPage)
                 {
-                    $scope.currentPage = page;
-                     //get components from page
-                    if ($scope.currentPage && $scope.currentPage.components) {
-                        $scope.components = $scope.currentPage.components;
-                    } else {
-                        $scope.components = [];
-                    }
-                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                    $scope.$apply(function() {
+                        $scope.currentPage = page;
+                         //get components from page
+                        if ($scope.currentPage && $scope.currentPage.components) {
+                            $scope.components = $scope.currentPage.components;
+                        } else {
+                            $scope.components = [];
+                        }
+                        $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                    })
                 }
                
             }
