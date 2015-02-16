@@ -1,4 +1,4 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore'], function(app) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants'], function(app) {
     app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, UserService, CampaignService, SocialService, SocialConfigService) {
 
         $scope.campaigns = [];
@@ -236,18 +236,24 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             $scope.displayedFeed = $scope.feed;
         });
 
-        SocialService.getFBPages(function(pages){
-            console.log('pages ', pages);
-            $scope.fbAdminPages = [];
-            for (var i = 0; i < pages.length; i++) {
-                var sourceId = pages[i].sourceId;
-                SocialService.getFBPageInfo(sourceId, function(pageInfo){
-                    SocialService.getFBPageProfilePic(sourceId, function(pagePic){
-                        pageInfo.profilePic = pagePic;
-                        $scope.fbAdminPages.push(pageInfo);
+        SocialConfigService.getAllSocialConfig(function(data) {
+          data.socialAccounts.forEach(function(value, index) {
+            if (value.type == $$.constants.user.credential_types.FACEBOOK) {
+              SocialService.getFBPageSocialConfig(value.id, function(pages) {
+                console.log('pages ', pages);
+                $scope.fbAdminPages = [];
+                for (var i = 0; i < pages.length; i++) {
+                    var sourceId = pages[i].sourceId;
+                    SocialService.getFBPageInfo(sourceId, function(pageInfo){
+                        SocialService.getFBPageProfilePic(sourceId, function(pagePic){
+                            pageInfo.profilePic = pagePic;
+                            $scope.fbAdminPages.push(pageInfo);
+                        });
                     });
-                });
-            };
+                };
+              });
+            }
+          });
         });
 
     }]);
