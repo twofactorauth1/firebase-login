@@ -222,7 +222,7 @@ module.exports = {
         var self = this;
         log.debug('>> fetchTrackedObject');
         self.getSocialConfig(accountId, null, function(err, config){
-            if(err) {
+            if(err || config === null) {
                 log.error('Error getting social config: ' + err);
                 return fn(err, null);
             }
