@@ -192,7 +192,7 @@ var dao = {
     },
 
     getTokenPageInfo: function(accessToken, socialId, pageId, fn) {
-        var key = '?fields=picture';
+        var key = '?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count';
         return this._getStreamPart(null, accessToken, pageId, key, fn);
     },
 
@@ -370,7 +370,7 @@ var dao = {
     },
 
     getTokenAdminPages: function(accessToken, socialId, fn) {
-        var key = "accounts?fields=picture";
+        var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count";
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
@@ -800,6 +800,23 @@ var dao = {
     },
 
     //region feed
+
+    createPostWithToken: function(accessToken, socialId, content, fn) {
+        var self = this;
+        self.log.debug('>> createPostWithToken');
+
+        var urlOptions = {access_token:accessToken, message:content};
+
+        FB.api(socialId + '/feed', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< shareLink', res);
+                fn(null, res.id);
+            }
+        });
+    },
 
     shareLink: function(user, url, picture, name, caption, description, fn) {
 

@@ -172,6 +172,25 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createFacebookPost: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createFacebookPost');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        var message = req.body;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.createFacebookPost(accountId, socialAccountId, message, function(err, value){
+                    self.log.debug('<< createFacebookPost');
+                    self.sendResultOrError(resp, err, value, "Error creating post");
+                });
+
+            }
+        });
 
     }
 

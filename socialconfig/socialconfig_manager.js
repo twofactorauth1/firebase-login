@@ -221,6 +221,26 @@ module.exports = {
 
     },
 
+    createFacebookPost: function(accountId, socialAccountId, message,fn) {
+        var self = this;
+        log.debug('>> createFacebookPost');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            facebookDao.createPostWithToken(socialAccount.accessToken, socialAccount.socialId, message, fn);
+            
+        });
+    },
+
     _handleTwitterTrackedObject: function(socialAccount, trackedObject, fn) {
         var self = this;
         if(trackedObject.type === 'feed') {
