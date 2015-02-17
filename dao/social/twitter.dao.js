@@ -384,6 +384,29 @@ var dao = {
         );
     },
 
+    postWithToken: function(accessToken, accessTokenSecret, status, fn) {
+        var self = this;
+        self.log.debug('>> postWithToken');
+
+        twitter.statuses("update", {
+                status: status
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error updating status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< postWithToken');
+                    fn(null, response);
+                }
+            }
+        );
+    },
+
     getSearchResults: function(accessToken, accessTokenSecret, twitterId, term, fn) {
         var self = this;
         var path = "search/tweets.json";

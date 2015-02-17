@@ -32,18 +32,20 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('facebook/:socialAccountId/posts'), this.isAuthApi.bind(this), this.getFacebookPosts.bind(this));
         app.get(this.url('facebook/:socialAccountId/pages'), this.isAuthApi.bind(this), this.getFacebookPages.bind(this));
         app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
-        app.post(this.url('facebook/:soc ialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
+        app.get(this.url('facebook/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getFacebookProfile.bind(this));
+        app.post(this.url('facebook/:socialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
 
         /*
          * twitter feed
          * twitter followers
          * twitter profile
          */
-/*
+
         app.get(this.url('twitter/:socialAccountId/feed'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
-        app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
-        app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
-*/
+        app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFollowers.bind(this));
+        app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterProfile.bind(this));
+        app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
+
     },
 
     /**
@@ -179,7 +181,9 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-
+    getFacebookProfile: function(req, resp) {
+        //todo: this
+    },
 
     createFacebookPost: function(req, resp) {
         var self = this;
@@ -188,7 +192,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var socialAccountId = req.params.socialAccountId;
 
-        var message = req.body;
+        var message = req.body.post;
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -205,7 +209,100 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getFacebookPosts: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPosts');
 
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookPosts(accountId, socialAccountId, function(err, posts){
+                    self.log.debug('<< getFacebookPosts');
+                    self.sendResultOrError(resp, err, posts, "Error fetching posts");
+                });
+            }
+        });
+
+    },
+
+    getTwitterFeed: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTwitterFeed');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getTwitterFeed(accountId, socialAccountId, function(err, posts){
+                    self.log.debug('<< getTwitterFeed');
+                    self.sendResultOrError(resp, err, posts, "Error fetching twitter feed");
+                });
+            }
+        });
+    },
+
+    getTwitterFollowers: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTwitterFollowers');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getTwitterFollowers(accountId, socialAccountId, function(err, followers){
+                    self.log.debug('<< getTwitterFollowers');
+                    self.sendResultOrError(resp, err, followers, "Error fetching twitter followers");
+                });
+            }
+        });
+    },
+
+    getTwitterProfile: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTwitterProfile');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getTwitterProfile(accountId, socialAccountId, function(err, profile){
+                    self.log.debug('<< getTwitterProfile');
+                    self.sendResultOrError(resp, err, profile, "Error fetching twitter profile");
+                });
+            }
+        });
+    },
+
+    createTwitterPost: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterPost');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var post = req.body.post;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.createTwitterPost(accountId, socialAccountId, post, function(err, savedPost){
+                    self.log.debug('<< createTwitterPost');
+                    self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                });
+            }
+        });
     }
 
 
