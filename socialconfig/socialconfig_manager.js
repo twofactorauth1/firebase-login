@@ -348,6 +348,24 @@ module.exports = {
 
     },
 
+    getFacebookProfile: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookProfile');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
     createFacebookPost: function(accountId, socialAccountId, message, url, fn) {
         var self = this;
         log.debug('>> createFacebookPost');

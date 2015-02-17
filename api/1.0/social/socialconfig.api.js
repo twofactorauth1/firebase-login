@@ -205,7 +205,23 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getFacebookProfile: function(req, resp) {
-        //todo: this
+        var self = this;
+        self.log.debug('>> getFacebookProfile');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var pageId = req.params.pageId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookProfile(accountId, socialAccountId, function(err, profile){
+                    self.log.debug('<< getFacebookProfile');
+                    self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
     },
 
     createFacebookPost: function(req, resp) {
