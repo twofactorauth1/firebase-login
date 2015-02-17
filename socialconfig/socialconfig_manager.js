@@ -67,7 +67,7 @@ module.exports = {
             query._id= configId;
         }
         socialconfigDao.findOne(query, $$.m.SocialConfig, function(err, value){
-            if(err) {
+            if(err|| value===null) {
                 log.error('Error finding socialconfig: ' + err);
                 return fn(err, null);
             } else {
@@ -115,6 +115,34 @@ module.exports = {
                 }
             });
         }
+    },
+
+    removeSocialAccount: function(accountId, id, socialId, fn) {
+        var self = this;
+        log.debug('>> removeSocialAccount');
+
+        self.getSocialConfig(accountId, id, function(err, config){
+            if(err || config === null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccounts = config.get('socialAccounts');
+
+            var updatedSocialAccounts = _.filter(socialAccounts, function(_account){
+                return _account.id !== socialId;
+            });
+            config.set('socialAccounts', updatedSocialAccounts);
+
+            socialconfigDao.saveOrUpdate(config, function(err, value){
+                if(err) {
+                    log.error('Error updating socialconfig: ' + err);
+                    fn(err, null);
+                } else {
+                    log.debug('<< updateSocialConfig');
+                    fn(null, value);
+                }
+            });
+        });
     },
 
     addSocialAccount: function(accountId, socialType, socialId, accessToken, refreshToken, expires, username, profileUrl, scope, fn) {

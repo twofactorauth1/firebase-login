@@ -25,6 +25,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
+        app.delete(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
+        app.delete(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
 
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
 
@@ -119,6 +121,27 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.updateSocialConfig(socialConfig, function(err, config){
                     self.log.debug('<< updateSocialConfig');
                     self.sendResultOrError(resp, err, config, "Error updating social config");
+                });
+            }
+        });
+    },
+
+    removeSocialAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeSocialAccount');
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var accountId = parseInt(self.accountId(req));
+                var id = null;
+                var socialId = req.params.socialId;
+                if(req.params.id) {
+                    socialConfig.set('_id', req.params.id);
+                }
+                socialConfigManager.removeSocialAccount(accountId, id, socialId, function(err, config){
+                    self.log.debug('<< removeSocialAccount');
+                    self.sendResultOrError(resp, err, config, "Error removing social account");
                 });
             }
         });
