@@ -92,7 +92,7 @@ define([
         $scope.customerOverviewConfig.loading = true;
         $scope.displayVisitors = true;
         $scope.date = {
-            startDate: moment().subtract('days', 29).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
+            startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
             endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
         };
 
@@ -107,20 +107,20 @@ define([
             dateSwitch = true;
         });
 
-        $scope.selectedDate = {startDate: moment().subtract('days', 29).toDate(), endDate: new Date()};
+        $scope.selectedDate = {startDate: moment().subtract(29, 'days').toDate(), endDate: new Date()};
 
         $scope.pickerOptions = {
-            startDate: moment().subtract('days', 29).toDate(),
+            startDate: moment().subtract(29, 'days').toDate(),
             endDate: new Date(),
             format: 'MMMM D, YYYY',
             opens: 'left',
             ranges: {
                'Today': [moment(), moment()],
-               'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-               'Last 7 Days': [moment().subtract('days', 6), moment()],
-               'Last 30 Days': [moment().subtract('days', 29), moment()],
+               'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+               'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+               'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                'This Month': [moment().startOf('month'), moment().endOf('month')],
-               'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+               'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         };
 
@@ -134,6 +134,8 @@ define([
         });
 
         $scope.runAnalyticsReports = function(account) {
+            //console.log('account is: ', account);
+            //console.log('date is: ', $scope.date);
             ChartAnalyticsService.runReports($scope.date, account, function(data) {
 
                 $scope.desktop = data.desktop;
