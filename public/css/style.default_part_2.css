@@ -8014,9 +8014,10 @@ i.indi-sm {
 }
 
 .stream li .post-content img {
-  max-width: 75px;
-  height: 75px;
+  max-width: 226px;
+  height: 130px;
   display: block;
+  margin: 0 auto;
 }
 
 .stream li .post-bottom-bar {

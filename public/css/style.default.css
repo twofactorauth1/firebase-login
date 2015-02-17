@@ -12,7 +12,6 @@
 @import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
 @import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
-@import '../js/libs/bootstrap-select/dist/css/bootstrap-select.min.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -22878,9 +22877,10 @@ i.indi-sm {
   padding: 15px;
 }
 .stream li .post-content img {
-  max-width: 75px;
-  height: 75px;
+  max-width: 226px;
+  height: 130px;
   display: block;
+  margin: 0 auto;
 }
 .stream li .post-bottom-bar {
   height: 40px;
