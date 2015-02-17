@@ -45,6 +45,10 @@ _.extend(api.prototype, baseApi.prototype, {
         // PAGE
         app.get(this.url('website/:websiteid/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
         app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
+        app.get(this.url('page/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.get(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.post(this.url('page/:id/revert'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
+        app.post(this.url('page/:id/revert/:version'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
         app.get(this.url('page/:handle/screenshot'), this.isAuthApi.bind(this), this.generateScreenshot.bind(this));
         app.get(this.url('page/:handle/savedscreenshot'), this.isAuthApi.bind(this), this.getScreenshot.bind(this));
@@ -96,6 +100,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.setup.bind(this), this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup.bind(this), this.listBlogPosts.bind(this));
+        app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
@@ -107,6 +112,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/blog/tag/:tag'), this.setup.bind(this), this.getPostsByTag.bind(this));
         app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi.bind(this), this.reorderPosts.bind(this));
         app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.reorderBlogPost.bind(this));
+
+        //authors, tags, categories, titles
+        app.get(this.url('blog/authors'), this.setup.bind(this), this.getBlogAuthors.bind(this));
+        app.get(this.url('blog/tags'), this.setup.bind(this), this.getBlogTags.bind(this));
+        app.get(this.url('blog/categories'), this.setup.bind(this), this.getBlogCategories.bind(this));
+        app.get(this.url('blog/titles'), this.setup.bind(this), this.getBlogTitles.bind(this));
     },
 
 
@@ -127,6 +138,7 @@ _.extend(api.prototype, baseApi.prototype, {
     saveOrUpdateWebsite: function(req, resp) {
 
         var self = this;
+        self.log.debug('>> saveOrUpdateWebsite');
         var settings = req.body.settings;
         var accountId = req.body.accountId;
         var websiteId = req.body._id;
@@ -137,6 +149,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(req);
             } else {
                 cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
+                    self.log.debug('<< saveOrUpdateWebsite');
                     self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
                     self = value = null;
                 });
@@ -342,7 +355,70 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * This method requires security.  It expects up to two url params: :id and :version
+     * @param req
+     * @param resp
+     */
+    getPageVersionsById: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPageVersionsById');
+        var pageId = req.params.id;
+        var version = 'all';
+        var accountId = parseInt(self.accountId(req));
+        if(req.params.version) {
+            version = parseInt(req.params.version);
+        }
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getPageVersions(pageId, version, function(err, pages){
+                    self.log.debug('<< getPageVersionsById');
+                    self.sendResultOrError(resp, err, pages, "Error Retrieving Page Versions");
+                    self = null;
+                    return;
+                });
+            }
+        });
 
+    },
+
+    /**
+     * This method requires security.  It expects up to two url params: :id, and :version
+     * @param req
+     * @param resp
+     */
+    revertPage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> revertPage');
+        var pageId = req.params.id;
+        var version = 'latest';
+        var accountId = parseInt(self.accountId(req));
+        if(req.params.version) {
+            version = parseInt(req.params.version);
+        }
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.revertPage(pageId, version, function(err, page){
+                    self.log.debug('<< revertPage');
+                    self.sendResultOrError(resp, err, page, "Error reverting page version");
+                    self = null;
+                    return;
+                });
+            }
+        });
+
+    },
+
+    /**
+     * This is only used to create pages.
+     * @param req
+     * @param resp
+     */
     saveOrUpdatePage: function (req, resp) {
         var self = this;
         self.log.debug('>> saveOrUpdatePage');
@@ -415,6 +491,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+
     updatePage: function (req, res) {
         var self = this;
         self.log.debug('>> updatePage');
@@ -459,7 +536,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 cmsManager.deletePage(pageId, function (err, value) {
                     self.log.debug('<< deletePage');
-                    self.sendResultOrError(res, err, value, "Error deleting Page");
+                    self.log.debug('err:', err);
+                    self.log.debug('value:', value);
+                    if(err) {
+                        self.wrapError(res, 500, err, "Error deleting page");
+                    } else {
+                        self.send200(res);
+                    }
+                    //self.sendResultOrError(res, err, value, "Error deleting Page");
+                    self.log.debug('sent');
                     self = null;
                 });
             }
@@ -1052,6 +1137,19 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getBlogPostByTitle: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogPostByTitle');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostTitle = req.params.title;
+
+        cmsManager.getBlogPostByUrl(accountId, blogPostTitle, function(err, value){
+            self.log.debug('<< getBlogPostByTitle');
+            self.sendResultOrError(resp, err, value, "Error getting Blog Post");
+            self = null;
+        });
+    },
+
     updateBlogPost: function(req, res) {
 
         var self = this;
@@ -1354,6 +1452,54 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsManager.getSecurePage(accountId, pageHandle, websiteId, function(err, page){
             self.log.debug('<< getSecurePage');
             self.sendResultOrError(resp, err, page, 'Error getting secure page');
+            self = null;
+        });
+    },
+
+    getBlogAuthors: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogAuthors');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostAuthors(accountId, function(err, value){
+            self.log.debug('<< getBlogAuthors');
+            self.sendResultOrError(resp, err, value, 'Error getting blog authors');
+            self = null;
+        });
+    },
+
+    getBlogTags: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogTags');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostTags(accountId, function(err, value){
+            self.log.debug('<< getBlogTags');
+            self.sendResultOrError(resp, err, value, 'Error getting blog tags');
+            self = null;
+        });
+    },
+
+    getBlogCategories: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogCategories');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostCategories(accountId, function(err, value){
+            self.log.debug('<< getBlogCategories');
+            self.sendResultOrError(resp, err, value, 'Error getting blog categories');
+            self = null;
+        });
+    },
+
+    getBlogTitles: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogTitles');
+        var accountId = parseInt(self.accountId(req));
+
+        cmsManager.getDistinctBlogPostTitles(accountId, function(err, value){
+            self.log.debug('<< getBlogTitles');
+            self.sendResultOrError(resp, err, value, 'Error getting blog titles');
             self = null;
         });
     }

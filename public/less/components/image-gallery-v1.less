@@ -1,12 +1,40 @@
+.editing .image-wrap {
+  &:hover {
+    border: 4px dashed rgba(0,0,0,0.4);
+    padding-right: 6px;
+    padding-left: 6px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+
+    .add-addtional {
+      display: block;
+      font-size: 28px;
+    }
+
+    .delete-single-image {
+      .btn-delete-single-image {
+        background: rgba(0,0,0,0.5);
+        display: block;
+        border: 0;
+        color: #ffffff;
+        padding: 10px 15px;
+        position: absolute;
+        top: 0;
+        right:0;
+      }
+    }
+
+  }
+
+  .delete-single-image {
+    .btn-delete-single-image {
+      display: none;
+    }
+  }
+
+}
+
 .image-gallery-v1 {
-
-  .image-gallery-title {
-      text-align: center;
-  }
-
-  .image-gallery-subtitle {
-    text-align: center;
-  }
 
   .single-image {
     padding: 0;
@@ -15,6 +43,12 @@
 
   .thumbnail {
     position: relative;
+
+    a {
+      img {
+        min-height: 149px;
+      }
+    }
   }
 
   a.thumbnail .caption {
@@ -68,12 +102,15 @@
     transition: all 0.2s ease-in-out;
   }
 
-  .thumbnail img {
-    height: 240px;
-    width: 310px
-  }
+  // .thumbnail img {
+  //   height: 240px;
+  //   width: 310px
+  // }
 
   .imgHeight {
-    height: 285px;
+    max-height: 150px;
+    overflow: hidden;
+    min-height: 150px;
+    margin: 10px 0 20px 0;
   }
 }

@@ -3583,7 +3583,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   float: none;
 }
 .nav-stacked > li + li {
-  margin-top: 2px;
   margin-left: 0;
 }
 .nav-justified {
@@ -6046,6 +6045,19 @@ h4,
 .open .dropdown-toggle.btn-green {
   background-color: #16a085;
   border-color: #16a085;
+  color: white;
+}
+.btn-light-green {
+  background-color: #2abb9b;
+  border-bottom: 4px solid #1f8972;
+  color: white;
+}
+.btn-light-green:hover,
+.btn-light-green:active,
+.btn-light-green.active,
+.open .dropdown-toggle.btn-light-green {
+  background-color: #1f8972;
+  border-color: #1f8972;
   color: white;
 }
 .btn-white {
@@ -13096,10 +13108,6 @@ h4,
 h5 {
   font-family: 'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
 }
-strong {
-  font-family: 'LatoBold';
-  font-weight: normal;
-}
 .mb5 {
   margin-bottom: 5px;
 }
@@ -16049,9 +16057,6 @@ div.error label.error:before {
   .mainpanel {
     margin-left: 0;
     width: 100%;
-  }
-  .leftpanel-collapsed .leftpanel {
-    display: none;
   }
   .leftpanel-collapsed .mainpanel {
     margin-left: 0;

@@ -1,3 +1,6 @@
-<div ng-repeat="component in blog.pages.components | createUrlFilter track by $index">
+<div ng-show="isEditing">
+	  <div id="editor-toolbar"></div>
+</div>
+<div style="{{isEditing ? 'margin-top:50px;' : ''}}" ng-repeat="component in blog.pages.components | createUrlFilter track by $index">
     <div ng-include src="'/components/component-wrap.html'"></div>
 </div>

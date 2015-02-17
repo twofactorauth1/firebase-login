@@ -1,18 +1,12 @@
-#leftnav {
+#editor-toolbar {
     position: fixed;
-        -webkit-transition: none;
-        -moz-transition: none;
-        -o-transition: none;
-        -ms-transition: none;
-        transition: none;
-    .nav-bracket > li.active > a {
-        background-color: #eee;
-        color: rgb(51, 51, 51);
-        -moz-box-shadow: none;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }
+    top: 0;
+    z-index: 99999;
+    display: block;
+    width: 100%;
+    height: 60px;
 }
+
 #headerbar {
     left: 0px;
     position: fixed;
@@ -57,7 +51,7 @@ body.leftpanel-collapsed.rightmenu-open {
     #headerbar {
         right: 240px;
     }
-    .contentpanel, .header-menu-row {
+    .contentpanel{
         margin-right: 240px;
         // -webkit-transition: all 0.3s ease;
         // -moz-transition: all 0.3s ease;

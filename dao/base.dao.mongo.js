@@ -167,7 +167,9 @@ var mongodao = {
                 fn(err, value);
             }
         };
-        this.mongo(collection).find(query).sort({order_by: order_dir}).toArray(fxn);
+        var orderByObj = {};
+        orderByObj[order_by] = order_dir;
+        this.mongo(collection).find(query).sort(orderByObj).toArray(fxn);
 
     },
 
@@ -398,10 +400,10 @@ var mongodao = {
         /*
          * DEBUG CODE FOR USER CORRUPTION
          */
-        if(collection === 'users') {
-            var log = $$.g.getLogger("USER.DEBUG");
-            log.warn('updating user to the following:' + JSON.stringify(model));
-        }
+        //if(collection === 'users') {
+        //    var log = $$.g.getLogger("USER.DEBUG");
+        //    log.warn('updating user to the following:' + JSON.stringify(model));
+        //}
         this.mongo(collection).save(model.toJSON("db"), function (err, result) {
             if (!err) {
                 if (fn != null) {
@@ -611,6 +613,15 @@ var mongodao = {
             }
         });
         */
+    },
+
+    _distinctMongo: function(key, query, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+
+        return self.mongo(collection).distinct(key, query, fn);
+
     },
 
     //endregion PROTECTED

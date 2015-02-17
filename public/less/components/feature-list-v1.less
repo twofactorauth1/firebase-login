@@ -1,18 +1,44 @@
 /********** Feature List v1 **********/
 
+.editing .features-wrap {
+    .feature {
+        border: 4px solid rgba(0,0,0,0);
+        position: relative;
+        &:hover {
+            .add-addtional {
+                display: block;
+                font-size: 28px;
+            }
+            border: 4px dashed rgba(0,0,0,0.4);
+            .delete-feature {
+                .btn-delete-feature {
+                    background: rgba(0,0,0,0.5);
+                    display: block;
+                    border: 0;
+                    color: #ffffff;
+                    padding: 10px 15px;
+                    position: absolute;
+                    top: 0;
+                    right:0;
+                }
+            }
+        }
+    }
+    .delete-feature {
+        .btn-delete-feature {
+            display: none;
+        }
+    }
+}
+
 .feature-list-v1 {
     .features-wrap {
             margin: 2%;
         }
     .feature-list-title {
-        text-align: center;
-        text-transform: uppercase;
-        color: #444444;
-    }
-    .feature-list-subtitle {
-        color: #bbbbbb;
-        text-align: center;
-    }
+            text-align: center;
+            position: relative;
+    }    
     .feature-single {
         background: #4bb0cb;
         min-height: 320px;
@@ -20,7 +46,6 @@
         padding: 20px;
         border-radius: 5px;
         border-bottom: 4px solid #2f93b6;
-        color: white;
         .feature-icon {
             color: #3b9db7;
             font-size: 14em;
@@ -62,4 +87,9 @@
         background: url('../assets/images/indimain/wave-bg.jpg');
         background-size: 15% auto;
     }
+}
+ @media screen and (max-width: 1024px) {
+     div[data-type="feature-list"]  .inner-page {
+                    padding: 0px;
+       }
 }

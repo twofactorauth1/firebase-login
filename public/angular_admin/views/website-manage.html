@@ -1,20 +1,21 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
 <div ng-if="showOnboarding">
-    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'></onboarding-popover>
+  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+  on-finish-callback='finishOnboarding'></onboarding-popover>
 </div>
-<div class="website-manage">
+<div class="website-manage" >
     <div class="pageheader row">
-        <div class="col-xs-5">
-            <h2><i class="fa fa-desktop"></i> Website</h2>
+        <div class="col-xs-7">
+            <h2><i class="fa fa-desktop website-manage-icon"></i> Website</h2>
         </div>
 
-        <div class="col-xs-7">
-            <a class="btn btn-success pull-right media-modal" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+        <div class="col-xs-5">
+            <a class="btn btn-success pull-right media-modal btn-header" style="margin-right: 2px;" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
-            <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
-                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+            <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 6px;">
+                <button type="button" class="btn btn-success dropdown-toggle btn-header" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs">Add</span>
                     <span class="caret"></span>
@@ -135,11 +136,11 @@
 
                 <div class="row">
 
-                    <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true">
+                    <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true track by $index">
                         <div class="thumbnail layered-paper">
                             <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
                             <h5 style="margin-top:0;color: #999;font-weight: normal;">{{page.modified.date ? (page.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
-                            <div class="screenshot-wrap scrollhover">
+                            <div class="screenshot-wrap scrollhover" block-ui="{{ editedPage.handle === page.handle ? 'pagesBlockUI' : '' }} ">
                                 <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
                                 <img ng-if="page.screenshot" ng-src="{{page.screenshot}}" err-src="<div class='page-icon'><h1 class='center'><i class='fa fa-photo'></i></h1></div>" alt="" class="screenshot">
                                 <div class="page-icon" ng-if="!page.screenshot"><h1 class="center"><i class="fa fa-photo"></i></h1></div>
@@ -297,18 +298,18 @@
                 </div>
                 <div class="modal-body">
                     <div id="new_page">
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'has-error': postAuthorError}">
                             <label for="page-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
-                            <input id="page-author" class="form-control input-lg" type="text" ng-model="post.post_author">
+                            <input id="page-author" class="form-control input-lg" type="text" placeholder="Post Author" ng-model="post.post_author" ng-change="validateCreatePost(post)">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'has-error': postTitleError}">
                             <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
-                            <input id="page-title" class="form-control input-lg" type="text" ng-model="post.post_title">
+                            <input id="page-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title"  ng-change="validateCreatePost(post)">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{ 'has-error': postUrlError}">
                             <slug from="post.post_title" to="post.post_url"></slug>
                             <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
-                            <input id="post-url" class="form-control input-lg" type="text" ng-model="post.post_url">
+                            <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post)">
                         </div>
                         <div class="clearfix mb15"></div>
                         <div class="form-group">
@@ -322,7 +323,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)">Create</button>
                 </div>
             </div>
         </div>

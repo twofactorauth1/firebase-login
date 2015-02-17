@@ -57,12 +57,25 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
+            videoType: 'html5',
+            /**
+            *
+            *
+            */
             video : "",
+            videoMp4: '',
+            videoWebm: '',
 
             /**
              *
              *
              */
+             videoAutoPlay: false,
+             videoControls: true,
+             videoBranding: true,
+             videoWidth: 780,
+             videoHeight: 320,
+             videoImage: '',
             txtcolor : "#ffffff",
 
             /**

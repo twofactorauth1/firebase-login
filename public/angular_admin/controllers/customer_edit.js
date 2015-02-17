@@ -9,7 +9,7 @@ define(['app',
   'toasterService',
   'mediaDirective',
   'userService',
-  'geocodeService',
+  'geocodeService','constants',
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -25,7 +25,8 @@ define(['app',
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
       $scope.modifyAddress = {};
-
+      $scope.saveLoading = false ;
+      $scope.countries = $$.constants.contact.country_codes;
       $scope.customer = {
         _id: null,
         accountId: $$.server.accountId,
@@ -95,6 +96,7 @@ define(['app',
       };
 
       $scope.customerSaveFn = function() {
+        $scope.saveLoading = true;
         if ($scope.customer.details[0].phones) {
           $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
             return num.number !== "";
@@ -107,6 +109,7 @@ define(['app',
             {
               CustomerService.saveCustomer($scope.customer, function(customer) {
               $scope.customer = customer;
+              $scope.saveLoading = false;
               if ($scope.currentState == 'customerAdd') {
                 ToasterService.setPending('success', 'Contact Created.');
                 $state.go('customerDetail', {
@@ -120,8 +123,11 @@ define(['app',
               }
             });
             }
-            else
+            else {
+              $scope.saveLoading = false;
               ToasterService.show("warning", "Contact Name OR Email is required");
+            }
+
         });
 
       };
@@ -232,7 +238,7 @@ define(['app',
             $scope.customer.type = $scope.userPreferences.default_customer_type;
           }
           if ($scope.customer.details[0].addresses.length === 0) {
-            $scope.customer.details[0].addresses.push({});
+            //$scope.customer.details[0].addresses.push({});
             $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
             $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
             $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
@@ -240,7 +246,7 @@ define(['app',
           }
         } else {
           $scope.customer.type = $scope.userPreferences.default_customer_type;
-          $scope.customer.details[0].addresses.push({});
+          //$scope.customer.details[0].addresses.push({});
           $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
           $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
           $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
@@ -311,8 +317,8 @@ define(['app',
       }
 
       $scope.$watch('fullName', function(newValue, oldValue) {
-        if (newValue) {
-          var nameSplit = newValue.split(' ');
+        if (newValue !== undefined) {
+          var nameSplit = newValue.match(/\S+/g);
           if (nameSplit.length >= 3) {
             $scope.customer.first = nameSplit[0];
             $scope.customer.middle = nameSplit[1];
@@ -337,6 +343,9 @@ define(['app',
         $scope.customer.photo = asset.url;
       };
 
+      $scope.enableSaveBtnFn = function () {
+        $('.btn-save-contact').removeClass('disabled');
+      };
     }
   ]);
 });

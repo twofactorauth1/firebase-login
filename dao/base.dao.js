@@ -346,6 +346,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    distinct: function(key, query, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._distinctMongo(key, query, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     _isAuthenticationError: function (obj, fn) {
         var error;

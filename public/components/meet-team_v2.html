@@ -16,43 +16,60 @@
 
     <div class="mb30"></div>
 
-    <div class="row text-center">
+    <div class="row text-center team-member-wrap">
         <div class="col-sm-6 text-center teamMember" ng-repeat="teamMember in component.teamMembers">
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <div class="profile-img" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: 250px 250px;"></div>
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="name">
-                    <div class="editable" data-class="teamMember.item.name">
-                        <span ng-bind-html="teamMember.name"/>
+            <div class="team-member {{isEditing ? 'edit-mode' : ''}}">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="profile-img meet-team-image" data-index="{{$index}}" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: 250px 250px;"></div>
                     </div>
                 </div>
+                <div class="row">
 
-                <div class="position">
-                    <div class="editable" data-class="teamMember.item.position">
-                        <span ng-bind-html="teamMember.position"/>
+                    <div class="name">
+                        <div class="editable" data-class="teamMember.item.name">
+                            <span ng-bind-html="teamMember.name"/>
+                        </div>
+                    </div>
+
+                    <div class="position">
+                        <div class="editable" data-class="teamMember.item.position">
+                            <span ng-bind-html="teamMember.position"/>
+                        </div>
+                    </div>
+
+                    <div class="bio">
+                        <div class="editable" data-class="teamMember.item.bio">
+                            <span ng-bind-html="teamMember.bio"/>
+                        </div>
+                    </div>
+                    <div class="social-link {{isEditing ? 'edit-mode' : ''}}">
+                        <ul class="social">
+                        <li ng-repeat="network in teamMember.networks">
+                            <a ng-if="!isEditing" href="{{network.url}}" target="_blank">
+                                <span class="fa fa-{{network.icon}}"></span>
+                            </a>
+                            <a ng-if="isEditing" href="#" ng-click="setSelectedSocialLink(network, component._id, true, true, $parent.$parent.$index)" class="clickable-link" data-toggle="modal" data-target="#meetteamSocialModal"><span class="fa fa-{{network.icon}}"></span></a>
+                        </li>
+                        
+                    </ul>
+                    <div ng-if="isEditing" class="add-addtional-team center">
+                        <a ng-if="isEditing" class="clickable-link" data-toggle="modal" ng-click="setSelectedSocialLink(network, component._id, false, true, $parent.$parent.$index)" data-target="#meetteamSocialModal"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
-
-                <div class="bio">
-                    <div class="editable" data-class="teamMember.item.bio">
-                        <span ng-bind-html="teamMember.bio"/>
-                    </div>
                 </div>
-                <ul class="social">
-                            <li ng-repeat="(val, key) in teamMember.social">
-                                <a href="{{key}}" target="_blank">
-                                    <span class="fa fa-{{val}}"></span>
-                                </a>
-                            </li>
-                </ul>
-                <div ng-if="isEditing" class="delete-team-member">
-                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+                <div ng-if="isEditing" class="delete-team-member center">
+                    <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
+                        <i class='fa fa-trash'></i>
+                    </button>
+                </div>
+                <div ng-if="isEditing" class="add-addtional center">
+                    <a href="" ng-click="addTeamMember(component._id,$index)">
+                        <i class="fa fa-plus"></i>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div ng-if="isEditing" ng-include="'/components/meet-team-social-links.html'"></div>

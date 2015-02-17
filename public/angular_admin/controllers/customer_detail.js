@@ -31,9 +31,9 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                        console.log('keen extraction ', data);
                        var keepGoing =  true;
                        data.result.forEach(function(value, index) {
-                        if (keepGoing && value.ip_geo_info && value.ip_geo_info.country) {
-                            $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.country, value.ip_geo_info.continent, value.ip_geo_info.postal_code], function(str) {
-                            $scope.city = value.ip_geo_info_gen.city;
+                        if (keepGoing && value.ip_geo_info && value.ip_geo_info.city) {
+                            $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.postal_code], function(str) {
+                            $scope.city = value.ip_geo_info.city;
                             return (str !== "" || str !== undefined || str !== null);
                             }).join(",");
                             keepGoing = false;
@@ -51,32 +51,44 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                         console.log('$scope.ip_geo_address ', $scope.ip_geo_address);
 
                         $scope.localtime = moment().format('h:mm a');
+                        if ($scope.ip_geo_address) {
+                            CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                                console.log('latlong data ', data);
+                                if (data.error === undefined) {
+                                    $scope.london.lat = parseFloat(data.lat);
+                                    $scope.london.lng = parseFloat(data.lon);
+                                    $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                                    $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                                } 
+                                else 
+                                    $('.map-wrap').addClass("blur-map");
 
-                        CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
-                            console.log('latlong data ', data);
-                            if (data.error === undefined) {
-                                $scope.london.lat = parseFloat(data.lat);
-                                $scope.london.lng = parseFloat(data.lon);
-                                $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                                $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                            }
+                                mapBlockUI.stop();
+                            });
+                        }
+                        else 
                             mapBlockUI.stop();
-                        });
                     });
                 } else {
                     if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
                         $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
                         $scope.city = $scope.customer.details[0].addresses[0].city;
                     }
-                    CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
-                        if (data.error === undefined) {
-                            $scope.london.lat = parseFloat(data.lat);
-                            $scope.london.lng = parseFloat(data.lon);
-                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                        }
+                    if ($scope.ip_geo_address) {
+                        CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                            if (data.error === undefined) {
+                                $scope.london.lat = parseFloat(data.lat);
+                                $scope.london.lng = parseFloat(data.lon);
+                                $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                                $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                            }
+                            else 
+                                $('.map-wrap').addClass("blur-map");
+                            mapBlockUI.stop();
+                        });
+                    }
+                    else 
                         mapBlockUI.stop();
-                    });
                 }
 
                 $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();

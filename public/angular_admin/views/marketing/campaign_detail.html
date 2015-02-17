@@ -1,0 +1,236 @@
+<toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<div class="marketing">
+
+    <div class="pageheader">
+        <div class="col-xs-8">
+            <button ng-click="$back()" class="btn btn-success pull-left" type="button">
+                <span class="fa fa-chevron-left"></span>
+                <span class="hidden-xs">Back</span>
+            </button>
+            <h2><i class="fa fa-bullhorn"></i>  Campaign Builder</h2>
+        </div>
+        <div class="col-xs-4">
+            <!-- <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-plus"></i>
+                    <span class="hidden-xs">Add Steps</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="" data-toggle="modal" data-target="#campaign-add-email"> Send Email</a>
+                    </li>
+                    <li><a href=""> Send Personal Social Message</a>
+                    </li>
+                    <li><a href=""> Change Contact Type</a>
+                    </li>
+                    <li><a href=""> Unsubscibe Contact</a>
+                    </li>
+                    <li><a href=""> Post to Social</a>
+                    </li>
+
+                </ul>
+            </div>  -->
+            <button ng-click="$back()" class="btn btn-green pull-right" type="button">
+                <span class="hidden-xs">Start Campaign</span>
+                <span class="fa fa-play"></span>
+            </button>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="col-xs-12 nopadding header-menu-row">
+
+        <div class="contentpanel" ng-style="styleCampaignDetail()" indigeweb-resize>
+            <!-- <div class="col-xs-12" ng-repeat="step in campaign.steps track by $index">
+                <h3>{{step.type}}</h3>
+            </div> -->
+            <div class="panel panel-default widgets">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <div class="window" id="newPageWidget" data-type="page">
+                                <span class='fa fa-times-circle deleteWidget'></span>
+                                <span class="fa fa-file-text marketing-icon"></span><span class="label label-primary marketing-label"><strong>Page</strong></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="window" id="newEmailWidget" data-toggle="modal" data-target="#campaign-add-email">
+                                <span class="fa fa-envelope marketing-icon"></span><span class="label label-primary marketing-label"><strong>Email</strong></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="window" id="newWaitWidget">
+                                <span class="fa fa-clock-o marketing-icon"></span><span class="label label-primary marketing-label"><strong>Wait</strong></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="window" id="newConditionalWidget">
+                                <span class="fa fa-code marketing-icon"></span><span class="label label-primary marketing-label"><strong>Conditional</strong></span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="window" id="newABWidget">
+                                <span class="fa fa-code-fork marketing-icon"></span><span class="label label-primary marketing-label"><strong>A/B Split</strong></span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="clearfix mb25"></div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="demo flowchart-demo" id="d" style="margin:0;height: 500px;">
+
+                <div class="window start" id="startWidget">
+                    <span class="fa fa-arrow-right marketing-icon start"></span><span class="label label-primary marketing-label"><strong>Start</strong></span>
+                </div>
+                <div ng-repeat="step in campaign.steps">
+                    <div class="window start" id="{{step._id}}">
+                        <span class='fa fa-times-circle deleteWidget' ng-click="deleteWidget(step._id)"></span>
+                        <span class="fa marketing-icon" ng-class="{'fa-file-text-o':step.type == 'page', 'fa-envelope':step.type == 'email'}"></span>
+                        <span class="label label-primary marketing-label"><strong>{{step.type}}</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="rightpanel">
+            <div class="rightpanel rightpanel-marketing">
+                <ul class="nav nav-tabs nav-justified">
+                    <li class="active"><a href="#" data-toggle="tab">Settings</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane pane-settings active" id="rp-settings">
+                        <h4>No Settings Avaliable</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="campaign-add-email">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add New Email</h4>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="nav nav-pills nav-justified thumbnail" style="margin:0!important;">
+                            <li ng-class="{active: wizardStep == 1}">
+                                <a href="" ng-click="goToStep(1)">
+                                    <h4 class="list-group-item-heading">Step 1</h4>
+                                    <p class="list-group-item-text">When to send this email?</p>
+                                </a>
+                            </li>
+                            <li ng-class="{active: wizardStep == 2}">
+                                <a href="" ng-click="goToStep(2)">
+                                    <h4 class="list-group-item-heading">Step 2</h4>
+                                    <p class="list-group-item-text">What will it look like?</p>
+                                </a>
+                            </li>
+                            <li ng-class="{active: wizardStep == 3}">
+                                <a href="" ng-click="goToStep(3)">
+                                    <h4 class="list-group-item-heading">Step 3</h4>
+                                    <p class="list-group-item-text">Who is it from?</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div ng-if="wizardStep == 1">
+                        <form class="col-sm-8">
+                            <div class="row col-xs-6">
+                                <div class="form-group col-xs-6 mb0">
+                                    <label class="control-label">Day:</label>
+                                    <table ng-model="myday" ng-change="changed()" hour-step="hstep" minute-step="mstep" class="ng-isolate-scope ng-pristine ng-valid ng-valid-time">
+                                        <tbody>
+                                            <tr class="text-center">
+                                                <td><a ng-click="incrementDays()" class="btn btn-link"><span class="glyphicon glyphicon-chevron-up"></span></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:50px;" class="form-group" ng-class="{'has-error': invalidDays}">
+                                                    <input type="text" ng-model="myDays" ng-change="updateDays()" class="form-control text-center ng-pristine ng-valid" ng-mousewheel="incrementDays()" ng-readonly="readonlyInput" maxlength="2">
+                                                </td>
+
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td><a ng-click="decrementDays()" class="btn btn-link"><span class="glyphicon glyphicon-chevron-down"></span></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="form-group col-xs-6">
+                                    <label class="control-label">Time:</label>
+                                    <timepicker class="timepicker" ng-model="email.scheduledTime" hour-step="hstep" minute-step="mstep" show-meridian="true"></timepicker>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div ng-if="wizardStep == 2">
+                        <div class="row email-templates">
+                            <div class="col-sm-4">
+                                <div class="thumbnail mb0">
+                                    <div class="caption">
+                                        <div class="mb40"></div>
+                                        <a href="" class="label label-success" title="Use">Use Template</a>
+                                        <div class="mb5"></div>
+                                        <a href="" class="label label-default" title="Preview">Preview</a>
+                                    </div>
+                                    <img src="http://lorempixel.com/400/300/sports/1/" alt="...">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="thumbnail mb0">
+                                    <div class="caption">
+                                        <div class="mb40"></div>
+                                        <a href="" class="label label-success" title="Use">Use Template</a>
+                                        <div class="mb5"></div>
+                                        <a href="" class="label label-default" title="Preview">Preview</a>
+                                    </div>
+                                    <img src="http://lorempixel.com/400/300/sports/1/" alt="...">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="thumbnail mb0">
+                                    <div class="caption">
+                                        <div class="mb40"></div>
+                                        <a href="" class="label label-success" title="Use">Use Template</a>
+                                        <div class="mb5"></div>
+                                        <a href="" class="label label-default" title="Preview">Preview</a>
+                                    </div>
+                                    <img src="http://lorempixel.com/400/300/sports/1/" alt="...">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div ng-if="wizardStep == 3">
+                        <div class="form-group">
+                            <label for="emailFrom">From Email:</label>
+                            <input type="text" class="form-control input-lg" id="emailFrom" placeholder="yourEmail@gmail.com" ng-model='newCampaign.name' />
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <button type="button" ng-if="wizardStep != 1" class="btn btn-primary pull-left" ng-click="prevStep()"><i class="fa fa-chevron-left"></i> Back</button>
+                    <button type="button" ng-if="wizardStep != 3" class="btn btn-primary pull-right" ng-click="nextStep()"> Next <i class="fa fa-chevron-right"></i>
+                    </button>
+                    <button type="button" ng-if="wizardStep == 3" class="btn btn-green" data-dismiss="modal" ng-click="addCampaignFn()"><i class="fa fa-check" /> Complete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

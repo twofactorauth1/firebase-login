@@ -1,6 +1,6 @@
-define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2', 'productService'], function(app) {
-    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService',
-        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService) {
+define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'toasterService', 'accountService', 'navigationService', 'ngOnboarding', 'constants', 'confirmClick2', 'productService', 'socialConfigService'], function(app) {
+    app.register.controller('AccountCtrl', ['$scope', '$q', '$location', 'UserService', 'PaymentService', 'ngProgress', 'ToasterService', 'AccountService', 'NavigationService', 'ProductService', '$rootScope', 'SocialConfigService',
+        function($scope, $q, $location, UserService, PaymentService, ngProgress, ToasterService, AccountService, NavigationService, ProductService, $rootScope, SocialConfigService) {
             ngProgress.start();
             NavigationService.updateNavigation();
             $scope.showToaster = false;
@@ -16,15 +16,23 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.firstTime = false;
 
             $scope.redirectUrl = encodeURIComponent('/admin#/account');
-            
+
+            $scope.currentHost = window.location.host;
+
             $scope.plusOneMonth = function(date) {
                 var date = moment(date);
                 return date.add(1, 'months').format('MMMM D, YYYY');
             };
 
+
             for (var key in $scope.credentialTypes) {
                 $scope.userSocial[$scope.credentialTypes[key]] = {status: false, image: null, username: null};
             }
+
+            SocialConfigService.getAllSocialConfig(function(data) {
+              $scope.socialAccounts = data.socialAccounts;
+            });
+
             $scope.onboardingSteps = [];
             $scope.showOnboarding = false;
             $scope.stepIndex = 0;
@@ -49,7 +57,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.finishOnboarding = function() {
-                console.log('were finished');
+                $scope.userPreferences.tasks.connect_social = true;
+                UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 
             if ($location.$$search.onboarding) {
@@ -200,11 +209,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 });
             };
 
-            $scope.deleteSocialFn = function(type) {
-                UserService.deleteUserSocial(type, function() {
-                    $scope.userSocial[type].status = false;
-                    ToasterService.show('warning', 'Social connection deleted.');
+            $scope.deleteSocialFn = function(id) {
+              SocialConfigService.deleteSocialConfigEntry(id, function() {
+                SocialConfigService.getAllSocialConfig(function(data) {
+                  $scope.socialAccounts = data.socialAccounts;
                 });
+              });
             };
 
             $scope.hasCard = false;
@@ -246,6 +256,19 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             UserService.getAccount(function(account) {
                 $scope.account = account;
                 $scope.currentAccount.membership = account.billing.subscriptionId;
+                /*
+                 * If the account is locked, do not allow state changes away from account.
+                 * Commenting this out until we know for sure that we should allow logins from locked accounts.
+
+                if(account.locked === true) {
+                    $rootScope.$on('$stateChangeStart',
+                        function(event, toState, toParams, fromState, fromParams){
+                            event.preventDefault();
+                            // transitionTo() promise will be rejected with
+                            // a 'transition prevented' error
+                        });
+                }
+                */
             });
 
             $scope.setActiveTab = function(tab) {
@@ -255,7 +278,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if (!$location.$$search.onboarding) {
+                if ($location.$$search.authtoken) {
+                     $scope.activeTab = AccountService.getSocialTab();
+                }
+                else if (!$location.$$search.onboarding) {
                     var activeTab = $scope.userPreferences.account_default_tab;
                     if (activeTab)
                         $scope.activeTab = activeTab;
@@ -350,21 +376,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 NavigationService.updateNavigation2(user);
             };
 
-            UserService.getUser(function(user) {
-                $scope.user = user;
-                angular.forEach($scope.user.profilePhotos, function(value, index) {
-                    if (value.type && $scope.userSocial) {
-                        $scope.userSocial[value.type].image = value.url;
-                    }
-                });
+            $scope.$watch('createType', function(newValue, oldValue) {
+              if (newValue) {
+                window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + newValue.toLowerCase() + '?redirectTo=' + $scope.redirectUrl;
+              }
             });
 
-            UserService.getUserSocial(function(social) {
-                social.forEach(function(value, index) {
-                    $scope.userSocial[value.type].username = value.username;
-                    $scope.userSocial[value.type].status = true;
-                });
-            });
         }
     ]);
 });

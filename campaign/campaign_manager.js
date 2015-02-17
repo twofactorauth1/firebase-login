@@ -9,6 +9,7 @@ require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
 
 var accountDao = require('../dao/account.dao');
+var campaignDao = require('./dao/campaign.dao');
 var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
@@ -21,10 +22,13 @@ var mandrillConfig = require('../configs/mandrill.config');
 
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
+var mandrillHelper = require('../utils/mandrillhelper');
 
-//todo: change it to dynamic resolution depending on env
 var hostSuffix = appConfig.subdomain_suffix;
 var async = require('async');
+
+var gtmDao = require('../dao/social/gtm.dao');
+var gtmConfig = require('../configs/gtm.config');
 
 /**
  * Constants for pipeshift
@@ -68,6 +72,563 @@ module.exports = {
 
     findCampaignMessages: function (query, fn) {
         $$.dao.CampaignMessageDao.findMany(query, fn);
+    },
+
+    createCampaign: function(campaignObj, fn) {
+        var self = this;
+        self.log.debug('>> createCampaign');
+        campaignDao.saveOrUpdate(campaignObj, function(err, value){
+            if(err) {
+                self.log.error('Error creating campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< createCampaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    updateCampaign: function(campaignObj, fn) {
+        var self = this;
+        self.log.debug('>> updateCampaign');
+        campaignDao.saveOrUpdate(campaignObj, function(err, value){
+            if(err) {
+                self.log.error('Error updating campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< updateCampaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    addContactToCampaign: function(contactId, campaignId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> addContactToCampaign');
+
+        /*
+         * Get or create campaign flow.
+         * Add contact to running campaign
+         * Schedule first step.
+         */
+        var query = {
+            campaignId: campaignId,
+            accountId: accountId,
+            contactId: contactId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, value){
+            self.log.debug('value ', value);
+             self.log.debug('err ', err);
+            if(err) {
+                self.log.error('Error finding campaign flow: ' + err);
+                return fn(err, null);
+            } else if(value !== null && value.length < 0) {
+                self.log.debug('Contact already part of this campaign.');
+                return fn(null, value);
+            } else {
+                campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+                    if(err) {
+                        self.log.error('Error finding campaign: ' + err);
+                        return fn(err, null);
+                    }
+                    //need to create flow.
+                    var flow = new $$.m.CampaignFlow({
+                        campaignId: campaignId,
+                        accountId: accountId,
+                        contactId: contactId,
+                        startDate: new Date(),
+                        lastStep: 0,
+                        steps: campaign.get('steps')
+                    });
+                    campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                        if(err) {
+                            self.log.error('Error saving campaign flow: ' + err);
+                            return fn(err, null);
+                        }
+                        self.log.debug('Added contact to campaign flow.');
+                        self.handleStep(flow, 0, function(err, value){
+                            if(err) {
+                                self.log.error('Error handling initial step of campaign: ' + err);
+                                return fn(err, null);
+                            } else {
+                                self.log.debug('<< addContactToCampaign');
+                                return fn(err, savedFlow);
+                            }
+                        });
+                    });
+                });
+
+            }
+        });
+
+    },
+
+    /**
+     * This method will execute the step in stepNumber, setting the lastStep var to stepNumber.
+     * @param campaignFlow
+     * @param stepNumber 0-based index of steps.
+     * @param fn
+     */
+    handleStep: function(campaignFlow, stepNumber, fn) {
+
+        var self = this;
+        self.log.debug('>> handleStep (' + stepNumber + ')');
+
+        var step = campaignFlow.get('steps')[stepNumber];
+        if(step === null) {
+            var errorString = 'Error getting steps';
+            self.log.error(errorString);
+            return fn(errorString, null);
+        }
+
+        if(step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT' ||
+            (step.trigger === 'SIGNUP' && step.triggered) || (step.trigger === 'EMAIL_OPENED' && step.triggered))) {
+            /*
+             * Schedule the email.
+             */
+            contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact){
+                if(err) {
+                    self.log.error('Error getting contact for step: ' + err);
+                    return fn(err, null);
+                } else if(contact === null) {
+                    self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
+                    return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                } else {
+                    var fromAddress = step.settings.from;
+                    var fromName = step.settings.fromName;
+                    var toAddress = contact.getEmails()[0].email;
+                    self.log.debug('contact.getEmails: ', contact.getEmails());
+                    self.log.debug('contact:', contact);
+                    var toName = contact.get('first') + ' ' + contact.get('last');
+                    var subject = step.settings.subject;
+
+                    var accountId = campaignFlow.get('accountId');
+                    var vars = step.settings.vars || [];
+
+                    var pageId = step.settings.pageId;
+                    cmsDao.getPageById(pageId, function(err, page){
+                        if(err) {
+                            self.log.error('Error getting page to render: ' + err);
+                            return fn(err, null);
+                        }
+                        var component = page.get('components')[0];
+                        self.log.debug('Using this for data', component);
+                        app.render('emails/base_email_campaign', component, function(err, html) {
+                            if (err) {
+                                self.log.error('error rendering html: ' + err);
+                                self.log.warn('email will not be sent.');
+                            } else {
+                                var campaignId = campaignFlow.get('campaignId');
+                                var contactId = campaignFlow.get('contactId');
+                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId,
+                                    vars, step.settings, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error sending email: ', err);
+                                            return fn(err, null);
+                                        }
+                                        campaignFlow.set('lastStep', stepNumber);
+                                        step.executed = new Date();
+                                        campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                                            if(err) {
+                                                self.log.error('Error saving campaign flow: ' + err);
+                                                return fn(err, null);
+                                            } else {
+                                                //try to handle the next step:
+                                                var steps = campaignFlow.get('steps');
+                                                if(steps.length -1 > stepNumber) {
+                                                    self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                                        if(err) {
+                                                            self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                                            self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                                            return fn(null, updatedFlow);
+                                                        } else {
+                                                            self.log.debug('<< handleStep');
+                                                            return fn(null, updatedFlow);
+                                                        }
+                                                    });
+                                                } else {
+                                                    self.log.debug('<< handleStep (no more steps)');
+                                                    return fn(null, updatedFlow);
+                                                }
+                                            }
+                                        });
+                                    });
+                            }
+                        });
+                    });
+
+
+
+
+                }
+            });
+
+        } else if(step.type === 'landing'){
+            //there is nothing to do here.
+            campaignFlow.set('lastStep', stepNumber);
+            step.executed = new Date();
+            campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                if(err) {
+                    self.log.error('Error saving campaign flow: ' + err);
+                    return fn(err, null);
+                } else {
+                    //try to handle the next step:
+                    var steps = campaignFlow.get('steps');
+                    if(steps.length -1 > stepNumber) {
+                        self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                            if(err) {
+                                self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                return fn(null, updatedFlow);
+                            } else {
+                                self.log.debug('<< handleStep');
+                                return fn(null, updatedFlow);
+                            }
+                        });
+                    } else {
+                        self.log.debug('<< handleStep (no more steps)');
+                        return fn(null, updatedFlow);
+                    }
+                }
+            });
+        } else if(step.type === 'webinar'){
+
+            contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact) {
+                if (err) {
+                    self.log.error('Error getting contact for step: ' + err);
+                    return fn(err, null);
+                } else if (contact === null) {
+                    self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
+                    return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                } else {
+                    var registrantInfo = {
+                        "firstName": contact.get('first'),
+                        "lastName": contact.get('last'),
+                        "email": contact.getEmails()[0].email
+                    }
+                    var organizerId = step.settings.organizerId;
+                    var webinarId = step.settings.webinarId;
+                    var resendConfirmation = true;
+                    if(step.settings.resendConfirmation) {
+                        resendConfirmation = step.settings.resendConfirmation;
+                    }
+                    var accessToken = gtmConfig.accessToken;
+                    gtmDao.addRegistrant(organizerId, webinarId, resendConfirmation, accessToken, registrantInfo, function(err, value){
+                        if(err) {
+                            self.log.error('Error registering for webinar: ' + err);
+                            return fn(err, null);
+                        }
+                        campaignFlow.set('lastStep', stepNumber);
+                        step.executed = new Date();
+                        campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                            if(err) {
+                                self.log.error('Error saving campaign flow: ' + err);
+                                return fn(err, null);
+                            } else {
+                                //try to handle the next step:
+                                var steps = campaignFlow.get('steps');
+                                if(steps.length -1 > stepNumber) {
+                                    self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                            self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                            return fn(null, updatedFlow);
+                                        } else {
+                                            self.log.debug('<< handleStep');
+                                            return fn(null, updatedFlow);
+                                        }
+                                    });
+                                } else {
+                                    self.log.debug('<< handleStep (no more steps)');
+                                    return fn(null, updatedFlow);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+
+        } else {
+            self.log.warn('Unknown step type: ' + step.type);
+            return fn(null, null);
+        }
+
+    },
+
+    bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> bulkAddContactToCampaign');
+        campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+            if(err) {
+                self.log.error('Error finding campaign: ' + err);
+                return fn(err, null);
+            }
+            async.each(contactIdAry, function(contactId, callback){
+                //need to create flow.
+                var flow = new $$.m.CampaignFlow({
+                    campaignId: campaignId,
+                    accountId: accountId,
+                    contactId: contactId,
+                    startDate: new Date(),
+                    lastStep: 0,
+                    steps: campaign.get('steps')
+                });
+                campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                    if(err) {
+                        self.log.error('Error saving campaign flow: ' + err);
+                        return fn(err, null);
+                    }
+                    self.log.debug('Added contact to campaign flow.');
+                    self.handleStep(flow, 1, function(err, value){
+                        if(err) {
+                            self.log.error('Error handling initial step of campaign: ' + err);
+                            callback(err);
+                        } else {
+                            self.log.debug('added contact.');
+                            callback();
+                        }
+                    });
+                });
+            }, function(err){
+                if(err) {
+                    self.log.error('Error adding contacts to campaign: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< bulkAddContactToCampaign');
+                    return fn(null, 'OK');
+                }
+            });
+
+        });
+
+    },
+
+    /**
+     * This method will delete any active campaign_flow objects for this campaign and account.
+     * @param campaignId
+     * @param accountId
+     * @param fn
+     */
+    cancelRunningCampaign: function(campaignId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> cancelRunningCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: campaignId
+        };
+
+        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error deleting campaign flow: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< cancelRunning Campaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    /**
+     * This method will cancel a campaign flow for a particular contact
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    cancelCampaignForContact: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> cancelRunningCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: campaignId,
+            contactId: contactId
+        };
+
+        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error deleting campaign flow: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< cancelRunning Campaign');
+                return fn(null, value);
+            }
+        });
+    },
+
+    getRunningCampaign: function(accountId, runningCampaignId, fn) {
+        var self = this;
+        self.log.debug('>> getRunningCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: runningCampaignId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error getting campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getRunningCampaign');
+                return fn(null, flow);
+            }
+        });
+    },
+
+    getRunningCampaigns: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> getRunningCampaigns');
+
+        var query = {
+            accountId: accountId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error getting campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getRunningCampaigns');
+                return fn(null, flow);
+            }
+        });
+    },
+
+    getRunningCampaignsForContact: function(accountId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> getRunningCampaignsForContact');
+
+        var query = {
+            accountId: accountId,
+            contactId: contactId
+        };
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flow){
+            if(err) {
+                self.log.error('Error getting campaign: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getRunningCampaignsForContact');
+                return fn(null, flow);
+            }
+        });
+    },
+
+    triggerCampaignStep: function(accountId, campaignId, contactId, stepNumber, fn) {
+        var self = this;
+        self.log.debug('>> triggerCampaignStep');
+
+        var query = {
+            accountId:accountId,
+            campaignId:campaignId,
+            contactId:contactId
+        };
+
+        campaignDao.findOne(query, $$.m.CampaignFlow, function(err, flow){
+            if(err || flow==null) {
+                self.log.error('Error finding running campaign: ' + err);
+                return fn(err, null);
+            }
+            if(flow.get('steps').size() > stepNumber) {
+                var errorString = 'StepNumber ' + stepNumber + ' is greater than the number of steps: ' + flow.get('steps').size();
+                self.log.error(errorString);
+                return fn(errorString, null);
+            }
+            return self.handleStep(flow, stepNumber, fn);
+        });
+
+    },
+
+    /**
+     * This method will getOrCreate a campaignFlow object, mark the first signupStep as triggered, handle the next.
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignSignupEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'SIGNUP', fn);
+    },
+
+    /**
+     * This method will getOrCreate a campaignFlow object, mark the first EMAIL_OPENED as triggered, handle the next.
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignEmailOpenEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
+    },
+
+    _handleSpecificCampaignEvent: function(accountId, campaignId, contactId, trigger, fn) {
+        var self = this;
+        self.log.debug('>> _handleSpecificCampaignEvent (' + trigger + ')');
+        async.waterfall([
+            function(callback){
+                var query = {
+                    accountId: accountId,
+                    campaignId: campaignId,
+                    contactId: contactId
+                };
+                campaignDao.findOne(query, $$.m.CampaignFlow, function(err, flow) {
+                    if (err ) {
+                        self.log.error('Error finding running campaign: ' + err);
+                        callback(err);
+                    } else if(flow === null) {
+                        self.log.debug('Creating campaign flow for contact '+ contactId + ' in campaign ' + campaignId);
+                        self.addContactToCampaign(contactId, campaignId, accountId, function(err, value){
+                            if(err) {
+                                self.log.error('Error adding contact to campaign: ' + err);
+                                callback(err);
+                            } else {
+                                callback(null, value);
+                            }
+                        });
+                    } else {
+                        self.log.debug('Found campaign flow');
+                        callback(null, flow);
+                    }
+
+                });
+            },
+            function(flow, callback){
+                var steps = flow.get('steps');
+                var i = flow.get('lastStep');
+                var nextStep = steps[i];
+                if(nextStep.trigger === trigger) {
+                    nextStep.triggered = new Date();
+                    campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            self.log.debug('set step as triggered');
+                            callback(null, flow, i);
+                        }
+                    });
+
+                } else {
+                    self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
+                    callback('Unexpected trigger type');
+                }
+            },
+            function(flow, stepNumber, callback) {
+                self.handleStep(flow, stepNumber, function(err, value){
+                    if(err) {
+                        callback(err);
+                    } else {
+                        self.log.debug('handled step ' + stepNumber);
+                        callback(null);
+                    }
+                });
+            }
+        ], function(err){
+            if(err) {
+                self.log.error('Error condition: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< _handleSpecificCampaignEvent');
+                return fn(null, 'OK');
+            }
+        });
     },
 
     createMandrillCampaign: function (name, description, revision, templateName, numberOfMessages, messageDeliveryFrequency, callback) {
@@ -486,6 +1047,7 @@ module.exports = {
     _sendMessageToMandrill: function (campaign, contactId, contactName, contactEmail, sendAt, mergeVarsArray, callback) {
 
         var self = this;
+        self.log.debug("_sendMessageToMandrill >>> ");
 
         var message = {
             "subject": campaign.attributes.subject,

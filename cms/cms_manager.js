@@ -215,7 +215,7 @@ module.exports = {
     createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
         log.debug('>> createWebsiteFromTheme');
         if(fn === null) {
-            fn = pageHanle;
+            fn = pageHandle;
             pageHandle = null;
         }
         //default to index page if none is specified
@@ -273,6 +273,7 @@ module.exports = {
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
+                'title': pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1),
                 'websiteId': websiteId,
                 'components': componentAry,
                 'created': {
@@ -322,31 +323,75 @@ module.exports = {
         blogPostDao.createPost(blogPost, function(err, savedPost){
             if(err) {
                 self.log.error('Error creating post: ' + err);
-                fn(err, null);
+                return fn(err, null);
             } else {
                 //store the id in the page component's array
                 cmsDao.getPageById(savedPost.get('pageId'), function(err, page){
                     if(err) {
                         self.log.error('Error getting page for post: ' + err);
-                        fn(err, null);
+                        return fn(err, null);
                     } else if(!page){
-                        var msg = 'Referenced page [' + savedPost.get('pageId') + '] does not exist:';
-                        self.log.error(msg);
-                        fn(msg, null);
+                        self.log.debug('Referenced page does not exist.  Creating default blog page.');
+                        self._createBlogPage(accountId, savedPost.get('websiteId'), function(err, blogPage){
+                            if(err) {
+                                self.log.error('Error creating blog page: ' + err);
+                                return fn(err, null);
+                            }
+                            var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), blogPage);
+                            if(postAry === null) {
+                                //return fn('Page does not contain blog component.', null);
+                                //need to create a blog component.
+                                var blogComponent = new $$.m.cms.modules.Blog({
+                                    posts: [savedPost.id()]
+                                });
+                                blogPage.get('components').push(blogComponent);
+                                //asynchrounously create single-post-page if it doesn't exist.
+                                self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating single-post-page: ' + err);
+                                        return;
+                                    }
+                                });
+                            }
+
+                            cmsDao.saveOrUpdate(blogPage, function(err, page){
+                                if(err) {
+                                    self.log.error('Error updating page for post: ' + err);
+                                    return fn(err, null);
+                                } else {
+                                    self.log.debug('<< createBlogPost');
+                                    return fn(null, savedPost);
+                                }
+                            });
+
+                        });
+
                     } else {
 
                         var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), page);
                         if(postAry === null) {
-                            fn('Page does not contain blog component.', null);
+                            //return fn('Page does not contain blog component.', null);
+                            //need to create a blog component.
+                            var blogComponent = new $$.m.cms.modules.Blog({
+                                posts: [savedPost.id()]
+                            });
+                            page.get('components').push(blogComponent);
+                            //asynchrounously create single-post-page if it doesn't exist.
+                            self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating single-post-page: ' + err);
+                                    return;
+                                }
+                            });
                         }
 
                         cmsDao.saveOrUpdate(page, function(err, page){
                             if(err) {
                                 self.log.error('Error updating page for post: ' + err);
-                                fn(err, null);
+                                return fn(err, null);
                             } else {
                                 self.log.debug('<< createBlogPost');
-                                fn(null, savedPost);
+                                return fn(null, savedPost);
                             }
                         });
                     }
@@ -355,8 +400,279 @@ module.exports = {
         });
     },
 
+    _createBlogPage: function(accountId, websiteId, fn) {
+        var blogPage = {
+            "_id" : null,
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "blog",
+            "title" : "Blog",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : "76aae765-bda7-4298-b78c-f1db159eb9f4",
+                    "anchor" : null,
+                    "type" : "navigation",
+                    "version" : 1,
+                    "visibility" : true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                },
+                {
+                    "_id" : "b56556a7-b145-4c4d-9e82-6cbe7dc967c0",
+                    "anchor" : null,
+                    "type" : "blog",
+                    "version" : 1,
+                    "visibility" : true,
+                    "txtcolor" : "#444",
+                    "posts" : [
+                        {
+                            "title" : "Hello World",
+                            "content" : "this is the content",
+                            "created" : {
+                                "date" : new Date(),
+                                "by" : null
+                            },
+                            "modified" : {
+                                "date" : "",
+                                "by" : null
+                            }
+                        },
+                        {
+                            "title" : "Hello World 2",
+                            "content" : "this is the content",
+                            "created" : {
+                                "date" : new Date(),
+                                "by" : null
+                            },
+                            "modified" : {
+                                "date" : "",
+                                "by" : null
+                            }
+                        },
+                        "b6df057f-2d45-402d-a010-d43bcca00f12",
+                        "13260fd6-c854-4ed2-a830-bc75869b3b48"
+                    ],
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : "#f6f6f6"
+                    },
+                    "btn" : {
+                        "text" : "I'm Interested",
+                        "url" : "http://google.com",
+                        "icon" : "fa fa-rocket"
+                    },
+                    "post_title" : "<p>TEST MANIK POST_TEST</p>",
+                    "post_excerpt" : "<p><br></p>"
+                },
+
+                {
+                    "_id" : "g3297f91-53fc-47d6-b862-5ec161e0d250",
+                    "anchor" : "g3297f91-53fc-47d6-b862-5ec161e0d250",
+                    "type" : "footer",
+                    "version" : 1,
+                    "visibility" : true,
+                    "txtcolor" : null,
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "title" : null
+                }
+            ],
+            "screenshot" : null,
+            "secure" : false,
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : null,
+                "by" : null
+            }
+        };
+
+        cmsDao.saveOrUpdate(new $$.m.cms.Page(blogPage), function(err, value){
+            if(err) {
+                return fn(err, null);
+            } else {
+                return fn(null, value);
+            }
+        });
+    },
+
+    _getOrCreateSinglePostPage: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> _getOrCreateSinglePostPage');
+
+        var page = {
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "single-post",
+            "title" : "Single Post",
+            "seo" : null,
+            "visibility" : {
+            "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "navigation",
+                "version" : 1,
+                "visibility" : true,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#888",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                }
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "single-post",
+                "version" : 1,
+                "visibility" : true,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#888888",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                },
+                "post_content" : ""
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : "g3297f91-53fc-47d6-b862-5ec161e0d250",
+                "type" : "footer",
+                "version" : 1,
+                "visibility" : true,
+                "txtcolor" : null,
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : null,
+                        "height" : null,
+                        "parallax" : false,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "title" : null
+            }
+        ],
+            "created" : {
+            "date" : new Date(),
+                "by" : null
+        },
+            "modified" : {
+            "date" : null,
+                "by" : null
+        },
+            "screenshot" : null
+        };
+
+        cmsDao.getPageForWebsite(websiteId, 'single-post', function(err, value){
+            if(err) {
+                self.log.error('Error getting single-post page: ' + err);
+                return fn(err, null);
+            } else if(value !== null) {
+                self.log.debug('<< _getOrCreateSinglePostPage (already created)');
+                return fn(null, value);
+            } else {
+                var singlePostPage = new $$.m.cms.Page(page);
+                cmsDao.saveOrUpdate(singlePostPage, function(err, savedPage){
+                    if(err) {
+                        self.log.error('Error saving single-post page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        self.log.debug('<< _getOrCreateSinglePostPage (new)');
+                        return fn(null, savedPage);
+                    }
+                });
+
+            }
+        });
+    },
+
     getBlogPost: function(accountId, postId, fn) {
         blogPostDao.getById(postId, fn);
+    },
+
+    getBlogPostByTitle: function(accountId, title, fn) {
+        var query = {
+            accountId: accountId,
+            post_title: title
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
+    getBlogPostByUrl: function(accountId, url, fn) {
+        var query = {
+            accountId: accountId,
+            post_url: url
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
     },
 
     updateBlogPost: function(accountId, blogPost, fn) {
@@ -575,7 +891,7 @@ module.exports = {
                         }
                     }
                 }
-                cmsDao.saveOrUpdate(page, fn);
+                self.updatePage(pageId, page, fn);
             }
         });
     },
@@ -688,15 +1004,43 @@ module.exports = {
         //make sure the ID is set.
         page.set('_id', pageId);
 
-        cmsDao.saveOrUpdate(page, function(err, value){
+        //Handle versioning.
+        cmsDao.getPageById(pageId, function(err, existingPage){
             if(err) {
-                self.log.error('Error updating page: ' + err);
-                fn(err, null);
+                self.log.error('Error retrieving existing page: ' + err);
+                return fn(err, null);
+            } else if(existingPage == null) {
+                self.log.error('Could not find page with id: ' + pageId);
+                return fn(null, null);
             } else {
-                self.log.debug('<< udpatePage');
-                fn(null, value);
+                var currentVersion = existingPage.get('version');
+                if(currentVersion === null) {
+                    currentVersion = 0;
+                }
+                page.set('version', currentVersion+1);
+                page.set('latest', true);
+                existingPage.set('_id', pageId + '_' + currentVersion);
+                existingPage.set('latest', false);
+                cmsDao.saveOrUpdate(existingPage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating version on page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        cmsDao.saveOrUpdate(page, function(err, value){
+                            if(err) {
+                                self.log.error('Error updating page: ' + err);
+                                fn(err, null);
+                            } else {
+                                self.log.debug('<< udpatePage');
+                                fn(null, value);
+                            }
+                        });
+                    }
+                });
             }
         });
+
+
 
     },
 
@@ -728,7 +1072,10 @@ module.exports = {
 								self.log.error('Error updating website linklists by handle: ' + err);
 								fn(err, page);
 							} else {
-								cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                                var query = {};
+                                query._id = new RegExp('' + pageId + '(_.*)*');
+                                cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
+								//cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
 									if (err) {
 										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
 										fn(err, null);
@@ -742,7 +1089,10 @@ module.exports = {
 					}
 				});
 			} else {
-				cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                var query = {};
+                query._id = new RegExp('' + pageId + '(_.*)*');
+                cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
+                //cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
 					if (err) {
 						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
 						fn(err, null);
@@ -765,6 +1115,7 @@ module.exports = {
                     "anchor" : null,
                     "type" : "navigation",
                     "version" : 1,
+                    "latest": true,
                     "visibility" : true,
                     "title" : "Title",
                     "subtitle" : "Subtitle.",
@@ -790,13 +1141,13 @@ module.exports = {
                     "anchor" : null,
                     "type" : "feature-block",
                     "version" : 1,
-                    "title" : "<h1>Feature Block Title</h1>",
+                    "title" : "<h1>Awesome Feature Block</h1>",
                     "subtitle" : "<h3>This is the feature block subtitle.</h3>",
                     "text" : "<h5>The Feature Block component is great for a quick testimonial or a list of<br>features for a single product. It works great with an image background and parallax.</h5>",
-                    "txtcolor" : "#888888",
+                    "txtcolor" : "#ffffff",
                     "bg" : {
                         "img" : {
-                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/feature-block_1416870905848.jpg",
+                            "url" : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/bg-grey_1421966329788.jpg",
                             "width" : 838,
                             "height" : 470,
                             "parallax" : true,
@@ -804,12 +1155,7 @@ module.exports = {
                             "overlay" : false,
                             "show" : false
                         },
-                        "color" : "#f7f7f7"
-                    },
-                    "btn" : {
-                        "text" : "                &lt;p&gt;Button Text&lt;/p&gt;            ",
-                        "url" : "#",
-                        "icon" : "fa fa-rocket"
+                        "color" : ""
                     },
                     "visibility" : true
                 },
@@ -887,6 +1233,55 @@ module.exports = {
         });
     },
 
+    getPageVersions: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPageVersions');
+
+        var query = {};
+        if(version === 'all') {
+            query._id = new RegExp('' + pageId + '_.*');
+        } else if(version === 'latest'){
+            query._id = pageId;
+        } else {
+            query = {$or: [{_id: pageId + '_' + version},{_id: pageId}]};
+        }
+
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            if(err) {
+                self.log.error('Error getting pages by version: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getPageVersions');
+                return fn(null, list);
+            }
+        });
+
+    },
+
+    revertPage: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> revertPage');
+
+        self.getPageVersions(pageId, version, function(err, pageAry){
+            if(err || pageAry === null) {
+                self.log.error('Error finding version of page: ' + err);
+                return fn(err, null);
+            }
+            self.updatePage(pageId, pageAry[0], function(err, newPage){
+                if(err) {
+                    self.log.error('Error updating page: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< revertPage');
+                    return fn(null, newPage);
+                }
+            });
+        });
+
+    },
+
     getPagesByWebsiteId: function(websiteId, accountId, fn) {
         var self = this;
         self.log = log;
@@ -894,17 +1289,31 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $or: [{secure:false},{secure:{$exists:false}}]
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+
 
         };
+        self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            self.log.debug('end query');
             if(err) {
                 self.log.error('Error getting pages by websiteId: ' + err);
                 fn(err, null);
             } else {
                 var map = {};
                 _.each(list, function(value){
-                    map[value.get('handle')] = value;
+                    if(map[value.get('handle')] === undefined) {
+                        map[value.get('handle')] = value;
+                    } else {
+                        var currentVersion = map[value.get('handle')].get('version');
+                        if(value.get('version') > currentVersion) {
+                            map[value.get('handle')] = value;
+                        }
+                    }
+
                 });
                 fn(null, map);
             }
@@ -1130,7 +1539,7 @@ module.exports = {
                 width: 1280,
                 height: 1024,
                 full_page: true,
-                delay: 2500,
+                delay: 3500,
                 force: true
             };
 
@@ -1145,23 +1554,33 @@ module.exports = {
             var bucket = awsConfig.BUCKETS.SCREENSHOTS;
             var subdir = 'account_' + accountId;
 
-
-
-            self._download(ssURL, tempFile, function(){
-                log.debug('stored screenshot at ' + tempFileName);
-                tempFile.type = 'image/png';
-                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
-                    fs.unlink(tempFile.path, function(err, value){});
-                    if(err) {
-                        log.error('Error uploading to s3: ' + err);
-                        fn(err, null);
-                    } else {
-                        log.debug('Got the following from S3', value);
-                        log.debug('<< generateScreenshot');
-                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
-                    }
+            //check if the length is greater than 5kb.  If not, do it again.
+            self._checkSize(ssURL, function(err, size){
+                if(parseInt(size) < 5000) {
+                    options.delay = 9000;
+                    ssURL = urlboxhelper.getUrl(serverUrl, options);
+                    log.debug('Increasing delay to 5000 for ' + serverUrl);
+                }
+                self._download(ssURL, tempFile, function(){
+                    log.debug('stored screenshot at ' + tempFileName);
+                    tempFile.type = 'image/png';
+                    s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+                        fs.unlink(tempFile.path, function(err, value){});
+                        if(err) {
+                            log.error('Error uploading to s3: ' + err);
+                            fn(err, null);
+                        } else {
+                            log.debug('Got the following from S3', value);
+                            log.debug('<< generateScreenshot');
+                            fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
+                        }
+                    });
                 });
+
+
             });
+
+
 
         });
     },
@@ -1193,6 +1612,68 @@ module.exports = {
                     }
                 });
             });
+        });
+    },
+
+
+    getDistinctBlogPostAuthors: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostAuthors');
+
+        blogPostDao.distinct('post_author', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostAuthors');
+                return fn(null, value);
+            }
+        });
+
+    },
+
+    getDistinctBlogPostTitles: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostTitles');
+
+        blogPostDao.distinct('post_title', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostTitles');
+                return fn(null, value);
+            }
+        });
+    },
+
+    getDistinctBlogPostCategories : function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostCategories');
+
+        blogPostDao.distinct('post_category', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostCategories');
+                return fn(null, value);
+            }
+        });
+    },
+
+    getDistinctBlogPostTags: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getDistinctBlogPostTags');
+
+        blogPostDao.distinct('post_tags', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+            if(err) {
+                log.error('Error getting distinct authors: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getDistinctBlogPostTags');
+                return fn(null, value);
+            }
         });
     },
 
@@ -1259,6 +1740,18 @@ module.exports = {
             request(uri).on('error', function(err) {
                 console.log('error getting screenshot: ' + err);
             }).pipe(fs.createWriteStream(file.path)).on('close', callback);
+        });
+    },
+
+    _checkSize: function(uri, callback) {
+        request.head(uri, function(err, res, body){
+            if(err) {
+                log.error('checksize error: ' + err);
+                callback(null, 0);
+            }
+            var length = res.headers['content-length'];
+            log.debug('checksize length: ' + length);
+            callback(null, length);
         });
     },
 

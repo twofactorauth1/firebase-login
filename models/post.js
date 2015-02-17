@@ -65,18 +65,21 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.FACEBOOK,
             sourceId: post.id,
-            postType: post.type,
-            from: {
+            postType: post.type
+        };
+
+        if(post.from) {
+            obj.from = {
                 sourceId: post.from.id,
                 name: post.from.name
-            }
-        };
+            };
+        }
 
         if (post.created_time) {
             obj.date = new Date(post.created_time).getTime();
         }
 
-        if (post.to && post.to.data && post.to.data.length > 0) {
+        if (post.to && post.to.data && post.to.data.length > 0 && post.to.forEach) {
             obj.to = [];
             post.to.forEach(function(toObj) {
                 obj.to.push({
@@ -154,12 +157,20 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
-            postType: "tweet",
-            from: {
+            postType: "tweet"
+        };
+
+        if(tweet.user) {
+            obj.from = {
                 sourceId: tweet.user.id,
                 name: tweet.user.name
-            }
-        };
+            };
+        } else if(tweet.sender) {
+            obj.from = {
+                sourceId: tweet.sender.id,
+                name: tweet.sender.name
+            };
+        }
 
         if (tweet.created_at) {
             obj.date = new Date(tweet.created_at).getTime();
@@ -175,6 +186,27 @@ var post = $$.m.ModelBase.extend({
                });
             });
         }
+
+        this.set(obj);
+        return this;
+    },
+
+    convertFromTwitterFollower: function(follower) {
+        var obj = {
+            _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
+            type: $$.constants.social.types.TWITTER,
+            sourceId: follower.id_str,
+            postType: "follower",
+            from: {
+                name: follower.screen_name,
+                description: follower.description,
+                profileimg: follower.profile_background_image_url_https
+            }
+        };
+
+        if (follower.created_at) {
+            obj.date = new Date(follower.created_at).getTime();
+        };
 
         this.set(obj);
         return this;

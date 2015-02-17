@@ -1,29 +1,41 @@
 <div ng-class="component.type+'-v'+component.version">
 <div class="editable" data-class="component.title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
-<div class="row clearfix mb30" ng-repeat="teamMember in component.teamMembers">
-    <div class="col-md-4 text-center">
-        <div class="mb10"></div>
-        <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img" style="width: 200px;height: 200px" />
-    </div>
-    <div class="col-md-8">
-        <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
-        <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
-        <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
+<div class="team-member-wrap">
+    <div class="row clearfix mb30 team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
+        <div class="col-md-4 text-center">
+            <div class="mb10"></div>
+            <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img meet-team-image" data-index="{{$index}}" style="width: 200px;height: 200px" />
+        </div>
+        <div class="col-md-8">
+            <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
+            <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
+            <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
 
-        <div class="row">
-            <ul class="social">
-            <li ng-repeat="(val, key) in teamMember.social">
-                <a href="{{key}}" target="_blank">
-                    <span class="fa fa-{{val}}"></span>
-                </a>
-            </li>
-        </ul>
-        </div>        
-        <div class="row" ng-if="isEditing">
-        <div class="delete-team-member center">
-                    <button ng-click="deleteTeamMember(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-team">Delete</button>
+            <div class="row social-link {{isEditing ? 'edit-mode' : ''}}">
+                <ul class="social">
+                    <li ng-repeat="network in teamMember.networks">
+                        <a ng-if="!isEditing" href="{{network.url}}" target="_blank">
+                            <span class="fa fa-{{network.icon}}"></span>
+                        </a>
+                        <a ng-if="isEditing" href="#" ng-click="setSelectedSocialLink(network, component._id, true, true, $parent.$parent.$index)" class="clickable-link" data-toggle="modal" data-target="#meetteamSocialModal"><span class="fa fa-{{network.icon}}"></span></a>
+                    </li>                    
+                </ul>
+                <div ng-if="isEditing" class="add-addtional-team center">
+                    <a ng-if="isEditing" class="clickable-link" data-toggle="modal" ng-click="setSelectedSocialLink(network, component._id, false, true, $parent.$parent.$index)" data-target="#meetteamSocialModal"><i class="fa fa-plus"></i></a>
+                </div>
             </div>
-         </div>   
+        </div>
+        <div ng-if="isEditing" class="delete-team-member center">
+            <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
+                <i class='fa fa-trash'></i>
+            </button>
+        </div>
+        <div ng-if="isEditing" class="add-addtional center">
+            <a href="" ng-click="addTeamMember(component._id,$index)">
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
     </div>
 </div>
 </div>
+<div ng-if="isEditing" ng-include="'/components/meet-team-social-links.html'"></div>

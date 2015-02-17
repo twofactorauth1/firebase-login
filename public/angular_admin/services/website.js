@@ -1,6 +1,15 @@
 define(['app'], function (app) {
 	app.register.service('WebsiteService', function ($http) {
 		var baseUrl = '/api/1.0/';
+		this.editPageHandle = null;
+
+		this.getEditedPageHandle = function () {
+      		return this.editPageHandle;
+    	};
+
+	    this.setEditedPageHandle = function (handle) {
+	      this.editPageHandle = handle;
+	    };
 
 		this.getWebsite = function (websiteID, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
@@ -292,6 +301,27 @@ define(['app'], function (app) {
                 fn(err, null);
             });
 		};
+		this.saveComponent = function (component, cmpVersion, fn) {
+			console.log('Saving Component >>>');
+			console.log('component ', component);
+			console.log('cmpVersion ', cmpVersion);
+			var apiUrl = baseUrl + ['cms', 'component', component.type].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson({version: cmpVersion})
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 
+		this.getPageScreenShot = function (handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', handle, 'savedscreenshot'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+		};
 	});
 });

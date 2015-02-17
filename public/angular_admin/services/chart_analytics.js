@@ -284,8 +284,8 @@ define(['app', 'keenService'], function(app) {
 
         //local variables
         var client;
-        var timeframeStart = '2014-11-12T23:05:20.075Z';
-        var timeframeEnd = '2014-12-12T23:05:20.075Z';
+        var timeframeStart = '2015-01-17T23:05:20.075Z';
+        var timeframeEnd = '2015-02-17T23:05:20.075Z';
         var timeframePreviousStart = '2014-10-15T23:05:20.075Z';
         var timeframePreviousEnd = '2014-11-14T23:05:20.075Z';
         var interval = "daily";
@@ -568,11 +568,21 @@ define(['app', 'keenService'], function(app) {
 
             var self = this;
 
-            var filters = [{
-                "property_name": "url.domain",
-                "operator": "eq",
-                "property_value": window.location.hostname
-            }];
+            var filters = [];
+            if(account.subdomain === 'main') {
+                //add a special filter for main
+                filters.push({
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname.replace('main', 'www')
+                });
+            } else {
+                filters.push({
+                    "property_name": "url.domain",
+                    "operator": "eq",
+                    "property_value": window.location.hostname
+                });
+            }
 
             if (account && account.domain) {
                 filters.push({
@@ -790,7 +800,11 @@ define(['app', 'keenService'], function(app) {
 
                     var sessionsPercent = self.calculatePercentage(_totalSessions, sessionsPreviousData);
 
-                    var visitDuration = self.secToTime(results[9].result);
+                    var secsToConv = 0;
+                    if (results[9].result && _totalSessions) {
+                      secsToConv = results[9].result / _totalSessions;
+                    }
+                    var visitDuration = self.secToTime(secsToConv);
 
                     if (results[15].result == null) {
                         results[15].result = 0;

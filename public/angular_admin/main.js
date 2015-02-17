@@ -13,7 +13,7 @@ require.config({
         'jqueryUI': 'libs/jquery-ui/jquery-ui.min',
         'angular': 'libs/angular/angular',
         'angularBootstrap': 'libs/angular-bootstrap/ui-bootstrap-tpls.min',
-        'angularBootstrapSwitch': 'libs/angular-bootstrap-switch/dist/angular-bootstrap-switch',
+        'angularBootstrapSwitch': 'libs_misc/angular-bootstrap-switch/dist/angular-bootstrap-switch',
         'angularRoute': 'libs/angular-route/angular-route',
         'angularSanitize': 'libs/angular-sanitize/angular-sanitize.min',
         'angularResource': 'libs/angular-resource/angular-resource.min',
@@ -36,7 +36,7 @@ require.config({
         'd3': 'libs/d3/d3.min',
         'c3': 'libs/c3/c3.min',
         'daterangepicker': 'libs/bootstrap-daterangepicker/daterangepicker',
-        'angular-daterangepicker': 'libs_misc/angular-daterangepicker/angular-daterangepicker',
+        'angular-daterangepicker': 'libs/angular-daterangepicker/js/angular-daterangepicker.min',
         'jqueryGridster': 'libs/gridster/dist/jquery.gridster.min',
         'angularUiRouter': 'libs/angular-ui-router/release/angular-ui-router.min',
         'angularFileUpload': 'libs_misc/angular-file-upload/angular-file-upload',
@@ -65,7 +65,7 @@ require.config({
         'leaflet-directive': 'libs/angular-leaflet-directive/dist/angular-leaflet-directive.min',
         'truncate': 'libs/angular-truncate/src/truncate',
         'ngOnboarding': 'libs/ngOnboarding/dist/ng-onboarding.min',
-        'heatmapjs': 'libs/heatmap.js-amd/src/heatmap',
+        'heatmapjs': 'libs_misc/heatmap.js-2.0/build/heatmap',
         'fingerprint': 'libs/fingerprint/fingerprint',
         'jPushMenu' : 'libs/jPushMenu/js/jPushMenu',
         'ngSweetAlert' : 'libs/angular-sweetalert/SweetAlert',
@@ -74,6 +74,8 @@ require.config({
         'angularSpinner': 'libs/angular-spinner/angular-spinner',
         'powertour':'libs_misc/powertour/js/powertour.2.1.4.min',
         'blockUI':'libs/angular-block-ui/dist/angular-block-ui.min',
+        'socialist': 'libs_misc/jquery-socialist/jquery.socialist',
+        'isotope': 'libs/isotope/jquery.isotope',
 
         //application related
         'storageutils': 'utils/storageutils',
@@ -84,6 +86,7 @@ require.config({
         'userService': '/angular_admin/services/user',
         'paymentService': '/angular_admin/services/payment',
         'twoNetService': '/angular_admin/services/two_net',
+        'socialService': '/angular_admin/services/social',
         'assetsService': '/angular_admin/services/assets',
         'geocodeService': '/angular_admin/services/geocode',
         'skeuocardDirective': '/angular_admin/directives/skeuocard',
@@ -92,6 +95,7 @@ require.config({
         'customerService': '/angular_admin/services/customer',
         'websiteService': '/angular_admin/services/website',
         'postService': '/angular_admin/services/post',
+        'campaignService': '/angular_admin/services/campaign',
         'productService': '/angular_admin/services/product',
         'navigationService': '/angular_admin/services/navigationService',
         'dashboardService': '/angular_admin/services/dashboard',
@@ -106,6 +110,7 @@ require.config({
         'accountService': '/angular_admin/services/account',
         'keenService': '/angular_admin/services/keen',
         'courseServiceAdmin': '/angular_admin/services/course',
+        'socialConfigService': '/angular_admin/services/socialconfig',
         'stateNavDirective': '/angular_admin/directives/state_nav',
         'hoverClassDirective': '/angular_admin/directives/hover_class',
         'confirmClickDirective': '/angular_admin/directives/confirm_click',
@@ -113,6 +118,7 @@ require.config({
         'scrollerDirective': '/angular_admin/directives/scroller',
         'truncateDirective': '/angular_admin/directives/truncate',
         'adminValidationDirective': '/angular_admin/directives/form_validations',
+        'intervalCountValidationDirective': '/angular_admin/directives/interval_count_validation',
         "constants": 'constants/constants',
         'formValidationDirective': 'libs/angular-bootstrap-switch/src/directives/bsSwitch',
         'unsafeHtml': '/angular_admin/filters/unsafe-html',
@@ -134,6 +140,8 @@ require.config({
         'angularCookie': 'libs/angular-cookie/angular-cookie.min',
         'purl': 'libs/purl/purl',
         'uaParser': 'libs/ua-parser-js/dist/ua-parser.min',
+        'jsPlumb': 'libs/jsplumb/dist/js/dom.jsPlumb-1.7.2-min',
+        'carousel': '/angular_admin/directives/carousel',
 
         //videoautoresponder
         "varMainModule": "/pipeshift/js/varMainModule",
@@ -167,7 +175,8 @@ require.config({
         "stripeButtonDirective": "/pipeshift/js/directive/stripePayButton",
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'angularConfig' : 'scripts/config',
-        'angularSlugifier': 'libs/angular-slugify/angular-slugify'
+        'angularSlugifier': 'libs/angular-slugify/angular-slugify',
+        'ui.sortable':'libs_misc/ng-sortable/dist/ng-sortable'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -237,7 +246,9 @@ require.config({
         'ngload': ['angularAMD'],
         'jPushMenu' : {deps: ['jquery']},
         'angularSlugifier': ['angular'],
-        'blockUI': ['angular']
+        'blockUI': ['angular'],
+        'carousel': ['angular','angularBootstrap'],
+        'ui.sortable': ['angular']
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });

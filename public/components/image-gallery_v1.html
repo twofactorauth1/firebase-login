@@ -6,74 +6,69 @@
 *
 -->
 
-
-<div class="image-gallery-title">
-    <div class="editable" data-class="maintitle" data-index="{{$index}}">
-        <div ng-bind-html="component.maintitle | unsafe"></div>
+<div ng-class="component.type+'-v'+component.version">
+    <div class="image-gallery-title">
+        <div class="editable" data-class="title" data-index="{{$index}}">
+            <div ng-bind-html="component.title | unsafe"></div>
+        </div>
     </div>
-</div>
 
-<hr></hr>
+    <div class="clearfix mb20"></div>
 
-<div class="image-gallery-subtitle" data-ng-show="component.subtitle">
-    <div class="editable" data-class="subtitle" data-index="{{$index}}">
-        <div data-ng-bind-html="component.subtitle"></div>
-    </div>
-</div>
-
-<div class=" clearfix mb20"></div>
-
-<div>
-    <div ng-cloak>
-        <div ng-repeat="image in component.images track by $index">
-            <div class="col-sm-3 col-xs-12">
-                <div class="thumbnail imgHeight single-image">
-                    <a  href="{{image.url}}" title="{{image.label}}" data-gallery>
-                        <img class="img-responsive img-gallery-{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
-                    </a>
-                    <span class="caption" ng-if="isEditing">
-                        <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
-                    </span>
+    <div>
+        <div ng-cloak>
+            <div ng-repeat="image in component.images track by $index">
+                <div class="col-sm-3 col-xs-12 image-wrap">
+                    <div class="thumbnail imgHeight single-image">
+                        <a href="{{image.url}}" title="{{image.label}}" data-gallery>
+                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
+                        </a>
+                        <span class="caption" ng-if="isEditing">
+                            <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
+                        </span>
+                    </div>
+                    <div ng-if="isEditing" class="delete-single-image center">
+                        <button ng-click="DeleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                    </div>
+                    <div ng-if="isEditing" class="add-addtional center">
+                        <a href="">
+                            <i class="fa fa-plus" ng-click="AddImageToGallery(component._id)"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3 col-xs-12" ng-if="isEditing">
-            <div class="thumbnail imgHeight single-image" style="display: inline-block;color:black;">
-                <i class="fa fa-plus-circle" style="font-size: 174px; cursor:pointer" ng-click="addImage(component)"></i>
-            </div>
-        </div>
     </div>
-</div>
-<div id="blueimp-gallery" class="blueimp-gallery">
-    <!-- The container for the modal slides -->
-    <div class="slides">
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <!-- The container for the modal slides -->
+        <div class="slides">
 
-    </div>
-    <!-- Controls for the borderless lightbox -->
-    <h3 class="title"></h3>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">×</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
-    <!-- The modal dialog, which will be used to wrap the lightbox content -->
-    <div class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"></h4>
-                </div>
-                <div class="modal-body next"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left prev">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                        Previous
-                    </button>
-                    <button type="button" class="btn btn-primary next">
-                        Next
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </button>
+        </div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

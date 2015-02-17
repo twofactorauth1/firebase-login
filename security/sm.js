@@ -43,7 +43,9 @@ var defaultPrivileges = [
     'VIEW_ASSET',
     'MODIFY_ASSET',
     'VIEW_DASHBOARD',
-    'MODIFY_DASHBOARD'
+    'MODIFY_DASHBOARD',
+    'VIEW_SOCIALCONFIG',
+    'MODIFY_SOCIALCONFIG'
 ];
 
 var defaultSubscriptionPrivs = [
@@ -52,13 +54,15 @@ var defaultSubscriptionPrivs = [
     'analytics',
     'assets',
     'authentication',
+    'campaign',
     'cms',
     'contact',
     'courses',
     'dashboard',
     'emaildata',
     'products',
-    'user'
+    'user',
+    'social/socialconfig'
 ];
 
 var securityManager = {

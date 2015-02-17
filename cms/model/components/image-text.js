@@ -60,19 +60,13 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title : "<h1>Image/Text Title</h1>",
+            title : "<h1>Intro</h1><h4 style=\"text-align: center;\">A LITTLE ABOUT US</h4>",
 
             /**
              *
              *
              */
-            subtitle : "<h4>Lorem ipsum dolor sit amet, consectetur adipisicing elit. </h4>",
-
-            /**
-             *
-             *
-             */
-            text : "<p>Ullam molestiae est, recusandae ratione rem sit, praesentium laborum corporis. Molestiae quidem libero minima earum error minus voluptatum eligendi cum culpa impedit, dicta tenetur quis similique magni rerum doloribus excepturi aspernatur saepe dignissimos ad est aliquid? Voluptas inventore dignissimos possimus perspiciatis enim.</p>",
+            text : "<p><br></p><p>This is the Image Text component and it is very versatile. You can use it for an about us section or any image that may need a little more explanation. &nbsp;The image can be on the right or left side. The image doesn't even need to be an image! You can insert any icon in the images place.</p>",
 
             /**
              *
@@ -88,14 +82,9 @@ var component = $$.m.ModelBase.extend({
             imagePosition: "left",
 
             /**
-             * The caption to accompany the image (optional)
-             */
-            caption: null,
-
-            /**
              * The url of the image
              */
-            imgurl: "",
+            imgsection: "<p><img data-cke-saved-src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_6/rocket-icon-512x512_1421971689163.png\" src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_6/rocket-icon-512x512_1421971689163.png\" style=\"width: 175px; height: 175px;\">​​</p>",
 
             /**
              *
@@ -111,7 +100,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : "#4bb0cb"
+                color : "#32373f"
             },
 
             /**

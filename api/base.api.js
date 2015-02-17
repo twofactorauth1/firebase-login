@@ -262,10 +262,12 @@ _.extend(apiBase.prototype, {
         if (_.isArray(result)) {
             var _arr = [];
             result.forEach(function(item) {
-                if (typeof item.toJSON != 'undefined') {
-                    _arr.push(item.toJSON("public"));
-                } else {
-                    _arr.push(item);
+                if(item != null) {
+                    if (typeof item.toJSON != 'undefined') {
+                        _arr.push(item.toJSON("public"));
+                    } else {
+                        _arr.push(item);
+                    }
                 }
             });
             result = _arr;

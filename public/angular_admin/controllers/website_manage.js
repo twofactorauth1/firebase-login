@@ -12,6 +12,7 @@ define([
     'jquery',
     'mediaDirective',
     'checkImageDirective',
+    'blockUI'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -20,11 +21,13 @@ define([
         'WebsiteService',
         'ngProgress',
         'toaster',
-        function($scope, $location, UserService, WebsiteService, ngProgress, toaster) {
+        'blockUI',
+        function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI) {
             ngProgress.start();
             var account;
             $scope.showToaster = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
+
 
             $scope.beginOnboarding = function(type) {
                 if (type == 'select-theme') {
@@ -86,6 +89,11 @@ define([
                 }
             };
 
+            $scope.finishOnboarding = function() {
+              $scope.userPreferences.tasks.add_post = true;
+              UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+            };
+
             if ($location.$$search['onboarding']) {
                 $scope.beginOnboarding($location.$$search['onboarding']);
             }
@@ -145,6 +153,39 @@ define([
                         }
                     }
                     $scope.pages = _pages;
+                    var editPageHandle = WebsiteService.getEditedPageHandle();
+                    if($scope.activeTab === 'pages' && editPageHandle)
+                    {
+
+                        $scope.editedPage =  _.findWhere($scope.pages, {
+                            handle: editPageHandle
+                        });
+                        if($scope.editedPage && $scope.editedPage.screenshot == null)
+                        {
+                            var pagesBlockUI = blockUI.instances.get('pagesBlockUI');
+                            pagesBlockUI.start();
+                            var maxTries = 10;
+                            var getScreenShot = function() {
+                                WebsiteService.getPageScreenShot(editPageHandle, function(data) {
+                                    if((!data || !data.length) && maxTries > 0)
+                                    {
+                                        getScreenShot();
+                                        maxTries = maxTries - 1;
+                                    }
+                                    else
+                                    {
+                                       WebsiteService.setEditedPageHandle();
+                                       if(data && data.length)
+                                            $scope.editedPage.screenshot = data;
+                                       pagesBlockUI.stop();
+                                    }
+                                })
+                            }
+                            setTimeout(function() {
+                                getScreenShot();
+                            }, 5000);
+                        }
+                    }
                 });
 
                 UserService.getUserPreferences(function(preferences) {
@@ -244,11 +285,16 @@ define([
             };
 
             $scope.createPage = function(page, $event) {
-
+                $scope.validateCreatePage(page);
                 console.log('$scope.createPageValidated ', $scope.createPageValidated);
 
                 if (!$scope.createPageValidated) {
+                    $('#page-title').parents('div.form-group').addClass('has-error');
+                    $('#page-url').parents('div.form-group').addClass('has-error');
                     return false;
+                } else {
+                    $('#page-title').parents('div.form-group').removeClass('has-error');
+                    $('#page-url').parents('div.form-group').removeClass('has-error');
                 }
 
                 var websiteId = $scope.website._id;
@@ -279,39 +325,43 @@ define([
                     $event.stopPropagation();
                 }
             };
+            $scope.createPostValidated = false;
+            $scope.validateCreatePost = function(post) {
+                if (!post.post_title || post.post_title == '') {
+                    $scope.postTitleError = true
+                } else {
+                    $scope.postTitleError = false
+                }
+                if (!post.post_author || post.post_author == '') {
+                    $scope.postAuthorError = true
+                } else {
+                    $scope.postAuthorError = false
+                }
+                if (!post.post_url || post.post_url == '') {
+                    $scope.postUrlError = true
+                } else {
+                    $scope.postUrlError = false
+                }
+                if (post && post.post_title && post.post_title != '' && post.post_author && post.post_author != '' && post.post_url && post.post_url != '') {
+                    $scope.createPostValidated = true;
+                }
+            };
 
             $scope.createPost = function(postData) {
-                if(!$scope.postId)
-                {
-                    var pageData = {
-                        title: "Post",
-                        handle: "post",
-                        mainmenu: false
-                    };
-                    WebsiteService.createPage($scope.website._id, pageData, function(newpage) {
-                         $scope.pages.push(newpage);
-                         $scope.postId = newpage._id;
-                         WebsiteService.createPost($scope.postId, postData, function(data) {
-                            toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                            $('#create-post-modal').modal('hide');
-                            $scope.posts.push(data);
-                            WebsiteService.createPost($scope.postId, postData, function(data) {
-                                toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                                $('#create-post-modal').modal('hide');
-                                $scope.posts.push(data);
-                            });
-                        });
-                    });
+                $scope.validateCreatePost(postData);
+                console.log('$scope.createPostValidated ', $scope.createPostValidated);
+                if (!$scope.createPostValidated) {
+                    return false;
                 }
-                else
-                {
-                    WebsiteService.createPost($scope.postId, postData, function(data) {
-                        toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-                        $('#create-post-modal').modal('hide');
-                        $scope.posts.push(data);
-                    });
-                }
-                
+
+
+                postData.websiteId = $scope.website._id;
+                    WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+                    $('#create-post-modal').modal('hide');
+                    $scope.posts.push(data);
+                })
+
             };
 
              $scope.insertMedia = function(asset) {

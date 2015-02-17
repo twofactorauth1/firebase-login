@@ -16,8 +16,7 @@ define(['angularAMD'], function (angularAMD) {
                         width = "99%";
                     return {
                         'height': (newValue.h)-70 + 'px',
-                        'width': width,
-                        'overflow-y' : 'scroll'
+                        'width': width
                     };
                 };
 
@@ -29,9 +28,9 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
-                scope.styleMarketing = function () {
+                scope.styleMarketingSection = function () {
                     return {
-                        'height': (newValue.h) - 1000 + 'px',
+                        'height': (newValue.h)-109 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };
@@ -80,6 +79,14 @@ define(['angularAMD'], function (angularAMD) {
                 scope.styleIndi = function () {
                     return {
                         'height': (newValue.h)-110 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
+                scope.styleCampaignDetail = function () {
+                    return {
+                        'height': (newValue.h)-70 + 'px',
                         'width': '100%',
                         'overflow-y' : 'scroll'
                     };

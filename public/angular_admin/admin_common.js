@@ -1,10 +1,7 @@
 $(document).ready(function () {
-    $('.toggle-menu').jPushMenu();
-    var jPushMenu = {
-            close: function (o) {
-                $('.jPushMenuBtn,body,.cbp-spmenu').removeClass('disabled active cbp-spmenu-open cbp-spmenu-push-toleft cbp-spmenu-push-toright');
-            }
-        }
+    if($('.toggle-menu').jPushMenu)
+       $('.toggle-menu').jPushMenu({closeOnClickOutside: false});
+    
 	function openLeftMenu() {
 	    var body = $('body');
 	    var bodypos = body.css('position');
@@ -75,7 +72,7 @@ $(document).ready(function () {
                     $('.nav-bracket ul').attr('style', '');
                 } else {
                     body.removeClass('rightmenu-open');
-                    jPushMenu.close();
+                    //jPushMenu.close();
                     // if (!$('.menutoggle').hasClass('menu-collapsed')) {
                     //     $('body').removeClass('leftpanel-collapsed').addClass('leftpanel-open');
                     //     $('.nav-bracket li.active ul').css({
@@ -96,8 +93,14 @@ $(document).ready(function () {
 		toggleLeftMenu();
 	});
 
+    $('.header-left').click(function () {
+        $("#leftnav").toggle();
+        var body = $('body');
+        body.toggleClass('toggle-left-nav');
+    });
+
     $(document).click(function() {
-        closeLeftMenu();
+        //closeLeftMenu();
      });
 	
 	$('.menutoggle-right').click(function () {

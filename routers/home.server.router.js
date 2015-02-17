@@ -15,6 +15,7 @@ var contactDao = require('../dao/contact.dao');
 var cookies = require("../utils/cookieutil");
 var appConfig = require('../configs/app.config.js');
 var authenticationDao = require('../dao/authentication.dao');
+var fs = require('fs');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -54,12 +55,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
         app.get("/admin/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        
+
         app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
         app.get("/admin1/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
 
         app.get("/demo", this.setup.bind(this), this.demo.bind(this));
         app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
+
+        app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
+
+        app.get('/main/:page', this.setup.bind(this), this.serveMainHtml.bind(this));
 
         return this;
     },
@@ -271,6 +276,38 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         }
 
+    },
+
+    externalRedirect: function(req, resp) {
+        resp.render('redirect', {next: encodeURIComponent(req.query.next),socialNetwork: encodeURIComponent(req.query.socialNetwork)});
+    },
+
+    serveMainHtml: function(req, resp) {
+        var self = this;
+        var accountId = self.accountId(req);
+        if(accountId !== appConfig.mainAccountID && accountId !== 7) {//7 is a made-up account launch.
+            //resp.redirect("/");
+            resp.status(404);
+            resp.render('404.html', {title: '404: File Not Found'});
+            return;
+        } else {
+            var pageName = req.params.page;
+            if(pageName.indexOf('.html') === -1) {
+                pageName +=".html";
+            }
+            pageName = 'public/static/' + pageName;
+            fs.readFile(pageName, function(err, page) {
+                if(err) {
+                    resp.status(404);
+                    resp.render('404.html', {title: '404: File Not Found'});
+                    return;
+                } else {
+                    resp.writeHead(200, {'Content-Type': 'text/html'});
+                    resp.end(page, 'utf8');
+                }
+
+            });
+        }
     }
 });
 

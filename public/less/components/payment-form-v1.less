@@ -1,143 +1,395 @@
 .payment-form-v1 {
 
-    .selected {
-    	.well {
-    		border: 1px solid #2ecc71!important;
-    		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-    	}
+    h1,h2,h3,h4,h5,p,input,span, .assertions {font-family: 'Raleway', sans-serif!important;}
+    .glyphicon {
+        font-family: 'Glyphicons Halflings'!important;
+    }
+    .fa {
+        font-family: 'FontAwesome'!important;
     }
 
-    .notSelected {
-    	.well {
-    		background: #f0fafb!important;
-    	}
+    .inner-page {
+        max-width: 600px;
+        padding: 25px 0;
     }
 
-    .glyphicon-refresh-animate {
-        -animation: spin .7s infinite linear;
-        -ms-animation: spin .7s infinite linear;
-        -webkit-animation: spinw .7s infinite linear;
-        -moz-animation: spinm .7s infinite linear;
+    .fa-check {
+        color: #27ae60;
     }
-    @keyframes spin {
-        from {
-            transform: scale(1) rotate(0deg);
+
+    #terms-of-service {
+        p.p1 {margin: 0.0px 0.0px 14.4px 0.0px; line-height: 19.2px; font: 11.5px Helvetica; color: #323333}
+        p.p2 {margin: 0.0px 0.0px 15.0px 0.0px; line-height: 15.0px; font: 14.0px Arial; color: #323333}
+        p.p3 {margin: 0.0px 0.0px 14.4px 0.0px; line-height: 19.2px; font: 11.5px Helvetica; color: #272727}
+        p.p4 {margin: 0.0px 0.0px 18.0px 0.0px; line-height: 21.0px; font: 11.5px Helvetica; color: #272727}
+        p.p5 {margin: 0.0px 0.0px 14.4px 30.0px; line-height: 19.2px; font: 11.5px Helvetica; color: #323333}
+        p.p6 {margin: 0.0px 0.0px 14.4px 30.0px; line-height: 19.2px; font: 11.5px Helvetica; color: #444444}
+        p.p7 {margin: 0.0px 0.0px 16.8px 30.0px; line-height: 18.0px; font: 11.5px Helvetica; color: #444444}
+        p.p8 {margin: 0.0px 0.0px 15.0px 0.0px; line-height: 15.0px; font: 14.0px Helvetica; color: #272727}
+        p.p9 {margin: 0.0px 0.0px 10.0px 0.0px; line-height: 19.2px; font: 11.5px Helvetica; color: #323333}
+        span.s1 {letter-spacing: 0.0px}
+        span.s2 {text-decoration: underline ; letter-spacing: 0.0px}
+        span.s3 {text-decoration: underline ; letter-spacing: 0.0px; color: #272727}
+        span.s4 {text-decoration: underline ; letter-spacing: 0.0px; color: #1e497d}
+        span.s5 {letter-spacing: 0.0px; color: #323333}
+        span.s6 {letter-spacing: 0.0px; color: #1e497d}
+    }
+
+    .top-signup {
+        background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
+
+        h1 {
+            font-size: 55px;
+            color: #4bafca;
+            font-weight: bold;
+            i {
+                font-family: 'FontAwesome'!important
+            }
         }
-        to {
-            transform: scale(1) rotate(360deg);
+
+        h2 {
+            font-size: 35px;
+            color: #4bafca;
+            font-weight: bold;
+            i {
+                font-family: 'FontAwesome'!important
+            }
+        }
+
+        h3 {
+            padding-left: 30px;
+        }
+
+        h4 {
+            color:#808080;
         }
     }
-    @-webkit-keyframes spinw {
-        from {
-            -webkit-transform: rotate(0deg);
+
+    .social-signup {
+        background: #4bafca;
+        color:#ffffff;
+        padding: 5px;
+        h2 {
+            font-weight: 700;
         }
-        to {
-            -webkit-transform: rotate(360deg);
+        .btn-toolbar {
+            background: #3897b5;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 380px;
+            margin: 0 auto 5px;
+            p {
+                margin-bottom: 0;
+                line-height: 50px;
+                margin-right: 10px;
+            }
+        }
+        .btn-default {
+            border-radius: 35px;
+            height: 50px;
+            line-height: 37px;
+            font-size: 24px;
+            color: white;
+            width: 50px;
+            border: none;
+            box-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+            margin-right: 10px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+
+        .facebook {background: #3b5998}
+        .twitter {background: #00aced}
+        .google-plus {background: #dd4b39}
+        .linkedin {background: #007bb6}
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            width: 0;
+            height: 0;
+            border-top: solid 25px #4bafca;
+            border-left: solid 25px transparent;
+            border-right: solid 25px transparent;
+            display: block;
         }
     }
-    @-moz-keyframes spinm {
-        from {
-            -moz-transform: rotate(0deg);
-        }
-        to {
-            -moz-transform: rotate(360deg);
+
+    .account-info-signup {
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            width: 0;
+            height: 0;
+            border-top: solid 25px #ffffff;
+            border-left: solid 25px transparent;
+            border-right: solid 25px transparent;
+            display: block;
         }
     }
-    .panel {
-        padding: 15px;
-        background: none;
-        border: none;
-        box-shadow: none;
-        -webkit-box-shadow: none;
-        .wrap {
-            margin: 0 auto;
-            max-width: 780px;
-            border: 1px solid #dddddd;
-            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+
+    .account-info-signup, .payment-signup {
+
+        h4 {
+            padding-left: 10px;
+            color: #808080;
         }
-        .panel-header {
-            padding: 30px;
-            background: #f0fafb;
-            border-bottom: 1px solid #e4f3f6;
-            h1 {
-                color: #57b0cf;
-            }
-            h3 {
-                color: #444444;
-            }
-            .row {
-                text-align: center;
+
+        input {
+            -webkit-box-shadow: 0px 0px 0 3px #f3f7f8;
+            -moz-box-shadow: 0px 0px 0 3px #f3f7f8;
+            box-shadow: 0px 0px 0 3px #f3f7f8;
+            color: #007fbc;
+            font-size: 14px;
+            &:focus {
+                border: 1px solid #4bafca;
+                -webkit-box-shadow: 0px 0px 0 3px #e0f1fc;
+                -moz-box-shadow: 0px 0px 0 3px #e0f1fc;
+                box-shadow: 0px 0px 0 3px #e0f1fc;
             }
         }
-        .panel-body {
-            padding: 23px;
-        }
-        .submit-signup {
-            margin: 15px auto;
-            text-align: center;
-        }
-        .credit-card-input {
-            margin: 0 auto;
-        }
-        .well.well-calm {
-            background: #f0fafb;
-            border: 1px solid #e5f3f6;
-            padding: 0;
-            h2 {
-                background: #53afce;
-                padding: 10px 0;
-                color: white;
-                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-                span {
-                    font-size: 14px;
-                }
+
+        .has-success {
+            .form-control {
+                border-color: #2ecc71;
             }
-            h4 {
-                padding: 10px 0;
-                color: #444;
-                text-shadow: 1px 1px 1px rgb(255, 255, 255);
+            .glyphicon {
+                color:#2ecc71;
             }
         }
+
+        .has-error {
+            .form-control {
+                border-color: #e74c3c;
+            }
+            .glyphicon {
+                color:#e74c3c;
+            }
+            .help-block {
+                color:#e74c3c;
+            }
+        }
+
+        ::-webkit-input-placeholder {
+           color: #cdcdcd;
+        }
+
+        :-moz-placeholder {
+           color: #cdcdcd;
+        }
+
+        ::-moz-placeholder {
+           color: #cdcdcd;
+        }
+
+        :-ms-input-placeholder {
+           color: #cdcdcd;
+        }
+
         .has-feedback .form-control-feedback {
-            top: 5px;
-        }
-    } //end panel
-    .certificates {
-        padding: 0;
-        text-align: center;
-        li {
-            background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
-            width: 132px;
-            height: 131px;
-            padding: 10px;
-            list-style-type: none;
-            text-align: center;
-            display: inline-block;
-            margin-right: 15px;
-            vertical-align: top;
-            .larger {
-                font-size: 24px;
-                padding-top: 12px;
-                vertical-align: middle;
-                line-height: normal;
-            }
+            position: absolute;
+            top: 8px;
+            right: 8px;
         }
     }
 
-    @media (max-width: 625px) {
+    .price-signup {
+        background: #3cb878;
+        color: #ffffff;
+
+        h2 {
+            i {
+                font-size: 30px;
+            }
+            font-size: 54px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+            span {
+                font-size: 24px;
+            }
+        }
+
+        .assertions {
+            color: #1b7144;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+            font-size: 20px;
+            span {
+                font-size: 35px;
+                font-weight: bold;
+            }
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            width: 0;
+            height: 0;
+            border-top: solid 25px #3cb878;
+            border-left: solid 25px transparent;
+            border-right: solid 25px transparent;
+            display: block;
+        }
+    }
+
+    .payment-signup {
+        .submit-signup .btn {
+            max-width: 430px;
+            display: block;
+            font-size: 18px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.4);
+            -webkit-box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
+            -moz-box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
+            box-shadow: 0px 1px 7px rgba(0,0,0,0.5);
+            height: 60px;
+            line-height: 30px;
+        }
+    }
+
+ //    .selected {
+ //    	.well {
+ //    		border: 1px solid #2ecc71!important;
+ //    		box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+ //    	}
+ //    }
+
+ //    .notSelected {
+ //    	.well {
+ //    		background: #f0fafb!important;
+ //    	}
+ //    }
+
+ //    .glyphicon-refresh-animate {
+ //        -animation: spin .7s infinite linear;
+ //        -ms-animation: spin .7s infinite linear;
+ //        -webkit-animation: spinw .7s infinite linear;
+ //        -moz-animation: spinm .7s infinite linear;
+ //    }
+ //    @keyframes spin {
+ //        from {
+ //            transform: scale(1) rotate(0deg);
+ //        }
+ //        to {
+ //            transform: scale(1) rotate(360deg);
+ //        }
+ //    }
+ //    @-webkit-keyframes spinw {
+ //        from {
+ //            -webkit-transform: rotate(0deg);
+ //        }
+ //        to {
+ //            -webkit-transform: rotate(360deg);
+ //        }
+ //    }
+ //    @-moz-keyframes spinm {
+ //        from {
+ //            -moz-transform: rotate(0deg);
+ //        }
+ //        to {
+ //            -moz-transform: rotate(360deg);
+ //        }
+ //    }
+ //    .panel {
+ //        padding: 15px;
+ //        background: none;
+ //        border: none;
+ //        box-shadow: none;
+ //        -webkit-box-shadow: none;
+ //        .wrap {
+ //            margin: 0 auto;
+ //            max-width: 780px;
+ //            border: 1px solid #dddddd;
+ //            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+ //        }
+ //        .panel-header {
+ //            padding: 30px;
+ //            background: #f0fafb;
+ //            border-bottom: 1px solid #e4f3f6;
+ //            h1 {
+ //                color: #57b0cf;
+ //            }
+ //            h3 {
+ //                color: #444444;
+ //            }
+ //            .row {
+ //                text-align: center;
+ //            }
+ //        }
+ //        .panel-body {
+ //            padding: 23px;
+ //        }
+ //        .submit-signup {
+ //            margin: 15px auto;
+ //            text-align: center;
+ //        }
+ //        .credit-card-input {
+ //            margin: 0 auto;
+ //        }
+ //        .well.well-calm {
+ //            background: #f0fafb;
+ //            border: 1px solid #e5f3f6;
+ //            padding: 0;
+ //            h2 {
+ //                background: #53afce;
+ //                padding: 10px 0;
+ //                color: white;
+ //                text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+ //                span {
+ //                    font-size: 14px;
+ //                }
+ //            }
+ //            h4 {
+ //                padding: 10px 0;
+ //                color: #444;
+ //                text-shadow: 1px 1px 1px rgb(255, 255, 255);
+ //            }
+ //        }
+ //        .has-feedback .form-control-feedback {
+ //            top: 5px;
+ //        }
+ //    } //end panel
+ //    .certificates {
+ //        padding: 0;
+ //        text-align: center;
+ //        li {
+ //            background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
+ //            width: 132px;
+ //            height: 131px;
+ //            padding: 10px;
+ //            list-style-type: none;
+ //            text-align: center;
+ //            display: inline-block;
+ //            margin-right: 15px;
+ //            vertical-align: top;
+ //            .larger {
+ //                font-size: 24px;
+ //                padding-top: 12px;
+ //                vertical-align: middle;
+ //                line-height: normal;
+ //            }
+ //        }
+ //    }
+
+ //    @media (max-width: 625px) {
 		
-	}
-    .signup-social-toolbar {
-        text-align: center;
-        margin-bottom: 20px;
-        .btn {
-            min-width: 75px;
-        }
-        i.fa {
-            font-size: 36px;
-        }
-    }
-    .profilePhoto {
-        margin: 0 auto;
-    }
+	// }
+ //    .signup-social-toolbar {
+ //        text-align: center;
+ //        margin-bottom: 20px;
+ //        .btn {
+ //            min-width: 75px;
+ //        }
+ //        i.fa {
+ //            font-size: 36px;
+ //        }
+ //    }
+ //    .profilePhoto {
+ //        margin: 0 auto;
+ //    }
 }

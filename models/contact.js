@@ -167,8 +167,8 @@ var contact = $$.m.ModelBase.extend({
         details.forEach(function(detail) {
             if (detail && detail.emails != null) {
                 detail.emails.forEach(function(email) {
-                    if (emails.indexOf(email.email) == -1) {
-                        emails.push(email.email);
+                    if (emails.indexOf(email) == -1) {
+                        emails.push(email);
                     }
                 });
             }

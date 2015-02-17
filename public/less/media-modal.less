@@ -8,6 +8,11 @@
 	}
 	.modal-footer {
 		margin-top: 0;
+
+        &.upload {
+            height: ~"calc(100% - 60px)";
+            overflow: auto;
+        }
 	}
 
 	.single-filemanager {
@@ -69,9 +74,9 @@
         margin-bottom: 0 !important;
     }
 
-    .media > * {
-        display: none;
-    }
+    // .media > * {
+    //     display: none;
+    // }
 
     .all .media > *:not([id]),
     .all .media #all-warning-box,
@@ -117,7 +122,7 @@
         display: none !important;
     }
 
-    [id*="-warning-box"]{
+    [id="warning-box"]{
         padding: 20px;
         color: red;
         font-size: 20px;
@@ -130,4 +135,3 @@
         margin: 15px auto;
     }
 }
-

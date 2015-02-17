@@ -45,19 +45,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            maintitle : "<h1>Masthead Title</h1>",
-
-            /**
-             *
-             *
-             */
-            subtitle : "<h4>A Great place for a subtitle. </h4>",
-
-            /**
-             *
-             *
-             */
-            text : "<p>This is where you describe something about your business or product that get the user to scroll or press a button.</p>",
+            text : "<h1>Masthead Title</h1><h4>A Great place for a subtitle. </h4><p>This is where you describe something about your business or product that get the user to scroll or press a button.</p>",
 
             /**
              *
@@ -77,20 +65,10 @@ var component = $$.m.ModelBase.extend({
                     parallax : false,
                     blur : false,
                     overlay: false,
-                    show: false
+                    show: false,
+                    position: "",
                 },
                 color : "#4bb0cb"
-            },
-
-            /**
-             *
-             *
-             */
-            btn : {
-                visibility: true,
-                text : "Learn More",
-                url : "#features",
-                icon : "fa fa-rocket"
             },
 
             visibility: true

@@ -60,6 +60,7 @@ _.extend(baseRouter.prototype, {
                         req.session.accountId = value.id();
                         req.session.subdomain = value.get('subdomain');
                         req.session.domain = value.get('domain');
+                        req.session.locked = value.get('locked');
                     }
                 } else {
                     logger.warn("No account found from getAccountByHost");

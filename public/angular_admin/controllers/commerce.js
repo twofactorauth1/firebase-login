@@ -25,7 +25,8 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         };
 
         $scope.finishOnboarding = function() {
-            console.log('were finished');
+          $scope.userPreferences.tasks.add_product = true;
+          UserService.updateUserPreferences($scope.userPreferences, false, function() {});
         };
 
         if ($location.$$search['onboarding']) {
@@ -64,10 +65,26 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         });
 
         $scope.toggleProductType = true;
-        
+
         $scope.$watch('toggleProductType', function(value) {
             if (angular.isDefined(value)) {
                 $scope.commerceSettings.showProductType = value;
+            }
+        });
+
+        $scope.toggleProductStatus = true;
+
+        $scope.$watch('toggleProductStatus', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showProductStatus = value;
+            }
+        });
+
+        $scope.toggleProductCost = true;
+
+        $scope.$watch('toggleProductCost', function(value) {
+            if (angular.isDefined(value)) {
+                $scope.commerceSettings.showProductCost = value;
             }
         });
 
@@ -95,13 +112,16 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             } else if (newValue == 3) {
                 $scope.productOrder = 'created.date';
                 $scope.productSortReverse = false;
-            } else if (newValue == 4) {
-                $scope.productOrder = 'last';
-                $scope.productSortReverse = false;
-            } else if (newValue == 5) {
-                $scope.productOrder = 'lastActivity';
-                $scope.productSortReverse = true;
-            } else if (newValue == 4) {
+            }
+            //else if (newValue == 4) {
+              //  $scope.productOrder = 'last';
+               // $scope.productSortReverse = false;
+            //}
+            //else if (newValue == 5) {
+              //  $scope.productOrder = 'lastActivity';
+                //$scope.productSortReverse = true;
+            //}
+             else if (newValue == 4) {
                 $scope.productOrder = 'total_sales';
                 $scope.productSortReverse = false;
             } else if (newValue == 5) {
@@ -112,7 +132,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 $scope.productSortReverse = true;
             } else if (newValue == 7) {
                 $scope.productOrder = 'starred';
-                $scope.productSortReverse = false;
+                $scope.productSortReverse = true;
             }
         });
         var initializeSortOrder = 0;
@@ -143,7 +163,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                     $scope.productSortReverse = true;
                 } else if (newValue == 7) {
                     $scope.productOrder = 'starred';
-                    $scope.productSortReverse = false;
+                    $scope.productSortReverse = true;
                 }
                 if (newValue && $scope.userPreferences && $scope.userPreferences.commerceSettings) {
                     $scope.userPreferences.commerceSettings.productOrder = $scope.productOrder;

@@ -16,6 +16,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
             templateUrl : '/angular_admin/views/partials/_activity.html',
             link : function(scope, element, attrs, controllers) { 
                 scope.next = false;
+                scope.disablePaging = true;
                 scope.main = {
                         page: scope.currentPage,
                         take: scope.numPerPage
@@ -83,6 +84,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                        }).reverse();
                         scope.all_activities = angular.copy(activities);
                         scope.total = scope.all_activities.length;
+                        scope.disablePaging = false;
                     });
                     } else {                       
                         if(scope.customersAtRisk)
@@ -112,6 +114,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                             };
                             scope.total = data.total;
                             scope.activities = activites;
+                            scope.disablePaging = false;
                         });                                       
                     }
                 }
@@ -140,7 +143,8 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                     } 
                 }
                 
-                scope.nextPage = function() {                   
+                scope.nextPage = function() { 
+                        scope.disablePaging = true; 
                         scope.main.page++;
                         if(!scope.singleCustomer)
                             scope.loadPage();                        
@@ -148,6 +152,7 @@ define(['angularAMD', 'customerService', 'offsetFilter'], function(angularAMD) {
                 };
                
                 scope.previousPage = function() {
+                       scope.disablePaging = true;
                        scope.main.page--;
                        if(!scope.singleCustomer)
                             scope.loadPage();                         

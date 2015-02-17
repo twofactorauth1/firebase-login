@@ -9,6 +9,10 @@ hr {
   font-size: 14px;
 }
 
+.cke_widget_drag_handler_container {
+  display: none;
+}
+
 .goback {
   background: #d0ecf6;
   padding: 38px;
@@ -16,6 +20,13 @@ hr {
   -webkit-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   -moz-box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
   box-shadow: 8px 0px 7px 0px rgba(50, 50, 50, 0.15);
+}
+
+.btn-big {
+  max-width: 300px!important;
+  height: 70px!important;
+  line-height: 55px;
+  font-size: 24px;
 }
 
 .goback span {
@@ -140,6 +151,29 @@ hr {
       }
     }
 }
+.component-hidden{text-align: center;padding: 5px 0;}
+
+.add-addtional, .add-addtional-feature, .add-addtional-team {
+  position: absolute;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 10px 10px 5px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  left: 50%;
+  z-index: 9998;
+  margin-top: -25px;
+  margin-left: -25px;
+  display: none;
+  -webkit-transition: font-size 0.5s;
+   -moz-transition: font-size 0.5s;
+     -o-transition: font-size 0.5s;
+        transition: font-size 0.5s;
+
+  &:hover {
+    font-size: 18px;
+  }
+}
 
 body.editing {
   .no-component {
@@ -156,13 +190,15 @@ body.editing {
   }
   .fragment {
     border: none;
+    .component-inner {
+        border: 2px solid transparent;
+      }
     &.dragging {
-      z-index: 999999!important;
+      z-index: 99999!important;
     }
     &:hover {
       .component-inner {
         border: 2px dashed #34495e;
-        padding: 0px;
       }
       .componentActions {
         display: block;
@@ -184,11 +220,21 @@ body.editing {
   .dragging {
     height: 60px!important;
   }
+  .as-sortable-placeholder {
+    height: 60px!important;    
+  }
   .componentActions {
     h4 {
         display: none;
       }
   }
+}
+
+.as-sortable-drag {
+    pointer-events: none;
+    z-index: 9999;
+    list-style:none;
+    opacity: 0.9;
 }
 
 ul.ui-sortable.active {
@@ -264,7 +310,7 @@ ol.circles-list > li:before {
 }
 
 /* BS CAROUSEL STEP */
-  
+
   .single-step.carousel-step{
     width:400px;
     height:540px;
@@ -318,14 +364,13 @@ ol.circles-list > li:before {
 @import "components/accordion-v1.less";
 @import "components/campaign.less";
 @import "components/contact-us-v1.less";
-@import "components/contact-us-v2.less";
-@import "components/contact-us-v4.less";
 @import "components/component-wrap.less";
 @import "components/default-layout.less";
 @import "components/feature-list-v1.less";
 @import "components/feature-list-v2.less";
 @import "components/feature-list-v3.less";
 @import "components/feature-list-v4.less";
+@import "components/top-bar-v1.less";
 @import "components/navbar-v1.less";
 @import "components/navbar-v2.less";
 @import "components/navbar-v3.less";
@@ -339,11 +384,8 @@ ol.circles-list > li:before {
 @import "components/testimonials-v1.less";
 @import "components/testimonials-v2.less";
 @import "components/image-text-v1.less";
-@import "components/image-text-v2.less";
-@import "components/image-text-v3.less";
 @import "components/shopping-cart-v1.less";
 @import "components/masthead-v1.less";
-@import "components/social-v1.less";
 @import "components/simple-form-v1.less";
 @import "components/simple-form-v2.less";
 @import "components/simple-form-v3.less";
@@ -353,11 +395,9 @@ ol.circles-list > li:before {
 @import "components/footer-v1.less";
 @import "components/single-blog-v1.less";
 @import "components/blog-v1.less";
-@import "components/pricing-table-v1.less";
+@import "components/pricing-tables-v1.less";
 @import "components/coming-soon-v1.less";
 @import "components/image-gallery-v1.less";
-@import "components/image-text-v4.less";
-@import "components/information-list-v1.less";
 @import "components/header-image-text-v1.less";
 @import "components/information-list-v2.less";
 @import "components/triangle-text-v1.less";
@@ -365,8 +405,7 @@ ol.circles-list > li:before {
 @import "components/payment-form-v1.less";
 @import "components/thumbnail-slider-v1.less";
 @import "components/video-v1.less";
-@import "components/image-text-v5.less";
-@import "components/image-gallery-v2.less";
+
 @import "components/social-link-v1.less";
 @import "components/customer-account-v1.less";
 @import "components/customer-signup-v1.less";

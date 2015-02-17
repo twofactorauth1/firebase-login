@@ -236,9 +236,15 @@ module.exports = function(grunt) {
         },
 
         uglify: {
+            options: {
+                compress: {
+                    drop_console: true
+                }
+            },
             js: {
                 files: {
-                    'public/js/indigenous.js': ['public/js/indigenous.js']
+                    'public/js/indigenous.js': ['public/js/indigenous.js'],
+                    'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js']
                 }
             }
         },
@@ -329,6 +335,7 @@ module.exports = function(grunt) {
             facebook: ['test/facebook_test.js'],
             functionalPayments: ['payments/tests/payment_functional_test.js'],
             google: ['test/google.dao_test.js'],
+            gtm: ['test/gtm.dao_test.js'],
             linkedin: ['test/linkedin.dao_test.js'],
             payments: ['payments/tests/*_test.js'],
             paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
@@ -342,7 +349,8 @@ module.exports = function(grunt) {
             runkeeper:['biometrics/runkeeper/adapter/test/**/*_test.js', 'biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
-            utils:['utils/test/*_test.js']
+            utils:['utils/test/*_test.js'],
+            tzTests: ['test/tztest.js']
         },
 
         //NG-Constant for angular constants
@@ -506,7 +514,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'uglify', 'ngAnnotate','clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
 
     /*
      * This task is run by CI.
@@ -541,6 +549,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testPaymentEvents', ['nodeunit:paymentEvents']);
     grunt.registerTask('testCollater', ['nodeunit:analyticsCollater']);
     grunt.registerTask('updateDocs', 'jsdoc2md');
-
-    
+    grunt.registerTask('testTz', ['nodeunit:tzTests']);
+    grunt.registerTask('testGtm', ['nodeunit:gtm']);
 };

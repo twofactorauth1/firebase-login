@@ -1,0 +1,46 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+
+extends snippets/_layout
+
+block content
+    section
+        .signinpanel
+            if account
+                if account.business.logo
+                    img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
+                else
+                    h1.center.company-title #{account.company.name}
+            else
+                span.logo
+
+            form(role="form", action="/login" method="post")
+
+                div.welcome-text
+                    h4.nomargin Redirecting
+                    p.mt5.mb20(id="redirectMsg")
+                    div(id="timerSec")                   
+                    p 
+                      h4 Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
+    script.
+        var next = decodeURIComponent('//#{next}');
+        var socialNetwork = decodeURIComponent('#{socialNetwork}');
+        //console.log('next: ' + next);
+        console.log('socialNetwork: ' + socialNetwork);
+        if (socialNetwork != 'undefined')
+            document.getElementById('redirectMsg').innerHTML = "You are about to be redirected to "+ socialNetwork +" for authentication";
+        else
+            document.getElementById('redirectMsg').innerHTML = "You're about to be redirected in ";
+        var secLeft = 4;
+        var intervalFn = function() {
+        	secLeft -= 1;
+        	document.getElementById('timerSec').innerHTML = '<strong>' + secLeft + ' Sec</strong>';
+        	if (secLeft <= 0) {
+        		clearInterval(interval);
+        		window.location = next;
+        	} 
+        };
+        var interval = setInterval(intervalFn, 1000);

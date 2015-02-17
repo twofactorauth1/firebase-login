@@ -6,18 +6,16 @@
         position: relative;
     }
     .leftpanel {
-        display: none;
+        // display: none;
     }
     .mainpanel {
-        margin-left: 0;
+        //margin-left: 0;
         width: 100%;
     }
     .leftpanel-collapsed .leftpanel {
-        display: none;
+        // display: none;
     }
-    .leftpanel-collapsed .mainpanel {
-        margin-left: 0;
-    }
+    
     .leftpanel-collapsed .headerbar {
         margin-left: 0;
     }
@@ -196,6 +194,9 @@
     .website .pageheader .glyphicon, .website .pageheader .fa,  .website-manage .pageheader .fa {
         font-size: 14px;
     }
+    .pageheader .fa.website-manage-icon {
+        font-size: 20px;
+    }
     .website .pageheader .col-xs-5, .website-manage .pageheader .col-xs-5{
         padding-left: 2px;
         padding-right: 1px;
@@ -304,6 +305,7 @@
         font-size: 14px;
         line-height: 18px;
     }
+    .l
     .blog-summary {
         font-size: 12px;
         line-height: 18px;
@@ -351,6 +353,11 @@
     }
     .pagination {
         margin-bottom: 20px;
+    }
+}
+@media screen and (max-width: 400px) {
+    #leftnav {
+        display: none;
     }
 }
 @media screen and (max-width: 320px) {

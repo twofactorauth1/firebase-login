@@ -336,7 +336,17 @@ var dao = {
             websiteId: websiteId,
             handle: pageName
         };
-        this.findOne(query, Page, fn);
+        this.findMany(query, Page, function(err, pages){
+            //only return the latest.
+            var version = -1;
+            var pageToReturn = null;
+            _.each(pages, function(page){
+                if(page.get('version') > version) {
+                    pageToReturn = page;
+                }
+            });
+            return fn(null, pageToReturn);
+        });
     },
 
     getPageByType: function(accountId, websiteId, pageType, fn) {
@@ -812,9 +822,9 @@ var dao = {
     updateWebsiteSettings: function(newSettings, accountId, websiteId, fn) {
         var self = this,
             website;
-        console.log('New Settings: ' + JSON.stringify(newSettings));
+        self.log.debug('New Settings: ' + JSON.stringify(newSettings));
         //ensure website exists and belongs to this account
-        this.getById(websiteId, Website, function(err, value) {
+        self.getById(websiteId, Website, function(err, value) {
             if (err) {
                 fn(err, value);
                 accountId = websiteId = fn = null;
@@ -834,21 +844,21 @@ var dao = {
             }
 
             var settings = value.get('settings');
-            console.log('Website Settings: ' + JSON.stringify(settings));
+            self.log.debug('Website Settings: ' + JSON.stringify(settings));
             if (settings == null) {
                 settings = newSettings;
                 value.set('settings', settings);
-                console.log('Website Settings2: ' + JSON.stringify(value.get('settings')));
+                self.log.debug('Website Settings2: ' + JSON.stringify(value.get('settings')));
             } else {
                 settings = newSettings;
                 value.set('settings', settings);
             }
 
-            self.saveOrUpdate(value, function() {
+            self.saveOrUpdate(value, function(err, saved) {
                 console.log('saved');
+                return fn(null, saved);
             });
-            accountId = website = null;
-            return;
+            
         });
     },
 
@@ -1284,6 +1294,7 @@ var dao = {
                     "type" : "email",
                     "version" : 1,
                     "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
                     "subtitle" : "subtitle",
                     "text" : "We're! excited to show you how Indigenous will take your business, whether it's still an idea or you're already making a name for yourself, to the next level.!<br><br>Our current clients have helped us develop a business software platform that is going to wow you and your customers with its simplicity and power, and even more importantly, give you a lot more time to do what you love, whatever it is and wherever you are.<br><br>Imagine catching that golden hour surf sesh instead of going through your client list and trying to determine who's fallen through the cracks, taking your kids to the ball game instead of working on the fourteenth draft of that newsletter you're not sure anyone reads that was supposed to go out a week ago, or being able to say yes to that impromptu trip to Bali because your workshops and lecture series are already scheduled and filled for the year.<br><br>Sounds good, right? Please stay tuned. In the meantime, check out our blog to learn more.<br><a href=\"http://www.indigenous.io/page/blog\" class=\"btn\" target=\"_blank\">Visit Our Blog</a><br>We’re looking forward to helping you tell your story.<br><br><strong>Your team at Indigenous</strong>",

@@ -7,17 +7,12 @@
 -->
 <div ng-class="component.type+'-v'+component.version">
     <div ng-show="component.title" class="image-text-title col-xs-12">
-        <div class="editable" data-class="title" data-ng-bind-html="component.title">
-        </div>
-    </div>
-
-    <div ng-show="component.subtitle" class="image-text-subtitle col-xs-12">
-        <div class="editable" data-class="subtitle" data-ng-bind-html="component.subtitle | unsafe">
+        <div class="editable" data-class="title" data-ng-bind-html="component.title | unsafe">
         </div>
     </div>
 
     <div class="pull-{{component.imagePosition}} col-sm-4 col-xs-12 image-text-image">
-        <div class="center editable" data-class="caption" ng-bind-html="component.caption | unsafe"></div>
+        <div class="center editable" data-class="imgsection" ng-bind-html="component.imgsection | unsafe"></div>
     </div>
 
     <div class="col-sm-8 col-xs-12" style="padding-left:30px;">

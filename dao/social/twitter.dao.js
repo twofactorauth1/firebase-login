@@ -79,7 +79,6 @@ var dao = {
         });
     },
 
-
     refreshUserFromProfile: function(user, defaultPhoto, fn) {
         if (_.isFunction(defaultPhoto)) {
             fn = defaultPhoto;
@@ -103,8 +102,75 @@ var dao = {
         });
     },
 
+    getHomeTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/home_timeline.json', fn);
+    },
+
+    getUserTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/user_timeline.json', fn);
+    },
+
+    getMentionsTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/mentions_timeline.json', fn);
+    },
+
+    getDirectMessages: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'direct_messages.json', fn);
+    },
+
+    getTweetsForId: function(accessToken, accessTokenSecret, twitterId, timeline, fn) {
+        var self = this;
+        self.log.debug('>> getting tweets ', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        //var path = "statuses/user_timeline.json";
+        var path = timeline;
+        var params = {
+            user_id: twitterId,
+            count: 200
+        };
+
+        var url = this._generateUrl(path, params);
+
+        self.log.debug('>> getting tweets params ', params);
+        self.log.debug('>> getting tweets url ', url);
+
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            if (err) {
+                return fn(err, value);
+            }
+
+            var tweets = JSON.parse(value);
+            self.log.debug('>> tweets ', tweets);
+            if (tweets.length > 0) {
+                var result = [];
+
+                var processTweet = function (tweet, cb) {
+                    result.push(new Post().convertFromTwitterTweet(tweet));
+                    cb();
+                };
+
+                async.eachLimit(tweets, 10, processTweet, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, tweets);
+            }
+        });
+
+    },
+
 
     getTweetsForUser: function(user, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting tweets ', twitterId);
         if (_.isFunction(twitterId)) {
             fn = twitterId;
             twitterId = null;
@@ -118,12 +184,16 @@ var dao = {
 
         var url = this._generateUrl(path, params);
 
+        self.log.debug('>> getting tweets params ', params);
+        self.log.debug('>> getting tweets url ', url);
+
         this._makeRequest(url, user, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
 
             var tweets = JSON.parse(value);
+            self.log.debug('>> tweets ', tweets);
 
             if (tweets.length > 0) {
                 var result = [];
@@ -140,6 +210,153 @@ var dao = {
                 fn(null, tweets);
             }
         });
+    },
+
+    getProfleForUser: function(user, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting tweets ', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "account/verify_credentials.json";
+        var params = {
+            user_id: twitterId || this._getTwitterId(user),
+            count: 200
+        };
+
+        var url = this._generateUrl(path, params);
+
+        self.log.debug('>> getting tweets params ', params);
+        self.log.debug('>> getting tweets url ', url);
+
+        this._makeRequest(url, user, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var profile = JSON.parse(value);
+            self.log.debug('>> profile ', profile);
+            fn(null, profile);
+
+            // if (profile.length > 0) {
+            //     var result = [];
+
+            //     var processTweet = function (tweet, cb) {
+            //         result.push(new Post().convertFromTwitterTweet(tweet));
+            //         cb();
+            //     };
+
+            //     async.eachLimit(tweets, 10, processTweet, function (cb) {
+            //         return fn(null, result);
+            //     });
+            // } else {
+            //     fn(null, tweets);
+            // }
+        });
+    },
+
+    getProfleForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getProfleForId', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "account/verify_credentials.json";
+        var params = {
+            user_id: twitterId,
+            count: 200
+        };
+        var url = this._generateUrl(path, params);
+
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            var profile = JSON.parse(value);
+            self.log.debug('>> profile ', profile);
+            fn(null, profile);
+        });
+    },
+
+    getFollowers: function(user, twitterId, fn) {
+        var self = this;
+        self.log.debug('>> getting followers ', twitterId);
+        if (_.isFunction(twitterId)) {
+            fn = twitterId;
+            twitterId = null;
+        }
+
+        var path = "followers/list.json";
+        var params = {
+            user_id: twitterId || this._getTwitterId(user),
+            count: 200
+        };
+
+        var url = this._generateUrl(path, params);
+
+        self.log.debug('>> getting followers params ', params);
+        self.log.debug('>> getting followers url ', url);
+
+        this._makeRequest(url, user, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var followers = JSON.parse(value);
+            self.log.debug('>> followers ', followers['users']);
+
+            if (followers['users'].length > 0) {
+                var result = [];
+
+                var processFollower = function (follower, cb) {
+                    result.push(new Post().convertFromTwitterFollower(follower));
+                    cb();
+                };
+
+                async.eachLimit(followers['users'], 10, processFollower, function (cb) {
+                    self.log.debug('>> result ', result);
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, followers['users']);
+            }
+        });
+    },
+
+    getFollowersForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        var path = "followers/list.json";
+        var params = {
+            user_id: twitterId,
+            count: 200
+        };
+        var url = this._generateUrl(path, params);
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            if (err) {
+                return fn(err, value);
+            }
+
+            var followers = JSON.parse(value);
+            self.log.debug('>> followers ', followers['users']);
+
+            if (followers['users'].length > 0) {
+                var result = [];
+
+                var processFollower = function (follower, cb) {
+                    result.push(new Post().convertFromTwitterFollower(follower));
+                    cb();
+                };
+
+                async.eachLimit(followers['users'], 10, processFollower, function (cb) {
+                    self.log.debug('>> result ', result);
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, followers['users']);
+            }
+        });
+
     },
 
     post: function(user, status, fn) {
@@ -167,9 +384,69 @@ var dao = {
         );
     },
 
+    postWithToken: function(accessToken, accessTokenSecret, status, fn) {
+        var self = this;
+        self.log.debug('>> postWithToken');
+
+        twitter.statuses("update", {
+                status: status
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error updating status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< postWithToken');
+                    fn(null, response);
+                }
+            }
+        );
+    },
+
+    getSearchResults: function(accessToken, accessTokenSecret, twitterId, term, fn) {
+        var self = this;
+        var path = "search/tweets.json";
+        var params = {
+            user_id: twitterId,
+            count: 200,
+            q: encodeURIComponent(term)
+        };
+        var url = this._generateUrl(path, params);
+
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            if (err) {
+                return fn(err, value);
+            }
+
+            var tweets = JSON.parse(value);
+            self.log.debug('>> tweets ', tweets);
+            if (tweets.length > 0) {
+                var result = [];
+
+                var processTweet = function (tweet, cb) {
+                    result.push(new Post().convertFromTwitterTweet(tweet));
+                    cb();
+                };
+
+                async.eachLimit(tweets, 10, processTweet, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, tweets);
+            }
+        });
+    },
+
 
     _getAccessToken: function(user) {
+        var self = this;
+        self.log.debug('>> _getAccessToken ', user);
         var credentials = user.getCredentials($$.constants.user.credential_types.TWITTER);
+        self.log.debug('>> credentials ', credentials);
         if (credentials == null) {
             return null;
         }
@@ -215,6 +492,8 @@ var dao = {
 
 
     _makeRequest: function(url, user, fn) {
+        var self = this;
+        self.log.debug('>> _makeRequest ', user);
         var oauth = new OAuth(
             '',                      //REquest URL (not in use)
             '',                      //Access URL (not in use)
@@ -226,12 +505,36 @@ var dao = {
         );
 
         var accessToken = this._getAccessToken(user);
+        self.log.debug('>> _makeRequest accessToken ', accessToken);
         var accessTokenSecret = this._getAccessTokenSecret(user);
+        self.log.debug('>> _makeRequest accessTokenSecret ', accessTokenSecret);
 
         if (accessToken == null || accessTokenSecret == null) {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "Cannot make twitter request");
         }
 
+        oauth.get(url, accessToken, accessTokenSecret, function (err, body, response) {
+            console.log('URL [%s]', url);
+            if (!err && response.statusCode == 200) {
+                fn(null, body);
+            } else {
+                fn(err, response, body);
+            }
+        });
+    },
+
+    _makeRequestWithTokens: function(url, accessToken, accessTokenSecret, fn) {
+        var self = this;
+        self.log.debug('>> _makeRequestWithTokens');
+        var oauth = new OAuth(
+            '',                      //REquest URL (not in use)
+            '',                      //Access URL (not in use)
+            twitterConfig.CLIENT_ID,
+            twitterConfig.CLIENT_SECRET,
+            '1.0',
+            '',                     //Callback URL, not in use
+            'HMAC-SHA1'
+        );
         oauth.get(url, accessToken, accessTokenSecret, function (err, body, response) {
             console.log('URL [%s]', url);
             if (!err && response.statusCode == 200) {

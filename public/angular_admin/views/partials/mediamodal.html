@@ -13,42 +13,70 @@
                     <span class="fa fa-image"></span> Media Manager
                 </h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" ng-if="uploader.queue.length <= 0">
                 <div class="row filemanager {{showType}}" ng-if="!editingImage">
                     <ul class="filemanager-options">
                         <li class="checked">
                             <div class="ckbox ckbox-default">
                                 <input type="checkbox"
                                        id="selectall"
-                                       ng-model="select_all"
-                                       ng-change="m.selectAll()">
+                                       ng-model="selectModel.select_all"
+                                       ng-change="m.selectTriggerFn(selectModel.select_all)" />
                                 <label for="selectall">Select All</label>
                             </div>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-envelope-o"></i><span class="hidden-xs">Email</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-envelope-o"></i><span class="hidden-xs">Email</span></a>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-download"></i> <span class="hidden-xs">Download</span></a>
                         </li>
                         <li class="hidden">
-                            <a href="" class="itemopt" ng-disabled="!select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all"><i class="fa fa-pencil"></i> <span class="hidden-xs">Edit</span></a>
                         </li>
                         <li>
-                            <a href="" class="itemopt" ng-disabled="!select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()"  ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
+                            <a href="" class="itemopt" ng-disabled="!selectModel.select_all" confirm-click2 data-placement="top" confirm-click2-confirm="m.deleteAsset()" confirm-click2-href="#" ng-click=""><i class="fa fa-trash-o"></i> <span class="hidden-xs">Delete</span></a>
                         </li>
                         <li class="filter-type" style="font-size: 11px;">
                             Show:
-                            <a href="" data-active="all"        ng-click="select_all=false;showType = 'all'     ;m.selectAll()"     >All</a>
-                            <a href="" data-active="document"   ng-click="select_all=false;showType = 'document';m.selectAll()"     >Documents</a>
-                            <a href="" data-active="audio"      ng-click="select_all=false;showType = 'audio'   ;m.selectAll()"     >Audio</a>
-                            <a href="" data-active="image"      ng-click="select_all=false;showType = 'image'   ;m.selectAll()"     >Images</a>
-                            <a href="" data-active="video"      ng-click="select_all=false;showType = 'video'   ;m.selectAll()"     >Videos</a>
+                            <a href=""
+                               data-active="all"
+                               ng-click="insertMediaType !== undefined || m.selectAll('all', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined}">
+                                All
+                            </a>
+
+                            <a href=""
+                               data-active="document"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'document' || m.selectAll('document', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'document'}">
+                                Documents
+                            </a>
+
+                            <a href=""
+                               data-active="audio"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'audio' || m.selectAll('audio', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'audio'}">
+                                Audio
+                            </a>
+
+                            <a href=""
+                               data-active="image"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'image' || m.selectAll('image', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'image'}">
+                                Images
+                            </a>
+
+                            <a href="" data-active="video"
+                               ng-click="insertMediaType !== undefined && insertMediaType !== 'video' || m.selectAll('video', true)"
+                               ng-class="{'disabled': insertMediaType !== undefined && insertMediaType !== 'video'}">
+                                Videos
+                            </a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
                     <div class="media" id="assets" style="max-height:{{bodyHeight}};">
-                        <div ng-repeat="asset in assets track by $index" class="col-xs-12 col-sm-4 {{asset.mimeType}}">
+                        <div ng-repeat="asset in assets" class="col-xs-12 col-sm-4" ng-show="assets.length">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
@@ -81,8 +109,10 @@
                                     </ul>
                                 </div>
                                 <div class="thmb-prev">
-                                    <div>
-                                        <img ng-src="{{asset.url}}" alt="">
+                                    <div ng-switch="asset.mimeType">
+                                        <span ng-switch-when="application/pdf" class="fa fa-file-pdf-o" style="font-size: 96px;"></span>
+                                        <span ng-switch-when="application/octet-stream" class="fa fa-file-text-o" style="font-size: 96px;"></span>
+                                        <img ng-switch-default ng-src="{{asset.url}}" alt="">
                                     </div>
                                 </div>
                                 <h5 class="fm-title">
@@ -92,16 +122,13 @@
                                 <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>
                         </div>
-                        <div id="image-warning-box"> No Image</div>
-                        <div id="audio-warning-box"> No Audio</div>
-                        <div id="video-warning-box"> No Video</div>
-                        <div id="document-warning-box"> No document</div>
-                        <div id="all-warning-box"> No Media</div>
+                        <div id="warning-box" ng-hide="assets.length" ng-if="showType != 'all'"> No {{showType}} uploaded.</div>
+                        <div id="warning-box" ng-hide="assets.length" ng-if="showType == 'all'"> No media uploaded.</div>
                     </div>
                 </div>
                 <div class="editimage" ng-show="editingImage" style="height:{{bodyHeight}};">
                     <div class="col-xs-6 imgedit-wrap">
-                        <img src="{{singleAsset.url}}" class="img-responsive img-thumbnail" id="targetEditImage">
+                        <img ng-src="{{singleAsset.url}}" class="img-responsive img-thumbnail" id="targetEditImage">
                         <!-- <img ng-src="{{singleAsset.url}}" id="originalSource" class="hidden"> -->
                         <canvas id="targetCanvas"></canvas>
                     </div>
@@ -111,16 +138,17 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" ng-class="{upload: uploader.queue.length > 0}">
                 <div class="row" ng-if="editingImage">
                     <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
                     <button class="btn btn-primary"><i class="fa fa-history"></i> Restore</button>
                     <button class="btn btn-primary"><i class="fa fa-save"></i> Save Image</button>
                 </div>
                 <div class="row" ng-if="!editingImage">
-                    <div class="col-md-offset-8 col-md-4">
+                    <div class="col-md-offset-7 col-md-5">
                         <label for="upload_image" class="btn btn-primary ">
-                            <span ng-if="uploader.queue.length <= 0">From Computer</span>
+                            <span ng-if="uploader.queue.length <= 0" ng-show="!isMobile">From Computer</span>
+                            <span ng-if="uploader.queue.length <= 0" ng-show="isMobile">From Mobile</span>
                             <span ng-if="uploader.queue.length > 0">Select Another File</span>
                             <input type="file"
                                    id="upload_image"
@@ -154,7 +182,7 @@
                             <tbody>
                                 <tr ng-repeat="item in uploader.queue">
                                     <td>
-                                        <strong>{{ item.file.name }}</strong>
+                                        <span class="word-wrap"><strong>{{ item.file.name }}</strong></span>
                                     </td>
                                     <td ng-show="uploader.isHTML5" nowrap>
                                         {{ item.file.size/1024/1024|number:2 }} MB

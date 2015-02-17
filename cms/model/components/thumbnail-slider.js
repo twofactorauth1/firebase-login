@@ -38,13 +38,15 @@ var component = $$.m.ModelBase.extend({
              * The label for the component
              * (optional)
              */
-            title:"",
+            title:"<h1>Thumbnail Slider</h1>",
 
             /**
              * A description that appears at the top of the component
              * (optional)
              */
             subtitle:"",
+
+            txtcolor: "#444",
 
             /**
              * An array of objects that contain image and caption data:
@@ -58,13 +60,62 @@ var component = $$.m.ModelBase.extend({
              */
             imagetextcolor : 'green',
             indicatorcolor : '#3276bb',
-            images : [
+            thumbnailCollection : [
                 {
                     text : "Thumbnail Image",
-                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_114/or-st_logo_horizontal_hi_res_1417334410262.png",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
                     width : 250,
                     height : 175,
-                    margin : "40px auto 0"
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
+                },
+                {
+                    text : "Thumbnail Image",
+                    url : "https://s3.amazonaws.com/indigenous-digital-assets/account_6/acme-logo.png",
+                    width : 250,
+                    height : 175,
+                    margin : "0 auto 0"
                 }
             ]
         }

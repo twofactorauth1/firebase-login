@@ -6,19 +6,25 @@
 *
 -->
 
+<style>
+.feature-height{
+    min-height: {{maxHeight || '100px'}}
+}
+</style>
+
 <div ng-class="component.type+'-v'+component.version">
 
     <div class="feature-list-title">
-        <div class="editable" data-class="title">
-                <span ng-bind-html="component.title" />
-        </div>
+        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe"></div>
     </div>
 
     <div class="clearfix mb15"></div>
 
     <div class="row features-wrap">
-        <div class="col-sm-6 feature" data-ng-repeat="feature in component.features track by $index">
+        <div class="feature feature-height" ng-class="{'col-sm-6':component.features.length > 1, 'col-sm-12':component.features.length < 1}" data-ng-repeat="feature in component.features track by $index">
             <div class="feature-single feature-single-{{$index}}">
+                <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
+                    </div>
 
                 <div class="feature-content">
                     <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
@@ -27,7 +33,12 @@
 
             </div>
             <div ng-if="isEditing" class="delete-feature center">
-                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature">Delete</button>
+                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
+            </div>
+            <div ng-if="isEditing" class="add-addtional center">
+                <a href="" ng-click="addFeatureList(component._id,$index)">
+                    <i class="fa fa-plus"></i>
+                </a>
             </div>
         </div>
     </div>

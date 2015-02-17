@@ -1,12 +1,12 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI'], function(angularAMD) {
-  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI', 'angularStepper','carousel','ui.sortable'], function(angularAMD) {
+  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI', 'revolunet.stepper', 'ui.sortable']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
   //routes
   app.config(function($stateProvider, $urlRouterProvider, $httpProvider, blockUIConfig) {
       $urlRouterProvider.otherwise("/website");
-      
+
       $stateProvider
         .state('dashboard', angularAMD.route({
           url: '/dashboard',
@@ -59,10 +59,24 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
         }))
         .state('marketing', angularAMD.route({
           url: '/marketing',
-          templateUrl: '/pipeshift/views/video/listeditor.html',
-          controller: 'ListEditorController',
-          controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+          templateUrl: '/angular_admin/views/marketing.html',
+          controller: 'MarketingCtrl',
+          controllerUrl: '/angular_admin/controllers/marketing.js'
         }))
+        .state('marketingDetail', angularAMD.route({
+          url: '/marketing/campaign/:id',
+          templateUrl: '/angular_admin/views/marketing/campaign_detail.html',
+          controller: 'CampaignDetailCtrl',
+          controllerUrl: '/angular_admin/controllers/marketing/campaign_detail.js'
+        }))
+
+        //depreceated videoautopilot
+        // .state('marketing', angularAMD.route({
+        //   url: '/marketing',
+        //   templateUrl: '/pipeshift/views/video/listeditor.html',
+        //   controller: 'ListEditorController',
+        //   controllerUrl: '/pipeshift/js/modules/video/controller/ListEditorController.js'
+        // }))
         .state('commerce', angularAMD.route({
           url: '/commerce',
           templateUrl: '/angular_admin/views/commerce.html',
@@ -111,17 +125,23 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'WebsiteCtrl',
           controllerUrl: '/angular_admin/controllers/website.js'
         }))
-        .state('indi', angularAMD.route({
-          url: '/indi',
-          templateUrl: '/angular_admin/views/indi.html',
-          controller: 'IndiCtrl',
-          controllerUrl: '/angular_admin/controllers/indi.js'
+        .state('support', angularAMD.route({
+          url: '/support',
+          templateUrl: '/angular_admin/views/support.html',
+          controller: 'SupportCtrl',
+          controllerUrl: '/angular_admin/controllers/support.js'
         }))
         .state('home', angularAMD.route({
           url: '/home',
           templateUrl: '/angular_admin/views/home.html',
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
+        }))
+        .state('logout', angularAMD.route({
+          url: '/logout',
+          templateUrl: '/angular_admin/views/logout.html',
+          controller: 'LogoutCtrl',
+          controllerUrl: '/angular_admin/controllers/logout.js'
         }));
         blockUIConfig.autoBlock = false;
       var authInterceptor =
@@ -141,11 +161,11 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
     })
     .run(['$rootScope', function($rootScope) {
       var p = $('.nav.nav-pills.nav-stacked.nav-bracket')
-        , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'indi'];
+        , includeList = ['account', 'commerce', 'customer', 'websiteManage', 'marketing', 'dashboard', 'support'];
 
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
-          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail'];
+          var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail', 'singlePageAnalytics'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,
@@ -158,12 +178,32 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
             p = p || $('.nav.nav-pills.nav-stacked.nav-bracket');
             toName = toState.name.split(/[A-Z]/g);
             fromName = fromState.name.split(/[A-Z]/g);
-            $('[href="#/' + toName[0] + '"]', p).parent().addClass('active')
-            $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active')
+            console.log('toName[0] ', toName[0]);
+            console.log('fromName[0] ', fromName[0]);
+            $('[href="#/' + toName[0] + '"]', p).parent().addClass('active');
+            if (excludeList.indexOf(fromState.name) == -1)
+              $('[href="#/' + fromName[0] + '"]', p).parent().removeClass('active');
+            else
+              $('[href="#/' + $rootScope.lastState.state + '"]', p).parent().removeClass('active');
           }
         });
     }]);
 
+    /*
+     * This snippet will log all events emitted to the root scope.
+    app.config(['$provide', function ($provide) {
+        $provide.decorator('$rootScope', function ($delegate) {
+            var _emit = $delegate.$emit;
+
+            $delegate.$emit = function () {
+                console.log.apply(console, arguments);
+                _emit.apply(this, arguments);
+            };
+
+            return $delegate;
+        });
+    }]);
+   */
   $('#preloader').fadeOut();
 
   angularAMD.bootstrap(app);

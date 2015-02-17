@@ -26,6 +26,7 @@ var facebookApi = require('./1.0/social/facebook.api');
 var googleApi = require('./1.0/social/google.api');
 var linkedInApi = require('./1.0/social/linkedin.api');
 var twitterApi = require('./1.0/social/twitter.api');
+var socialConfigApi = require('./1.0/social/socialconfig.api');
 
 //Biometrics
 var biometricsPlatform = require('./1.0/biometricsplatform.api');
@@ -34,6 +35,7 @@ var runkeeperApi = require('./1.0/runkeeperadapter.api');
 
 // Campaigns
 var campaignManager = require('./1.0/campaignmanager.api');
+var campaignAPI = require('./1.0/campaign.api');
 
 // Products
 var productsApi = require('./1.0/product.api');

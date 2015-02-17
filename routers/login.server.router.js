@@ -132,7 +132,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
         this.setup(req, resp, function (err, value) {
             if (self.accountId(value) > 0) {
                 self.log.debug('redirecting to /admin');
-                resp.redirect("/admin");
+
+                if(req.session.locked === true) {
+                    self.log.debug('locked is true');
+                    resp.redirect("/admin#/account");
+                } else {
+                    resp.redirect("/admin");
+                }
+
                 self = req = resp = null;
             } else {
                 /*
@@ -204,9 +211,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 self = null;
                                 return;
                             }
+                            if(req.session.locked === true) {
+                                self.log.debug('locked is true');
+                                if(value.indexOf('?') != -1) {
+                                    var valueAry = value.split('?');
+                                    value = valueAry[0] + '#/account?' + valueAry[1];
+                                } else {
+                                    value= value + '#/account';
+                                }
 
+                            }
                             self.log.debug('redirecting to ' + value);
                             resp.redirect(value);
+
+
                             self = null;
                         });
                     });

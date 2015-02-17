@@ -1,17 +1,10 @@
-#leftnav {
+#editor-toolbar {
   position: fixed;
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  -ms-transition: none;
-  transition: none;
-}
-#leftnav .nav-bracket > li.active > a {
-  background-color: #eee;
-  color: #333333;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  top: 0;
+  z-index: 99999;
+  display: block;
+  width: 100%;
+  height: 60px;
 }
 #headerbar {
   left: 0px;
@@ -46,8 +39,7 @@ body.leftpanel-collapsed #headerbar {
 body.leftpanel-collapsed.rightmenu-open #headerbar {
   right: 240px;
 }
-body.leftpanel-collapsed.rightmenu-open .contentpanel,
-body.leftpanel-collapsed.rightmenu-open .header-menu-row {
+body.leftpanel-collapsed.rightmenu-open .contentpanel {
   margin-right: 240px;
 }
 .powertour-highlight {

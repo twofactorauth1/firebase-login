@@ -49,6 +49,22 @@ var component = $$.m.ModelBase.extend({
              */
             txtcolor: null,
 
+            activetxtcolor: null,
+
+            /**
+             *
+             *
+             */
+            logo: '<img src=\"https://s3-us-west-2.amazonaws.com/indigenous-admin/logo-indi-white.png\" width=\"220\" height=\"60\">',
+
+            /**
+             *
+             *
+             */
+             nav: {
+                bg: "#017ebe"
+             },
+
             /**
              *
              *
@@ -63,7 +79,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : ""
+                color : "#89c4f4"
             }
 
         }

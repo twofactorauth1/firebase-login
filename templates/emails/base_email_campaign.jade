@@ -1,0 +1,127 @@
+doctype strict
+html(xmlns='http://www.w3.org/1999/xhtml')
+head
+  title
+    | &#x9;
+    meta(http-equiv='content-type', content='text/html; charset=UTF-8')
+    | &#x9;
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    | &#x9;
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    // Prevents iOS from auto detecting and styling phone numbers. Remember to link tel numbers and style yourself.
+    meta(name='format-detection', content='telephone=no')
+    | &#x9;
+    style(type='text/css').
+      body {
+      width: 100%;
+      /* Prevent auto resizing of font size */
+      -webkit-text-size-adjust: 100% !important;
+      -ms-text-size-adjust: 100% !important;
+      margin: 0;
+      padding: 0;
+      }
+      img {
+      border: 0;
+      outline: none;
+      -ms-interpolation-mode: bicubic;
+      }
+      a img {
+      border: 0;
+      }
+      /* Forces Outlook to display email at 100% width */
+      .ExternalClass {
+      width: 100%;
+      }
+      /* Corrects line-height issues on Outlook */
+      .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+      line-height: 100%;
+      }
+      /* Removes unwanted gap with left/right aligned tables */
+      table, td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+      border-collapse: collapse;
+      }
+      /* Mobile Responsive Styles */
+      /* Using attribute selectors due to media queries issues with Yahoo! Mail */
+      @media only screen and (max-width: 480px) {
+      table[class=device-width], td[class=device-width], img[class=device-width] {
+      width: 320px !important;
+      height: auto !important;
+      }
+      table[class=inner-width], td[class=inner-width], img[class=inner-width] {
+      width: 240px !important;
+      height: auto !important;
+      }
+      table[class=medium-width], td[class=medium-width], img[class=medium-width] {
+      width: 280px !important;
+      height: auto !important;
+      }
+      td[class=hero-1] {
+      width: 320px !important;
+      height: auto !important;
+      background-image: url(img/hero-bg-1.jpg) !important;
+      background-position: center !important;
+      background-size: cover !important;
+      padding-top: 60px !important;
+      padding-bottom: 60px !important;
+      }
+      td[class=hero-2] {
+      width: 320px !important;
+      height: auto !important;
+      background-image: url(img/hero-bg-2.jpg) !important;
+      background-position: center !important;
+      background-size: cover !important;
+      padding-top: 60px !important;
+      padding-bottom: 60px !important;
+      }
+      td[class=hero-3] {
+      width: 320px !important;
+      height: auto !important;
+      padding-top: 60px !important;
+      padding-bottom: 60px !important;
+      }
+      td[class=hero-feature] {
+      padding-bottom: 30px !important;
+      }
+      td[class=stack] {
+      display: block !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      }
+      td[class=small-push] {
+      padding-top: 30px !important;
+      }
+      td[class=wrapper] {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      }
+      td[class=logo] {
+      width: 320px !important;
+      height: auto !important;
+      text-align: center !important;
+      padding-bottom: 20px !important;
+      }
+      td[class=logo] img {
+      display: inline !important;
+      }
+      td[class=center] {
+      width: 240px !important;
+      height: auto !important;
+      text-align: center !important;
+      }
+      td[class=head] {
+      display: table-header-group !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      }
+      td[class=foot] {
+      display: table-footer-group !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      }
+      }
+  body(style='width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;')
+    div#content !{text}

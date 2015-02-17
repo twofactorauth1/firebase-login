@@ -50,7 +50,23 @@ var component = $$.m.ModelBase.extend({
             txtcolor: null,
 
 
-            networks: [],
+            networks: [
+                {
+                    "name" : "facebook",
+                    "url" : "http://www.facebook.com",
+                    "icon" : "facebook"
+                },
+                {
+                    "name" : "twitter",
+                    "url" : "http://www.twitter.com",
+                    "icon" : "twitter"
+                },
+                {
+                    "name" : "google-plus",
+                    "url" : "http://plus.google.com",
+                    "icon" : "google-plus"
+                }
+            ],
 
             /**
              *

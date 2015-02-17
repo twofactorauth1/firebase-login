@@ -1,5 +1,58 @@
 /********** Meet Team  v2**********/
-
+.editing .meet-team-v2 .team-member-wrap {
+  .social-link {
+    border: 2px solid rgba(0, 0, 0, 0);
+    position: relative;
+  }
+  .social-link.edit-mode {
+    padding-top: 30px;
+  }
+  .social-link:hover {
+    border: 2px dashed rgba(0, 0, 0, 0.4);
+  }
+  .social-link:hover {
+    .add-addtional-team {
+      display: block;
+      font-size: 20px !important;
+      top:0px;
+    }
+  }
+  .team-member {
+    border: 4px solid rgba(0, 0, 0, 0);
+    position: relative;
+  }
+  .team-member.edit-mode {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .team-member:hover {
+    border: 4px dashed rgba(0, 0, 0, 0.4);
+  }
+  .team-member:hover {
+    .add-addtional {
+      display: block;
+      font-size: 28px;
+    }
+    .delete-team-member {
+      .btn-delete-team-member {
+        background: rgba(0, 0, 0, 0.5);
+        display: block;
+        border: 0;
+        color: #ffffff;
+        padding: 10px 15px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1050;
+      }
+    }
+  }
+  .delete-team-member {
+    .btn-delete-team-member {
+      display: none;
+    }
+  }
+}
 .meet-team-v2 {
     .title {
         font-weight: bold;

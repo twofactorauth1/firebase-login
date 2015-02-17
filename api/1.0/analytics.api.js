@@ -14,6 +14,7 @@ var async = require('async');
 var contactDao = require('../../dao/contact.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 var urlUtils = require('../../utils/urlutils');
+var campaignManager = require('../../campaign/campaign_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -134,6 +135,21 @@ _.extend(api.prototype, baseApi.prototype, {
                         } else if (type === 'open') {
                             obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
                             objArray.push(obj);
+                            //if value.msg.metadata.campaignId, trigger campaignStep
+                            if(value.msg.metadata.campaignId) {
+                                self.log.debug('triggering campaign step');
+                                var metadata = value.msg.metadata;
+                                campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error handling email open event:' + err);
+                                        return;
+                                    } else {
+                                        self.log.debug('Handled email open event.');
+                                        return;
+                                    }
+                                });
+                            }
+
                         } else if (type === 'click') {
                             obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
                             objArray.push(obj);

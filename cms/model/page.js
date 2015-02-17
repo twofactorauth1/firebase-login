@@ -102,7 +102,12 @@ var page = $$.m.ModelBase.extend({
             /**
              * Check if the page is secure OR not.
              */
-            secure:false, 
+            secure:false,
+
+            /**
+             * Version of the page.  Auto incremented.  Cannot be modified externally.
+             */
+            version:0,
 
             /**
              * Created by data

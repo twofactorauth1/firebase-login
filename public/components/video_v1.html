@@ -11,15 +11,8 @@
     <div class="row">
         <div class="col-xs-12">
 
-            <div class="video-title">
-                <div class="editable" data-class="maintitle" data-index="{{$index}}">
-                    <span ng-bind-html="component.maintitle" />
-                </div>
-            </div>
-
-            <div class="video-subtitle">
-                <div class="editable" data-class="subtitle" data-index="{{$index}}">
-                    <span ng-bind-html="component.subtitle | unsafe" />
+            <div class="video-text">
+                <div class="editable" data-class="text" data-index="{{$index}}" ng-bind-html="component.text | unsafe">
                 </div>
             </div>
 
@@ -27,7 +20,7 @@
 
             <div class="videoblock">
                 <div class="videogular-container">
-                    <!-- <iframe width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe> -->
+                    <!-- <iframe ng-if="video" width="{{component.video.width}}" height="{{component.video.height}}" src="{{trustSrc(component.video.src)}}" frameborder="0"></iframe> -->
 
                     <!-- <videogular vg-responsive="config.responsive" vg-autoPlay="config.autoPlay">
                                         <video class='videoPlayer' controls preload='metadata'>
@@ -35,17 +28,20 @@
                                         </video>
                                         <vg-overlay-play></vg-overlay-play>
                                     </videogular> -->
+                    <iframe ng-if="component.videoType=='youtube'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//www.youtube.com/embed/', component.video)}}" frameborder="0" allowfullscreen></iframe>
 
-                    <videogular vg-width="config.width" vg-height="config.height" vg-theme="config.theme.url" vg-autoplay="config.autoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive">
+                    <iframe ng-if="component.videoType=='vimeo'" ng-style='{"height": component.videoHeight, "width": component.videoWidth}' ng-src="{{flvVideoUrl('//player.vimeo.com/video/', component.video)}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+                    <videogular vg-width="component.videoWidth" vg-height="component.videoHeight" vg-theme="config.theme.url" vg-autoplay="component.videoAutoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive" ng-if="component.videoType=='html5'">
                         <video class='videoPlayer' preload='metadata'>
-                            <source src='{{trustSrc(component.video.src.ogv)}}' type='video/ogv'>
-                            <source src="{{trustSrc(component.video.src.mp4)}}" type='video/mp4' />
-                            <source src="{{trustSrc(component.video.src.webm)}}" type='video/webm' />
+                            <source src="{{trustSrc(component.videoMp4)}}" type='video/mp4' ng-if="component.videoMp4"/>
+                            <source src="{{trustSrc(component.videoWebm)}}" type='video/webm' ng-if="component.videoWebm"/>
                         </video>
+                        <vg-video vg-src="video" vg-youtube="rel=1;showinfo=0"></vg-video>
 
                         <vg-overlay-play></vg-overlay-play>
 
-                        <vg-controls vg-autohide="config.autoHide" vg-autohide-time="config.autoHideTime">
+                        <vg-controls vg-autohide="component.videoControls" vg-autohide-time="config.autoHideTime">
                             <!-- First element from the left -->
                             <vg-play-pause-button></vg-play-pause-button>
 
@@ -72,7 +68,7 @@
             </div>
 
 
-            <div class="col-xs-12" ng-show="component.btn.visibility" class="editable" data-index="{{$index}}" data-class="btn-text">
+            <div class="col-xs-12" ng-if="component.btn.visibility" class="editable" data-index="{{$index}}" data-class="btn-text">
                 <a class="btn btn-primary btn-block center" ng-bind="component.btn.text" data-ng-href="{{component.btn.url}}" du-smooth-scroll></a>
             </div>
 

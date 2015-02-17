@@ -4,7 +4,7 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
-
+var appConfig = require('../configs/app.config');
 var cookieUtil =  {
 
     setCookie: function(resp, key, value, signed, secondsToExpiration, domain) {
@@ -53,7 +53,7 @@ var cookieUtil =  {
 
     //region COMPANY COOKIES
     setAccountToken: function(resp, token) {
-        this.setCookie(resp, "ind-acc", token, true, 600);
+        this.setCookie(resp, "ind-acc", token, true, 600, appConfig.cookie_subdomain);
     },
 
     getAccountToken: function(req) {

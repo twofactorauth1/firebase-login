@@ -12,17 +12,48 @@ var campaign = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
-            name: null,
-            description: null,
-            templateName: null,
-            subject: null,
-            fromName: null,
-            fromEmail: null,
-            numberOfMessages: null,
-            messageDeliveryFrequency: null,
-            revision: null,
-            type: null,
-            _v:"0.1"
+            accountId: 0,
+            title: "",
+            status: "active",
+            visibility: 1,
+            startDate: null,
+            /*
+             * Example Step:
+             * {
+             *      templateId" : "000000-0000-000000-00000000",
+                    "offset" : "320000", //in seconds
+                    "from" : "john@indigenous.io",
+                    "fromName" : 'John Doe',
+                    "subject" : 'Email Subject',
+                    "content": '<html><body>Stuff</body></html>',
+                    "vars": [{
+
+                    }],
+                    "scheduled" : {
+                        "minute":1,
+                        "hour": 2,
+                        "day":1
+                    },
+                    "sendAt" : {
+                        "year":2015,
+                        "month":2,
+                        "day":15,
+                        "hour":13,
+                        "minute":0
+                    }
+             * }
+             */
+            steps: [],
+
+            "created": {
+                "date": new Date(),
+                "by": null
+            },
+            "modified": {
+                "date": null,
+                "by": null
+            },
+            "_v": "0.1"
         }
     },
 

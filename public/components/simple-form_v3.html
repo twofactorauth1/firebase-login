@@ -5,14 +5,14 @@
 </style>
 <div ng-class="component.type+'-v'+component.version">
     <div class="contact-us-title">
-        <div class="editable text-center" data-class="title">
-            <span ng-bind-html="component.title"></span>
+        <div class="editable text-center" data-class="maintitle" ng-bind-html="component.maintitle">
+            <span ></span>
         </div>
     </div>
 
     <div class="contact-us-subtitle">
-        <div class="editable text-center" data-class="subtitle">
-            <span ng-bind-html="component.subtitle"></span>
+        <div class="editable text-center" data-class="subtitle" ng-bind-html="component.subtitle">
+            
         </div>
     </div>
 
@@ -65,14 +65,14 @@
                         </div>
 
                         <div class="form-group">
-                            <button type="button" ng-click="createContactwithFormActivity(contact, $event)" class="btn btn-lg btn-block btn-success ">Send
+                            <button type="button" ng-disabled="isEditing" ng-click="createContactwithFormActivity(contact, $event)" class="btn btn-lg btn-block btn-success ">Send
                             </button>
                         </div>
                     </fieldset>
 
                     <div class="clearfix mb15"></div>
 
-                    <div class="row thank-you animated" ng-class="{fadeOut: !contact.success, tada: contact.success}">
+                    <div class="row thank-you animated" ng-if="contact.success" ng-class="{fadeOut: !contact.success, tada: contact.success}">
                         <h3 class="center mb20">Thank You for Submitting!</h3>
                     </div>
                 
