@@ -997,45 +997,70 @@ define([
                     var componentEditable = editedComponent[0].querySelectorAll('.editable');
                     if (componentEditable.length >= 1) {
                         for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                            var componentVar = componentEditable[i2].attributes['data-class'].value;
-                            var componentVarContents = componentEditable[i2].innerHTML;
+                                    var componentVar = componentEditable[i2].attributes['data-class'].value;
+                                    var componentVarContents = componentEditable[i2].innerHTML;
 
-                            //if innerhtml contains a span with the class ng-binding then remove it
-                            var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+                                    //if innerhtml contains a span with the class ng-binding then remove it
+                                    var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
 
-                            if (span) {
-                                var spanParent = span.parentNode;
-                                var spanInner = span.innerHTML;
-                                if (spanParent.classList.contains('editable')) {
-                                    componentVarContents = spanInner;
-                                } else {
-                                    spanParent.innerHTML = spanInner;
-                                    componentVarContents = spanParent.parentNode.innerHTML;
+                                    if (span) {
+                                        var spanParent = span.parentNode;
+                                        var spanInner = span.innerHTML;
+                                        if (spanParent.classList.contains('editable')) {
+                                            componentVarContents = spanInner;
+                                        } else {
+                                            spanParent.innerHTML = spanInner;
+                                            componentVarContents = spanParent.parentNode.innerHTML;
+                                        }
+                                    }
+                                    //remove "/n"
+                                    componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+
+                                        var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                        if(regex.test(componentVarContents))
+                                        {
+                                            var jHtmlObject = $(componentVarContents);
+                                            var editor = jQuery("<p>").append(jHtmlObject);
+                                            editor.find(".cke_reset").remove();
+                                            var newHtml = editor.html();
+                                            componentVarContents = newHtml; 
+                                        }
+                                        
+
+                                    var setterKey, pa;
+                                    //if contains an array of variables
+                                    if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
+                                        //get index in array
+                                        var first = componentVar.split(".")[0];
+                                        var second = componentEditable[i2].attributes['data-index'].value;
+                                        var third = componentVar.split(".")[2];
+                                        if(matchingComponent[first][second])
+                                            matchingComponent[first][second][third] = componentVarContents;
+                                    }
+                                    //if contains an array of array variables
+                                    if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                                        //get parent index in array
+                                        var first = componentVar.split(".")[0];                                    
+                                        var second = componentEditable[i2].attributes['parent-data-index'].value;
+                                        //get child index in array
+                                        var third = componentVar.split(".")[2];
+                                        var fourth = componentEditable[i2].attributes['data-index'].value;
+                                        var last = componentVar.split(".")[3];
+                                        if(matchingComponent[first][second][third][fourth])
+                                            matchingComponent[first][second][third][fourth][last] = componentVarContents;
+                                    }
+                                    //if needs to traverse a single
+                                    if (componentVar.indexOf('-') > 0) {
+                                        var first = componentVar.split("-")[0];
+                                        var second = componentVar.split("-")[1];
+                                        if(matchingComponent[first])
+                                            matchingComponent[first][second] = componentVarContents;
+                                    }
+                                    //simple
+                                    if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                                        matchingComponent[componentVar] = componentVarContents;
+                                    }
                                 }
-                            }
-                            //remove "/n"
-                            componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
-                            var setterKey, pa;
-                            //if contains an array of variables
-                            if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
-                                //get index in array
-                                var first = componentVar.split(".")[0];
-                                var second = componentEditable[i2].attributes['data-index'].value;
-                                var third = componentVar.split(".")[2];
-                                matchingComponent[first][second][third] = componentVarContents;
-                            }
-                            //if needs to traverse a single
-                            if (componentVar.indexOf('-') > 0) {
-                                var first = componentVar.split("-")[0];
-                                var second = componentVar.split("-")[1];
-                                matchingComponent[first][second] = componentVarContents;
-                            }
-                            //simple
-                            if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                matchingComponent[componentVar] = componentVarContents;
-                            }
-                        }
                     }
                 }               
                return matchingComponent;
