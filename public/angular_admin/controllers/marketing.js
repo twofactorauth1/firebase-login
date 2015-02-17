@@ -1,4 +1,4 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants'], function(app) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment'], function(app) {
     app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, UserService, CampaignService, SocialService, SocialConfigService) {
 
         $scope.campaigns = [];
@@ -23,6 +23,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 $scope.savePreferencesFn();
             }
         });
+
+        $scope.formatDate = function(date) {
+            return moment(date).format('MMMM D, YYYY [at] h:mm a');
+        };
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
@@ -181,6 +185,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                             for (var i = 0; i < posts.length; i++) {
                                 posts[i].type = 'facebook';
                                 $scope.fbPostsLength +=1;
+                                posts[i].from.profile_pic = 'https://graph.facebook.com/'+posts[i].from.sourceId+'/picture?width=32&height=32';
                                 $scope.feed.push(posts[i]);
                             };
                         });

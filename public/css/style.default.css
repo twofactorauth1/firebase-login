@@ -22864,6 +22864,15 @@ i.indi-sm {
 .stream li {
   overflow: hidden;
 }
+.stream li .panel-body .media a {
+  height: 160px;
+  overflow: hidden;
+}
+.stream li .panel-body .media a img {
+  margin: 0 auto 15px;
+  max-width: 370px;
+  width: 100%;
+}
 .stream li .post-inner {
   background-color: #FFFFFF;
   line-height: 1.35em;
@@ -22881,6 +22890,7 @@ i.indi-sm {
   height: 130px;
   display: block;
   margin: 0 auto;
+  border-radius: 5px;
 }
 .stream li .post-bottom-bar {
   height: 40px;
@@ -22888,8 +22898,6 @@ i.indi-sm {
   padding: 5px;
   display: block;
   width: 100%;
-  bottom: 0;
-  position: absolute;
   color: white;
   /* feeds network specific styles */
 }
