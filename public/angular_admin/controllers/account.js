@@ -210,7 +210,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.deleteSocialFn = function(id) {
-              SocialConfigService.deleteSocialConfigEntry(id, function() {});
+              SocialConfigService.deleteSocialConfigEntry(id, function() {
+                SocialConfigService.getAllSocialConfig(function(data) {
+                  $scope.socialAccounts = data.socialAccounts;
+                });
+              });
             };
 
             $scope.hasCard = false;
