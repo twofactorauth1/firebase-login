@@ -17331,6 +17331,34 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   border: 1px solid #e7e7e7;
   overflow: hidden;
 }
+.account .integrations-section .thumbnail .img-wrap .social-link-icon {
+  text-align: center;
+  padding: 45px;
+}
+.account .integrations-section .thumbnail .img-wrap .facebook-icon-color {
+  color: #3b5998;
+}
+.account .integrations-section .thumbnail .img-wrap .facebook-icon-color:hover {
+  opacity: .8;
+}
+.account .integrations-section .thumbnail .img-wrap .google-icon-color {
+  color: #dd4b39;
+}
+.account .integrations-section .thumbnail .img-wrap .google-icon-color:hover {
+  opacity: .8;
+}
+.account .integrations-section .thumbnail .img-wrap .linkedin-icon-color {
+  color: #007bb6;
+}
+.account .integrations-section .thumbnail .img-wrap .linkedin-icon-color:hover {
+  opacity: .8;
+}
+.account .integrations-section .thumbnail .img-wrap .twitter-icon-color {
+  color: #00aced;
+}
+.account .integrations-section .thumbnail .img-wrap .twitter-icon-color:hover {
+  opacity: .8;
+}
 .account .integrations-section .thumbnail .connected {
   height: 70px;
   margin-bottom: 10px;

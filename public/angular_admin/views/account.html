@@ -365,6 +365,26 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
             <div class="row">
 
+                 <div class="col-sm-3 col-md-4">
+                  <div class="thumbnail">
+                    
+                    <div class="img-wrap">
+                          <div class="col-sm-6 social-link-icon">
+                            <a href="/redirect/?next={{currentHost}}/socialconfig/facebook?redirectTo={{redirectUrl}}">
+                            <i class="fa fa-facebook fa-5x facebook-icon-color"></i>
+                            </a>
+                        </div>
+                            <div class="col-sm-6 social-link-icon">
+                                <a href="/redirect/?next={{currentHost}}/socialconfig/google?redirectTo={{redirectUrl}}"><i class="fa fa-google-plus google-icon-color fa-5x"></i></a></div>
+                      </div>
+                      <div class="img-wrap ">
+                          <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/linkedin?redirectTo={{redirectUrl}}"><i class="fa fa-linkedin fa-5x linkedin-icon-color"></i></a></div>
+                            <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/twitter?redirectTo={{redirectUrl}}"><i class="fa fa-twitter fa-5x twitter-icon-color"></i></a></div>
+                      </div>
+                      
+                  </div>
+                 </div>
+
               <div class="col-sm-3 col-md-4" ng-repeat="sa in socialAccounts">
                   <div class="thumbnail">
                       <div class="img-wrap">
