@@ -221,6 +221,8 @@ var collator = {
                 });
             }
         ], function(err, result){
+            //delete the pings for this session.  Return anyway.
+            dao.removeByQuery({session_id:sessionEvent.get('session_id')}, $$.m.PingEvent, function(err, value){});
             fn(err, result);
         });
     },
