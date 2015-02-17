@@ -372,6 +372,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 NavigationService.updateNavigation2(user);
             };
 
+            $scope.$watch('createType', function(newValue, oldValue) {
+              if (newValue) {
+                window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + newValue.toLowerCase() + '?redirectTo=' + $scope.redirectUrl;
+              }
+            });
+
         }
     ]);
 });
