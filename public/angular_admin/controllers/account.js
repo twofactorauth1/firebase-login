@@ -30,11 +30,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             }
 
             SocialConfigService.getAllSocialConfig(function(data) {
-              data.socialAccounts.forEach(function(value, index) {
-                $scope.userSocial[value.type].status = true;
-                $scope.userSocial[value.type].image = value.image;
-                $scope.userSocial[value.type].username = value.username;
-              });
+              $scope.socialAccounts = data.socialAccounts;
             });
 
             $scope.onboardingSteps = [];
@@ -213,11 +209,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 });
             };
 
-            $scope.deleteSocialFn = function(type) {
-                UserService.deleteUserSocial(type, function() {
-                    $scope.userSocial[type].status = false;
-                    ToasterService.show('warning', 'Social connection deleted.');
+            $scope.deleteSocialFn = function(id) {
+              SocialConfigService.deleteSocialConfigEntry(id, function() {
+                SocialConfigService.getAllSocialConfig(function(data) {
+                  $scope.socialAccounts = data.socialAccounts;
                 });
+              });
             };
 
             $scope.hasCard = false;
@@ -378,6 +375,12 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.updateDefaultTab = function(user) {
                 NavigationService.updateNavigation2(user);
             };
+
+            $scope.$watch('createType', function(newValue, oldValue) {
+              if (newValue) {
+                window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + newValue.toLowerCase() + '?redirectTo=' + $scope.redirectUrl;
+              }
+            });
 
         }
     ]);

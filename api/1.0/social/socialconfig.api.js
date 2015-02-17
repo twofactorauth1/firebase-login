@@ -205,7 +205,23 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getFacebookProfile: function(req, resp) {
-        //todo: this
+        var self = this;
+        self.log.debug('>> getFacebookProfile');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var pageId = req.params.pageId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookProfile(accountId, socialAccountId, function(err, profile){
+                    self.log.debug('<< getFacebookProfile');
+                    self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
     },
 
     createFacebookPost: function(req, resp) {
@@ -216,12 +232,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var socialAccountId = req.params.socialAccountId;
 
         var message = req.body.post;
+        var url = req.body.imageUrl;//optional
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
-                socialConfigManager.createFacebookPost(accountId, socialAccountId, message, function(err, value){
+                socialConfigManager.createFacebookPost(accountId, socialAccountId, message, url, function(err, value){
                     self.log.debug('<< createFacebookPost');
                     self.sendResultOrError(resp, err, value, "Error creating post");
                 });

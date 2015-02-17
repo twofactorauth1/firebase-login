@@ -26,6 +26,15 @@ define(['app'], function (app) {
             }).success(function (data, status, headers, config) {
                 fn(data);
             });
+
+        };
+
+        this.deleteSocialConfigEntry = function(id, fn) {
+          var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount', id].join('/');
+          $http.delete(apiUrl)
+          .success(function(data, status, headers, config) {
+            fn(data);
+          });
         };
     });
 
