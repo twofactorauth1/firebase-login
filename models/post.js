@@ -157,12 +157,20 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
-            postType: "tweet",
-            from: {
+            postType: "tweet"
+        };
+
+        if(tweet.user) {
+            obj.from = {
                 sourceId: tweet.user.id,
                 name: tweet.user.name
-            }
-        };
+            };
+        } else if(tweet.sender) {
+            obj.from = {
+                sourceId: tweet.sender.id,
+                name: tweet.sender.name
+            };
+        }
 
         if (tweet.created_at) {
             obj.date = new Date(tweet.created_at).getTime();

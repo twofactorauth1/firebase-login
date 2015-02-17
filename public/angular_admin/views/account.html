@@ -4,7 +4,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 <div class="account">
 
     <div class="pageheader row">
-        <div class="col-xs-8">
+        <div class="col-xs-7">
             <h2>
                 <i class="fa fa-sliders"></i> Account
             </h2>
@@ -13,7 +13,12 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
         <div class="col-xs-1">
             <!-- <span class="mediaModal" user='user'></span> -->
         </div>
-
+        <div class="col-xs-1">
+          <select ng-model="createType">
+            <option selected value=null>Select to connect</option>
+            <option ng-repeat="(key, value) in credentialTypes" value="{{key}}" ng-hide="key=='LOCAL'">{{key}}</option>
+          </select>
+        </div>
         <div class="col-xs-3">
             <a href="#/account/edit" class="btn btn-success pull-right" type="button">
                 <span class="fa fa-edit"></span>
@@ -359,149 +364,58 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
         <div class="integrations-section" ng-switch-when="integrations">
 
             <div class="row">
-                <div class="col-sm-3 col-md-4">
-                    <div class="thumbnail">
-                        <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="...">
-                        </div>
-                        <div class="caption">
-                            <h3>Facebook</h3>
 
-                            <p ng-show="!userSocial[credentialTypes.FACEBOOK].status">Connect with your friends</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK].status">
-                                <span>You are logged in as:</span>
-                                <div class="clearfix"></div>
-                                <img ng-src="{{userSocial[credentialTypes.FACEBOOK].image}}" class="img-circle" />
-                                <span>{{userSocial[credentialTypes.FACEBOOK].username}}</span>
-                            </div>
-                            <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK].status">
-                                  <a href="/redirect/?next={{currentHost}}/inapplogin/facebook?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
-                                        <span class="fa fa-plug"></span>Connect</a>
-                                </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK].status">
-                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.FACEBOOK)" confirm-click2 confirm-click2-placement="top">
-                                        <span class="fa fa-trash-o"></span>Disconnect</button>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
+                 <div class="col-sm-3 col-md-4">
+                  <div class="thumbnail">
+                    
+                    <div class="img-wrap">
+                          <div class="col-sm-6 social-link-icon">
+                            <a href="/redirect/?next={{currentHost}}/socialconfig/facebook?redirectTo={{redirectUrl}}&socialNetwork=Facebook">
+                            <i class="fa fa-facebook fa-5x facebook-icon-color"></i>
+                            </a>
                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-4 hidden">
-                    <div class="thumbnail">
-                        <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/reveille-logo.jpg" alt="Reveille">
-                        </div>
-                        <div class="caption">
-                            <h3>Reveille</h3>
-                            <p>Find it first. Fix it fast</p>
-                            <p>
-                                <a href="http://reveillesoftware.com/" class="btn btn-orange btn-lg btn-block" role="button">
-                                    <span class="fa fa-plug"></span>Connect</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-4">
-                    <div class="thumbnail">
-                        <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="...">
-                        </div>
-                        <div class="caption">
-                            <h3>Google +</h3>
-                            <p ng-show="!userSocial[credentialTypes.GOOGLE].status">Import customers, plan posts in advance.</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.GOOGLE].status">
-                                <span>You are logged in as:</span>
-                                <div class="clearfix"></div>
-                                <img ng-src="{{userSocial[credentialTypes.GOOGLE].image}}" class="img-circle" />
-                                <span>{{userSocial[credentialTypes.GOOGLE].username}}</span>
-                            </div>
-                            <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.GOOGLE].status">
-                                    <a href="/redirect/?next={{currentHost}}/inapplogin/google?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
-                                        <span class="fa fa-plug"></span>Connect</a>
-                                </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.GOOGLE].status">
-                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.GOOGLE)" confirm-click2>
-                                        <span class="fa fa-trash-o"></span>Disconnect</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-4">
-                    <div class="thumbnail">
-                        <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="...">
-                        </div>
-                        <div class="caption">
-                            <h3>LinkedIn</h3>
-                            <p ng-show="!userSocial[credentialTypes.LINKEDIN].status">Import contacts</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.LINKEDIN].status">
-                                <span>You are logged in as:</span>
-                                <div class="clearfix"></div>
-                                <img ng-src="{{userSocial[credentialTypes.LINKEDIN].image}}" class="img-circle" />
-                                <span>{{userSocial[credentialTypes.LINKEDIN].username}}</span>
-                            </div>
-                            <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.LINKEDIN].status">
-                                    <a href="/redirect/?next={{currentHost}}/inapplogin/linkedin?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
-                                        <span class="fa fa-plug"></span>Connect</a>
-                                </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.LINKEDIN].status">
-                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.LINKEDIN)" confirm-click2>
-                                        <span class="fa fa-trash-o"></span>Disconnect</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-4">
-                    <div class="thumbnail">
-                        <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/twit-logo.jpg" alt="...">
-                        </div>
-                        <div class="caption">
-                            <h3>Twitter</h3>
-                            <p ng-show="!userSocial[credentialTypes.TWITTER].status">Import followers</p>
-                            <div class="connected" ng-show="userSocial[credentialTypes.TWITTER].status">
-                                <span>You are logged in as:</span>
-                                <div class="clearfix"></div>
-                                <img ng-src="{{userSocial[credentialTypes.TWITTER].image}}" class="img-circle" />
-                                <span>{{userSocial[credentialTypes.TWITTER].username}}</span>
-                            </div>
-                            <div class="btn-group btn-group-justified">
-                                <div class="btn-group" ng-hide="userSocial[credentialTypes.TWITTER].status">
-                                    <a href="/redirect/?next={{currentHost}}/inapplogin/twitter?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
-                                        <span class="fa fa-plug"></span>Connect</a>
-                                </div>
-                                <div class="btn-group" ng-show="userSocial[credentialTypes.TWITTER].status">
-                                    <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.TWITTER)" confirm-click2>
-                                        <span class="fa fa-trash-o"></span>Disconnect</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-4">
-                    <div class="thumbnail">
-                        <div class="img-wrap">
-                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="...">
-                        </div>
-                        <div class="caption">
-                            <h3>Stripe</h3>
-                            <p ng-show="!userSocial[credentialTypes.STRIPE].status">Stripe Allows you to recieve payments on your website.</p>
-                            <p>
-                                <a href="/redirect/?next={{currentHost}}/stripe/connect" class="btn btn-orange btn-lg btn-block" role="button">
-                                    <span class="fa fa-plug"></span>Connect</a>
-                            </p>
-                            <div class="toggle-modern">
-                                <div class="toggles on"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <div class="col-sm-6 social-link-icon">
+                                <a href="/redirect/?next={{currentHost}}/socialconfig/google?redirectTo={{redirectUrl}}&socialNetwork=Google Plus"><i class="fa fa-google-plus google-icon-color fa-5x"></i></a></div>
+                      </div>
+                      <div class="img-wrap ">
+                          <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/linkedin?redirectTo={{redirectUrl}}&socialNetwork=LinkedIn"><i class="fa fa-linkedin fa-5x linkedin-icon-color"></i></a></div>
+                            <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/twitter?redirectTo={{redirectUrl}}&socialNetwork=Twitter"><i class="fa fa-twitter fa-5x twitter-icon-color"></i></a></div>
+                      </div>
+                      
+                  </div>
+                 </div>
+
+              <div class="col-sm-3 col-md-4" ng-repeat="sa in socialAccounts">
+                  <div class="thumbnail">
+                      <div class="img-wrap">
+                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
+                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
+                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.LINKEDIN">
+                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/twit-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.TWITTER">
+                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.STRIPE">
+                      </div>
+                      <div class="caption">
+                          <h3 ng-show="sa.type==credentialTypes.FACEBOOK">Facebook</h3>
+                          <h3 ng-show="sa.type==credentialTypes.GOOGLE">Google +</h3>
+                          <h3 ng-show="sa.type==credentialTypes.LINKEDIN">Linkedin</h3>
+                          <h3 ng-show="sa.type==credentialTypes.TWITTER">Twitter</h3>
+                          <h3 ng-show="sa.type==credentialTypes.STRIPE">Stripe</h3>
+                          <div class="connected">
+                              <span>You are logged in as:</span>
+                              <div class="clearfix"></div>
+                              <img ng-src="{{sa.image}}" class="img-circle" />
+                              <span>{{sa.username}}</span>
+                          </div>
+                          <div class="btn-group btn-group-justified">
+                              <div class="btn-group">
+                                  <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(sa.id)" confirm-click2 confirm-click2-placement="top">
+                                      <span class="fa fa-trash-o"></span>Disconnect</button>
+                              </div>
+                          </div>
+                          <div class="clearfix"></div>
+                      </div>
+                  </div>
+              </div>
             </div>
         </div>
     </div>

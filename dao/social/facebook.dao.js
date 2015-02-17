@@ -127,7 +127,7 @@ var dao = {
     },
 
 
-    getProfile: function (profileId, accessToken, fn) {
+    getProfile: function (accessToken, profileId, fn) {
         var self = this;
         var fields = "email,picture,first_name,last_name,middle_name,name";
 
@@ -164,6 +164,50 @@ var dao = {
         });
     },
     //endregion
+
+    getPages: function(user, fn) {
+        var self = this;
+        self.log.info("getPages >>> ");
+        var socialId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        var key = 'accounts';
+        return this._getStreamPart(null, accessToken, socialId, key, fn);
+    },
+
+    getPageInfo: function(user, pageId, fn) {
+        var self = this;
+        self.log.info("getPageInfo >>> ");
+        var socialId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        var key = '';
+        return this._getStreamPart(null, accessToken, pageId, key, fn);
+    },
+
+    getTokenPageInfo: function(accessToken, socialId, pageId, fn) {
+        var key = '?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count';
+        return this._getStreamPart(null, accessToken, pageId, key, fn);
+    },
+
+    getPageProfilePic: function(user, pageId, fn) {
+        var self = this;
+        self.log.info("getPageProfilePic >>> ");
+        var socialId = this._getFacebookId(user);
+        var accessToken = this._getAccessToken(user);
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+        var key = 'picture';
+        return this._getStreamPart(null, accessToken, pageId, key, fn);
+    },
 
 
     //region FRIENDS & IMPORT
@@ -316,17 +360,18 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, fn) {
+        //var key = 'feed?fields=comments,likes';
         var key = 'feed';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
-    },
-
-    getPages: function(accessToken, socialId, fn) {
-        var key = 'accounts';
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
     getLikedPages: function(accessToken, socialId, fn) {
         var key = 'likes';
+        return this._getStreamPart(null, accessToken, socialId, key, fn);
+    },
+
+    getTokenAdminPages: function(accessToken, socialId, fn) {
+        var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count";
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
@@ -356,27 +401,9 @@ var dao = {
         return this._getStreamPart(user, null, socialId, key, fn);
     },
 
-
-    _getStreamPart: function (user, _accessToken, socialId, key, fn) {
+    getTokenSearch: function(accessToken, socialId, searchType, term, fn) {
         var self = this;
-        self.log.info("facebook dao: _getStreamPart >>> ");
-        var accessToken = _accessToken;
-
-        if(user) {
-            var accessToken = this._getAccessToken(user);
-        }
-
-
-        if (accessToken == null) {
-            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
-        }
-
-        var path = socialId + "/" + key + "?limit=500";
-        var url = this._generateUrl(path, accessToken);
-
-        self.log.info("_getStreamPart: path >>> ", path);
-        self.log.info("_getStreamPart: url >>> ", url);
-
+        var url = this.GRAPH_API_URL +'search?q=' + term + '&type=' + searchType + '&access_token=' + accessToken + '&limit=500';
         return this._makeRequest(url, function (err, value) {
             self.log.info("_getStreamPart: fb value >>> ", value);
             if (err) {
@@ -396,6 +423,57 @@ var dao = {
                 });
             } else {
                 return fn(null, value.data);
+            }
+        });
+    },
+
+
+    _getStreamPart: function (user, _accessToken, socialId, key, fn) {
+        var self = this;
+        self.log.info("facebook dao: _getStreamPart >>> " + _accessToken);
+        var accessToken = _accessToken;
+
+        if(user) {
+            var accessToken = this._getAccessToken(user);
+        }
+
+
+        if (accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
+        }
+
+        var path = socialId + "/" + key;
+        if(path.indexOf("?") === -1) {
+            path = path + "?limit=500";
+        } else {
+            path = path + "&limit=500";
+        }
+        var url = this._generateUrl(path, accessToken);
+
+        self.log.info("_getStreamPart: path >>> ", path);
+        self.log.info("_getStreamPart: url >>> ", url);
+
+        return this._makeRequest(url, function (err, value) {
+            self.log.info("_getStreamPart: fb value >>> ", value);
+            self.log.info("_getStreamPart: key >>> ", key);
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value && value.data && value.data.length > 0 && key.length > 0) {
+                var result = [];
+
+                var processPost = function (_post, cb) {
+                    result.push(new Post().convertFromFacebookPost(_post));
+                    cb();
+                };
+
+                async.eachLimit(value.data, 10, processPost, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                var thisval = value.data || value;
+                return fn(null, thisval);
             }
         });
     },
@@ -724,6 +802,27 @@ var dao = {
 
     //region feed
 
+    createPostWithToken: function(accessToken, socialId, content, objectId, fn) {
+        var self = this;
+        self.log.debug('>> createPostWithToken');
+
+        var urlOptions = {access_token:accessToken, message:content};
+
+        if(objectId) {
+            urlOptions.object_attachment = objectId;
+        }
+
+        FB.api(socialId + '/feed', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< shareLink', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
     shareLink: function(user, url, picture, name, caption, description, fn) {
 
         var self = this;
@@ -752,6 +851,36 @@ var dao = {
             } else {
                 self.log.debug('<< shareLink', res);
                 fn(null, res.id);
+            }
+        });
+    },
+
+    getMessages: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> getMessages');
+        var urlOptions = {access_token: accessToken};
+        FB.api('/me/inbox', urlOptions, function(res) {
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< getMessages', res);
+                fn(null, res);
+            }
+        });
+    },
+
+    savePhoto: function(accessToken, socialId, url, fn) {
+        var self = this;
+        self.log.debug('>> savePhoto');
+        var urlOptions = {access_token: accessToken, url: url};
+        FB.api('/' + socialId + '/photos', urlOptions, function(res) {
+            if(!res || res.error) {
+                self.log.error('Error saving photo: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< savePhoto', res);
+                fn(null, res);
             }
         });
     },

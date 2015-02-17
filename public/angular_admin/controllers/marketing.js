@@ -1,10 +1,36 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore'], function(app) {
-    app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, UserService, CampaignService, SocialService, SocialConfigService) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'ngOnboarding'], function(app) {
+    app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$location', function($scope, UserService, CampaignService, SocialService, SocialConfigService, $location) {
 
         $scope.campaigns = [];
         $scope.feeds = [];
 
-        $scope.activeTab = 'campaigns';
+        $scope.activeTab = 'social-feed';
+
+        $scope.onboardingSteps = [];
+        $scope.showOnboarding = false;
+        $scope.stepIndex = 0;
+
+        $scope.beginOnboarding = function(type) {
+            if (type == 'create-campaign') {
+                $scope.showOnboarding = true;
+                $scope.onboardingSteps = [{
+                    overlay: true,
+                    title: 'Task: Create new campaign',
+                    description: "Here you can create a new campaign to gain traction.",
+                    position: 'centered',
+                    width: 400
+                }];
+            }
+        };
+
+        $scope.finishOnboarding = function() {
+            $scope.userPreferences.tasks.create_campaign = true;
+            UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+        };
+
+        if ($location.$$search.onboarding) {
+            $scope.beginOnboarding($location.$$search.onboarding);
+        }
 
         $scope.campaignSettings = {
             showStatus: true,
@@ -14,7 +40,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         };
 
         CampaignService.getCampaigns(function(campaigns) {
-            console.log('fetched campaigns >>> ', campaigns);
             $scope.campaigns = campaigns;
         });
 
@@ -28,7 +53,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.activeTab = preferences.indi_default_tab;
-            $scope.initialWelcome = preferences.welcome_alert.initial;
+            if(preferences.welcome_alert) {
+                $scope.initialWelcome = preferences.welcome_alert.initial;
+            } else {
+                //TODO: what makes sense here?
+            }
+
         });
 
         $scope.savePreferencesFn = function() {
@@ -46,7 +76,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.displayedFeed = [];
 
         $scope.filterFeed = function(type, $event) {
-            console.log('filterFeed ', type);
             $event.stopPropagation();
             if (type != 'all') {
                 if ($event.currentTarget.checked) {
@@ -139,7 +168,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 }
                 if (trackedTwitterObjects[i].type == 'follower') {
                     SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, function(followers){
-                        console.log('followers ', followers);
                         $scope.followersLength = followers.length;
                         for (var i = 0; i < followers.length; i++) {
                             followers[i].type = 'twitter';
@@ -160,7 +188,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             //handle each tracked object
             for (var i=0; i<config.trackedObjects.length; i++) {
                 var obj = config.trackedObjects[i];
-                //console.log('handling object:', obj);
+                // console.log('handling object:', obj);
                 if(obj.type === 'feed') {
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(tweets){
@@ -180,6 +208,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         });
                     }
                 } else if(obj.type === 'pages') {
+                    console.log('has pages >>>');
+                    console.log('obj ', obj);
 
                 } else if(obj.type === 'likes') {
 
@@ -192,7 +222,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 } else if(obj.type === 'numberFollowers') {
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(followers){
-                            console.log('followers ', followers);
                             $scope.followersLength = followers.length;
                             for (var i = 0; i < followers.length; i++) {
                                 followers[i].type = 'twitter';
@@ -203,13 +232,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 } else if(obj.type === 'profile') {
                     if(socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, function(profile){
-                            console.log('Twitter Profile: ', profile);
                             profile.type = 'twitter';
+                            console.log('profile ', profile);
                             $scope.feedTypes.push(profile);
                         });
                     } else if(socialAccountMap[obj.socialId] === 'fb') {
                         SocialConfigService.getTrackedObject(i, function(profile){
-                            console.log('Facebook profile: ', profile);
                             profile.type = 'facebook';
                             $scope.feedTypes.push(profile);
                         });
@@ -228,9 +256,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
                 if (thisSocial.type == 'go') {
                     $scope.feedTypes.push('google-plus');
-                    console.log('getting google plus');
                     SocialService.getGooglePlusPosts(thisSocial.socialId, function(posts) {
-                        console.log('google plus posts return: ', posts);
                         for (var i = 0; i < posts.length; i++) {
                             posts[i].type = 'google-plus';
                             $scope.feed.push(posts[i]);
@@ -240,6 +266,28 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             };
             $scope.displayedFeed = $scope.feed;
         });
+
+        /*
+        SocialConfigService.getAllSocialConfig(function(data) {
+          data.socialAccounts.forEach(function(value, index) {
+            if (value.type == $$.constants.user.credential_types.FACEBOOK) {
+              SocialService.getFBPageSocialConfig(value.id, function(pages) {
+                console.log('pages ', pages);
+                $scope.fbAdminPages = [];
+                for (var i = 0; i < pages.length; i++) {
+                    var sourceId = pages[i].sourceId;
+                    SocialService.getFBPageInfo(sourceId, function(pageInfo){
+                        SocialService.getFBPageProfilePic(sourceId, function(pagePic){
+                            pageInfo.profilePic = pagePic;
+                            $scope.fbAdminPages.push(pageInfo);
+                        });
+                    });
+                };
+              });
+            }
+          });
+        });
+        */
 
     }]);
 });

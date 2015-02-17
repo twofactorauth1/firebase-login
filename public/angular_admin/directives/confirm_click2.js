@@ -14,7 +14,10 @@ define([
                 var href= '#/';
 
                 if (scope.confirmClick2Href !== undefined) {
-                    href += scope.confirmClick2Href;
+                    if (scope.confirmClick2Href == "#") 
+                        href = scope.confirmClick2Href;
+                    else
+                        href += scope.confirmClick2Href;
                 } else {
                     href += $state.current.name;
                 }

@@ -533,6 +533,28 @@ define([
                 // iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerFontUpdate && iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
             };
 
+            $scope.editPageValidated = false;
+
+            $scope.validateEditPage = function(page) {
+                if (page.handle == '') {
+                    $scope.handleError = true;
+                    $('#edit-page-url').parents('div.form-group').addClass('has-error');
+                } else {
+                    $scope.handleError = false;
+                    $('#edit-page-url').parents('div.form-group').removeClass('has-error');
+                }
+                if (page.title == '') {
+                    $scope.titleError = true;
+                    $('#edit-page-title').parents('div.form-group').addClass('has-error');
+                } else {
+                    $scope.titleError = false;
+                    $('#edit-page-title').parents('div.form-group').removeClass('has-error');
+                }
+                if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+                    $scope.editPageValidated = true;
+                }
+            };
+
             //TODO: use scope connection
             $scope.savePage = function() {
                 $scope.saveLoading = true;
@@ -544,6 +566,24 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
                     $scope.isEditing = true;
                 } else {
+                    $scope.validateEditPage($scope.currentPage);
+                    console.log('$scope.editPageValidated ', $scope.editPageValidated);
+
+                    if (!$scope.editPageValidated) {
+                        $scope.saveLoading = false;
+                        toaster.pop('error', "Page Title or URL can not be blank.");
+                        return false;
+                    } else {
+                      for (var i = 0; i < that.allPages.length; i++) {
+                        if (that.allPages[i].handle === $scope.currentPage.handle && that.allPages[i]._id != $scope.currentPage._id) {
+                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                            $scope.saveLoading = false;
+                            $('#edit-page-url').parents('div.form-group').addClass('has-error');
+                            return false;
+                            }
+                        };  
+                        
+                    }
                     var componentJSON = $scope.currentPage.components;
                     var pageId = $scope.currentPage._id;
 
@@ -865,6 +905,8 @@ define([
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: componentId
                     });
+                    if($scope.componentEditing)
+                    {
                     $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).icon;
@@ -874,6 +916,8 @@ define([
 
                     if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
+                    }
+                    
 
                 });
                 //open right sidebar and component tab
@@ -882,14 +926,17 @@ define([
                 // var last = nodes[nodes.length - 1];
                 // angular.element(last).triggerHandler('click');
 
-                WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
-                    $scope.componentEditingVersions = versions;
-                    if ($scope.componentEditing && $scope.componentEditing.version) {
-                        $scope.componentEditing.version = $scope.componentEditing.version.toString();
-                        $scope.versionSelected = $scope.componentEditing.version;
-                    }
-                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
-                });
+                if($scope.componentEditing)
+                {
+                    WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
+                        $scope.componentEditingVersions = versions;
+                        if ($scope.componentEditing && $scope.componentEditing.version) {
+                            $scope.componentEditing.version = $scope.componentEditing.version.toString();
+                            $scope.versionSelected = $scope.componentEditing.version;
+                        }
+                        $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                    });
+                 }
                 $('#feature-convert').iconpicker({
                     iconset: 'fontawesome',
                     icon: 'fa-credit-card',
@@ -911,60 +958,7 @@ define([
 
                 var componentId = $scope.componentEditing._id;
 
-                //update single component
-                var componentType = $scope.componentEditing.type;
-                var matchingComponent = _.findWhere($scope.currentPage.components, {
-                    _id: componentId
-                });
-
-                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + $scope.componentEditing._id + '"]');
-                if (editedComponent && editedComponent.length > 0) {
-                    //get all the editable variables and replace the ones in view with variables in DB
-                    var componentEditable = editedComponent[0].querySelectorAll('.editable');
-                    if (componentEditable.length >= 1) {
-                        for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                            var componentVar = componentEditable[i2].attributes['data-class'].value;
-                            var componentVarContents = componentEditable[i2].innerHTML;
-
-                            //if innerhtml contains a span with the class ng-binding then remove it
-                            var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
-
-                            if (span) {
-                                var spanParent = span.parentNode;
-                                var spanInner = span.innerHTML;
-                                if (spanParent.classList.contains('editable')) {
-                                    componentVarContents = spanInner;
-                                } else {
-                                    spanParent.innerHTML = spanInner;
-                                    componentVarContents = spanParent.parentNode.innerHTML;
-                                }
-                            }
-                            //remove "/n"
-                            componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
-                            var setterKey, pa;
-                            //if contains an array of variables
-                            if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index']) {
-                                //get index in array
-                                var first = componentVar.split(".")[0];
-                                var second = componentEditable[i2].attributes['data-index'].value;
-                                var third = componentVar.split(".")[2];
-                                matchingComponent[first][second][third] = componentVarContents;
-                            }
-                            //if needs to traverse a single
-                            if (componentVar.indexOf('-') > 0) {
-                                var first = componentVar.split("-")[0];
-                                var second = componentVar.split("-")[1];
-                                matchingComponent[first][second] = componentVarContents;
-                            }
-                            //simple
-                            if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                matchingComponent[componentVar] = componentVarContents;
-                            }
-                        }
-                    }
-                }
-
+                $scope.updateSingleComponent(componentId);
 
                 var componentIndex;
                 for (var i = 0; i < $scope.components.length; i++) {
@@ -988,22 +982,21 @@ define([
                 // });
             };
 
-            $scope.saveCustomComponent = function(networks) {
-                    var currentComponentId = $scope.componentEditing._id;
 
-                    //foreach components by class .component
-                    var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
-                    for (var i = 0; i < editedPageComponents.length; i++) {
-                        var componentId = editedPageComponents[i].attributes['data-id'].value;
-                        if(currentComponentId == componentId)
-                        {
-                            var matchingComponent = _.findWhere($scope.currentPage.components, {
-                            _id: componentId
-                            });
-                            //get all the editable variables and replace the ones in view with variables in DB
-                            var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
-                            if (componentEditable.length >= 1) {
-                                for (var i2 = 0; i2 < componentEditable.length; i2++) {
+            $scope.updateSingleComponent = function(componentId)
+            {
+                //update single component
+                
+                var matchingComponent = _.findWhere($scope.currentPage.components, {
+                    _id: componentId
+                });
+
+                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
+                if (editedComponent && editedComponent.length > 0) {
+                    //get all the editable variables and replace the ones in view with variables in DB
+                    var componentEditable = editedComponent[0].querySelectorAll('.editable');
+                    if (componentEditable.length >= 1) {
+                        for (var i2 = 0; i2 < componentEditable.length; i2++) {
                                     var componentVar = componentEditable[i2].attributes['data-class'].value;
                                     var componentVarContents = componentEditable[i2].innerHTML;
 
@@ -1068,12 +1061,15 @@ define([
                                         matchingComponent[componentVar] = componentVarContents;
                                     }
                                 }
-                            }
+                    }
+                }               
+               return matchingComponent;
+            }
 
-                        }
-                    };
-                    //$scope.currentPage.components = $scope.components;
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, networks ? networks : $scope.componentEditing.networks);
+            $scope.saveCustomComponent = function(networks) {
+                    var currentComponentId = $scope.componentEditing._id;  
+                    $scope.updateSingleComponent(currentComponentId);                  
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
             };
 
             //delete page
@@ -1492,19 +1488,21 @@ define([
 
             window.updateAdminPageScope = function(page) {
                 $scope.singlePost = false;
-                if (page._id !== $scope.currentPage._id) {
-                    $scope.currentPage = _.findWhere(that.allPages, {
-                        handle: page.handle
-                    });
-
-                    //get components from page
-                    if ($scope.currentPage && $scope.currentPage.components) {
-                        $scope.components = $scope.currentPage.components;
-                    } else {
-                        $scope.components = [];
-                    }
-                    $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                console.log("Updating admin scope")
+                if (!$scope.currentPage)
+                {
+                    $scope.$apply(function() {
+                        $scope.currentPage = page;
+                         //get components from page
+                        if ($scope.currentPage && $scope.currentPage.components) {
+                            $scope.components = $scope.currentPage.components;
+                        } else {
+                            $scope.components = [];
+                        }
+                        $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                    })
                 }
+               
             }
 
             window.checkIfSinglePost = function(post) {
@@ -1554,6 +1552,10 @@ define([
                 $scope.componentEditing.teamMembers.splice(index, 0, newTeam);
                 $scope.saveCustomComponent();
             }
+            window.updateComponent = function(componentId) {
+                //update single component               
+               return $scope.updateSingleComponent(componentId);
+            };
 
         }
     ]);

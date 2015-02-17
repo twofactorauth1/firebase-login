@@ -13,6 +13,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.tagCloud = [];
     $scope.isPageDirty = false;
     $scope.currentcomponents = [];
+    $scope.thumbnailSlider = [];
 
     //displays the year dynamically for the footer
     var d = new Date();
@@ -991,9 +992,24 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
-            $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            var thumbnailId = $scope.currentpage.components[i]._id;
+           
+            var matching = _.find($scope.thumbnailSlider, function(item) {
+              return item.thumbnailId == thumbnailId
+            })
+          
+          if (!matching) {            
+            $scope.thumbnailSlider.push(
+            {
+              thumbnailId : thumbnailId,
+              thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
+            });
+          }
+          else
+           matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile);
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
         };
       });
@@ -1020,9 +1036,24 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
-            $scope.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            var thumbnailId = $scope.currentpage.components[i]._id;
+           
+            var matching = _.find($scope.thumbnailSlider, function(item) {
+              return item.thumbnailId == thumbnailId
+            })
+          
+          if (!matching) {            
+            $scope.thumbnailSlider.push(
+            {
+              thumbnailId : thumbnailId,
+              thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
+            });
+          } 
+          else
+            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection); 
+           
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile);
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
       };
     };
@@ -1095,20 +1126,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.sortableOptions = {
       dragStart: function(e, ui) {
-        console.log('ui >>> ', ui);
-        //$(".as-sortable-placeholder").height(60);        
-        //e.dest.sortableScope.element.addClass("active");
+        console.log('Start sorting');
+        var componentId = e.source.itemScope.modelValue._id;
+        e.source.itemScope.modelValue = window.parent.updateComponent(componentId);
         e.source.itemScope.element.addClass(" dragging");
         clearTimeout($scope.wait);
        // e.source.itemScope.element.parent()[0].style.position = "absolute";
         //e.source.itemScope.element[0].style.position = "relative";
       },
-      update: function(e, ui) {
+      dragMove: function(e, ui) {
         console.log('sorting update');
       },
       dragEnd: function(e, ui) {
+        console.log('sorting end');
         e.dest.sortableScope.element.removeClass("dragging");        
         $scope.wait = setTimeout(function() {
+          activateAloha();
           $(".ui-sortable").removeClass("active");
         }, 1500);
       }
@@ -1154,12 +1187,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
             console.log('value ', value);
-            $scope.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
+            var thumbnailId = value._id;
+           
+            var matching = _.find($scope.thumbnailSlider, function(item) {
+              return item.thumbnailId == thumbnailId
+            })
+          
+          if (!matching) {            
+            $scope.thumbnailSlider.push(
+            {
+              thumbnailId : thumbnailId,
+              thumbnailSliderCollection : angular.copy(value.thumbnailCollection)
+            });
+          }
+          else
+           matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection); 
             var winWidth = w.width();
-            $scope.bindThumbnailSlider(winWidth, check_if_mobile);
+            $scope.bindThumbnailSlider(winWidth, check_if_mobile, thumbnailId);
             w.bind('resize', function() {
               $scope.$apply(function() {
-                $scope.bindThumbnailSlider(w.width(), check_if_mobile);
+                $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
               });
             });
           }
@@ -1170,7 +1217,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
     });
 
-    $scope.bindThumbnailSlider = function(width, is_mobile) {
+    $scope.bindThumbnailSlider = function(width, is_mobile, thumbnailId) {
       console.log('width ', width);
       console.log('is_mobile ', is_mobile);
       var number_of_arr = 4;
@@ -1178,13 +1225,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         number_of_arr = 1;
       }
       $scope.imagesPerPage = number_of_arr;
-      if($scope.thumbnailSliderCollection)
+
+      var matching = _.find($scope.thumbnailSlider, function(item) {
+          return item.thumbnailId == thumbnailId
+      })
+          
+      if(matching)
       {
-        $scope.thumbnailCollection = partition($scope.thumbnailSliderCollection, number_of_arr);
-        if($scope.thumbnailCollection.length > 1)
-          $scope.displayThumbnailPaging = true;
+        matching.thumbnailCollection = partition(matching.thumbnailSliderCollection, number_of_arr);
+        if(matching.thumbnailCollection.length > 1)
+          matching.displayThumbnailPaging = true;
         else
-          $scope.displayThumbnailPaging = false;
+          matching.displayThumbnailPaging = false;
       }
     }
 

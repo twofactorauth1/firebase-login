@@ -167,7 +167,9 @@ var mongodao = {
                 fn(err, value);
             }
         };
-        this.mongo(collection).find(query).sort({order_by: order_dir}).toArray(fxn);
+        var orderByObj = {};
+        orderByObj[order_by] = order_dir;
+        this.mongo(collection).find(query).sort(orderByObj).toArray(fxn);
 
     },
 

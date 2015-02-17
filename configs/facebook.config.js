@@ -21,7 +21,7 @@ module.exports = {
     SCOPE_MAILBOX: "read_mailbox",
 
     getScope: function(additions) {
-        var arr = ["user_friends", "email", "read_insights", "read_stream", 'publish_actions', 'user_likes']; //read_mailbox, read_stream
+        var arr = ["user_friends", "email", "read_insights", "read_stream", 'publish_actions', 'user_likes', 'read_mailbox', 'manage_pages']; //read_mailbox, read_stream
         if (additions != null) {
             arr = arr.concat(additions);
         }

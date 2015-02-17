@@ -1,7 +1,7 @@
 <div class="website" ng-class="{true: 'editing', false: ''}[isEditing == true]">
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
-        <div class="col-xs-7 pages-editing">
+        <div class="col-xs-8 pages-editing">
             <a class="btn btn-success pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
                 <span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
             </a>
@@ -16,7 +16,7 @@
 
             </div>
         </div>
-        <div class="col-xs-5">
+        <div class="col-xs-4">
 
             <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
                 <i class="fa fa fa-edit"></i>
@@ -116,11 +116,11 @@
                 <div ng-if="!single_post" class="rightpanelinner">
                     <div class="form-group">
                         <label>Title:</label>
-                        <input class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
+                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
                     </div>
                     <div class="form-group" ng-hide="currentPage.handle == 'index'">
                         <label>URL:</label>
-                        <input class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
+                        <input id="edit-page-url" class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
                     </div>
                     <div class="form-group" ng-hide="currentPage.handle == 'index'">
                         <label>Show:</label>
@@ -271,7 +271,7 @@
                         <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
                         <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
                       </div>
-                    <h4 class="modal-title">{{componentEditing.title | htmlToPlaintext}} Settings</h4>
+                    <h4 class="modal-title">{{(componentEditing.title || '') | htmlToPlaintext}} Settings</h4>
                 </div>
                 <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
                     <tabset>

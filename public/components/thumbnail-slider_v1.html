@@ -5,15 +5,15 @@
             </div>
         </div>
         <br>
-        <div class="well" style="background: none">
+        <div class="well" style="background: none" data-ng-repeat="slider in thumbnailSlider track by $index" data-ng-if="slider.thumbnailId == component._id">
             <div id="myCarousel-{{component.anchor}}" active="1" class="carousel slide">
-                <ol class="carousel-indicators hidden" ng-hide="thumbnailCollection[0][0].detail">
-                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in thumbnailCollection"></li>
+                <ol class="carousel-indicators hidden" ng-hide="slider.thumbnailCollection[0][0].detail">
+                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in slider.thumbnailCollection"></li>
                 </ol>
                 <div class="carousel-inner" style="height:200px">
-                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in thumbnailCollection">
+                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in slider.thumbnailCollection">
                         <div class="row">
-                            <div class="col-sm-3 hideText"  data-ng-repeat="image in collection"> 
+                            <div class="col-sm-3 hideText"  data-ng-repeat="image in collection track by $index"> 
                                 <div class="image-wrap">
                                     <div class="imgHeight single-image">
                                     <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 70px;background: none;">
@@ -29,14 +29,14 @@
                                         </a>
                                     </div>
                                 </div>
-                                <h4 ng-show="thumbnailCollection[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
+                                <h4 ng-show="slider.thumbnailCollection[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
                                 <p ng-show="image.detail">{{image.detail}}</p>
                             </div>
                         </div>
                     </div>
                </div>
-                <div ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
-                <div ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>
+                <div ng-show="slider.displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
+                <div ng-show="slider.displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>
             </div>
         </div>
     </div>

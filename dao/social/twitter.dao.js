@@ -117,6 +117,11 @@ var dao = {
         return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/mentions_timeline.json', fn);
     },
 
+    getDirectMessages: function(accessToken, accessTokenSecret, twitterId, fn) {
+        var self = this;
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'direct_messages.json', fn);
+    },
+
     getTweetsForId: function(accessToken, accessTokenSecret, twitterId, timeline, fn) {
         var self = this;
         self.log.debug('>> getting tweets ', twitterId);
@@ -377,6 +382,63 @@ var dao = {
                 }
             }
         );
+    },
+
+    postWithToken: function(accessToken, accessTokenSecret, status, fn) {
+        var self = this;
+        self.log.debug('>> postWithToken');
+
+        twitter.statuses("update", {
+                status: status
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error updating status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< postWithToken');
+                    fn(null, response);
+                }
+            }
+        );
+    },
+
+    getSearchResults: function(accessToken, accessTokenSecret, twitterId, term, fn) {
+        var self = this;
+        var path = "search/tweets.json";
+        var params = {
+            user_id: twitterId,
+            count: 200,
+            q: encodeURIComponent(term)
+        };
+        var url = this._generateUrl(path, params);
+
+        self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
+            if (err) {
+                return fn(err, value);
+            }
+
+            var tweets = JSON.parse(value);
+            self.log.debug('>> tweets ', tweets);
+            if (tweets.length > 0) {
+                var result = [];
+
+                var processTweet = function (tweet, cb) {
+                    result.push(new Post().convertFromTwitterTweet(tweet));
+                    cb();
+                };
+
+                async.eachLimit(tweets, 10, processTweet, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                fn(null, tweets);
+            }
+        });
     },
 
 

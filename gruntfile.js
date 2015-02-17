@@ -236,9 +236,15 @@ module.exports = function(grunt) {
         },
 
         uglify: {
+            options: {
+                compress: {
+                    drop_console: true
+                }
+            },
             js: {
                 files: {
-                    'public/js/indigenous.js': ['public/js/indigenous.js']
+                    'public/js/indigenous.js': ['public/js/indigenous.js'],
+                    'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js']
                 }
             }
         },
@@ -508,7 +514,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
-    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate','clean:postbuild']);
+
+    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
+
 
     /*
      * This task is run by CI.
