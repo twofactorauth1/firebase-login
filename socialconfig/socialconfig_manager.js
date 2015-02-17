@@ -383,7 +383,7 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccount = config.getSocialAccountById(socialAccountId);
-            if (socialAccount === null) {
+            if (!socialAccount) {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
             }
