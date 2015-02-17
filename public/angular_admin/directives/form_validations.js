@@ -50,7 +50,7 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 						}
 						break;
 						case "url":
-							var regex = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+							var regex = /^(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
 							var result = regex.test(el.val());
 							if (!result) {
 								parent_div.addClass('has-error');

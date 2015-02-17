@@ -361,7 +361,8 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, fn) {
-        var key = 'feed?fields=comments,likes';
+        //var key = 'feed?fields=comments,likes';
+        var key = 'feed';
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
