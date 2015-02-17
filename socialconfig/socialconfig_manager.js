@@ -12,6 +12,9 @@ var facebookDao = require('../dao/social/facebook.dao');
 
 module.exports = {
 
+    defaultTwitterTrackedObjects : ['feed', 'user', 'mentions', 'numberFollowers', 'profile', 'messages'],
+    defaultFacebookTrackedObjects: ['feed', 'pages', 'likes', 'profile', 'messages'],
+
     createSocialConfig: function(socialConfig, fn) {
         var self = this;
         log.debug('>> createSocialConfig');
@@ -172,8 +175,31 @@ module.exports = {
                 });
                 if (updatedCred == false) {
                     socialAccounts.push(creds);
+                    /*
+                     * Add default tracked objects
+                     */
+                    var trackedObjects = config.get('trackedObjects');
+                    if(creds.type === $$.constants.social.types.FACEBOOK) {
+                        _.each(self.defaultFacebookTrackedObjects, function(type){
+                            var obj = {
+                                socialId: creds.id,
+                                type: type
+                            }
+                            trackedObjects.push(obj);
+                        });
+                    } else if(creds.type === $$.constants.social.types.TWITTER) {
+                        _.each(self.defaultTwitterTrackedObjects, function(type){
+                            var obj = {
+                                socialId: creds.id,
+                                type: type
+                            }
+                            trackedObjects.push(obj);
+                        });
+                    }
+                    config.set('trackedObjects', trackedObjects);
                 }
                 config.set('socialAccounts', socialAccounts);
+
                 socialconfigDao.saveOrUpdate(config, function(err, value){
                     if(err) {
                         log.error('Error saving social config: ' + err);
