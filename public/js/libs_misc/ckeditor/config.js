@@ -4,6 +4,7 @@
  */
 
 CKEDITOR.editorConfig = function( config ) {
+	config.title = false;
 	// Define changes to default configuration here.
 	// For complete reference see:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
@@ -43,7 +44,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'doksoft_button,lineheight,mediamanager,sharedspace,image2';
+	config.extraPlugins = 'doksoft_button,lineheight,mediamanager,sharedspace,image2,tooltip';
 
 	config.filebrowserBrowseUrl = '';
 

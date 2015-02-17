@@ -12,6 +12,9 @@ var facebookDao = require('../dao/social/facebook.dao');
 
 module.exports = {
 
+    defaultTwitterTrackedObjects : ['feed', 'user', 'mentions', 'numberFollowers', 'profile', 'messages'],
+    defaultFacebookTrackedObjects: ['feed', 'pages', 'likes', 'profile', 'messages'],
+
     createSocialConfig: function(socialConfig, fn) {
         var self = this;
         log.debug('>> createSocialConfig');
@@ -172,8 +175,31 @@ module.exports = {
                 });
                 if (updatedCred == false) {
                     socialAccounts.push(creds);
+                    /*
+                     * Add default tracked objects
+                     */
+                    var trackedObjects = config.get('trackedObjects');
+                    if(creds.type === $$.constants.social.types.FACEBOOK) {
+                        _.each(self.defaultFacebookTrackedObjects, function(type){
+                            var obj = {
+                                socialId: creds.id,
+                                type: type
+                            }
+                            trackedObjects.push(obj);
+                        });
+                    } else if(creds.type === $$.constants.social.types.TWITTER) {
+                        _.each(self.defaultTwitterTrackedObjects, function(type){
+                            var obj = {
+                                socialId: creds.id,
+                                type: type
+                            }
+                            trackedObjects.push(obj);
+                        });
+                    }
+                    config.set('trackedObjects', trackedObjects);
                 }
                 config.set('socialAccounts', socialAccounts);
+
                 socialconfigDao.saveOrUpdate(config, function(err, value){
                     if(err) {
                         log.error('Error saving social config: ' + err);
@@ -311,6 +337,99 @@ module.exports = {
 
             facebookDao.createPostWithToken(socialAccount.accessToken, socialAccount.socialId, message, fn);
 
+        });
+    },
+
+    getFacebookPosts: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookPosts');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return facebookDao.getTokenPosts(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getTwitterFeed: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getTwitterFeed');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return twitterDao.getHomeTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        });
+    },
+
+    getTwitterFollowers: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getTwitterFollowers');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        });
+    },
+
+    getTwitterProfile: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getTwitterProfile');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return twitterDao.getProfleForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, fn);
+        });
+    },
+
+    createTwitterPost: function(accountId, socialAccountId, post, fn) {
+        var self = this;
+        log.debug('>> createTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return twitterDao.postWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, post, fn);
         });
     },
 
