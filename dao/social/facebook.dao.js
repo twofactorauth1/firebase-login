@@ -360,7 +360,8 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, fn) {
-        var key = 'feed?fields=comments,likes';
+        //var key = 'feed?fields=comments,likes';
+        var key = 'feed';
         return this._getStreamPart(null, accessToken, socialId, key, fn);
     },
 
@@ -801,11 +802,15 @@ var dao = {
 
     //region feed
 
-    createPostWithToken: function(accessToken, socialId, content, fn) {
+    createPostWithToken: function(accessToken, socialId, content, objectId, fn) {
         var self = this;
         self.log.debug('>> createPostWithToken');
 
         var urlOptions = {access_token:accessToken, message:content};
+
+        if(objectId) {
+            urlOptions.object_attachment = objectId;
+        }
 
         FB.api(socialId + '/feed', 'post', urlOptions, function(res){
             if(!res || res.error) {
@@ -860,6 +865,21 @@ var dao = {
                 fn(res.error, null);
             } else {
                 self.log.debug('<< getMessages', res);
+                fn(null, res);
+            }
+        });
+    },
+
+    savePhoto: function(accessToken, socialId, url, fn) {
+        var self = this;
+        self.log.debug('>> savePhoto');
+        var urlOptions = {access_token: accessToken, url: url};
+        FB.api('/' + socialId + '/photos', urlOptions, function(res) {
+            if(!res || res.error) {
+                self.log.error('Error saving photo: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< savePhoto', res);
                 fn(null, res);
             }
         });
