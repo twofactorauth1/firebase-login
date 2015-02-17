@@ -348,7 +348,7 @@ module.exports = {
 
     },
 
-    createFacebookPost: function(accountId, socialAccountId, message,fn) {
+    createFacebookPost: function(accountId, socialAccountId, message, url, fn) {
         var self = this;
         log.debug('>> createFacebookPost');
 
@@ -362,8 +362,18 @@ module.exports = {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
             }
-
-            facebookDao.createPostWithToken(socialAccount.accessToken, socialAccount.socialId, message, fn);
+            if(url) {
+                facebookDao.savePhoto(socialAccount.accessToken, socialAccount.socialId, url, function(err, value){
+                    if(err) {
+                        log.error('Error saving photo: ' + err);
+                        return fn(err, null);
+                    }
+                    var objectId = value.id;
+                    facebookDao.createPostWithToken(socialAccount.accessToken, socialAccount.socialId, message, objectId, fn);
+                });
+            } else {
+                facebookDao.createPostWithToken(socialAccount.accessToken, socialAccount.socialId, message, null, fn);
+            }
 
         });
     },
