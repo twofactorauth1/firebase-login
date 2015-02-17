@@ -11576,7 +11576,7 @@ div[data-class='image-text'] p {
   max-width: 200px;
 }
 
-@media only screen and (min-width: 700px) and (max-width: 1500px) {
+@media only screen and (min-width: 700px) and (max-width: 1920px) {
   .footer-after {
     background: #292929;
     padding: 20px 0 0 0;
