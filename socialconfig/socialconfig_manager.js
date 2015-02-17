@@ -132,6 +132,13 @@ module.exports = {
                 return _account.id !== socialId;
             });
             config.set('socialAccounts', updatedSocialAccounts);
+            
+            var trackedObjects = config.get('trackedObjects');
+            var updatedTrackedObjects = _.fitler(trackedObjects, function(_obj){
+                return _obj.socialId !== socialId;
+            });
+            config.set('trackedObjects', updatedTrackedObjects);
+
 
             socialconfigDao.saveOrUpdate(config, function(err, value){
                 if(err) {
