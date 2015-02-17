@@ -241,6 +241,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             $scope.displayedFeed = $scope.feed;
         });
 
+        /*
         SocialConfigService.getAllSocialConfig(function(data) {
           data.socialAccounts.forEach(function(value, index) {
             if (value.type == $$.constants.user.credential_types.FACEBOOK) {
@@ -260,6 +261,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
           });
         });
+        */
 
     }]);
 });
