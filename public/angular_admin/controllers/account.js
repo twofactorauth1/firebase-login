@@ -30,6 +30,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             }
 
             SocialConfigService.getAllSocialConfig(function(data) {
+              $scope.socialAccounts = data.socialAccounts;
               data.socialAccounts.forEach(function(value, index) {
                 $scope.userSocial[value.type].status = true;
                 $scope.userSocial[value.type].image = value.image;
