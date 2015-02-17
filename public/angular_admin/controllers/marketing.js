@@ -245,6 +245,21 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             $scope.displayedFeed = $scope.feed;
         });
 
+        $scope.handleFBPost = function(socialAccountId, post) {
+            SocialConfigService.postFBPost(socialAccountId, post, function(data) {
+                console.log('posted to facebook ', data);
+            });
+        };
+
+        $scope.postToSocial = function(socialAccountId, post, type) {
+            console.log('socialAccountId ', socialAccountId);
+            console.log('post ', post);
+            console.log('type ', type);
+            if (type == 'fb') {
+                 $scope.handleFBPost(socialAccountId, post);
+            }
+        };
+
         /*
 >>>>>>> develop
         SocialConfigService.getAllSocialConfig(function(data) {

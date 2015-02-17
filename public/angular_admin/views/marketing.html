@@ -156,7 +156,7 @@
             </div>
             <div ng-if="feed.length > 0" class="col-sm-9">
                 <div class="submit-post-form">
-                    <div class="panel panel-dark panel-alt timeline-post hidden">
+                    <div class="panel panel-dark panel-alt timeline-post">
                         <div class="panel-body">
                             <textarea placeholder="Write something..." class="form-control"></textarea>
                         </div>
@@ -171,9 +171,8 @@
                                     <div class="form-group mb0">
                                         <label for="post-to" class="pull-left control-label" style="padding: 0;margin-right: 10px;font-size: 14px;">Post To: </label>
                                         <div class="pull-left">
-                                            <select class="form-control mb0">
-                                                <option>Facebook</option>
-                                                <option>Twitter</option>
+                                            <select class="form-control mb0 selectpicker">
+                                                <option ng-repeat="type in feedTypes">{{type.type}} {{type.name}}</option>
                                             </select>
 
                                         </div>
@@ -181,7 +180,7 @@
                                 </div>
                             </div>
                             <!--timeline-btns -->
-                            <button class="btn btn-primary pull-right">Submit Post</button>
+                            <button class="btn btn-primary pull-right" ng-click="postToSocial('ea124ddb-35e5-478b-8c81-ad658a018187', 'hello', 'fb') ">Submit Post</button>
                         </div>
                         <!-- panel-footer -->
                     </div>
@@ -192,7 +191,6 @@
                             <div class="post-inner">
                                 <div class="post-content">
                                     <img src="{{post.picture}}">
-                                    <pre>{{post}}</pre>
                                 </div>
                                 <div class="post-bottom-bar {{post.type}}">
                                     <i class="fa fa-{{post.type}} pull-left"></i>

@@ -17,7 +17,16 @@ define(['app'], function (app) {
                     console.log('getTrackedObject >>> ', data);
                     fn(data);
                 });
-        }
+        };
+
+        this.postFBPost = function(socialAccountId, post, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post'].join('/');
+            $http.post(apiUrl, {
+                post: post
+            }).success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
     });
 
     //Twitter
@@ -85,14 +94,5 @@ define(['app'], function (app) {
             .success(function (data, status, headers, config) {
                 fn(data);
             });
-    };
-
-    this.postFBPost = function(socialAccountId, post, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post'].join('/');
-        $http.post(apiUrl, {
-            post: post
-        }).success(function (data, status, headers, config) {
-            fn(data);
-        });
     };
 });
