@@ -918,13 +918,40 @@ define([
 
                 var componentId = $scope.componentEditing._id;
 
+                $scope.updateSingleComponent(componentId);
+
+                var componentIndex;
+                for (var i = 0; i < $scope.components.length; i++) {
+                    if ($scope.components[i]._id === componentId) {
+                        $scope.components[i] = $scope.componentEditing
+                    }
+                }
+                $scope.currentPage.components = $scope.components;
+                $scope.updateIframeComponents();
+                $scope.isEditing = true;
+                setTimeout(function() {
+                    $scope.activateAloha();
+                }, 500)
+
+                //update the scope as the temppage until save
+
+                // var pageId = $scope.currentPage._id;
+                // WebsiteService.updateComponent(pageId, $scope.componentEditing._id, $scope.componentEditing, function(data) {
+                //     toaster.pop('success', "Component Saved", "The component was saved successfully.");
+                //     $scope.updateIframeComponents();
+                // });
+            };
+
+
+            $scope.updateSingleComponent = function(componentId)
+            {
                 //update single component
-                var componentType = $scope.componentEditing.type;
+                
                 var matchingComponent = _.findWhere($scope.currentPage.components, {
                     _id: componentId
                 });
 
-                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + $scope.componentEditing._id + '"]');
+                var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
                 if (editedComponent && editedComponent.length > 0) {
                     //get all the editable variables and replace the ones in view with variables in DB
                     var componentEditable = editedComponent[0].querySelectorAll('.editable');
@@ -971,115 +998,12 @@ define([
                         }
                     }
                 }
-
-
-                var componentIndex;
-                for (var i = 0; i < $scope.components.length; i++) {
-                    if ($scope.components[i]._id === componentId) {
-                        $scope.components[i] = $scope.componentEditing
-                    }
-                }
-                $scope.currentPage.components = $scope.components;
-                $scope.updateIframeComponents();
-                $scope.isEditing = true;
-                setTimeout(function() {
-                    $scope.activateAloha();
-                }, 500)
-
-                //update the scope as the temppage until save
-
-                // var pageId = $scope.currentPage._id;
-                // WebsiteService.updateComponent(pageId, $scope.componentEditing._id, $scope.componentEditing, function(data) {
-                //     toaster.pop('success', "Component Saved", "The component was saved successfully.");
-                //     $scope.updateIframeComponents();
-                // });
-            };
+               return matchingComponent;
+            }
 
             $scope.saveCustomComponent = function(networks) {
-                    var currentComponentId = $scope.componentEditing._id;
-
-                    //foreach components by class .component
-                    var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
-                    for (var i = 0; i < editedPageComponents.length; i++) {
-                        var componentId = editedPageComponents[i].attributes['data-id'].value;
-                        if(currentComponentId == componentId)
-                        {
-                            var matchingComponent = _.findWhere($scope.currentPage.components, {
-                            _id: componentId
-                            });
-                            //get all the editable variables and replace the ones in view with variables in DB
-                            var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
-                            if (componentEditable.length >= 1) {
-                                for (var i2 = 0; i2 < componentEditable.length; i2++) {
-                                    var componentVar = componentEditable[i2].attributes['data-class'].value;
-                                    var componentVarContents = componentEditable[i2].innerHTML;
-
-                                    //if innerhtml contains a span with the class ng-binding then remove it
-                                    var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
-
-                                    if (span) {
-                                        var spanParent = span.parentNode;
-                                        var spanInner = span.innerHTML;
-                                        if (spanParent.classList.contains('editable')) {
-                                            componentVarContents = spanInner;
-                                        } else {
-                                            spanParent.innerHTML = spanInner;
-                                            componentVarContents = spanParent.parentNode.innerHTML;
-                                        }
-                                    }
-                                    //remove "/n"
-                                    componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
-                                        var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
-                                        if(regex.test(componentVarContents))
-                                        {
-                                            var jHtmlObject = $(componentVarContents);
-                                            var editor = jQuery("<p>").append(jHtmlObject);
-                                            editor.find(".cke_reset").remove();
-                                            var newHtml = editor.html();
-                                            componentVarContents = newHtml; 
-                                        }
-                                        
-
-                                    var setterKey, pa;
-                                    //if contains an array of variables
-                                    if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
-                                        //get index in array
-                                        var first = componentVar.split(".")[0];
-                                        var second = componentEditable[i2].attributes['data-index'].value;
-                                        var third = componentVar.split(".")[2];
-                                        if(matchingComponent[first][second])
-                                            matchingComponent[first][second][third] = componentVarContents;
-                                    }
-                                    //if contains an array of array variables
-                                    if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
-                                        //get parent index in array
-                                        var first = componentVar.split(".")[0];                                    
-                                        var second = componentEditable[i2].attributes['parent-data-index'].value;
-                                        //get child index in array
-                                        var third = componentVar.split(".")[2];
-                                        var fourth = componentEditable[i2].attributes['data-index'].value;
-                                        var last = componentVar.split(".")[3];
-                                        if(matchingComponent[first][second][third][fourth])
-                                            matchingComponent[first][second][third][fourth][last] = componentVarContents;
-                                    }
-                                    //if needs to traverse a single
-                                    if (componentVar.indexOf('-') > 0) {
-                                        var first = componentVar.split("-")[0];
-                                        var second = componentVar.split("-")[1];
-                                        if(matchingComponent[first])
-                                            matchingComponent[first][second] = componentVarContents;
-                                    }
-                                    //simple
-                                    if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
-                                        matchingComponent[componentVar] = componentVarContents;
-                                    }
-                                }
-                            }
-
-                        }
-                    };
-                    //$scope.currentPage.components = $scope.components;
+                    var currentComponentId = $scope.componentEditing._id;  
+                    $scope.updateSingleComponent(currentComponentId);                  
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, networks ? networks : $scope.componentEditing.networks);
             };
 
@@ -1563,6 +1487,10 @@ define([
                 $scope.componentEditing.teamMembers.splice(index, 0, newTeam);
                 $scope.saveCustomComponent();
             }
+            window.updateComponent = function(componentId) {
+                //update single component               
+               return $scope.updateSingleComponent(componentId);
+            };
 
         }
     ]);

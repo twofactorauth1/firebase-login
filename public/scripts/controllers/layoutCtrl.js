@@ -1126,20 +1126,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.sortableOptions = {
       dragStart: function(e, ui) {
-        console.log('ui >>> ', ui);
-        //$(".as-sortable-placeholder").height(60);        
-        //e.dest.sortableScope.element.addClass("active");
+        console.log('Start sorting');
+        var componentId = e.source.itemScope.modelValue._id;
+        e.source.itemScope.modelValue = window.parent.updateComponent(componentId);
         e.source.itemScope.element.addClass(" dragging");
         clearTimeout($scope.wait);
        // e.source.itemScope.element.parent()[0].style.position = "absolute";
         //e.source.itemScope.element[0].style.position = "relative";
       },
-      update: function(e, ui) {
+      dragMove: function(e, ui) {
         console.log('sorting update');
       },
       dragEnd: function(e, ui) {
+        console.log('sorting end');
         e.dest.sortableScope.element.removeClass("dragging");        
         $scope.wait = setTimeout(function() {
+          activateAloha();
           $(".ui-sortable").removeClass("active");
         }, 1500);
       }
