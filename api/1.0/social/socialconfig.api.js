@@ -29,11 +29,21 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
 
 
-
+        app.get(this.url('facebook/:socialAccountId/posts'), this.isAuthApi.bind(this), this.getFacebookPosts.bind(this));
         app.get(this.url('facebook/:socialAccountId/pages'), this.isAuthApi.bind(this), this.getFacebookPages.bind(this));
         app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
-        app.post(this.url('facebook/:socialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
+        app.post(this.url('facebook/:soc ialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
 
+        /*
+         * twitter feed
+         * twitter followers
+         * twitter profile
+         */
+/*
+        app.get(this.url('twitter/:socialAccountId/feed'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
+        app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
+        app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
+*/
     },
 
     /**
@@ -191,6 +201,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
             }
         });
+
+    },
+
+    getFacebookPosts: function(req, resp) {
 
     }
 
