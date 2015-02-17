@@ -1037,14 +1037,14 @@ define([
                             }
                         }
                     }
-                }
+                }               
                return matchingComponent;
             }
 
             $scope.saveCustomComponent = function(networks) {
                     var currentComponentId = $scope.componentEditing._id;  
                     $scope.updateSingleComponent(currentComponentId);                  
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.components, networks ? networks : $scope.componentEditing.networks);
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
             };
 
             //delete page
