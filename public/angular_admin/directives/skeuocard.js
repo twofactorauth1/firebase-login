@@ -71,7 +71,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                       scope.cardNameValidated = true;
                     };
 
-                    scope.currentYear = new Date().getFullYear().toString().substr(2,2);
+                    scope.currentYear = new Date().getFullYear().toString();
                     scope.currentMonth = new Date().getMonth() + 1;
 
                     scope.checkCardExpiry = function() {
@@ -140,6 +140,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
 
                     scope.addCardFn = function() {
                         console.log('addCardFn >>>');
+                        scope.cardValidated = scope.expirationValidated = scope.cvvValidated = scope.cardNameValidated = false;
                         scope.checkCardCvv();
                         scope.checkCardExpiry();
                         scope.checkCardName();
