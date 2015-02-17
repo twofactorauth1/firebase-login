@@ -25,6 +25,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
+        app.delete(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
+        app.delete(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
 
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
 
@@ -124,6 +126,27 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    removeSocialAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeSocialAccount');
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var accountId = parseInt(self.accountId(req));
+                var id = null;
+                var socialId = req.params.socialId;
+                if(req.params.id) {
+                    socialConfig.set('_id', req.params.id);
+                }
+                socialConfigManager.removeSocialAccount(accountId, id, socialId, function(err, config){
+                    self.log.debug('<< removeSocialAccount');
+                    self.sendResultOrError(resp, err, config, "Error removing social account");
+                });
+            }
+        });
+    },
+
     fetchTrackedObject: function(req, resp) {
         var self = this;
         self.log.debug('>> fetchTrackedObject');
@@ -182,7 +205,23 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getFacebookProfile: function(req, resp) {
-        //todo: this
+        var self = this;
+        self.log.debug('>> getFacebookProfile');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var pageId = req.params.pageId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookProfile(accountId, socialAccountId, function(err, profile){
+                    self.log.debug('<< getFacebookProfile');
+                    self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
     },
 
     createFacebookPost: function(req, resp) {
@@ -193,12 +232,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var socialAccountId = req.params.socialAccountId;
 
         var message = req.body.post;
+        var url = req.body.imageUrl;//optional
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
-                socialConfigManager.createFacebookPost(accountId, socialAccountId, message, function(err, value){
+                socialConfigManager.createFacebookPost(accountId, socialAccountId, message, url, function(err, value){
                     self.log.debug('<< createFacebookPost');
                     self.sendResultOrError(resp, err, value, "Error creating post");
                 });
