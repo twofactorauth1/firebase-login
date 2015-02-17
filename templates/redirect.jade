@@ -21,18 +21,19 @@ block content
 
                 div.welcome-text
                     h4.nomargin Redirecting
-                    p.mt5.mb20  You're about to be redirected in 
+                    p.mt5.mb20(id="redirectMsg")
                     div(id="timerSec")                   
                     p 
                       h4 Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
     script.
         var next = decodeURIComponent('//#{next}');
+        var socialNetwork = decodeURIComponent('#{socialNetwork}');
         //console.log('next: ' + next);
-        if(next.indexOf('?') != -1) {
-            var nextAry = next.split('?');
-            next = nextAry[0] + '?' + encodeURIComponent(nextAry[1]);
-            //console.log('next is now: ' + next);
-        }
+        console.log('socialNetwork: ' + socialNetwork);
+        if (socialNetwork != 'undefined')
+            document.getElementById('redirectMsg').innerHTML = "You are about to be redirected to "+ socialNetwork +" for authentication";
+        else
+            document.getElementById('redirectMsg').innerHTML = "You're about to be redirected in ";
         var secLeft = 4;
         var intervalFn = function() {
         	secLeft -= 1;
