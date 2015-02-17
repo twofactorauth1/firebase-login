@@ -18326,9 +18326,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin-left: 191px;
 }
 @media (max-width: 1024px) {
-  .mainpanel .pageheader,
-  .mainpanel .contentpanel {
-    padding-left: 75px;
+  .mainpanel .pageheader {
+    margin-right: 124px;
   }
 }
 @media (max-width: 767px) {
@@ -20720,11 +20719,7 @@ div.error label.error:before {
     position: relative;
   }
   .mainpanel {
-    margin-left: 0;
     width: 100%;
-  }
-  .leftpanel-collapsed .mainpanel {
-    margin-left: 0;
   }
   .leftpanel-collapsed .headerbar {
     margin-left: 0;
@@ -23940,6 +23935,11 @@ div[data-type='campaign'] .inner-page .overlay {
 .feature-list-v1 div[data-class="feature-list"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
+}
+@media screen and (max-width: 1024px) {
+  div[data-type="feature-list"] .inner-page {
+    padding: 0px;
+  }
 }
 /********** Features list v2 **********/
 .feature-list-v2 .feature-list-title {

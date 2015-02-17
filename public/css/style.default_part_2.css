@@ -2489,9 +2489,8 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 
 @media (max-width: 1024px) {
-  .mainpanel .pageheader,
-  .mainpanel .contentpanel {
-    padding-left: 75px;
+  .mainpanel .pageheader {
+    margin-right: 124px;
   }
 }
 
@@ -5388,12 +5387,7 @@ div.error label.error:before {
   }
 
   .mainpanel {
-    margin-left: 0;
     width: 100%;
-  }
-
-  .leftpanel-collapsed .mainpanel {
-    margin-left: 0;
   }
 
   .leftpanel-collapsed .headerbar {
@@ -9285,6 +9279,12 @@ div[data-type='campaign'] .inner-page .overlay {
 .feature-list-v1 div[data-class="feature-list"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
+}
+
+@media screen and (max-width: 1024px) {
+  div[data-type="feature-list"] .inner-page {
+    padding: 0px;
+  }
 }
 
 /********** Features list v2 **********/
