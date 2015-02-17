@@ -31,11 +31,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             SocialConfigService.getAllSocialConfig(function(data) {
               $scope.socialAccounts = data.socialAccounts;
-              data.socialAccounts.forEach(function(value, index) {
-                $scope.userSocial[value.type].status = true;
-                $scope.userSocial[value.type].image = value.image;
-                $scope.userSocial[value.type].username = value.username;
-              });
             });
 
             $scope.onboardingSteps = [];
@@ -214,11 +209,8 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 });
             };
 
-            $scope.deleteSocialFn = function(type) {
-                UserService.deleteUserSocial(type, function() {
-                    $scope.userSocial[type].status = false;
-                    ToasterService.show('warning', 'Social connection deleted.');
-                });
+            $scope.deleteSocialFn = function(id) {
+              SocialConfigService.deleteSocialConfigEntry(id, function() {});
             };
 
             $scope.hasCard = false;

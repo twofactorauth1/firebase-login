@@ -375,25 +375,15 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
                           <h3 ng-show="sa.type==credentialTypes.LINKEDIN">Linkedin</h3>
                           <h3 ng-show="sa.type==credentialTypes.TWITTER">Twitter</h3>
                           <h3 ng-show="sa.type==credentialTypes.STRIPE">Stripe</h3>
-
-                          <p ng-show="sa.type==credentialTypes.FACEBOOK">Connect with your friends</p>
-                          <p ng-show="sa.type==credentialTypes.GOOGLE">Import customers, plan posts in advance.</p>
-                          <p ng-show="sa.type==credentialTypes.LINKEDIN">Import contacts</p>
-                          <p ng-show="sa.type==credentialTypes.TWITTER">Import followers</p>
-                          <p ng-show="sa.type==credentialTypes.STRIPE">Stripe Allows you to recieve payments on your website.</p>
-                          <div class="connected" ng-show="userSocial[credentialTypes.FACEBOOK].status">
+                          <div class="connected">
                               <span>You are logged in as:</span>
                               <div class="clearfix"></div>
-                              <img ng-src="{{userSocial[credentialTypes.FACEBOOK].image}}" class="img-circle" />
-                              <span>{{userSocial[credentialTypes.FACEBOOK].username}}</span>
+                              <img ng-src="{{sa.image}}" class="img-circle" />
+                              <span>{{sa.username}}</span>
                           </div>
                           <div class="btn-group btn-group-justified">
-                              <div class="btn-group" ng-hide="userSocial[credentialTypes.FACEBOOK].status">
-                                <a href="/redirect/?next={{currentHost}}/socialconfig/facebook?redirectTo={{redirectUrl}}" class="btn btn-orange btn-lg btn-block" role="button">
-                                      <span class="fa fa-plug"></span>Connect</a>
-                              </div>
-                              <div class="btn-group" ng-show="userSocial[credentialTypes.FACEBOOK].status">
-                                  <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(credentialTypes.FACEBOOK)" confirm-click2 confirm-click2-placement="top">
+                              <div class="btn-group">
+                                  <button class="btn btn-danger btn-lg" role="button" confirm-click2-confirm="deleteSocialFn(sa.id)" confirm-click2 confirm-click2-placement="top">
                                       <span class="fa fa-trash-o"></span>Disconnect</button>
                               </div>
                           </div>
