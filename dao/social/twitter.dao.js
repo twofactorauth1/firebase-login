@@ -401,10 +401,26 @@ var dao = {
                     self.log.debug('data: ', data);
                     self.log.debug('response:', response);
                     self.log.debug('<< postWithToken');
-                    fn(null, response);
+                    fn(null, data);
                 }
             }
         );
+    },
+
+    deletePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> deletePostWithToken');
+        twitter.statuses("destroy", {id:statusId}, accessToken, accessTokenSecret, function(error, data, response){
+            if (error) {
+                self.log.error('Error updating status: ', error);
+                fn(error, null);
+            } else {
+                self.log.debug('data: ', data);
+                self.log.debug('response:', response);
+                self.log.debug('<< deletePostWithToken');
+                fn(null, data);
+            }
+        });
     },
 
     getSearchResults: function(accessToken, accessTokenSecret, twitterId, term, fn) {

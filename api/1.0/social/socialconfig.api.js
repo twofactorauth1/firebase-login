@@ -36,6 +36,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
         app.get(this.url('facebook/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getFacebookProfile.bind(this));
         app.post(this.url('facebook/:socialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
+        app.delete(this.url('facebook/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteFacebookPost.bind(this));
+
+
 
         /*
          * twitter feed
@@ -47,6 +50,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFollowers.bind(this));
         app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterProfile.bind(this));
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
+        app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
     },
 
@@ -248,6 +252,26 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    deleteFacebookPost: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteFacebookPost');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.deleteFacebookPost(accountId, socialAccountId, postId, function(err, value){
+                    self.log.debug('<< deleteFacebookPost');
+                    self.sendResultOrError(resp, err, value, "Error deleting post");
+                });
+            }
+        });
+    },
+
     getFacebookPosts: function(req, resp) {
         var self = this;
         self.log.debug('>> getFacebookPosts');
@@ -340,6 +364,26 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.createTwitterPost(accountId, socialAccountId, post, function(err, savedPost){
                     self.log.debug('<< createTwitterPost');
                     self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                });
+            }
+        });
+    },
+
+    deleteTwitterPost: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteTwitterPost');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.deleteTwitterPost(accountId, socialAccountId, postId, function(err, savedPost){
+                    self.log.debug('<< deleteTwitterPost');
+                    self.sendResultOrError(resp, err, savedPost, "Error deleting twitter post");
                 });
             }
         });

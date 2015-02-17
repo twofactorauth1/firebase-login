@@ -884,6 +884,21 @@ var dao = {
             }
         });
     },
+
+    deletePostWithToken: function(accessToken, socialId, postId, fn) {
+        var self = this;
+        self.log.debug('>> deletePostWithToken');
+        var urlOptions = {access_token: accessToken};
+        FB.api('/' + postId, 'DELETE', urlOptions, function(err, value){
+            if(!res || res.error) {
+                self.log.error('Error deleting post: ' + JSON.stringify(res.error));
+                return fn(res.error, null);
+            } else {
+                self.log.debug('<< deletePostWithToken', res);
+                return fn(null, res);
+            }
+        });
+    },
     
     //region PRIVATE
     _batchRequest: function(batchName, options, fn){
