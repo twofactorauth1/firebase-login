@@ -441,6 +441,23 @@ module.exports = {
         });
     },
 
+    addFacebookComment: function(accountId, socialAccountId, postId, comment, fn) {
+        var self = this;
+        log.debug('>> addFacebookComment');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return facebookDao.postCommentWithToken(socialAccount.accessToken, postId, comment, fn);
+        });
+    },
+
     getTwitterFeed: function(accountId, socialAccountId, fn) {
         var self = this;
         log.debug('>> getTwitterFeed');
