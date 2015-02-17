@@ -27,7 +27,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.activeTab = preferences.indi_default_tab;
-            $scope.initialWelcome = preferences.welcome_alert.initial;
+            if(preferences.welcome_alert) {
+                $scope.initialWelcome = preferences.welcome_alert.initial;
+            } else {
+                //TODO: what makes sense here?
+            }
+
         });
 
         $scope.savePreferencesFn = function() {

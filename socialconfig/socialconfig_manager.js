@@ -196,17 +196,18 @@ module.exports = {
         var social = $$.constants.social.types;
         switch(creds.type) {
             case social.FACEBOOK:
-                facebookDao.getProfile(creds.accessToken, creds.socialId, function(err, value){
+                return facebookDao.getProfile(creds.accessToken, creds.socialId, function(err, value){
                     if(err) {
                         return fn(err, null);
                     }
+                    log.debug('value: ', value);
                     if (value.picture != null && value.picture.data != null) {
                         creds.image = value.picture.data.url;
                     }
                     return fn(null, creds);
                 });
             case social.TWITTER:
-                twitterDao.getProfleForId(creds.accessToken, creds.accessTokenSecret, creds.socialId, function(err, value){
+                return twitterDao.getProfleForId(creds.accessToken, creds.accessTokenSecret, creds.socialId, function(err, value){
                     if(err) {
                         return fn(err, null);
                     }
