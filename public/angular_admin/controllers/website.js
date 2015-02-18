@@ -628,6 +628,7 @@ define([
                                         var jHtmlObject = $(componentVarContents);
                                         var editor = jQuery("<p>").append(jHtmlObject);
                                         editor.find(".cke_reset").remove();
+                                        editor.find(".cke_image_resizer").remove();
                                         var newHtml = editor.html();
                                         componentVarContents = newHtml; 
                                     }
