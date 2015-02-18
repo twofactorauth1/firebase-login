@@ -41,7 +41,7 @@ var component = $$.m.ModelBase.extend({
             title:"<h1>Pricing Table</h1>",            
 
             txtcolor: "#444",
-
+            tblbgcolor: null,
             tables : [
                 {
                     title : "<h1>This is title</h1>",

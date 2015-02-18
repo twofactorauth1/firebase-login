@@ -296,6 +296,10 @@
                                     <label for="colorpicker">Background Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
+                                <div class="form-group" ng-if="componentEditing.type === 'pricing-tables'">
+                                    <label>Pricing Table BG Color:</label>
+                                    <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
                                     <label for="bg_hide">Show Background Image</label>
                                     <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
