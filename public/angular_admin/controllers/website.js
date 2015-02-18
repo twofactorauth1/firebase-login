@@ -622,7 +622,7 @@ define([
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
 
-                                    var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                    var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                                     if(regex.test(componentVarContents))
                                     {
                                         var jHtmlObject = $(componentVarContents);
@@ -1016,7 +1016,7 @@ define([
                                     //remove "/n"
                                     componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
 
-                                        var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                        var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                                         if(regex.test(componentVarContents))
                                         {
                                             var jHtmlObject = $(componentVarContents);
