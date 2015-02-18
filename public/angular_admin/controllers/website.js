@@ -910,7 +910,7 @@ define([
                     $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).icon;
-                    $scope.componentEditing.title = _.findWhere($scope.componentTypes, {
+                    $scope.componentEditing.header_title = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).title;
 
