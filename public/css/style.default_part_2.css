@@ -4510,6 +4510,12 @@ div.error label.error:before {
   width: 16px;
 }
 
+.modal-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
 .website-manage .screenshot-wrap {
   height: 155px;
   overflow: hidden;
