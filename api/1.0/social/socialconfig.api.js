@@ -39,6 +39,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('facebook/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteFacebookPost.bind(this));
         app.post(this.url('facebook/:socialAccountId/post/:postId/comment'), this.isAuthApi.bind(this), this.addPostComment.bind(this));
         app.post(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.addPostLike.bind(this));
+        app.delete(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.deletePostLike.bind(this));
 
 
 
@@ -310,6 +311,26 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.addFacebookLike(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< addPostLike');
                     self.sendResultOrError(resp, err, value, "Error adding like");
+                });
+            }
+        });
+    },
+
+    deletePostLike: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deletePostLike');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.deleteFacebookLike(accountId, socialAccountId, postId, function(err, value){
+                    self.log.debug('<< deletePostLike');
+                    self.sendResultOrError(resp, err, value, "Error deleting like");
                 });
             }
         });

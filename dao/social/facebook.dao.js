@@ -844,14 +844,31 @@ var dao = {
         var self = this;
         self.log.debug('>> postLikeWithToken');
 
-        var urlOptions = {access_token:accessToken, message:comment};
+        var urlOptions = {access_token:accessToken};
 
-        FB.api(socialId + '/comments', 'post', urlOptions, function(res){
+        FB.api(socialId + '/likes', 'post', urlOptions, function(res){
             if(!res || res.error) {
                 self.log.error('Error sharing like: ' + JSON.stringify(res.error));
                 fn(res.error, null);
             } else {
                 self.log.debug('<< postLikeWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    deleteLikeWithToken: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> deleteLikeWithToken');
+
+        var urlOptions = {access_token:accessToken};
+
+        FB.api(socialId + '/likes', 'delete', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing like: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< deleteLikeWithToken', res);
                 fn(null, res.id);
             }
         });
