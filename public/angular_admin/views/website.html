@@ -467,11 +467,9 @@
                                 </div>
                                 <div class="row form-group">
                                     <div class="input-group pull-left" style="margin-left: 10px;" ng-if="addNavigationLink">
-                                        <input ng-model="newLink.linkTitle" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Title" class="input-lg form-control"
-                                        type="text">
-                                        <slug from="newLink.linkTitle" to="newLink.linkUrl"></slug>
-                                        <input ng-model="newLink.linkUrl" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Label" class="input-lg form-control"
-                                        type="text">
+                                        <select style="text-transform:capitalize" ng-if="addLinkType=='section'" ng-model="newLink.linkUrl" class="form-control input-lg">
+                                                <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor && validateLinkUrl(component.anchor)" value="{{component.anchor}}">{{component.anchor}}</option>
+                                        </select>
                                         <select ng-if="addLinkType=='page'" ng-model="newLink.linkPage" class="form-control input-lg">
                                                 <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}">{{page.title}}</option>
                                         </select>

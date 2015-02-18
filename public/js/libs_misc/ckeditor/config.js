@@ -28,7 +28,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-	config.removeButtons = 'Cut,Copy,Paste,Underline,Strike,Subscript,Superscript,Image,maximize,resize,Format,Indent,HorizontalRule,Outdent,Blockquote,lineheight';
+	config.removeButtons = 'PasteText,Cut,Copy,Paste,Underline,Strike,Subscript,Superscript,Image,maximize,resize,Format,Indent,HorizontalRule,Outdent,Blockquote,lineheight';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = '';
@@ -46,7 +46,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'doksoft_button,lineheight,mediamanager,sharedspace,image2,tooltip';
+	config.extraPlugins = 'pastetext,doksoft_button,lineheight,mediamanager,sharedspace,image2,tooltip';
 
 	config.filebrowserBrowseUrl = '';
 
