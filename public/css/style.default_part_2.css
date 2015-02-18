@@ -4510,7 +4510,7 @@ div.error label.error:before {
   width: 16px;
 }
 
-.modal-footer {
+.modal-footer.media-footer {
   position: absolute;
   width: 100%;
   bottom: 0;
