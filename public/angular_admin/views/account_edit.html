@@ -1,4 +1,6 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+on-finish-callback='finishOnboarding'></onboarding-popover>
 <div class="accountEdit">
 	<form name="accountForm" novalidate>
 	<div class="pageheader">
@@ -23,7 +25,7 @@
 	                 <i class="fa fa-spinner fa-spin"></i>
 	                </span>
 	                <span class="hidden-xs" ng-hide="saveLoading">
-	                 <i class="fa fa fa-save"></i> Save 
+	                 <i class="fa fa fa-save"></i> Save
 	                 </span>
 	                <span class="hidden-xs"  ng-show="saveLoading">
 	                 Saving
@@ -122,7 +124,7 @@
 									</div>
 
 								</div>
-								<span class="col-xs-10"> 
+								<span class="col-xs-10">
 								<small>e.g.303-555-5555
 										<!-- (<span class="skype_c2c_print_container notranslate">303-555-5555</span><span
 										id="skype_c2c_container" class="skype_c2c_container notranslate"

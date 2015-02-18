@@ -818,7 +818,24 @@ var dao = {
                 self.log.error('Error sharing post: ' + JSON.stringify(res.error));
                 fn(res.error, null);
             } else {
-                self.log.debug('<< shareLink', res);
+                self.log.debug('<< createPostWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    postCommentWithToken: function(accessToken, socialId, comment, fn) {
+        var self = this;
+        self.log.debug('>> postCommentWithToken');
+
+        var urlOptions = {access_token:accessToken, message:comment};
+
+        FB.api(socialId + '/comments', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< postCommentWithToken', res);
                 fn(null, res.id);
             }
         });
@@ -882,6 +899,21 @@ var dao = {
             } else {
                 self.log.debug('<< savePhoto', res);
                 fn(null, res);
+            }
+        });
+    },
+
+    deletePostWithToken: function(accessToken, socialId, postId, fn) {
+        var self = this;
+        self.log.debug('>> deletePostWithToken');
+        var urlOptions = {access_token: accessToken};
+        FB.api('/' + postId, 'DELETE', urlOptions, function(err, value){
+            if(!res || res.error) {
+                self.log.error('Error deleting post: ' + JSON.stringify(res.error));
+                return fn(res.error, null);
+            } else {
+                self.log.debug('<< deletePostWithToken', res);
+                return fn(null, res);
             }
         });
     },

@@ -1,4 +1,4 @@
-define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'toaster', 'powertour', 'ngSweetAlert'], function(app) {
+define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirective', 'ngProgress', 'mediaDirective', 'toaster', 'powertour', 'ngSweetAlert', 'ngOnboarding'], function(app) {
     app.register.controller('AccountEditCtrl', ['$scope', '$stateParams', 'UserService', 'ngProgress', '$location', 'toaster', 'SweetAlert', function($scope, $stateParams, UserService, ngProgress, $location, toaster, SweetAlert) {
         ngProgress.start();
         var phoneCharLimit = 4;
@@ -7,6 +7,42 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         //back button click function
 
         $scope.isFormDirty = false;
+
+        $scope.onboardingSteps = [];
+        $scope.showOnboarding = false;
+        $scope.stepIndex = 0;
+
+        UserService.getUserPreferences(function(preferences) {
+            $scope.userPreferences = preferences;
+        });
+
+        $scope.beginOnboarding = function(type) {
+            if (type == 'basic-info') {
+                $scope.showOnboarding = true;
+                $scope.onboardingSteps = [{
+                    overlay: true,
+                    title: 'Task: Enter profile information',
+                    description: "In the left column you can set your profile information.",
+                    position: 'centered',
+                    width: 400
+                }, {
+                    overlay: true,
+                    title: 'Task: Enter business information',
+                    position: 'centered',
+                    width: 400,
+                    description: "In right panel you will find business info fields."
+                }];
+            }
+        };
+
+        $scope.finishOnboarding = function() {
+            $scope.userPreferences.tasks.basic_info = true;
+            UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+        };
+
+        if ($location.$$search.onboarding) {
+            $scope.beginOnboarding($location.$$search.onboarding);
+        }
 
         $scope.$back = function() {
             if ($scope.isFormDirty) {

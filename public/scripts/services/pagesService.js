@@ -13,6 +13,10 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
             path = "index";
         }
 
+        if ( path =="/signup") {
+            path = "signup";
+        }
+
         if (path.indexOf("blog/") > -1) {
             path = 'single-post';
         }

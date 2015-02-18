@@ -1732,7 +1732,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
     $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
       var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
-      window.parent.deleteImageFromThumbnail(componentId, index);
+      window.parent.deleteImageFromThumbnail(componentId, imageIndex);
     };
     $scope.addImageToThumbnail = function(componentId) {
       window.parent.addImageToThumbnail(componentId);

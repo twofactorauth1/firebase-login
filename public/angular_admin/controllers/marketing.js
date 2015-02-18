@@ -1,10 +1,36 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment'], function(app) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding'], function(app) {
     app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, UserService, CampaignService, SocialService, SocialConfigService) {
 
         $scope.campaigns = [];
         $scope.feeds = [];
 
         $scope.activeTab = 'social-feed';
+
+        $scope.onboardingSteps = [];
+        $scope.showOnboarding = false;
+        $scope.stepIndex = 0;
+
+        $scope.beginOnboarding = function(type) {
+            if (type == 'create-campaign') {
+                $scope.showOnboarding = true;
+                $scope.onboardingSteps = [{
+                    overlay: true,
+                    title: 'Task: Create new campaign',
+                    description: "Here you can create a new campaign to gain traction.",
+                    position: 'centered',
+                    width: 400
+                }];
+            }
+        };
+
+        $scope.finishOnboarding = function() {
+            $scope.userPreferences.tasks.create_campaign = true;
+            UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+        };
+
+        if ($location.$$search.onboarding) {
+            $scope.beginOnboarding($location.$$search.onboarding);
+        }
 
         $scope.campaignSettings = {
             showStatus: true,
