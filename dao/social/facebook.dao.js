@@ -779,7 +779,7 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
     },
-    
+
     getAppInsights: function (user, urlOptions, fn) {
         var self = this;
         var myFacebookId = this._getFacebookId(user);
@@ -835,6 +835,23 @@ var dao = {
                 fn(res.error, null);
             } else {
                 self.log.debug('<< postCommentWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    postLikeWithToken: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> postLikeWithToken');
+
+        var urlOptions = {access_token:accessToken, message:comment};
+
+        FB.api(socialId + '/comments', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing like: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< postLikeWithToken', res);
                 fn(null, res.id);
             }
         });
@@ -916,7 +933,7 @@ var dao = {
             }
         });
     },
-    
+
     //region PRIVATE
     _batchRequest: function(batchName, options, fn){
         // default == last 7 days
@@ -1058,4 +1075,3 @@ $$.dao.social = $$.dao.social || {};
 $$.dao.social.FacebookDao = dao;
 
 module.exports = dao;
-
