@@ -158,7 +158,7 @@
                 <div class="submit-post-form">
                     <div class="panel panel-dark panel-alt timeline-post">
                         <div class="panel-body">
-                            <textarea placeholder="Write something..." class="form-control"></textarea>
+                            <textarea placeholder="Write something..." class="form-control" id="postContent" ng-model="postContent"></textarea>
                         </div>
                         <!-- panel-body -->
                         <div class="panel-footer">
@@ -171,8 +171,8 @@
                                     <div class="form-group mb0">
                                         <label for="post-to" class="pull-left control-label" style="padding: 0;margin-right: 10px;font-size: 14px;">Post To: </label>
                                         <div class="pull-left">
-                                            <select class="form-control mb0 selectpicker">
-                                                <option ng-repeat="type in feedTypes">{{type.type}} {{type.name}}</option>
+                                            <select class="form-control mb0" ng-model="selectedType" ng-change="postToChange(selectedType)">
+                                                <option ng-repeat="type in feedTypes" value="{{type}}">{{type.type}} {{type.name}}</option>
                                             </select>
 
                                         </div>
@@ -180,7 +180,7 @@
                                 </div>
                             </div>
                             <!--timeline-btns -->
-                            <button class="btn btn-primary pull-right" ng-click="postToSocial('6f6e3997-1c76-4db3-8879-acb4bdb05090', 'hello', 'fb') ">Submit Post</button>
+                            <button class="btn btn-primary pull-right" ng-click="postToSocial(selectedSocial.socialId, postContent, selectedSocial.type) "><i class="fa fa-spinner fa-spin" ng-show="postingToSocial"></i> Submit Post</button>
                         </div>
                         <!-- panel-footer -->
                     </div>
