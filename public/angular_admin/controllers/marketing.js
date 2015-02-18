@@ -1,5 +1,5 @@
 define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding'], function(app) {
-    app.register.controller('MarketingCtrl', ['$scope', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, UserService, CampaignService, SocialService, SocialConfigService) {
+    app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService) {
 
         $scope.campaigns = [];
         $scope.feeds = [];
