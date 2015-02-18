@@ -619,6 +619,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       name: "google-plus",
       icon: "google-plus"
     }, {
+      name: "instagram",
+      icon: "instagram"
+    }, {
       name: "microsoft",
       icon: "windows"
     }, {
@@ -645,7 +648,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }, {
       name: "yahoo",
       icon: "yahoo"
-    }]
+    }
+    
+    ]
 
     $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
       if (!$scope.social)

@@ -429,7 +429,7 @@
                         </tab>
                         <tab ng-if="componentEditing.type === 'navigation'">
                             <tab-heading>
-                                <span>Reorder</span>
+                                <span>Links</span>
                             </tab-heading>
                             <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
                                 <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
