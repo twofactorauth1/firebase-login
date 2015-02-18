@@ -804,7 +804,7 @@ define(['app', 'keenService'], function(app) {
 
                     var secsToConv = 0;
                     if (results[9].result && _totalSessions) {
-                      secsToConv = results[9].result / _totalSessions;
+                      secsToConv = (results[9].result / 1000) / _totalSessions;
                     }
                     var visitDuration = self.secToTime(secsToConv);
 
