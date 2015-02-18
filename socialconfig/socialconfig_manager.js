@@ -132,7 +132,7 @@ module.exports = {
                 return _account.id !== socialId;
             });
             config.set('socialAccounts', updatedSocialAccounts);
-            
+
             var trackedObjects = config.get('trackedObjects');
             var updatedTrackedObjects = _.fitler(trackedObjects, function(_obj){
                 return _obj.socialId !== socialId;
@@ -455,6 +455,40 @@ module.exports = {
                 return fn('Invalid social accountId', null);
             }
             return facebookDao.postCommentWithToken(socialAccount.accessToken, postId, comment, fn);
+        });
+    },
+
+    addFacebookLike: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> addFacebookLike');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return facebookDao.postLikeWithToken(socialAccount.accessToken, postId, fn);
+        });
+    },
+
+    deleteFacebookLike: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> deleteFacebookLike');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return facebookDao.deleteLikeWithToken(socialAccount.accessToken, postId, fn);
         });
     },
 
