@@ -30,17 +30,9 @@
             </div>
 
 
-            <div    ng-if="component.bg.img.url && component.type != 'email' "
-                    class="ipad-bg"
-                    ng-class="{parallax:component.bg.img.parallax}"
-                    parallax-background
-                    parallax-ratio="0.4"
-                    style='
-                        background: url("{{component.bg.img.url}}") no-repeat fixed;
-                        background-size: cover;
-                        background: {{component.bg.img.url}};'>
+            <div ng-if="component.bg.img.url && component.type != 'email' "
+                    class="ipad-bg">
                 <div>
-
                     <div class="component-inner">
 
                         <div ng-if="component.bg.color" class="bg"
