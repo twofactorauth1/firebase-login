@@ -1071,7 +1071,7 @@ define([
                     $scope.updateSingleComponent(currentComponentId);                  
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
             };
-
+            
             //delete page
             $scope.deletePage = function() {
 
@@ -1306,8 +1306,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.features.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);
             }
 
             window.addNewFeatureList = function(componentId, index) {
@@ -1353,8 +1354,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.images.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.addImageToThumbnail = function(componentId) {
@@ -1370,8 +1372,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.thumbnailCollection.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.changeProfilePhoto = function(componentId, customer) {
@@ -1398,8 +1401,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.teamMembers.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.updateSocialNetworks = function(old_value, mode, new_value) {
@@ -1518,8 +1522,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.tables.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.addPricingTable = function(componentId, newTable, index) {
@@ -1534,8 +1539,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.tables[parentIndex].features.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
