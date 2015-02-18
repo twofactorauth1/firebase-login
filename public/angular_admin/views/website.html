@@ -419,6 +419,13 @@
                                     <option value="img-circle">Circle</option>
                                 </select>
                             </div>
+                            <div class="form-group" ng-if="componentEditing.type == 'image-text'">
+                                <label for="colorpicker">Image Position:</label>
+                                <select ng-model="componentEditing.imagePosition" ng-change="saveComponent()" class="form-control input-lg">
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'navigation'">
                             <tab-heading>
