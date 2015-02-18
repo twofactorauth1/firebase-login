@@ -1225,6 +1225,19 @@ define([
             });
 
             //Add Link to navigation
+           
+            $scope.$watch('newLink.linkUrl', function(newValue, oldValue) {
+              if (newValue) {
+                $scope.newLink.linkTitle = newValue;
+              }
+            });
+
+            $scope.validateLinkUrl = function(value)
+            {
+                var regex = /^[a-zA-Z_]*$/;
+                return /^[a-zA-Z_]*$/.test(value);
+            }
+
             $scope.initializeLinks = function() {
                 $scope.newLink = {
                     linkUrl: null,
@@ -1237,6 +1250,7 @@ define([
                 $scope.addLinkType = lnk;
                 $scope.initializeLinks();
             }
+
 
             $scope.addLinkToNav = function() {
                 var linkTitle = null;
