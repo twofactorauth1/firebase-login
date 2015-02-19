@@ -89,8 +89,8 @@ var post = $$.m.ModelBase.extend({
             })
         }
 
-        if (post.story) {
-            obj.message = post.story;
+        if (post.story || post.message) {
+            obj.message = post.story || post.message;
         }
         if (post.name) {
             obj.name = post.name;

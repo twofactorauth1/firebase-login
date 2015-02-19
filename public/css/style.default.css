@@ -22703,6 +22703,20 @@ i.indi-sm {
 .marketing #marketing-add-feed .modal-body {
   padding: 0;
 }
+.marketing #marketing-add-feed .fb-admin-pages li {
+  height: 50px;
+  line-height: 50px;
+  text-indent: 10px;
+}
+.marketing #marketing-add-feed .fb-admin-pages li img {
+  height: 40px;
+  margin: 4px 0;
+}
+.marketing #marketing-add-feed .fb-admin-pages li .fa-plus-square {
+  line-height: 50px;
+  font-size: 20px;
+  color: #27ae60;
+}
 .marketing #marketing-add-feed .left-panel {
   padding-left: 0;
 }
@@ -22752,6 +22766,9 @@ i.indi-sm {
   float: left;
   margin-right: 10px;
   border-radius: 5px;
+}
+.marketing .stream-filter input[type='checkbox'] {
+  margin-right: 15px;
 }
 .marketing .stream-filter .filter-heading {
   margin: 0;
@@ -22885,6 +22902,15 @@ i.indi-sm {
 .stream li {
   overflow: hidden;
 }
+.stream li .panel-body .media a {
+  height: auto;
+  overflow: hidden;
+}
+.stream li .panel-body .media a img {
+  margin: 0 auto 15px;
+  max-width: 370px;
+  width: 100%;
+}
 .stream li .post-inner {
   background-color: #FFFFFF;
   line-height: 1.35em;
@@ -22898,9 +22924,11 @@ i.indi-sm {
   padding: 15px;
 }
 .stream li .post-content img {
-  max-width: 75px;
-  height: 75px;
+  max-width: 226px;
+  height: 130px;
   display: block;
+  margin: 0 auto;
+  border-radius: 5px;
 }
 .stream li .post-bottom-bar {
   height: 40px;
@@ -22908,8 +22936,6 @@ i.indi-sm {
   padding: 5px;
   display: block;
   width: 100%;
-  bottom: 0;
-  position: absolute;
   color: white;
   /* feeds network specific styles */
 }
@@ -23095,6 +23121,49 @@ i.indi-sm {
   color: white;
   border: 1px solid white;
 }
+/* Start: Recommended Isotope styles */
+/**** Isotope Filtering ****/
+.isotope-item {
+  z-index: 2;
+}
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+/**** Isotope CSS3 transitions ****/
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -ms-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+.isotope {
+  -webkit-transition-property: height, width;
+  -moz-transition-property: height, width;
+  -ms-transition-property: height, width;
+  -o-transition-property: height, width;
+  transition-property: height, width;
+}
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform, opacity;
+  -ms-transition-property: -ms-transform, opacity;
+  -o-transition-property: top, left, opacity;
+  transition-property: transform, opacity;
+}
+/**** disabling Isotope CSS3 transitions ****/
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -ms-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  transition-duration: 0s;
+}
+/* End: Recommended Isotope styles */
 .datepicker {
   top: 0;
   left: 0;
