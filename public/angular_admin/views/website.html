@@ -436,7 +436,7 @@
                                 <span>Links</span>
                             </tab-heading>
                             <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
-                                <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                                <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;text-transform: capitalize;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                                     <li data-ng-repeat="link in mainMenu.links" as-sortable-item  style="position: relative;">
                                         <div as-sortable-item-handle class="head-menu-links" data-label="{{link.label}}">
                                             <div class="container-fluid">
