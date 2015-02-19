@@ -1,6 +1,6 @@
 <style>
     .pricing-tables-v1 .pricing-table,.pricing-tables-v1 .list-group-item  {
-        background: {{component.tblbgcolor}};
+        background: {{component.tblbgcolor || 'none'}};
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">
