@@ -55,7 +55,8 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            logo: '<img src=\"https://s3-us-west-2.amazonaws.com/indigenous-admin/logo-indi-white.png\" width=\"220\" height=\"60\">',
+            // logo: '<img src=\"https://s3-us-west-2.amazonaws.com/indigenous-admin/logo-indi-white.png\" width=\"220\" height=\"60\">',
+            logo: null,
 
             /**
              *
