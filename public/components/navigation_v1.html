@@ -38,7 +38,7 @@
                             <span class="logo-1">
                                 <div class="nav-logo">
                                     <div class="editable navigation-logo" data-class="logo" data-index="{{$index}}" ng-if="component.logo" ng-bind-html="component.logo | unsafe"></div>
-                                    <div class="editable" data-class="logo" data-index="{{$index}}" ng-if="!component.logo">
+                                    <div class="editable navigation-logo" data-class="logo" data-index="{{$index}}" ng-if="!component.logo">
                                         <img data-ng-show="layout.account.business.logo || blog.account.business.logo && !component.logo" ng-src="{{layout.account.business.logo || blog.account.business.logo}}">
                                     </div>
                                 </div>
