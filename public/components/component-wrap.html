@@ -42,8 +42,8 @@
                         <div ng-if="component.bg.img.show && component.type == 'masthead'"
                             class="bg"
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            parallax-background
-                            parallax-ratio="0.4"
+                            {{component.bg.img.parallax ? parallax-background : ""}}
+                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;
@@ -53,8 +53,8 @@
                         <div ng-if="component.bg.img.show && component.type != 'masthead'"
                             class="bg"
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            parallax-background
-                            parallax-ratio="0.4"
+                            {{component.bg.img.parallax ? parallax-background : ""}}
+                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;

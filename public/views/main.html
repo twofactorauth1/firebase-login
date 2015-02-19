@@ -15,6 +15,7 @@
             <span  class="reorder fa fa-arrows" tooltip="Re-Order {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="right"></span>
             <h4 class="pull-left">{{component.type}}</h4>
             <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" tooltip="Delete {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
+            <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" tooltip="Add {{component.type | cleanType}} Copy"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer' && component.type != 'navigation'"></span>
             <span class="settings fa fa-cog" data-id="{{component._id}}" tooltip="{{component.type | cleanType}} Settings"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
         </div>
         <div ng-include="'/components/component-wrap.html'"></div>

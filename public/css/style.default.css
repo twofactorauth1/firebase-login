@@ -21585,11 +21585,13 @@ div.error label.error:before {
   z-index: -1;
   height: 60px;
 }
-.componentActions .delete {
+.componentActions .delete,
+.componentActions .duplicate {
   float: right;
   pointer-events: all;
 }
-.componentActions .delete:hover {
+.componentActions .delete:hover,
+.componentActions .duplicate:hover {
   color: #d9534f;
 }
 .componentActions .settings {
