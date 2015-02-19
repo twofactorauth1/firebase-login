@@ -1160,7 +1160,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (newValue) {
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
-          if(value.bg && value.bg.img.url && !value.bg.color)
+          if(value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
             value.bg.img.show = true;          
           if (value && value.type === 'payment-form') {
             var productId = value.productId;
