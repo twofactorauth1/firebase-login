@@ -1,3 +1,8 @@
+.center {
+  text-align: center;
+  margin: 0 auto;
+}
+
 .onboard-vid {
   width: 100%;
 }
@@ -12052,7 +12057,6 @@ div[data-type=blog] .container {
 }
 
 .pricing-tables-v1 .pricing-table .list-group-item {
-  background: none;
   border: none;
   border-bottom: 1px solid #000000;
 }

@@ -8162,6 +8162,10 @@ h4,
   border-color: #ddd;
 }
 
+.modal-dialog {
+  z-index: 99999;
+}
+
 .modal-content {
   box-shadow: 0 0px 7px rgba(0, 0, 0, 0.5);
 }
@@ -19788,9 +19792,4 @@ a:active {
 .stickyheader.rightmenu-open .headerbar {
   right: 240px;
   width: auto;
-}
-
-.center {
-  text-align: center;
-  margin: 0 auto;
 }
