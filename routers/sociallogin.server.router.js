@@ -54,7 +54,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         state.accountId = accountId;
         state.authMode = authMode;
         state.socialType = authSocialType;
-        state.redirectUrl = redirect;
+        state.redirectUrl = encodeURIComponent(redirect);
         return state;
     },
 
@@ -177,6 +177,14 @@ _.extend(router.prototype, baseRouter.prototype, {
     _socialLogin: function(req, resp, state, next) {
         var self = this;
         self.log.debug('>> _socialLogin');
+        /*
+         * error=access_denied
+         */
+        if(req.query.error) {
+            self.log.warn('Error parameter: ' + req.query.error);
+            //TODO: put redirect logic here.
+        }
+
         var type
             , config
             , subdomain
