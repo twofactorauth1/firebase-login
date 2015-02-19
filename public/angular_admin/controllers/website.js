@@ -839,7 +839,7 @@ define([
                 }
 
                 if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
-                    $scope.saveComponent();
+                    $scope.saveContactComponent();
                     $('#component-setting-modal').modal('hide');
                 }
             }
@@ -1101,6 +1101,12 @@ define([
                     var currentComponentId = $scope.componentEditing._id;  
                     $scope.updateSingleComponent(currentComponentId);                  
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
+            };
+
+            $scope.saveContactComponent = function() {
+                    var currentComponentId = $scope.componentEditing._id;  
+                    $scope.updateSingleComponent(currentComponentId);                  
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
             };
             
             //delete page

@@ -991,9 +991,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             body.className = body.className.replace('navbar-v', '');
             body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
           }
-          if ($scope.currentpage.components[i].type == 'contact-us') {
-            $scope.updateContactUsMap($scope.currentpage.components[i]);
-          }
           if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
@@ -1018,6 +1015,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           }
         };
       });
+    };
+    window.updateContactComponent = function(data, networks) {
+      console.log('updateCustomComponent >>>');
+      if (data) {
+        $scope.currentpage.components = data;
+        setTimeout(function() {
+          $scope.$apply(function() {
+              activateAloha();
+          });
+        });
+      } else {
+        $scope.$apply(function() {
+
+        });
+      }
+      for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          if ($scope.currentpage.components[i].type == 'contact-us') {
+            $scope.updateContactUsMap($scope.currentpage.components[i]);
+          }
+      };
     };
     window.updateCustomComponent = function(data, networks) {
       console.log('updateCustomComponent >>>');
