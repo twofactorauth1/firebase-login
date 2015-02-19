@@ -24259,6 +24259,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .navbar .nav > li {
   float: left;
+  min-height: 44px;
 }
 ul.nav {
   margin-top: 25px!important;
