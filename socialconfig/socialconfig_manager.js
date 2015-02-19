@@ -9,6 +9,7 @@ var socialconfigDao = require('./dao/socialconfig.dao');
 var log = $$.g.getLogger("socialconfig_manager");
 var twitterDao = require('../dao/social/twitter.dao');
 var facebookDao = require('../dao/social/facebook.dao');
+var linkedinDao = require('../dao/social/linkedin.dao');
 
 module.exports = {
 
@@ -134,7 +135,7 @@ module.exports = {
             config.set('socialAccounts', updatedSocialAccounts);
 
             var trackedObjects = config.get('trackedObjects');
-            var updatedTrackedObjects = _.fitler(trackedObjects, function(_obj){
+            var updatedTrackedObjects = _.filter(trackedObjects, function(_obj){
                 return _obj.socialId !== socialId;
             });
             config.set('trackedObjects', updatedTrackedObjects);
@@ -283,7 +284,29 @@ module.exports = {
             case social.GOOGLE:
                 return fn(null, creds);
             case social.LINKEDIN:
+              linkedinDao.getProfile(creds.socialId, creds.accessToken, function(err, value) {
+                if (err) {
+                  return fn(err, null);
+                }
+
+                var nameList = [];
+                if (value.firstName) {
+                  nameList.push(value.firstName);
+                }
+                if (value.lastName) {
+                  nameList.push(value.lastName);
+                }
+
+                if (nameList.length) {
+                  creds.username = nameList.join(' ');
+                }
+
+                if (value.pictureUrl) {
+                  creds.image = value.pictureUrl;
+                }
+
                 return fn(null, creds);
+              });
             default:
                 return process.nextTick(function() {
                     return fn(null, creds);
