@@ -15,7 +15,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             $scope.firstTime = false;
 
-            $scope.redirectUrl = encodeURIComponent('/admin#/account');
+            $scope.redirectUrl = '/admin/account';//encodeURIComponent('/admin#/account');
 
             $scope.currentHost = window.location.host;
 
