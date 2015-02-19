@@ -188,7 +188,7 @@ module.exports = {
             }
         });
 
-        
+
         $.when(p1).done(function(){
             accountDao.getById(accountId, $$.m.Account, function(err, account){
                 if(err) {
@@ -1600,6 +1600,9 @@ module.exports = {
                 if(err) {
                     log.error('Error generating screenshot: ' + err);
                     return fn(err, null);
+                }
+                if (url.substr(0,5) == 'http:') {
+                  url = url.substr(5, url.length);
                 }
                 page.set('screenshot', url);
                 cmsDao.saveOrUpdate(page, function(err, savedPage){

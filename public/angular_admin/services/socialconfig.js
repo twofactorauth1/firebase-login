@@ -9,15 +9,25 @@ define(['app'], function (app) {
                 });
         };
 
-        this.getTrackedObject = function(id, fn) {
+        this.getTrackedObject = function(id, socialId, fn) {
             console.log('id >>> ', id);
             var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
             $http.get(apiUrl)
                 .success(function (data, status, headers, config) {
                     console.log('getTrackedObject >>> ', data);
-                    fn(data);
+                    fn(data, socialId);
                 });
-        }
+        };
+
+        this.postFBPost = function(socialAccountId, post, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post'].join('/');
+            $http.post(apiUrl, {
+                post: post
+            }).success(function (data, status, headers, config) {
+                fn(data);
+            });
+
+        };
 
         this.deleteSocialConfigEntry = function(id, fn) {
           var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount', id].join('/');
@@ -93,14 +103,5 @@ define(['app'], function (app) {
             .success(function (data, status, headers, config) {
                 fn(data);
             });
-    };
-
-    this.postFBPost = function(socialAccountId, post, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post'].join('/');
-        $http.post(apiUrl, {
-            post: post
-        }).success(function (data, status, headers, config) {
-            fn(data);
-        });
     };
 });

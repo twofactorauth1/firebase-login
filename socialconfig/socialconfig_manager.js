@@ -9,6 +9,8 @@ var socialconfigDao = require('./dao/socialconfig.dao');
 var log = $$.g.getLogger("socialconfig_manager");
 var twitterDao = require('../dao/social/twitter.dao');
 var facebookDao = require('../dao/social/facebook.dao');
+var linkedinDao = require('../dao/social/linkedin.dao');
+var googleDao = require('../dao/social/google.dao');
 
 module.exports = {
 
@@ -132,9 +134,9 @@ module.exports = {
                 return _account.id !== socialId;
             });
             config.set('socialAccounts', updatedSocialAccounts);
-            
+
             var trackedObjects = config.get('trackedObjects');
-            var updatedTrackedObjects = _.fitler(trackedObjects, function(_obj){
+            var updatedTrackedObjects = _.filter(trackedObjects, function(_obj){
                 return _obj.socialId !== socialId;
             });
             config.set('trackedObjects', updatedTrackedObjects);
@@ -281,9 +283,45 @@ module.exports = {
                 });
 
             case social.GOOGLE:
+              googleDao.getProfile(creds.socialId, creds.accessToken, function(err, value) {
+                if(err) {
+                    return fn(err, null);
+                }
+
+                if (value.name) {
+                  creds.username = value.name;
+                }
+
+                if (value.picture) {
+                  creds.image = value.picture;
+                }
+
                 return fn(null, creds);
+              });
             case social.LINKEDIN:
+              linkedinDao.getProfile(creds.socialId, creds.accessToken, function(err, value) {
+                if (err) {
+                  return fn(err, null);
+                }
+
+                var nameList = [];
+                if (value.firstName) {
+                  nameList.push(value.firstName);
+                }
+                if (value.lastName) {
+                  nameList.push(value.lastName);
+                }
+
+                if (nameList.length) {
+                  creds.username = nameList.join(' ');
+                }
+
+                if (value.pictureUrl) {
+                  creds.image = value.pictureUrl;
+                }
+
                 return fn(null, creds);
+              });
             default:
                 return process.nextTick(function() {
                     return fn(null, creds);
@@ -293,7 +331,7 @@ module.exports = {
 
     fetchTrackedObject: function(accountId, objIndex, fn) {
         var self = this;
-        log.debug('>> fetchTrackedObject');
+        log.debug('>> fetchTrackedObject ', objIndex);
         self.getSocialConfig(accountId, null, function(err, config){
             if(err || config === null) {
                 log.error('Error getting social config: ' + err);
@@ -383,7 +421,7 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccount = config.getSocialAccountById(socialAccountId);
-            if (socialAccount === null) {
+            if (!socialAccount) {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
             }
@@ -403,6 +441,26 @@ module.exports = {
         });
     },
 
+    deleteFacebookPost: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> deleteFacebookPost');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (!socialAccount) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return facebookDao.deletePostWithToken(socialAccount.accessToken, socialAccount.socialId, postId, fn);
+
+        });
+    },
+
     getFacebookPosts: function(accountId, socialAccountId, fn) {
         var self = this;
         log.debug('>> getFacebookPosts');
@@ -418,6 +476,57 @@ module.exports = {
             }
 
             return facebookDao.getTokenPosts(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    addFacebookComment: function(accountId, socialAccountId, postId, comment, fn) {
+        var self = this;
+        log.debug('>> addFacebookComment');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return facebookDao.postCommentWithToken(socialAccount.accessToken, postId, comment, fn);
+        });
+    },
+
+    addFacebookLike: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> addFacebookLike');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return facebookDao.postLikeWithToken(socialAccount.accessToken, postId, fn);
+        });
+    },
+
+    deleteFacebookLike: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> deleteFacebookLike');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return facebookDao.deleteLikeWithToken(socialAccount.accessToken, postId, fn);
         });
     },
 
@@ -493,6 +602,24 @@ module.exports = {
             }
 
             return twitterDao.postWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, post, fn);
+        });
+    },
+
+    deleteTwitterPost: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> createTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return twitterDao.deletePostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, postId, fn);
         });
     },
 

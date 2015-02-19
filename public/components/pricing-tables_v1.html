@@ -1,3 +1,8 @@
+<style>
+    .pricing-tables-v1 .pricing-table,.pricing-tables-v1 .list-group-item  {
+        background: {{component.tblbgcolor}};
+    }
+</style>
 <div ng-class="component.type+'-v'+component.version">
     <div class="pricing-table-title">
         <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">

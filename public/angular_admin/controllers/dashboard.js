@@ -102,7 +102,7 @@ define([
            $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
            //update user preferences
            if (dateSwitch) {
-                $scope.runAnalyticsReports();
+                $scope.runAnalyticsReports($scope.analyticsAccount);
             }
             dateSwitch = true;
         });
@@ -167,6 +167,7 @@ define([
             });
         };
         UserService.getAccount(function(account){
+            $scope.analyticsAccount = account;
             $scope.runAnalyticsReports(account);
         });
 

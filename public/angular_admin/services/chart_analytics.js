@@ -284,18 +284,25 @@ define(['app', 'keenService'], function(app) {
 
         //local variables
         var client;
-        var timeframeStart = '2015-01-17T23:05:20.075Z';
-        var timeframeEnd = '2015-02-17T23:05:20.075Z';
-        var timeframePreviousStart = '2014-10-15T23:05:20.075Z';
-        var timeframePreviousEnd = '2014-11-14T23:05:20.075Z';
+        /*
+         * I assume these timeframes are the past 30days and the past 60 days.
+         * .utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
+         * moment().subtract(29, 'days'), moment()
+         */
+        var timeframeStart = moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: 30d ago
+        var timeframeEnd = moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: today
+        var timeframePreviousStart = moment().subtract(60, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 60d ago
+        var timeframePreviousEnd = moment().subtract(30, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: 30d ago
         var interval = "daily";
         var firstQuery = true;
         var totalVisitors = 0;
 
         //reports
 
-        this.queryReports = function(date) {
+        this.queryReports = function(date, _hostname) {
             var queryData = {};
+            var hostname = _hostname || window.location.hostname;
+            console.log('>> queryReports ' + hostname);
 
             queryData.visitorLocations = new Keen.Query("count", {
                 eventCollection: "session_data",
@@ -307,7 +314,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }, {
                     "property_name": "ip_geo_info",
                     "operator": "ne",
@@ -325,7 +332,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -340,7 +347,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -355,7 +362,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -369,7 +376,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "url.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -383,7 +390,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "url.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -398,7 +405,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -413,7 +420,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -428,7 +435,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -442,7 +449,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -462,7 +469,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -481,7 +488,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -496,7 +503,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -510,7 +517,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -528,7 +535,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -547,7 +554,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -569,20 +576,15 @@ define(['app', 'keenService'], function(app) {
             var self = this;
 
             var filters = [];
+            var hostname = window.location.hostname;
             if(account.subdomain === 'main') {
-                //add a special filter for main
-                filters.push({
-                    "property_name": "url.domain",
-                    "operator": "eq",
-                    "property_value": window.location.hostname.replace('main', 'www')
-                });
-            } else {
-                filters.push({
-                    "property_name": "url.domain",
-                    "operator": "eq",
-                    "property_value": window.location.hostname
-                });
+                hostname = hostname.replace('main', 'www');
             }
+            filters.push({
+                "property_name": "url.domain",
+                "operator": "eq",
+                "property_value": hostname
+            });
 
             if (account && account.domain) {
                 filters.push({
@@ -662,7 +664,7 @@ define(['app', 'keenService'], function(app) {
             });
 
             keenService.keenClient(function(client) {
-                var queryData = self.queryReports(date);
+                var queryData = self.queryReports(date, hostname);
                 client.run([
                     queryData.visitorLocations,
                     queryData.deviceReportByCategory,
@@ -802,7 +804,7 @@ define(['app', 'keenService'], function(app) {
 
                     var secsToConv = 0;
                     if (results[9].result && _totalSessions) {
-                      secsToConv = results[9].result / _totalSessions;
+                      secsToConv = (results[9].result / 1000) / _totalSessions;
                     }
                     var visitDuration = self.secToTime(secsToConv);
 

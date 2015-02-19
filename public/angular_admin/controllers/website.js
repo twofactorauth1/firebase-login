@@ -22,6 +22,7 @@ define([
     'ngSweetAlert',
     'blockUI',
     'adminValidationDirective','constants',
+    'commonutils',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -391,6 +392,9 @@ define([
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.display = "block";
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
                     }
+                    //unbind all click handler
+                    $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
+
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
                         if(!$(this).hasClass("clickable-link")) {
@@ -406,6 +410,32 @@ define([
                         $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                         var element = angular.element('#component-setting-modal');
                         element.modal('show');
+                    });
+
+                    //add click events for all the copy component buttons
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .duplicate", function(e) {
+                        $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                        $scope.saveComponent();
+                        var matchingComponent = _.findWhere($scope.currentPage.components, {
+                            _id: e.currentTarget.attributes['data-id'].value
+                        });
+                        
+
+                        var newComponent = angular.copy(matchingComponent);
+                        var temp = Math.uuid();
+                        newComponent._id = temp;
+                        newComponent.anchor = temp;
+                        var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
+                        $scope.currentPage.components.splice(indexToadd, 0, newComponent);
+                        $scope.components = $scope.currentPage.components;
+                        $scope.updateIframeComponents();
+                        //TODO: get updateIframeComponents callback
+                        setTimeout(function() {
+                                $scope.activateAloha();
+                            }, 1000)
+                        toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+
                     });
 
                     //add click events for all the add component buttons.
@@ -622,12 +652,13 @@ define([
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
 
-                                    var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                    var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                                     if(regex.test(componentVarContents))
                                     {
                                         var jHtmlObject = $(componentVarContents);
                                         var editor = jQuery("<p>").append(jHtmlObject);
                                         editor.find(".cke_reset").remove();
+                                        editor.find(".cke_image_resizer").remove();
                                         var newHtml = editor.html();
                                         componentVarContents = newHtml; 
                                     }
@@ -808,7 +839,7 @@ define([
                 }
 
                 if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
-                    $scope.saveComponent();
+                    $scope.saveContactComponent();
                     $('#component-setting-modal').modal('hide');
                 }
             }
@@ -910,11 +941,11 @@ define([
                     $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).icon;
-                    $scope.componentEditing.title = _.findWhere($scope.componentTypes, {
+                    $scope.componentEditing.header_title = _.findWhere($scope.componentTypes, {
                         type: $scope.componentEditing.type
                     }).title;
 
-                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
+                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
                     }
                     
@@ -1016,7 +1047,7 @@ define([
                                     //remove "/n"
                                     componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
 
-                                        var regex = /<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                                        var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                                         if(regex.test(componentVarContents))
                                         {
                                             var jHtmlObject = $(componentVarContents);
@@ -1072,6 +1103,12 @@ define([
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
             };
 
+            $scope.saveContactComponent = function() {
+                    var currentComponentId = $scope.componentEditing._id;  
+                    $scope.updateSingleComponent(currentComponentId);                  
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
+            };
+            
             //delete page
             $scope.deletePage = function() {
 
@@ -1224,6 +1261,19 @@ define([
             });
 
             //Add Link to navigation
+           
+            $scope.$watch('newLink.linkUrl', function(newValue, oldValue) {
+              if (newValue) {
+                $scope.newLink.linkTitle = newValue;
+              }
+            });
+
+            $scope.validateLinkUrl = function(value)
+            {
+                var regex = /^[a-zA-Z_]*$/;
+                return /^[a-zA-Z_]*$/.test(value);
+            }
+
             $scope.initializeLinks = function() {
                 $scope.newLink = {
                     linkUrl: null,
@@ -1236,6 +1286,7 @@ define([
                 $scope.addLinkType = lnk;
                 $scope.initializeLinks();
             }
+
 
             $scope.addLinkToNav = function() {
                 var linkTitle = null;
@@ -1306,8 +1357,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.features.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);
             }
 
             window.addNewFeatureList = function(componentId, index) {
@@ -1353,8 +1405,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.images.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.addImageToThumbnail = function(componentId) {
@@ -1370,8 +1423,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.thumbnailCollection.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.changeProfilePhoto = function(componentId, customer) {
@@ -1398,8 +1452,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.teamMembers.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.updateSocialNetworks = function(old_value, mode, new_value) {
@@ -1518,8 +1573,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.tables.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.addPricingTable = function(componentId, newTable, index) {
@@ -1534,8 +1590,9 @@ define([
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
+                $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.tables[parentIndex].features.splice(index, 1);
-                $scope.saveCustomComponent();
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
             }
 
             window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {

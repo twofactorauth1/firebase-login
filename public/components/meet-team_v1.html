@@ -55,10 +55,8 @@
                             <img ng-if="!teamMember.becomeMember" ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img img-thumbnail img-circle" style="width: 229px;height: 230px"  />
                     </div>
 
-
-
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
-                        <div class="editable" data-class="teamMembers.item.profilepic" data-index="{{$index}}" ng-bind-html="teamMember.profilepic | unsafe"></div>
+                        <img ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
                     </a>
                 </div>
                 <div class="name">

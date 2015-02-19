@@ -7,6 +7,23 @@
         .modal-body {
             padding: 0;
         }
+
+        .fb-admin-pages {
+            li {
+                height: 50px;
+                line-height: 50px;
+                text-indent: 10px;
+                img {
+                    height: 40px;
+                    margin: 4px 0;
+                }
+                .fa-plus-square {
+                    line-height: 50px;
+                    font-size: 20px;
+                    color: #27ae60;
+                }
+            }
+        }
         .left-panel {
             padding-left: 0;
         }
@@ -63,6 +80,9 @@
             float: left;
             margin-right: 10px;
             border-radius: 5px;
+        }
+        input[type='checkbox'] {
+            margin-right: 15px;
         }
         .filter-heading {
             margin:0;
@@ -203,8 +223,24 @@
     }
 }
 .stream {
+    .item-inner {
+        // padding: 5px!important;
+    }
     li {
         overflow: hidden;
+        .panel-body {
+            .media {
+                a {
+                    height: auto;
+                    overflow: hidden;
+                    img {
+                        margin: 0 auto 15px;
+                        max-width: 370px;
+                        width: 100%;
+                    }
+                }
+            }
+        }
         .post-inner {
             background-color: #FFFFFF;
             line-height: 1.35em;
@@ -217,9 +253,11 @@
         .post-content {
             padding: 15px;
             img {
-                max-width: 75px;
-                height: 75px;
+                max-width: 226px;
+                height: 130px;
                 display: block;
+                margin: 0 auto;
+                border-radius: 5px;
             }
         }
         .post-bottom-bar {
@@ -228,8 +266,6 @@
             padding: 5px;
             display: block;
             width: 100%;
-            bottom: 0;
-            position: absolute;
             color: white;
             i {
                 font-size: 35px;
@@ -424,3 +460,57 @@
     color: white;
     border: 1px solid white;
 }
+
+/* Start: Recommended Isotope styles */
+
+/**** Isotope Filtering ****/
+
+.isotope-item {
+  z-index: 2;
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+      -ms-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}
+
+/* End: Recommended Isotope styles */

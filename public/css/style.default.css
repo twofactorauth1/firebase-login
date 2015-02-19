@@ -18355,7 +18355,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 @media (max-width: 1024px) {
   .mainpanel .pageheader {
-    margin-right: 124px;
+    margin-right: 70px;
+  }
+}
+@media (max-width: 480px) {
+  .mainpanel .pageheader {
+    margin-right: 132px;
   }
 }
 @media (max-width: 767px) {
@@ -18363,7 +18368,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
     padding-left: 0px;
   }
   .mainpanel .pageheader {
-    padding-left: 75px;
+    padding-left: 0px;
   }
   .mainpanel .pageheader h2 {
     padding-left: 15px;
@@ -19982,6 +19987,11 @@ div.error label.error:before {
   margin-right: 10px;
   width: 16px;
 }
+.modal-footer.media-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
 .website-manage .screenshot-wrap {
   height: 155px;
   overflow: hidden;
@@ -20747,7 +20757,7 @@ div.error label.error:before {
     position: relative;
   }
   .mainpanel {
-    width: 100%;
+    width: 95%;
   }
   .leftpanel-collapsed .headerbar {
     margin-left: 0;
@@ -21575,11 +21585,13 @@ div.error label.error:before {
   z-index: -1;
   height: 60px;
 }
-.componentActions .delete {
+.componentActions .delete,
+.componentActions .duplicate {
   float: right;
   pointer-events: all;
 }
-.componentActions .delete:hover {
+.componentActions .delete:hover,
+.componentActions .duplicate:hover {
   color: #d9534f;
 }
 .componentActions .settings {
@@ -22691,6 +22703,20 @@ i.indi-sm {
 .marketing #marketing-add-feed .modal-body {
   padding: 0;
 }
+.marketing #marketing-add-feed .fb-admin-pages li {
+  height: 50px;
+  line-height: 50px;
+  text-indent: 10px;
+}
+.marketing #marketing-add-feed .fb-admin-pages li img {
+  height: 40px;
+  margin: 4px 0;
+}
+.marketing #marketing-add-feed .fb-admin-pages li .fa-plus-square {
+  line-height: 50px;
+  font-size: 20px;
+  color: #27ae60;
+}
 .marketing #marketing-add-feed .left-panel {
   padding-left: 0;
 }
@@ -22740,6 +22766,9 @@ i.indi-sm {
   float: left;
   margin-right: 10px;
   border-radius: 5px;
+}
+.marketing .stream-filter input[type='checkbox'] {
+  margin-right: 15px;
 }
 .marketing .stream-filter .filter-heading {
   margin: 0;
@@ -22873,6 +22902,15 @@ i.indi-sm {
 .stream li {
   overflow: hidden;
 }
+.stream li .panel-body .media a {
+  height: auto;
+  overflow: hidden;
+}
+.stream li .panel-body .media a img {
+  margin: 0 auto 15px;
+  max-width: 370px;
+  width: 100%;
+}
 .stream li .post-inner {
   background-color: #FFFFFF;
   line-height: 1.35em;
@@ -22886,9 +22924,11 @@ i.indi-sm {
   padding: 15px;
 }
 .stream li .post-content img {
-  max-width: 75px;
-  height: 75px;
+  max-width: 226px;
+  height: 130px;
   display: block;
+  margin: 0 auto;
+  border-radius: 5px;
 }
 .stream li .post-bottom-bar {
   height: 40px;
@@ -22896,8 +22936,6 @@ i.indi-sm {
   padding: 5px;
   display: block;
   width: 100%;
-  bottom: 0;
-  position: absolute;
   color: white;
   /* feeds network specific styles */
 }
@@ -23083,6 +23121,49 @@ i.indi-sm {
   color: white;
   border: 1px solid white;
 }
+/* Start: Recommended Isotope styles */
+/**** Isotope Filtering ****/
+.isotope-item {
+  z-index: 2;
+}
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+/**** Isotope CSS3 transitions ****/
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -ms-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+.isotope {
+  -webkit-transition-property: height, width;
+  -moz-transition-property: height, width;
+  -ms-transition-property: height, width;
+  -o-transition-property: height, width;
+  transition-property: height, width;
+}
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform, opacity;
+  -ms-transition-property: -ms-transform, opacity;
+  -o-transition-property: top, left, opacity;
+  transition-property: transform, opacity;
+}
+/**** disabling Isotope CSS3 transitions ****/
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -ms-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  transition-duration: 0s;
+}
+/* End: Recommended Isotope styles */
 .datepicker {
   top: 0;
   left: 0;
@@ -23860,9 +23941,6 @@ div[data-type='campaign'] .inner-page .overlay {
   -ms-filter: blur(5px);
   filter: blur(5px);
 }
-.component-wrap .component > [id] .bg-overlay {
-  background: rgba(0, 0, 0, 0.58) !important;
-}
 @media only screen and (max-device-width: 1024px) {
   .component-wrap .component > [id] .ipad-bg {
     background-attachment: scroll !important;
@@ -24250,6 +24328,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .navbar .nav > li {
   float: left;
+  min-height: 44px;
 }
 ul.nav {
   margin-top: 25px!important;
@@ -24259,6 +24338,10 @@ ul.nav {
 }
 .navbar-brand {
   padding: 12px 20px;
+}
+.editable.navigation-logo {
+  min-height: 85px;
+  min-width: 85px;
 }
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
@@ -24549,6 +24632,7 @@ contenthover a {
 }
 .meet-team-v1 .profilepic {
   margin-bottom: 20px;
+  min-height: 445px;
 }
 .meet-team-v1 .profilepic-hover {
   opacity: 0;
@@ -25123,6 +25207,9 @@ contenthover a {
   background: none!important;
 }
 /********** Image Text v1 **********/
+.image-text-v1 img {
+  max-width: 100%;
+}
 .image-text-v1 .image-text-title {
   text-align: center;
   font-weight: bold;
@@ -25347,6 +25434,9 @@ div[data-class='image-text'] p {
 .simple-form-v1 #user_email {
   padding-left: 20px;
 }
+.simple-form-v1 .btn-editable {
+  padding-top: 15px !important;
+}
 .simple-form-v1 .thank-you {
   padding: 0;
   margin-bottom: -70px;
@@ -25434,6 +25524,9 @@ div[data-class='image-text'] p {
 .simple-form-v2 .inner-page {
   padding: 15px 0 30px;
 }
+.simple-form-v2 .btn-editable {
+  padding-top: 15px !important;
+}
 .simple-form-v2 .btn {
   height: 50px;
   margin: 0;
@@ -25446,6 +25539,9 @@ div[data-class='image-text'] p {
 /********** Simple Form v3 **********/
 .simple-form-v3 input[type='radio'] {
   margin-right: 5px;
+}
+.simple-form-v3 .btn-editable {
+  padding-top: 15px !important;
 }
 /********** Products v1 component **********/
 .products-v1 {
@@ -26136,7 +26232,6 @@ div[data-type=blog] .container {
   margin-top: 10px;
 }
 .pricing-tables-v1 .pricing_header {
-  background: #FAFAFA;
   box-shadow: 0 0 2px #c2c2c2;
 }
 .pricing-tables-v1 .pricing_header h1,

@@ -271,7 +271,7 @@
                         <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
                         <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
                       </div>
-                    <h4 class="modal-title">{{(componentEditing.title || '') | htmlToPlaintext}} Settings</h4>
+                    <h4 class="modal-title">{{(componentEditing.header_title || '') | htmlToPlaintext}} Settings</h4>
                 </div>
                 <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
                     <tabset>
@@ -284,6 +284,10 @@
                                     <label>Nav BG Color:</label>
                                     <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
+                                <div class="form-group" ng-show="componentEditing.type == 'navigation'">
+                                    <label for="colorpicker">Nav Hover BG Color:</label>
+                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hoverbg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
                                 <div class="form-group">
                                     <label for="colorpicker">Text Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
@@ -292,9 +296,14 @@
                                     <label for="colorpicker">Active Text Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
+                                
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                <div class="form-group" ng-if="componentEditing.type === 'pricing-tables'">
+                                    <label>Pricing Table BG Color:</label>
+                                    <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
                                     <label for="bg_hide">Show Background Image</label>
@@ -379,7 +388,14 @@
                                     <label for="bg_overlay">Add Overlay</label>
                                     <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
-
+                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                    <label for="bg_overlay_color">Add Overlay Color</label>
+                                    <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                    <label for="bg_overlay_opacity">Add Overlay Opacity Percentage</label>
+                                    <input id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" type="text" class="pull-right" ng-change="saveComponent()">
+                                </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_position">BG Position</label>
                                     <select id="bg_position" ng-model="componentEditing.bg.img.position" ng-change="saveComponent()" class="form-control input-lg">
@@ -419,13 +435,20 @@
                                     <option value="img-circle">Circle</option>
                                 </select>
                             </div>
+                            <div class="form-group" ng-if="componentEditing.type == 'image-text'">
+                                <label for="colorpicker">Image Position:</label>
+                                <select ng-model="componentEditing.imagePosition" ng-change="saveComponent()" class="form-control input-lg">
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'navigation'">
                             <tab-heading>
-                                <span>Reorder</span>
+                                <span>Links</span>
                             </tab-heading>
                             <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
-                                <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                                <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;text-transform: capitalize;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                                     <li data-ng-repeat="link in mainMenu.links" as-sortable-item  style="position: relative;">
                                         <div as-sortable-item-handle class="head-menu-links" data-label="{{link.label}}">
                                             <div class="container-fluid">
@@ -456,11 +479,9 @@
                                 </div>
                                 <div class="row form-group">
                                     <div class="input-group pull-left" style="margin-left: 10px;" ng-if="addNavigationLink">
-                                        <input ng-model="newLink.linkTitle" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Title" class="input-lg form-control"
-                                        type="text">
-                                        <slug from="newLink.linkTitle" to="newLink.linkUrl"></slug>
-                                        <input ng-model="newLink.linkUrl" style="width:50%" ng-if="addLinkType=='section'" placeholder="Link Label" class="input-lg form-control"
-                                        type="text">
+                                        <select style="text-transform:capitalize" ng-if="addLinkType=='section'" ng-model="newLink.linkUrl" class="form-control input-lg">
+                                                <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor && validateLinkUrl(component.anchor)" value="{{component.anchor}}">{{component.anchor}}</option>
+                                        </select>
                                         <select ng-if="addLinkType=='page'" ng-model="newLink.linkPage" class="form-control input-lg">
                                                 <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}">{{page.title}}</option>
                                         </select>
