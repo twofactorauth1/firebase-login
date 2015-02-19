@@ -984,15 +984,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //         components: data
         //     }
         // });
+        var scroll = $(window).scrollTop();
         $scope.currentpage.components = data;
         for (var i = 0; i < $scope.currentpage.components.length; i++) {
           if ($scope.currentpage.components[i].type == 'navigation') {
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace('navbar-v', '');
             body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
-          }
-          if ($scope.currentpage.components[i].type == 'contact-us') {
-            $scope.updateContactUsMap($scope.currentpage.components[i]);
           }
           if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
             var w = angular.element($window);
@@ -1017,6 +1015,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
         };
+        setTimeout(function() {
+          $(window).scrollTop(scroll);
+        }, 200);
       });
     };
     window.updateCustomComponent = function(data, networks) {
@@ -1059,6 +1060,27 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
            
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+          }
+      };
+    };
+
+    window.updateContactComponent = function(data, networks) {
+      console.log('updateCustomComponent >>>');
+      if (data) {
+        $scope.currentpage.components = data;
+        setTimeout(function() {
+          $scope.$apply(function() {
+              activateAloha();
+          });
+        });
+      } else {
+        $scope.$apply(function() {
+
+        });
+      }
+      for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          if ($scope.currentpage.components[i].type == 'contact-us') {
+            $scope.updateContactUsMap($scope.currentpage.components[i]);
           }
       };
     };
@@ -1160,7 +1182,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (newValue) {
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
-          if(value.bg && value.bg.img.url && !value.bg.color)
+          if(value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
             value.bg.img.show = true;          
           if (value && value.type === 'payment-form') {
             var productId = value.productId;

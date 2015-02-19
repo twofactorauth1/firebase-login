@@ -18355,7 +18355,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 @media (max-width: 1024px) {
   .mainpanel .pageheader {
-    margin-right: 124px;
+    margin-right: 70px;
   }
 }
 @media (max-width: 480px) {
@@ -20757,7 +20757,7 @@ div.error label.error:before {
     position: relative;
   }
   .mainpanel {
-    width: 100%;
+    width: 95%;
   }
   .leftpanel-collapsed .headerbar {
     margin-left: 0;
@@ -21585,11 +21585,13 @@ div.error label.error:before {
   z-index: -1;
   height: 60px;
 }
-.componentActions .delete {
+.componentActions .delete,
+.componentActions .duplicate {
   float: right;
   pointer-events: all;
 }
-.componentActions .delete:hover {
+.componentActions .delete:hover,
+.componentActions .duplicate:hover {
   color: #d9534f;
 }
 .componentActions .settings {
@@ -23939,9 +23941,6 @@ div[data-type='campaign'] .inner-page .overlay {
   -ms-filter: blur(5px);
   filter: blur(5px);
 }
-.component-wrap .component > [id] .bg-overlay {
-  background: rgba(0, 0, 0, 0.58) !important;
-}
 @media only screen and (max-device-width: 1024px) {
   .component-wrap .component > [id] .ipad-bg {
     background-attachment: scroll !important;
@@ -24329,6 +24328,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .navbar .nav > li {
   float: left;
+  min-height: 44px;
 }
 ul.nav {
   margin-top: 25px!important;
@@ -24338,6 +24338,10 @@ ul.nav {
 }
 .navbar-brand {
   padding: 12px 20px;
+}
+.editable.navigation-logo {
+  min-height: 85px;
+  min-width: 85px;
 }
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
@@ -24628,6 +24632,7 @@ contenthover a {
 }
 .meet-team-v1 .profilepic {
   margin-bottom: 20px;
+  min-height: 445px;
 }
 .meet-team-v1 .profilepic-hover {
   opacity: 0;
@@ -25429,6 +25434,9 @@ div[data-class='image-text'] p {
 .simple-form-v1 #user_email {
   padding-left: 20px;
 }
+.simple-form-v1 .btn-editable {
+  padding-top: 15px !important;
+}
 .simple-form-v1 .thank-you {
   padding: 0;
   margin-bottom: -70px;
@@ -25516,6 +25524,9 @@ div[data-class='image-text'] p {
 .simple-form-v2 .inner-page {
   padding: 15px 0 30px;
 }
+.simple-form-v2 .btn-editable {
+  padding-top: 15px !important;
+}
 .simple-form-v2 .btn {
   height: 50px;
   margin: 0;
@@ -25528,6 +25539,9 @@ div[data-class='image-text'] p {
 /********** Simple Form v3 **********/
 .simple-form-v3 input[type='radio'] {
   margin-right: 5px;
+}
+.simple-form-v3 .btn-editable {
+  padding-top: 15px !important;
 }
 /********** Products v1 component **********/
 .products-v1 {

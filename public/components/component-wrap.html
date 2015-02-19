@@ -1,6 +1,12 @@
+<style>
+    .{{component.type}}{{$index + 1}} .bg-overlay {
+        background: {{component.bg.img.overlaycolor || 'rgba(0, 0, 0, 0.58)'}}!important;
+        opacity: {{component.bg.img.overlayopacity/100 || 1}};
+    }
+</style>
 <div class="component-wrap" ng-if="component.visibility">
 
-    <div class="component" data-id="{{component._id}}" data-type="{{component.type}}">
+    <div class="component {{component.type}}{{$index + 1}}" data-id="{{component._id}}" data-type="{{component.type}}">
 
         <div id="{{component.anchor}}" ng-style="{&#39;color&#39;:component.txtcolor||primaryTextColor}">
 
@@ -42,8 +48,8 @@
                         <div ng-if="component.bg.img.show && component.type == 'masthead'"
                             class="bg"
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            parallax-background
-                            parallax-ratio="0.4"
+                            {{component.bg.img.parallax ? parallax-background : ""}}
+                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;
@@ -53,8 +59,8 @@
                         <div ng-if="component.bg.img.show && component.type != 'masthead'"
                             class="bg"
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            parallax-background
-                            parallax-ratio="0.4"
+                            {{component.bg.img.parallax ? parallax-background : ""}}
+                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;

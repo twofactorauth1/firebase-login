@@ -22,6 +22,7 @@ define([
     'ngSweetAlert',
     'blockUI',
     'adminValidationDirective','constants',
+    'commonutils',
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -391,6 +392,9 @@ define([
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.display = "block";
                         iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
                     }
+                    //unbind all click handler
+                    $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
+
                     //Disable all links in edit
                     $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
                         if(!$(this).hasClass("clickable-link")) {
@@ -406,6 +410,32 @@ define([
                         $scope.editComponent(e.currentTarget.attributes['data-id'].value);
                         var element = angular.element('#component-setting-modal');
                         element.modal('show');
+                    });
+
+                    //add click events for all the copy component buttons
+                    $("#iframe-website").contents().find('body').on("click", ".componentActions .duplicate", function(e) {
+                        $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
+                        $scope.editComponent(e.currentTarget.attributes['data-id'].value);
+                        $scope.saveComponent();
+                        var matchingComponent = _.findWhere($scope.currentPage.components, {
+                            _id: e.currentTarget.attributes['data-id'].value
+                        });
+                        
+
+                        var newComponent = angular.copy(matchingComponent);
+                        var temp = Math.uuid();
+                        newComponent._id = temp;
+                        newComponent.anchor = temp;
+                        var indexToadd = $scope.editComponentIndex ? $scope.editComponentIndex : 1
+                        $scope.currentPage.components.splice(indexToadd, 0, newComponent);
+                        $scope.components = $scope.currentPage.components;
+                        $scope.updateIframeComponents();
+                        //TODO: get updateIframeComponents callback
+                        setTimeout(function() {
+                                $scope.activateAloha();
+                            }, 1000)
+                        toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+
                     });
 
                     //add click events for all the add component buttons.
@@ -809,7 +839,7 @@ define([
                 }
 
                 if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
-                    $scope.saveComponent();
+                    $scope.saveContactComponent();
                     $('#component-setting-modal').modal('hide');
                 }
             }
@@ -915,7 +945,7 @@ define([
                         type: $scope.componentEditing.type
                     }).title;
 
-                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
+                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
                     }
                     
@@ -1071,6 +1101,12 @@ define([
                     var currentComponentId = $scope.componentEditing._id;  
                     $scope.updateSingleComponent(currentComponentId);                  
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
+            };
+
+            $scope.saveContactComponent = function() {
+                    var currentComponentId = $scope.componentEditing._id;  
+                    $scope.updateSingleComponent(currentComponentId);                  
+                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
             };
             
             //delete page

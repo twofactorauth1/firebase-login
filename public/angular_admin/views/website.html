@@ -284,6 +284,10 @@
                                     <label>Nav BG Color:</label>
                                     <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
+                                <div class="form-group" ng-show="componentEditing.type == 'navigation'">
+                                    <label for="colorpicker">Nav Hover BG Color:</label>
+                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hoverbg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
                                 <div class="form-group">
                                     <label for="colorpicker">Text Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
@@ -292,6 +296,7 @@
                                     <label for="colorpicker">Active Text Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
+                                
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
@@ -383,7 +388,14 @@
                                     <label for="bg_overlay">Add Overlay</label>
                                     <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
-
+                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                    <label for="bg_overlay_color">Add Overlay Color</label>
+                                    <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                    <label for="bg_overlay_opacity">Add Overlay Opacity Percentage</label>
+                                    <input id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" type="text" class="pull-right" ng-change="saveComponent()">
+                                </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_position">BG Position</label>
                                     <select id="bg_position" ng-model="componentEditing.bg.img.position" ng-change="saveComponent()" class="form-control input-lg">
@@ -436,7 +448,7 @@
                                 <span>Links</span>
                             </tab-heading>
                             <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
-                                <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                                <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" style="list-style: none;padding-left: 0;text-transform: capitalize;" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                                     <li data-ng-repeat="link in mainMenu.links" as-sortable-item  style="position: relative;">
                                         <div as-sortable-item-handle class="head-menu-links" data-label="{{link.label}}">
                                             <div class="container-fluid">
