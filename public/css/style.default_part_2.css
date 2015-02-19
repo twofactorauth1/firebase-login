@@ -12051,6 +12051,12 @@ div[data-type=blog] .container {
   display: none;
 }
 
+.pricing-tables-v1 .pricing-table .list-group-item {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #000000;
+}
+
 .pricing-tables-v1 .container {
   padding-top: 40px;
 }
@@ -12081,10 +12087,6 @@ div[data-type=blog] .container {
   margin-top: 10px;
 }
 
-.pricing-tables-v1 .pricing_header {
-  box-shadow: 0 0 2px #c2c2c2;
-}
-
 .pricing-tables-v1 .pricing_header h1,
 .pricing-tables-v1 .pricing_header h3,
 .pricing-tables-v1 .pricing_header p {
@@ -12094,11 +12096,6 @@ div[data-type=blog] .container {
   padding-bottom: 20px;
   text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
   font-weight: normal;
-}
-
-.pricing-tables-v1 .pricing_header h1,
-.pricing-tables-v1 .pricing_header h3 {
-  color: black;
 }
 
 .pricing-tables-v1 .pricing_header h1 {
@@ -12135,8 +12132,8 @@ div[data-type=blog] .container {
 }
 
 .pricing-tables-v1 .space {
-  height: 2px;
-  background-color: #75b1ae;
+  height: 5px;
+  background-color: #00bff3;
 }
 
 .coming-soon-v1 {
