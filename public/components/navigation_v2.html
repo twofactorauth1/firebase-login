@@ -2,6 +2,9 @@
     .navigation-v2 .navbar ul.navbar-nav li a {
         color:{{component.txtcolor || 'white'}};
     }
+    .navigation-v2 .navbar-default .navbar-nav > li > a:hover, .navigation-v2 .navbar-default .navbar-nav > li > a:focus{
+        background-color: {{component.nav.hoverbg || 'transparent'}};
+    }
     .navigation-v2 .navbar-header {
         background: {{component.bg.color}};
     }

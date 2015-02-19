@@ -62,7 +62,8 @@ var component = $$.m.ModelBase.extend({
              *
              */
              nav: {
-                bg: "#017ebe"
+                bg: "#017ebe",
+                hoverbg: null
              },
 
             /**
