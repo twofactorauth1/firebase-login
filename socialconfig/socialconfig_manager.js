@@ -10,6 +10,7 @@ var log = $$.g.getLogger("socialconfig_manager");
 var twitterDao = require('../dao/social/twitter.dao');
 var facebookDao = require('../dao/social/facebook.dao');
 var linkedinDao = require('../dao/social/linkedin.dao');
+var googleDao = require('../dao/social/google.dao');
 
 module.exports = {
 
@@ -282,7 +283,21 @@ module.exports = {
                 });
 
             case social.GOOGLE:
+              googleDao.getProfile(creds.socialId, creds.accessToken, function(err, value) {
+                if(err) {
+                    return fn(err, null);
+                }
+
+                if (value.name) {
+                  creds.username = value.name;
+                }
+
+                if (value.picture) {
+                  creds.image = value.picture;
+                }
+
                 return fn(null, creds);
+              });
             case social.LINKEDIN:
               linkedinDao.getProfile(creds.socialId, creds.accessToken, function(err, value) {
                 if (err) {

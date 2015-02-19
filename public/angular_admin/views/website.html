@@ -388,7 +388,14 @@
                                     <label for="bg_overlay">Add Overlay</label>
                                     <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
-
+                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                    <label for="bg_overlay_color">Add Overlay Color</label>
+                                    <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                </div>
+                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                    <label for="bg_overlay_opacity">Add Overlay Opacity Percentage</label>
+                                    <input id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" type="text" class="pull-right" ng-change="saveComponent()">
+                                </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_position">BG Position</label>
                                     <select id="bg_position" ng-model="componentEditing.bg.img.position" ng-change="saveComponent()" class="form-control input-lg">
