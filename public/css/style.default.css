@@ -18355,7 +18355,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 @media (max-width: 1024px) {
   .mainpanel .pageheader {
-    margin-right: 124px;
+    margin-right: 70px;
   }
 }
 @media (max-width: 480px) {
@@ -20757,7 +20757,7 @@ div.error label.error:before {
     position: relative;
   }
   .mainpanel {
-    width: 100%;
+    width: 95%;
   }
   .leftpanel-collapsed .headerbar {
     margin-left: 0;
