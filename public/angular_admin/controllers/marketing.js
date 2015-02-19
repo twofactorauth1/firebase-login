@@ -1,4 +1,4 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding'], function(app) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope'], function(app) {
     app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService) {
 
         $scope.campaigns = [];
@@ -85,31 +85,26 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         $scope.filterFeed = function(type, $event) {
             $event.stopPropagation();
-            if (type != 'all') {
-                if ($event.currentTarget.checked) {
-                    for (var i = 0; i < $scope.feed.length; i++) {
-                        if ($scope.feed[i].type == type) {
-                            $scope.displayedFeed.push($scope.feed[i]);
-                        }
-                    }
-                    setTimeout(function() {
-                        $scope.$apply();
-                    }, 1);
-                } else {
-                    for (var i = 0; i < $scope.feed.length; i++) {
-                        if ($scope.feed[i].type == type) {
-                            var itemToRemove = _.find($scope.displayedFeed, function(value) {
-                                return value._id == $scope.feed[i]._id;
-                            });
-                            $scope.displayedFeed = _.filter($scope.displayedFeed, function(o) {
-                                return o._id != itemToRemove._id;
-                            });
-                        }
-                    }
-                }
-            } else {
-                $scope.displayedFeed = $scope.feed;
-            }
+            var $container = $('.stream'),
+                $checkboxes = $('.stream-filter input');
+
+            $container.isotope({
+                itemSelector: '.item'
+            });
+
+            $checkboxes.change(function() {
+                var filters = [];
+                // get checked checkboxes values
+                $checkboxes.filter(':checked').each(function() {
+                    filters.push(this.value);
+                });
+                // ['.red', '.blue'] -> '.red, .blue'
+                filters = filters.join(', ');
+                $container.isotope({
+                    filter: filters
+                });
+                console.log('filters ', filters);
+            });
         };
 
         $scope.feedTypes = [];
@@ -139,7 +134,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             var trackedTwitterObjects = $scope.getTrackedObjects(trackedObjects, id);
             for (var i = 0; i < trackedTwitterObjects.length; i++) {
                 if (trackedTwitterObjects[i].type == 'feed') {
-                    SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, function(tweets) {
+                    SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, null, function(tweets) {
                         $scope.tweetsLength = tweets.length;
                         for (var i = 0; i < tweets.length; i++) {
                             tweets[i].type = 'twitter';
@@ -148,7 +143,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     });
                 }
                 if (trackedTwitterObjects[i].type == 'follower') {
-                    SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, function(followers) {
+                    SocialConfigService.getTrackedObject(trackedTwitterObjects[i].index, null, function(followers) {
                         $scope.followersLength = followers.length;
                         for (var i = 0; i < followers.length; i++) {
                             followers[i].type = 'twitter';
@@ -170,17 +165,19 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 // console.log('handling object:', obj);
                 if (obj.type === 'feed') {
                     if (socialAccountMap[obj.socialId] === 'tw') {
-                        SocialConfigService.getTrackedObject(i, function(tweets) {
+                        SocialConfigService.getTrackedObject(i, obj.socialId, function(tweets, socialId) {
                             $scope.tweetsLength = tweets.length;
                             for (var i = 0; i < tweets.length; i++) {
                                 tweets[i].type = 'twitter';
+                                tweets[i].socialAccountId = socialId;
                                 $scope.feed.push(tweets[i]);
                             };
                         });
                     } else if (socialAccountMap[obj.socialId] === 'fb') {
-                        SocialConfigService.getTrackedObject(i, function(posts) {
+                        SocialConfigService.getTrackedObject(i, obj.socialId, function(posts, socialId) {
                             for (var i = 0; i < posts.length; i++) {
                                 posts[i].type = 'facebook';
+                                posts[i].socialAccountId = socialId;
                                 $scope.fbPostsLength += 1;
                                 posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
                                 $scope.feed.push(posts[i]);
@@ -201,10 +198,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
                 } else if (obj.type === 'numberFollowers') {
                     if (socialAccountMap[obj.socialId] === 'tw') {
-                        SocialConfigService.getTrackedObject(i, function(followers) {
+                        SocialConfigService.getTrackedObject(i, obj.socialId, function(followers, socialId) {
+                            console.log('followers ', followers);
                             $scope.followersLength = followers.length;
                             for (var i = 0; i < followers.length; i++) {
                                 followers[i].type = 'twitter';
+                                followers[i].socialId = socialId;
                                 $scope.feed.push(followers[i]);
                             };
                         });
@@ -212,15 +211,14 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
                 } else if (obj.type === 'profile') {
                     if (socialAccountMap[obj.socialId] === 'tw') {
-                        SocialConfigService.getTrackedObject(i, function(profile) {
+                        SocialConfigService.getTrackedObject(i, obj.socialId, function(profile, socialId) {
                             profile.type = 'twitter';
-                            profile.socialId = obj.socialId;
+                            profile.socialId = socialId;
                             $scope.feedTypes.push(profile);
                         });
                     } else if (socialAccountMap[obj.socialId] === 'fb') {
-                        var fbSocialIdTemp = obj.socialId;
-                        SocialConfigService.getTrackedObject(i, function(profile) {
-                            profile.socialId = fbSocialIdTemp;
+                        SocialConfigService.getTrackedObject(i, obj.socialId, function(profile, socialId) {
+                            profile.socialId = socialId;
                             profile.type = 'facebook';
                             $scope.feedTypes.push(profile);
                         });
@@ -257,6 +255,22 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 $scope.afterPosting();
             });
         };
+
+        setTimeout(function() {
+            var $container = $('.stream');
+            console.log('$container ', $container);
+            // init
+            $container.isotope({
+                // options
+                itemSelector: '.item',
+                layoutMode: 'masonry',
+                getSortData: {
+                    date: function ($elem) {
+                        return Date.parse($elem.data('date'));
+                    }
+                }
+            });
+        }, 6000);
 
         $scope.afterPosting = function() {
             //clear spinner
