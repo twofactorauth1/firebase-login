@@ -25360,6 +25360,9 @@ div[data-class='image-text'] p {
 .simple-form-v1 #user_email {
   padding-left: 20px;
 }
+.simple-form-v1 .btn-editable {
+  padding-top: 15px !important;
+}
 .simple-form-v1 .thank-you {
   padding: 0;
   margin-bottom: -70px;
@@ -25447,6 +25450,9 @@ div[data-class='image-text'] p {
 .simple-form-v2 .inner-page {
   padding: 15px 0 30px;
 }
+.simple-form-v2 .btn-editable {
+  padding-top: 15px !important;
+}
 .simple-form-v2 .btn {
   height: 50px;
   margin: 0;
@@ -25459,6 +25465,9 @@ div[data-class='image-text'] p {
 /********** Simple Form v3 **********/
 .simple-form-v3 input[type='radio'] {
   margin-right: 5px;
+}
+.simple-form-v3 .btn-editable {
+  padding-top: 15px !important;
 }
 /********** Products v1 component **********/
 .products-v1 {
