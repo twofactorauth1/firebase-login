@@ -24269,6 +24269,10 @@ ul.nav {
 .navbar-brand {
   padding: 12px 20px;
 }
+.editable.navigation-logo {
+  min-height: 85px;
+  min-width: 85px;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
