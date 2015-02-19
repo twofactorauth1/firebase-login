@@ -8,8 +8,22 @@
 var appConfig =  require('./app.config');
 
 //user:  cycleboy99
-var clientId = process.env.TWITTER_CLIENT_ID || 'n8xIukBuQ1GIpmDmCYiqkw';
-var clientSecret = process.env.TWITTER_CLIENT_SECRET || '1w2GyxTw0qFbVuW5V9dhGV1CchLmSZDI8Jd2ENx82YE';
+var clientId = process.env.TWITTER_CLIENT_ID || 'wYCvZVUB0Qm24oxnVkCTZNsOm';
+var clientSecret = process.env.TWITTER_CLIENT_SECRET || 'BqkHN5QDxMbX2Z4BeT505eQhBhbBPOayulDXebh0bubfCAg0Dd';
+
+/*
+ Consumer Key (API Key)	wYCvZVUB0Qm24oxnVkCTZNsOm
+ Consumer Secret (API Secret)	BqkHN5QDxMbX2Z4BeT505eQhBhbBPOayulDXebh0bubfCAg0Dd
+ Access Level	Read, write, and direct messages (modify app permissions)
+ Owner	indigenous_io
+ Owner ID	2346197179
+
+ Access Token	2346197179-pPvrs8hfCEK8Ks442qa0MacKnyRCrWttzVndYyc
+ Access Token Secret	V8ZpyaX8lJc6X1qm6PFyYaZs2Fg8eDBWQXK8lE9ZnV46Y
+ Access Level	Read, write, and direct messages
+ Owner	indigenous_io
+ Owner ID	2346197179
+ */
 
 module.exports = {
     CLIENT_ID: clientId,
