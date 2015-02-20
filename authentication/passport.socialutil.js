@@ -84,7 +84,7 @@ module.exports = {
             });
         } else if(authMode === 'socialconfig'){
             socialConfigManager.addSocialAccount(req.session.state.accountId, socialType, socialId, accessToken,
-                refreshToken, options.expires, username, profileUrl, scope, function(err, value){
+                refreshToken, options.expires, username, profileUrl, scope, 'account', function(err, value){
                     if(err) {
                         return done(null, false, err);
                     } else {

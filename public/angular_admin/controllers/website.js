@@ -1097,10 +1097,8 @@ define([
                return matchingComponent;
             }
 
-            $scope.saveCustomComponent = function(networks) {
-                    var currentComponentId = $scope.componentEditing._id;  
-                    $scope.updateSingleComponent(currentComponentId);                  
-                    iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
+            $scope.saveCustomComponent = function(networks) {                
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
             };
 
             $scope.saveContactComponent = function() {
@@ -1262,16 +1260,19 @@ define([
 
             //Add Link to navigation
            
-            $scope.$watch('newLink.linkUrl', function(newValue, oldValue) {
-              if (newValue) {
-                $scope.newLink.linkTitle = newValue;
-              }
-            });
-
-            $scope.validateLinkUrl = function(value)
+            $scope.setLinkUrl = function()
             {
-                var regex = /^[a-zA-Z_]*$/;
-                return /^[a-zA-Z_]*$/.test(value);
+                $scope.newLink.linkTitle = $("#linkSection option:selected").html();
+            }
+            
+            $scope.setLinkTitle = function(value, index, newLink)
+            {
+                var newArray = _.first(angular.copy($scope.currentPage.components), [index+1]);
+                var hash = _.filter(newArray, function(obj){ return obj.type === value; })
+                if(hash.length > 1)
+                    return value.replace("-"," ") + "-" + (hash.length - 1);
+                else
+                    return value.replace("-"," ");
             }
 
             $scope.initializeLinks = function() {
@@ -1359,17 +1360,15 @@ define([
                 });
                 $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.features.splice(index, 1);
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);
+                $scope.saveCustomComponent();
             }
 
-            window.addNewFeatureList = function(componentId, index) {
+            window.addNewFeatureList = function(componentId, index, newFeature) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                $scope.componentEditing.features.push({
-                    "top" : "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%23ffffff%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
-                    "content" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-                });
+                $scope.updateSingleComponent(componentId);
+                $scope.componentEditing.features.splice(index + 1, 0, newFeature) 
                 $scope.saveCustomComponent();
             }
 
@@ -1407,7 +1406,7 @@ define([
                 });
                 $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.images.splice(index, 1);
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
+                $scope.saveCustomComponent();
             }
 
             window.addImageToThumbnail = function(componentId) {
@@ -1425,7 +1424,7 @@ define([
                 });
                 $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.thumbnailCollection.splice(index, 1);
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
+                $scope.saveCustomComponent();
             }
 
             window.changeProfilePhoto = function(componentId, customer) {
@@ -1454,7 +1453,7 @@ define([
                 });
                 $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.teamMembers.splice(index, 1);
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
+                $scope.saveCustomComponent();
             }
 
             window.updateSocialNetworks = function(old_value, mode, new_value) {
@@ -1499,6 +1498,8 @@ define([
                 switch (mode) {
                     case "add":
                         if (new_value && new_value.name && new_value.url) {
+                            if(!$scope.componentEditing.teamMembers[parent_index].networks)
+                                $scope.componentEditing.teamMembers[parent_index].networks = [];
                             $scope.componentEditing.teamMembers[parent_index].networks.push({
                                 name: new_value.name,
                                 url: new_value.url,
@@ -1574,15 +1575,16 @@ define([
                     _id: componentId
                 });
                 $scope.updateSingleComponent(componentId);
-                $scope.componentEditing.tables.splice(index, 1);
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
+                $scope.componentEditing.tables.splice(index, 1);                
+                $scope.saveCustomComponent();
             }
 
             window.addPricingTable = function(componentId, newTable, index) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                $scope.componentEditing.tables.splice(index, 0, newTable);
+                $scope.updateSingleComponent(componentId);
+                $scope.componentEditing.tables.splice(index + 1, 0, newTable);
                 $scope.saveCustomComponent();
             }
 
@@ -1592,21 +1594,23 @@ define([
                 });
                 $scope.updateSingleComponent(componentId);
                 $scope.componentEditing.tables[parentIndex].features.splice(index, 1);
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components);                
+                $scope.saveCustomComponent();
             }
 
             window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                $scope.componentEditing.tables[parentIndex].features.splice(index, 0, newTable);
+                $scope.updateSingleComponent(componentId);
+                $scope.componentEditing.tables[parentIndex].features.splice(index + 1, 0, newTable);
                 $scope.saveCustomComponent();
             }
             window.addTeamMember = function(componentId, newTeam, index) {
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
-                $scope.componentEditing.teamMembers.splice(index, 0, newTeam);
+                $scope.updateSingleComponent(componentId);
+                $scope.componentEditing.teamMembers.splice(index + 1, 0, newTeam);
                 $scope.saveCustomComponent();
             }
             window.updateComponent = function(componentId) {

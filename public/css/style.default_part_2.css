@@ -333,6 +333,10 @@
   hyphens: auto;
 }
 
+span[data-cke-widget-id] {
+  outline: 0;
+}
+
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -5876,12 +5880,6 @@ div.error label.error:before {
 
   .pagination {
     margin-bottom: 20px;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  #leftnav {
-    display: none;
   }
 }
 
@@ -12052,7 +12050,6 @@ div[data-type=blog] .container {
 }
 
 .pricing-tables-v1 .pricing-table .list-group-item {
-  background: none;
   border: none;
   border-bottom: 1px solid #000000;
 }
@@ -12896,6 +12893,14 @@ div[data-type="coming-soon"] .component-inner {
 .thumbnail-slider-v1 .single-image {
   padding: 0;
   margin: 0;
+}
+
+.thumbnail-slider-v1 .glyphicon-chevron-left:before {
+  color: #444;
+}
+
+.thumbnail-slider-v1 .glyphicon-chevron-right:before {
+  color: #444;
 }
 
 .thumbnail-slider-v1 .imgHeight {

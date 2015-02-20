@@ -106,7 +106,7 @@
                             <tags-input ng-if="isEditing" ng-model="blog.post.post_tags"></tags-input>
                             <ul ng-if="!isEditing" class="post_tags">
                                 <li ng-repeat="tag in blog.post.post_tags track by $index">
-                                    <a href="/tag/{{tag.text}}">{{tag.text ? tag.text:tag}}</a>
+                                    <a href="/tag/{{tag.text ? tag.text : tag}}">{{tag.text ? tag.text:tag}}</a>
                                 </li>
                             </ul>
                         </div>

@@ -15124,7 +15124,7 @@ body {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), local('OpenSans'), url("OpenSans-Regular.ttf") format('truetype'), url("OpenSans.woff") format('woff');
+  src: url('../fonts/opensans/OpenSans-Regular.ttf');
 }
 .marketing #like {
   position: fixed;
@@ -16544,6 +16544,9 @@ a:active {
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   hyphens: auto;
+}
+span[data-cke-widget-id] {
+  outline: 0;
 }
 /* ------------------------------------------------------------
 	Site Map Styles
@@ -21110,11 +21113,6 @@ div.error label.error:before {
   }
   .pagination {
     margin-bottom: 20px;
-  }
-}
-@media screen and (max-width: 400px) {
-  #leftnav {
-    display: none;
   }
 }
 @media screen and (max-width: 320px) {
@@ -26208,7 +26206,6 @@ div[data-type=blog] .container {
   display: none;
 }
 .pricing-tables-v1 .pricing-table .list-group-item {
-  background: none;
   border: none;
   border-bottom: 1px solid #000000;
 }
@@ -26914,6 +26911,12 @@ div[data-type="coming-soon"] .component-inner {
 .thumbnail-slider-v1 .single-image {
   padding: 0;
   margin: 0;
+}
+.thumbnail-slider-v1 .glyphicon-chevron-left:before {
+  color: #444;
+}
+.thumbnail-slider-v1 .glyphicon-chevron-right:before {
+  color: #444;
 }
 .thumbnail-slider-v1 .imgHeight {
   overflow: hidden;
