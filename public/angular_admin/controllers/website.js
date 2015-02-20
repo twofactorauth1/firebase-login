@@ -1262,16 +1262,19 @@ define([
 
             //Add Link to navigation
            
-            $scope.$watch('newLink.linkUrl', function(newValue, oldValue) {
-              if (newValue) {
-                $scope.newLink.linkTitle = newValue;
-              }
-            });
-
-            $scope.validateLinkUrl = function(value)
+            $scope.setLinkUrl = function()
             {
-                var regex = /^[a-zA-Z_]*$/;
-                return /^[a-zA-Z_]*$/.test(value);
+                $scope.newLink.linkTitle = $("#linkSection option:selected").html();
+            }
+            
+            $scope.setLinkTitle = function(value, index, newLink)
+            {
+                var newArray = _.first(angular.copy($scope.currentPage.components), [index+1]);
+                var hash = _.filter(newArray, function(obj){ return obj.type === value; })
+                if(hash.length > 1)
+                    return value.replace("-"," ") + "-" + (hash.length - 1);
+                else
+                    return value.replace("-"," ");
             }
 
             $scope.initializeLinks = function() {
