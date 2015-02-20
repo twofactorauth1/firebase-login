@@ -24,14 +24,14 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
+
         app.get(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.getSocialAccount.bind(this));
         app.get(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.getSocialAccount.bind(this));
         app.post(this.url('socialaccount'), this.isAuthAndSubscribedApi.bind(this), this.addSocialAccount.bind(this));
         app.post(this.url(':id/socialaccount'), this.isAuthAndSubscribedApi.bind(this), this.addSocialAccount.bind(this));
         app.delete(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
         app.delete(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
-
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
 
 
@@ -150,8 +150,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(res);
             } else {
                 var socialAccount = req.body;
-                socialConfigManager.addSocialAccount(accountId, socialAccount.socialType, socialAccount.socialId, socialAccount.accessToken,
-                    socialAccount.refreshToken, socialAccount.expires, socialAccount.username, socialAccount.profileUrl,
+                self.log.debug('socialAccount:', socialAccount);
+                socialConfigManager.addSocialAccount(accountId, socialAccount.type, socialAccount.socialId, socialAccount.accessToken,
+                    socialAccount.refreshToken, socialAccount.expires, socialAccount.username, socialAccount.socialUrl,
                     socialAccount.scope, socialAccount.accountType, function(err, config){
                         self.log.debug('<< addSocialAccount');
                         self.sendResultOrError(resp, err, config, "Error adding social account");

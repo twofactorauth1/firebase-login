@@ -210,6 +210,7 @@ module.exports = {
                         socialAccounts[index].username = creds.username;
                         socialAccounts[index].socialUrl = creds.socialUrl;
                         socialAccounts[index].scope = creds.scope;
+                        socialAccounts[index].accountType = creds.accountType;
                         updatedCred = true;
                     }
                 });
