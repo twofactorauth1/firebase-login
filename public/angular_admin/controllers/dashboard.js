@@ -91,6 +91,7 @@ define([
         $scope.newVsReturningConfig.loading = true;
         $scope.customerOverviewConfig.loading = true;
         $scope.displayVisitors = true;
+
         $scope.date = {
             startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
             endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
@@ -102,6 +103,13 @@ define([
            $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
            //update user preferences
            if (dateSwitch) {
+                $scope.analyticsOverviewConfig.loading = true;
+                $scope.timeonSiteConfig.loading = true;
+                $scope.trafficSourcesConfig.loading = true;
+                $scope.newVsReturningConfig.loading = true;
+                $scope.customerOverviewConfig.loading = true;
+                $scope.displayVisitors = true;
+                $("#visitor_locations").html($("#visitor_location_loading").clone().show());
                 $scope.runAnalyticsReports($scope.analyticsAccount);
             }
             dateSwitch = true;
