@@ -7878,10 +7878,21 @@ i.indi-sm {
   box-shadow: none;
 }
 
-.marketing .stream-filter .avatar {
+.marketing .stream-filter .filter-avatar {
   width: 50px;
   float: left;
   margin-right: 10px;
+  position: relative;
+  display: block;
+}
+
+.marketing .stream-filter .filter-avatar .badge {
+  position: absolute;
+  right: 0;
+  margin: -7px -8px 0 0;
+}
+
+.marketing .stream-filter .avatar {
   border-radius: 5px;
 }
 

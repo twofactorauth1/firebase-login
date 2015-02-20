@@ -36,6 +36,22 @@ define(['app'], function (app) {
             fn(data);
           });
         };
+
+        this.getFBPages = function (socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getFBPageInfo = function (socialAccountId, pageId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
     });
 
     //Twitter
@@ -75,22 +91,6 @@ define(['app'], function (app) {
     //Facebook
     this.getFBPosts = function (socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBPages = function (socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBPageInfo = function (socialAccountId, pageId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
         $http.get(apiUrl)
             .success(function (data, status, headers, config) {
                 fn(data);

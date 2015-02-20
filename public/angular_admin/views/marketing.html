@@ -90,7 +90,10 @@
                                     <input type="checkbox" value="1" id="checkboxPrimary" checked="checked" ng-click="toggleCheckbox($event)">
                                     <label for="checkboxPrimary"></label>
                                 </div> -->
-                                <img ng-src="{{type.picture.data.url || type.profile_image_url_https}}" class="avatar pull-left" />
+                                <div class="filter-avatar">
+                                    <span class="badge badge-success">{{feedLengths[type.socialId]}}</span>
+                                    <img ng-src="{{type.picture.data.url || type.profile_image_url_https}}" class="avatar pull-left" />
+                                </div>
                                 <div class="pull-left">
                                     <h4>{{type.name}}</h4>
                                     <p><span class="fa fa-{{type.type}}-square"></span> {{type.type}}</p>
@@ -117,13 +120,13 @@
                         <div class="col-xs-12" ng-if="type.type == 'twitter'">
                             <input type="checkbox" name="tweets" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}">
                             <label for="tweets">Tweets</label>
-                            <span class="pull-right label label-primary">{{tweetsLength}}</span>
+                            <span class="pull-right label label-primary"></span>
                             <hr></hr>
                         </div>
                         <div class="col-xs-12" ng-if="type.type == 'twitter'">
                             <input type="checkbox" name="followers" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".follower-{{type.socialId}}">
                             <label for="followers">Followers</label>
-                            <span class="pull-right label label-primary">{{followersLength}}</span>
+                            <span class="pull-right label label-primary"></span>
                             <hr></hr>
                         </div>
                         <!--  <div class="col-xs-12 ckbox ckbox-success">
@@ -143,6 +146,8 @@
                                 </div> -->
 
                         <!-- FACEBOOK -->
+            }
+            }
 
 <!--                         <div class="col-xs-12" ng-if="type.type == 'facebook'">
                             <input type="checkbox" name="likes" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".likes-{{type.socialId}}">

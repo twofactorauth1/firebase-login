@@ -1,5 +1,5 @@
 define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope'], function(app) {
-    app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService) {
+    app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout',function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout) {
 
         $scope.campaigns = [];
         $scope.feeds = [];
@@ -82,15 +82,15 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         $scope.feed = [];
         $scope.displayedFeed = [];
+        var feedTimer;
 
+        //watch the feed and after 2sec of waiting on new items set isotope
         $scope.$watchCollection('feed', function(newFeed, oldFeed) {
-            var feedTimer;
-            var feedInterval = 3000;
-
-            clearTimeout(typingTimer);
-            feedTimer = setTimeout(function() {
+            console.log('new feed ', newFeed.length);
+            $timeout.cancel(feedTimer);
+            feedTimer = $timeout(function() {
+                console.log('set isotope ');
                 var $container = $('.stream');
-                console.log('$container ', $container);
                 // init
                 $container.isotope({
                     // options
@@ -102,8 +102,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         }
                     }
                 });
-            }, feedInterval);
-
+            }, 3000);
         });
 
         $scope.filterFeed = function(type, $event) {
@@ -177,6 +176,9 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             };
         };
 
+        $scope.fbAdminPages = [];
+        $scope.feedLengths = [];
+
         SocialConfigService.getAllSocialConfig(function(config) {
             var socialAccountMap = {};
             for (var i = 0; i < config.socialAccounts.length; i++) {
@@ -187,9 +189,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 var obj = config.trackedObjects[i];
                 // console.log('handling object:', obj);
                 if (obj.type === 'feed') {
+                    $scope.feedLengths[obj.socialId] = 0;
                     if (socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(tweets, socialId) {
-                            $scope.tweetsLength = tweets.length;
+                            $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + tweets.length;
                             for (var i = 0; i < tweets.length; i++) {
                                 tweets[i].type = 'twitter';
                                 tweets[i].socialAccountId = socialId;
@@ -198,6 +201,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         });
                     } else if (socialAccountMap[obj.socialId] === 'fb') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(posts, socialId) {
+                            $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + posts.length;
                             for (var i = 0; i < posts.length; i++) {
                                 posts[i].type = 'facebook';
                                 posts[i].socialAccountId = socialId;
@@ -211,6 +215,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     console.log('has pages >>>');
                     console.log('obj ', obj);
 
+                    // SocialConfigService.getFBPages(obj.id, function(fbAdminPages) {
+                    //     console.log('fbAdminPages ', fbAdminPages);
+                    // });
+
                 } else if (obj.type === 'likes') {
 
                 } else if (obj.type === 'user') {
@@ -223,7 +231,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     if (socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(followers, socialId) {
                             console.log('followers socialId ', socialId);
-                            $scope.followersLength = followers.length;
+                            $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + followers.length;
                             for (var i = 0; i < followers.length; i++) {
                                 followers[i].type = 'twitter';
                                 followers[i].socialId = socialId;
