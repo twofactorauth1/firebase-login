@@ -5883,12 +5883,6 @@ div.error label.error:before {
   }
 }
 
-@media screen and (max-width: 400px) {
-  #leftnav {
-    display: none;
-  }
-}
-
 @media screen and (max-width: 320px) {
   .signinpanel,
   .signuppanel {

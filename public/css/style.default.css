@@ -21115,11 +21115,6 @@ div.error label.error:before {
     margin-bottom: 20px;
   }
 }
-@media screen and (max-width: 400px) {
-  #leftnav {
-    display: none;
-  }
-}
 @media screen and (max-width: 320px) {
   .signinpanel,
   .signuppanel {
