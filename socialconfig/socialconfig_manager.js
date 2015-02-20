@@ -694,6 +694,14 @@ module.exports = {
         } else if (trackedObject.type === 'search-group') {
             return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'group', trackedObject.term, fn);
         }
+    },
+
+    getGoogleContacts: function(accountId, socialAccountId, fn) {
+
+    },
+
+    getLinkedinContacts: function(accountId, socialAccountId, fn) {
+      
     }
 
 
