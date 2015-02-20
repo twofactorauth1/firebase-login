@@ -81,7 +81,7 @@
                 </div> -->
             <div class="col-sm-3 stream-filter">
                 <accordion>
-                    <accordion-group is-open="item.open" ng-repeat="type in feedTypes">
+                    <accordion-group is-open="item.open" ng-repeat="type in feedTypes" is-disabled="true">
                         <accordion-heading>
                             <div class="feedTypeDetail">
                                 <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}" />
@@ -96,7 +96,7 @@
                                     <p><span class="fa fa-{{type.type}}-square"></span> {{type.type}}</p>
                                 </div>
 
-                                <span class="glyphicon pull-right" ng-class="{'glyphicon-chevron-up': item.open, 'glyphicon-chevron-down': !item.open}"></span>
+                                <span class="glyphicon pull-right hidden" ng-class="{'glyphicon-chevron-up': item.open, 'glyphicon-chevron-down': !item.open}"></span>
                                 <div class="clearfix"></div>
                             </div>
                         </accordion-heading>

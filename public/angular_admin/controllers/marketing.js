@@ -83,6 +83,29 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.feed = [];
         $scope.displayedFeed = [];
 
+        $scope.$watchCollection('feed', function(newFeed, oldFeed) {
+            var feedTimer;
+            var feedInterval = 3000;
+
+            clearTimeout(typingTimer);
+            feedTimer = setTimeout(function() {
+                var $container = $('.stream');
+                console.log('$container ', $container);
+                // init
+                $container.isotope({
+                    // options
+                    itemSelector: '.item',
+                    layoutMode: 'masonry',
+                    getSortData: {
+                        date: function ($elem) {
+                            return Date.parse($elem.data('date'));
+                        }
+                    }
+                });
+            }, feedInterval);
+
+        });
+
         $scope.filterFeed = function(type, $event) {
             $event.stopPropagation();
             var $container = $('.stream'),
@@ -199,11 +222,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 } else if (obj.type === 'numberFollowers') {
                     if (socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(followers, socialId) {
-                            console.log('followers ', followers);
+                            console.log('followers socialId ', socialId);
                             $scope.followersLength = followers.length;
                             for (var i = 0; i < followers.length; i++) {
                                 followers[i].type = 'twitter';
                                 followers[i].socialId = socialId;
+                                followers[i].socialAccountId = socialId;
                                 $scope.feed.push(followers[i]);
                             };
                         });
@@ -255,22 +279,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 $scope.afterPosting();
             });
         };
-
-        setTimeout(function() {
-            var $container = $('.stream');
-            console.log('$container ', $container);
-            // init
-            $container.isotope({
-                // options
-                itemSelector: '.item',
-                layoutMode: 'masonry',
-                getSortData: {
-                    date: function ($elem) {
-                        return Date.parse($elem.data('date'));
-                    }
-                }
-            });
-        }, 6000);
 
         $scope.afterPosting = function() {
             //clear spinner
