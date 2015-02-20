@@ -59,6 +59,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
         app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
+        app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
+        app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
+
     },
 
     /**
@@ -508,8 +511,45 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
-    }
+    },
 
+    getGoogleContacts: function(req, res) {
+      var self = this;
+      self.log.debug('>> getGoogleContacts');
+
+      var accountId = parseInt(self.accountId(req));
+      var socialAccountId = req.params.socialAccountId;
+
+      self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+          if (isAllowed !== true) {
+              return self.send403(res);
+          } else {
+              socialConfigManager.getGoogleContacts(accountId, socialAccountId, function(err, contacts){
+                  self.log.debug('<< getGoogleContacts');
+                  self.sendResultOrError(resp, err, contacts, "Error importing google contacts");
+              });
+          }
+      });
+    },
+
+    getLinkedinContacts: function(req, res) {
+      var self = this;
+      self.log.debug('>> getLinkedinContacts');
+
+      var accountId = parseInt(self.accountId(req));
+      var socialAccountId = req.params.socialAccountId;
+
+      self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+          if (isAllowed !== true) {
+              return self.send403(res);
+          } else {
+              socialConfigManager.getLinkedinContacts(accountId, socialAccountId, function(err, contacts){
+                  self.log.debug('<< getLinkedinContacts');
+                  self.sendResultOrError(resp, err, contacts, "Error importing linkedin contacts");
+              });
+          }
+      });
+    }
 
 });
 
