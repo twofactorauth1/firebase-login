@@ -37,6 +37,6 @@ module.exports = {
 
 
     getScope: function() {
-        return "https://www.googleapis.com/auth/email https://www.googleapis.com/auth/profile https://www.google.com/m8/feeds https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/plus.login";
+        return "email profile https://www.google.com/m8/feeds https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/plus.login";
     }
 };

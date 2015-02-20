@@ -394,7 +394,19 @@
                                 </div>
                                  <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
                                     <label for="bg_overlay_opacity">Add Overlay Opacity Percentage</label>
-                                    <input id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" type="text" class="pull-right" ng-change="saveComponent()">
+                                    <select id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" ng-change="saveComponent()" class="pull-right input-lg">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                    <option value="60">60</option>
+                                    <option value="70">70</option>
+                                    <option value="80">80</option>
+                                    <option value="90">90</option>
+                                    <option value="100">100</option>
+                                </select>
+                                   
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_position">BG Position</label>
@@ -425,16 +437,7 @@
                                 <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
                                 </select>
 
-                            </div>
-                            <div class="form-group" ng-if="componentEditing.type == 'image-text'">
-                                <label for="colorpicker">Image Style:</label>
-                                <select ng-model="componentEditing.imagestyle" ng-change="saveComponent()" class="form-control input-lg">
-                                    <option value="">Square</option>
-                                    <option value="img-rounded">Rounded Square</option>
-                                    <option value="img-thumbnail">Square with Border</option>
-                                    <option value="img-circle">Circle</option>
-                                </select>
-                            </div>
+                            </div>                           
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
                                 <label for="colorpicker">Image Position:</label>
                                 <select ng-model="componentEditing.imagePosition" ng-change="saveComponent()" class="form-control input-lg">
@@ -479,8 +482,8 @@
                                 </div>
                                 <div class="row form-group">
                                     <div class="input-group pull-left" style="margin-left: 10px;" ng-if="addNavigationLink">
-                                        <select style="text-transform:capitalize" ng-if="addLinkType=='section'" ng-model="newLink.linkUrl" class="form-control input-lg">
-                                                <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor && validateLinkUrl(component.anchor)" value="{{component.anchor}}">{{component.anchor}}</option>
+                                        <select id="linkSection" style="text-transform:capitalize" ng-if="addLinkType=='section'" ng-model="newLink.linkUrl" ng-change="setLinkUrl()" class="form-control input-lg">
+                                                <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
                                         </select>
                                         <select ng-if="addLinkType=='page'" ng-model="newLink.linkPage" class="form-control input-lg">
                                                 <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}">{{page.title}}</option>
