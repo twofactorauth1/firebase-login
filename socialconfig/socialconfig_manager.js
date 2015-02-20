@@ -79,6 +79,8 @@ module.exports = {
         });
     },
 
+
+
     updateSocialConfig: function(socialConfig, fn) {
         var self = this;
         log.debug('>> updateSocialConfig');
@@ -154,7 +156,7 @@ module.exports = {
         });
     },
 
-    addSocialAccount: function(accountId, socialType, socialId, accessToken, refreshToken, expires, username, profileUrl, scope, fn) {
+    addSocialAccount: function(accountId, socialType, socialId, accessToken, refreshToken, expires, username, profileUrl, scope, accountType, fn) {
         var self = this;
         log.debug('>> addSocialAccount');
 
@@ -178,6 +180,7 @@ module.exports = {
             creds.username = username;
             creds.socialUrl = profileUrl;
             creds.scope = scope;
+            creds.accountType = accountType;
 
             creds.id = $$.u.idutils.generateUUID();
             //add the profile pic
@@ -259,16 +262,31 @@ module.exports = {
         var social = $$.constants.social.types;
         switch(creds.type) {
             case social.FACEBOOK:
-                return facebookDao.getProfile(creds.accessToken, creds.socialId, function(err, value){
-                    if(err) {
-                        return fn(err, null);
-                    }
-                    log.debug('value: ', value);
-                    if (value.picture != null && value.picture.data != null) {
-                        creds.image = value.picture.data.url;
-                    }
-                    return fn(null, creds);
-                });
+
+                if(creds.accountType === 'adminpage') {
+                    return facebookDao.getTokenPageInfo(creds.accessToken, creds.socialId, creds.socialId, function(err, value){
+                        if(err) {
+                            return fn(err, null);
+                        }
+                        log.debug('value: ', value);
+                        if (value.picture != null && value.picture.data != null) {
+                            creds.image = value.picture.data.url;
+                        }
+                        return fn(null, creds);
+                    });
+                } else {
+                    return facebookDao.getProfile(creds.accessToken, creds.socialId, function(err, value){
+                        if(err) {
+                            return fn(err, null);
+                        }
+                        log.debug('value: ', value);
+                        if (value.picture != null && value.picture.data != null) {
+                            creds.image = value.picture.data.url;
+                        }
+                        return fn(null, creds);
+                    });
+                }
+
             case social.TWITTER:
                 return twitterDao.getProfleForId(creds.accessToken, creds.accessTokenSecret, creds.socialId, function(err, value){
                     if(err) {
