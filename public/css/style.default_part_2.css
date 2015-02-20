@@ -12901,6 +12901,14 @@ div[data-type="coming-soon"] .component-inner {
   margin: 0;
 }
 
+.thumbnail-slider-v1 .glyphicon-chevron-left:before {
+  color: #444;
+}
+
+.thumbnail-slider-v1 .glyphicon-chevron-right:before {
+  color: #444;
+}
+
 .thumbnail-slider-v1 .imgHeight {
   overflow: hidden;
 }
