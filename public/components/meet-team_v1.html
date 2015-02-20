@@ -56,7 +56,7 @@
                     </div>
 
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
-                        <img ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img" />
+                        <img data-index="{{$index}}" ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img meet-team-image" />
                     </a>
                 </div>
                 <div class="name">

@@ -1502,6 +1502,8 @@ define([
                 switch (mode) {
                     case "add":
                         if (new_value && new_value.name && new_value.url) {
+                            if(!$scope.componentEditing.teamMembers[parent_index].networks)
+                                $scope.componentEditing.teamMembers[parent_index].networks = [];
                             $scope.componentEditing.teamMembers[parent_index].networks.push({
                                 name: new_value.name,
                                 url: new_value.url,
