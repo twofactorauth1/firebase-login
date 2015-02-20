@@ -41,9 +41,10 @@ var mainApp = angular
         'ui.sortable'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
         if(window.history && window.history.pushState){
             $locationProvider.html5Mode(true).hashPrefix('!');
-          }
+        }        
         $routeProvider
             .when('/', {
                 templateUrl: '../views/main.html',
