@@ -65,7 +65,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 		lockRatio, userDefinedLock,
 
 		// Global variables referring to dialog fields and elements.
-		lockButton, resetButton, widthField, heightField,
+		lockButton, resetButton, widthField, heightField, selectedImageStyle,
 
 		natural;
 
@@ -524,7 +524,44 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 						commit: function( widget ) {
 							widget.setData( 'hasCaption', this.getValue() );
 						}
-					}
+					},
+					{
+						type: 'hbox',
+						id: 'imageStyle',
+						requiredContent: features.align.requiredContent,
+						children: [
+							{
+								id: 'imageStyleSelect',
+								type: 'select',
+								items: [
+									[ "Rounded Square", 'img-rounded' ],
+									[ "Square with Border", 'img-thumbnail' ],	
+									[ "Circle", 'img-circle' ], ],									
+								label: "Image Style",
+								
+								setup: function( widget ) {
+									if(widget.hasClass("img-rounded"))
+									{
+										this.setValue("img-rounded");
+									}
+									else if(widget.hasClass("img-thumbnail"))
+									{
+										this.setValue("img-thumbnail");
+									}
+									else if(widget.hasClass("img-circle"))
+									{
+										this.setValue("img-circle");	
+									}
+									selectedImageStyle = this.getValue();
+
+								},
+								commit: function( widget ) {
+									widget.removeClass(selectedImageStyle);
+									widget.addClass(this.getValue());
+								}
+							}
+						]
+					},
 				]
 			},
 			{
