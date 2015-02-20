@@ -14,10 +14,6 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
             <!-- <span class="mediaModal" user='user'></span> -->
         </div>
         <div class="col-xs-1">
-          <select ng-model="createType">
-            <option selected value=null>Select to connect</option>
-            <option ng-repeat="(key, value) in credentialTypes" value="{{key}}" ng-hide="key=='LOCAL'">{{key}}</option>
-          </select>
         </div>
         <div class="col-xs-3">
             <a href="#/account/edit" class="btn btn-success pull-right" type="button">
@@ -367,7 +363,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
                  <div class="col-sm-3 col-md-4">
                   <div class="thumbnail">
-                    
+
                     <div class="img-wrap">
                           <div class="col-sm-6 social-link-icon">
                             <a href="/redirect/?next={{currentHost}}/socialconfig/facebook?redirectTo={{redirectUrl}}&socialNetwork=Facebook">
@@ -381,7 +377,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
                           <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/linkedin?redirectTo={{redirectUrl}}&socialNetwork=LinkedIn"><i class="fa fa-linkedin fa-5x linkedin-icon-color"></i></a></div>
                             <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/twitter?redirectTo={{redirectUrl}}&socialNetwork=Twitter"><i class="fa fa-twitter fa-5x twitter-icon-color"></i></a></div>
                       </div>
-                      
+
                   </div>
                  </div>
 

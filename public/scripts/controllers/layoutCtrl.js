@@ -385,7 +385,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
     // });
 
-   
+
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
@@ -649,7 +649,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       name: "yahoo",
       icon: "yahoo"
     }
-    
+
     ]
 
     $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
@@ -996,12 +996,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
             var thumbnailId = $scope.currentpage.components[i]._id;
-           
+
             var matching = _.find($scope.thumbnailSlider, function(item) {
               return item.thumbnailId == thumbnailId
             })
-          
-          if (!matching) {            
+
+          if (!matching) {
             $scope.thumbnailSlider.push(
             {
               thumbnailId : thumbnailId,
@@ -1010,7 +1010,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           }
           else
            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
-            
+
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
@@ -1043,21 +1043,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
             var thumbnailId = $scope.currentpage.components[i]._id;
-           
+
             var matching = _.find($scope.thumbnailSlider, function(item) {
               return item.thumbnailId == thumbnailId
             })
-          
-          if (!matching) {            
+
+          if (!matching) {
             $scope.thumbnailSlider.push(
             {
               thumbnailId : thumbnailId,
               thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
             });
-          } 
+          }
           else
-            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection); 
-           
+            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
@@ -1166,7 +1166,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       },
       dragEnd: function(e, ui) {
         console.log('sorting end');
-        e.dest.sortableScope.element.removeClass("dragging");        
+        e.dest.sortableScope.element.removeClass("dragging");
         $scope.wait = setTimeout(function() {
           activateAloha();
           $(".ui-sortable").removeClass("active");
@@ -1183,7 +1183,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
           if(value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
-            value.bg.img.show = true;          
+            value.bg.img.show = true;
           if (value && value.type === 'payment-form') {
             var productId = value.productId;
             ProductService.getProduct(productId, function(product) {
@@ -1217,12 +1217,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var check_if_mobile = mobilecheck();
             console.log('value ', value);
             var thumbnailId = value._id;
-           
+
             var matching = _.find($scope.thumbnailSlider, function(item) {
               return item.thumbnailId == thumbnailId
             })
-          
-          if (!matching) {            
+
+          if (!matching) {
             $scope.thumbnailSlider.push(
             {
               thumbnailId : thumbnailId,
@@ -1230,7 +1230,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             });
           }
           else
-           matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection); 
+           matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
             var winWidth = w.width();
             $scope.bindThumbnailSlider(winWidth, check_if_mobile, thumbnailId);
             w.bind('resize', function() {
@@ -1258,7 +1258,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       var matching = _.find($scope.thumbnailSlider, function(item) {
           return item.thumbnailId == thumbnailId
       })
-          
+
       if(matching)
       {
         matching.thumbnailCollection = partition(matching.thumbnailSliderCollection, number_of_arr);
