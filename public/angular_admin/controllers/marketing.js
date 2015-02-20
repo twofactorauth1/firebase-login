@@ -215,9 +215,13 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     console.log('has pages >>>');
                     console.log('obj ', obj);
 
-                    // SocialConfigService.getFBPages(obj.id, function(fbAdminPages) {
-                    //     console.log('fbAdminPages ', fbAdminPages);
-                    // });
+                    if (obj.type == 'fb') {
+                        if (obj.accountType == 'account') {
+                            SocialConfigService.getFBPages(obj.id, function(fbAdminPages) {
+                                console.log('fbAdminPages ', fbAdminPages);
+                            });
+                        }
+                    }
 
                 } else if (obj.type === 'likes') {
 
