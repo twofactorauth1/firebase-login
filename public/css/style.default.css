@@ -16545,6 +16545,9 @@ a:active {
   -moz-hyphens: auto;
   hyphens: auto;
 }
+span[data-cke-widget-id] {
+  outline: 0;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
@@ -26208,7 +26211,6 @@ div[data-type=blog] .container {
   display: none;
 }
 .pricing-tables-v1 .pricing-table .list-group-item {
-  background: none;
   border: none;
   border-bottom: 1px solid #000000;
 }
