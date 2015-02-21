@@ -78,6 +78,22 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         $scope.addPageFeed = function(page) {
             console.log('adding page feed ', page);
+            console.log('config ', $scope.config);
+            var config = $scope.config.socialAccounts;
+            var newSocialAccount;
+            for (var i = 0; i < config.length; i++) {
+                console.log('config[i] ', config[i]);
+                console.log('page ', page);
+                if(config[i].id == page.socialId) {
+                    newSocialAccount = config[i];
+                    newSocialAccount.socialId = page.sourceId;
+                    newSocialAccount.socialUrl = 'https://www.facebook.com/app_scoped_user_id/'+page.sourceId+'/';
+                }
+            }
+            console.log('newSocialAccount ', JSON.stringify(newSocialAccount));
+            SocialConfigService.postSocialAccount(newSocialAccount, function(data) {
+                console.log('return ', data);
+            });
         };
 
         $scope.feed = [];
@@ -180,6 +196,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.feedLengths = [];
 
         SocialConfigService.getAllSocialConfig(function(config) {
+            $scope.config = config;
             var socialAccountMap = {};
             for (var i = 0; i < config.socialAccounts.length; i++) {
                 socialAccountMap[config.socialAccounts[i].id] = config.socialAccounts[i].type;
@@ -212,13 +229,27 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         });
                     }
                 } else if (obj.type === 'pages') {
-                    console.log('has pages >>>');
-                    console.log('obj ', obj);
 
-                    if (obj.type == 'fb') {
-                        if (obj.accountType == 'account') {
-                            SocialConfigService.getFBPages(obj.id, function(fbAdminPages) {
+                    if (socialAccountMap[obj.socialId] === 'fb') {
+                        console.log('has pages >>>');
+                        console.log('obj ', obj);
+                        var accounts = config.socialAccounts;
+                        console.log('accounts', accounts);
+                        var matchingAccount = '';
+                        for (var l = 0; l < accounts.length; l++) {
+                            if (accounts[l].id == obj.socialId) {
+                                matchingAccount = accounts[l];
+                            }
+                        }
+                        if (matchingAccount.accountType == 'account') {
+                            console.log('getting admin pages >>> ');
+                            console.log('obj.socialId >>> ', obj.socialId);
+                            SocialConfigService.getFBPages(obj.socialId, function(fbAdminPages) {
                                 console.log('fbAdminPages ', fbAdminPages);
+                                for (var k = 0; k < fbAdminPages.length; k++) {
+                                    fbAdminPages[k].socialId = obj.socialId;
+                                    $scope.fbAdminPages.push(fbAdminPages[k]);
+                                };
                             });
                         }
                     }

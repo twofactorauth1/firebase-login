@@ -52,6 +52,23 @@ define(['app'], function (app) {
                     fn(data);
                 });
         };
+
+        this.postSocialAccount = function(socialAccount, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount'].join('/');
+            $http({
+                url: apiUrl,
+                method: "POST",
+                data: socialAccount
+            })
+            .success(function (data, status, headers, config) {
+                fn(data);
+            })
+            .error(function (err) {
+                console.log('END:postSocialAccount with ERROR');
+                fn(err);
+            });
+
+        };
     });
 
     //Twitter
