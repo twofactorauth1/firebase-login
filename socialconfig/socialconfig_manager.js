@@ -705,7 +705,7 @@ module.exports = {
     },
 
     getLinkedinContacts: function(accountId, accessToken, socialAccountId, fn) {
-
+      return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, fn);
     }
 
 
