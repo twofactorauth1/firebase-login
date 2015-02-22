@@ -10,11 +10,9 @@ define(['app'], function (app) {
         };
 
         this.getTrackedObject = function(id, socialId, fn) {
-            console.log('id >>> ', id);
             var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
             $http.get(apiUrl)
                 .success(function (data, status, headers, config) {
-                    console.log('getTrackedObject >>> ', data);
                     fn(data, socialId);
                 });
         };
@@ -36,6 +34,42 @@ define(['app'], function (app) {
             fn(data);
           });
         };
+
+
+        this.getFBPages = function (socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getFBPageInfo = function (socialAccountId, pageId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.postSocialAccount = function(socialAccount, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount'].join('/');
+            $http({
+                url: apiUrl,
+                method: "POST",
+                data: socialAccount
+            })
+            .success(function (data, status, headers, config) {
+                fn(data);
+            })
+            .error(function (err) {
+                console.log('END:postSocialAccount with ERROR');
+                fn(err);
+            });
+
+        };
+    });
+
 
     //Twitter
     this.getTwitterFeed = function (socialAccountId, fn) {
@@ -74,22 +108,6 @@ define(['app'], function (app) {
     //Facebook
     this.getFBPosts = function (socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBPages = function (socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBPageInfo = function (socialAccountId, pageId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
         $http.get(apiUrl)
             .success(function (data, status, headers, config) {
                 fn(data);
