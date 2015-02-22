@@ -1,6 +1,6 @@
-define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter', 'navigationService', 'ngOnboarding'], function(app) {
-    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', 'NavigationService', '$location',
-        function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService, NavigationService, $location) {
+define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngProgress', 'headroom', 'ngHeadroom', 'toasterService', 'iStartsWithFilter', 'ngInfiniteScroll', 'scrollerDirective', 'userService', 'moment', 'timeAgoFilter', 'navigationService', 'ngOnboarding', 'socialConfigService'], function(app) {
+    app.register.controller('CustomerCtrl', ['$scope', 'CustomerService', 'ngProgress', 'ToasterService', '$window', '$filter', 'UserService', 'NavigationService', '$location', 'SocialConfigService',
+        function($scope, CustomerService, ngProgress, ToasterService, $window, $filter, UserService, NavigationService, $location, SocialConfigService) {
             NavigationService.updateNavigation();
             ngProgress.start();
             $scope.customerFilter = {};
@@ -16,6 +16,10 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             $scope.searchBarType = 'name';
             //$scope.gridViewDisplay = "true";
 
+            SocialConfigService.getAllSocialConfig(function(data) {
+              $scope.socialAccounts = data.socialAccounts;
+            });
+            console.log(SocialConfigService);
             $scope.beginOnboarding = function(type) {
                 if (type == 'create-contact') {
                     $scope.stepIndex = 0;
@@ -384,23 +388,37 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 };
 
                 $scope.importLinkedInConnections = function() {
-                    CustomerService.importLinkedInConnections(function(data, success) {
-                        if (success) {
-                            $('#import-contacts-modal').modal('hide');
-                            ToasterService.show('success', "Contacts being imported.");
-                        } else
-                            $window.location.href = "/socialconfig/linkedin?redirectTo=" + encodeURIComponent('/admin#/customer');
-                    });
+                  var foundSocialId = false;
+                  $scope.socialAccounts.forEach(function(value, index) {
+                    if (value.type == $$.constants.user.credential_types.LINKEDIN) {
+                      foundSocialId = true;
+                      SocialConfigService.importLinkedinContact(value.socialId, value.accessToken, function(data) {
+                        $('#import-contacts-modal').modal('hide');
+                        ToasterService.show('success', "Contacts being imported.");
+                      });
+                    }
+                  });
+                  if (foundSocialId == false) {
+                    $('#import-contacts-modal').modal('hide');
+                    ToasterService.show('warning', "No google account integrated.");
+                  }
                 };
 
                 $scope.importGmailContacts = function() {
-                    CustomerService.importGmailContacts(function(data, success) {
-                        if (success) {
-                            $('#import-contacts-modal').modal('hide');
-                            ToasterService.show('success', "Contacts being imported.");
-                        } else
-                            $window.location.href = "/socialconfig/google?redirectTo=" + encodeURIComponent('/admin#/customer');
-                    });
+                  var foundSocialId = false;
+                  $scope.socialAccounts.forEach(function(value, index) {
+                    if (value.type == $$.constants.user.credential_types.GOOGLE) {
+                      foundSocialId = true;
+                      SocialConfigService.importGoogleContact(value.socialId, value.accessToken, function(data) {
+                        $('#import-contacts-modal').modal('hide');
+                        ToasterService.show('success', "Contacts being imported.");
+                      });
+                    }
+                  });
+                  if (foundSocialId == false) {
+                    $('#import-contacts-modal').modal('hide');
+                    ToasterService.show('warning', "No google account integrated.");
+                  }
                 };
 
 

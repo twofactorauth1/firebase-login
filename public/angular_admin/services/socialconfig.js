@@ -35,6 +35,7 @@ define(['app'], function (app) {
           });
         };
 
+
         this.getFBPages = function (socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
             $http.get(apiUrl)
@@ -68,6 +69,7 @@ define(['app'], function (app) {
 
         };
     });
+
 
     //Twitter
     this.getTwitterFeed = function (socialAccountId, fn) {
@@ -119,4 +121,29 @@ define(['app'], function (app) {
                 fn(data);
             });
     };
+
+    this.importLinkedinContact = function (socialAccountId, accessToken, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'linkedin', socialAccountId, 'importcontacts'].join('/');
+      $http({
+        url: apiUrl,
+        method: 'GET',
+        params: {accessToken: accessToken}
+      })
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+    this.importGoogleContact = function (socialAccountId, accessToken, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
+      $http({
+        url: apiUrl,
+        method: 'GET',
+        params: {accessToken: accessToken}
+      })
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+    });
 });

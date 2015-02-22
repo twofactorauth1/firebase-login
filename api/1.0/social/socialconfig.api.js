@@ -524,7 +524,7 @@ _.extend(api.prototype, baseApi.prototype, {
           if (isAllowed !== true) {
               return self.send403(res);
           } else {
-              socialConfigManager.getGoogleContacts(accountId, socialAccountId, function(err, contacts){
+              socialConfigManager.getGoogleContacts(accountId, req.query.accessToken, req.params.socialAccountId, function(err, contacts){
                   self.log.debug('<< getGoogleContacts');
                   self.sendResultOrError(resp, err, contacts, "Error importing google contacts");
               });
@@ -543,7 +543,7 @@ _.extend(api.prototype, baseApi.prototype, {
           if (isAllowed !== true) {
               return self.send403(res);
           } else {
-              socialConfigManager.getLinkedinContacts(accountId, socialAccountId, function(err, contacts){
+              socialConfigManager.getLinkedinContacts(accountId, req.query.accessToken, req.params.socialAccountId, function(err, contacts){
                   self.log.debug('<< getLinkedinContacts');
                   self.sendResultOrError(resp, err, contacts, "Error importing linkedin contacts");
               });

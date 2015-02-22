@@ -491,6 +491,271 @@ var dao = {
 
         url += "format=json&oauth2_access_token=" + accessToken;
         return url;
+    },
+
+    //social config
+    getConnectionsForSocialId: function(accessToken, socialAccountId, updated, options, fn) {
+        var self = this;
+
+        if (_.isFunction(updated)) {
+            fn = updated;
+            updated = null;
+            options = null;
+        } else if (_.isFunction(options)) {
+            fn = options;
+            options = null;
+        }
+
+        var start = 0; //0
+        var max = 500;   //500
+        var retrieveAll = true;
+
+        if (options) {
+            if (options.start) {
+                start = options.start;
+            }
+            if (options.max) {
+                max = options.max;
+            }
+            if (options.retrieveAll) {
+                retrieveAll = options.retrieveAll;
+            }
+        }
+
+        var socialId = socialAccountId;
+        var accessToken = accessToken;
+
+        if (socialId == null || accessToken == null) {
+            return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to LinkedIn");
+        }
+
+        var getContacts = function(start, max, updated, fxn) {
+            var path = "~/connections:(id,first-name,last-name,headline,location:(name),summary,picture-url,site-standard-profile-request,public-profile-url)?";
+            if (start != null) {
+                path += "&start=" + start;
+            }
+            if (max != null) {
+                path += "&count=" + max;
+            }
+            if (updated != null) {
+                path += "&modified-since=" + updated;
+            }
+
+            var url = self._generateUrl(path, accessToken);
+
+            request(url, function(err, resp, body) {
+                if (!err) {
+                    var list = JSON.parse(body);
+                    return fxn(null, list);
+                } else {
+                    return fxn(err, resp);
+                }
+            });
+        };
+
+        var result = {
+            _start:0,
+            _count:0,
+            _total:0,
+            values: []
+        };
+        var result = {};
+        result.values = [];
+
+        var recurseContacts = function(start, max, updated) {
+            self.log.debug('recurseContacts(' + start + ',' + max + ',' + updated + ')');
+            getContacts(start, max, updated, function(err, value) {
+                if (err) {
+                    return fn(err, value);
+                }
+
+                if (!retrieveAll) {
+                    return fn(err, value);
+                }
+
+                if (value.hasOwnProperty("_count")) {
+                    var _count = value._count;
+                    var _start = value._start;
+                    var _total = value._total;
+
+                    var values = value.values;
+                    result.values = result.values.concat(values);
+
+                    if (_count + _start < _total) {
+                        //we need to fetch more
+                        start = _start + _count;
+                        return recurseContacts(start, max, updated);
+                    } else {
+                        result._total = _total;
+                        result._count = _total;
+                        result._start = 0;
+
+                        return fn(null, result);
+                    }
+                } else if(result.values.length > 0){
+                    //something funky came back in the last result.  Append the results and return
+                    result._total = value._total;
+                    result._count = value._total;
+                    result._start = 0;
+                    result.values = result.values.concat(values);
+                    return fn(null, result);
+                } else {
+                    return fn(err, value);
+                }
+            });
+        };
+
+        recurseContacts(start, max, updated, fn);
+    },
+
+
+    importConnectionsAsContactsForSocialId: function(accountId, accessToken, socialAccountId, user, fn) {
+        var self = this, totalImported = 0;
+        var linkedInBaggage = user.getUserAccountBaggage(accountId, "linkedin");
+        linkedInBaggage.contacts = linkedInBaggage.contacts || {};
+        var updated = linkedInBaggage.contacts.updated;
+
+        this.getConnectionsForSocialId(accessToken, socialAccountId, updated, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            linkedInBaggage.contacts.updated = new Date().getTime();
+
+            var linkedInId = socialAccountId;
+            //filter out any bogus values that LinkedIn returns
+            var _connections = _.filter(value.values, Boolean);
+
+            var updateContactFromConnection = function(contact, connection) {
+
+                var location= null;
+                if(connection) {
+                    if (connection.location && connection.location.name) { location = connection.location.name; }
+                    contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
+
+                    var websites = [];
+                    if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                        websites.push(connection.publicProfielUrl);
+                    }
+                    if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                        websites.push(connection.siteStandardProfileRequest.url);
+                    }
+
+                    //Update contact details
+                    contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+                }
+
+            };
+
+
+            (function importConnections(connections, page) {
+
+                if (connections != null) {
+                    var numPerPage = 50, socialType = $$.constants.social.types.LINKEDIN;
+
+                    var pagingInfo = paging.getPagingInfo(connections.length, numPerPage, page);
+
+                    var items = paging.getItemsForCurrentPage(connections, page, numPerPage);
+                    var socialIds = _.pluck(items, "id");
+
+                    contactDao.getContactsBySocialIds(accountId, socialType, socialIds, function(err, value) {
+                        if (err) {
+                            return fn(err, value);
+                        }
+
+                        var contactValues = value;
+                        async.series([
+                            function(callback) {
+                                if (contactValues != null && contactValues.length > 0) {
+                                    async.eachSeries(contactValues, function(contact, cb) {
+
+                                        //Get reference to current friend
+                                        var connection = _.findWhere(items, {id:contact.getSocialId(socialType)});
+                                        if(connection !== null){
+                                            //remove the contact from the items array so we don't process again
+                                            items = _.without(items, connection);
+
+                                            updateContactFromConnection(contact, connection);
+
+                                            contactDao.saveOrUpdateContact(contact, function(err, value) {
+                                                if (err) {
+                                                    self.log.error("An error occurred updating contact during LinkedIn import", err);
+                                                }
+                                                totalImported++;
+                                                cb();
+                                            });
+                                        } else {
+                                            self.log.warn('Could not find connection for contact.');
+                                            cb();
+                                        }
+
+
+                                    }, function(err) {
+                                        callback(err);
+                                    });
+                                } else {
+                                    callback(null);
+                                }
+                            },
+
+                            function(callback) {
+                                //Iterate through remaining items
+                                if (items != null && items.length > 0) {
+                                    async.eachSeries(items, function(connection, cb) {
+
+                                        var contact = new Contact({
+                                            accountId: accountId,
+                                            type: $$.constants.contact.contact_types.OTHER
+                                        });
+
+                                        contact.createdBy(user.id(), socialType, linkedInId);
+                                        updateContactFromConnection(contact, connection);
+                                        contactDao.saveOrMerge(contact, function(err, value) {
+                                            if (err) {
+                                                self.log.error("An error occurred saving contact during LinkedIn import", err);
+                                            }
+                                            totalImported++;
+                                            cb();
+                                        });
+
+                                    }, function(err) {
+                                        callback(err);
+                                    })
+                                } else {
+                                    callback(null);
+                                }
+                            }
+
+                        ], function(err, results) {
+                            if (pagingInfo.nextPage > page) {
+                                process.nextTick(function() {
+                                    importConnections(connections, pagingInfo.nextPage);
+                                });
+                            } else {
+                                self.log.info("LinkedIn friend import succeed. " + totalImported + " imports");
+                                //Last step, save the user
+                                userDao.saveOrUpdate(user, function(err, value) {
+                                    if(err) {
+                                        self.log.error('Error updating user: '  + err);
+                                        return fn(null);
+                                    }
+                                    self.log.info('User updated. Merging duplicates.');
+                                    contactDao.mergeDuplicates(null, accountId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error occurred during duplicate merge: ' + err);
+                                            fn(null);
+                                        } else {
+                                            self.log.info('Duplicate merge successful.');
+                                            fn(null);
+                                        }
+                                    });
+                                });
+                            }
+                        });
+                    });
+                }
+            })(_connections, 1);
+        });
     }
 };
 
