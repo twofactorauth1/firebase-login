@@ -11,6 +11,7 @@ var twitterDao = require('../dao/social/twitter.dao');
 var facebookDao = require('../dao/social/facebook.dao');
 var linkedinDao = require('../dao/social/linkedin.dao');
 var googleDao = require('../dao/social/google.dao');
+var userDao = require('../dao/user.dao');
 
 module.exports = {
 
@@ -701,11 +702,15 @@ module.exports = {
     },
 
     getGoogleContacts: function(accountId, accessToken, socialAccountId, fn) {
-      return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, fn);
+      userDao.getUserBySocialId('go', socialAccountId, function(err, user) {
+        return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+      });
     },
 
     getLinkedinContacts: function(accountId, accessToken, socialAccountId, fn) {
-      return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, fn);
+      userDao.getUserBySocialId('li', socialAccountId, function(err, user) {
+        return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+      });
     }
 
 

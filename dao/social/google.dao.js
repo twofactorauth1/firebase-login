@@ -686,7 +686,7 @@ getContactsForSocialId: function(accessToken, socialAccountId, lastUpdated, grou
 },
 
 
-importContactsForSocialId: function(accountId, accessToken, socialAccountId, groupIdAry, fn) {
+importContactsForSocialId: function(accountId, accessToken, socialAccountId, user, groupIdAry, fn) {
     var self = this;
     var totalImported = 0;
     if(fn === null) {

@@ -611,7 +611,6 @@ var dao = {
 
     importConnectionsAsContactsForSocialId: function(accountId, accessToken, socialAccountId, user, fn) {
         var self = this, totalImported = 0;
-
         var linkedInBaggage = user.getUserAccountBaggage(accountId, "linkedin");
         linkedInBaggage.contacts = linkedInBaggage.contacts || {};
         var updated = linkedInBaggage.contacts.updated;
@@ -623,7 +622,7 @@ var dao = {
 
             linkedInBaggage.contacts.updated = new Date().getTime();
 
-            var linkedInId = self._getLInkedInId(user);
+            var linkedInId = socialAccountId;
             //filter out any bogus values that LinkedIn returns
             var _connections = _.filter(value.values, Boolean);
 
