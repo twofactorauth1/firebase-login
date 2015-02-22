@@ -606,7 +606,7 @@ var dao = {
         }
 
         return obj;
-    }
+    },
 
 //endregion
 

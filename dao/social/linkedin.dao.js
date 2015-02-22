@@ -491,7 +491,7 @@ var dao = {
 
         url += "format=json&oauth2_access_token=" + accessToken;
         return url;
-    }
+    },
 
     //social config
     getConnectionsForSocialId: function(accessToken, socialAccountId, updated, options, fn) {
