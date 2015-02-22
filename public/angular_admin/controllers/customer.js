@@ -19,6 +19,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             SocialConfigService.getAllSocialConfig(function(data) {
               $scope.socialAccounts = data.socialAccounts;
             });
+            console.log(SocialConfigService);
             $scope.beginOnboarding = function(type) {
                 if (type == 'create-contact') {
                     $scope.stepIndex = 0;

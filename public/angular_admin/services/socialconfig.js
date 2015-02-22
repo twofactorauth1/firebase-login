@@ -36,7 +36,6 @@ define(['app'], function (app) {
             fn(data);
           });
         };
-    });
 
     //Twitter
     this.getTwitterFeed = function (socialAccountId, fn) {
@@ -128,4 +127,5 @@ define(['app'], function (app) {
         fn(data);
       });
     };
+    });
 });
