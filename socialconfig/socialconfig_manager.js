@@ -696,12 +696,12 @@ module.exports = {
         }
     },
 
-    getGoogleContacts: function(accountId, socialAccountId, fn) {
-
+    getGoogleContacts: function(accountId, accessToken, socialAccountId, fn) {
+      return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, fn);
     },
 
-    getLinkedinContacts: function(accountId, socialAccountId, fn) {
-      
+    getLinkedinContacts: function(accountId, accessToken, socialAccountId, fn) {
+
     }
 
 
