@@ -104,4 +104,28 @@ define(['app'], function (app) {
                 fn(data);
             });
     };
+
+    this.importLinkedinContact = function (socialAccountId, accessToken, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'linkedin', socialAccountId, 'importcontacts'].join('/');
+      $http({
+        url: apiUrl,
+        method: 'GET',
+        params: {accessToken: accessToken}
+      })
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+    this.importGoogleContact = function (socialAccountId, accessToken, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
+      $http({
+        url: apiUrl,
+        method: 'GET',
+        params: {accessToken: accessToken}
+      })
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
 });
