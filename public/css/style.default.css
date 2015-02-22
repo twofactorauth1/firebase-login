@@ -22022,6 +22022,15 @@ input[type='file'] {
   line-height: normal;
   border-radius: 2px;
 }
+.indi-assistant .getting-started-section .panel-heading {
+  background-color: #fcb040;
+}
+.indi-assistant .getting-started-section .panel-heading .fa {
+  color: #dd6617;
+}
+.indi-assistant .getting-started-section .panel-heading .content h4 {
+  color: #dd6617;
+}
 .indi-assistant .template-btns {
   padding: 0!important;
   margin-bottom: 0;
@@ -22074,22 +22083,19 @@ input[type='file'] {
 .indi-assistant .task-list .done {
   display: none;
 }
-.indi-assistant .task-list li:hover .task-desc {
-  display: block!important;
-}
 .indi-assistant .task-list .task-desc {
-  display: none;
+  text-indent: 46px;
 }
 .indi-assistant .task-list .complete .fa-check-circle-o {
   color: #27ae60;
 }
 .indi-assistant .task-list .complete h3 {
   text-decoration: line-through;
-  color: #27ae60;
+  color: #666666;
 }
 .indi-assistant .task-list .complete .done {
   line-height: 40px;
-  color: #27ae60;
+  color: #666666;
   font-size: 20px;
   font-weight: bold;
   display: block;
@@ -24434,7 +24440,7 @@ ul.nav {
   margin-top: 0;
 }
 .navigation-v3 .navbar-nav > li {
-  float: none;
+  float: right;
   display: inline-block;
 }
 .navigation-v3 .navbar {
@@ -24449,12 +24455,11 @@ ul.nav {
   float: none;
   padding: 10px 20px 10px;
   font-size: 15px;
-  line-height: 100px;
+  line-height: 105px;
 }
 .navigation-v3 .navbar .nav > li > a:hover {
   color: #ffffff;
   background: #265fb3;
-  border-bottom: 5px solid #1f4d90;
   -webkit-transition: all 0.4s;
   -moz-transition: all 0.4s;
   -ms-transition: all 0.4s;

@@ -84,7 +84,7 @@
                     <accordion-group is-open="item.open" ng-repeat="type in feedTypes" is-disabled="true">
                         <accordion-heading>
                             <div class="feedTypeDetail">
-                                <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}" />
+                                <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}" />
                                 <input type="checkbox" ng-if="type.type == 'twitter'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}" />
                                 <!-- <div class="ckbox ckbox-primary pull-left">
                                     <input type="checkbox" value="1" id="checkboxPrimary" checked="checked" ng-click="toggleCheckbox($event)">
@@ -228,18 +228,18 @@
                                     <div class="panel-body">
 
                                         <div class="media">
-                                            <a href="#" ng-class="{'pull-left': post.postType !== 'link'}">
+                                            <a href="#" >
                                                 <img alt="" src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
-                                                <!-- <pre>{{post}}</pre> -->
+                                                <pre>{{post}}</pre>
                                             </div>
                                         </div>
 
                                         <div class="timeline-btns" ng-show="post.postType !== 'link'">
                                             <div class="pull-left">
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Like / Unlike"><i class="fa fa-thumbs-up"></i></a>
+                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike"><i class="fa fa-thumbs-up"></i></a>
                                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment"><i class="fa fa-comment"></i></a>
                                                 <a href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
@@ -275,7 +275,7 @@
                                     <div class="panel-body">
 
                                         <div class="media">
-                                            <a href="#" ng-class="{'pull-left': post.postType !== 'link'}">
+                                            <a href="#">
                                                 <img alt="" src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
@@ -384,11 +384,11 @@
                         <ul class="integrations" ng-init="modalfeed = 'facebook'">
                             <li ng-click="modalfeed = 'facebook'" ng-class="{active: modalfeed == 'facebook'}"><i class="fa fa-facebook-square"></i> <span class="hidden-xs">Facebook</span>
                             </li>
-                            <li ng-click="modalfeed = 'linkedin'" ng-class="{active: modalfeed == 'linkedin'}"><i class="fa fa-linkedin-square"></i> <span class="hidden-xs">LinkedIn</span>
+                            <li ng-click="modalfeed = 'linkedin'" ng-class="{active: modalfeed == 'linkedin'}" class="hidden"><i class="fa fa-linkedin-square"></i> <span class="hidden-xs">LinkedIn</span>
                             </li>
-                            <li ng-click="modalfeed = 'google-plus'" ng-class="{active: modalfeed == 'google-plus'}"><i class="fa fa-google-plus-square"></i> <span class="hidden-xs">Google Plus</span>
+                            <li ng-click="modalfeed = 'google-plus'" ng-class="{active: modalfeed == 'google-plus'}" class="hidden"><i class="fa fa-google-plus-square"></i> <span class="hidden-xs">Google Plus</span>
                             </li>
-                            <li ng-click="modalfeed = 'twitter'" ng-class="{active: modalfeed == 'twitter'}"><i class="fa fa-twitter-square"></i> <span class="hidden-xs">Twitter</span>
+                            <li ng-click="modalfeed = 'twitter'" ng-class="{active: modalfeed == 'twitter'}" class="hidden"><i class="fa fa-twitter-square"></i> <span class="hidden-xs">Twitter</span>
                             </li>
                         </ul>
                     </div>
@@ -408,6 +408,22 @@
                 <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addFeedFn()"><i class="fa fa-plus" /> Add</button>
                 </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="marketing-like-unlike">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Like/Unlike</h4>
+                </div>
+                <div class="modal-body">
+                    <p>All the likes and unlikes</p>
+                    <div class="clearfix"></div>
+                </div>
+
             </div>
         </div>
     </div>
