@@ -22,17 +22,14 @@
        
             <fieldset>
 
-                <div class="form-group">
-                    <input id="name" name="name" type="text" placeholder="Name" class="form-control input-lg" ng-model='contact.full_name'>
-                </div>
 
+                <div ng-repeat="field in component.fields" ng-if="field.value" id="contact_{{field.name}}" class="form-group"> 
+                        <input type="text" placeholder="{{field.display}}" class="form-control input-lg" ng-model="field.model" />
+                        <span class="error help-block" />
+                </div>
+                
                 <div id="contact_email" class="form-group">
                     <input id="email" name="email" type="text" placeholder="Email" class="form-control input-lg" ng-model='contact.email'>
-                    <span class="error help-block" />
-                </div>
-
-                <div class="form-group" id="contact_phone">
-                    <input type="text" class="form-control input-lg" id="phone" name="phone" placeholder="Phone" ng-model='contact.phone' />
                     <span class="error help-block" />
                 </div>
 
@@ -43,7 +40,7 @@
                 
 
                 <div class="form-group">
-                    <div ng-click="isEditing ? '' : createContactwithFormActivity(contact, $event)" class="btn btn-outline btn-lg btn-block btn-editable" role="button">
+                    <div ng-click="isEditing ? '' : createContactwithFormActivity(contact, component, $event)" class="btn btn-outline btn-lg btn-block btn-editable" role="button">
                         <div class="editable" data-class="submitBtn" ng-bind-html="(component.submitBtn || 'I\'m Interested') | unsafe"> 
                         </div>
                 </div>

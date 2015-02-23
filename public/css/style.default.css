@@ -25452,7 +25452,10 @@ div[data-class='image-text'] p {
 .simple-form-v1 .simple-form-subtitle {
   margin: 0 10px;
 }
-.simple-form-v1 #user_email {
+.simple-form-v1 #user_email,
+.simple-form-v1 #user_first,
+.simple-form-v1 #user_last,
+.simple-form-v1 #user_phone {
   padding-left: 20px;
 }
 .simple-form-v1 .btn-editable {

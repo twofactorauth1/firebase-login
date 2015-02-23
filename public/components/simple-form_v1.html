@@ -25,20 +25,21 @@
 
                 <div class="clearfix mb15"></div>
 
-                <div id="user_email" class="col-sm-5 form-group">
+                <div id="user_{{field.name}}" ng-repeat="field in component.fields" ng-if="field.value" class="col-sm-4 form-group">
+                    <div class="left-inner-addon">
+                        <input  type="text" ng-model="field.model" placeholder="{{field.display}}">
+                    </div>
+                    <span class="error help-block" />
+                </div>
+                
+                <div class="clearfix mb15"></div>
+                <div id="user_email" class="col-sm-9 form-group">
                     <div class="left-inner-addon">
                         <span><i class="fa fa-envelope"></i></span>
                         <input type="email" ng-model="user.email" placeholder="Email" />
                     </div>
                     <span class="error help-block" />
-                </div>
-                <div id="user_phone" class="col-sm-4 form-group">
-                    <div class="left-inner-addon">
-                        <span><i class="fa fa-phone"></i></span>
-                        <input type="text" ng-model="user.phone" placeholder="Phone" />
-                    </div>
-                    <span class="error help-block" />
-                </div>
+                </div>                
                 <div class="clearfix mb15 visible-xs"></div>
                 <div class="col-sm-3">
                     <div class="clear">

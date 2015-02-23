@@ -1316,6 +1316,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createUser = function(user, component) {
       console.log('user', user);
+
+      
       $("#user_email .error").html("");
       $("#user_email").removeClass('has-error');
       $("#user_email .glyphicon").removeClass('glyphicon-remove');
@@ -1332,6 +1334,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $("#user_email .glyphicon").addClass('glyphicon-remove');
         return;
       }
+
+      var first_name = _.findWhere(component.fields, {
+                            name: 'first'
+                        });
+      var last_name = _.findWhere(component.fields, {
+                            name: 'last'
+                        });
+      var phone = _.findWhere(component.fields, {
+                            name: 'phone'
+                        }); 
+       if(first_name) 
+          user.first = first_name.model; 
+       if(last_name) 
+          user.last = last_name.model;  
+       if(phone)                      
+          user.phone = phone.model; 
+
       if(user.phone)
       {
         var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
@@ -1362,6 +1381,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
+          first : user.first,
+          last : user.last,
           details: [{
             emails: [],
             phones: []
@@ -1396,7 +1417,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#user_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             console.log('data ', data);
             user.email = "";
-            user.phone = "";
+            component.fields.forEach(function(value)
+            {
+              value.model = null;
+            })
             user.success = true;
 
             var name;
@@ -1433,7 +1457,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //window.location.href = "http://app.indigenous.local:3000/signup";
     };
 
-    $scope.createContactwithFormActivity = function(contact) {
+    $scope.createContactwithFormActivity = function(contact, component) {
       console.log('contact', contact);
       $("#contact_email .error").html("");
       $("#contact_email").removeClass('has-error');
@@ -1448,6 +1472,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $("#contact_email .glyphicon").addClass('glyphicon-remove');
         return;
       }
+
+      var first_name = _.findWhere(component.fields, {
+                            name: 'first'
+                        });
+      var last_name = _.findWhere(component.fields, {
+                            name: 'last'
+                        });
+      var phone = _.findWhere(component.fields, {
+                            name: 'phone'
+                        }); 
+       if(first_name) 
+          contact.first_name = first_name.model; 
+       if(last_name) 
+          contact.last_name = last_name.model;  
+       if(phone)                      
+          contact.phone = phone.model; 
+
       if(contact.phone)
       {
         var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
@@ -1513,12 +1554,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             userService.addContactActivity(activity_info, function(data) {
               console.log('data ', data);
               contact.email = '';
-              contact.message = '';
-              contact.full_name = '';
-              contact.first_name = '';
-              contact.last_name = '';
+              contact.message = '';              
               contact.success = true;
-              contact.phone = "";
+              component.fields.forEach(function(value)
+              {
+                value.model = null;
+              })
+              
               setTimeout(function() {
                 $scope.$apply(function() {
                   contact.success = false;

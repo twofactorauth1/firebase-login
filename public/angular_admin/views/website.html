@@ -573,6 +573,17 @@
                                 </button>
                             </div>
                         </tab>
+                        <tab ng-if="componentEditing.type === 'simple-form'">
+                            <tab-heading>
+                                <span>Fields</span>
+                            </tab-heading>                            
+                                <div class="form-group" ng-repeat="field in componentEditing.fields">
+                                  <div class="col-xs-12 ckbox ckbox-success">
+                                    <input type="checkbox" id="chk_{{field.name}}"  ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
+                                    <label for="chk_{{field.name}}">{{field.display}}</label>
+                            </div>
+                                </div>                         
+                        </tab>
 
                         <tab ng-if="componentEditing.type === 'video'">
                           <tab-heading>

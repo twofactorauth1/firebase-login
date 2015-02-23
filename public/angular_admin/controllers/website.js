@@ -949,7 +949,26 @@ define([
                     if($scope.componentEditing.bg && $scope.componentEditing.bg.img && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
                     }
-                    
+
+                    if($scope.componentEditing.type === "simple-form" && !$scope.componentEditing.fields.length)
+                    {
+                        $scope.componentEditing.fields.push(
+                        {
+                            "display" : "First Name",
+                            "value" : false,
+                            "name" : "first"
+                        },
+                        {
+                            "display" : "Last Name",
+                            "value" : false,
+                            "name" : "last"
+                        },
+                        {
+                            "display" : "Phone Number",
+                            "value" : false,
+                            "name" : "phone"
+                        })
+                    }                    
 
                 });
                 //open right sidebar and component tab
