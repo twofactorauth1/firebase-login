@@ -1822,8 +1822,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.DeleteImageFromGallery = function(componentId, index) {
       window.parent.deleteImageFromGallery(componentId, index);
     };
-    $scope.AddImageToGallery = function(componentId) {
-      window.parent.addImageToGallery(componentId);
+    $scope.AddImageToGallery = function(componentId, index) {
+      window.parent.addImageToGallery(componentId, index);
     }
     $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
       var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;

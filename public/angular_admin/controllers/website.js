@@ -1186,7 +1186,7 @@ define([
                     return;
                 } else if ($scope.imgGallery && $scope.componentEditing) {
                     $scope.imgGallery = false;
-                    $scope.componentEditing.images.push({
+                    $scope.componentEditing.images.splice($scope.imgGalleryIndex + 1, 0,{
                         url: asset.url
                     });
                 } else if ($scope.imgThumbnail && $scope.componentEditing) {
@@ -1392,8 +1392,9 @@ define([
                 $(".insert-image").removeClass("ng-hide");
             }
 
-            window.addImageToGallery = function(componentId) {
+            window.addImageToGallery = function(componentId, index) {
                 $scope.imgGallery = true;
+                $scope.imgGalleryIndex = index;
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });
