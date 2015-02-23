@@ -208,7 +208,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 socialConfigManager.removeSocialAccount(accountId, id, socialId, function(err, config){
                     self.log.debug('<< removeSocialAccount');
-                    self.sendResultOrError(resp, err, config, "Error removing social account");
+                    if(err) {
+                        return self.wrapError(resp, 500, 'Server Error', err);
+                    } else {
+                        return self.send200(resp);
+                    }
+                    //self.sendResultOrError(resp, err, config, "Error removing social account");
                 });
             }
         });
