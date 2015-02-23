@@ -261,7 +261,7 @@ define([
                 title: 'Products',
                 type: 'products',
                 icon: 'fa fa-money',
-                enabled: false
+                enabled: true
             },
             {
                 title: 'Pricing Tables',

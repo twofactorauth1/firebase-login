@@ -75,10 +75,22 @@
             padding: 4px 8px!important;
             box-shadow: none;
         }
-        .avatar {
+        .panel-group {
+            // position: fixed;
+        }
+        .filter-avatar {
             width: 50px;
             float: left;
             margin-right: 10px;
+            position: relative;
+            display: block;
+            .badge {
+                position: absolute;
+                right: 0;
+                margin: -7px -8px 0 0;
+            }
+        }
+        .avatar {
             border-radius: 5px;
         }
         input[type='checkbox'] {

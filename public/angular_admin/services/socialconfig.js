@@ -1,20 +1,18 @@
-define(['app'], function (app) {
-    app.register.service('SocialConfigService', function ($http) {
+define(['app'], function(app) {
+    app.register.service('SocialConfigService', function($http) {
         var baseUrl = '/api/1.0/';
-        this.getAllSocialConfig = function (fn) {
+        this.getAllSocialConfig = function(fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig'].join('/');
             $http.get(apiUrl)
-                .success(function (data, status, headers, config) {
+                .success(function(data, status, headers, config) {
                     fn(data);
                 });
         };
 
         this.getTrackedObject = function(id, socialId, fn) {
-            console.log('id >>> ', id);
             var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
             $http.get(apiUrl)
-                .success(function (data, status, headers, config) {
-                    console.log('getTrackedObject >>> ', data);
+                .success(function(data, status, headers, config) {
                     fn(data, socialId);
                 });
         };
@@ -23,42 +21,76 @@ define(['app'], function (app) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post'].join('/');
             $http.post(apiUrl, {
                 post: post
-            }).success(function (data, status, headers, config) {
+            }).success(function(data, status, headers, config) {
                 fn(data);
             });
 
         };
 
         this.deleteSocialConfigEntry = function(id, fn) {
-          var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount', id].join('/');
-          $http.delete(apiUrl)
-          .success(function(data, status, headers, config) {
-            fn(data);
-          });
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount', id].join('/');
+            $http.delete(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+
+        this.getFBPages = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getFBPageInfo = function(socialAccountId, pageId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.postSocialAccount = function(socialAccount, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount'].join('/');
+            $http({
+                    url: apiUrl,
+                    method: "POST",
+                    data: socialAccount
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                })
+                .error(function(err) {
+                    console.log('END:postSocialAccount with ERROR');
+                    fn(err);
+                });
+
         };
     });
 
     //Twitter
-    this.getTwitterFeed = function (socialAccountId, fn) {
+    this.getTwitterFeed = function(socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'feed'].join('/');
         $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
+            .success(function(data, status, headers, config) {
                 fn(data);
             });
     };
 
-    this.getTwitterFollowers = function (socialAccountId, fn) {
+    this.getTwitterFollowers = function(socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'followers'].join('/');
         $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
+            .success(function(data, status, headers, config) {
                 fn(data);
             });
     };
 
-    this.getTwitterProfile = function (socialAccountId, fn) {
+    this.getTwitterProfile = function(socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'profile'].join('/');
         $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
+            .success(function(data, status, headers, config) {
                 fn(data);
             });
     };
@@ -67,40 +99,52 @@ define(['app'], function (app) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post'].join('/');
         $http.post(apiUrl, {
             post: post
-            }).success(function (data, status, headers, config) {
-                fn(data);
-            });
+        }).success(function(data, status, headers, config) {
+            fn(data);
+        });
     };
 
     //Facebook
-    this.getFBPosts = function (socialAccountId, fn) {
+    this.getFBPosts = function(socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
         $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
+            .success(function(data, status, headers, config) {
                 fn(data);
             });
     };
 
-    this.getFBPages = function (socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBPageInfo = function (socialAccountId, pageId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBProfile = function (socialAccountId, fn) {
+    this.getFBProfile = function(socialAccountId, fn) {
         var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'profile'].join('/');
         $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+    };
+
+    this.importLinkedinContact = function(socialAccountId, accessToken, fn) {
+        var apiUrl = baseUrl + ['social', 'socialconfig', 'linkedin', socialAccountId, 'importcontacts'].join('/');
+        $http({
+                url: apiUrl,
+                method: 'GET',
+                params: {
+                    accessToken: accessToken
+                }
+            })
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+    };
+
+    this.importGoogleContact = function(socialAccountId, accessToken, fn) {
+        var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
+        $http({
+                url: apiUrl,
+                method: 'GET',
+                params: {
+                    accessToken: accessToken
+                }
+            })
+            .success(function(data, status, headers, config) {
                 fn(data);
             });
     };

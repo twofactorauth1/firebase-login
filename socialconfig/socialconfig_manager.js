@@ -11,6 +11,7 @@ var twitterDao = require('../dao/social/twitter.dao');
 var facebookDao = require('../dao/social/facebook.dao');
 var linkedinDao = require('../dao/social/linkedin.dao');
 var googleDao = require('../dao/social/google.dao');
+var userDao = require('../dao/user.dao');
 
 module.exports = {
 
@@ -682,7 +683,11 @@ module.exports = {
         } else if (trackedObject.type === 'likes') {
             return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'profile') {
-            return facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
+            if(socialAccount.accountType === 'adminpage') {
+                return facebookDao.getTokenPageInfo(socialAccount.accessToken, socialAccount.socialId, socialAccount.socialId, fn);
+            } else {
+                return facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
+            }
         } else if (trackedObject.type === 'messages') {
             return facebookDao.getMessages(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'search' || trackedObject.type === 'search-user') {
@@ -696,12 +701,16 @@ module.exports = {
         }
     },
 
-    getGoogleContacts: function(accountId, socialAccountId, fn) {
-
+    getGoogleContacts: function(accountId, accessToken, socialAccountId, fn) {
+      userDao.getUserBySocialId('go', socialAccountId, function(err, user) {
+        return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+      });
     },
 
-    getLinkedinContacts: function(accountId, socialAccountId, fn) {
-      
+    getLinkedinContacts: function(accountId, accessToken, socialAccountId, fn) {
+      userDao.getUserBySocialId('li', socialAccountId, function(err, user) {
+        return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+      });
     }
 
 
