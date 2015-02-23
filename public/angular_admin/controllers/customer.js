@@ -19,7 +19,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             SocialConfigService.getAllSocialConfig(function(data) {
               $scope.socialAccounts = data.socialAccounts;
             });
-            console.log(SocialConfigService);
+            
             $scope.beginOnboarding = function(type) {
                 if (type == 'create-contact') {
                     $scope.stepIndex = 0;
@@ -400,7 +400,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                   });
                   if (foundSocialId == false) {
                     $('#import-contacts-modal').modal('hide');
-                    ToasterService.show('warning', "No google account integrated.");
+                    ToasterService.show('warning', "No linkedin account integrated.");
                   }
                 };
 

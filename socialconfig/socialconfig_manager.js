@@ -701,16 +701,12 @@ module.exports = {
         }
     },
 
-    getGoogleContacts: function(accountId, accessToken, socialAccountId, fn) {
-      userDao.getUserBySocialId('go', socialAccountId, function(err, user) {
-        return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
-      });
+    getGoogleContacts: function(accountId, accessToken, socialAccountId, user, fn) {
+      return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
     },
 
-    getLinkedinContacts: function(accountId, accessToken, socialAccountId, fn) {
-      userDao.getUserBySocialId('li', socialAccountId, function(err, user) {
-        return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
-      });
+    getLinkedinContacts: function(accountId, accessToken, socialAccountId, user, fn) {
+      return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
     }
 
 
