@@ -19,7 +19,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             SocialConfigService.getAllSocialConfig(function(data) {
               $scope.socialAccounts = data.socialAccounts;
             });
-            
+
             $scope.beginOnboarding = function(type) {
                 if (type == 'create-contact') {
                     $scope.stepIndex = 0;
@@ -392,9 +392,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                   $scope.socialAccounts.forEach(function(value, index) {
                     if (value.type == $$.constants.user.credential_types.LINKEDIN) {
                       foundSocialId = true;
+                      $('#import-contacts-modal').modal('hide');
+                      ToasterService.show('success', "Contacts import initiated.");
                       SocialConfigService.importLinkedinContact(value.socialId, value.accessToken, function(data) {
                         $('#import-contacts-modal').modal('hide');
-                        ToasterService.show('success', "Contacts being imported.");
+                        ToasterService.show('success', "Contacts import complete.");
                       });
                     }
                   });
@@ -409,9 +411,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                   $scope.socialAccounts.forEach(function(value, index) {
                     if (value.type == $$.constants.user.credential_types.GOOGLE) {
                       foundSocialId = true;
+                      $('#import-contacts-modal').modal('hide');
+                      ToasterService.show('success', "Contacts import initiated.");
                       SocialConfigService.importGoogleContact(value.socialId, value.accessToken, function(data) {
                         $('#import-contacts-modal').modal('hide');
-                        ToasterService.show('success', "Contacts being imported.");
+                        ToasterService.show('success', "Contacts import complete.");
                       });
                     }
                   });
