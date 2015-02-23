@@ -70,9 +70,13 @@ module.exports = {
             query._id= configId;
         }
         socialconfigDao.findOne(query, $$.m.SocialConfig, function(err, value){
-            if(err|| value===null) {
+            if(err) {
                 log.error('Error finding socialconfig: ' + err);
                 return fn(err, null);
+            } if (value === null) {
+                log.debug('Creating new socialconfig.');
+                var socialConfig = new $$.m.SocialConfig({accountId:accountId});
+                return self.createSocialConfig(socialConfig, fn);
             } else {
                 log.debug('<< getSocialConfig');
                 return fn(null, value);
