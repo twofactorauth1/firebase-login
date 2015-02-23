@@ -187,15 +187,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
             var post_title_container = $('.blog_post_title');
             if(post_title_container.length > 0)
-                post_data.post_title = post_title_container.text();
+                post_data.post_title = post_title_container.text().trim();
 
             var post_author_container = $('.blog_post_author');
             if(post_author_container.length > 0)
-                post_data.post_author = post_author_container.text();
+                post_data.post_author = post_author_container.text().trim();
 
             var post_category_container = $('.blog_post_category');
             if(post_category_container.length > 0)
-                post_data.post_category = post_category_container.text();
+                post_data.post_category = post_category_container.text().trim();
 
 
             var post_excerpt_container = $('.post_excerpt_div');
