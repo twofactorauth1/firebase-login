@@ -651,7 +651,8 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
+                                //Hack for link plugin popup functionality
+                                componentVarContents = componentVarContents.replace("data-cke-pa-onclick", "onclick");
                                     var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                                     if(regex.test(componentVarContents))
                                     {
