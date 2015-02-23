@@ -210,6 +210,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.deleteSocialFn = function(id) {
+              $('.btn-disconnect-' + id).addClass('disabled');
               SocialConfigService.deleteSocialConfigEntry(id, function() {
                 SocialConfigService.getAllSocialConfig(function(data) {
                   $scope.socialAccounts = data.socialAccounts;

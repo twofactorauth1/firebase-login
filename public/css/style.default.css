@@ -18149,6 +18149,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: #999;
 }
 .rightpanel .nav-tabs  > .active  > a,
+.nav-tabs  > .active  > span,
 .rightpanel .nav-tabs  > .active  > a:hover,
 .rightpanel .nav-tabs  > .active  > a:focus {
   background: #1D2939;
@@ -25451,7 +25452,10 @@ div[data-class='image-text'] p {
 .simple-form-v1 .simple-form-subtitle {
   margin: 0 10px;
 }
-.simple-form-v1 #user_email {
+.simple-form-v1 #user_email,
+.simple-form-v1 #user_first,
+.simple-form-v1 #user_last,
+.simple-form-v1 #user_phone {
   padding-left: 20px;
 }
 .simple-form-v1 .btn-editable {
@@ -25621,6 +25625,10 @@ div[data-class='image-text'] p {
 .products-v1 .product {
   margin-bottom: 35px;
 }
+.products-v1 .product .img-wrap {
+  text-align: center;
+  font-size: 175px;
+}
 .products-v1 .tab-content .col-sm-3 {
   padding-top: 0px;
 }
@@ -25636,7 +25644,7 @@ div[data-class='image-text'] p {
   margin: 0 auto;
 }
 .products-v1 .product-content {
-  min-height: 225px;
+  height: 330px;
   border: 1px solid #e4e7ea;
   border-bottom: 4px solid #e4e7ea;
   border-radius: 4px;

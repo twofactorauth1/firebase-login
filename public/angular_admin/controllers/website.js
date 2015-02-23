@@ -651,7 +651,8 @@ define([
                                 }
                                 //remove "/n"
                                 componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
-
+                                //Hack for link plugin popup functionality
+                                componentVarContents = componentVarContents.replace("data-cke-pa-onclick", "onclick");
                                     var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                                     if(regex.test(componentVarContents))
                                     {
@@ -948,7 +949,26 @@ define([
                     if($scope.componentEditing.bg && $scope.componentEditing.bg.img && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
                         $scope.componentEditing.bg.img.show = true;
                     }
-                    
+
+                    if($scope.componentEditing.type === "simple-form" && !$scope.componentEditing.fields.length)
+                    {
+                        $scope.componentEditing.fields.push(
+                        {
+                            "display" : "First Name",
+                            "value" : false,
+                            "name" : "first"
+                        },
+                        {
+                            "display" : "Last Name",
+                            "value" : false,
+                            "name" : "last"
+                        },
+                        {
+                            "display" : "Phone Number",
+                            "value" : false,
+                            "name" : "phone"
+                        })
+                    }                    
 
                 });
                 //open right sidebar and component tab
@@ -1185,7 +1205,7 @@ define([
                     return;
                 } else if ($scope.imgGallery && $scope.componentEditing) {
                     $scope.imgGallery = false;
-                    $scope.componentEditing.images.push({
+                    $scope.componentEditing.images.splice($scope.imgGalleryIndex + 1, 0,{
                         url: asset.url
                     });
                 } else if ($scope.imgThumbnail && $scope.componentEditing) {
@@ -1391,8 +1411,9 @@ define([
                 $(".insert-image").removeClass("ng-hide");
             }
 
-            window.addImageToGallery = function(componentId) {
+            window.addImageToGallery = function(componentId, index) {
                 $scope.imgGallery = true;
+                $scope.imgGalleryIndex = index;
                 $scope.componentEditing = _.findWhere($scope.components, {
                     _id: componentId
                 });

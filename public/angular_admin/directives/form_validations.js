@@ -36,7 +36,7 @@ define(['angularAMD'], function(angularAMD) {'use strict';
 							}
 							break;
 						case "zip":
-						var regex = /(^\s*$|^\d{5}$)|(^\d{5}-\d{4}$)/;
+						var regex = /(^\s*$|^\d{5}$)|(^\d{5}-\d{4}$)|(^\d{6}$)/;
 						var result = regex.test(el.val());
 						if (!result) {
 							parent_div.addClass('has-error');
