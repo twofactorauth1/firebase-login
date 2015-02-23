@@ -178,9 +178,10 @@ _.extend(router.prototype, baseRouter.prototype, {
         var self = this;
         self.log.debug('>> _socialLogin');
         /*
-         * error=access_denied
+         * facebook: error=access_denied
+         * twitter: denied=sometoken
          */
-        if(req.query.error) {
+        if(req.query.error || req.query.denied) {
             self.log.warn('Error parameter: ' + req.query.error);
             //TODO: put redirect logic here.
         }
@@ -205,35 +206,44 @@ _.extend(router.prototype, baseRouter.prototype, {
             callbackURL: callbackUrl,
             returnURL: callbackUrl,
             successRedirect: "/oauth2/postlogin",
-            failureRedirect: "/login", failureFlash:true
+            failureRedirect: state.failureRedirect || "/login",
+            failureFlash:true
         };
 
+        authenticationDao.getAuthenticatedUrlForRedirect(state.accountId, req.user.attributes._id, options.failureRedirect, function(err, value){
+            if(err) {
+                //not sure what to do here
+                self.log.error('error getting authenticated url: ' + err);
+            }
+            options.failureRedirect = value;
+            var scope = config.getScope();
+            if (scope != null) {
+                options.scope = scope;
+            }
 
-        var scope = config.getScope();
-        if (scope != null) {
-            options.scope = scope;
-        }
+            if (state != null) {
+                options.state = JSON.stringify(state);
+            }
 
-        if (state != null) {
-            options.state = JSON.stringify(state);
-        }
+            options.accessType = "offline";
+            if(state.forceApprovalPrompt) {
+                /*
+                 * This causes you to have to reauthorize every time, instead of just logging in.
+                 * It also ensures you get a refresh token.
+                 */
+                options.approvalPrompt = "force";
+                self.log.debug('approvalPrompt set to force');
+            }
 
-        options.accessType = "offline";
-        if(state.forceApprovalPrompt) {
-            /*
-             * This causes you to have to reauthorize every time, instead of just logging in.
-             * It also ensures you get a refresh token.
-             */
-            options.approvalPrompt = "force";
-            self.log.debug('approvalPrompt set to force');
-        }
+            if (state.failureRedirect) {
+                options.failureRedirect = state.failureRedirect;
+            }
 
-        if (state.failureRedirect) {
-          options.failureRedirect = state.failureRedirect;
-        }
+            self.log.debug('<< _socialLogin');
+            passport.authenticate(type, options)(req,resp,next);
+        });
 
-        self.log.debug('<< _socialLogin');
-        passport.authenticate(type, options)(req,resp,next);
+
     },
 
 
