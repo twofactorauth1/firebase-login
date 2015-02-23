@@ -14,6 +14,12 @@ var URLBOX = {
         var apiKey = urlboxConfig.URLBOX_KEY;
         var apiSecret = urlboxConfig.URLBOX_SECRET;
 
+        /*
+         * local addresses are not helpful.  We can just replace them with test urls for now.
+         */
+        if(url.indexOf('.local') >0) {
+            url = url.replace('indigenous.local:3000', 'test.indigenous.io');
+        }
         var encodedUrl = encodeURIComponent(url);
         var queryString = "url=" + encodedUrl;
 
