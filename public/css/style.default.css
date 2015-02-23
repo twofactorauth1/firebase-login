@@ -23889,13 +23889,18 @@ div[data-type='campaign'] .inner-page .overlay {
   margin-top: -250px;
   margin-left: 100px;
 }
+.contact-us-v1 .panel-default,
+.contact-us-v1 .panel-body {
+  background: none;
+}
 .contact-us-v1 .row {
   margin-left: 0px;
   margin-right: 0px;
 }
 .contact-us-v1 .widget-weather .temp {
-  background-color: #658CC4;
+  background: rgba(0, 0, 0, 0.5);
   padding: 14px !important;
+  height: 250px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
@@ -24647,7 +24652,7 @@ contenthover a {
 }
 .meet-team-v1 .profilepic {
   margin-bottom: 20px;
-  min-height: 445px;
+  min-height: 385px;
 }
 .meet-team-v1 .profilepic-hover {
   opacity: 0;
@@ -24703,13 +24708,13 @@ contenthover a {
   display: none !important;
 }
 .meet-team-v1 .profile-social li span {
-  background: #efa022 !important;
   width: 40px;
   height: 40px;
   border-radius: 30px;
   line-height: 35px;
   color: white;
-  border: 2px solid #efa022;
+  border: 2px solid white;
+  margin-right: 5px;
 }
 .meet-team-v1 .profile-social li span:hover {
   border: 2px solid white;
@@ -25559,9 +25564,6 @@ div[data-class='image-text'] p {
   padding-top: 15px !important;
 }
 /********** Products v1 component **********/
-.products-v1 {
-  background: #FAFAFA;
-}
 .products-v1 .nav-tabs {
   width: 425px;
   margin: 0 auto;
