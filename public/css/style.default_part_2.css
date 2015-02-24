@@ -2276,6 +2276,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 
 .rightpanel .nav-tabs  > .active  > a,
+.nav-tabs  > .active  > span,
 .rightpanel .nav-tabs  > .active  > a:hover,
 .rightpanel .nav-tabs  > .active  > a:focus {
   background: #1D2939;
@@ -11142,7 +11143,10 @@ div[data-class='image-text'] p {
   margin: 0 10px;
 }
 
-.simple-form-v1 #user_email {
+.simple-form-v1 #user_email,
+.simple-form-v1 #user_first,
+.simple-form-v1 #user_last,
+.simple-form-v1 #user_phone {
   padding-left: 20px;
 }
 

@@ -70,9 +70,13 @@ module.exports = {
             query._id= configId;
         }
         socialconfigDao.findOne(query, $$.m.SocialConfig, function(err, value){
-            if(err|| value===null) {
+            if(err) {
                 log.error('Error finding socialconfig: ' + err);
                 return fn(err, null);
+            } if (value === null) {
+                log.debug('Creating new socialconfig.');
+                var socialConfig = new $$.m.SocialConfig({accountId:accountId});
+                return self.createSocialConfig(socialConfig, fn);
             } else {
                 log.debug('<< getSocialConfig');
                 return fn(null, value);
@@ -701,16 +705,12 @@ module.exports = {
         }
     },
 
-    getGoogleContacts: function(accountId, accessToken, socialAccountId, fn) {
-      userDao.getUserBySocialId('go', socialAccountId, function(err, user) {
-        return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
-      });
+    getGoogleContacts: function(accountId, accessToken, socialAccountId, user, fn) {
+      return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
     },
 
-    getLinkedinContacts: function(accountId, accessToken, socialAccountId, fn) {
-      userDao.getUserBySocialId('li', socialAccountId, function(err, user) {
-        return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
-      });
+    getLinkedinContacts: function(accountId, accessToken, socialAccountId, user, fn) {
+      return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
     }
 
 

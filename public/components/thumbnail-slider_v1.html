@@ -33,6 +33,11 @@
                             </div>
                         </div>
                     </div>
+                    <div ng-if="!slider.thumbnailCollection.length">
+                        <a href="" ng-if="isEditing" ng-click="addImageToThumbnail(component._id)" class="btn btn-default">
+                                            <i class="fa fa-plus" ></i>
+                                    </a>
+                    </div>
                </div>
                 <div ng-show="slider.displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
                 <div ng-show="slider.displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>

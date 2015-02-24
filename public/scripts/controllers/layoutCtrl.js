@@ -1316,6 +1316,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createUser = function(user, component) {
       console.log('user', user);
+
+      
+      $("#user_email .error").html("");
+      $("#user_email").removeClass('has-error');
+      $("#user_email .glyphicon").removeClass('glyphicon-remove');
+      $("#user_phone .error").html("");
+      $("#user_phone").removeClass('has-error');
+      $("#user_phone .glyphicon").removeClass('glyphicon-remove');
+
       var fingerprint = new Fingerprint().get();
       var sessionId = ipCookie("session_cookie")["id"];
 
@@ -1324,6 +1333,34 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $("#user_email").addClass('has-error');
         $("#user_email .glyphicon").addClass('glyphicon-remove');
         return;
+      }
+
+      var first_name = _.findWhere(component.fields, {
+                            name: 'first'
+                        });
+      var last_name = _.findWhere(component.fields, {
+                            name: 'last'
+                        });
+      var phone = _.findWhere(component.fields, {
+                            name: 'phone'
+                        }); 
+       if(first_name) 
+          user.first = first_name.model; 
+       if(last_name) 
+          user.last = last_name.model;  
+       if(phone)                      
+          user.phone = phone.model; 
+
+      if(user.phone)
+      {
+        var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
+        if(!regex.test(user.phone))
+        {
+          $("#user_phone .error").html("Phone is invalid");
+          $("#user_phone").addClass('has-error');
+          $("#user_phone .glyphicon").addClass('glyphicon-remove');
+          return;
+        }
       }
       if (user.email) {
         var regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
@@ -1344,8 +1381,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
+          first : user.first,
+          last : user.last,
           details: [{
-            emails: []
+            emails: [],
+            phones: []
           }],
           campaignId: component.campaignId,
           skipWelcomeEmail: skipWelcomeEmail
@@ -1353,6 +1393,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         formatted.details[0].emails.push({
           email: user.email
         });
+        if(user.phone)
+        {
+          formatted.details[0].phones.push({
+            number: user.phone,
+            type: 'm'
+        });
+        }
+        
         //create contact
         console.log('formatted ', formatted);
         userService.addContact(formatted, function(data, err) {
@@ -1369,6 +1417,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#user_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             console.log('data ', data);
             user.email = "";
+            component.fields.forEach(function(value)
+            {
+              value.model = null;
+            })
             user.success = true;
 
             var name;
@@ -1385,6 +1437,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $window.intercomSettings = {
               name: user.first + ' ' + user.last,
               email: user.email,
+              phone: user.phone,
               user_hash: hash.toString(CryptoJS.enc.Hex),
               created_at: new Date().getTime(),
               app_id: "b3st2skm"
@@ -1404,13 +1457,48 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //window.location.href = "http://app.indigenous.local:3000/signup";
     };
 
-    $scope.createContactwithFormActivity = function(contact) {
+    $scope.createContactwithFormActivity = function(contact, component) {
       console.log('contact', contact);
+      $("#contact_email .error").html("");
+      $("#contact_email").removeClass('has-error');
+      $("#contact_email .glyphicon").removeClass('glyphicon-remove');
+      $("#contact_phone .error").html("");
+      $("#contact_phone").removeClass('has-error');
+      $("#contact_phone .glyphicon").removeClass('glyphicon-remove');
+
       if (!contact || !contact.email) {
         $("#contact_email .error").html("Email Required");
         $("#contact_email").addClass('has-error');
         $("#contact_email .glyphicon").addClass('glyphicon-remove');
         return;
+      }
+
+      var first_name = _.findWhere(component.fields, {
+                            name: 'first'
+                        });
+      var last_name = _.findWhere(component.fields, {
+                            name: 'last'
+                        });
+      var phone = _.findWhere(component.fields, {
+                            name: 'phone'
+                        }); 
+       if(first_name) 
+          contact.first_name = first_name.model; 
+       if(last_name) 
+          contact.last_name = last_name.model;  
+       if(phone)                      
+          contact.phone = phone.model; 
+
+      if(contact.phone)
+      {
+        var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
+        if(!regex.test(contact.phone))
+        {
+          $("#contact_phone .error").html("Phone is invalid");
+          $("#contact_phone").addClass('has-error');
+          $("#contact_phone .glyphicon").addClass('glyphicon-remove');
+          return;
+        }
       }
       if (contact.email) {
         if(contact.full_name)
@@ -1423,13 +1511,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           first: contact.first_name,
           last: contact.last_name,
           details: [{
-            emails: []
+            emails: [],
+            phones:[]
           }]
         };
 
         contact_info.details[0].emails.push({
           email: contact.email
         });
+        if(contact.phone)
+        {
+          contact_info.details[0].phones.push({
+          number: contact.phone,
+          type: 'm'
+        });
+        }
+        
 
         userService.addContact(contact_info, function(data, err) {
           console.log('data ', data);
@@ -1457,11 +1554,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             userService.addContactActivity(activity_info, function(data) {
               console.log('data ', data);
               contact.email = '';
-              contact.message = '';
-              contact.full_name = '';
-              contact.first_name = '';
-              contact.last_name = '';
+              contact.message = '';              
               contact.success = true;
+              component.fields.forEach(function(value)
+              {
+                value.model = null;
+              })
+              
               setTimeout(function() {
                 $scope.$apply(function() {
                   contact.success = false;
@@ -1765,8 +1864,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.DeleteImageFromGallery = function(componentId, index) {
       window.parent.deleteImageFromGallery(componentId, index);
     };
-    $scope.AddImageToGallery = function(componentId) {
-      window.parent.addImageToGallery(componentId);
+    $scope.AddImageToGallery = function(componentId, index) {
+      window.parent.addImageToGallery(componentId, index);
     }
     $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
       var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
