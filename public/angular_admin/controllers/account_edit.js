@@ -445,6 +445,9 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             $scope.isFormDirty = false;
             $scope.saveLoading = true;
             UserService.putUser($scope.user, function(user) {
+                if ($scope.account.business.name.length) {
+                  $scope.account.business.name = $scope.account.business.name.replace(/[^\w\s]/gi, '');
+                }
                 UserService.putAccount($scope.account, function(account) {
                     $scope.saveLoading = false;
                     toaster.pop('success', "Account Saved", "All account information has been saved.");
