@@ -19294,6 +19294,22 @@ div.error label.error:before {
 .thmb-sm {
   padding: 5px;
 }
+.product-img .img-wrap {
+  height: 150px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.product-img .no-preview {
+  background: #e7e7e7;
+  color: white;
+}
+.product-img .icon {
+  background: #e7e7e7;
+  color: white;
+  text-align: center;
+  line-height: 150px;
+  font-size: 120px;
+}
 .small-user-icon img {
   border-radius: 50%;
   float: left;

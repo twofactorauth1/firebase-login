@@ -23,9 +23,16 @@
 
         <!-- <div class="tab-content container" ng-repeat="productSection in component['product-sections'] track by $index"> -->
 
+        <header class="jumbotron hero-spacer col-xs-12d">
+            <h1>Welcome to Our Store</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+            <p><a class="btn btn-primary btn-large">Call to action!</a>
+            </p>
+        </header>
+
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-xs-4" ng-repeat="product in layout.products track by $index">
-                <div class="product" id="{{product.id}}">
+            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in layout.products track by $index">
+                <div class="product hidden" id="{{product.id}}">
                     <div>
 
                         <div class="product-content">
@@ -56,6 +63,37 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                        <div class="thumbnail">
+                            <div class="product-img">
+                                <div ng-if="product.is_image" class="img-wrap">
+                                    <img ng-src="{{product.icon}}" class="img-responsive">
+                                </div>
+                                <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
+                                    <i class="fa {{product.icon}}"></i>
+                                </div>
+                                <div ng-if="!product.is_image && !product.icon" class="img-wrap no-preview">
+                                    <h3>No Preview <br> Available</h3>
+                                </div>
+                            </div>
+                            <div class="caption">
+                                <h4 class="pull-right">${{product.regular_price}}</h4>
+                                <h4><a href="#">{{product.name}}</a>
+                                </h4>
+                                <p>{{product.description}}</p>
+                            </div>
+                            <div class="ratings hidden">
+                                <p class="pull-right">15 reviews</p>
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
             </div>
             <div class="clearfix mb15"></div>
         </div>
