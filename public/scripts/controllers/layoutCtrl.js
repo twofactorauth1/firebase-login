@@ -84,6 +84,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       };
     };
 
+
+    $(window).scroll(function(){
+        alert(1)
+    });
+
     accountService(function(err, data) {
       if (err) {
         console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
