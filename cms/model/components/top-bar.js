@@ -52,9 +52,9 @@ var component = $$.m.ModelBase.extend({
              *business hours, email, phone number
              *
              */
-            businessHours: "<span> Mon-Sat: 7:00 - 17:00</span>",
-            email: "<span> info@indigenous.com</span>",
-            phone: "<span>+123-456-7890</span>",
+            businessHours: "Mon-Sat: 7:00 - 17:00",
+            email: "info@indigenous.com",
+            phone: "+123-456-7890",
             networks: [
                 {
                     "name" : "facebook",

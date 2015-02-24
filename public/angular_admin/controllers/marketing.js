@@ -63,6 +63,9 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
+            if ($scope.userPreferences.welcome_alert.initial == false) {
+              $scope.finishOnboarding();
+            }
             $scope.activeTab = preferences.indi_default_tab;
             if (preferences.welcome_alert) {
                 $scope.initialWelcome = preferences.welcome_alert.initial;

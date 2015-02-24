@@ -65,6 +65,7 @@ var CKBUILDER_CONFIG = {
 		'indentlist' : 1,
 		'justify' : 1,
 		'link' : 1,
+		'colorbutton' : 1,
 		'lineheight' : 1,
 		'list' : 1,
 		'magicline' : 1,

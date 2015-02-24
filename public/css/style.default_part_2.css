@@ -6039,6 +6039,10 @@ div.error label.error:before {
   content: "\f138";
 }
 
+#editor-toolbar .cke_chrome a.cke_button .cke_button__textcolor_icon:before {
+  content: "\f040";
+}
+
 #editor-toolbar .cke_chrome .cke_combo_button {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
   border: medium none;
@@ -6056,8 +6060,17 @@ div.error label.error:before {
   color: #fff;
 }
 
-#editor-toolbar .cke_chrome .cke_combo_button .cke_combo_arrow {
+#editor-toolbar .cke_chrome .cke_combo_button .cke_combo_arrow,
+#editor-toolbar .cke_chrome .cke_button_arrow {
   border-top: 3px solid #fff;
+}
+
+#editor-toolbar .cke_chrome .cke_button_arrow {
+  margin-top: 24px;
+}
+
+#editor-toolbar .cke_chrome a.cke_button__textcolor {
+  padding: 2px 10px;
 }
 
 #editor-toolbar .cke_chrome .cke_combo_button:hover,

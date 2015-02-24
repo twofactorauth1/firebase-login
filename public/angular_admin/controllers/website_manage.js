@@ -30,6 +30,7 @@ define([
 
 
             $scope.beginOnboarding = function(type) {
+              $scope.obType = type;
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
                     $scope.showOnboarding = true;
@@ -87,10 +88,42 @@ define([
                       }
                     ];
                 }
+                if (type == 'edit-home') {
+                    $scope.stepIndex = 0
+                    $scope.showOnboarding = true;
+                    $scope.activeTab = 'pages';
+                    $scope.onboardingSteps = [
+                      {
+                        overlay: true,
+                        title: 'Task: Edit home page',
+                        description: "Find the home page in the list to edit.",
+                        position: 'centered'
+                      },
+                      {
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Task: Click edit',
+                        width: 400,
+                        description: "Once you find the page click the edit button in the tile."
+                      },
+                      {
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Task: Save edit',
+                        width: 400,
+                        description: 'After all your editing is done click save in top right of the view and your are done.'
+                      }
+                    ];
+                }
             };
 
             $scope.finishOnboarding = function() {
-              $scope.userPreferences.tasks.add_post = true;
+              if ($scope.obType == 'add-post') {
+                $scope.userPreferences.tasks.add_post = true;
+              }
+              if ($scope.obType == 'edit-home') {
+                $scope.userPreferences.tasks.edit_home = true;
+              }
               UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 
@@ -107,6 +140,9 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
+                if ($scope.userPreferences.welcome_alert.initial == false) {
+                  $scope.finishOnboarding();
+                }
                 if (!$location.$$search['onboarding']) {
                     $scope.activeTab = preferences.website_default_tab || 'pages';
                 }
@@ -377,6 +413,17 @@ define([
                     });
 
              };
+             $scope.updateThemeSettings = function() {
+                var data = {
+                           _id: $scope.website._id,
+                           accountId: $scope.website.accountId,
+                           settings: $scope.website.settings
+                        };
+                        //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                            console.log('updated website settings', data);
+                    });
+             }
 
              //update the primary font
             $scope.updatePrimaryFont = function(font) {

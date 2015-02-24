@@ -634,6 +634,24 @@
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoImage">
                           </div>
                         </tab>
+                        <tab active="tabs.address" ng-if="componentEditing.type === 'top-bar'">
+                            <tab-heading>
+                                <span>Top Bar Info</span>
+                            </tab-heading>
+                             <div class="form-group">
+                                <label for="top-bar-hours">Business Hours </label>
+                                <input id="top-bar-hours" class="form-control input-lg" type="text" ng-model="componentEditing.businessHours">
+                            </div>
+                            <div class="form-group">
+                                <label for="top-bar-phone">Phone number </label>
+                                <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.phone">
+                            </div>
+                           <div class="form-group">
+                                <label for="top-bar-email">Email </label>
+                                <input id="top-bar-email" class="form-control input-lg" type="text" ng-model="componentEditing.email">
+                            </div>
+
+                        </tab>
 
 
                     </tabset>
