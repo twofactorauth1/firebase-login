@@ -133,6 +133,11 @@
             content: "\f138";
           }
         }
+        .cke_button__textcolor_icon {
+          &:before {
+            content: "\f040";
+          }
+        }
 
       }
       .cke_combo_button {
@@ -150,9 +155,16 @@
         color: #fff;
       }
 
-      .cke_combo_button .cke_combo_arrow {
+      .cke_combo_button .cke_combo_arrow, .cke_button_arrow {
 
           border-top: 3px solid #fff;
+      }
+      .cke_button_arrow {
+        margin-top: 24px;
+
+      }
+      a.cke_button__textcolor {
+          padding: 2px 10px;
       }
       .cke_combo_button:hover, .cke_combo_on .cke_combo_button {
           background: none repeat scroll 0 0 rgba(255, 255, 255, 0.5);

@@ -71,25 +71,25 @@
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label for="colorpicker">Color Primary:</label>
-                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primary_color" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primary_color" class="pull-right" ></spectrum-colorpicker>
                                             </div>
                                             <div class="form-group">
                                                 <label for="colorpicker">Color Secondary:</label>
-                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.secondaryColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.secondaryColor" class="pull-right" ></spectrum-colorpicker>
                                             </div>
                                             <div class="form-group">
                                                 <label for="colorpicker">Highlight Primary:</label>
-                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryHighlight" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
+                                                <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryHighlight" class="pull-right" ></spectrum-colorpicker>
                                             </div>
                                             <div class="form-group">
                                                 <label for="colorpicker">Text Color Primary:</label>
                                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" ng-model="website.settings.primaryTextColor" class="pull-right" ng-change="updateThemeSettings()"></spectrum-colorpicker>
                                             </div>
-
-                                            <div class="form-group">
-                                                <label for="colorpicker">Fav Icon:</label>
-                                                <img ng-if = "website.settings.favicon" class=" center pull-right" style="max-height:40px;max-width:40px" ng-src="{{ website.settings.favicon }}">
+                                             <div class="form-group">
+                                                <a class="btn btn-success btn-block" ng-click="updateThemeSettings()" >Save Colors Changes </a>
                                             </div>
+
+                                            
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
@@ -99,6 +99,10 @@
                                             <div class="form-group">
                                                 <label for="colorpicker">Font Family Secondary:</label>
                                                 <jd-fontselect stack="secondaryFontStack" rawText="{ toggleOpenLabel: 'Mach uff!' }"></jd-fontselect>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="colorpicker">Fav Icon:</label>
+                                                <img ng-if = "website.settings.favicon" class=" center pull-right" style="max-height:40px;max-width:40px" ng-src="{{ website.settings.favicon }}">
                                             </div>
                                             <div class="form-group">
                                                 <a class="btn btn-success btn-block media-modal ng-isolate-scope" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user="user" data-toggle="modal" data-target="#media-manager-modal"> <span class="fa fa-image"></span> <span class="hidden-xs">Change Icon</span> </a>
@@ -209,7 +213,7 @@
 
         <div class="rightpanel rightpanel-website">
             <ul class="nav nav-tabs nav-justified">
-                <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+                <li class="active"><a href="javascript:void(0)" data-toggle="tab">Settings</a>
                 </li>
             </ul>
 

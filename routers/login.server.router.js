@@ -80,7 +80,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         self.log.debug('>> showLogin')
         
         if (req.isAuthenticated()) {
-            console.log('req.isAuthenticated is true.');
+            self.log.debug('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
                 resp.redirect("/admin");
             } else {

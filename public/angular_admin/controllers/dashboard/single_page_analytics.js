@@ -18,10 +18,21 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
         //determine if page or post
         //get single page object
         UserService.getAccount(function(account) {
+            console.log('account:' + account);
 	        WebsiteService.getSinglePage(account.website.websiteId, handle, function(data) {
+                console.log('screenshot:' + data.screenshot);
 	        	console.log('data >>> ', data);
 	        	$scope.page = data;
+                console.log("scope.page.screenshot: " + $scope.page.screenshot);
 	        	ngProgress.complete();
+
+                /*
+                 * handle the hostname.
+                 */
+                var hostname = window.location.hostname;
+                if(account.subdomain === 'main') {
+                    hostname = hostname.replace('main', 'www');
+                }
 
                 //get single page analytics
                 var params = {
@@ -30,7 +41,7 @@ define(['app', 'ngProgress', 'formatCurrency', 'highcharts', 'highcharts-ng', 'w
                         {
                             "property_name": "url.domain",
                             "operator": "eq",
-                            "property_value": "main.indigenous.local"
+                            "property_value": hostname
                         },
                         {
                             "property_name": "url.path",

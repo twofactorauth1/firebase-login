@@ -210,6 +210,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             };
 
             $scope.deleteSocialFn = function(id) {
+              $('.btn-disconnect-' + id).addClass('disabled');
               SocialConfigService.deleteSocialConfigEntry(id, function() {
                 SocialConfigService.getAllSocialConfig(function(data) {
                   $scope.socialAccounts = data.socialAccounts;
@@ -278,6 +279,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
+                if ($scope.userPreferences.welcome_alert.initial == false) {
+                  $scope.finishOnboarding();
+                }
                 if ($location.$$search.authtoken) {
                      $scope.activeTab = AccountService.getSocialTab();
                 }
