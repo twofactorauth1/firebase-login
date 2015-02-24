@@ -45,7 +45,9 @@ var defaultPrivileges = [
     'VIEW_DASHBOARD',
     'MODIFY_DASHBOARD',
     'VIEW_SOCIALCONFIG',
-    'MODIFY_SOCIALCONFIG'
+    'MODIFY_SOCIALCONFIG',
+    'ALL'
+
 ];
 
 var defaultSubscriptionPrivs = [
@@ -62,7 +64,8 @@ var defaultSubscriptionPrivs = [
     'emaildata',
     'products',
     'user',
-    'social/socialconfig'
+    'social/socialconfig',
+    'all'
 ];
 
 var securityManager = {
@@ -265,6 +268,7 @@ var securityManager = {
                 log.error('Error adding subscription to account: ' + err);
                 return fn(err, null);
             }
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
             var subpriv = new $$.m.SubscriptionPrivilege({
                 accountId: accountId,
                 subscriptionId: planId,
@@ -294,6 +298,7 @@ var securityManager = {
                 log.error('Error adding subscription to account: ' + err);
                 return fn(err, null);
             }
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
             var subpriv = new $$.m.SubscriptionPrivilege({
                 accountId: accountId,
                 subscriptionId: planId,

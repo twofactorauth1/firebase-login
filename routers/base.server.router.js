@@ -7,10 +7,11 @@
 
 var cookies = require('../utils/cookieutil');
 var authenticationDao = require('../dao/authentication.dao');
-var securityManager = require('../security/sm');
+var securityManager = require('../security/sm')(false);
 var logger = $$.g.getLogger("baserouter");
 var urlUtils = require('../utils/urlutils.js');
 var accountDao = require("../dao/account.dao");
+var appConfig = require('../configs/app.config');
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -65,8 +66,25 @@ _.extend(baseRouter.prototype, {
                 } else {
                     logger.warn("No account found from getAccountByHost");
                 }
-
-                return next();
+                if(req.session.accountId !== appConfig.mainAccountID) {
+                    self.sm.verifySubscription(req, function(err, isValid){
+                        if(err) {
+                            logger.error('Could not verify subscription: ' + err);
+                            accountDao.addSubscriptionLockToAccount(accountId, function(err, value){
+                                return next();
+                            });
+                        } else if(isValid !== true) {
+                            logger.warn('Subscription for account ' + req.session.accountId + ' is not valid.');
+                            accountDao.addSubscriptionLockToAccount(accountId, function(err, value){
+                                return next();
+                            });
+                        } else {
+                            return next();
+                        }
+                    });
+                } else {
+                    return next();
+                }
             });
         } else {
             return next();
@@ -92,6 +110,7 @@ _.extend(baseRouter.prototype, {
                         req.session.accountId = value.id();
                         req.session.subdomain = value.get('subdomain');
                         req.session.domain = value.get('domain');
+                        req.session.locked = value.get('locked');
                     }
                 } else {
                     logger.warn("No account found from getAccountByHost");

@@ -373,6 +373,48 @@ var dao = {
         });
     },
 
+    addSubscriptionLockToAccount: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> addSubscriptionLockToAccount');
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account for id [' + accountId + ']: ' + err);
+                return fn(err, null);
+            }
+            account.set('locked_sub', true);
+            self.saveOrUpdate(account, function(err, savedAccount){
+                if(err) {
+                    self.log.error('Error updating account for id [' + accountId + ']: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< addSubscriptionLockToAccount');
+                    return fn(null, savedAccount);
+                }
+            });
+        });
+    },
+
+    removeSubscriptionLockFromAccount: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> addSubscriptionLockToAccount');
+        self.getById(accountId, $$.m.Account, function(err, account){
+            if(err) {
+                self.log.error('Error getting account for id [' + accountId + ']: ' + err);
+                return fn(err, null);
+            }
+            account.set('locked_sub', false);
+            self.saveOrUpdate(account, function(err, savedAccount){
+                if(err) {
+                    self.log.error('Error updating account for id [' + accountId + ']: ' + err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< addSubscriptionLockToAccount');
+                    return fn(null, savedAccount);
+                }
+            });
+        });
+    },
+
     addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
         var self=this;
         self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken +')');

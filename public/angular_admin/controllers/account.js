@@ -260,16 +260,18 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 /*
                  * If the account is locked, do not allow state changes away from account.
                  * Commenting this out until we know for sure that we should allow logins from locked accounts.
-
-                if(account.locked === true) {
+                 */
+                if(account.locked_sub === true) {
+                    ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
                     $rootScope.$on('$stateChangeStart',
                         function(event, toState, toParams, fromState, fromParams){
                             event.preventDefault();
+                            ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
                             // transitionTo() promise will be rejected with
                             // a 'transition prevented' error
                         });
                 }
-                */
+
             });
 
             $scope.setActiveTab = function(tab) {
