@@ -140,6 +140,9 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
+                if ($scope.userPreferences.welcome_alert.initial == false) {
+                  $scope.finishOnboarding();
+                }
                 if (!$location.$$search['onboarding']) {
                     $scope.activeTab = preferences.website_default_tab || 'pages';
                 }

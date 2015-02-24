@@ -477,6 +477,9 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
                 UserService.getUserPreferences(function(preferences) {
                     $scope.userPreferences = preferences;
+                    if ($scope.userPreferences.welcome_alert.initial == false) {
+                      $scope.finishOnboarding();
+                    }
                     var customerSettings = $scope.userPreferences.customerSettings;
                     // if (customerSettings && customerSettings.scrollPos) {
                     //   setTimeout(function() {
