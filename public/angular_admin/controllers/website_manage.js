@@ -377,6 +377,17 @@ define([
                     });
 
              };
+             $scope.updateThemeSettings = function() {
+                var data = {
+                           _id: $scope.website._id,
+                           accountId: $scope.website.accountId,
+                           settings: $scope.website.settings
+                        };
+                        //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                            console.log('updated website settings', data);
+                    });
+             }
 
              //update the primary font
             $scope.updatePrimaryFont = function(font) {
