@@ -268,7 +268,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="modal-btns">
-                        <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
+                        <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;" ng-click="componentEditing.type === 'navigation' ? updateLinkList() : ''">×</a>
                         <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
                       </div>
                     <h4 class="modal-title">{{(componentEditing.header_title || '') | htmlToPlaintext}} Settings</h4>
@@ -511,7 +511,7 @@
                                 </div>
                                 <div class="row">
                                     <button type="button" class="btn btn-primary pull-right" ng-click="updateLinkList()" data-dismiss="modal">
-                                        Save changes
+                                        Close
                                     </button>
                                 </div>
                             </div>
