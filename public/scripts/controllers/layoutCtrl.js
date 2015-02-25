@@ -410,6 +410,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     $scope.addDetailsToCart = function(product) {
+      // that.products[product.id].clicked = true;
+      var productMatch = _.find(that.products, function(item) {
+        return item._id === product._id
+      });
+      productMatch.clicked = true;
+      console.log('productMatch ', productMatch);
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
       }
@@ -425,7 +431,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.cartDetails.push(product);
       }
       $scope.calculateTotalChargesfn();
+      console.log('$scope.cartDetails ', $scope.cartDetails);
+    };
 
+    $scope.removeFromCart = function(product) {
+      var filtered = _.filter($scope.cartDetails, function(item) {
+           return item._id !== product._id
+      });
+      var productMatch = _.find(that.products, function(item) {
+        return item._id === product._id
+      });
+      productMatch.clicked = false;
+      $scope.cartDetails = filtered;
     };
 
     $scope.calculateTotalChargesfn = function() {
@@ -468,7 +485,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       PaymentService.getStripeCardToken(cardInput, function(token) {
         PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
-          $('#cart-checkout-modal').modal('hide');
+          // $('#cart-checkout-modal').modal('hide');
+          //thanks modal
+          //clear form
         });
       });
 

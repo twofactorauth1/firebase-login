@@ -522,8 +522,10 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
                 UserService.getUserPreferences(function(preferences) {
                     $scope.userPreferences = preferences;
-                    if ($scope.showOnboarding = false && $scope.userPreferences.tasks.create_contact == undefined || $scope.userPreferences.tasks.create_contact == false) {
-                      $scope.finishOnboarding();
+                    if ($scope.userPreferences.tasks) {
+                        if ($scope.showOnboarding = false && $scope.userPreferences.tasks.create_contact == undefined || $scope.userPreferences.tasks.create_contact == false) {
+                          $scope.finishOnboarding();
+                        }
                     }
                     var customerSettings = $scope.userPreferences.customerSettings;
                     // if (customerSettings && customerSettings.scrollPos) {

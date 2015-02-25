@@ -81,7 +81,7 @@
     "leaflet": "~0.7.3",
     "angular-leaflet-directive": "*",
     "modernizr": "~2.8.3",
-    "moment": "~2.8.3",
+    "moment": "~2.9.0",
     "ng-csv": "~0.2.3",
     "ngOnboarding": "*",
     "nestable": "4f93032cfafe2002f24ed6bd7dc1510931498503",

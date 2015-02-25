@@ -65,8 +65,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            if ($scope.showOnboarding = false && $scope.userPreferences.tasks.create_campaign == undefined || $scope.userPreferences.tasks.create_campaign == false) {
-              $scope.finishOnboarding();
+            if ($scope.userPreferences.tasks) {
+                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.create_campaign == undefined || $scope.userPreferences.tasks.create_campaign == false) {
+                  $scope.finishOnboarding();
+                }
             }
             $scope.activeTab = preferences.indi_default_tab;
             if (preferences.welcome_alert) {

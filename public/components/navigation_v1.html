@@ -56,6 +56,9 @@
                                 <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}"  class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
                                 <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
                             </li>
+                            <li ng-if="cartDetails.length > 0">
+                                <a href="" data-toggle="modal" data-target="#cart-checkout-modal"><i class="fa fa-shopping-cart"></i> ({{cartDetails.length || 0}})</a>
+                            </li>
                         </ul>
                     </div>
                     <!-- /.navbar-collapse -->
