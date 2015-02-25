@@ -939,15 +939,12 @@ define([
                     });
                     if($scope.componentEditing)
                     {
-                    $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
-                        type: $scope.componentEditing.type
-                    }).icon;
-                    $scope.componentEditing.header_title = _.findWhere($scope.componentTypes, {
-                        type: $scope.componentEditing.type
-                    }).title;
-
-                    if($scope.componentEditing.bg && $scope.componentEditing.bg.img && $scope.componentEditing.bg.img.url && !$scope.componentEditing.bg.color)
-                        $scope.componentEditing.bg.img.show = true;
+                        $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
+                            type: $scope.componentEditing.type
+                        }).icon;
+                        $scope.componentEditing.header_title = _.findWhere($scope.componentTypes, {
+                            type: $scope.componentEditing.type
+                        }).title;
                     }
 
                     if($scope.componentEditing.type === "simple-form" && !$scope.componentEditing.fields.length)
