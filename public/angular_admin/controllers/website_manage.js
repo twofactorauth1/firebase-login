@@ -90,42 +90,10 @@ define([
                       }
                     ];
                 }
-                if (type == 'edit-home') {
-                    $scope.stepIndex = 0
-                    $scope.showOnboarding = true;
-                    $scope.activeTab = 'pages';
-                    $scope.onboardingSteps = [
-                      {
-                        overlay: true,
-                        title: 'Task: Edit home page',
-                        description: "Find the home page in the list to edit.",
-                        position: 'centered'
-                      },
-                      {
-                        position: 'bottom',
-                        overlay: false,
-                        title: 'Task: Click edit',
-                        width: 400,
-                        description: "Once you find the page click the edit button in the tile."
-                      },
-                      {
-                        position: 'bottom',
-                        overlay: false,
-                        title: 'Task: Save edit',
-                        width: 400,
-                        description: 'After all your editing is done click save in top right of the view and your are done.'
-                      }
-                    ];
-                }
             };
 
             $scope.finishOnboarding = function() {
-              if ($scope.obType == 'add-post') {
-                $scope.userPreferences.tasks.add_post = true;
-              }
-              if ($scope.obType == 'edit-home') {
-                $scope.userPreferences.tasks.edit_home = true;
-              }
+              $scope.userPreferences.tasks.add_post = true;
               UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 

@@ -1,5 +1,9 @@
 <div class="website" ng-class="{true: 'editing', false: ''}[isEditing == true]">
     <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+    <div ng-if="showOnboarding">
+      <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+      on-finish-callback='finishOnboarding'></onboarding-popover>
+    </div>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-8 pages-editing">
             <a class="btn btn-success pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
@@ -301,7 +305,7 @@
                                     <label for="colorpicker">Nav Hover Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hover" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
-                                
+
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
@@ -411,7 +415,7 @@
                                     <option value="90">90</option>
                                     <option value="100">100</option>
                                 </select>
-                                   
+
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_position">BG Position</label>
@@ -442,7 +446,7 @@
                                 <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
                                 </select>
 
-                            </div>                           
+                            </div>
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
                                 <label for="colorpicker">Image Position:</label>
                                 <select ng-model="componentEditing.imagePosition" ng-change="saveComponent()" class="form-control input-lg">
@@ -571,21 +575,21 @@
                                     <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                     </select>
                                     <label class="col-xs-2" for="colorpicker">Closed:</label>
-                                     <input class="" ng-model="val.closed" type="checkbox" > 
+                                     <input class="" ng-model="val.closed" type="checkbox" >
                                 </div>
-                                
+
                             </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'simple-form'">
                             <tab-heading>
                                 <span>Fields</span>
-                            </tab-heading>                            
+                            </tab-heading>
                                 <div class="form-group" ng-repeat="field in componentEditing.fields">
                                   <div class="col-xs-12 ckbox ckbox-success">
                                     <input type="checkbox" id="chk_{{field.name}}"  ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
                                     <label for="chk_{{field.name}}">{{field.display}}</label>
                             </div>
-                                </div>                         
+                                </div>
                         </tab>
 
                         <tab ng-if="componentEditing.type === 'video'">
