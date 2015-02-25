@@ -293,23 +293,26 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.$watch('fullName', function(newValue, oldValue) {
             if (newValue) {
                 var nameSplit = newValue.match(/\S+/g);
-                if (nameSplit.length >= 3) {
-                    $scope.user.first = nameSplit[0];
-                    $scope.user.middle = nameSplit[1];
-                    $scope.user.last = nameSplit[2];
-                } else if (nameSplit.length == 2) {
-                    $scope.user.first = nameSplit[0];
-                    $scope.user.middle = '';
-                    $scope.user.last = nameSplit[1];
-                } else if (nameSplit.length == 1) {
-                    $scope.user.first = nameSplit[0];
-                    $scope.user.middle = '';
-                    $scope.user.last = '';
-                } else {
-                    $scope.user.first = '';
-                    $scope.user.middle = '';
-                    $scope.user.last = '';
+                if(nameSplit !=null) {
+                    if (nameSplit.length >= 3) {
+                        $scope.user.first = nameSplit[0];
+                        $scope.user.middle = nameSplit[1];
+                        $scope.user.last = nameSplit[2];
+                    } else if (nameSplit.length == 2) {
+                        $scope.user.first = nameSplit[0];
+                        $scope.user.middle = '';
+                        $scope.user.last = nameSplit[1];
+                    } else if (nameSplit.length == 1) {
+                        $scope.user.first = nameSplit[0];
+                        $scope.user.middle = '';
+                        $scope.user.last = '';
+                    } else {
+                        $scope.user.first = '';
+                        $scope.user.middle = '';
+                        $scope.user.last = '';
+                    }
                 }
+
                 // UserService.putUser($scope.user, function(user) {
                 //   //$scope.user = user;
                 // });
