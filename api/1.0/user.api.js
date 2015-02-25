@@ -618,7 +618,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 //console.log(value);
                 user.set("credentials",value.get("credentials"));
                 user.set('accounts', value.get('accounts'));
-
+                if(user.get('welcome_alert')) {
+                    self.log.warn('user object contains welcome_alert:', user);
+                    var userPreferences = user.get('user_preferences');
+                    userPreferences.welcome_alert = user.get('welcome_alert');
+                    delete user.attributes.welcome_alert;
+                }
                 self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
                     if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
                         return self.send403(res);

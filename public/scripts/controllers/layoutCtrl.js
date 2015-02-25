@@ -1615,11 +1615,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
     };
-
-    userService.getTmpAccount(function(data) {
-      $scope.tmpAccount = data;
-    });
-
+    if ($scope.$location.$$path === '/signup') {
+      userService.getTmpAccount(function(data) {
+        $scope.tmpAccount = data;
+      });
+    }
     $scope.createAccount = function(newAccount) {
       //validate
       //email

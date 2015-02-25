@@ -23,6 +23,7 @@ define([
     'blockUI',
     'adminValidationDirective','constants',
     'commonutils',
+    'ngOnboarding'
 ], function(app) {
     app.register.controller('WebsiteCtrl', [
         '$scope',
@@ -41,6 +42,55 @@ define([
         function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
             var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
             ngProgress.start();
+            UserService.getUserPreferences(function(preferences) {
+              $scope.userPreferences = preferences;
+              if ($scope.showOnboarding = false && $scope.userPreferences.tasks.edit_home == undefined || $scope.userPreferences.tasks.edit_home == false) {
+                $scope.finishOnboarding();
+              }
+            });
+            $scope.showOnboarding = false;
+            $scope.beginOnboarding = function(type) {
+              $scope.showOnboarding = true;
+              $scope.obType = type;
+                if (type == 'edit-home') {
+                    $scope.stepIndex = 0
+                    $scope.showOnboarding = true;
+                    $scope.activeTab = 'pages';
+                    $scope.onboardingSteps = [
+                      {
+                        overlay: true,
+                        title: 'Task: Edit home page',
+                        description: "Find the home page in the list to edit.",
+                        position: 'centered'
+                      },
+                      {
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Task: Click edit',
+                        width: 400,
+                        description: "Once you find the page click the edit button in the tile."
+                      },
+                      {
+                        position: 'bottom',
+                        overlay: false,
+                        title: 'Task: Save edit',
+                        width: 400,
+                        description: 'After all your editing is done click save in top right of the view and your are done.'
+                      }
+                    ];
+                }
+            };
+
+            $scope.finishOnboarding = function() {
+              $scope.userPreferences.tasks.edit_home = true;
+              UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+            };
+
+            if ($location.$$search['onboarding']) {
+                $scope.beginOnboarding($location.$$search['onboarding']);
+            }
+
+
 
             if ($location.$$search['pagehandle']) {
                 document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
@@ -399,7 +449,7 @@ define([
                     $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
                         if(!$(this).hasClass("clickable-link")) {
                             e.preventDefault();
-                            e.stopPropagation();    
+                            e.stopPropagation();
                         }
                     });
 
@@ -420,7 +470,7 @@ define([
                         var matchingComponent = _.findWhere($scope.currentPage.components, {
                             _id: e.currentTarget.attributes['data-id'].value
                         });
-                        
+
 
                         var newComponent = angular.copy(matchingComponent);
                         var temp = Math.uuid();
@@ -612,8 +662,8 @@ define([
                             $('#edit-page-url').parents('div.form-group').addClass('has-error');
                             return false;
                             }
-                        };  
-                        
+                        };
+
                     }
                     var componentJSON = $scope.currentPage.components;
                     var pageId = $scope.currentPage._id;
@@ -662,9 +712,9 @@ define([
                                         editor.find(".cke_reset").remove();
                                         editor.find(".cke_image_resizer").remove();
                                         var newHtml = editor.html();
-                                        componentVarContents = newHtml; 
+                                        componentVarContents = newHtml;
                                     }
-                                    
+
 
                                 var setterKey, pa;
                                 //if contains an array of variables
@@ -678,7 +728,7 @@ define([
                                 //if contains an array of array variables
                                 if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
                                     //get parent index in array
-                                    var first = componentVar.split(".")[0];                                    
+                                    var first = componentVar.split(".")[0];
                                     var second = componentEditable[i2].attributes['parent-data-index'].value;
                                     //get child index in array
                                     var third = componentVar.split(".")[2];
@@ -965,7 +1015,7 @@ define([
                             "value" : false,
                             "name" : "phone"
                         })
-                    }                    
+                    }
 
                 });
                 //open right sidebar and component tab
@@ -1035,7 +1085,7 @@ define([
             $scope.updateSingleComponent = function(componentId)
             {
                 //update single component
-                
+
                 var matchingComponent = _.findWhere($scope.currentPage.components, {
                     _id: componentId
                 });
@@ -1072,9 +1122,9 @@ define([
                                             var editor = jQuery("<p>").append(jHtmlObject);
                                             editor.find(".cke_reset").remove();
                                             var newHtml = editor.html();
-                                            componentVarContents = newHtml; 
+                                            componentVarContents = newHtml;
                                         }
-                                        
+
 
                                     var setterKey, pa;
                                     //if contains an array of variables
@@ -1089,7 +1139,7 @@ define([
                                     //if contains an array of array variables
                                     if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
                                         //get parent index in array
-                                        var first = componentVar.split(".")[0];                                    
+                                        var first = componentVar.split(".")[0];
                                         var second = componentEditable[i2].attributes['parent-data-index'].value;
                                         //get child index in array
                                         var third = componentVar.split(".")[2];
@@ -1111,20 +1161,20 @@ define([
                                     }
                                 }
                     }
-                }               
+                }
                return matchingComponent;
             }
 
-            $scope.saveCustomComponent = function(networks) {                
+            $scope.saveCustomComponent = function(networks) {
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
             };
 
             $scope.saveContactComponent = function() {
-                    var currentComponentId = $scope.componentEditing._id;  
-                    $scope.updateSingleComponent(currentComponentId);                  
+                    var currentComponentId = $scope.componentEditing._id;
+                    $scope.updateSingleComponent(currentComponentId);
                     iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
             };
-            
+
             //delete page
             $scope.deletePage = function() {
 
@@ -1251,7 +1301,7 @@ define([
 
                     SweetAlert.swal({
                             title: "Are you sure?",
-                            text: "Do you want to save your changes?",
+                            text: "You have unsaved data that will be lost",
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonColor: "#DD6B55",
@@ -1279,12 +1329,12 @@ define([
             });
 
             //Add Link to navigation
-           
+
             $scope.setLinkUrl = function()
             {
                 $scope.newLink.linkTitle = $("#linkSection option:selected").html();
             }
-            
+
             $scope.setLinkTitle = function(value, index, newLink)
             {
                 var newArray = _.first(angular.copy($scope.currentPage.components), [index+1]);
@@ -1388,7 +1438,7 @@ define([
                     _id: componentId
                 });
                 $scope.updateSingleComponent(componentId);
-                $scope.componentEditing.features.splice(index + 1, 0, newFeature) 
+                $scope.componentEditing.features.splice(index + 1, 0, newFeature)
                 $scope.saveCustomComponent();
             }
 
@@ -1579,7 +1629,7 @@ define([
                         $scope.originalCurrentPage = angular.copy($scope.currentPage);
                     })
                 }
-               
+
             }
 
             window.checkIfSinglePost = function(post) {
@@ -1596,7 +1646,7 @@ define([
                     _id: componentId
                 });
                 $scope.updateSingleComponent(componentId);
-                $scope.componentEditing.tables.splice(index, 1);                
+                $scope.componentEditing.tables.splice(index, 1);
                 $scope.saveCustomComponent();
             }
 
@@ -1635,7 +1685,7 @@ define([
                 $scope.saveCustomComponent();
             }
             window.updateComponent = function(componentId) {
-                //update single component               
+                //update single component
                return $scope.updateSingleComponent(componentId);
             };
 

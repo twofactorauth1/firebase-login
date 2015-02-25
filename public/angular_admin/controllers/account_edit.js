@@ -51,7 +51,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             if ($scope.isFormDirty) {
                 SweetAlert.swal({
                     title: "Are you sure?",
-                    text: "You want to lose unsaved data?",
+                    text: "You have unsaved data that will be lost",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
