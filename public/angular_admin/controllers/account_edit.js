@@ -449,7 +449,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             $scope.saveLoading = true;
             UserService.putUser($scope.user, function(user) {
                 if ($scope.account.business.name.length) {
-                  $scope.account.business.name = $scope.account.business.name.replace(/[^\w\s]/gi, '');
+                  $scope.account.business.name = $scope.account.business.name.replace(/^([a-zA-Z0-9 _-]+)$/, '');
                 }
                 UserService.putAccount($scope.account, function(account) {
                     $scope.saveLoading = false;
