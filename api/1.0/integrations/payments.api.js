@@ -28,7 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         //Contacts
-        app.post(this.url('contacts/:id/charge'), this.setup, this.createChargeForContact.bind(this));
+        app.post(this.url('contacts/:id/charge'), this.setup.bind(this), this.createChargeForContact.bind(this));
 
         //Customers
         app.get(this.url('customers'), this.isAuthApi.bind(this), this.listCustomers.bind(this));
