@@ -4,7 +4,11 @@ define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
     	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
     		if (section && task) {
-    			window.location = '/admin#/'+section+'?onboarding='+task
+          if (section == 'website-editor') {
+            window.location = '/admin#/'+section+'?pagehandle=index&onboarding='+task
+          } else {
+    			     window.location = '/admin#/'+section+'?onboarding='+task
+          }
     		};
     	};
 
