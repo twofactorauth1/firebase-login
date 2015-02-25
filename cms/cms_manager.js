@@ -338,6 +338,7 @@ module.exports = {
                                 return fn(err, null);
                             }
                             var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), blogPage);
+
                             if(postAry === null) {
                                 //return fn('Page does not contain blog component.', null);
                                 //need to create a blog component.
@@ -346,14 +347,14 @@ module.exports = {
                                 });
                                 blogPage.get('components').push(blogComponent);
                                 //asynchrounously create single-post-page if it doesn't exist.
-                                self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
-                                    if(err) {
-                                        self.log.error('Error creating single-post-page: ' + err);
-                                        return;
-                                    }
-                                });
-                            }
 
+                            }
+                            self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating single-post-page: ' + err);
+                                    return;
+                                }
+                            });
                             cmsDao.saveOrUpdate(blogPage, function(err, page){
                                 if(err) {
                                     self.log.error('Error updating page for post: ' + err);
@@ -377,14 +378,14 @@ module.exports = {
                             });
                             page.get('components').push(blogComponent);
                             //asynchrounously create single-post-page if it doesn't exist.
-                            self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
-                                if(err) {
-                                    self.log.error('Error creating single-post-page: ' + err);
-                                    return;
-                                }
-                            });
-                        }
 
+                        }
+                        self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                            if(err) {
+                                self.log.error('Error creating single-post-page: ' + err);
+                                return;
+                            }
+                        });
                         cmsDao.saveOrUpdate(page, function(err, page){
                             if(err) {
                                 self.log.error('Error updating page for post: ' + err);
@@ -520,7 +521,7 @@ module.exports = {
                 "by" : null
             },
             "modified" : {
-                "date" : null,
+                "date" : new Date(),
                 "by" : null
             }
         };
@@ -626,7 +627,7 @@ module.exports = {
                 "by" : null
         },
             "modified" : {
-            "date" : null,
+            "date" : new Date(),
                 "by" : null
         },
             "screenshot" : null
