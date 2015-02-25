@@ -140,7 +140,7 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if ($scope.userPreferences.welcome_alert.initial == false) {
+                if ($scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
                   $scope.finishOnboarding();
                 }
                 if (!$location.$$search['onboarding']) {

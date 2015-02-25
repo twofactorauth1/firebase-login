@@ -214,7 +214,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         });
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            if ($scope.userPreferences.welcome_alert.initial == false) {
+            if ($scope.userPreferences.tasks.add_product == undefined || $scope.userPreferences.tasks.add_product == false) {
               $scope.finishOnboarding();
             }
             var commerceSettings = $scope.userPreferences.commerceSettings;
