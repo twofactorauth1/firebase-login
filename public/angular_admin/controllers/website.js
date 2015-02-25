@@ -1251,7 +1251,7 @@ define([
 
                     SweetAlert.swal({
                             title: "Are you sure?",
-                            text: "Do you want to save your changes?",
+                            text: "You have unsaved data that will be lost",
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonColor: "#DD6B55",
