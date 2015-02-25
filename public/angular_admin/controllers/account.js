@@ -33,7 +33,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
               $scope.socialAccounts = data.socialAccounts;
             });
 
-            $scope.onboardingSteps = [];
+            $scope.onboardingSteps = [{
+                overlay: false
+            }]
             $scope.showOnboarding = false;
             $scope.stepIndex = 0;
             $scope.beginOnboarding = function(type) {

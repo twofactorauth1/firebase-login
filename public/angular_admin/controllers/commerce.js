@@ -10,6 +10,10 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             });
         };
         $scope.showOnboarding = false;
+        $scope.stepIndex = 0;
+        $scope.onboardingSteps = [{
+            overlay: false
+        }]
         $scope.beginOnboarding = function(type) {
             if (type == 'add-product') {
                 $scope.stepIndex = 0;

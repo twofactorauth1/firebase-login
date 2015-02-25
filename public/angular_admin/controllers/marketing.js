@@ -6,10 +6,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
          * begin the onboarding process if this is the users first time
          */
 
-        $scope.onboardingSteps = [];
+        
         $scope.showOnboarding = false;
         $scope.stepIndex = 0;
-
+        $scope.onboardingSteps = [{
+            overlay: false
+        }]
         $scope.beginOnboarding = function(type) {
             if (type == 'create-campaign') {
                 $scope.showOnboarding = true;
