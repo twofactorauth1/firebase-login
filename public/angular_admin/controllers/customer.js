@@ -20,6 +20,11 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
               $scope.socialAccounts = data.socialAccounts;
             });
             $scope.showOnboarding = false;
+            $scope.stepIndex = 0;
+            $scope.onboardingSteps = [
+            {
+                overlay: false
+            }];
             $scope.beginOnboarding = function(type) {
                 if (type == 'create-contact') {
                     $scope.stepIndex = 0;
@@ -233,14 +238,54 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 });
 
                 $scope.$watch('customerFilter.type', function(newValue, oldValue) {
-                    if (newValue) {
-                        $scope.renderedCustomers = $scope.originalCustomers.filter(function(elem) {
+                    var orginal = $scope.originalCustomers;
+                    if(newValue) {                        
+                        $scope.renderedCustomers = [];
+                        $scope.fetchedCustomers = orginal.filter(function(elem) {
                             return elem.type == newValue;
                         });
-                    } else {
-                        $scope.renderedCustomers = $scope.originalCustomers;
+                        $scope.orderByFn();
+                        $scope.customerScrollOffset = 0;
+                        $scope.customerScrollFn();
                     }
+                    else if(newValue === "")
+                    {
+                        $scope.renderedCustomers = [];
+                        $scope.fetchedCustomers = orginal;
+                        $scope.orderByFn();
+                        $scope.customerScrollOffset = 0;
+                        $scope.customerScrollFn();
+                    } 
+                    
                 });
+
+
+
+                $scope.alphaFilter = function(alpha) {
+                    $scope.alphaSelected = alpha;
+                    var orginal = $scope.originalCustomers;
+                    $scope.renderedCustomers = [];
+                    $scope.fetchedCustomers = [];
+                    if (alpha) {
+                        $scope.alphaSelectedCharCode = alpha.charCodeAt(0);
+                        $scope.fetchedCustomers = orginal.filter(function(elem) {
+                            if (elem.first) {
+                                return elem.first.charAt(0).toLowerCase() == alpha;
+                            }
+                        });
+                        $(".contentpanel").scrollTop(0);
+                        $scope.customerFilter.first = alpha;
+                    } else {
+                        $scope.alphaSelectedCharCode = null;
+                        $scope.fetchedCustomers = orginal;
+                        $scope.customerFilter = {};
+                    }
+                    $scope.orderByFn();
+                    $scope.customerScrollOffset = 0;
+                    $scope.customerScrollFn();
+                };
+
+
 
                 $scope.alphaSelected = null;
                 $scope.alphaSelectedCharCode = null;
