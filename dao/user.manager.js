@@ -201,8 +201,13 @@ module.exports = {
                         }
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
-                        analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
-
+                        //analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
+                        socialConfigManager.createSocialConfigFromUser(accountId, savedUser, function(err, value){
+                            if(err) {
+                                log.error('Error creating social config for account:' + accountId);
+                            }
+                            return;
+                        });
                         /*
                          * Send welcome email.  This is done asynchronously.
                          * But only do this if we are not running unit tests.
