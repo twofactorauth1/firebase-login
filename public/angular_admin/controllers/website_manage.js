@@ -392,7 +392,7 @@ define([
 
 
                 postData.websiteId = $scope.website._id;
-                    WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
                     toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                     $('#create-post-modal').modal('hide');
                     $scope.posts.push(data);
