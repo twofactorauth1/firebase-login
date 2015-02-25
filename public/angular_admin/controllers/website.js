@@ -842,7 +842,6 @@ define([
 
                 if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
                     $scope.saveContactComponent();
-                    $('#component-setting-modal').modal('hide');
                 }
             }
 
