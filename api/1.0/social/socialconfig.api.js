@@ -77,15 +77,9 @@ _.extend(api.prototype, baseApi.prototype, {
             id = req.params.id;
         }
         var accountId = parseInt(self.accountId(req));
-        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(res);
-            } else {
-                socialConfigManager.getSocialConfig(accountId, id, function(err, config){
-                    self.log.debug('<< getSocialConfig');
-                    self.sendResultOrError(resp, err, config, "Error retrieving social config");
-                });
-            }
+        socialConfigManager.getSocialConfig(accountId, id, function(err, config){
+            self.log.debug('<< getSocialConfig');
+            self.sendResultOrError(resp, err, config, "Error retrieving social config");
         });
 
     },
