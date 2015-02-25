@@ -51,8 +51,6 @@ var component = $$.m.ModelBase.extend({
 
             activetxtcolor: null,
 
-            navhovercolor: null,
-
             /**
              *
              *
