@@ -157,6 +157,7 @@ var user = $$.m.ModelBase.extend({
                 },
                 website_default_tab : '',
                 indi_default_tab : '',
+                tasks: {},
                 welcome_alert : {
                     initial : false,
                     editwebsite : false,
