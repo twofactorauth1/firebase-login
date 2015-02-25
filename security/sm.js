@@ -118,7 +118,7 @@ var securityManager = {
 
     getPrivilegesByUserAndAccount: function(userId, accountId, cb) {
         var self = this;
-        log.debug('>> getPrivilegesByUserAndAccount');
+        log.debug('>> getPrivilegesByUserAndAccount(' + userId + ',' + accountId + ')');
         dao.findOne({'userId': userId, accountId: accountId}, $$.m.Privilege, function(err, privilege){
             if(err) {
                 log.error('Exception while finding privilege by userId[' + userId + '] and account[' + accountId + ']: ' + err );

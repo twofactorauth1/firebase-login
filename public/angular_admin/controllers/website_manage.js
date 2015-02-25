@@ -26,10 +26,12 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+            $scope.showOnboarding = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
 
 
             $scope.beginOnboarding = function(type) {
+              $scope.showOnboarding = true;
               $scope.obType = type;
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
@@ -140,7 +142,7 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if ($scope.userPreferences.welcome_alert.initial == false) {
+                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
                   $scope.finishOnboarding();
                 }
                 if (!$location.$$search['onboarding']) {
@@ -392,7 +394,7 @@ define([
 
 
                 postData.websiteId = $scope.website._id;
-                    WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
                     toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                     $('#create-post-modal').modal('hide');
                     $scope.posts.push(data);

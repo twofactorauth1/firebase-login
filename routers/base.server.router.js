@@ -70,12 +70,12 @@ _.extend(baseRouter.prototype, {
                     self.sm.verifySubscription(req, function(err, isValid){
                         if(err) {
                             logger.error('Could not verify subscription: ' + err);
-                            accountDao.addSubscriptionLockToAccount(accountId, function(err, value){
+                            accountDao.addSubscriptionLockToAccount(req.session.accountId, function(err, value){
                                 return next();
                             });
                         } else if(isValid !== true) {
                             logger.warn('Subscription for account ' + req.session.accountId + ' is not valid.');
-                            accountDao.addSubscriptionLockToAccount(accountId, function(err, value){
+                            accountDao.addSubscriptionLockToAccount(req.session.accountId, function(err, value){
                                 return next();
                             });
                         } else {
