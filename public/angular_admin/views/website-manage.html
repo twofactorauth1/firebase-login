@@ -118,7 +118,7 @@
                         </div>
                     </div>
                     <div class="themes">
-                        <div class="col-sm-4 theme" ng-class="{success: theme.name == currentTheme.name, selected: theme.name == selectedTheme.name}" ng-repeat="theme in themes">
+                        <div class="col-sm-4 theme" ng-class="{success: theme.name == currentTheme.name, selected: theme.name == selectedTheme.name}" ng-repeat="theme in themes|orderBy:'coming_soon':true">
                         <div class="ribbon-wrapper-green" ng-if="theme.coming_soon == true"><div class="ribbon-green">COMING SOON</div></div>
                             <div class="thumbnail" data-themeid="">
                                 <div class="check-theme" style="display:none"><i class="fa fa-check-circle"></i>
