@@ -42,7 +42,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
-        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createContact.bind(this));
+        /*
+         * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
+         */
+        //app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createContact.bind(this));
+        app.post(this.url(''), this.setup.bind(this), this.createContact.bind(this));
         app.put(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
@@ -153,7 +157,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (isNew === true) {
             contact.set("accountId", accountId);
-            contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
+            if(this.userId(req)) {
+                contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
+            }
+
             contact.created("date", new Date().getTime());
         }
 
