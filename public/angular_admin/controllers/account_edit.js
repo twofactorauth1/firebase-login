@@ -14,7 +14,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
-            if ($scope.userPreferences.tasks.basic_info == undefined || $scope.userPreferences.tasks.basic_info == false) {
+            if ($scope.showOnboarding = false && $scope.showOnboarding$scope.userPreferences.tasks.basic_info == undefined || $scope.userPreferences.tasks.basic_info == false) {
               $scope.finishOnboarding();
             }
         });

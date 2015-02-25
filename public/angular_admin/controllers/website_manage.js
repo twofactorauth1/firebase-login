@@ -26,10 +26,12 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+            $scope.showOnboarding = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
 
 
             $scope.beginOnboarding = function(type) {
+              $scope.showOnboarding = true;
               $scope.obType = type;
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
@@ -140,7 +142,7 @@ define([
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if ($scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
+                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
                   $scope.finishOnboarding();
                 }
                 if (!$location.$$search['onboarding']) {
