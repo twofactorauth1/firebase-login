@@ -10,6 +10,10 @@ define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
 
         $scope.initialWelcome = true;
 
+        $scope.preventClick = function(e) {
+          e.preventDefault();
+        };
+
         $scope.topics = [
             {
                 "title" : "Can I use my own domain name?",
@@ -39,7 +43,8 @@ define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
             UserService.updateUserPreferences($scope.userPreferences, false, function() {})
         };
 
-        $scope.clearWelcome = function() {
+        $scope.clearWelcome = function(e) {
+          e.preventDefault();
             console.log('clear welcome');
         	$scope.initialWelcome = true;
         	if ($scope.userPreferences) {
