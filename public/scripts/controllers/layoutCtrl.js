@@ -475,7 +475,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       PaymentService.getStripeCardToken(cardInput, function(token) {
         PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
-          $('#cart-checkout-modal').modal('hide');
+          // $('#cart-checkout-modal').modal('hide');
+          //thanks modal
+          //clear form
         });
       });
 
