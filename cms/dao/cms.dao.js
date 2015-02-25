@@ -1271,7 +1271,10 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "modified" : null
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            }
 
         });
         var componentId = $$.u.idutils.generateUUID();
@@ -1317,7 +1320,7 @@ var dao = {
                 "by" : null
             },
             "modified" : {
-                "date" : "",
+                "date" : new Date(),
                 "by" : null
             },
             "mainmenu" : null,
