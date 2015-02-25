@@ -66,17 +66,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         productManager.getProduct(productId, function(err, value){
             if(!err && value != null) {
-                var accountId = value.get('accountId');
-
-                self.checkPermissionForAccount(req, self.sc.privs.VIEW_PRODUCT, accountId, function(err, isAllowed){
-                    if (isAllowed !== true) {
-                        self.log.debug('<< getProduct');
-                        return self.send403(res);
-                    } else {
-                        self.log.debug('<< getProduct');
-                        return self.sendResult(res, value);
-                    }
-                });
+                return self.sendResult(res, value);
             } else {
                 self.log.debug('<< getProduct');
                 self.sendResultOrError(res, err, value, "Error retrieving product");
