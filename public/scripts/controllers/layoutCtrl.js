@@ -179,7 +179,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             return '';
           }
         }
-
+        $(document).ready(function() {
+          setTimeout(function() {
+            var locId =  $location.$$hash;
+            if(locId)
+            {
+             var element = document.getElementById(locId);
+             if(element)
+                $document.scrollToElementAnimated(element);
+            } 
+            }, 500);          
+        })
         var iframe = window.parent.document.getElementById("iframe-website")
         $scope.isAdmin = iframe;
         iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
@@ -1894,6 +1904,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addImageToThumbnail(componentId);
     }
 
+
 $scope.inserted = false;
  if(!$scope.activated)
   $('body').on("DOMNodeInserted", ".feature-height", function (e)
@@ -1911,4 +1922,7 @@ $scope.inserted = false;
    }
   })
   }
+
+  
+
 ]);

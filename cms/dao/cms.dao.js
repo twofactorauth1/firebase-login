@@ -1343,7 +1343,10 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "modified" : null
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            }
         });
 
         self.saveOrUpdate(page, function(err, value){
