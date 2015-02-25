@@ -538,6 +538,7 @@ define([
             $scope.cancelPage = function() {
                 // $scope.components = that.originalCurrentPageComponents;
                 $scope.changesConfirmed = true;
+                $scope.isDirty = false;
                 var pageId = $scope.currentPage._id;
                 //$scope.deactivateAloha && $scope.deactivateAloha();
                 $scope.deactivateAloha();
@@ -1017,6 +1018,7 @@ define([
                 $scope.currentPage.components = $scope.components;
                 $scope.updateIframeComponents();
                 $scope.isEditing = true;
+                $scope.isDirty = true;
                 setTimeout(function() {
                     $scope.activateAloha();
                 }, 500)
@@ -1236,12 +1238,13 @@ define([
             };
 
             $scope.changesConfirmed = false;
+            $scope.isDirty = false;
             //Before user leaves editor, ask if they want to save changes
             var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
                 var isDirty = false;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
-                    var isDirty = iFrame.contentWindow.checkOrSetPageDirty();
+                    var isDirty = iFrame.contentWindow.checkOrSetPageDirty() || $scope.isDirty;
                 }
 
                 if (isDirty && !$scope.changesConfirmed) {
@@ -1266,6 +1269,7 @@ define([
                                 SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
                             }
                             $scope.changesConfirmed = true;
+                            $scope.isDirty = false;
                             $location.path(newUrl);
                             offFn();
                         });
