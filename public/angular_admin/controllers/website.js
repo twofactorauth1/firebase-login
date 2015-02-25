@@ -1363,7 +1363,7 @@ define([
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
                                     iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
-                                    toaster.pop('success', "Navigation updated successfully.");
+                                    //toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }
 

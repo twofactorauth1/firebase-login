@@ -558,6 +558,10 @@
                                 <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.contact.phone" ng-blur="updateContactUsAddress()">
                             </div>
                             <div class="form-group">
+                                    <label for="show-hours">Show Business Hours</label>
+                                    <input id="show-hours" bs-switch ng-model="componentEditing.showHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                </div>
+                            <div class="form-group" ng-if="componentEditing.showHours">
                                 <label for="location-hours">Business Hours </label>
                                 <div class="col-xs-12" ng-repeat="val in componentEditing.hours">
 

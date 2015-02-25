@@ -65,7 +65,11 @@ var component = $$.m.ModelBase.extend({
              *
              */
             imgurl: "",
-
+            /**
+             *
+             *
+             */
+            showHours: true,
             /**
              * The hours a business is open, array
              *[

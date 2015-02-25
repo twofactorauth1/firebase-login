@@ -13,7 +13,7 @@
                             <span class="blocked" ng-if="!contactPhone">Enter Phone Number here</span>
                             <span class="blocked" ng-bind-html="contactPhone"></span>
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->
-                            <div ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed">{{val.start}}-{{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                            <div ng-if="component.showHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed">{{val.start}}-{{val.end}}</span><span ng-show="val.closed">Closed</span></div>
                         </div>
                     </div> 
                 </div>
