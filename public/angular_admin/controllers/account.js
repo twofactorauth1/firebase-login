@@ -281,7 +281,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             UserService.getUserPreferences(function(preferences) {
                 $scope.userPreferences = preferences;
-                if ($scope.userPreferences.welcome_alert.initial == false) {
+                if ($scope.userPreferences.tasks.connect_social == undefined || $scope.userPreferences.tasks.connect_social == false) {
                   $scope.finishOnboarding();
                 }
                 if ($location.$$search.authtoken) {
