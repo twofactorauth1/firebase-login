@@ -134,24 +134,31 @@ define([
             }
 
             $scope.$watch('activeTab', function(newValue, oldValue) {
+                console.log('active tab changing to '+newValue+' from '+oldValue);
                 if ($scope.userPreferences) {
                     $scope.userPreferences.website_default_tab = newValue;
+                    console.log('final change '+$scope.userPreferences.website_default_tab);
                     $scope.savePreferencesFn();
                 }
             });
 
             UserService.getUserPreferences(function(preferences) {
+                console.log('getUserPreferences >>> ', preferences);
                 $scope.userPreferences = preferences;
-                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
-                  $scope.finishOnboarding();
+                if ($scope.userPreferences.tasks) {
+                    if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
+                      $scope.finishOnboarding();
+                    }
                 }
                 if (!$location.$$search['onboarding']) {
+                    console.log('setting active tab >>> ', preferences.website_default_tab);
                     $scope.activeTab = preferences.website_default_tab || 'pages';
                 }
             });
 
             $scope.savePreferencesFn = function() {
                 UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {})
+                console.log('savePreferencesFn >>> $scope.userPreferences ', $scope.userPreferences);
             };
 
             // var xH;
