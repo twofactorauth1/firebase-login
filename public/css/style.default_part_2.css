@@ -9830,6 +9830,10 @@ ul.nav {
   min-width: 85px;
 }
 
+.navigation-v1 .navigation-logo img {
+  max-height: 70px;
+}
+
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -9901,7 +9905,7 @@ ul.nav {
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
   display: block;
-  max-height: inherit;
+  max-height: 110px;
 }
 
 @media (max-width: 625px) {
@@ -9958,6 +9962,10 @@ ul.nav {
   -ms-transition: all 0.4s;
   -o-transition: all 0.4s;
   transition: all 0.4s;
+}
+
+.navigation-v3 .navigation-logo img {
+  max-height: 105px;
 }
 
 /********** Feature Block **********/
