@@ -1,6 +1,8 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
-on-finish-callback='finishOnboarding'></onboarding-popover>
+<div ng-if="showOnboarding">
+  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+  on-finish-callback='finishOnboarding'></onboarding-popover>
+</div>
 <div class="commerce">
   <div class="pageheader row">
     <div class="col-xs-8">

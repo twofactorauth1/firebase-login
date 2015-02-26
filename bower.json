@@ -21,6 +21,7 @@
     "angular-cookies": "1.2.16",
     "angular-cookie": "4.0.5",
     "angular-file-upload": "1.1.5",
+    "angular-filter": "0.5.4",
     "angular-isotope": "*",
     "angular-masonry-directive": "*",
     "angular-mocks": "~1.2.0",

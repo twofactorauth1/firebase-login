@@ -421,7 +421,7 @@ define([
                             $scope.editPage();
                             $scope.iframeLoaded = true;
                             editBlockUI.stop();
-                            $scope.showOnboarding = true;
+                            // $scope.showOnboarding = true;
                         }, 5000)
                     }
                 }

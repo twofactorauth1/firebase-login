@@ -251,7 +251,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             }
 
                     ngProgress.complete();
-                    $scope.showOnboarding = true;
+                    // $scope.showOnboarding = true;
         });
 
         //business phone field add
