@@ -377,10 +377,15 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
                           <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/linkedin?redirectTo={{redirectUrl}}&socialNetwork=LinkedIn"><i class="fa fa-linkedin fa-5x linkedin-icon-color"></i></a></div>
                             <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/twitter?redirectTo={{redirectUrl}}&socialNetwork=Twitter"><i class="fa fa-twitter fa-5x twitter-icon-color"></i></a></div>
                       </div>
-
                   </div>
                  </div>
-
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
+                        <div class="img-wrap img-wrap-strip">
+                          <div class="col-sm-12"><a href="/redirect/?next={{currentHost}}/stripe/connect"><img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="..."></a></div>
+                      </div>
+                    </div>
+                </div>
               <div class="col-sm-3 col-md-4" ng-repeat="sa in socialAccounts">
                   <div class="thumbnail">
                       <div class="img-wrap">
