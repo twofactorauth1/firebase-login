@@ -97,7 +97,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                         if (parseInt(exp_year) < parseInt(scope.currentYear)) {
                             $("#card_expiry .error").html("Card Year has Expired");
                             $("#card_expiry").addClass('has-error');
-                        } else if  (exp_month <= scope.currentMonth && exp_year >= scope.currentYear) {
+                        } else if  (exp_month <= scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
                         } else {
