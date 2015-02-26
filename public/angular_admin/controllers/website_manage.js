@@ -31,11 +31,11 @@ define([
 
 
             $scope.beginOnboarding = function(type) {
-              $scope.showOnboarding = true;
+
               $scope.obType = type;
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
-                    $scope.showOnboarding = true;
+
                     $scope.activeTab = 'themes';
                     $scope.onboardingSteps = [
                       {
@@ -63,7 +63,7 @@ define([
                 }
                 if (type == 'add-post') {
                     $scope.stepIndex = 0
-                    $scope.showOnboarding = true;
+
                     $scope.activeTab = 'posts';
                     $scope.onboardingSteps = [
                       {
@@ -93,7 +93,12 @@ define([
             };
 
             $scope.finishOnboarding = function() {
-              $scope.userPreferences.tasks.add_post = true;
+              if ($scope.obType == 'add-post') {
+                $scope.userPreferences.tasks.add_post = true;
+              }
+              if ($scope.obType == 'select-theme') {
+                $scope.userPreferences.tasks.select_theme = true;
+              }
               UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 
@@ -240,6 +245,7 @@ define([
                     $scope.secondaryFontStack = $scope.website.settings.font_family_2;
 
                     ngProgress.complete();
+                    $scope.showOnboarding = true;
                 });
             });
 

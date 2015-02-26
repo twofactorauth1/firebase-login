@@ -214,7 +214,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         ProductService.getProducts(function(products) {
             $scope.products = products;
             ngProgress.complete();
-            $scope.showOnboarding = true;
+            setTimeout(function(){$scope.showOnboarding = true;}, 2000);
         });
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
