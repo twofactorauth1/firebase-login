@@ -317,7 +317,9 @@
                                         <tbody>
 
                                             <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
-                                                <td><a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate">{{topPage.page}}</a>
+                                                <td>
+                                                    {{topPage.page}}
+                                                    <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>
                                                 </td>
                                                 <td>{{topPage.pageviews}}</td>
                                                 <td>{{topPage.uniquePageviews}}</td>
