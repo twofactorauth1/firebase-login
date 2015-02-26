@@ -93,7 +93,12 @@ define([
             };
 
             $scope.finishOnboarding = function() {
-              $scope.userPreferences.tasks.add_post = true;
+              if ($scope.obType == 'add-post') {
+                $scope.userPreferences.tasks.add_post = true;
+              }
+              if ($scope.obType == 'select-theme') {
+                $scope.userPreferences.tasks.select_theme = true;
+              }
               UserService.updateUserPreferences($scope.userPreferences, false, function() {});
             };
 
