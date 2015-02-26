@@ -122,6 +122,18 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                            <li ng-click="startTask('customer/add', 'add-contact')" ng-class="{complete: userPreferences.tasks.add_contact }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_contact , 'fa-circle-o' : !userPreferences.tasks.add_contact }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_contact">Complete</small>
+                                <h3 class="pull-left">Add a new contact</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Add a new contact.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('marketing', 'create-campaign')" ng-class="{complete: userPreferences.tasks.create_campaign }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_campaign , 'fa-circle-o' : !userPreferences.tasks.create_campaign }"></i></h1>
                                 <small class="pull-right done" ng-if="userPreferences.tasks.create_campaign">Complete</small>
