@@ -1401,6 +1401,11 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   margin: 0px;
 }
 
+.accountEdit .add-new {
+  margin-top: 10px;
+  margin-right: 0px;
+}
+
 .headerbar {
   border-left: 1px solid #eee;
   background: #fff;

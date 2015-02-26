@@ -139,7 +139,11 @@
             <div class="pages-section" ng-switch-when="pages">
 
                 <div class="row">
-
+                    <div ng-if="pages.length <= 0" class="empty">
+                        <h1 class="center"><span class="fa fa-file-text-o"></span></h1>
+                        <h3 class="center">No Pages Yet</h3>
+                        <h5 class="center">Add pages for them to appear here.</h5>
+                    </div>
                     <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true track by $index">
                         <div class="thumbnail layered-paper">
                             <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
@@ -161,7 +165,11 @@
 
             <div class="posts-section" ng-switch-when="posts">
                 <div class="row">
-
+                    <div ng-if="posts.length <= 0" class="empty">
+                        <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
+                        <h3 class="center">No Posts Yet</h3>
+                        <h5 class="center">Add posts for them to appear here.</h5>
+                    </div>
                     <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true track by $index">
                         <!-- <div class="thumbnail box14">
                             <div class="caption">

@@ -51,7 +51,7 @@ define([
       $scope.beginOnboarding = function(type) {
           if (type == 'dashboard') {
               $scope.stepIndex = 0;
-              $scope.showOnboarding = true;
+
               $scope.onboardingSteps = [{
                   overlay: true,
                   title: 'Task: Explore Dashboard',
@@ -223,6 +223,7 @@ define([
             //     }, 100);
             // };
             ngProgress.complete();
+            $scope.showOnboarding = true;
         };
         $scope.renderCommerceCharts = function() {
             ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {

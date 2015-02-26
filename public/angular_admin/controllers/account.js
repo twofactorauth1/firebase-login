@@ -40,7 +40,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.stepIndex = 0;
             $scope.beginOnboarding = function(type) {
                 if (type == 'connect-social') {
-                    $scope.showOnboarding = true;
                     $scope.activeTab = 'integrations';
                     $scope.onboardingSteps = [{
                         overlay: true,
@@ -234,6 +233,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                     });
 
                     ngProgress.complete();
+                    $scope.showOnboarding = true;
 
                     if ($scope.user.stripeId) {
                         PaymentService.getInvoicesForAccount(function(invoices) {

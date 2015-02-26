@@ -17,7 +17,6 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.beginOnboarding = function(type) {
             if (type == 'add-product') {
                 $scope.stepIndex = 0;
-                $scope.showOnboarding = true;
                 $scope.onboardingSteps = [{
                     overlay: true,
                     title: 'Task: Add Product',
@@ -215,6 +214,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         ProductService.getProducts(function(products) {
             $scope.products = products;
             ngProgress.complete();
+            $scope.showOnboarding = true;
         });
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
