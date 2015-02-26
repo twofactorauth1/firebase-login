@@ -40,7 +40,13 @@ define([
     function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService, $location) {
       UserService.getUserPreferences(function(preferences) {
           $scope.userPreferences = preferences;
+          if($scope.userPreferences.tasks) {
+              if ($scope.showOnboarding = false && $scope.userPreferences.tasks.dashboard == undefined || $scope.userPreferences.tasks.dashboard == false) {
+                $scope.finishOnboarding();
+              }
+          }
       });
+      $scope.showOnboarding = false;
 
       $scope.beginOnboarding = function(type) {
           if (type == 'dashboard') {

@@ -14,6 +14,9 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
+            if ($scope.showOnboarding = false && $scope.showOnboarding$scope.userPreferences.tasks.basic_info == undefined || $scope.userPreferences.tasks.basic_info == false) {
+              $scope.finishOnboarding();
+            }
         });
 
         $scope.beginOnboarding = function(type) {
@@ -48,7 +51,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             if ($scope.isFormDirty) {
                 SweetAlert.swal({
                     title: "Are you sure?",
-                    text: "You want to lose unsaved data?",
+                    text: "You have unsaved data that will be lost",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -290,23 +293,26 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.$watch('fullName', function(newValue, oldValue) {
             if (newValue) {
                 var nameSplit = newValue.match(/\S+/g);
-                if (nameSplit.length >= 3) {
-                    $scope.user.first = nameSplit[0];
-                    $scope.user.middle = nameSplit[1];
-                    $scope.user.last = nameSplit[2];
-                } else if (nameSplit.length == 2) {
-                    $scope.user.first = nameSplit[0];
-                    $scope.user.middle = '';
-                    $scope.user.last = nameSplit[1];
-                } else if (nameSplit.length == 1) {
-                    $scope.user.first = nameSplit[0];
-                    $scope.user.middle = '';
-                    $scope.user.last = '';
-                } else {
-                    $scope.user.first = '';
-                    $scope.user.middle = '';
-                    $scope.user.last = '';
+                if(nameSplit !=null) {
+                    if (nameSplit.length >= 3) {
+                        $scope.user.first = nameSplit[0];
+                        $scope.user.middle = nameSplit[1];
+                        $scope.user.last = nameSplit[2];
+                    } else if (nameSplit.length == 2) {
+                        $scope.user.first = nameSplit[0];
+                        $scope.user.middle = '';
+                        $scope.user.last = nameSplit[1];
+                    } else if (nameSplit.length == 1) {
+                        $scope.user.first = nameSplit[0];
+                        $scope.user.middle = '';
+                        $scope.user.last = '';
+                    } else {
+                        $scope.user.first = '';
+                        $scope.user.middle = '';
+                        $scope.user.last = '';
+                    }
                 }
+
                 // UserService.putUser($scope.user, function(user) {
                 //   //$scope.user = user;
                 // });
@@ -445,6 +451,9 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             $scope.isFormDirty = false;
             $scope.saveLoading = true;
             UserService.putUser($scope.user, function(user) {
+                if ($scope.account.business.name.length) {
+                  $scope.account.business.name = $scope.account.business.name.replace(/^([a-zA-Z0-9 _-]+)$/, '');
+                }
                 UserService.putAccount($scope.account, function(account) {
                     $scope.saveLoading = false;
                     toaster.pop('success', "Account Saved", "All account information has been saved.");

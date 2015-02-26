@@ -179,7 +179,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             return '';
           }
         }
-
+        $(document).ready(function() {
+          setTimeout(function() {
+            var locId =  $location.$$hash;
+            if(locId)
+            {
+             var element = document.getElementById(locId);
+             if(element)
+                $document.scrollToElementAnimated(element);
+            } 
+            }, 500);          
+        })
         var iframe = window.parent.document.getElementById("iframe-website")
         $scope.isAdmin = iframe;
         iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
@@ -400,6 +410,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
 
     $scope.addDetailsToCart = function(product) {
+      // that.products[product.id].clicked = true;
+      var productMatch = _.find(that.products, function(item) {
+        return item._id === product._id
+      });
+      productMatch.clicked = true;
+      console.log('productMatch ', productMatch);
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
       }
@@ -415,7 +431,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.cartDetails.push(product);
       }
       $scope.calculateTotalChargesfn();
+      console.log('$scope.cartDetails ', $scope.cartDetails);
+    };
 
+    $scope.removeFromCart = function(product) {
+      var filtered = _.filter($scope.cartDetails, function(item) {
+           return item._id !== product._id
+      });
+      var productMatch = _.find(that.products, function(item) {
+        return item._id === product._id
+      });
+      productMatch.clicked = false;
+      $scope.cartDetails = filtered;
     };
 
     $scope.calculateTotalChargesfn = function() {
@@ -458,7 +485,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       PaymentService.getStripeCardToken(cardInput, function(token) {
         PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
-          $('#cart-checkout-modal').modal('hide');
+          // $('#cart-checkout-modal').modal('hide');
+          //thanks modal
+          //clear form
         });
       });
 
@@ -1586,11 +1615,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
     };
-
-    userService.getTmpAccount(function(data) {
-      $scope.tmpAccount = data;
-    });
-
+    if ($scope.$location.$$path === '/signup') {
+      userService.getTmpAccount(function(data) {
+        $scope.tmpAccount = data;
+      });
+    }
     $scope.createAccount = function(newAccount) {
       //validate
       //email
@@ -1875,6 +1904,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addImageToThumbnail(componentId);
     }
 
+
 $scope.inserted = false;
  if(!$scope.activated)
   $('body').on("DOMNodeInserted", ".feature-height", function (e)
@@ -1892,4 +1922,7 @@ $scope.inserted = false;
    }
   })
   }
+
+  
+
 ]);

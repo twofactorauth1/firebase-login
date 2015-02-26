@@ -28,7 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         //Contacts
-        app.post(this.url('contacts/:id/charge'), this.setup, this.createChargeForContact.bind(this));
+        app.post(this.url('contacts/:id/charge'), this.setup.bind(this), this.createChargeForContact.bind(this));
 
         //Customers
         app.get(this.url('customers'), this.isAuthApi.bind(this), this.listCustomers.bind(this));
@@ -482,20 +482,14 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getPlan');
         var accountId = parseInt(self.accountId(req));
 
-        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                var planId = req.params.id;
-                var accessToken = self._getAccessToken(req);
-                if(accessToken === null && accountId != appConfig.mainAccountID) {
-                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-                }
-                stripeDao.getStripePlan(planId, accessToken, function(err, value){
-                    self.log.debug('<< getPlan');
-                    return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
-                });
-            }
+        var planId = req.params.id;
+        var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
+        stripeDao.getStripePlan(planId, accessToken, function(err, value){
+            self.log.debug('<< getPlan');
+            return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
         });
 
     },

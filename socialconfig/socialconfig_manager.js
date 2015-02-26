@@ -711,6 +711,24 @@ module.exports = {
 
     getLinkedinContacts: function(accountId, accessToken, socialAccountId, user, fn) {
       return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+    },
+
+    getStripeAccessToken: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> getStripeAccessToken');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err || config == null) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var stripeConfig = config.getSocialAccountsByType('stripe')[0];
+            if(!stripeConfig) {
+                log.error('No Stripe social account found.');
+                return fn('No Stripe social account found.', null);
+            }
+            return fn(null, stripeConfig.accessToken);
+
+        });
     }
 
 

@@ -26,10 +26,13 @@ define([
             ngProgress.start();
             var account;
             $scope.showToaster = false;
+            $scope.showOnboarding = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
 
 
             $scope.beginOnboarding = function(type) {
+              $scope.showOnboarding = true;
+              $scope.obType = type;
                 if (type == 'select-theme') {
                     $scope.stepIndex = 0
                     $scope.showOnboarding = true;
@@ -99,21 +102,31 @@ define([
             }
 
             $scope.$watch('activeTab', function(newValue, oldValue) {
+                console.log('active tab changing to '+newValue+' from '+oldValue);
                 if ($scope.userPreferences) {
                     $scope.userPreferences.website_default_tab = newValue;
+                    console.log('final change '+$scope.userPreferences.website_default_tab);
                     $scope.savePreferencesFn();
                 }
             });
 
             UserService.getUserPreferences(function(preferences) {
+                console.log('getUserPreferences >>> ', preferences);
                 $scope.userPreferences = preferences;
+                if ($scope.userPreferences.tasks) {
+                    if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_post == undefined || $scope.userPreferences.tasks.add_post == false) {
+                      $scope.finishOnboarding();
+                    }
+                }
                 if (!$location.$$search['onboarding']) {
+                    console.log('setting active tab >>> ', preferences.website_default_tab);
                     $scope.activeTab = preferences.website_default_tab || 'pages';
                 }
             });
 
             $scope.savePreferencesFn = function() {
                 UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {})
+                console.log('savePreferencesFn >>> $scope.userPreferences ', $scope.userPreferences);
             };
 
             // var xH;
@@ -356,7 +369,7 @@ define([
 
 
                 postData.websiteId = $scope.website._id;
-                    WebsiteService.createPost($scope.blogId, postData, function(data) {
+                    WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
                     toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
                     $('#create-post-modal').modal('hide');
                     $scope.posts.push(data);
@@ -377,6 +390,17 @@ define([
                     });
 
              };
+             $scope.updateThemeSettings = function() {
+                var data = {
+                           _id: $scope.website._id,
+                           accountId: $scope.website.accountId,
+                           settings: $scope.website.settings
+                        };
+                        //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                            console.log('updated website settings', data);
+                    });
+             }
 
              //update the primary font
             $scope.updatePrimaryFont = function(font) {

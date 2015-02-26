@@ -31,9 +31,9 @@ script(type="text/javascript").
     };
 
 script(type="text/javascript").
-    var initialAlert =  "#{user.user_preferences.welcome_alert.initial}";
-    if(!initialAlert === "false") {
-        window.location="/admin#/indi";
+    var initialAlert =  '#{user.user_preferences.welcome_alert.initial}';
+    if(initialAlert == 'false' || initialAlert == '') {
+        window.location="/admin#/support";
     }
     //- window.location="/admin#/" + (function(){
     //-     var single_view = "#{user.user_preferences.single_view}"

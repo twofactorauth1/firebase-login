@@ -157,6 +157,7 @@ var user = $$.m.ModelBase.extend({
                 },
                 website_default_tab : '',
                 indi_default_tab : '',
+                tasks: {},
                 welcome_alert : {
                     initial : false,
                     editwebsite : false,
@@ -183,6 +184,7 @@ var user = $$.m.ModelBase.extend({
                 json.credentials.forEach(function(creds) {
                     delete creds.password;
                     delete creds.accessToken;
+                    delete creds.accessTokenSecret;
                     delete creds.refreshToken;
                 });
             }
@@ -202,6 +204,7 @@ var user = $$.m.ModelBase.extend({
                         account.credentials.forEach(function(creds) {
                             delete creds.password;
                             delete creds.accessToken;
+                            delete creds.accessTokenSecret;
                         });
                     }
                 });

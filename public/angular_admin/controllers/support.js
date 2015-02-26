@@ -4,11 +4,19 @@ define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
     	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
     		if (section && task) {
-    			window.location = '/admin#/'+section+'?onboarding='+task
+          if (section == 'website-editor') {
+            window.location = '/admin#/'+section+'?pagehandle=index&onboarding='+task
+          } else {
+    			     window.location = '/admin#/'+section+'?onboarding='+task
+          }
     		};
     	};
 
         $scope.initialWelcome = true;
+
+        $scope.preventClick = function(e) {
+          e.preventDefault();
+        };
 
         $scope.topics = [
             {
@@ -39,7 +47,8 @@ define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
             UserService.updateUserPreferences($scope.userPreferences, false, function() {})
         };
 
-        $scope.clearWelcome = function() {
+        $scope.clearWelcome = function(e) {
+          e.preventDefault();
             console.log('clear welcome');
         	$scope.initialWelcome = true;
         	if ($scope.userPreferences) {

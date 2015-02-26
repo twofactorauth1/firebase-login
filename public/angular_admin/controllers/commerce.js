@@ -9,7 +9,11 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
 '#commerce-add-product').modal('hide');
             });
         };
-
+        $scope.showOnboarding = false;
+        $scope.stepIndex = 0;
+        $scope.onboardingSteps = [{
+            overlay: false
+        }]
         $scope.beginOnboarding = function(type) {
             if (type == 'add-product') {
                 $scope.stepIndex = 0;
@@ -214,6 +218,11 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         });
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
+            if ($scope.userPreferences.tasks) {
+                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_product == undefined || $scope.userPreferences.tasks.add_product == false) {
+                  $scope.finishOnboarding();
+                }
+            }
             var commerceSettings = $scope.userPreferences.commerceSettings;
             if (commerceSettings) {
                 $scope.userPreferences.commerceSettings = commerceSettings;

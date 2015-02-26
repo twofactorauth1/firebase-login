@@ -158,6 +158,18 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                            <li ng-click="startTask('website-editor', 'edit-home')" ng-class="{complete: userPreferences.tasks.edit_home }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.edit_home , 'fa-circle-o' : !userPreferences.tasks.edit_home }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.edit_home">Complete</small>
+                                <h3 class="pull-left">Edit the home page</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Lets make the home page according to your taste.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('dashboard', 'dashboard')" ng-class="{complete: userPreferences.tasks.dashboard }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.dashboard , 'fa-circle-o' : !userPreferences.tasks.dashboard }"></i></h1>
                                 <small class="pull-right done" ng-if="userPreferences.tasks.dashboard">Complete</small>
@@ -217,7 +229,7 @@
                     </div>
                     <div class="carousel-ctrls">
                         <!-- Controls -->
-                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" ng-click="preventClick($event)" role="button" data-slide="next">
                             Next <i class="fa fa-chevron-right"></i>
                         </a>
                     </div>
@@ -230,7 +242,7 @@
                     </div>
                     <div class="carousel-ctrls">
                         <!-- Controls -->
-                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" ng-click="preventClick($event)" role="button" data-slide="next">
                             Next <i class="fa fa-chevron-right"></i>
                         </a>
                     </div>
@@ -246,7 +258,7 @@
                     </div>
                     <div class="carousel-ctrls">
                         <!-- Controls -->
-                        <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop" ng-click="clearWelcome()">
+                        <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop" ng-click="clearWelcome($event)">
                             GET STARTED <i class="fa fa-chevron-right"></i>
                         </a>
                     </div>

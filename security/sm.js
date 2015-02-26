@@ -45,7 +45,9 @@ var defaultPrivileges = [
     'VIEW_DASHBOARD',
     'MODIFY_DASHBOARD',
     'VIEW_SOCIALCONFIG',
-    'MODIFY_SOCIALCONFIG'
+    'MODIFY_SOCIALCONFIG',
+    'ALL'
+
 ];
 
 var defaultSubscriptionPrivs = [
@@ -62,7 +64,8 @@ var defaultSubscriptionPrivs = [
     'emaildata',
     'products',
     'user',
-    'social/socialconfig'
+    'social/socialconfig',
+    'all'
 ];
 
 var securityManager = {
@@ -115,7 +118,7 @@ var securityManager = {
 
     getPrivilegesByUserAndAccount: function(userId, accountId, cb) {
         var self = this;
-        log.debug('>> getPrivilegesByUserAndAccount');
+        log.debug('>> getPrivilegesByUserAndAccount(' + userId + ',' + accountId + ')');
         dao.findOne({'userId': userId, accountId: accountId}, $$.m.Privilege, function(err, privilege){
             if(err) {
                 log.error('Exception while finding privilege by userId[' + userId + '] and account[' + accountId + ']: ' + err );
@@ -265,6 +268,7 @@ var securityManager = {
                 log.error('Error adding subscription to account: ' + err);
                 return fn(err, null);
             }
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
             var subpriv = new $$.m.SubscriptionPrivilege({
                 accountId: accountId,
                 subscriptionId: planId,
@@ -294,6 +298,7 @@ var securityManager = {
                 log.error('Error adding subscription to account: ' + err);
                 return fn(err, null);
             }
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
             var subpriv = new $$.m.SubscriptionPrivilege({
                 accountId: accountId,
                 subscriptionId: planId,

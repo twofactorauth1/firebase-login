@@ -6,10 +6,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
          * begin the onboarding process if this is the users first time
          */
 
-        $scope.onboardingSteps = [];
+        
         $scope.showOnboarding = false;
         $scope.stepIndex = 0;
-
+        $scope.onboardingSteps = [{
+            overlay: false
+        }]
         $scope.beginOnboarding = function(type) {
             if (type == 'create-campaign') {
                 $scope.showOnboarding = true;
@@ -63,6 +65,11 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
+            if ($scope.userPreferences.tasks) {
+                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.create_campaign == undefined || $scope.userPreferences.tasks.create_campaign == false) {
+                  $scope.finishOnboarding();
+                }
+            }
             $scope.activeTab = preferences.indi_default_tab;
             if (preferences.welcome_alert) {
                 $scope.initialWelcome = preferences.welcome_alert.initial;
