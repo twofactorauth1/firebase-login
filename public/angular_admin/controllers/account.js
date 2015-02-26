@@ -72,6 +72,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             if ($location.$$search.onboarding) {
                 $scope.beginOnboarding($location.$$search.onboarding);
             }
+            $scope.socialFilter = function (item) { 
+                return item.accountType !== 'adminpage'
+            };
 
             $scope.tabList = [{
                 v: 'last_tab_visited',
