@@ -34,6 +34,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             SocialConfigService.getAllSocialConfig(function(data) {
               $scope.socialAccounts = data.socialAccounts;
+              $scope.checkStripe = _.findWhere($scope.socialAccounts, {
+                type: 'stripe'
+              });
             });
 
             $scope.onboardingSteps = [{
@@ -219,6 +222,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
               SocialConfigService.deleteSocialConfigEntry(id, function() {
                 SocialConfigService.getAllSocialConfig(function(data) {
                   $scope.socialAccounts = data.socialAccounts;
+                  $scope.checkStripe = _.findWhere($scope.socialAccounts, {
+                     type: 'stripe'
+                  });
                 });
               });
             };
