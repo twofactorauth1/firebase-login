@@ -21,7 +21,6 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
         $scope.beginOnboarding = function(type) {
             if (type == 'basic-info') {
-                $scope.showOnboarding = true;
                 $scope.onboardingSteps = [{
                     overlay: true,
                     title: 'Task: Enter profile information',
@@ -265,6 +264,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
                         _id: $$.u.idutils.generateUniqueAlphaNumericShort()
                     });
                     ngProgress.complete();
+                    $scope.showOnboarding = true;
         });
 
         //business phone field add

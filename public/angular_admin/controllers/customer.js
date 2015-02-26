@@ -28,7 +28,6 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
             $scope.beginOnboarding = function(type) {
                 if (type == 'create-contact') {
                     $scope.stepIndex = 0;
-                    $scope.showOnboarding = true;
                     $scope.onboardingSteps = [{
                         overlay: true,
                         title: 'Task: Import/Create Contacts',
@@ -167,6 +166,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 $scope.orderByFn();
                 $scope.customerScrollFn();
                 ngProgress.complete();
+                $scope.showOnboarding = true;
                 ToasterService.processPending();
                 var initializeSearchBar = 0;
                 $scope.$watch('searchBar', function(newValue, oldValue) {
@@ -239,7 +239,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
 
                 $scope.$watch('customerFilter.type', function(newValue, oldValue) {
                     var orginal = $scope.originalCustomers;
-                    if(newValue) {                        
+                    if(newValue) {
                         $scope.renderedCustomers = [];
                         $scope.fetchedCustomers = orginal.filter(function(elem) {
                             return elem.type == newValue;
@@ -255,8 +255,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                         $scope.orderByFn();
                         $scope.customerScrollOffset = 0;
                         $scope.customerScrollFn();
-                    } 
-                    
+                    }
+
                 });
 
 
