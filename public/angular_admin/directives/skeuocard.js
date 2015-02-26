@@ -71,7 +71,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                       scope.cardNameValidated = true;
                     };
 
-                    scope.currentYear = new Date().getFullYear().toString();
+                    scope.currentYear =  new Date().getYear() - 100;
                     scope.currentMonth = new Date().getMonth() + 1;
 
                     scope.checkCardExpiry = function() {
