@@ -149,7 +149,12 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 							</div>
 						</div>
 						<div class="row add-new" ng-hide="user.details[0].phones.length">
+							<div class="col-xs-10">
+									Add Phone
+								</div>
+								<div class="col-xs-2">
 								<button id="btn-new-address" tooltip-placement="top" tooltip-html-unsafe="Add Phone Number" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
+							</div>
 							</div>
 						<div id="address-row" class="row"  ng-repeat="address in user.details[0].addresses">
 							<div class="col-xs-1">
@@ -184,7 +189,12 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 							</div>
 						</div>
 						<div class="row add-new" ng-hide="user.details[0].addresses.length">
+							<div class="col-xs-10">
+									Add Address
+								</div>
+								<div class="col-xs-2">
 								<button id="btn-new-address" tooltip-placement="top" tooltip-html-unsafe="Add Address" class="btn btn-primary btn-lg pull-right" ng-click="addUserAddressFn()"><i class="fa fa-plus"></i></button>
+							</div>
 							</div>
 
 						<div id="email-row" class="row">
