@@ -89,7 +89,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 							</div>
 						</div>
 
-						<div id="phone-row" class="row" ng-repeat="phone in user.details[0].phones">
+						<div id="phone-row"  class="row" ng-repeat="phone in user.details[0].phones">
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-phone"></i>
 							</div>
@@ -148,13 +148,15 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
 							</div>
 						</div>
-
-						<div id="address-row" class="row">
+						<div class="row add-new" ng-hide="user.details[0].phones.length">
+								<button id="btn-new-address" tooltip-placement="top" tooltip-html-unsafe="Add Phone Number" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
+							</div>
+						<div id="address-row" class="row"  ng-repeat="address in user.details[0].addresses">
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-map-marker"></i>
 							</div>
 							<div class="col-xs-11">
-								<div class="row" ng-repeat="address in user.details[0].addresses">
+								<div class="row">
 								<div id="edit-addresses-container">
 									<div class="form-group">
 										<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="userSaveFn(address.address1)">
@@ -174,10 +176,16 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 									<div class="form-group">
 										<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="userSaveFn(address.country)">
 									</div>
+									<div class="form-group">
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteUserAddressFn($index)"><i class="fa fa-minus"></i></button>
+							</div>
 								</div>
 							</div>
 							</div>
 						</div>
+						<div class="row add-new" ng-hide="user.details[0].addresses.length">
+								<button id="btn-new-address" tooltip-placement="top" tooltip-html-unsafe="Add Address" class="btn btn-primary btn-lg pull-right" ng-click="addUserAddressFn()"><i class="fa fa-plus"></i></button>
+							</div>
 
 						<div id="email-row" class="row">
 							<div class="col-xs-1">

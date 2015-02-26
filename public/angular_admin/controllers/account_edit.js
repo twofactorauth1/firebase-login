@@ -249,20 +249,7 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
             if (!$scope.user.details[0].addresses) {
                 $scope.user.details[0].addresses = [];
             }
-            if ($scope.user.details[0].phones.length == 0)
-                $scope.user.details[0].phones.push({
-                    _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-                    number: '',
-                    default: false,
-                    type: 'm'
-                });
-                $scope.user.details[0].phones.forEach(function(value, index) {
-                    $scope.userPhoneWatchFn(index);
-                });
-                if (!$scope.user.details[0].addresses.length)
-                    $scope.user.details[0].addresses.push({
-                        _id: $$.u.idutils.generateUniqueAlphaNumericShort()
-                    });
+
                     ngProgress.complete();
                     $scope.showOnboarding = true;
         });
@@ -379,26 +366,45 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
         //business phone field add
         $scope.addUserContactFn = function() {
-            $scope.user.details[0].phones.push({
-                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-                number: '',
-                default: false,
-                type: 'm'
-            });
-            $scope.userPhoneWatchFn($scope.user.details[0].phones.length - 1);
-        };
-
-        $scope.deleteUserContactFn = function(index) {
-            $scope.user.details[0].phones.splice(index, 1);
-            if ($scope.user.details[0].phones.length === 0) {
+            if ($scope.user.details[0].phones.length == 0) {
                 $scope.user.details[0].phones.push({
                     _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                     number: '',
                     default: false,
                     type: 'm'
                 });
+                $scope.user.details[0].phones.forEach(function(value, index) {
+                    $scope.userPhoneWatchFn(index);
+                });
             }
+            else
+            {
+                    $scope.user.details[0].phones.push({
+                    _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                    number: '',
+                    default: false,
+                    type: 'm'
+                });
             $scope.userPhoneWatchFn($scope.user.details[0].phones.length - 1);
+            }
+        };
+
+        $scope.deleteUserContactFn = function(index) {
+            $scope.user.details[0].phones.splice(index, 1);
+
+            $scope.userPhoneWatchFn($scope.user.details[0].phones.length - 1);
+        };
+
+        //owner address field add
+        $scope.addUserAddressFn = function() {
+            if (!$scope.user.details[0].addresses.length)
+                $scope.user.details[0].addresses.push({
+                    _id: $$.u.idutils.generateUniqueAlphaNumericShort()
+                });
+        };
+
+        $scope.deleteUserAddressFn = function(index) {
+            $scope.user.details[0].addresses.splice(index, 1);
         };
 
         $scope.insertMedia = function(asset) {
