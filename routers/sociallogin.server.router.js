@@ -210,7 +210,7 @@ _.extend(router.prototype, baseRouter.prototype, {
             failureFlash:true
         };
 
-        authenticationDao.getAuthenticatedUrlForRedirect(state.accountId, req.user.attributes._id, options.failureRedirect, function(err, value){
+        authenticationDao.getAuthenticatedUrlForRedirect(state.accountId, state.userId, options.failureRedirect, function(err, value){
             if(err) {
                 //not sure what to do here
                 self.log.error('error getting authenticated url: ' + err);
