@@ -71,6 +71,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                     $scope.customerScrollBusy = false;
                     $scope.alphaFilterStatusFn();
                 }
+
             };
 
             $scope.contactLabel = function(contact) {
@@ -166,7 +167,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 $scope.orderByFn();
                 $scope.customerScrollFn();
                 ngProgress.complete();
-                $scope.showOnboarding = true;
+                setTimeout(function() {$scope.showOnboarding = true;}, 2000);
                 ToasterService.processPending();
                 var initializeSearchBar = 0;
                 $scope.$watch('searchBar', function(newValue, oldValue) {
@@ -596,6 +597,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 };
 
             });
+
         }
     ]);
 });
