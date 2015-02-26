@@ -17334,6 +17334,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .account .integrations-section .thumbnail .caption p {
   height: 70px;
 }
+.account .integrations-section .thumbnail .img-wrap-strip {
+  height: 400px !important;
+}
 .account .integrations-section .thumbnail .img-wrap {
   height: 200px;
   position: relative;
