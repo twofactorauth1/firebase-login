@@ -16,7 +16,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.firstTime = false;
 
             $scope.redirectUrl = '/admin/account';//encodeURIComponent('/admin#/account');
-
+            //for processing toaster for social account integration
+            $scope.showToaster = true;
+            ToasterService.processPending();
+            //
             $scope.currentHost = window.location.host;
 
             $scope.plusOneMonth = function(date) {
@@ -43,6 +46,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.stepIndex = 0;
             $scope.beginOnboarding = function(type) {
                 if (type == 'connect-social') {
+                    
                     $scope.activeTab = 'integrations';
                     $scope.onboardingSteps = [{
                         overlay: true,
@@ -240,7 +244,6 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
                     ngProgress.complete();
                     $scope.showOnboarding = true;
-
                     if ($scope.user.stripeId) {
                         PaymentService.getInvoicesForAccount(function(invoices) {
                             $scope.invoices = invoices;
@@ -397,6 +400,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + newValue.toLowerCase() + '?redirectTo=' + $scope.redirectUrl;
               }
             });
+
+            $scope.socailRedirect = function(socailAccount) {
+                ToasterService.setPending('success', socailAccount + ' is integreted successfully.');
+                window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socailAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl +'&socialNetwork=' + socailAccount;
+            };
 
         }
     ]);
