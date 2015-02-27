@@ -28,6 +28,9 @@ define([
             $scope.showToaster = false;
             $scope.showOnboarding = false;
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
+            $scope.onboardingSteps = [{
+                overlay: false
+            }];
 
 
             $scope.beginOnboarding = function(type) {
@@ -245,7 +248,7 @@ define([
                     $scope.secondaryFontStack = $scope.website.settings.font_family_2;
 
                     ngProgress.complete();
-                    $scope.showOnboarding = true;
+                    // $scope.showOnboarding = true;
                 });
             });
 

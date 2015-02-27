@@ -223,7 +223,7 @@ define([
             //     }, 100);
             // };
             ngProgress.complete();
-            $scope.showOnboarding = true;
+            // $scope.showOnboarding = true;
         };
         $scope.renderCommerceCharts = function() {
             ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {

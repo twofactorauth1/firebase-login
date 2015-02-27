@@ -167,7 +167,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                 $scope.orderByFn();
                 $scope.customerScrollFn();
                 ngProgress.complete();
-                setTimeout(function() {$scope.showOnboarding = true;}, 2000);
+                // setTimeout(function() {$scope.showOnboarding = true;}, 2000);
                 ToasterService.processPending();
                 var initializeSearchBar = 0;
                 $scope.$watch('searchBar', function(newValue, oldValue) {
