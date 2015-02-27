@@ -5,11 +5,11 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
   <form name="customerForm" novalidate>
     <div class="pageheader">
       <div class="col-xs-7">
-        <button indigeweb-state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerAdd'">
+        <button indigeweb-state-nav="customer" id="btn-back-to-contact" class="btn btn-outline pull-left" type="button" ng-show="currentState == 'customerAdd'">
           <span class="fa fa-chevron-left"></span>
           <span class="hidden-xs">Back</span>
         </button>
-        <button indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerEdit'">
+        <button indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-outline pull-left" type="button" ng-show="currentState == 'customerEdit'">
           <span class="fa fa-chevron-left"></span>
           <span class="hidden-xs">Back</span>
         </button>
@@ -18,7 +18,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
       </div>
 
       <div class="col-xs-5">
-        <div class="btn btn-success pull-right btn-save-contact"  ng-disabled="customerForm.$invalid" type="button" ng-click="customerSaveFn()">
+        <div class="btn btn-outline pull-right btn-save-contact"  ng-disabled="customerForm.$invalid" type="button" ng-click="customerSaveFn()">
           <span class="visible-xs" ng-hide="saveLoading">
            <i class="fa fa-save"></i>
           </span>
