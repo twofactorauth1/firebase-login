@@ -283,6 +283,10 @@ module.exports = {
                 'created': {
                     'by': userId,
                     'date': new Date()
+                },
+                'modified': {
+                    'by': userId,
+                    'date': new Date()
                 }
             });
             cmsDao.saveOrUpdate(page, function(err, savedPage){
