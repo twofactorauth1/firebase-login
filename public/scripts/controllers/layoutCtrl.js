@@ -1698,14 +1698,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               case "number":
                 $("#card_number .error").html(error.message);
                 $("#card_number").addClass('has-error');
+                $("#card_number .glyphicon").addClass('glyphicon-remove');
                 break;
               case "exp_year":
                 $("#card_expiry .error").html(error.message);
                 $("#card_expiry").addClass('has-error');
+                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                 break;
               case "cvc":
                 $("#card_cvc .error").html(error.message);
                 $("#card_cvc").addClass('has-error');
+                $("#card_cvc .glyphicon").addClass('glyphicon-remove');
                 break;
             }
           } else {
@@ -1822,9 +1825,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (!card_number) {
         $("#card_number .error").html("Card Number Required");
         $("#card_number").addClass('has-error');
+        $("#card_number .glyphicon").addClass('glyphicon-remove');
       } else {
         $("#card_number .error").html("");
         $("#card_number").removeClass('has-error').addClass('has-success');
+        $("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
@@ -1850,6 +1855,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $("#card_expiry").addClass('has-error');
       } else {
         $("#card_expiry .error").html("");
+        $("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         $("#card_expiry").removeClass('has-error').addClass('has-success');
       }
     };
@@ -1862,9 +1868,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (!card_cvc) {
         $("#card_cvc .error").html("CVC Required");
         $("#card_cvc").addClass('has-error');
+        $("#card_cvc .glyphicon").addClass('glyphicon-remove');
       } else {
         $("#card_cvc .error").html("");
         $("#card_cvc").removeClass('has-error').addClass('has-success');
+        $("#card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
