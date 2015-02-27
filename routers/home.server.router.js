@@ -215,8 +215,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     rerouteToAngularAdmin: function(req, res) {
-      console.log(req.baseUrl);
-      res.redirect('/admin');
+      var path = req.url;
+      var angularPath = path.slice(6, path.length);
+      res.redirect('/admin/#' + angularPath);
     },
 
     _showHome: function(req,resp) {
