@@ -6,10 +6,10 @@
     </div>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-8 pages-editing">
-            <a class="btn btn-success pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
+            <a class="btn btn-outline pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
                 <span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
             </a>
-            <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Editing {{currentPage.title}}</div></h2>
+            <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Editing {{single_post ? post_data.post_title : currentPage.title}}</div></h2>
             <h2 class="pull-left hidden-xs" style="margin-right: 15px;" ng-show="!isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Website</div></h2>
             <div class="btn-group pull-left" dropdown is-open="status.isopen">
                 <button type="button" class="btn btn-orange dropdown-toggle" ng-disabled="disabled" ng-show="!isEditing">
@@ -22,12 +22,12 @@
         </div>
         <div class="col-xs-4">
 
-            <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
+            <a class="btn btn-outline pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
                 <i class="fa fa fa-edit"></i>
                 <span class="hidden-xs">Edit</span>
             </a>
 
-            <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
+            <a class="btn btn-outline pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
 
                 <span>
                      <span class="hidden-xs" ng-if="!saveLoading"> Save </span>
@@ -35,12 +35,12 @@
                      <i class="fa fa-spinner fa-spin" ng-if="saveLoading"></i>
                  </span>
             </a>
-            <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
+            <a ng-confirm-click class="btn btn-outline pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
             </a>
 
-            <a class="btn btn-success pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+            <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
@@ -286,36 +286,44 @@
                             <div class="righstpanelinner">
                                 <div class="form-group" ng-if="componentEditing.type === 'navigation'">
                                     <label>Nav BG Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                                     <label for="colorpicker">Nav Hover BG Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Navigation bar on hover BG color."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hoverbg" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="form-group">
                                     <label for="colorpicker">Text Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Text color of component."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                                     <label for="colorpicker">Active Text Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Nav bar Active menu color."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
 
                                 <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                                     <label for="colorpicker">Nav Hover Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Nav bar menu hover color."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hover" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
 
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type === 'pricing-tables'">
                                     <label>Pricing Table BG Color:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Background color of Pricing table."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
                                     <label for="bg_hide">Show Background Image</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
                                     <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                     <br>
                                     <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
@@ -373,7 +381,7 @@
                                 <div class="clearfix"></div>
                                 <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.bg.img.url">
                                     <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove background image of component."><i class="fa fa-info-circle" /></span>
                                     <div class="bgimg" id="bgimg">
                                         <i class="fa fa-close" ng-click="componentEditing.bg.img.url=null"></i>
                                         <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
@@ -386,23 +394,28 @@
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.type != 'navigation'">
                                     <label for="bg_blur">Blur BG</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
                                     <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
 
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
                                     <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_overlay">Add Overlay</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
                                     <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
                                  <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
                                     <label for="bg_overlay_color">Add Overlay Color</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
                                     <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                 </div>
                                  <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
                                     <label for="bg_overlay_opacity">Add Overlay Opacity Percentage</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
                                     <select id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" ng-change="saveComponent()" class="pull-right input-lg">
                                     <option value="10">10</option>
                                     <option value="20">20</option>
@@ -419,6 +432,7 @@
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_position">BG Position</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Set Background image position."><i class="fa fa-info-circle" /></span>
                                     <select id="bg_position" ng-model="componentEditing.bg.img.position" ng-change="saveComponent()" class="form-control input-lg">
                                         <option value="center">Center</option>
                                         <option value="left">Left</option>
@@ -435,20 +449,24 @@
                             </tab-heading>
                             <div class="form-group">
                                 <label for="colorpicker">Visibility:</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide component."><i class="fa fa-info-circle" /></span>
                                 <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation'">
                                 <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
                                 <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
                             </div>
                             <div class="form-group">
                                 <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
                                 <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
                                 </select>
 
                             </div>
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
                                 <label for="colorpicker">Image Position:</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
                                 <select ng-model="componentEditing.imagePosition" ng-change="saveComponent()" class="form-control input-lg">
                                     <option value="left">Left</option>
                                     <option value="right">Right</option>
@@ -532,41 +550,50 @@
                             </tab-heading>
                             <div class="form-group">
                                 <label for="location-address-type">Address type </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address type."><i class="fa fa-info-circle" /></span>
                                 <input id="location-address-type" class="form-control input-lg" type="text" ng-model="componentEditing.location.addressDisplayLabel" ng-blur="updateContactUsAddress()">
                             </div>
                             <div class="form-group">
                                 <label for="location-address">Address </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
                                 <input id="location-address" class="form-control input-lg" type="text" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
                             </div>
                             <div class="form-group">
                                 <label for="location-address2">Address2 </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
                                 <input id="location-address2" class="form-control input-lg" type="text" ng-model="componentEditing.location.address2" ng-blur="updateContactUsAddress()">
                             </div>
 
                             <div class="form-group">
                                 <label for="location-city">City </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
                                 <input id="location-city" class="form-control input-lg" type="text" ng-model="componentEditing.location.city" ng-blur="updateContactUsAddress()">
                                 <div class="error"></div>
                             </div>
                             <div class="form-group">
                                 <label for="location-state">State </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
                                 <input id="location-state" class="form-control input-lg" type="text" ng-model="componentEditing.location.state" ng-blur="updateContactUsAddress()">
                                 <div class="error"></div>
                             </div>
                             <div class="form-group">
                                 <label for="location-zip">Zip Code </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
                                 <input id="location-zip" validation-type="zip" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.location.zip" ng-blur="updateContactUsAddress()">
                             </div>
                             <div class="form-group">
                                 <label for="contact-phone">Phone number </label>
+                                 <span tooltip-placement="top" tooltip-html-unsafe="Contact Us Phone number."><i class="fa fa-info-circle" /></span>
                                 <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.contact.phone" ng-blur="updateContactUsAddress()">
                             </div>
                             <div class="form-group">
                                     <label for="show-hours">Show Business Hours</label>
+                                     <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business hours to contact us component."><i class="fa fa-info-circle" /></span>
                                     <input id="show-hours" bs-switch ng-model="componentEditing.showHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
                                 </div>
                             <div class="form-group" ng-if="componentEditing.showHours">
                                 <label for="location-hours">Business Hours </label>
+                                 <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
                                 <div class="col-xs-12" ng-repeat="val in componentEditing.hours">
 
                                     <label class="col-xs-1" for="val.day">{{val.day}}:</label>
@@ -598,6 +625,7 @@
                           </tab-heading>
                           <div class="form-group">
                             <label for="member-name">Video Type:</label>
+                             <span tooltip-placement="top" tooltip-html-unsafe="Select video type."><i class="fa fa-info-circle" /></span>
                             <select id="member-name" class="form-control input-lg" ng-model="componentEditing.videoType">
                               <option value="youtube">YouTube</option>
                               <option value="vimeo">Vimeo</option>
@@ -606,38 +634,47 @@
                           </div>
                           <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="member-name">Video URL:</label>
+                             <span tooltip-placement="top" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.video">
                           </div>
                           <div class="form-group" ng-show="componentEditing.videoType == 'html5'">
                             <label for="member-name">Mp4 Url:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Add Mp4 video URL."><i class="fa fa-info-circle" /></span>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoMp4">
                           </div>
                           <div class="form-group" ng-show="componentEditing.videoType == 'html5'">
                             <label for="member-name">Webm Url:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Add Webm video URL."><i class="fa fa-info-circle" /></span>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoWebm">
                           </div>
                           <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="colorpicker">Auto Play:</label>
+                             <span tooltip-placement="top" tooltip-html-unsafe="Set auto play video"><i class="fa fa-info-circle" /></span>
                             <input bs-switch ng-model="componentEditing.videoAutoPlay" type="checkbox" class="pull-right">
                           </div>
                           <div class="form-group" ng-show="componentEditing.videoType == 'youtube'">
                             <label for="colorpicker">Controls:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Show/hide video player controls."><i class="fa fa-info-circle" /></span>
                             <input bs-switch ng-model="componentEditing.videoControls" type="checkbox" class="pull-right">
                           </div>
                           <div class="form-group" ng-show="componentEditing.videoType == 'youtube'">
                             <label for="colorpicker">Branding:</label>
+                             <span tooltip-placement="top" tooltip-html-unsafe="Youtube video branding."><i class="fa fa-info-circle" /></span>
                             <input bs-switch ng-model="componentEditing.videoBranding" type="checkbox" class="pull-right">
                           </div>
                           <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="member-name">Optional Width:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set video width."><i class="fa fa-info-circle" /></span>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoWidth">
                           </div>
                           <div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
                             <label for="member-name">Optional Height:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set video height."><i class="fa fa-info-circle" /></span>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoHeight">
                           </div>
                           <div class="form-group" ng-show="componentEditing.videoType == 'html5'">
                             <label for="member-name">Start Video Image Url:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set start video image URL."><i class="fa fa-info-circle" /></span>
                             <input id="member-name" class="form-control input-lg" type="text" ng-model="componentEditing.videoImage">
                           </div>
                         </tab>
@@ -647,14 +684,17 @@
                             </tab-heading>
                              <div class="form-group">
                                 <label for="top-bar-hours">Business Hours </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Add business hours to topbar."><i class="fa fa-info-circle" /></span>
                                 <input id="top-bar-hours" class="form-control input-lg" type="text" ng-model="componentEditing.businessHours">
                             </div>
                             <div class="form-group">
                                 <label for="top-bar-phone">Phone number </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Add Phone number to topbar."><i class="fa fa-info-circle" /></span>
                                 <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.phone">
                             </div>
                            <div class="form-group">
                                 <label for="top-bar-email">Email </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Add Email to topbar."><i class="fa fa-info-circle" /></span>
                                 <input id="top-bar-email" class="form-control input-lg" type="text" ng-model="componentEditing.email">
                             </div>
 

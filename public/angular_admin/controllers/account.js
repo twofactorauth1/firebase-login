@@ -16,7 +16,10 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.firstTime = false;
 
             $scope.redirectUrl = '/admin/account';//encodeURIComponent('/admin#/account');
-
+            //for processing toaster for social account integration
+            $scope.showToaster = true;
+            ToasterService.processPending();
+            //
             $scope.currentHost = window.location.host;
 
             $scope.plusOneMonth = function(date) {
@@ -31,6 +34,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
 
             SocialConfigService.getAllSocialConfig(function(data) {
               $scope.socialAccounts = data.socialAccounts;
+              $scope.checkStripe = _.findWhere($scope.socialAccounts, {
+                type: 'stripe'
+              });
             });
 
             $scope.onboardingSteps = [{
@@ -40,7 +46,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             $scope.stepIndex = 0;
             $scope.beginOnboarding = function(type) {
                 if (type == 'connect-social') {
-                    $scope.showOnboarding = true;
+                    
                     $scope.activeTab = 'integrations';
                     $scope.onboardingSteps = [{
                         overlay: true,
@@ -66,6 +72,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             if ($location.$$search.onboarding) {
                 $scope.beginOnboarding($location.$$search.onboarding);
             }
+            $scope.socialFilter = function (item) { 
+                return item.accountType !== 'adminpage'
+            };
 
             $scope.tabList = [{
                 v: 'last_tab_visited',
@@ -216,6 +225,9 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
               SocialConfigService.deleteSocialConfigEntry(id, function() {
                 SocialConfigService.getAllSocialConfig(function(data) {
                   $scope.socialAccounts = data.socialAccounts;
+                  $scope.checkStripe = _.findWhere($scope.socialAccounts, {
+                     type: 'stripe'
+                  });
                 });
               });
             };
@@ -234,7 +246,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                     });
 
                     ngProgress.complete();
-
+                    // $scope.showOnboarding = true;
                     if ($scope.user.stripeId) {
                         PaymentService.getInvoicesForAccount(function(invoices) {
                             $scope.invoices = invoices;
@@ -391,6 +403,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                 window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + newValue.toLowerCase() + '?redirectTo=' + $scope.redirectUrl;
               }
             });
+
+            $scope.socailRedirect = function(socailAccount) {
+                ToasterService.setPending('success', socailAccount + ' is integreted successfully.');
+                window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socailAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl +'&socialNetwork=' + socailAccount;
+            };
 
         }
     ]);

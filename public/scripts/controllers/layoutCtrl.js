@@ -1635,7 +1635,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
 
-      //business name
+      //url
       if (!$scope.newAccount.businessName) {
         $scope.checkDomainExists(newAccount);
         return;
@@ -1749,7 +1749,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.checkDomainExists = function(newAccount) {
       console.log('checking to see if the domiain exists ', newAccount.businessName);
       if (!newAccount.businessName) {
-        $("#business-name .error").html("Business Name Required");
+        $("#business-name .error").html("Url Required");
         $("#business-name").addClass('has-error');
         $("#business-name .glyphicon").addClass('glyphicon-remove');
       } else {

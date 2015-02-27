@@ -210,7 +210,7 @@ _.extend(router.prototype, baseRouter.prototype, {
             failureFlash:true
         };
 
-        authenticationDao.getAuthenticatedUrlForRedirect(state.accountId, req.user.attributes._id, options.failureRedirect, function(err, value){
+        authenticationDao.getAuthenticatedUrlForRedirect(state.accountId, state.userId, options.failureRedirect, function(err, value){
             if(err) {
                 //not sure what to do here
                 self.log.error('error getting authenticated url: ' + err);
@@ -255,7 +255,8 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         var authMode = state.authMode;
 
-        if (state.redirectUrl != null) {
+        if (state.redirectUrl && state.redirectUrl !== 'undefined') {
+            self.log.debug('state.redirectUrl', state);
             var redirectUrl = state.redirectUrl;
             redirectUrl = decodeURIComponent(redirectUrl);
             self.log.debug('decoded redirect: ' + redirectUrl);

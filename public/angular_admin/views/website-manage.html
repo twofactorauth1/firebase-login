@@ -10,12 +10,12 @@
         </div>
 
         <div class="col-xs-5">
-            <a class="btn btn-success pull-right media-modal btn-header" style="margin-right: 2px;" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+            <a class="btn btn-outline pull-right media-modal btn-header hidden" style="margin-right: 2px;" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
             <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 6px;">
-                <button type="button" class="btn btn-success dropdown-toggle btn-header" data-toggle="dropdown">
+                <button type="button" class="btn btn-outline dropdown-toggle btn-header" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs">Add</span>
                     <span class="caret"></span>
@@ -139,7 +139,11 @@
             <div class="pages-section" ng-switch-when="pages">
 
                 <div class="row">
-
+                    <div ng-if="pages.length <= 0" class="empty">
+                        <h1 class="center"><span class="fa fa-file-text-o"></span></h1>
+                        <h3 class="center">No Pages Yet</h3>
+                        <h5 class="center">Add pages for them to appear here.</h5>
+                    </div>
                     <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true track by $index">
                         <div class="thumbnail layered-paper">
                             <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
@@ -161,7 +165,11 @@
 
             <div class="posts-section" ng-switch-when="posts">
                 <div class="row">
-
+                    <div ng-if="posts.length <= 0" class="empty">
+                        <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
+                        <h3 class="center">No Posts Yet</h3>
+                        <h5 class="center">Add posts for them to appear here.</h5>
+                    </div>
                     <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'created.date':true track by $index">
                         <!-- <div class="thumbnail box14">
                             <div class="caption">

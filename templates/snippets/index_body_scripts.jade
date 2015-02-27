@@ -87,6 +87,7 @@ script(src="scripts/services/pageService.js")
 script(src="scripts/filters/CreateUrlFilter.js")
 script(src="scripts/filters/generateURLforLinks.js")
 script(src="scripts/filters/trustHtml.js")
+script(src="scripts/filters/urlFilter.js")
 script(src="scripts/filters/getByProperty.js")
 script(src="scripts/filters/getBytype.js")
 script(src="scripts/controllers/mainCtrl.js")
@@ -116,7 +117,7 @@ script(type='text/javascript').
      if(oldonload){oldonload()}};
   }());
 
-if account._id == 6 || account._id == 37
+if account._id == 6
     // begin olark code
     script(data-cfasync='false', type='text/javascript').
       /*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
@@ -142,6 +143,17 @@ if account._id == 6 || account._id == 37
       |  powered by
       a(href='http://www.olark.com?welcome', title='Olark live chat software') Olark live chat software
     // end olark code
+
+if account._id == 37
+    script(type='text/javascript').
+      var __lc = {};
+      __lc.license = 5647571;
+
+      (function() {
+        var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+        lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+      })();
 
 if includeEditor
     include _aloha_editor

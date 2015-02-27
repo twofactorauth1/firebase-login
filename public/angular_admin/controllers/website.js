@@ -50,11 +50,10 @@ define([
             });
             $scope.showOnboarding = false;
             $scope.beginOnboarding = function(type) {
-              $scope.showOnboarding = true;
+
               $scope.obType = type;
                 if (type == 'edit-home') {
                     $scope.stepIndex = 0
-                    $scope.showOnboarding = true;
                     $scope.activeTab = 'pages';
                     $scope.onboardingSteps = [
                       {
@@ -422,6 +421,7 @@ define([
                             $scope.editPage();
                             $scope.iframeLoaded = true;
                             editBlockUI.stop();
+                            // $scope.showOnboarding = true;
                         }, 5000)
                     }
                 }
@@ -639,6 +639,7 @@ define([
             //TODO: use scope connection
             $scope.savePage = function() {
                 $scope.saveLoading = true;
+                $scope.isDirty = false;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);

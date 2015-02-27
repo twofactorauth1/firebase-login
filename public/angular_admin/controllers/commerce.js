@@ -5,19 +5,19 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.addProductFn = function() {
             ProductService.postProduct($scope.newProduct, function(product) {
                 $scope.products.push(product);
-                $(
-'#commerce-add-product').modal('hide');
+                $('#commerce-add-product').modal('hide');
             });
         };
         $scope.showOnboarding = false;
         $scope.stepIndex = 0;
         $scope.onboardingSteps = [{
             overlay: false
-        }]
+        }];
+
         $scope.beginOnboarding = function(type) {
+            console.log('begin onboarding');
             if (type == 'add-product') {
                 $scope.stepIndex = 0;
-                $scope.showOnboarding = true;
                 $scope.onboardingSteps = [{
                     overlay: true,
                     title: 'Task: Add Product',
@@ -29,17 +29,19 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         };
 
         $scope.finishOnboarding = function() {
-          $scope.userPreferences.tasks.add_product = true;
-          UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+            console.log('finsish onboarding');
+            $scope.userPreferences.tasks.add_product = true;
+            UserService.updateUserPreferences($scope.userPreferences, false, function() {});
         };
 
         if ($location.$$search['onboarding']) {
+            console.log('search onboarding');
             $scope.beginOnboarding($location.$$search['onboarding']);
         }
 
-        $scope.productStarredFn = function (product, starred) {
+        $scope.productStarredFn = function(product, starred) {
             product.starred = starred;
-            ProductService.saveProduct(product, function (product) {
+            ProductService.saveProduct(product, function(product) {
                 console.log(product);
             });
         };
@@ -118,14 +120,14 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 $scope.productSortReverse = false;
             }
             //else if (newValue == 4) {
-              //  $scope.productOrder = 'last';
-               // $scope.productSortReverse = false;
+            //  $scope.productOrder = 'last';
+            // $scope.productSortReverse = false;
             //}
             //else if (newValue == 5) {
-              //  $scope.productOrder = 'lastActivity';
-                //$scope.productSortReverse = true;
+            //  $scope.productOrder = 'lastActivity';
+            //$scope.productSortReverse = true;
             //}
-             else if (newValue == 4) {
+            else if (newValue == 4) {
                 $scope.productOrder = 'total_sales';
                 $scope.productSortReverse = false;
             } else if (newValue == 5) {
@@ -142,8 +144,8 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         var initializeSortOrder = 0;
         $scope.$watch('sortOrderSettings', function(newValue, oldValue) {
             if (initializeSortOrder >= 2) {
-               newValue = parseInt(newValue);
-               $scope.sortOrder = newValue;
+                newValue = parseInt(newValue);
+                $scope.sortOrder = newValue;
                 if (newValue === 0) {
                     $scope.productOrder = 'name';
                     $scope.productSortReverse = false;
@@ -188,39 +190,46 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         };
 
         $scope.max_value = function(hash) {
-                if(hash) {
-                    var price = {};
-                if (hash[0] && hash[0].price) {
-                    price = _.max(hash, function(p){ return p.price; });
-                    return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
-                                        return (str !== "");
-                                    }).join(" ");
-                }
-              }
-            }
-
-        $scope.min_value = function(hash) {
-          if(hash) {
+            if (hash) {
                 var price = {};
                 if (hash[0] && hash[0].price) {
-                    price = _.min(hash, function(p){ return p.price; });
-
-                    return _.filter([(price.price/100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
-                                    return (str !== "");
-                                }).join(" ");
+                    price = _.max(hash, function(p) {
+                        return p.price;
+                    });
+                    return _.filter([(price.price / 100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
+                        return (str !== "");
+                    }).join(" ");
                 }
-          }
+            }
+        }
+
+        $scope.min_value = function(hash) {
+            if (hash) {
+                var price = {};
+                if (hash[0] && hash[0].price) {
+                    price = _.min(hash, function(p) {
+                        return p.price;
+                    });
+
+                    return _.filter([(price.price / 100).toFixed(2), '(', price.signup_fee, ')'], function(str) {
+                        return (str !== "");
+                    }).join(" ");
+                }
+            }
         }
 
         ProductService.getProducts(function(products) {
             $scope.products = products;
             ngProgress.complete();
+            // setTimeout(function() {
+            //     $scope.showOnboarding = true;
+            // }, 2000);
         });
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             if ($scope.userPreferences.tasks) {
                 if ($scope.showOnboarding = false && $scope.userPreferences.tasks.add_product == undefined || $scope.userPreferences.tasks.add_product == false) {
-                  $scope.finishOnboarding();
+                    $scope.finishOnboarding();
                 }
             }
             var commerceSettings = $scope.userPreferences.commerceSettings;
@@ -234,30 +243,26 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 var productSortReverse = $scope.productSortReverse;
                 var orderNum;
                 if (productOrder === 'name') {
-                    if(productSortReverse)
+                    if (productSortReverse)
                         orderNum = 2;
                     else
                         orderNum = 1;
-                }
-                else if (productOrder === 'created.date') {
-                   orderNum = 3;
-                }
-                else if (productOrder === 'total_sales') {
-                   orderNum = 4;
-                }
-                else if (productOrder === 'regular_price') {
-                   if(productSortReverse)
+                } else if (productOrder === 'created.date') {
+                    orderNum = 3;
+                } else if (productOrder === 'total_sales') {
+                    orderNum = 4;
+                } else if (productOrder === 'regular_price') {
+                    if (productSortReverse)
                         orderNum = 6;
                     else
                         orderNum = 5;
-                }
-                else if (productOrder === 'starred') {
-                   orderNum = 7;
+                } else if (productOrder === 'starred') {
+                    orderNum = 7;
                 }
                 $scope.sortOrder = orderNum;
                 $scope.sortOrderSettings = orderNum;
             } else {
-                    $scope.userPreferences.commerceSettings = {
+                $scope.userPreferences.commerceSettings = {
                     productOrder: 'name',
                     productSortReverse: false
                 };
@@ -266,5 +271,5 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
             }
         });
 
-  }]);
+    }]);
 });

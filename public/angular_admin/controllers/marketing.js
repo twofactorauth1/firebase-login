@@ -6,7 +6,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
          * begin the onboarding process if this is the users first time
          */
 
-        
+
         $scope.showOnboarding = false;
         $scope.stepIndex = 0;
         $scope.onboardingSteps = [{
@@ -14,7 +14,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         }]
         $scope.beginOnboarding = function(type) {
             if (type == 'create-campaign') {
-                $scope.showOnboarding = true;
+
                 $scope.onboardingSteps = [{
                     overlay: true,
                     title: 'Task: Create new campaign',
@@ -147,6 +147,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                     $scope.feedLengths[obj.socialId] = 0;
                     if (socialAccountMap[obj.socialId] === 'tw') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(tweets, socialId) {
+                          // $scope.showOnboarding = true;
                             $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + tweets.length;
                             for (var i = 0; i < tweets.length; i++) {
                                 tweets[i].type = 'twitter';
@@ -156,6 +157,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         });
                     } else if (socialAccountMap[obj.socialId] === 'fb') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(posts, socialId) {
+                          // $scope.showOnboarding = true;
                             $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + posts.length;
                             for (var i = 0; i < posts.length; i++) {
                                 console.log('posts[i] ', posts[i]);

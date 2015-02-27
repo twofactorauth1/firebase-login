@@ -1,6 +1,5 @@
 <toaster-container toaster-options="{'time-out': 1000, 'close-button':true, 'limit': 1}"></toaster-container>
-<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
-on-finish-callback='finishOnboarding'></onboarding-popover>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' on-finish-callback='finishOnboarding'></onboarding-popover>
 <div class="account">
 
     <div class="pageheader row">
@@ -16,7 +15,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
         <div class="col-xs-1">
         </div>
         <div class="col-xs-3">
-            <a href="#/account/edit" class="btn btn-success pull-right" type="button">
+            <a href="#/account/edit" class="btn btn-outline pull-right" type="button">
                 <span class="fa fa-edit"></span>
                 <span class="hidden-xs">Edit</span>
             </a>
@@ -361,57 +360,65 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
             <div class="row">
 
-                 <div class="col-sm-3 col-md-4">
-                  <div class="thumbnail">
+                <div class="col-sm-3 col-md-4">
+                    <div class="thumbnail">
 
-                    <div class="img-wrap">
-                          <div class="col-sm-6 social-link-icon">
-                            <a href="/redirect/?next={{currentHost}}/socialconfig/facebook?redirectTo={{redirectUrl}}&socialNetwork=Facebook">
-                            <i class="fa fa-facebook fa-5x facebook-icon-color"></i>
-                            </a>
-                        </div>
+                        <div class="img-wrap selector">
                             <div class="col-sm-6 social-link-icon">
-                                <a href="/redirect/?next={{currentHost}}/socialconfig/google?redirectTo={{redirectUrl}}&socialNetwork=Google Plus"><i class="fa fa-google-plus google-icon-color fa-5x"></i></a></div>
-                      </div>
-                      <div class="img-wrap ">
-                          <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/linkedin?redirectTo={{redirectUrl}}&socialNetwork=LinkedIn"><i class="fa fa-linkedin fa-5x linkedin-icon-color"></i></a></div>
-                            <div class="col-sm-6 social-link-icon"><a href="/redirect/?next={{currentHost}}/socialconfig/twitter?redirectTo={{redirectUrl}}&socialNetwork=Twitter"><i class="fa fa-twitter fa-5x twitter-icon-color"></i></a></div>
-                      </div>
+                                <a ng-click="socailRedirect('Facebook');">
+                                    <i class="fa fa-facebook fa-5x facebook-icon-color"></i>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 social-link-icon">
+                                <a ng-click="socailRedirect('Google');"><i class="fa fa-google-plus google-icon-color fa-5x"></i></a>
+                            </div>
+                        </div>
+                        <div class="img-wrap selector">
+                            <div class="col-sm-6 social-link-icon"><a ng-click="socailRedirect('LinkedIn');"><i class="fa fa-linkedin fa-5x linkedin-icon-color"></i></a>
+                            </div>
+                            <div class="col-sm-6 social-link-icon"><a ng-click="socailRedirect('Twitter');"><i class="fa fa-twitter fa-5x twitter-icon-color"></i></a>
+                            </div>
+                        </div>
+                        <div class="img-wrap img-wrap-strip selector" ng-if="!checkStripe">
+                            <div class="col-sm-12">
+                                <a href="/redirect/?next={{currentHost}}/stripe/connect"><img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="...">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
-                  </div>
-                 </div>
-
-              <div class="col-sm-3 col-md-4" ng-repeat="sa in socialAccounts">
-                  <div class="thumbnail">
-                      <div class="img-wrap">
-                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
-                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
-                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.LINKEDIN">
-                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/twit-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.TWITTER">
-                          <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.STRIPE">
-                      </div>
-                      <div class="caption">
-                          <h3 ng-show="sa.type==credentialTypes.FACEBOOK">Facebook</h3>
-                          <h3 ng-show="sa.type==credentialTypes.GOOGLE">Google +</h3>
-                          <h3 ng-show="sa.type==credentialTypes.LINKEDIN">Linkedin</h3>
-                          <h3 ng-show="sa.type==credentialTypes.TWITTER">Twitter</h3>
-                          <h3 ng-show="sa.type==credentialTypes.STRIPE">Stripe</h3>
-                          <div class="connected">
-                              <span>You are logged in as:</span>
-                              <div class="clearfix"></div>
-                              <img ng-src="{{sa.image}}" class="img-circle" />
-                              <span>{{sa.username}}</span>
-                          </div>
-                          <div class="btn-group btn-group-justified">
-                              <div class="btn-group">
-                                  <button class="btn btn-danger btn-lg btn-disconnect-{{sa.id}}" role="button" confirm-click2-confirm="deleteSocialFn(sa.id)" confirm-click2 confirm-click2-placement="top" confirm-click2-btn-ok-label="'Disconnect'">
-                                      <span class="fa fa-trash-o"></span>Disconnect</button>
-                              </div>
-                          </div>
-                          <div class="clearfix"></div>
-                      </div>
-                  </div>
-              </div>
+                </div>
+                <div class="col-sm-3 col-md-4" ng-repeat="sa in socialAccounts| filter: socialFilter">
+                    <div class="thumbnail">
+                        <div class="img-wrap">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.LINKEDIN">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/twit-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.TWITTER">
+                            <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.STRIPE">
+                        </div>
+                        <div class="caption">
+                            <h3 ng-show="sa.type==credentialTypes.FACEBOOK">Facebook</h3>
+                            <h3 ng-show="sa.type==credentialTypes.GOOGLE">Google +</h3>
+                            <h3 ng-show="sa.type==credentialTypes.LINKEDIN">Linkedin</h3>
+                            <h3 ng-show="sa.type==credentialTypes.TWITTER">Twitter</h3>
+                            <h3 ng-show="sa.type==credentialTypes.STRIPE">Stripe</h3>
+                            <div class="connected">
+                                <span>You are logged in as:</span>
+                                <div class="clearfix"></div>
+                                <img ng-src="{{sa.image}}" class="img-circle" />
+                                <span>{{sa.username}}</span>
+                            </div>
+                            <div class="btn-group btn-group-justified">
+                                <div class="btn-group">
+                                    <button class="btn btn-danger btn-lg btn-disconnect-{{sa.id}}" role="button" confirm-click2-confirm="deleteSocialFn(sa.id)" confirm-click2 confirm-click2-placement="top" confirm-click2-btn-ok-label="'Disconnect'">
+                                        <span class="fa fa-trash-o"></span>Disconnect</button>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -680,7 +687,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
                                 <h5 class="center">+ <i class="fa fa-usd fa-1"></i>{{planStatus[plan.id].signup_fee}}(One Time Fee)</h5>
                                 <div class="mb30"></div>
                                 <div class="col-xs-12 mb15">
-                                  <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)" ng-class="{'disabled': plan.id==subscription.plan.id}">Choose</a>
+                                    <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)" ng-class="{'disabled': plan.id==subscription.plan.id}">Choose</a>
                                     <a type="button" class="btn btn-green btn-block center active" ng-if="subscription.plan.id == plan.id">Selected</a>
                                 </div>
                                 <div class="clearfix"></div>

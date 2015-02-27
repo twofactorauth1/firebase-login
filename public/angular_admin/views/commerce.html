@@ -1,6 +1,8 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
-on-finish-callback='finishOnboarding'></onboarding-popover>
+<div ng-if="showOnboarding">
+  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+  on-finish-callback='finishOnboarding'></onboarding-popover>
+</div>
 <div class="commerce">
   <div class="pageheader row">
     <div class="col-xs-8">
@@ -9,7 +11,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 			</h2>
     </div>
     <div class="col-xs-4">
-      <a class="btn btn-success pull-right" type="button" data-toggle="modal" data-target="#commerce-add-product"> <span class="fa fa-plus"></span> <span class="hidden-xs">Add</span>
+      <a class="btn btn-outline pull-right" type="button" data-toggle="modal" data-target="#commerce-add-product"> <span class="fa fa-plus"></span> <span class="hidden-xs">Add</span>
       </a>
     </div>
     <div class="clear"></div>
@@ -206,7 +208,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
     <div class="tab-content">
       <div class="tab-pane pane-settings active" id="rp-page">
-        <div class="leftpanelinner">
+        <div class="rightpanelinner">
           <!--
           <button class="btn btn-orange btn-block mb15"><span class="fa fa-upload"></span> Import Products</button>
           -->

@@ -1,16 +1,41 @@
-define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker', 'angularMoney', 'combinatorics', 'intervalCountValidationDirective','adminValidationDirective'], function(app) {
-    app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', 'ToasterService', '$state',
-        function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService, ToasterService, $state) {
+define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective', 'productService', 'paymentService', 'angularUI', 'ngAnimate', 'angularBootstrapSwitch', 'jquery', 'bootstrap-iconpicker-font-awesome', 'bootstrap-iconpicker', 'userService', 'toasterService', 'datepicker', 'angularMoney', 'combinatorics', 'intervalCountValidationDirective','adminValidationDirective','ngSweetAlert'], function(app) {
+    app.register.controller('CommerceEditCtrl', ['$scope', '$q', 'ngProgress', '$stateParams', 'ProductService', 'PaymentService', 'UserService', 'ToasterService', '$state','SweetAlert',
+        function($scope, $q, ngProgress, $stateParams, ProductService, PaymentService, UserService, ToasterService, $state, SweetAlert) {
             ngProgress.start();
 
             var productPlanStatus = {};
             var productPlanSignupFee = {};
 
+            $scope.isFormDirty = false;
+
             $scope.showToaster = false;
             //back button click function
             $scope.$back = function() {
+                if ($scope.isFormDirty) {
+                SweetAlert.swal({
+                    title: "Are you sure?",
+                    text: "You have unsaved data that will be lost",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, I want to go back!",
+                    cancelButtonText: "No, I do not want to leave!",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function(isConfirm) {
+                    console.log(isConfirm);
+                    if (isConfirm) {
+                        window.history.back();
+                    }
+                });
+            } else
                 window.history.back();
             };
+            $scope.setFormDirtyFn = function() {
+                $scope.isFormDirty = true;
+            };
+            
             ngProgress.complete();
 
             $scope.productId = $stateParams.id;
@@ -167,6 +192,7 @@ define(['app', 'commonutils', 'ngProgress', 'mediaDirective', 'stateNavDirective
             };
 
             $scope.saveProductFn = function() {
+                $scope.isFormDirty = false;
                 $scope.saveLoading = true;
                 var variants = [];
                 $scope.product.variantSettings.variants.forEach(function(value, index) {
