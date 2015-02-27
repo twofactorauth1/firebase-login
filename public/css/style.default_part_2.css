@@ -11004,7 +11004,11 @@ contenthover a {
 
 /********** Image Text v1 **********/
 
-.image-text-v1 img {
+.image-text-v1 span[data-cke-display-name="image"] {
+  max-width: 100%;
+}
+
+.image-text-v1 span[data-cke-display-name="image"] img {
   max-width: 100%;
 }
 
@@ -11548,8 +11552,8 @@ div[data-class='image-text'] p {
 
 #cart-checkout-modal .glyphicon.form-control-feedback {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 8px;
+  right: 8px;
 }
 
 /*--------------------------
