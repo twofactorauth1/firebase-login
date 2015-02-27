@@ -17334,18 +17334,24 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .account .integrations-section .thumbnail .caption p {
   height: 70px;
 }
-.account .integrations-section .thumbnail .img-wrap-strip {
-  height: 400px !important;
+.account .integrations-section .thumbnail .img-wrap-strip img {
+  margin-top: -28px;
 }
 .account .integrations-section .thumbnail .img-wrap {
-  height: 200px;
+  height: 190px;
   position: relative;
   border: 1px solid #e7e7e7;
   overflow: hidden;
 }
 .account .integrations-section .thumbnail .img-wrap .social-link-icon {
   text-align: center;
-  padding: 45px;
+  padding: 30px;
+}
+.account .integrations-section .thumbnail .img-wrap.selector {
+  height: 133px;
+}
+.account .integrations-section .thumbnail .img-wrap.img-wrap-strip {
+  height: 120px;
 }
 .account .integrations-section .thumbnail .img-wrap .facebook-icon-color {
   color: #3b5998;

@@ -246,7 +246,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
                     });
 
                     ngProgress.complete();
-                    $scope.showOnboarding = true;
+                    // $scope.showOnboarding = true;
                     if ($scope.user.stripeId) {
                         PaymentService.getInvoicesForAccount(function(invoices) {
                             $scope.invoices = invoices;
