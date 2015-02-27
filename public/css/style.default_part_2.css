@@ -1279,7 +1279,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .account .integrations-section .thumbnail img {
   width: 100%;
-  margin-top: 20px;
+  margin-top: -10px;
   height: auto;
 }
 
@@ -1293,10 +1293,12 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 
 .account .integrations-section .thumbnail .img-wrap-strip img {
   margin-top: -28px;
+  max-height: 200px;
+  max-width: 300px;
 }
 
 .account .integrations-section .thumbnail .img-wrap {
-  height: 190px;
+  height: 200px;
   position: relative;
   border: 1px solid #e7e7e7;
   overflow: hidden;
