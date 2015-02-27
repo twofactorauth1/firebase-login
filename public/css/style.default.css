@@ -18970,6 +18970,15 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .dashboard .highcharts-title {
   display: none;
 }
+.dashboard .block-ui-active > .block-ui-container {
+  height: 310%;
+  cursor: default;
+}
+.dashboard .block-ui-message-container {
+  top: 20%;
+  width: 50%;
+  margin: 0 auto;
+}
 .single-metric-top h1 {
   padding: 15px;
   font-size: 55px;

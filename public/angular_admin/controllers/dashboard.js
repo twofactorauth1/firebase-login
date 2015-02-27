@@ -21,7 +21,7 @@ define([
     'navigationService',
     'chartAnalyticsService',
     'chartCommerceService',
-    'userService','activityDirective','ngOnboarding'
+    'userService','activityDirective','ngOnboarding', 'blockUI'
     ], function(app) {
     app.register.controller('DashboardCtrl',
         ['$scope',
@@ -37,7 +37,8 @@ define([
         'ChartCommerceService',
         'UserService',
         '$location',
-    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService, $location) {
+        'blockUI',
+    function($scope, $window, $resource, ngProgress, PaymentService, dashboardService, CustomerService, keenService, NavigationService, ChartAnalyticsService, ChartCommerceService, UserService, $location, blockUI) {
       UserService.getUserPreferences(function(preferences) {
           $scope.userPreferences = preferences;
           if($scope.userPreferences.tasks) {
@@ -225,6 +226,10 @@ define([
             //         }
             //     }, 100);
             // };
+            if(!$scope.displayVisitors){
+                var deshBlockUI = blockUI.instances.get('deshboardBlock');
+                deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
+            }
             ngProgress.complete();
             // $scope.showOnboarding = true;
         };
