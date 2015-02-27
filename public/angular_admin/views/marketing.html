@@ -16,8 +16,8 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="" data-toggle="modal" data-target="#marketing-add-campaign"> Campaign</a>
                     </li>
-                    <li><a href="" data-toggle="modal" data-target="#marketing-add-feed"> Social Feed</a>
-                    </li>
+                    <!-- <li><a href="" data-toggle="modal" data-target="#marketing-add-feed"> Social Feed</a>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -80,6 +80,7 @@
                     <h3 class="center">Add a Feed to get set up.</h3>
                 </div> -->
             <div class="col-sm-3 stream-filter">
+                <button class="btn btn-success btn-block mb15" data-toggle="modal" data-target="#marketing-add-feed">Manage Feeds</button>
                 <accordion>
                     <accordion-group is-open="item.open" ng-repeat="type in feedTypes" is-disabled="true">
                         <accordion-heading>
