@@ -17330,7 +17330,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .account .integrations-section .thumbnail img {
   width: 100%;
-  margin-top: 20px;
+  margin-top: -10px;
   height: auto;
 }
 .account .integrations-section .thumbnail h3 {
@@ -17341,9 +17341,11 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .account .integrations-section .thumbnail .img-wrap-strip img {
   margin-top: -28px;
+  max-height: 200px;
+  max-width: 300px;
 }
 .account .integrations-section .thumbnail .img-wrap {
-  height: 190px;
+  height: 200px;
   position: relative;
   border: 1px solid #e7e7e7;
   overflow: hidden;
@@ -18967,6 +18969,15 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .dashboard .highcharts-title {
   display: none;
+}
+.dashboard .block-ui-active > .block-ui-container {
+  height: 310%;
+  cursor: default;
+}
+.dashboard .block-ui-message-container {
+  top: 20%;
+  width: 50%;
+  margin: 0 auto;
 }
 .single-metric-top h1 {
   padding: 15px;
@@ -25348,7 +25359,10 @@ contenthover a {
   background: none!important;
 }
 /********** Image Text v1 **********/
-.image-text-v1 img {
+.image-text-v1 span[data-cke-display-name="image"] {
+  max-width: 100%;
+}
+.image-text-v1 span[data-cke-display-name="image"] img {
   max-width: 100%;
 }
 .image-text-v1 .image-text-title {
@@ -25782,6 +25796,11 @@ div[data-class='image-text'] p {
 }
 .shopping-cart {
   color: #444!important;
+}
+#cart-checkout-modal .glyphicon.form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 /*--------------------------
 ----Project Modal Styles----

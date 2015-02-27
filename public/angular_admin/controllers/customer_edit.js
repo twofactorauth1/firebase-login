@@ -22,7 +22,10 @@ define(['app',
     function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService, $location) {
       ngProgress.start();
 
-      $scope.showOnboarding = false;
+          $scope.showOnboarding = false;
+          $scope.onboardingSteps = [{
+            overlay: false
+          }]
           $scope.stepIndex = 0;
           $scope.beginOnboarding = function(type) {
             $scope.showOnboarding = true;

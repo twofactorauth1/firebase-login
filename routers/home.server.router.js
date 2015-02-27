@@ -54,10 +54,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
 
         app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        app.get("/admin/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin/*", this.isAuth.bind(this), this.rerouteToAngularAdmin.bind(this));
 
         app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        app.get("/admin1/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth.bind(this), this.rerouteToAngularAdmin.bind(this));
 
         app.get("/demo", this.setup.bind(this), this.demo.bind(this));
         app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
@@ -214,6 +214,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
+    rerouteToAngularAdmin: function(req, res) {
+      var path = req.url;
+      var angularPath = path.slice(6, path.length);
+      res.redirect('/admin/#' + angularPath);
+    },
+
     _showHome: function(req,resp) {
         new HomeView(req,resp).show("home");
     },
@@ -313,4 +319,3 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
 module.exports = new router();
-

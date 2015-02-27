@@ -458,7 +458,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.makeCartPayment = function() {
-      var expiry = $('#expiry').val().split("/")
+
+      var expiry = $('#card_expiry').val().split("/")
       var exp_month = expiry[0].trim();
       var exp_year = "";
       if (expiry.length > 1)
@@ -470,6 +471,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_month: exp_month,
         exp_year: exp_year
       };
+
+      if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+        //|| !cc_name
+        console.log('card invalid');
+        //hightlight card in red
+        $scope.checkCardNumber();
+        $scope.checkCardExpiry();
+        $scope.checkCardCvv();
+        return;
+      }
 
       if ($scope.newContact.first !== undefined) {
         userService.postContact($scope.newContact, function(data, err) {
@@ -1542,7 +1553,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           details: [{
             emails: [],
             phones:[]
-          }]
+          }],
+          activity: {
+            activityType: 'CONTACT_FORM',
+            note: "Contact form data.",
+            sessionId: ipCookie("session_cookie")["id"],
+            contact: contact
+          }
         };
 
         contact_info.details[0].emails.push({
@@ -1570,32 +1587,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#contact_email .error").html("");
             $("#contact_email").removeClass('has-error').addClass('has-success');
             $("#contact_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-            //create activity
-            var activity_info = {
-              accountId: data.accountId,
-              contactId: data._id,
-              activityType: 'CONTACT_FORM',
-              note: "Contact form data.",
-              start: new Date(),
-              extraFields: contact,
-              sessionId: ipCookie("session_cookie")["id"]
-            };
-            userService.addContactActivity(activity_info, function(data) {
-              console.log('data ', data);
-              contact.email = '';
+
+            contact.email = '';
               contact.message = '';              
               contact.success = true;
               component.fields.forEach(function(value)
               {
                 value.model = null;
               })
-              
-              setTimeout(function() {
+            setTimeout(function() {
                 $scope.$apply(function() {
                   contact.success = false;
                 });
               }, 3000);
-            });
           }
 
         });
@@ -1698,14 +1702,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               case "number":
                 $("#card_number .error").html(error.message);
                 $("#card_number").addClass('has-error');
+                $("#card_number .glyphicon").addClass('glyphicon-remove');
                 break;
               case "exp_year":
                 $("#card_expiry .error").html(error.message);
                 $("#card_expiry").addClass('has-error');
+                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                 break;
               case "cvc":
                 $("#card_cvc .error").html(error.message);
                 $("#card_cvc").addClass('has-error');
+                $("#card_cvc .glyphicon").addClass('glyphicon-remove');
                 break;
             }
           } else {
@@ -1822,9 +1829,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (!card_number) {
         $("#card_number .error").html("Card Number Required");
         $("#card_number").addClass('has-error');
+        $("#card_number .glyphicon").addClass('glyphicon-remove');
       } else {
         $("#card_number .error").html("");
         $("#card_number").removeClass('has-error').addClass('has-success');
+        $("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
@@ -1850,6 +1859,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $("#card_expiry").addClass('has-error');
       } else {
         $("#card_expiry .error").html("");
+        $("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         $("#card_expiry").removeClass('has-error').addClass('has-success');
       }
     };
@@ -1862,9 +1872,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (!card_cvc) {
         $("#card_cvc .error").html("CVC Required");
         $("#card_cvc").addClass('has-error');
+        $("#card_cvc .glyphicon").addClass('glyphicon-remove');
       } else {
         $("#card_cvc .error").html("");
         $("#card_cvc").removeClass('has-error').addClass('has-success');
+        $("#card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
