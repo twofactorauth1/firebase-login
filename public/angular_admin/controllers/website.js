@@ -639,6 +639,7 @@ define([
             //TODO: use scope connection
             $scope.savePage = function() {
                 $scope.saveLoading = true;
+                $scope.isDirty = false;
                 var iFrame = document.getElementById("iframe-website");
                 if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                     iFrame.contentWindow.checkOrSetPageDirty(true);
