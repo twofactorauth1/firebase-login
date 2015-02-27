@@ -31,7 +31,8 @@ module.exports = {
                 log.error('Error getting temp account: ' + err);
                 return fn(err, null);
             }
-            var user = new $$.m.User(tempAccount.tempUser);
+            log.debug('got tempAccount: ', tempAccount);
+            var user = new $$.m.User(tempAccount.get('tempUser'));
             accountDao.convertTempAccount(accountToken, function(err, account) {
                 if(err) {
                     log.error('Error converting temp account: ' + err);
@@ -41,7 +42,9 @@ module.exports = {
                 var roleAry = ["super","admin","member"];
                 var username = user.get('username');
                 var email = user.get('email');
+
                 user.createUserAccount(accountId, username, null, roleAry);
+                
                 user.set('_id', null);
                 dao.saveOrUpdate(user, function(err, savedUser){
                     if(err) {
