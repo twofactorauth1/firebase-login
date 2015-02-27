@@ -405,7 +405,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
             });
 
             $scope.socailRedirect = function(socailAccount) {
-                ToasterService.setPending('success', socailAccount + ' is integreted successfully.');
+                ToasterService.setPending('success', socailAccount + ' is integreted successfully.', '<div class="mb15"></div><a href="/admin#/customer?onboarding=create-contact" class="btn btn-primary">Next Step: Import / Create Contacts</a>', 0, 'trustedHtml');
                 window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socailAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl +'&socialNetwork=' + socailAccount;
             };
 
