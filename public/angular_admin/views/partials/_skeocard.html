@@ -7,6 +7,7 @@
                 <div class="small-6 columns col-sm-6">
                     <div id="card_number">
                         <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                        <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                 </div>
@@ -14,6 +15,7 @@
                 <div class="small-6 columns col-sm-6">
                     <div id="card_name">
                         <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
+                        <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                 </div>
@@ -21,10 +23,12 @@
             <div class="row">
                 <div id="card_expiry" class="small-3 columns col-xs-6">
                     <input placeholder="MM/YY" type="text" id="expiry" name="expiry" ng-blur="checkCardExpiry()" class="form-control input-lg">
+                    <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
                 <div id="card_cvc" class="small-3 columns col-xs-6">
                     <input placeholder="CVC" type="text" id="cvc" name="cvc" ng-blur="checkCardCvv()" class="form-control input-lg">
+                    <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
                 <!-- <div id="coupon_code" class="col-xs-12">

@@ -52,9 +52,11 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                       if (!card_number) {
                         $("#card_number .error").html("Card Number Required");
                         $("#card_number").addClass('has-error');
+                        $("#card_number .glyphicon").addClass('glyphicon-remove');
                       } else if (card_number.length > 16){
                         $("#card_number .error").html("");
                         $("#card_number").removeClass('has-error').addClass('has-success');
+                        $("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                       }
                         scope.cardValidated = true;
                     };
@@ -64,9 +66,12 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                       if (!name) {
                         $("#card_name .error").html("Card Name Required");
                         $("#card_name").addClass('has-error');
+                        $("#card_name .glyphicon").addClass('glyphicon-remove');
+
                       } else {
                         $("#card_name .error").html("");
                         $("#card_name").removeClass('has-error').addClass('has-success');
+                        $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                       }
                       scope.cardNameValidated = true;
                     };
@@ -92,18 +97,22 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                         else if (!exp_year)
                           $("#card_expiry .error").html("Expiry Year Required");
                         $("#card_expiry").addClass('has-error');
+                        $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                       } else {
                         console.log('year ', parseInt(exp_year));
                         if (parseInt(exp_year) < parseInt(scope.currentYear)) {
                             $("#card_expiry .error").html("Card Year has Expired");
                             $("#card_expiry").addClass('has-error');
+                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                         } else if  (exp_month <= scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
+                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                         } else {
                              scope.expirationValidated = true;
                             $("#card_expiry .error").html("");
                             $("#card_expiry").removeClass('has-error').addClass('has-success');
+                            $("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                         }
                       }
                     };
@@ -116,10 +125,12 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                       if (!card_cvc) {
                         $("#card_cvc .error").html("CVC Required");
                         $("#card_cvc").addClass('has-error');
+                        $("#card_cvc .glyphicon").addClass('glyphicon-remove');
                       } else {
                         scope.cvvValidated = true;
                         $("#card_cvc .error").html("");
                         $("#card_cvc").removeClass('has-error').addClass('has-success');
+                        $("#card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                       }
                     };
 
