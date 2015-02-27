@@ -1553,7 +1553,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           details: [{
             emails: [],
             phones:[]
-          }]
+          }],
+          activity: {
+            activityType: 'CONTACT_FORM',
+            note: "Contact form data.",
+            sessionId: ipCookie("session_cookie")["id"],
+            contact: contact
+          }
         };
 
         contact_info.details[0].emails.push({
@@ -1581,32 +1587,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#contact_email .error").html("");
             $("#contact_email").removeClass('has-error').addClass('has-success');
             $("#contact_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-            //create activity
-            var activity_info = {
-              accountId: data.accountId,
-              contactId: data._id,
-              activityType: 'CONTACT_FORM',
-              note: "Contact form data.",
-              start: new Date(),
-              extraFields: contact,
-              sessionId: ipCookie("session_cookie")["id"]
-            };
-            userService.addContactActivity(activity_info, function(data) {
-              console.log('data ', data);
-              contact.email = '';
+
+            contact.email = '';
               contact.message = '';              
               contact.success = true;
               component.fields.forEach(function(value)
               {
                 value.model = null;
               })
-              
-              setTimeout(function() {
+            setTimeout(function() {
                 $scope.$apply(function() {
                   contact.success = false;
                 });
               }, 3000);
-            });
           }
 
         });
