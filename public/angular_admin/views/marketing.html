@@ -32,7 +32,7 @@
                     <span class="hidden-xs">Social Feed</span>
                 </div>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'">
+            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'" disabled="true">
                 <div tooltip-placement="bottom" tooltip-html-unsafe="What are customers doing?">
                     <i class="fa fa-flag"></i>
                     <span class="hidden-xs">Campaigns <span class="label label-primary">Coming Soon</span>
@@ -84,8 +84,8 @@
                     <accordion-group is-open="item.open" ng-repeat="type in feedTypes" is-disabled="true">
                         <accordion-heading>
                             <div class="feedTypeDetail">
-                                <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}" />
-                                <input type="checkbox" ng-if="type.type == 'twitter'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}" />
+                                <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}" checked/>
+                                <input type="checkbox" ng-if="type.type == 'twitter'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}" checked/>
                                 <!-- <div class="ckbox ckbox-primary pull-left">
                                     <input type="checkbox" value="1" id="checkboxPrimary" checked="checked" ng-click="toggleCheckbox($event)">
                                     <label for="checkboxPrimary"></label>
@@ -146,10 +146,9 @@
                                 </div> -->
 
                         <!-- FACEBOOK -->
-            }
-            }
+                        } }
 
-<!--                         <div class="col-xs-12" ng-if="type.type == 'facebook'">
+                        <!--  <div class="col-xs-12" ng-if="type.type == 'facebook'">
                             <input type="checkbox" name="likes" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".likes-{{type.socialId}}">
                             <label for="likes">Likes</label>
                             <span class="pull-right label label-primary">--</span>
@@ -228,7 +227,7 @@
                                     <div class="panel-body">
 
                                         <div class="media">
-                                            <a href="#" >
+                                            <a href="#">
                                                 <img alt="" src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
@@ -335,6 +334,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="modal fade" id="marketing-add-campaign">
