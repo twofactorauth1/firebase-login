@@ -135,7 +135,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                 if(req.session.locked === true) {
                     self.log.debug('locked is true');
-                    resp.redirect("/admin#/account");
+                    resp.redirect("/admin#/almost-there");
                 } else {
                     resp.redirect("/admin");
                 }
