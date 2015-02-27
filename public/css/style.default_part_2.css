@@ -346,6 +346,12 @@ span[data-cke-widget-id] {
   display: block!important;
 }
 
+.indigeweb-skeuocard .glyphicon.form-control-feedback {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
