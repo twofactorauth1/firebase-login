@@ -184,6 +184,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         })
         .error(function (err) {
             console.log('END:userService with ERROR');
+            fn(err);
         });
     };
 
