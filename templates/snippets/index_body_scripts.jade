@@ -87,6 +87,7 @@ script(src="scripts/services/pageService.js")
 script(src="scripts/filters/CreateUrlFilter.js")
 script(src="scripts/filters/generateURLforLinks.js")
 script(src="scripts/filters/trustHtml.js")
+script(src="scripts/filters/urlFilter.js")
 script(src="scripts/filters/getByProperty.js")
 script(src="scripts/filters/getBytype.js")
 script(src="scripts/controllers/mainCtrl.js")
@@ -144,14 +145,15 @@ if account._id == 6
     // end olark code
 
 if account._id == 37
-    var __lc = {};
-    __lc.license = 5647571;
+    script(type='text/javascript').
+      var __lc = {};
+      __lc.license = 5647571;
 
-    (function() {
-      var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
-      lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
-    })();
+      (function() {
+        var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
+        lc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.livechatinc.com/tracking.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
+      })();
 
 if includeEditor
     include _aloha_editor

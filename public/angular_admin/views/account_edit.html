@@ -6,7 +6,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 	<div class="pageheader">
 		<div class="col-xs-7">
 			<button ng-click="$back()"
- 					class="btn btn-success pull-left"
+ 					class="btn btn-outline pull-left"
 					type="button">
 				<span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
 			</button>
@@ -17,7 +17,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
 		<div class="col-xs-5">
 			<div id="saveAccount">
-				<button class="btn btn-success pull-right" ng-disabled="accountForm.$invalid" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
+				<button class="btn btn-outline pull-right" ng-disabled="accountForm.$invalid" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
 	                <span class="visible-xs" ng-hide="saveLoading">
 	                 <i class="fa fa-save"></i>
 	                </span>

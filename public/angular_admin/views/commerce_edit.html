@@ -3,7 +3,7 @@
      <form name="productForm" novalidate>
     <div class="pageheader">
         <div class="col-xs-8">
-            <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-success pull-left"
+            <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-outline pull-left"
             type="button">
                 <span class="fa fa-chevron-left"></span>
                 <span class="hidden-xs">Back</span>
@@ -11,7 +11,7 @@
             <h2><i class="fa fa-shopping-cart"></i> Single Product</h2>
         </div>
         <div class="col-xs-4">
-            <a class="btn btn-success pull-right" ng-disabled="productForm.$invalid" type="button" ng-click="saveProductFn()">
+            <a class="btn btn-outline pull-right" ng-disabled="productForm.$invalid" type="button" ng-click="saveProductFn()">
                 <span class="visible-xs" ng-hide="saveLoading">
                  <i class="fa fa-save"></i>
                 </span>
@@ -719,7 +719,7 @@
 
         <div class="tab-content">
             <div class="tab-pane pane-settings active" id="rp-page">
-                <div class="leftpanelinner">
+                <div class="rightpanelinner">
                     <div class="form-group">
                         <label>Default Icon</label>
                         <a id="convert-pref" role="iconpicker"></a>

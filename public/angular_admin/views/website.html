@@ -6,7 +6,7 @@
     </div>
     <div class="pageheader row website-controls" ng-class="{true: 'editing', false: ''}[isEditing == true]">
         <div class="col-xs-8 pages-editing">
-            <a class="btn btn-success pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
+            <a class="btn btn-outline pull-left" type="button" href="/admin#/website" style="margin-left: 10px;">
                 <span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
             </a>
             <h2 class="pull-left" style="margin-right: 15px;" ng-show="isEditing"><i class="fa fa-desktop"></i><div class="hidden-xs div-header"> Editing {{single_post ? post_data.post_title : currentPage.title}}</div></h2>
@@ -22,12 +22,12 @@
         </div>
         <div class="col-xs-4">
 
-            <a class="btn btn-success pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
+            <a class="btn btn-outline pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
                 <i class="fa fa fa-edit"></i>
                 <span class="hidden-xs">Edit</span>
             </a>
 
-            <a class="btn btn-success pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
+            <a class="btn btn-outline pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
 
                 <span>
                      <span class="hidden-xs" ng-if="!saveLoading"> Save </span>
@@ -35,12 +35,12 @@
                      <i class="fa fa-spinner fa-spin" ng-if="saveLoading"></i>
                  </span>
             </a>
-            <a ng-confirm-click class="btn btn-warning pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
+            <a ng-confirm-click class="btn btn-outline pull-right btn-cancel-page" type="button" style="margin-right:5px" confirmed-click="cancelPage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
             </a>
 
-            <a class="btn btn-success pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+            <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>

@@ -46,9 +46,10 @@
             <!-- Business Name -->
 
             <div id="business-name" class="form-group col-xs-12 has-feedback">
-                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Url" ng-blur="checkDomainExists(newAccount)" />
+                <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
                 <span class="glyphicon form-control-feedback"></span>
                 <span class="error help-block" />
+                <span class="help-block" ng-show="newAccount.businessName">Your URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and can be changed later.</span>
             </div>
 
             <!-- EMAIL AND PASSOWORD -->
