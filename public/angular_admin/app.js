@@ -137,6 +137,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
         }))
+        .state('interim', angularAMD.route({
+          url: '/almost-there',
+          templateUrl: '/angular_admin/views/interim.html',
+          controller: 'InterimCtrl',
+          controllerUrl: '/angular_admin/controllers/interim.js'
+        }))
         .state('logout', angularAMD.route({
           url: '/logout',
           templateUrl: '/angular_admin/views/logout.html',
