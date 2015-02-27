@@ -11546,6 +11546,12 @@ div[data-class='image-text'] p {
   color: #444!important;
 }
 
+#cart-checkout-modal .glyphicon.form-control-feedback {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
 /*--------------------------
 ----Project Modal Styles----
 ----------------------------*/

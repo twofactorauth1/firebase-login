@@ -458,7 +458,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.makeCartPayment = function() {
-      var expiry = $('#expiry').val().split("/")
+
+      var expiry = $('#card_expiry').val().split("/")
       var exp_month = expiry[0].trim();
       var exp_year = "";
       if (expiry.length > 1)
@@ -470,6 +471,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_month: exp_month,
         exp_year: exp_year
       };
+
+      if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+        //|| !cc_name
+        console.log('card invalid');
+        //hightlight card in red
+        $scope.checkCardNumber();
+        $scope.checkCardExpiry();
+        $scope.checkCardCvv();
+        return;
+      }
 
       if ($scope.newContact.first !== undefined) {
         userService.postContact($scope.newContact, function(data, err) {

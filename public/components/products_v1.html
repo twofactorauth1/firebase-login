@@ -119,7 +119,7 @@
 
     <!--not in use now-->
 
-    <button class="btn btn-primary btn-lg btnLauchCart hidden" data-toggle="modal" data-target="#cart-checkout-modal">
+    <button class="btn btn-primary btn-lg btnLauchCart" data-toggle="modal" data-target="#cart-checkout-modal">
         Launch Cart modal
     </button>
 
@@ -351,21 +351,29 @@
                             <div class="active col-xs-12">
                                 <form name="product-card-details" action="">
                                     <div class="row">
-                                        <div class="small-6 columns col-sm-6">
-                                            <input placeholder="Card number" type="text" name="number" id="number" class="form-control input-lg">
+                                        <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
+                                            <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control input-lg">
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
                                         </div>
                                         <div class="visible-xs mb20"></div>
-                                        <div class="small-6 columns col-sm-6">
+                                        <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
                                             <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
                                         </div>
                                     </div>
                                     <div class="clearfix mb20"></div>
                                     <div class="row">
-                                        <div class="small-3 columns col-xs-6">
-                                            <input placeholder="MM/YY" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                        <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
+                                            <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
                                         </div>
-                                        <div class="small-3 columns col-xs-6">
-                                            <input placeholder="CVC" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                        <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
+                                            <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                            <span class="glyphicon form-control-feedback"></span>
+                                            <span class="error help-block" />
                                         </div>
                                     </div>
                                     <div class="clearfix mb20"></div>
