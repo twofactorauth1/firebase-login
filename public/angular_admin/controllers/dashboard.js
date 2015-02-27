@@ -47,7 +47,10 @@ define([
           }
       });
       $scope.showOnboarding = false;
-
+      $scope.stepIndex = 0;
+      $scope.onboardingSteps = [{
+        overlay: false
+      }]
       $scope.beginOnboarding = function(type) {
           if (type == 'dashboard') {
               $scope.stepIndex = 0;

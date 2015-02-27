@@ -8,7 +8,9 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
 
         $scope.isFormDirty = false;
 
-        $scope.onboardingSteps = [];
+        $scope.onboardingSteps = [{
+                overlay: false
+        }]
         $scope.showOnboarding = false;
         $scope.stepIndex = 0;
 
