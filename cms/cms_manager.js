@@ -219,8 +219,12 @@ module.exports = {
             pageHandle = null;
         }
         //default to index page if none is specified
+        var title = '';
         if(pageHandle === null) {
             pageHandle = 'index';
+            title = 'Home';
+        } else {
+            title = pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1);
         }
 
         var theme, website, page;
@@ -273,10 +277,14 @@ module.exports = {
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
-                'title': pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1),
+                'title': title,
                 'websiteId': websiteId,
                 'components': componentAry,
                 'created': {
+                    'by': userId,
+                    'date': new Date()
+                },
+                'modified': {
                     'by': userId,
                     'date': new Date()
                 }

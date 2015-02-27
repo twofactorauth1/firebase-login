@@ -160,7 +160,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                           // $scope.showOnboarding = true;
                             $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + posts.length;
                             for (var i = 0; i < posts.length; i++) {
-                                console.log('posts[i] ', posts[i]);
                                 posts[i].type = 'facebook';
                                 posts[i].socialAccountId = socialId;
                                 $scope.fbPostsLength += 1;
@@ -290,7 +289,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         $scope.handleFBPost = function(socialAccountId, post) {
             SocialConfigService.postFBPost(socialAccountId, post, function(data) {
-                console.log('data >> ', data);
                 $scope.afterPosting();
             });
         };

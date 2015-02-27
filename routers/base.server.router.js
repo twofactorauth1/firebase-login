@@ -83,6 +83,7 @@ _.extend(baseRouter.prototype, {
                         }
                     });
                 } else {
+
                     return next();
                 }
             });
@@ -255,6 +256,10 @@ _.extend(baseRouter.prototype, {
         var self = this;
         logger.debug('>> isAuth (' + req.originalUrl + ')');
         var path = req.url;
+        logger.debug('req.session.locked: ' + req.session.locked);
+        if(req.session.locked === 'true' || req.session.locked === true) {
+            return resp.redirect('/interim.html');
+        }
         if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1)) {
             logger.debug('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {

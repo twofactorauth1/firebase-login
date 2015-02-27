@@ -560,6 +560,24 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Skipping email.');
                             }
+                            //create contact_form activity
+                            if(req.body.activity){
+                                var contactActivity = new $$.m.ContactActivity({
+                                    accountId: query.accountId,
+                                    contactId: savedContact.id(),
+                                    activityType: req.body.activity.activityType,
+                                    note: req.body.activity.note,
+                                    start:new Date(),
+                                    extraFields: req.body.activity.contact,
+                                    sessionId: req.body.activity.sessionId
+                                });
+                                contactActivityManager.createActivity(contactActivity, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating subscribe activity: ' + err);
+                                        //if we can't create the activity... that's fine.  We have already created the contact.
+                                    }
+                                });
+                            }
 
                             //create contact activity
                             var activity = new $$.m.ContactActivity({

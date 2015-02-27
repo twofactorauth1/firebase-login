@@ -25,8 +25,12 @@ define([
         function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI) {
             ngProgress.start();
             var account;
-            $scope.showToaster = false;
+            $scope.showToaster = false;            
             $scope.showOnboarding = false;
+            $scope.stepIndex = 0;
+            $scope.onboardingSteps = [{
+                overlay: false
+            }]
             $scope.toasterOptions = { 'time-out': 3000, 'close-button':true, 'position-class': 'toast-top-right' };
             $scope.onboardingSteps = [{
                 overlay: false

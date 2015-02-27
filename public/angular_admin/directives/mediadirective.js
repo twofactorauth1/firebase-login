@@ -166,7 +166,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 };
 
                 $scope.m.singleSelect = function(asset) {
-                    $scope.singleSelected = true;
+                    $scope.singleSelected = asset.checked;
                     $timeout(function() {
                         if (!$scope.isSingleSelect) {
                             //$scope.batch.push(asset);
@@ -253,7 +253,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                         $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
                         $scope.type = null;
                     }
-
+                    $scope.m.selectTriggerFn(false);
+                    $scope.singleSelected = false;
                     $("#media-manager-modal").modal('hide');
                 };
             },

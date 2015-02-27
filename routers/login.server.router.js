@@ -133,9 +133,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
             if (self.accountId(value) > 0) {
                 self.log.debug('redirecting to /admin');
 
-                if(req.session.locked === true) {
+                if(req.session.locked === 'true') {
                     self.log.debug('locked is true');
-                    resp.redirect("/admin#/account");
+                    resp.redirect("/interim.html");
                 } else {
                     resp.redirect("/admin");
                 }
@@ -213,13 +213,17 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             }
                             if(req.session.locked === true) {
                                 self.log.debug('locked is true');
+                                /*
+
+
                                 if(value.indexOf('?') != -1) {
                                     var valueAry = value.split('?');
-                                    value = valueAry[0] + '#/account?' + valueAry[1];
+                                    value = valueAry[0] + '#/almost-there?' + valueAry[1];
                                 } else {
-                                    value= value + '#/account';
+                                    value= value + '#/almost-there';
                                 }
-
+                                */
+                                value = "/interim.html";
                             }
                             self.log.debug('redirecting to ' + value);
                             resp.redirect(value);

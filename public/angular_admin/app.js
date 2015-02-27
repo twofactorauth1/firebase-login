@@ -137,6 +137,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
         }))
+        .state('interim', angularAMD.route({
+          url: '/almost-there',
+          templateUrl: '/angular_admin/views/interim.html',
+          controller: 'InterimCtrl',
+          controllerUrl: '/angular_admin/controllers/interim.js'
+        }))
         .state('logout', angularAMD.route({
           url: '/logout',
           templateUrl: '/angular_admin/views/logout.html',
@@ -166,12 +172,17 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail', 'singlePageAnalytics'];
+          var excludeSettings = ['support', 'dashboard', 'marketing','customerDetail','accountEdit'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,
               params: fromParams
             };
           }
+          if(excludeSettings.indexOf(toState.name) >= 0) {
+             $('.header-right').hide();
+           }else
+            $('.header-right').show();
 
           // update active tab
           if (includeList.indexOf(toState.name) >= 0) {
