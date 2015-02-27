@@ -255,7 +255,8 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         var authMode = state.authMode;
 
-        if (state.redirectUrl != null) {
+        if (state.redirectUrl && state.redirectUrl !== 'undefined') {
+            self.log.debug('state.redirectUrl', state);
             var redirectUrl = state.redirectUrl;
             redirectUrl = decodeURIComponent(redirectUrl);
             self.log.debug('decoded redirect: ' + redirectUrl);
