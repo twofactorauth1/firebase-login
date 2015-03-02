@@ -25602,6 +25602,7 @@ div[data-class='image-text'] p {
 }
 .simple-form-v1 .btn-editable {
   padding-top: 15px !important;
+  -moz-user-select: text;
 }
 .simple-form-v1 .thank-you {
   padding: 0;
@@ -25692,6 +25693,7 @@ div[data-class='image-text'] p {
 }
 .simple-form-v2 .btn-editable {
   padding-top: 15px !important;
+  -moz-user-select: text;
 }
 .simple-form-v2 .btn {
   height: 50px;
@@ -25708,6 +25710,7 @@ div[data-class='image-text'] p {
 }
 .simple-form-v3 .btn-editable {
   padding-top: 15px !important;
+  -moz-user-select: text;
 }
 /********** Products v1 component **********/
 .products-v1 .nav-tabs {

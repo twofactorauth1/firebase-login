@@ -1,6 +1,5 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<div class="single-product">
-     <form name="productForm" novalidate>
+<div class="single-product">    
     <div class="pageheader">
         <div class="col-xs-8">
             <button id="btn-back-to-commerce" ng-click="$back()" class="btn btn-outline pull-left"
@@ -208,37 +207,39 @@
             </div>
         </div>
         <hr>
-        <div class="row" ng-if="product.type=='external_link'">
-            <h4>External Link</h4>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label>Allow Product View</label>
-                    <select ng-change="setFormDirtyFn()" class="form-control input-lg" ng-model="product.externalLinkAllowProductView">
-                        <option value=true>Yes</option>
-                        <option value=false>No</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Link Text</label>
-                    <input ng-change="setFormDirtyFn()" class="form-control input-lg mb20" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
-                </div>
+        <form name="productForm" novalidate>
+            <div class="row" ng-if="product.type=='external_link'">
+                <h4>External Link</h4>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Allow Product View</label>
+                        <select ng-change="setFormDirtyFn()" class="form-control input-lg" ng-model="product.externalLinkAllowProductView">
+                            <option value=true>Yes</option>
+                            <option value=false>No</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Link Text</label>
+                        <input ng-change="setFormDirtyFn()" class="form-control input-lg mb20" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                    </div>
 
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label>Link Url</label>
-                    <input ng-change="setFormDirtyFn()" indigeweb-validate-form-fields validation-type="url"  class="form-control input-lg mb20" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
                 </div>
-                <div class="form-group">
-                    <label>Open In</label>
-                    <select ng-change="setFormDirtyFn()" class="form-control input-lg" ng-model="product.externalLinkOpenIn">
-                        <option value='new'>New Window</option>
-                        <option value='same'>Same Window</option>
-                    </select>
-                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Link Url</label>
+                        <input ng-change="setFormDirtyFn()" indigeweb-validate-form-fields validation-type="url"  class="form-control input-lg mb20" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                    </div>
+                    <div class="form-group">
+                        <label>Open In</label>
+                        <select ng-change="setFormDirtyFn()" class="form-control input-lg" ng-model="product.externalLinkOpenIn">
+                            <option value='new'>New Window</option>
+                            <option value='same'>Same Window</option>
+                        </select>
+                    </div>
 
+                </div>
             </div>
-        </div>
+        </form>
         <hr>
         <div class="row">
             <input bs-switch ng-model="product.hasVariants" type="checkbox" switch-label="Variant">
@@ -706,7 +707,6 @@
             </ul>
         </div>
     </div>
-</form>
     <div class="rightpanel rightpanel-commerce-edit">
 
         <!-- Nav tabs -->
