@@ -107,8 +107,8 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.$watch('sortOrder', function(newValue, oldValue) {
             newValue = parseInt(newValue);
             if (newValue === 0) {
-                $scope.productOrder = 'name';
-                $scope.productSortReverse = false;
+                $scope.productOrder = 'created.date';
+                $scope.productSortReverse = true;
             } else if (newValue == 1) {
                 $scope.productOrder = 'name';
                 $scope.productSortReverse = false;
@@ -117,7 +117,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 $scope.productSortReverse = true;
             } else if (newValue == 3) {
                 $scope.productOrder = 'created.date';
-                $scope.productSortReverse = false;
+                $scope.productSortReverse = true;
             }
             //else if (newValue == 4) {
             //  $scope.productOrder = 'last';
