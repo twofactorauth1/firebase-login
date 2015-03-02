@@ -9,7 +9,7 @@ define(['app',
   'toasterService',
   'mediaDirective',
   'userService',
-  'geocodeService','constants', 'ngOnboarding',
+  'geocodeService', 'constants', 'ngOnboarding', 'toaster'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -18,8 +18,8 @@ define(['app',
     'ngProgress',
     'ToasterService',
     'UserService',
-    'GeocodeService', '$location',
-    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService, $location) {
+    'GeocodeService', '$location', 'toaster',
+    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService, $location, toaster) {
       ngProgress.start();
 
           $scope.showOnboarding = false;
@@ -125,6 +125,9 @@ define(['app',
       };
 
       $scope.customerSaveFn = function() {
+        if ($location.$$search.onboarding) {
+          toaster.pop('success', 'You completed the Add a new contact Task!', '<div class="mb15"></div><a href="/admin#/marketing?onboarding=create-campaign" class="btn btn-primary">Next Step: Create First Campaign</a>', 0, 'trustedHtml');
+        }
         $scope.saveLoading = true;
         if ($scope.customer.details[0].phones) {
           $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
