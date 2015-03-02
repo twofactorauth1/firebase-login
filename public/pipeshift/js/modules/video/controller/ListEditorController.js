@@ -44,7 +44,9 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
     $scope.beginOnboarding = function(type) {
       if (type == 'create-campaign') {
         $scope.stepIndex = 0;
-        $scope.showOnboarding = true;
+        if ($location.$$search.onboarding) {
+          $scope.showOnboarding = true;
+        }
         $scope.onboardingSteps = [{
           overlay: true,
           title: 'Task: Create First Campaign',
@@ -395,7 +397,9 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
       });
       modalInstance.result.then(function(email) {
         $scope.course.emails[index] = email;
-        Course.update({id: $scope.course._id}, $scope.course, function(resp) {
+        Course.update({
+          id: $scope.course._id
+        }, $scope.course, function(resp) {
           console.log('Template update', resp);
         });
       }, function() {});
@@ -422,15 +426,26 @@ define(['angularAMD', 'app', 'varMainModule', 'courseService', 'courseVideoServi
           $scope.course.emails.splice(index, 1);
         }
       });
-      Course.update({id: $scope.course._id}, $scope.course, function(resp) {
+      Course.update({
+        id: $scope.course._id
+      }, $scope.course, function(resp) {
         console.log(resp);
       });
     };
 
     $scope.addToCourseFn = function() {
       console.info('Add email');
-      $scope.course.emails.push({title: 'Default Email', picture: null, content: 'Content Placeholder', scheduledHour: 0, scheduledMinute: 0, scheduledDay: 0});
-      Course.update({id: $scope.course._id}, $scope.course, function(resp) {
+      $scope.course.emails.push({
+        title: 'Default Email',
+        picture: null,
+        content: 'Content Placeholder',
+        scheduledHour: 0,
+        scheduledMinute: 0,
+        scheduledDay: 0
+      });
+      Course.update({
+        id: $scope.course._id
+      }, $scope.course, function(resp) {
         console.log(resp);
       });
     };
