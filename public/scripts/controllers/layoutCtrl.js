@@ -445,6 +445,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.cartDetails = filtered;
     };
 
+    $scope.getUrl = function(value)
+    {
+      if(value && !/http[s]?/.test(value))
+      {
+          value = 'http://' + value;
+      }
+      return value;
+    }
+
     $scope.calculateTotalChargesfn = function() {
       var subTotal = 0;
       var totalTax = 0;
