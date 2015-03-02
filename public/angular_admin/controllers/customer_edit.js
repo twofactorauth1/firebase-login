@@ -126,7 +126,7 @@ define(['app',
 
       $scope.customerSaveFn = function() {
         if ($location.$$search.onboarding) {
-          toaster.pop('success', 'You completed the Add a new contact Task!', '<div class="mb15"></div><a href="/admin#/marketing?onboarding=create-campaign" class="btn btn-primary">Next Step: Create First Campaign</a>', 0, 'trustedHtml');
+          ToasterService.setHtmlPending('success', 'You completed the Add a new contact Task!', '<div class="mb15"></div><a href="/admin#/marketing?onboarding=create-campaign" class="btn btn-primary">Next Step: Create First Campaign</a>', 0, 'trustedHtml');
         }
         $scope.saveLoading = true;
         if ($scope.customer.details[0].phones) {
