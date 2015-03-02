@@ -426,7 +426,16 @@ define([
         }
 
       }
-
+      $scope.removeImage = function()
+      {
+        if($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img)
+        {
+          $scope.componentEditing.bg.img.url = null;
+          $scope.componentEditing.bg.img.blur = false;
+          $scope.componentEditing.bg.img.parallax = false;
+          $scope.componentEditing.bg.img.overlay = false;
+        }
+      }
       $scope.bindEvents = function() {
         var iframe = document.getElementById("iframe-website");
         if (!iframe)

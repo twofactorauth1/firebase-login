@@ -383,7 +383,7 @@
                                     <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add/remove background image of component."><i class="fa fa-info-circle" /></span>
                                     <div class="bgimg" id="bgimg">
-                                        <i class="fa fa-close" ng-click="componentEditing.bg.img.url=null"></i>
+                                        <i class="fa fa-close" ng-click="removeImage()"></i>
                                         <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
                                     </div>
 
