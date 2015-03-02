@@ -179,9 +179,9 @@ var dao = {
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
                                         }
-                                        log.info("Login successful. AccountId is now " + req.session.accountId);
+                                        self.log.info("Login successful. AccountId is now " + req.session.accountId);
                                         accountDao.getPreviewData(req.session.accounts, function(err, data){
-                                            log.debug('got preview data');
+                                            self.log.debug('got preview data');
                                             req.session.accounts = data;
                                             userDao.refreshFromSocialProfile(value, socialType, false, false, function(err, value) {
                                                 //regardless of error, always return success
