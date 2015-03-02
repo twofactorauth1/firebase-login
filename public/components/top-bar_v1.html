@@ -23,7 +23,7 @@
           
            <ul class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode' : ''}}">
             <li ng-repeat="network in component.networks">
-                <a ng-if="!isEditing" href="{{network.url}}" ><i class="fa fa-lg fa-{{network.icon}}"></i></a>
+                <a ng-if="!isEditing" href="{{getUrl(network.url)}}" ><i class="fa fa-lg fa-{{network.icon}}"></i></a>
                 <a ng-if="isEditing" class="clickable-link" href="" style="z-index:1033;" ng-click="setSelectedSocialLink(network, component._id, true)" data-toggle="modal" data-target="#topbarSocialComponentModal"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
             </li>
             <div ng-if="isEditing" class="add-addtional center">
