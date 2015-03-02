@@ -493,7 +493,7 @@ define([
             var element = angular.element('#add-component-modal');
             element.modal('show');
           });
-
+          $("#iframe-website").contents().find('body').off("click", ".delete-component");
           //add click events for all the delete component buttons.
           $("#iframe-website").contents().find('body').on("click", ".delete-component", function(e) {
             SweetAlert.swal({
@@ -509,7 +509,9 @@ define([
               },
               function(isConfirm) {
                 if (isConfirm) {
-                  $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+                  setTimeout(function() {
+                    $scope.deleteComponent(e.currentTarget.attributes['data-id'].value);
+                }, 200)
                 };
               });
           });
