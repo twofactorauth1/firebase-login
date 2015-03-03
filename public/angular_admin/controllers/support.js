@@ -1,6 +1,8 @@
-define(['app', 'userService', 'navigationService', 'powertour'], function(app) {
-    app.register.controller('SupportCtrl', ['$scope', 'UserService', 'NavigationService', function($scope, UserService, NavigationService) {
+define(['app', 'userService', 'navigationService', 'powertour', 'toasterService'], function(app) {
+    app.register.controller('SupportCtrl', ['$scope', 'UserService', 'NavigationService', 'ToasterService', function($scope, UserService, NavigationService, ToasterService) {
         NavigationService.updateNavigation();
+        ToasterService.processPending();
+        ToasterService.processHtmlPending();
     	$scope.startTask = function(section, task) {
     		console.log('starting task >>> ', task);
     		if (section && task) {
