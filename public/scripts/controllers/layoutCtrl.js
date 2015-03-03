@@ -1365,22 +1365,24 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createUser = function(user, component) {
       console.log('user', user);
-
+      $("#user_email_"+component._id + " .error").html("");
       
-      $("#user_email .error").html("");
-      $("#user_email").removeClass('has-error');
-      $("#user_email .glyphicon").removeClass('glyphicon-remove');
-      $("#user_phone .error").html("");
-      $("#user_phone").removeClass('has-error');
-      $("#user_phone .glyphicon").removeClass('glyphicon-remove');
+      
+      $("#user_email_"+component._id + " .error").html("");
+      $("#user_email_"+component._id).removeClass('has-error');
+      $("#user_email_"+component._id + " .glyphicon").removeClass('glyphicon-remove');
+      $("#user_phone_"+component._id + " .error").html("");
+      $("#user_phone_"+component._id).removeClass('has-error');
+      $("#user_phone_"+component._id + " .glyphicon").removeClass('glyphicon-remove');
 
       var fingerprint = new Fingerprint().get();
       var sessionId = ipCookie("session_cookie")["id"];
 
       if (!user || !user.email) {
-        $("#user_email .error").html("Email Required");
-        $("#user_email").addClass('has-error');
-        $("#user_email .glyphicon").addClass('glyphicon-remove');
+        
+        $("#user_email_"+component._id + " .error").html("Email Required");
+        $("#user_email_"+component._id).addClass('has-error');
+        $("#user_email_"+component._id + " .glyphicon").addClass('glyphicon-remove');
         return;
       }
 
@@ -1405,9 +1407,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
         if(!regex.test(user.phone))
         {
-          $("#user_phone .error").html("Phone is invalid");
-          $("#user_phone").addClass('has-error');
-          $("#user_phone .glyphicon").addClass('glyphicon-remove');
+          $("#user_phone_"+component._id + " .error").html("Phone is invalid");
+          $("#user_phone_"+component._id).addClass('has-error');
+          $("#user_phone_"+component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
       }
@@ -1416,9 +1418,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var result = regex.test(user.email);
         if(!result)
         {
-          $("#user_email .error").html("Valid Email Required");
-          $("#user_email").addClass('has-error');
-          $("#user_email .glyphicon").addClass('glyphicon-remove');
+          
+          $("#user_email_"+component._id + " .error").html("Valid Email Required");
+          $("#user_email_"+component._id).addClass('has-error');
+          $("#user_email_"+component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
 
@@ -1455,15 +1458,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         userService.addContact(formatted, function(data, err) {
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
-            $("#user_email .error").html("Email already exists");
-            $("#user_email").addClass('has-error');
-            $("#user_email .glyphicon").addClass('glyphicon-remove');
+            
+            $("#user_email_"+component._id + " .error").html("Email already exists");
+            $("#user_email_"+component._id).addClass('has-error');
+            $("#user_email_"+component._id + " .glyphicon").addClass('glyphicon-remove');
 
           } else if (data) {
             console.log('email avaliable');
-            $("#user_email .error").html("");
-            $("#user_email").removeClass('has-error').addClass('has-success');
-            $("#user_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            
+            $("#user_email_"+component._id + " .error").html("");
+            $("#user_email_"+component._id).removeClass('has-error').addClass('has-success');
+            $("#user_email_"+component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             console.log('data ', data);
             user.email = "";
             component.fields.forEach(function(value)
@@ -1508,17 +1513,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createContactwithFormActivity = function(contact, component) {
       console.log('contact', contact);
-      $("#contact_email .error").html("");
-      $("#contact_email").removeClass('has-error');
-      $("#contact_email .glyphicon").removeClass('glyphicon-remove');
-      $("#contact_phone .error").html("");
-      $("#contact_phone").removeClass('has-error');
-      $("#contact_phone .glyphicon").removeClass('glyphicon-remove');
+      $("#contact_email_"+component._id + " .error").html("");
+      $("#contact_email_"+component._id).removeClass('has-error');
+      $("#contact_email_"+component._id + " .glyphicon").removeClass('glyphicon-remove');
+      $("#contact_phone_"+component._id + " .error").html("");
+      $("#contact_phone_"+component._id).removeClass('has-error');
+      $("#contact_phone_"+component._id + " .glyphicon").removeClass('glyphicon-remove');
 
       if (!contact || !contact.email) {
-        $("#contact_email .error").html("Email Required");
-        $("#contact_email").addClass('has-error');
-        $("#contact_email .glyphicon").addClass('glyphicon-remove');
+        $("#contact_email_"+component._id + " .error").html("Email Required");
+        $("#contact_email_"+component._id).addClass('has-error');
+        $("#contact_email_"+component._id + " .glyphicon").addClass('glyphicon-remove');
         return;
       }
 
@@ -1543,9 +1548,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
         if(!regex.test(contact.phone))
         {
-          $("#contact_phone .error").html("Phone is invalid");
-          $("#contact_phone").addClass('has-error');
-          $("#contact_phone .glyphicon").addClass('glyphicon-remove');
+          $("#contact_phone_"+component._id + " .error").html("Phone is invalid");
+          $("#contact_phone_"+component._id).addClass('has-error');
+          $("#contact_phone_"+component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
       }
@@ -1587,15 +1592,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           console.log('data ', data);
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
-            $("#contact_email .error").html("Email already exists");
-            $("#contact_email").addClass('has-error');
-            $("#contact_email .glyphicon").addClass('glyphicon-remove');
+            $("#contact_email_"+component._id + " .error").html("Email already exists");
+            $("#contact_email_"+component._id).addClass('has-error');
+            $("#contact_email_"+component._id + " .glyphicon").addClass('glyphicon-remove');
 
           } else if (data) {
             console.log('email avaliable');
-            $("#contact_email .error").html("");
-            $("#contact_email").removeClass('has-error').addClass('has-success');
-            $("#contact_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            $("#contact_email_"+component._id + " .error").html("");
+            $("#contact_email_"+component._id).removeClass('has-error').addClass('has-success');
+            $("#contact_email_"+component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 
             contact.email = '';
               contact.message = '';              

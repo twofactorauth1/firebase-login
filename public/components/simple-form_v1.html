@@ -25,7 +25,7 @@
 
                 <div class="clearfix mb15"></div>
 
-                <div id="user_{{field.name}}" ng-repeat="field in component.fields" ng-if="field.value" class="col-sm-4 form-group">
+                <div id="user_{{field.name}}_{{component._id}}" ng-repeat="field in component.fields" ng-if="field.value" class="col-sm-4 form-group">
                     <div class="left-inner-addon">
                         <input  type="text" ng-model="field.model" placeholder="{{field.display}}">
                     </div>
@@ -33,7 +33,7 @@
                 </div>
                 
                 <div class="clearfix mb15"></div>
-                <div id="user_email" class="col-sm-9 form-group">
+                <div id="user_email_{{component._id}}" class="col-sm-9 form-group">
                     <div class="left-inner-addon">
                         <span><i class="fa fa-envelope"></i></span>
                         <input type="email" ng-model="user.email" placeholder="Email" />

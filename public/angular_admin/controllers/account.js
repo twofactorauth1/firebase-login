@@ -19,6 +19,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       //for processing toaster for social account integration
       $scope.showToaster = true;
       ToasterService.processPending();
+      ToasterService.processHtmlPending();
       //
       $scope.currentHost = window.location.host;
 
@@ -259,6 +260,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
               $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
               $scope.showToaster = true;
               ToasterService.processPending();
+              ToasterService.processHtmlPending();
             });
             PaymentService.getCustomerCards($scope.user.stripeId, function(cards) {
               if (cards.data.length) {
@@ -410,7 +412,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       });
 
       $scope.socailRedirect = function(socailAccount) {
-        ToasterService.setPending('success', socailAccount + ' is integreted successfully.', '<div class="mb15"></div><a href="/admin#/customer?onboarding=create-contact" class="btn btn-primary">Next Step: Import / Create Contacts</a>', 0, 'trustedHtml');
+        ToasterService.setHtmlPending('success', socailAccount + ' is integreted successfully.', '<div class="mb15"></div><a href="/admin#/customer?onboarding=create-contact" class="btn btn-primary">Next Step: Import / Create Contacts</a>', 0, 'trustedHtml');
         window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socailAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socailAccount;
       };
 
