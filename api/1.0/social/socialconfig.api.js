@@ -216,13 +216,22 @@ _.extend(api.prototype, baseApi.prototype, {
     fetchTrackedObject: function(req, resp) {
         var self = this;
         self.log.debug('>> fetchTrackedObject');
+        var since = req.query.since;
+        var until = req.query.until;
+        var limit = req.query.limit;
+        if(limit) {
+            limit = parseInt(limit);
+        }
+
+        self.log.debug('since: ' + since + ', until: ' + until + ', limit: ' + limit);
+
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
                 var objIndex = parseInt(req.params.index);
                 var accountId = parseInt(self.accountId(req));
-                socialConfigManager.fetchTrackedObject(accountId, objIndex, function(err, feed){
+                socialConfigManager.fetchTrackedObject(accountId, objIndex, since, until, limit, function(err, feed){
                     self.log.debug('<< fetchTrackedObject');
                     self.sendResultOrError(resp, err, feed, "Error fetching tracked objects");
                 });

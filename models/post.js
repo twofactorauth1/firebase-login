@@ -66,6 +66,7 @@ var post = $$.m.ModelBase.extend({
             type: $$.constants.social.types.FACEBOOK,
             sourceId: post.id,
             postType: post.type
+
         };
 
         if(post.from) {
@@ -77,6 +78,7 @@ var post = $$.m.ModelBase.extend({
 
         if (post.created_time) {
             obj.date = new Date(post.created_time).getTime();
+            obj.pagingId = new Date(post.created_time).getTime() / 1000;
         }
 
         if (post.to && post.to.data && post.to.data.length > 0 && post.to.forEach) {
@@ -157,7 +159,8 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
-            postType: "tweet"
+            postType: "tweet",
+            pagingId: tweet.id_str
         };
 
         if(tweet.user) {

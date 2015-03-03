@@ -175,7 +175,7 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
         var key = 'accounts';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
     },
 
     getPageInfo: function(user, pageId, fn) {
@@ -188,12 +188,12 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
         var key = '';
-        return this._getStreamPart(null, accessToken, pageId, key, fn);
+        return this._getStreamPart(null, accessToken, pageId, key, null, null, null, fn);
     },
 
     getTokenPageInfo: function(accessToken, socialId, pageId, fn) {
         var key = '?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count';
-        return this._getStreamPart(null, accessToken, pageId, key, fn);
+        return this._getStreamPart(null, accessToken, pageId, key, null, null, null, fn);
     },
 
     getPageProfilePic: function(user, pageId, fn) {
@@ -357,23 +357,23 @@ var dao = {
     //region STREAM
     getUserStream: function (user, socialId, fn) {
         var key = "feed";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
-    getTokenStream: function(accessToken, socialId, fn) {
+    getTokenStream: function(accessToken, socialId, since, until, limit, fn) {
         //var key = 'feed?fields=comments,likes';
         var key = 'feed';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
-    getLikedPages: function(accessToken, socialId, fn) {
+    getLikedPages: function(accessToken, socialId, since, until, limit, fn) {
         var key = 'likes';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
-    getTokenAdminPages: function(accessToken, socialId, fn) {
+    getTokenAdminPages: function(accessToken, socialId, since, until, limit, fn) {
         var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count";
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
     getUserPosts: function (user, socialId, fn) {
@@ -382,29 +382,43 @@ var dao = {
         self.log.info("facebook dao: user >>> ", user);
         self.log.info("facebook dao: socialId >>> ", socialId);
         var key = "posts";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
     getTokenPosts: function(accessToken, socialId, fn) {
         var self = this;
         var key = "posts";
-        return self._getStreamPart(null, accessToken, socialId, key, fn);
+        return self._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
     },
 
     getUserStatuses: function (user, socialId, fn) {
         var key = "statuses";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
 
     getUserTagged: function (user, socialId, fn) {
         var key = "tagged";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
-    getTokenSearch: function(accessToken, socialId, searchType, term, fn) {
+    getTokenSearch: function(accessToken, socialId, searchType, term, since, until, limit, fn) {
         var self = this;
-        var url = this.GRAPH_API_URL +'search?q=' + term + '&type=' + searchType + '&access_token=' + accessToken + '&limit=500';
+        var url = this.GRAPH_API_URL +'search?q=' + term + '&type=' + searchType + '&access_token=' + accessToken;
+
+        if(since) {
+            url += '&since=' + since;
+        }
+        if(until) {
+            url+= '&until=' + until;
+        }
+        if(limit) {
+            url += '&limit=' + limit;
+        } else {
+            url += '&limit=500';
+        }
+
+
         return this._makeRequest(url, function (err, value) {
             self.log.info("_getStreamPart: fb value >>> ", value);
             if (err) {
@@ -429,7 +443,7 @@ var dao = {
     },
 
 
-    _getStreamPart: function (user, _accessToken, socialId, key, fn) {
+    _getStreamPart: function (user, _accessToken, socialId, key, since, until, limit, fn) {
         var self = this;
         self.log.info("facebook dao: _getStreamPart >>> " + _accessToken);
         var accessToken = _accessToken;
@@ -444,12 +458,20 @@ var dao = {
         }
 
         var path = socialId + "/" + key;
-        if(path.indexOf("?") === -1) {
-            path = path + "?limit=500";
-        } else {
-            path = path + "&limit=500";
-        }
+        
         var url = this._generateUrl(path, accessToken);
+
+        if(since) {
+            url += '&since=' + since;
+        }
+        if(until) {
+            url+= '&until=' + until;
+        }
+        if(limit) {
+            url += '&limit=' + limit;
+        } else {
+            url += '&limit=500';
+        }
 
         self.log.info("_getStreamPart: path >>> ", path);
         self.log.info("_getStreamPart: url >>> ", url);
