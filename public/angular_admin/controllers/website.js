@@ -426,14 +426,18 @@ define([
         }
 
       }
-      $scope.removeImage = function()
+      $scope.removeImage = function(remove)
       {
         if($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img)
         {
-          $scope.componentEditing.bg.img.url = null;
-          $scope.componentEditing.bg.img.blur = false;
-          $scope.componentEditing.bg.img.parallax = false;
-          $scope.componentEditing.bg.img.overlay = false;
+          if(($scope.componentEditing.bg.img.show == false && remove == true) || remove == false)
+          {
+            $scope.componentEditing.bg.img.url = null;
+            $scope.componentEditing.bg.img.blur = false;
+            $scope.componentEditing.bg.img.parallax = false;
+            $scope.componentEditing.bg.img.overlay = false;
+          }
+          
         }
       }
       $scope.bindEvents = function() {

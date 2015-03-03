@@ -324,7 +324,7 @@
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
                                     <label for="bg_hide">Show Background Image</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
-                                    <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                    <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="removeImage(true);saveComponent()">
                                     <br>
                                     <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
                                 </div>
@@ -383,7 +383,7 @@
                                     <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add/remove background image of component."><i class="fa fa-info-circle" /></span>
                                     <div class="bgimg" id="bgimg">
-                                        <i class="fa fa-close" ng-click="removeImage()"></i>
+                                        <i class="fa fa-close" ng-click="removeImage(false)"></i>
                                         <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
                                     </div>
 
