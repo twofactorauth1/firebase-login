@@ -157,7 +157,7 @@
             <!-- BUY -->
 
             <div class="submit-signup mb10">
-                <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"><span ng-show="isFormValid" class="fa fa-spinner fa-spin"></span> Become an Indigenous Member Now</a>
+                <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"> Become an Indigenous Member Now</a>
             </div>
             <p class="center">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Use</a>.</p>
         </div>
@@ -314,7 +314,12 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-
+<div ng-if="isFormValid" id="overlay">
+    <div id="loading">
+        <div><i class="fa fa-spinner fa-spin"></i></div>    
+        <div class="msg col-sm-12"><span>Account is being set up...</span></div>
+    </div>
+</div>
 
 <script type="text/javascript">
 card = $('form[name="card-details"]').card({
