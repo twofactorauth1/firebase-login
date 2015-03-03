@@ -13,12 +13,22 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       overlay: false
     }]
     $scope.beginOnboarding = function(type) {
+      $scope.obType = type;
       if (type == 'create-campaign') {
-
         $scope.onboardingSteps = [{
           overlay: true,
           title: 'Task: Create new campaign',
           description: "Here you can create a new campaign to gain traction.",
+          position: 'centered',
+          width: 400
+        }];
+      }
+
+      if (type == 'add-feed') {
+        $scope.onboardingSteps = [{
+          overlay: true,
+          title: 'Task: Add feed',
+          description: "Click on the 'Manage Feeds' button and select the feed you want to subscribe to.",
           position: 'centered',
           width: 400
         }];
@@ -31,7 +41,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      */
 
     $scope.finishOnboarding = function() {
-      $scope.userPreferences.tasks.create_campaign = true;
+      if ($scope.obType == 'create-campaign') {
+        $scope.userPreferences.tasks.create_campaign = true;
+      }
+      if ($scope.obType == 'add-feed') {
+        $scope.userPreferences.tasks.add_feed = true;
+      }
       UserService.updateUserPreferences($scope.userPreferences, false, function() {});
     };
 

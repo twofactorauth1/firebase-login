@@ -907,6 +907,7 @@ var dao = {
         });
     },
 
+    //needs permission read_mailbox
     getMessages: function(accessToken, socialId, fn) {
         var self = this;
         self.log.debug('>> getMessages');

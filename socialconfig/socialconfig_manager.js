@@ -367,9 +367,10 @@ module.exports = {
             }
             var trackedObject = config.get('trackedObjects')[objIndex];
             var socialAccount = config.getSocialAccountById(trackedObject.socialId);
-            if(socialAccount.type === 'tw') {
+
+            if(socialAccount && socialAccount.type === 'tw') {
                 return self._handleTwitterTrackedObject(socialAccount, trackedObject, fn);
-            } else if (socialAccount.type === 'fb'){
+            } else if (socialAccount && socialAccount.type === 'fb'){
                 return self._handleFacebookTrackedObject(socialAccount, trackedObject, fn);
             } else {
                 return fn(null, null);

@@ -146,7 +146,8 @@ app.use(express.session({
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
         domain: appConfig.cookie_subdomain
-        } //stay open for 1 day of inactivity across all subdomains
+        }, //stay open for 1 day of inactivity across all subdomains
+    key: appConfig.cookie_name
 }));
 
 //Middle ware to refresh the session cookie expiration on every hit

@@ -110,6 +110,18 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                            <li ng-click="startTask('marketing', 'add-feed')" ng-class="{complete: userPreferences.tasks.add_feed }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_feed , 'fa-circle-o' : !userPreferences.tasks.add_feed }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_feed">Complete</small>
+                                <h3 class="pull-left">Add Social Feed</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Add social feeds of your friends.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('customer', 'create-contact')" ng-class="{complete: userPreferences.tasks.create_contact }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_contact , 'fa-circle-o' : !userPreferences.tasks.create_contact }"></i></h1>
                                 <small class="pull-right done" ng-if="userPreferences.tasks.create_contact">Complete</small>

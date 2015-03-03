@@ -181,14 +181,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         $(document).ready(function() {
           setTimeout(function() {
-            var locId =  $location.$$hash;
-            if(locId)
-            {
-             var element = document.getElementById(locId);
-             if(element)
+            var locId = $location.$$hash;
+            if (locId) {
+              var element = document.getElementById(locId);
+              if (element)
                 $document.scrollToElementAnimated(element);
-            } 
-            }, 500);          
+            }
+          }, 500);
         })
         var iframe = window.parent.document.getElementById("iframe-website")
         $scope.isAdmin = iframe;
@@ -339,11 +338,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.stringifyAddress = function(address) {
-      if (address){
+      if (address) {
         return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
-            return str !== "";
+          return str !== "";
         }).join(", ")
-        }
+      }
     };
 
     $scope.showEdit = function(type) {
@@ -358,13 +357,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.flvVideoUrl = function(iframeUrl, url) {
-        var parsedUrl = urlParser.parse(url);
-        var retUrl = "";
-        if(parsedUrl)
-          retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
-        else
-          retUrl = iframeUrl
-        return $sce.trustAsResourceUrl(retUrl);
+      var parsedUrl = urlParser.parse(url);
+      var retUrl = "";
+      if (parsedUrl)
+        retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
+      else
+        retUrl = iframeUrl
+      return $sce.trustAsResourceUrl(retUrl);
     };
 
     $scope.config = {
@@ -401,12 +400,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.checkoutModalState = 1;
     $scope.newContact = {
       isAuthenticated: true,
-      details: [
-        {
-          phones: [{type: 'w', default: false, number: ''}],
-          addresses: [{}]
-        }
-      ]
+      details: [{
+        phones: [{
+          type: 'w',
+          default: false,
+          number: ''
+        }],
+        addresses: [{}]
+      }]
     };
 
     $scope.addDetailsToCart = function(product) {
@@ -436,7 +437,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.removeFromCart = function(product) {
       var filtered = _.filter($scope.cartDetails, function(item) {
-           return item._id !== product._id
+        return item._id !== product._id
       });
       var productMatch = _.find(that.products, function(item) {
         return item._id === product._id
@@ -445,11 +446,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.cartDetails = filtered;
     };
 
-    $scope.getUrl = function(value)
-    {
-      if(value && !/http[s]?/.test(value))
-      {
-          value = 'http://' + value;
+    $scope.getUrl = function(value) {
+      if (value && !/http[s]?/.test(value)) {
+        value = 'http://' + value;
       }
       return value;
     }
@@ -492,8 +491,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
 
       if ($scope.newContact.first !== undefined) {
-        userService.postContact($scope.newContact, function(data, err) {
-        });
+        userService.postContact($scope.newContact, function(data, err) {});
       }
 
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
@@ -520,10 +518,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.curPage = 0;
     $scope.pageSize = 10;
     $scope.numberOfPages = function() {
-      if(that.blogposts)
+      if (that.blogposts)
         return Math.ceil(that.blogposts.length / $scope.pageSize);
       else
-         return 0;
+        return 0;
     };
 
     /********** END BLOG PAGE PAGINATION RELATED **********/
@@ -532,52 +530,52 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     /********** MAP RELATED **********/
     angular.extend($scope, {
-            mapLocation: {
-                lat: 51,
-                lng: 0,
-                zoom: 10
-            },
-            defaults: {
-              scrollWheelZoom: false
-            },
-            markers: {
+      mapLocation: {
+        lat: 51,
+        lng: 0,
+        zoom: 10
+      },
+      defaults: {
+        scrollWheelZoom: false
+      },
+      markers: {
 
-            }
-      });
+      }
+    });
 
-      $scope.updateContactUsMap = function(component) {
-            $scope.contactPhone = component.contact.phone;
-            $scope.geo_address_string = $scope.stringifyAddress(component.location);
-            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
-              if(that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
-                $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
-            }
-            if(!component.contact.phone && that.account.business.phones.length)
-              $scope.contactPhone = that.account.business.phones[0].number;
-            if($scope.geo_address_string){
-              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                    if (data.error === undefined) {
-                      angular.extend($scope, {
-                          mapLocation: {
-                              lat: parseFloat(data.lat),
-                              lng: parseFloat(data.lon),
-                              zoom: 10
-                          },
-                          markers: {
-                              mainMarker: {
-                                  lat: parseFloat(data.lat),
-                                  lng: parseFloat(data.lon),
-                                  focus: true,
-                                  message: $scope.geo_address_string,
-                                  draggable: false
-                              }
-                          }
-                    });
+    $scope.updateContactUsMap = function(component) {
+        $scope.contactPhone = component.contact.phone;
+        $scope.geo_address_string = $scope.stringifyAddress(component.location);
+        if ($scope.geo_address_string == "" && that.account.business.addresses.length) {
+          if (that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
+            $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+        }
+        if (!component.contact.phone && that.account.business.phones.length)
+          $scope.contactPhone = that.account.business.phones[0].number;
+        if ($scope.geo_address_string) {
+          analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+            if (data.error === undefined) {
+              angular.extend($scope, {
+                mapLocation: {
+                  lat: parseFloat(data.lat),
+                  lng: parseFloat(data.lon),
+                  zoom: 10
+                },
+                markers: {
+                  mainMarker: {
+                    lat: parseFloat(data.lat),
+                    lng: parseFloat(data.lon),
+                    focus: true,
+                    message: $scope.geo_address_string,
+                    draggable: false
                   }
+                }
               });
             }
+          });
+        }
       }
-     /********** END MAP RELATED **********/
+      /********** END MAP RELATED **********/
     $scope.sharePost = function(post, type) {
       var url = $location.$$absUrl;
       var postData = {};
@@ -644,67 +642,67 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.social_links = [{
-      name: "adn",
-      icon: "adn"
-    }, {
-      name: "bitbucket",
-      icon: "bitbucket"
-    }, {
-      name: "dropbox",
-      icon: "dropbox"
-    }, {
-      name: "facebook",
-      icon: "facebook"
-    }, {
-      name: "flickr",
-      icon: "flickr"
-    }, {
-      name: "foursquare",
-      icon: "foursquare"
-    }, {
-      name: "github",
-      icon: "github"
-    }, {
-      name: "google-plus",
-      icon: "google-plus"
-    }, {
-      name: "instagram",
-      icon: "instagram"
-    }, {
-      name: "microsoft",
-      icon: "windows"
-    }, {
-      name: "openid",
-      icon: "openid"
-    }, {
-      name: "pinterest",
-      icon: "pinterest"
-    }, {
-      name: "reddit",
-      icon: "reddit"
-    }, {
-      name: "soundcloud",
-      icon: "soundcloud"
-    }, {
-      name: "twitter",
-      icon: "twitter"
-    }, {
-      name: "vimeo",
-      icon: "vimeo-square"
-    }, {
-      name: "vk",
-      icon: "vk"
-    }, {
-      name: "yahoo",
-      icon: "yahoo"
-    }
+        name: "adn",
+        icon: "adn"
+      }, {
+        name: "bitbucket",
+        icon: "bitbucket"
+      }, {
+        name: "dropbox",
+        icon: "dropbox"
+      }, {
+        name: "facebook",
+        icon: "facebook"
+      }, {
+        name: "flickr",
+        icon: "flickr"
+      }, {
+        name: "foursquare",
+        icon: "foursquare"
+      }, {
+        name: "github",
+        icon: "github"
+      }, {
+        name: "google-plus",
+        icon: "google-plus"
+      }, {
+        name: "instagram",
+        icon: "instagram"
+      }, {
+        name: "microsoft",
+        icon: "windows"
+      }, {
+        name: "openid",
+        icon: "openid"
+      }, {
+        name: "pinterest",
+        icon: "pinterest"
+      }, {
+        name: "reddit",
+        icon: "reddit"
+      }, {
+        name: "soundcloud",
+        icon: "soundcloud"
+      }, {
+        name: "twitter",
+        icon: "twitter"
+      }, {
+        name: "vimeo",
+        icon: "vimeo-square"
+      }, {
+        name: "vk",
+        icon: "vk"
+      }, {
+        name: "yahoo",
+        icon: "yahoo"
+      }
 
     ]
 
     $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
       if (!$scope.social)
         $scope.social = {};
-      if(nested)
+      if (nested)
         $scope.meetTeamIndex = index;
       else
         $scope.meetTeamIndex = null;
@@ -741,13 +739,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
 
             if (social.url) {
-          var urlRegex = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-          if (urlRegex.test(social.url) == false) {
-        $("#social-link-url .error").html("Link url incorrect format");
-        $("#social-link-url").addClass('has-error');
-        return;
-          }
-        }
+              var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+              if (urlRegex.test(social.url) == false) {
+                $("#social-link-url .error").html("Link url incorrect format");
+                $("#social-link-url").addClass('has-error');
+                return;
+              }
+            }
             selectedName = _.findWhere($scope.networks, {
               name: social.name
             });
@@ -806,17 +804,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           }
           break;
       }
-      if($scope.meetTeamIndex !== null)
-        window.parent.updateTeamNetworks(old_value, mode, social,$scope.meetTeamIndex);
+      if ($scope.meetTeamIndex !== null)
+        window.parent.updateTeamNetworks(old_value, mode, social, $scope.meetTeamIndex);
       else
         window.parent.updateSocialNetworks(old_value, mode, social);
       $scope.social = {};
       $scope.meetTeamIndex = null;
-      if($("#meetteamSocialModal").length)
+      if ($("#meetteamSocialModal").length)
         $("#meetteamSocialModal").modal("hide");
-      if($("#socialComponentModal").length)
+      if ($("#socialComponentModal").length)
         $("#socialComponentModal").modal("hide");
-      if($("#topbarSocialComponentModal").length)
+      if ($("#topbarSocialComponentModal").length)
         $("#topbarSocialComponentModal").modal("hide");
       $(".modal-backdrop").remove();
     };
@@ -827,17 +825,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.addTeamMember = function(componentId, index) {
       // to do: the information should fetch from component model
       var newTeam = {
-        "name" : "<p>First Last</p>",
-        "position" : "<p>Position of Person</p>",
-        "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
-        "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-        "networks": [
-                        {
-                            "name" : "linkedin",
-                            "url" : "http://www.linkedin.com",
-                            "icon" : "linkedin"
-                        }
-                    ]
+        "name": "<p>First Last</p>",
+        "position": "<p>Position of Person</p>",
+        "profilepic": "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
+        "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
+        "networks": [{
+          "name": "linkedin",
+          "url": "http://www.linkedin.com",
+          "icon": "linkedin"
+        }]
       }
       window.parent.addTeamMember(componentId, newTeam, index);
     }
@@ -849,9 +845,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.addFeatureList = function(componentId, index) {
       console.log('adding Feature >>>');
       var newFeature = {
-                    "top" : "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%23ffffff%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
-                    "content" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-                };
+        "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%23ffffff%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
+        "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+      };
       window.parent.addNewFeatureList(componentId, index, newFeature);
     }
 
@@ -876,52 +872,50 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.addPricingTableFeature = function(componentId, index, parentIndex) {
       // to do: the information should fetch from component model
-      var newFeature =
-        {
-            title : "<h4>This is the feature title</h4>",
-            subtitle : "<b>This is the feature subtitle</b>",
-        }
+      var newFeature = {
+        title: "<h4>This is the feature title</h4>",
+        subtitle: "<b>This is the feature subtitle</b>",
+      }
       window.parent.addPricingTableFeature(componentId, newFeature, index, parentIndex);
     }
 
     $scope.addPricingTable = function(componentId, index) {
       // to do: the information should fetch from component model
       var newTable = {
-        title : "<h1>This is title</h1>",
-        subtitle : "<h3>This is the subtitle.</h3>",
-        text : 'This is text',
-        price : '$9.99/per month',
-        features: [
-            {
-                title : "<h4>This is the feature title</h4>",
-                subtitle : "<b>This is the feature subtitle</b>",
-            }
-        ],
-        btn : "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
+        title: "<h1>This is title</h1>",
+        subtitle: "<h3>This is the subtitle.</h3>",
+        text: 'This is text',
+        price: '$9.99/per month',
+        features: [{
+          title: "<h4>This is the feature title</h4>",
+          subtitle: "<b>This is the feature subtitle</b>",
+        }],
+        btn: "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
       }
 
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
 
-    function toTitleCase(str)
-    {
-        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    function toTitleCase(str) {
+      return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
     }
 
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        $scope.isEditing = true;
-        CKEDITOR.disableAutoInline = true;
-        var elements = $('.editable');
-        elements.each(function() {
-          if(!$(this).parent().hasClass('edit-wrap')) {
-            var dataClass = $(this).data('class').replace('.item.', ' ');
-            $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
-          }
-         // $scope.activated = true;
-        if(!$(this).hasClass('cke_editable')) {
+      $scope.isEditing = true;
+      CKEDITOR.disableAutoInline = true;
+      var elements = $('.editable');
+      elements.each(function() {
+        if (!$(this).parent().hasClass('edit-wrap')) {
+          var dataClass = $(this).data('class').replace('.item.', ' ');
+          $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+        }
+        // $scope.activated = true;
+        if (!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
@@ -937,17 +931,16 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
           });
         }
-        });
+      });
 
-        //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
+      //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
 
     window.deactivateAloha = function() {
-      for(name in CKEDITOR.instances)
-        {
-            CKEDITOR.instances[name].destroy()
-        }
+      for (name in CKEDITOR.instances) {
+        CKEDITOR.instances[name].destroy()
+      }
       // $('.editable').mahalo();
       // if (aloha.editor && aloha.editor.selection) {
       // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
@@ -989,11 +982,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.deletePost = function(postId, blogpost) {
       PostService.deletePost($scope.currentpage._id, postId, function(data) {
-       if(blogpost)
-       {
-        var index = that.blogposts.indexOf(blogpost);
-        that.blogposts.splice(index, 1);
-       }
+        if (blogpost) {
+          var index = that.blogposts.indexOf(blogpost);
+          that.blogposts.splice(index, 1);
+        }
       });
     };
 
@@ -1024,8 +1016,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.updateWebsite = function(data) {
       $scope.$apply(function() {
-      if(data)
-        that.website = data;
+        if (data)
+          that.website = data;
       });
     };
 
@@ -1045,7 +1037,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             body.className = body.className.replace('navbar-v', '');
             body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
           }
-          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+          if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
             var thumbnailId = $scope.currentpage.components[i]._id;
@@ -1054,15 +1046,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               return item.thumbnailId == thumbnailId
             })
 
-          if (!matching) {
-            $scope.thumbnailSlider.push(
-            {
-              thumbnailId : thumbnailId,
-              thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
-            });
-          }
-          else
-           matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
+              });
+            } else
+              matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
 
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
@@ -1075,13 +1065,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     };
     window.updateCustomComponent = function(data, networks) {
       var scroll = $(window).scrollTop();
-       
+
       console.log('updateCustomComponent >>>');
       if (data) {
         $scope.currentpage.components = data;
         setTimeout(function() {
           $scope.$apply(function() {
-              activateAloha();
+            activateAloha();
           });
         });
       } else {
@@ -1094,31 +1084,29 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.networks = networks;
 
       for (var i = 0; i < $scope.currentpage.components.length; i++) {
-          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
-            var w = angular.element($window);
-            var check_if_mobile = mobilecheck();
-            var thumbnailId = $scope.currentpage.components[i]._id;
+        if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
+          var w = angular.element($window);
+          var check_if_mobile = mobilecheck();
+          var thumbnailId = $scope.currentpage.components[i]._id;
 
-            var matching = _.find($scope.thumbnailSlider, function(item) {
-              return item.thumbnailId == thumbnailId
-            })
+          var matching = _.find($scope.thumbnailSlider, function(item) {
+            return item.thumbnailId == thumbnailId
+          })
 
           if (!matching) {
-            $scope.thumbnailSlider.push(
-            {
-              thumbnailId : thumbnailId,
-              thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
+            $scope.thumbnailSlider.push({
+              thumbnailId: thumbnailId,
+              thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
             });
-          }
-          else
+          } else
             matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
 
-            var winWidth = w.width();
-            $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
-          }
+          var winWidth = w.width();
+          $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+        }
       };
-       setTimeout(function() {
-          $(window).scrollTop(scroll);
+      setTimeout(function() {
+        $(window).scrollTop(scroll);
       }, 200);
     };
 
@@ -1128,7 +1116,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.currentpage.components = data;
         setTimeout(function() {
           $scope.$apply(function() {
-              activateAloha();
+            activateAloha();
           });
         });
       } else {
@@ -1137,9 +1125,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
       }
       for (var i = 0; i < $scope.currentpage.components.length; i++) {
-          if ($scope.currentpage.components[i].type == 'contact-us') {
-            $scope.updateContactUsMap($scope.currentpage.components[i]);
-          }
+        if ($scope.currentpage.components[i].type == 'contact-us') {
+          $scope.updateContactUsMap($scope.currentpage.components[i]);
+        }
       };
     };
 
@@ -1155,8 +1143,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       console.log('$scope.inlineInput ', $scope.inlineInput);
       if ($scope.inlineInput) {
         console.log('inserting html');
-        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
-      } else if($scope.urlInput) {
+        $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+      } else if ($scope.urlInput) {
         $scope.urlInput.val(url);
       }
     };
@@ -1216,7 +1204,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         e.source.itemScope.modelValue = window.parent.updateComponent(componentId);
         e.source.itemScope.element.addClass(" dragging");
         clearTimeout($scope.wait);
-       // e.source.itemScope.element.parent()[0].style.position = "absolute";
+        // e.source.itemScope.element.parent()[0].style.position = "absolute";
         //e.source.itemScope.element[0].style.position = "relative";
       },
       dragMove: function(e, ui) {
@@ -1240,7 +1228,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (newValue) {
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
-          if(value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
+          if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
             value.bg.img.show = true;
           if (value && value.type === 'payment-form') {
             var productId = value.productId;
@@ -1280,15 +1268,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               return item.thumbnailId == thumbnailId
             })
 
-          if (!matching) {
-            $scope.thumbnailSlider.push(
-            {
-              thumbnailId : thumbnailId,
-              thumbnailSliderCollection : angular.copy(value.thumbnailCollection)
-            });
-          }
-          else
-           matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy(value.thumbnailCollection)
+              });
+            } else
+              matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
             var winWidth = w.width();
             $scope.bindThumbnailSlider(winWidth, check_if_mobile, thumbnailId);
             w.bind('resize', function() {
@@ -1297,9 +1283,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               });
             });
           }
-          if (value &&  value.type == 'contact-us') {
-              $scope.updateContactUsMap(value);
-            }
+          if (value && value.type == 'contact-us') {
+            $scope.updateContactUsMap(value);
+          }
         });
       }
     });
@@ -1314,13 +1300,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.imagesPerPage = number_of_arr;
 
       var matching = _.find($scope.thumbnailSlider, function(item) {
-          return item.thumbnailId == thumbnailId
+        return item.thumbnailId == thumbnailId
       })
 
-      if(matching)
-      {
+      if (matching) {
         matching.thumbnailCollection = partition(matching.thumbnailSliderCollection, number_of_arr);
-        if(matching.thumbnailCollection.length > 1)
+        if (matching.thumbnailCollection.length > 1)
           matching.displayThumbnailPaging = true;
         else
           matching.displayThumbnailPaging = false;
@@ -1365,60 +1350,60 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createUser = function(user, component) {
       console.log('user', user);
+      $("#user_email_" + component._id + " .error").html("");
 
-      
-      $("#user_email .error").html("");
-      $("#user_email").removeClass('has-error');
-      $("#user_email .glyphicon").removeClass('glyphicon-remove');
-      $("#user_phone .error").html("");
-      $("#user_phone").removeClass('has-error');
-      $("#user_phone .glyphicon").removeClass('glyphicon-remove');
+
+      $("#user_email_" + component._id + " .error").html("");
+      $("#user_email_" + component._id).removeClass('has-error');
+      $("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+      $("#user_phone_" + component._id + " .error").html("");
+      $("#user_phone_" + component._id).removeClass('has-error');
+      $("#user_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
 
       var fingerprint = new Fingerprint().get();
       var sessionId = ipCookie("session_cookie")["id"];
 
       if (!user || !user.email) {
-        $("#user_email .error").html("Email Required");
-        $("#user_email").addClass('has-error');
-        $("#user_email .glyphicon").addClass('glyphicon-remove');
+
+        $("#user_email_" + component._id + " .error").html("Email Required");
+        $("#user_email_" + component._id).addClass('has-error');
+        $("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
         return;
       }
 
       var first_name = _.findWhere(component.fields, {
-                            name: 'first'
-                        });
+        name: 'first'
+      });
       var last_name = _.findWhere(component.fields, {
-                            name: 'last'
-                        });
+        name: 'last'
+      });
       var phone = _.findWhere(component.fields, {
-                            name: 'phone'
-                        }); 
-       if(first_name) 
-          user.first = first_name.model; 
-       if(last_name) 
-          user.last = last_name.model;  
-       if(phone)                      
-          user.phone = phone.model; 
+        name: 'phone'
+      });
+      if (first_name)
+        user.first = first_name.model;
+      if (last_name)
+        user.last = last_name.model;
+      if (phone)
+        user.phone = phone.model;
 
-      if(user.phone)
-      {
+      if (user.phone) {
         var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
-        if(!regex.test(user.phone))
-        {
-          $("#user_phone .error").html("Phone is invalid");
-          $("#user_phone").addClass('has-error');
-          $("#user_phone .glyphicon").addClass('glyphicon-remove');
+        if (!regex.test(user.phone)) {
+          $("#user_phone_" + component._id + " .error").html("Phone is invalid");
+          $("#user_phone_" + component._id).addClass('has-error');
+          $("#user_phone_" + component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
       }
       if (user.email) {
         var regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
         var result = regex.test(user.email);
-        if(!result)
-        {
-          $("#user_email .error").html("Valid Email Required");
-          $("#user_email").addClass('has-error');
-          $("#user_email .glyphicon").addClass('glyphicon-remove');
+        if (!result) {
+
+          $("#user_email_" + component._id + " .error").html("Valid Email Required");
+          $("#user_email_" + component._id).addClass('has-error');
+          $("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
 
@@ -1430,8 +1415,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
-          first : user.first,
-          last : user.last,
+          first: user.first,
+          last: user.last,
           details: [{
             emails: [],
             phones: []
@@ -1442,32 +1427,32 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         formatted.details[0].emails.push({
           email: user.email
         });
-        if(user.phone)
-        {
+        if (user.phone) {
           formatted.details[0].phones.push({
             number: user.phone,
             type: 'm'
-        });
+          });
         }
-        
+
         //create contact
         console.log('formatted ', formatted);
         userService.addContact(formatted, function(data, err) {
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
-            $("#user_email .error").html("Email already exists");
-            $("#user_email").addClass('has-error');
-            $("#user_email .glyphicon").addClass('glyphicon-remove');
+
+            $("#user_email_" + component._id + " .error").html("Email already exists");
+            $("#user_email_" + component._id).addClass('has-error');
+            $("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
 
           } else if (data) {
             console.log('email avaliable');
-            $("#user_email .error").html("");
-            $("#user_email").removeClass('has-error').addClass('has-success');
-            $("#user_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+
+            $("#user_email_" + component._id + " .error").html("");
+            $("#user_email_" + component._id).removeClass('has-error').addClass('has-success');
+            $("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             console.log('data ', data);
             user.email = "";
-            component.fields.forEach(function(value)
-            {
+            component.fields.forEach(function(value) {
               value.model = null;
             })
             user.success = true;
@@ -1480,7 +1465,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               name = 'John Doe';
             }
 
-              var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+            var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
             console.log('hash ', hash.toString(CryptoJS.enc.Hex));
             //send data to intercom
             $window.intercomSettings = {
@@ -1508,50 +1493,47 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createContactwithFormActivity = function(contact, component) {
       console.log('contact', contact);
-      $("#contact_email .error").html("");
-      $("#contact_email").removeClass('has-error');
-      $("#contact_email .glyphicon").removeClass('glyphicon-remove');
-      $("#contact_phone .error").html("");
-      $("#contact_phone").removeClass('has-error');
-      $("#contact_phone .glyphicon").removeClass('glyphicon-remove');
+      $("#contact_email_" + component._id + " .error").html("");
+      $("#contact_email_" + component._id).removeClass('has-error');
+      $("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+      $("#contact_phone_" + component._id + " .error").html("");
+      $("#contact_phone_" + component._id).removeClass('has-error');
+      $("#contact_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
 
       if (!contact || !contact.email) {
-        $("#contact_email .error").html("Email Required");
-        $("#contact_email").addClass('has-error');
-        $("#contact_email .glyphicon").addClass('glyphicon-remove');
+        $("#contact_email_" + component._id + " .error").html("Email Required");
+        $("#contact_email_" + component._id).addClass('has-error');
+        $("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
         return;
       }
 
       var first_name = _.findWhere(component.fields, {
-                            name: 'first'
-                        });
+        name: 'first'
+      });
       var last_name = _.findWhere(component.fields, {
-                            name: 'last'
-                        });
+        name: 'last'
+      });
       var phone = _.findWhere(component.fields, {
-                            name: 'phone'
-                        }); 
-       if(first_name) 
-          contact.first_name = first_name.model; 
-       if(last_name) 
-          contact.last_name = last_name.model;  
-       if(phone)                      
-          contact.phone = phone.model; 
+        name: 'phone'
+      });
+      if (first_name)
+        contact.first_name = first_name.model;
+      if (last_name)
+        contact.last_name = last_name.model;
+      if (phone)
+        contact.phone = phone.model;
 
-      if(contact.phone)
-      {
+      if (contact.phone) {
         var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
-        if(!regex.test(contact.phone))
-        {
-          $("#contact_phone .error").html("Phone is invalid");
-          $("#contact_phone").addClass('has-error');
-          $("#contact_phone .glyphicon").addClass('glyphicon-remove');
+        if (!regex.test(contact.phone)) {
+          $("#contact_phone_" + component._id + " .error").html("Phone is invalid");
+          $("#contact_phone_" + component._id).addClass('has-error');
+          $("#contact_phone_" + component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
       }
       if (contact.email) {
-        if(contact.full_name)
-        {
+        if (contact.full_name) {
           var full_name = contact.full_name.split(" ")
           contact.first_name = full_name[0];
           contact.last_name = full_name[1];
@@ -1561,7 +1543,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           last: contact.last_name,
           details: [{
             emails: [],
-            phones:[]
+            phones: []
           }],
           activity: {
             activityType: 'CONTACT_FORM',
@@ -1574,41 +1556,39 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         contact_info.details[0].emails.push({
           email: contact.email
         });
-        if(contact.phone)
-        {
+        if (contact.phone) {
           contact_info.details[0].phones.push({
-          number: contact.phone,
-          type: 'm'
-        });
+            number: contact.phone,
+            type: 'm'
+          });
         }
-        
+
 
         userService.addContact(contact_info, function(data, err) {
           console.log('data ', data);
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
-            $("#contact_email .error").html("Email already exists");
-            $("#contact_email").addClass('has-error');
-            $("#contact_email .glyphicon").addClass('glyphicon-remove');
+            $("#contact_email_" + component._id + " .error").html("Email already exists");
+            $("#contact_email_" + component._id).addClass('has-error');
+            $("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
 
           } else if (data) {
             console.log('email avaliable');
-            $("#contact_email .error").html("");
-            $("#contact_email").removeClass('has-error').addClass('has-success');
-            $("#contact_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            $("#contact_email_" + component._id + " .error").html("");
+            $("#contact_email_" + component._id).removeClass('has-error').addClass('has-success');
+            $("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 
             contact.email = '';
-              contact.message = '';              
-              contact.success = true;
-              component.fields.forEach(function(value)
-              {
-                value.model = null;
-              })
+            contact.message = '';
+            contact.success = true;
+            component.fields.forEach(function(value) {
+              value.model = null;
+            })
             setTimeout(function() {
-                $scope.$apply(function() {
-                  contact.success = false;
-                });
-              }, 3000);
+              $scope.$apply(function() {
+                contact.success = false;
+              });
+            }, 3000);
           }
 
         });
@@ -1735,20 +1715,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
             userService.initializeUser(newUser, function(data) {
               if (data && data.accountUrl) {
-                  /*
-                   * I'm not sure why these lines were added.  The accountUrl is a string.
-                   * It will never have a host attribute.
-                   *
-                   * var currentHost = $.url(window.location.origin).attr('host');
-                   * var futureHost = $.url(data.accountUrl).attr('host');
-                   * if (currentHost.indexOf(futureHost) > -1) {
-                   *      window.location = data.accountUrl;
-                   * } else {
-                   *      window.location = currentHost;
-                   * }
-                   */
+                /*
+                 * I'm not sure why these lines were added.  The accountUrl is a string.
+                 * It will never have a host attribute.
+                 *
+                 * var currentHost = $.url(window.location.origin).attr('host');
+                 * var futureHost = $.url(data.accountUrl).attr('host');
+                 * if (currentHost.indexOf(futureHost) > -1) {
+                 *      window.location = data.accountUrl;
+                 * } else {
+                 *      window.location = currentHost;
+                 * }
+                 */
 
-                  window.location = data.accountUrl;
+                window.location = data.accountUrl;
               } else {
                 $scope.isFormValid = false;
               }
@@ -1926,24 +1906,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
 
-$scope.inserted = false;
- if(!$scope.activated)
-  $('body').on("DOMNodeInserted", ".feature-height", function (e)
-  {
-    if(!$scope.inserted)
-    {
-      setTimeout(function() {
-      $scope.inserted = true;
-      var maxHeight = Math.max.apply(null, $("div.feature-height").map(function ()
-      {
-          return $(this).height();
-      }).get());
-      $scope.maxHeight = maxHeight + 10 + "px";
-      }, 500)
-   }
-  })
+    $scope.inserted = false;
+    if (!$scope.activated)
+      $('body').on("DOMNodeInserted", ".feature-height", function(e) {
+        if (!$scope.inserted) {
+          setTimeout(function() {
+            $scope.inserted = true;
+            var maxHeight = Math.max.apply(null, $("div.feature-height").map(function() {
+              return $(this).height();
+            }).get());
+            $scope.maxHeight = maxHeight + 10 + "px";
+          }, 500)
+        }
+      })
   }
 
-  
+
 
 ]);

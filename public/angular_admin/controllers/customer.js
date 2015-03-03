@@ -171,6 +171,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
           }
         }, 2000);
         ToasterService.processPending();
+        ToasterService.processHtmlPending();
         var initializeSearchBar = 0;
         $scope.$watch('searchBar', function(newValue, oldValue) {
           if (initializeSearchBar >= 1) {
