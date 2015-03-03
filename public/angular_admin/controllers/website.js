@@ -1060,11 +1060,11 @@ define([
           }
         });
       };
-      $scope.saveComponent = function() {
+      $scope.saveComponent = function(update) {
 
         var componentId = $scope.componentEditing._id;
-
-        $scope.updateSingleComponent(componentId);
+        if(!update)
+          $scope.updateSingleComponent(componentId);
 
         var componentIndex;
         for (var i = 0; i < $scope.components.length; i++) {

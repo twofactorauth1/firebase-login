@@ -467,7 +467,7 @@
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
                                 <label for="colorpicker">Image Position:</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
-                                <select ng-model="componentEditing.imagePosition" ng-change="saveComponent()" class="form-control input-lg">
+                                <select ng-model="componentEditing.imagePosition" ng-change="saveComponent(true)" class="form-control input-lg">
                                     <option value="left">Left</option>
                                     <option value="right">Right</option>
                                 </select>
