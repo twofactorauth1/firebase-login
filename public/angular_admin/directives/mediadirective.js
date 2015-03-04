@@ -214,7 +214,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.selectModel.select_all = allTrue;
                 };
 
-                $scope.m.deleteAsset = function() {
+                $scope.m.deleteAsset = function(asset) {
+                  if (asset) {
+                    $scope.batch.push(asset);
+                  }
                     AssetsService.deleteAssets($scope.batch, function(resp, status) {
                         if ( status === 200 ) {
                           $scope.originalAssets.forEach(function(v, i) {
