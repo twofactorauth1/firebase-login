@@ -131,6 +131,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function(data) {
             var tmpAccount = data;
+            //$scope.tmpAccount = tmpAccount;
             if (tmpAccount.tempUser) {
               if (tmpAccount.tempUser.email) {
                 $scope.newAccount.email = tmpAccount.tempUser.email;
@@ -1601,6 +1602,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //redirect to signup with details
       //window.location.href = "http://app.indigenous.local:3000/signup";
     };
+
+    $scope.removeAccount= function(type)
+    {
+        $scope.newAccount.businessName = null;
+        $scope.newAccount.profilePhoto = null;
+        $scope.newAccount.tempUserId = null;
+        $scope.newAccount.email = null;
+    }
 
     $scope.makeSocailAccount = function(socialType) {
       if (socialType) {
