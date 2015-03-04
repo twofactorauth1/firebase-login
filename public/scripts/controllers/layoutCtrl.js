@@ -746,6 +746,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.social.icon = social_link.icon;
     }
     $scope.saveSocialLink = function(social, id, mode) {
+      $("#social-link-name .error").html("");
+      $("#social-link-name").removeClass('has-error');
+      $("#social-link-url .error").html("");
+      $("#social-link-url").removeClass('has-error');
       var old_value = _.findWhere($scope.networks, {
         name: $scope.social.selectedLink
       });
@@ -1104,7 +1108,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       if (networks)
         $scope.networks = networks;
-      
+
       for (var i = 0; i < $scope.currentpage.components.length; i++) {
           if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
             var w = angular.element($window);
