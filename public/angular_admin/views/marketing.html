@@ -239,7 +239,7 @@
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
-                                                <pre>{{post}}</pre>
+                                                <!-- <pre>{{post}}</pre> -->
                                             </div>
                                         </div>
 
@@ -447,13 +447,30 @@
                         <div class="panel-body">
                             <ul>
                                 <li ng-repeat="comment in visibleComments">
-                                    <small class="pull-right">Dec 10</small>
+                                    <img src="{{comment.picture}}" class="img-thumbnail pull-left">
+                                    <small class="pull-right">{{comment.created}}</small>
                                     <h4 class="sender">{{comment.name}}</h4>
                                     <small>{{comment.comment}}</small>
                                 </li>
+                                <li ng-if="visibleComments.length <= 0">
+                                    <h4 class="center">No Comments</h4>
+                                </li>
                             </ul>
+                            <div class="clearfix"></div>
                         </div>
                         <!-- panel-body -->
+                        <div class="panel-footer">
+                            <div>
+                                <div class="col-xs-9">
+                                    <div class="form-group mb0">
+                                        <input type="text" class="form-control" placeholder="Enter Comment...">
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <button class="btn btn-primary btn-block">Comment</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
