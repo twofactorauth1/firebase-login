@@ -572,7 +572,7 @@ module.exports = {
             }
 
             return twitterDao.getHomeTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, null, null, null, fn);
         });
     },
 
@@ -654,16 +654,16 @@ module.exports = {
         var self = this;
         if(trackedObject.type === 'feed') {
             return twitterDao.getHomeTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'user') {
             return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'mentions') {
             return twitterDao.getMentionsTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'numberTweets') {
             return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'numberFollowers') {
             return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
@@ -672,10 +672,10 @@ module.exports = {
                 socialAccount.socialId, fn);
         } else if(trackedObject.type === 'search') {
             return twitterDao.getSearchResults(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, trackedObject.term, fn);
+                socialAccount.socialId, trackedObject.term, since, until, limit, fn);
         } else if(trackedObject.type === 'messages') {
             return twitterDao.getDirectMessages(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         }
 
 
