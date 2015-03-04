@@ -361,8 +361,8 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, since, until, limit, fn) {
-        //var key = 'feed?fields=comments,likes';
-        var key = 'feed';
+        var key = 'feed?fields=id,from,message,story,story_tags,picture,link,icon,actions,privacy,type,status_type,object_id,created_time,updated_time,likes,comments{id,attachment,comment_count,created_time,like_count,message,user_likes,from{id,name,picture}}';
+        //var key = 'feed';
         return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
@@ -458,7 +458,7 @@ var dao = {
         }
 
         var path = socialId + "/" + key;
-        
+
         var url = this._generateUrl(path, accessToken);
 
         if(since) {

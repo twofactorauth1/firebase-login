@@ -114,11 +114,15 @@ var post = $$.m.ModelBase.extend({
             obj.comments = [];
 
             post.comments.data.forEach(function(comment) {
-                obj.comments.push({
+                var comment_obj = {
                     sourceId: comment.from.id,
                     name: comment.from.name,
                     comment: comment.message
-                })
+                };
+                if(comment.from && comment.from.picture && comment.from.picture.data) {
+                    comment_obj.picture = comment.from.picture.data.url;
+                }
+                obj.comments.push(comment_obj);
             });
         }
 
