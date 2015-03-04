@@ -123,7 +123,7 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "No Facebook credentials found");
         }
 
-        return this.getProfile(socialId, accessToken, fn);
+        return this.getProfile(accessToken, socialId, fn);
     },
 
 
