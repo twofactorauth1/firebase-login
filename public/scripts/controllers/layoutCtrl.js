@@ -14,6 +14,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.isPageDirty = false;
     $scope.currentcomponents = [];
     $scope.thumbnailSlider = [];
+    $scope.contactDetails = [];
 
     //displays the year dynamically for the footer
     var d = new Date();
@@ -545,16 +546,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.updateContactUsMap = function(component) {
-        $scope.contactPhone = component.contact.phone;
-        $scope.geo_address_string = $scope.stringifyAddress(component.location);
-        if ($scope.geo_address_string == "" && that.account.business.addresses.length) {
+        var matchingContact = _.find($scope.contactDetails, function(item) {
+          return item.contactId == component._id
+        })
+
+        if (!matchingContact) {
+              $scope.contactDetails.push({
+                contactId: component._id,
+                contactPhone: angular.copy(component.contact.phone),
+                geo_address_string : $scope.stringifyAddress(component.location)
+              });
+              matchingContact = _.find($scope.contactDetails, function(item) {
+                return item.contactId == component._id
+              })   
+        }else
+        {
+          matchingContact.contactPhone = angular.copy(component.contact.phone);
+          matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
+        }
+
+       // $scope.contactPhone = component.contact.phone;
+        //$scope.geo_address_string = $scope.stringifyAddress(component.location);
+        if (matchingContact.geo_address_string == "" && that.account.business.addresses.length) {
           if (that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
-            $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            matchingContact.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
         }
         if (!component.contact.phone && that.account.business.phones.length)
-          $scope.contactPhone = that.account.business.phones[0].number;
-        if ($scope.geo_address_string) {
-          analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+          matchingContact.contactPhone = that.account.business.phones[0].number;
+        if (matchingContact.geo_address_string) {
+          analyticsService.getGeoSearchAddress(matchingContact.geo_address_string, function(data) {
             if (data.error === undefined) {
               angular.extend($scope, {
                 mapLocation: {
@@ -567,7 +587,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     lat: parseFloat(data.lat),
                     lng: parseFloat(data.lon),
                     focus: true,
-                    message: $scope.geo_address_string,
+                    message: matchingContact.geo_address_string,
                     draggable: false
                   }
                 }
@@ -1052,6 +1072,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 thumbnailId: thumbnailId,
                 thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
               });
+
             } else
               matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
 
@@ -1083,28 +1104,28 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       if (networks)
         $scope.networks = networks;
-
+      
       for (var i = 0; i < $scope.currentpage.components.length; i++) {
-        if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
-          var w = angular.element($window);
-          var check_if_mobile = mobilecheck();
-          var thumbnailId = $scope.currentpage.components[i]._id;
+          if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
+            var w = angular.element($window);
+            var check_if_mobile = mobilecheck();
+            var thumbnailId = $scope.currentpage.components[i]._id;
 
-          var matching = _.find($scope.thumbnailSlider, function(item) {
-            return item.thumbnailId == thumbnailId
-          })
+            var matching = _.find($scope.thumbnailSlider, function(item) {
+              return item.thumbnailId == thumbnailId
+            })
 
-          if (!matching) {
-            $scope.thumbnailSlider.push({
-              thumbnailId: thumbnailId,
-              thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
-            });
-          } else
-            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
+              });
+            } else
+              matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
 
-          var winWidth = w.width();
-          $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
-        }
+            var winWidth = w.width();
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+          }
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
