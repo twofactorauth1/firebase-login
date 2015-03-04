@@ -432,7 +432,8 @@ define([
         {
           if(($scope.componentEditing.bg.img.show == false && remove == true) || remove == false)
           {
-            $scope.componentEditing.bg.img.url = null;
+            if(remove == false)
+              $scope.componentEditing.bg.img.url = null;
             $scope.componentEditing.bg.img.blur = false;
             $scope.componentEditing.bg.img.parallax = false;
             $scope.componentEditing.bg.img.overlay = false;
@@ -492,6 +493,8 @@ define([
             $scope.currentPage.components.splice(indexToadd, 0, newComponent);
             $scope.components = $scope.currentPage.components;
             $scope.updateIframeComponents();
+            if (newComponent.type === 'contact-us')
+              iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
             //TODO: get updateIframeComponents callback
             setTimeout(function() {
               $scope.activateAloha();
@@ -944,6 +947,9 @@ define([
             //$scope.components.push(newComponent);
             $scope.components = $scope.currentPage.components;
             $scope.updateIframeComponents();
+            // Update contact component
+            if ($scope.selectedComponent.type === 'contact-us')
+              iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
             //TODO: get updateIframeComponents callback
             setTimeout(function() {
                 $scope.activateAloha();

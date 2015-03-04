@@ -14,6 +14,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.isPageDirty = false;
     $scope.currentcomponents = [];
     $scope.thumbnailSlider = [];
+    $scope.contactDetails = [];
 
     //displays the year dynamically for the footer
     var d = new Date();
@@ -131,6 +132,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function(data) {
             var tmpAccount = data;
+            //$scope.tmpAccount = tmpAccount;
             if (tmpAccount.tempUser) {
               if (tmpAccount.tempUser.email) {
                 $scope.newAccount.email = tmpAccount.tempUser.email;
@@ -544,16 +546,35 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.updateContactUsMap = function(component) {
-        $scope.contactPhone = component.contact.phone;
-        $scope.geo_address_string = $scope.stringifyAddress(component.location);
-        if ($scope.geo_address_string == "" && that.account.business.addresses.length) {
+        var matchingContact = _.find($scope.contactDetails, function(item) {
+          return item.contactId == component._id
+        })
+
+        if (!matchingContact) {
+              $scope.contactDetails.push({
+                contactId: component._id,
+                contactPhone: angular.copy(component.contact.phone),
+                geo_address_string : $scope.stringifyAddress(component.location)
+              });
+              matchingContact = _.find($scope.contactDetails, function(item) {
+                return item.contactId == component._id
+              })   
+        }else
+        {
+          matchingContact.contactPhone = angular.copy(component.contact.phone);
+          matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
+        }
+
+       // $scope.contactPhone = component.contact.phone;
+        //$scope.geo_address_string = $scope.stringifyAddress(component.location);
+        if (matchingContact.geo_address_string == "" && that.account.business.addresses.length) {
           if (that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
-            $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            matchingContact.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
         }
         if (!component.contact.phone && that.account.business.phones.length)
-          $scope.contactPhone = that.account.business.phones[0].number;
-        if ($scope.geo_address_string) {
-          analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
+          matchingContact.contactPhone = that.account.business.phones[0].number;
+        if (matchingContact.geo_address_string) {
+          analyticsService.getGeoSearchAddress(matchingContact.geo_address_string, function(data) {
             if (data.error === undefined) {
               angular.extend($scope, {
                 mapLocation: {
@@ -566,7 +587,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                     lat: parseFloat(data.lat),
                     lng: parseFloat(data.lon),
                     focus: true,
-                    message: $scope.geo_address_string,
+                    message: matchingContact.geo_address_string,
                     draggable: false
                   }
                 }
@@ -725,6 +746,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.social.icon = social_link.icon;
     }
     $scope.saveSocialLink = function(social, id, mode) {
+      $("#social-link-name .error").html("");
+      $("#social-link-name").removeClass('has-error');
+      $("#social-link-url .error").html("");
+      $("#social-link-url").removeClass('has-error');
       var old_value = _.findWhere($scope.networks, {
         name: $scope.social.selectedLink
       });
@@ -1051,6 +1076,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 thumbnailId: thumbnailId,
                 thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
               });
+
             } else
               matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
 
@@ -1084,26 +1110,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.networks = networks;
 
       for (var i = 0; i < $scope.currentpage.components.length; i++) {
-        if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
-          var w = angular.element($window);
-          var check_if_mobile = mobilecheck();
-          var thumbnailId = $scope.currentpage.components[i]._id;
+          if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
+            var w = angular.element($window);
+            var check_if_mobile = mobilecheck();
+            var thumbnailId = $scope.currentpage.components[i]._id;
 
-          var matching = _.find($scope.thumbnailSlider, function(item) {
-            return item.thumbnailId == thumbnailId
-          })
+            var matching = _.find($scope.thumbnailSlider, function(item) {
+              return item.thumbnailId == thumbnailId
+            })
 
-          if (!matching) {
-            $scope.thumbnailSlider.push({
-              thumbnailId: thumbnailId,
-              thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
-            });
-          } else
-            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
+              });
+            } else
+              matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
 
-          var winWidth = w.width();
-          $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
-        }
+            var winWidth = w.width();
+            $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+          }
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
@@ -1602,6 +1628,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //window.location.href = "http://app.indigenous.local:3000/signup";
     };
 
+    $scope.removeAccount= function(type)
+    {
+        $scope.newAccount.businessName = null;
+        $scope.newAccount.profilePhoto = null;
+        $scope.newAccount.tempUserId = null;
+        $scope.newAccount.email = null;
+    }
+
     $scope.makeSocailAccount = function(socialType) {
       if (socialType) {
         window.location.href = "/signup/" + socialType + "?redirectTo=/signup";
@@ -1907,18 +1941,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.inserted = false;
-    if (!$scope.activated)
-      $('body').on("DOMNodeInserted", ".feature-height", function(e) {
-        if (!$scope.inserted) {
-          setTimeout(function() {
-            $scope.inserted = true;
-            var maxHeight = Math.max.apply(null, $("div.feature-height").map(function() {
-              return $(this).height();
+    $('body').on("DOMNodeInserted", ".feature-height, .meet-team-height", function (e)
+    {
+        setTimeout(function() {
+        if(!$scope.inserted)  
+        {
+          $scope.inserted = true;
+          if($("div.feature-height").length)
+          {
+            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+            {
+                return $(this).height();
             }).get());
-            $scope.maxHeight = maxHeight + 10 + "px";
-          }, 500)
-        }
-      })
+            $(".feature-height").height(maxFeatureHeight + 10);
+          }
+         if($("div.feature-height").length)
+         {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").height(maxTeamHeight + 10);
+          }
+        }   
+        }, 500)
+    })
   }
 
 
