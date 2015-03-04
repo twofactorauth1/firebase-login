@@ -70,7 +70,31 @@
             box-shadow: none;
         }
     }
+    .stream-wrap {
+        float: left;
+        transition: all 0.2s ease;
+    }
+    .fa-square-o {
+        margin-right: 4px!important;
+    }
+    .fa-check-square-o {
+        color: #27ae60;
+    }
+    .stream.isotope {
+        padding: 0px;
+    }
+    .isotope-item {
+        width: 260px;
+        margin: 5px;
+        margin-left: 0;
+    }
+    .filter-checkbox {
+        font-size: 30px;
+        line-height: 47px;
+    }
     .stream-filter {
+        float: left;
+        transition: all 0.2s ease;
         .label {
             padding: 4px 8px!important;
             box-shadow: none;
@@ -89,6 +113,9 @@
                 right: 0;
                 margin: -7px -8px 0 0;
             }
+        }
+        .filter-details {
+            opacity: 1;
         }
         .avatar {
             border-radius: 5px;
@@ -240,6 +267,7 @@
     }
     li {
         overflow: hidden;
+        padding: 5px;
         .panel-body {
             .media {
                 a {

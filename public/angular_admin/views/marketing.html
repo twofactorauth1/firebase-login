@@ -79,14 +79,13 @@
                     <h2 class="center">No Feeds Setup</h2>
                     <h3 class="center">Add a Feed to get set up.</h3>
                 </div> -->
-            <div class="col-sm-3 stream-filter">
-                <button class="btn btn-success btn-block mb15" data-toggle="modal" data-target="#marketing-add-feed">Manage Feeds</button>
+            <div class="stream-filter col-xs-3">
+                <button class="btn btn-success btn-block mb15" data-toggle="modal" data-target="#marketing-add-feed">Manage <span ng-hide="!filterOpen">Feeds</span>
+                </button>
                 <accordion>
                     <accordion-group is-open="item.open" ng-repeat="type in feedTypes" is-disabled="true">
                         <accordion-heading>
                             <div class="feedTypeDetail">
-                                <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}" checked/>
-                                <input type="checkbox" ng-if="type.type == 'twitter'" class="pull-left glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}" checked/>
                                 <!-- <div class="ckbox ckbox-primary pull-left">
                                     <input type="checkbox" value="1" id="checkboxPrimary" checked="checked" ng-click="toggleCheckbox($event)">
                                     <label for="checkboxPrimary"></label>
@@ -95,12 +94,19 @@
                                     <span class="badge badge-success">{{feedLengths[type.socialId]}}</span>
                                     <img ng-src="{{type.picture.data.url || type.profile_image_url_https}}" class="avatar pull-left" />
                                 </div>
-                                <div class="pull-left">
+                                <div class="pull-left filter-details">
                                     <h4>{{type.name}}</h4>
                                     <p><span class="fa fa-{{type.type}}-square"></span> {{type.type}}</p>
                                 </div>
 
-                                <span class="glyphicon pull-right hidden" ng-class="{'glyphicon-chevron-up': item.open, 'glyphicon-chevron-down': !item.open}"></span>
+                                <!--  <input type="checkbox" ng-if="type.type == 'facebook'" class="pull-right glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}" checked/>
+                                <input type="checkbox" ng-if="type.type == 'twitter'" class="pull-right glyphicon profiles" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}" checked/> -->
+
+                                <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'facebook'" data-value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}"></span>
+
+                                <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'twitter'" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></span>
+
+                                <!-- <span class="glyphicon pull-right hidden" ng-class="{'glyphicon-chevron-up': item.open, 'glyphicon-chevron-down': !item.open}"></span> -->
                                 <div class="clearfix"></div>
                             </div>
                         </accordion-heading>
@@ -163,9 +169,9 @@
                         </div>
                     </accordion-group>
                 </accordion>
-
             </div>
-            <div ng-if="feed.length > 0" class="col-sm-9">
+
+            <div ng-if="feed.length > 0" class="stream-wrap col-xs-9">
                 <div class="submit-post-form">
                     <div class="panel panel-dark panel-alt timeline-post">
                         <div class="panel-body">
@@ -197,7 +203,7 @@
                     </div>
                 </div>
                 <ul class="stream">
-                    <li ng-repeat="post in displayedFeed track by $index | orderBy: 'date':true" class="col-sm-4 mb20 item {{post.postType}}-{{post.socialAccountId}}" data-date="{{post.date}}">
+                    <li ng-repeat="post in displayedFeed track by $index | orderBy: 'date':true" class="item {{post.postType}}-{{post.socialAccountId}}" data-date="{{post.date}}">
                         <div class="item-inner">
                             <div ng-if="post.type == 'facebook'">
                                 <!-- <div class="post-inner">
@@ -233,14 +239,14 @@
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
-                                                <!-- <pre>{{post}}</pre> -->
+                                                <pre>{{post}}</pre>
                                             </div>
                                         </div>
 
                                         <div class="timeline-btns" ng-show="post.postType !== 'link'">
                                             <div class="pull-left">
                                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike"><i class="fa fa-thumbs-up"></i></a>
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment"><i class="fa fa-comment"></i></a>
+                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post.comments)"><i class="fa fa-comment"></i></a>
                                                 <a href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
                                             <div class="pull-right">
@@ -422,6 +428,33 @@
                 </div>
                 <div class="modal-body">
                     <p>All the likes and unlikes</p>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="marketing-comments">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Comments</h4>
+                </div>
+                <div class="modal-body nopadding">
+                    <div class="panel panel-default panel-alt widget-messaging mb0">
+                        <div class="panel-body">
+                            <ul>
+                                <li ng-repeat="comment in visibleComments">
+                                    <small class="pull-right">Dec 10</small>
+                                    <h4 class="sender">{{comment.name}}</h4>
+                                    <small>{{comment.comment}}</small>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- panel-body -->
+                    </div>
                     <div class="clearfix"></div>
                 </div>
 

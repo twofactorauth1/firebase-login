@@ -385,6 +385,37 @@ var dao = {
         return this._getStreamPart(user, null, socialId, key, fn);
     },
 
+    getPostComments: function (accessToken, socialId, postId, fn) {
+        var self = this;
+        self.log.info("facebook dao: getPostComments >>> ");
+        var key = postId + "/comments";
+        var url = this._generateUrl(key, accessToken);
+        self.log.info("facebook dao: url >>> ", url);
+        return this._makeRequest(url, function (err, value) {
+            self.log.info("_getStreamPart: fb value >>> ", value);
+            self.log.info("_getStreamPart: key >>> ", key);
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value && value.data && value.data.length > 0 && key.length > 0) {
+                var result = [];
+
+                var processPost = function (_post, cb) {
+                    result.push(new Post().convertFromFacebookPost(_post));
+                    cb();
+                };
+
+                async.eachLimit(value.data, 10, processPost, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                var thisval = value.data || value;
+                return fn(null, thisval);
+            }
+        });
+    },
+
     getTokenPosts: function(accessToken, socialId, fn) {
         var self = this;
         var key = "posts";

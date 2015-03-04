@@ -115,7 +115,9 @@ var post = $$.m.ModelBase.extend({
                 obj.comments.push({
                     sourceId: comment.from.id,
                     name: comment.from.name,
-                    comment: comment.message
+                    comment: comment.message,
+                    created: comment.created_time,
+                    like_count: comment.like_count
                 })
             });
         }

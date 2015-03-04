@@ -8026,6 +8026,39 @@ i.indi-sm {
   box-shadow: none;
 }
 
+.marketing .stream-wrap {
+  float: left;
+  transition: all 0.2s ease;
+}
+
+.marketing .fa-square-o {
+  margin-right: 4px!important;
+}
+
+.marketing .fa-check-square-o {
+  color: #27ae60;
+}
+
+.marketing .stream.isotope {
+  padding: 0px;
+}
+
+.marketing .isotope-item {
+  width: 260px;
+  margin: 5px;
+  margin-left: 0;
+}
+
+.marketing .filter-checkbox {
+  font-size: 30px;
+  line-height: 47px;
+}
+
+.marketing .stream-filter {
+  float: left;
+  transition: all 0.2s ease;
+}
+
 .marketing .stream-filter .label {
   padding: 4px 8px!important;
   box-shadow: none;
@@ -8043,6 +8076,10 @@ i.indi-sm {
   position: absolute;
   right: 0;
   margin: -7px -8px 0 0;
+}
+
+.marketing .stream-filter .filter-details {
+  opacity: 1;
 }
 
 .marketing .stream-filter .avatar {
@@ -8215,6 +8252,7 @@ i.indi-sm {
 
 .stream li {
   overflow: hidden;
+  padding: 5px;
 }
 
 .stream li .panel-body .media a {

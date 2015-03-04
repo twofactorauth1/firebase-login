@@ -503,6 +503,29 @@ module.exports = {
         });
     },
 
+    getFacebookPostComments: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> getFacebookPostComments');
+        log.debug('>> accountId ', accountId);
+        log.debug('>> socialAccountId ', socialAccountId);
+        log.debug('>> postId ', postId);
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            facebookDao.getPostComments(socialAccount.accessToken, socialAccount.socialId, postId, fn);
+        });
+
+    },
+
     addFacebookComment: function(accountId, socialAccountId, postId, comment, fn) {
         var self = this;
         log.debug('>> addFacebookComment');
