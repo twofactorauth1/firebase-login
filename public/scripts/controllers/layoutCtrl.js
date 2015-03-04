@@ -1907,18 +1907,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
 
     $scope.inserted = false;
-    if (!$scope.activated)
-      $('body').on("DOMNodeInserted", ".feature-height", function(e) {
-        if (!$scope.inserted) {
-          setTimeout(function() {
-            $scope.inserted = true;
-            var maxHeight = Math.max.apply(null, $("div.feature-height").map(function() {
-              return $(this).height();
+    $('body').on("DOMNodeInserted", ".feature-height, .meet-team-height", function (e)
+    {
+        setTimeout(function() {
+        if(!$scope.inserted)  
+        {
+          $scope.inserted = true;
+          if($("div.feature-height").length)
+          {
+            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+            {
+                return $(this).height();
             }).get());
-            $scope.maxHeight = maxHeight + 10 + "px";
-          }, 500)
-        }
-      })
+            $(".feature-height").height(maxFeatureHeight + 10);
+          }
+         if($("div.feature-height").length)
+         {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").height(maxTeamHeight + 10);
+          }
+        }   
+        }, 500)
+    })
   }
 
 
