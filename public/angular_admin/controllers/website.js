@@ -492,7 +492,7 @@ define([
             $scope.currentPage.components.splice(indexToadd, 0, newComponent);
             $scope.components = $scope.currentPage.components;
             $scope.updateIframeComponents();
-            if ($scope.matchingComponent.type === 'contact-us')
+            if (newComponent.type === 'contact-us')
               iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
             //TODO: get updateIframeComponents callback
             setTimeout(function() {
