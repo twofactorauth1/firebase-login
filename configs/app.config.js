@@ -102,6 +102,14 @@ if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && pro
     subdomainSuffix += ":" + process.env.PORT;
 }
 
+//---------------------------------------------------------
+//  COOKIE NAME
+//---------------------------------------------------------
+
+var cookieName = "connect.sid";
+if( process.env.ROOT_HOST !== 'indigenous.io') {
+    cookieName = 'test_' + cookieName;
+}
 
 //---------------------------------------------------------
 // EXPORTS
@@ -120,6 +128,7 @@ module.exports = {
 
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
     cookie_subdomain: '.' + process.env.ROOT_HOST,
+    cookie_name: cookieName,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {

@@ -84,7 +84,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The url of the image
              */
-            imgsection: "<p><img data-cke-saved-src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_6/rocket-icon-512x512_1421971689163.png\" src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_6/rocket-icon-512x512_1421971689163.png\" style=\"width: 175px; height: 175px;\">​​</p>",
+            imgsection: "<p><img data-cke-saved-src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_6/rocket-icon-512x512_1421971689163.png\" src=\"http://s3.amazonaws.com/indigenous-digital-assets/account_6/rocket-icon-512x512_1421971689163.png\" width=\"175\" height=\"175\">​​</p>",
 
             /**
              *

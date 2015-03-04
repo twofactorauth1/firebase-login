@@ -7,6 +7,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
          */
 
 
+
         $scope.showOnboarding = false;
         $scope.stepIndex = 0;
         $scope.onboardingSteps = [{
@@ -42,6 +43,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         if ($location.$$search.onboarding) {
             $scope.beginOnboarding($location.$$search.onboarding);
+
         }
 
         /*

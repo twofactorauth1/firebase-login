@@ -4,7 +4,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
     NavigationService.updateNavigation();
     $scope.addProductFn = function() {
       ProductService.postProduct($scope.newProduct, function(product) {
-        $scope.products.push(product);
+        $scope.products.unshift(product);
         $('#commerce-add-product').modal('hide');
       });
     };

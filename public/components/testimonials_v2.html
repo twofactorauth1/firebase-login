@@ -20,8 +20,7 @@
    <div class="clearfix"></div>
 
    <div style="position: relative;">
-    <slick slides-to-show='1' slides-to-scroll='1' autoplay= "true",
-        autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
+    <slick slides-to-show='1' slides-to-scroll='1' autoplay= "true" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
         <div ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active">
         <img ng-src="{{testimonial.image}}" style="margin:auto;">
         <div class="">

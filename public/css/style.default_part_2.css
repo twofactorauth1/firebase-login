@@ -13139,6 +13139,34 @@ div[data-type="coming-soon"] .component-inner {
   line-height: 30px;
 }
 
+#overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  z-index: 999;
+}
+
+#loading {
+  position: absolute;
+  color: white;
+  top: 50%;
+  left: 50%;
+  font-size: 40px;
+}
+
+#loading span {
+  font-size: 20px;
+}
+
+#loading div.msg {
+  right: 40%;
+}
+
 .thumbnail-slider-v1 .single-image {
   padding: 0;
   margin: 0;
