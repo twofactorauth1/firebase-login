@@ -1647,10 +1647,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.tmpAccount = data;
       });
     }
+
+    $scope.showFooter=function(status)
+    {
+      if(status)
+        $("#footer").hide();
+      else
+        $("#footer").hide();
+    }
+    
     $scope.createAccount = function(newAccount) {
       //validate
       //email
       $scope.isFormValid = false;
+      $scope.showFooter(true);
       if (!$scope.newAccount.email) {
         $scope.checkEmailExists(newAccount);
         return;
@@ -1702,6 +1712,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
       //end validate
       $scope.isFormValid = true;
+      $scope.showFooter(false);
       var tmpAccount = $scope.tmpAccount;
       tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
       userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
@@ -1720,6 +1731,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.info(error);
             $scope.$apply(function() {
               $scope.isFormValid = false;
+              $scope.showFooter(true);
             })
             switch (error.param) {
               case "number":
@@ -1765,6 +1777,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 window.location = data.accountUrl;
               } else {
                 $scope.isFormValid = false;
+                $scope.showFooter(true);
               }
             });
           }
