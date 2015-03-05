@@ -202,7 +202,10 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         if (state != null) {
             type = state.socialType;
+            self.log.debug('getting social config from type: ' + type);
             config = this._getSocialConfigFromType(type);
+        } else {
+            self.log.debug('state is null');
         }
 
         callbackUrl = config.CALLBACK_URL_LOGIN;

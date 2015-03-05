@@ -207,6 +207,7 @@ var dao = {
                             req.session.accountId = value.getAllAccountIds()[0];
 
                         }
+                        self.log.debug('req.session.accountId: ' + req.session.accountId);
                         accountDao.getAccountByID(req.session.accountId, function(err, account){
                             if(err) {
                                 return fn(err, null);
