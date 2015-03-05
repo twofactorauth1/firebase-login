@@ -11934,21 +11934,24 @@ div[data-class='image-text'] p {
 
 /********** Blog Teaser v1 **********/
 
-.blog-teaser {
-  background: #f6f6f6;
-  padding: 40px;
+.blog-teaser-v1 {
+  color: #777;
 }
 
-.blog-teaser .posts {
+.blog-teaser-v1 .posts {
   margin-top: 45px;
 }
 
-.blog-teaser .title {
+.blog-teaser-v1 .label-info {
+  margin-right: 5px;
+}
+
+.blog-teaser-v1 .title {
   text-align: center;
   font-weight: bold;
 }
 
-.blog-teaser .single-blog {
+.blog-teaser-v1 .single-blog {
   min-height: 380px;
   display: block;
   background: #fff;
@@ -11956,16 +11959,16 @@ div[data-class='image-text'] p {
   border-radius: 5px;
 }
 
-.blog-teaser .single-blog .blog-content {
+.blog-teaser-v1 .single-blog .blog-content {
   padding: 15px;
 }
 
-.blog-teaser .single-blog .featured-image {
+.blog-teaser-v1 .single-blog .featured-image {
   max-height: 200px;
   overflow: hidden;
 }
 
-.blog-teaser .single-blog .featured-image img {
+.blog-teaser-v1 .single-blog .featured-image img {
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   max-height: 200px;
@@ -11973,18 +11976,18 @@ div[data-class='image-text'] p {
   width: 100%;
 }
 
-.blog-teaser .single-blog .title {
+.blog-teaser-v1 .single-blog .title {
   color: #4bb0cb;
   text-align: left;
 }
 
-.blog-teaser .single-blog .excerpt {
+.blog-teaser-v1 .single-blog .excerpt {
   font-size: 12px;
   color: #444444;
   font-weight: bold;
 }
 
-.blog-teaser .single-blog .footer {
+.blog-teaser-v1 .single-blog .footer {
   height: 35px;
   width: 100%;
   padding: 15px;
@@ -11995,8 +11998,8 @@ div[data-class='image-text'] p {
   margin-bottom: 15px;
 }
 
-.blog-teaser .single-blog .footer .date,
-.blog-teaser .single-blog .footer .comments {
+.blog-teaser-v1 .single-blog .footer .date,
+.blog-teaser-v1 .single-blog .footer .comments {
   display: block;
   position: relative;
   z-index: 999;
@@ -12005,11 +12008,11 @@ div[data-class='image-text'] p {
   padding: 0;
 }
 
-.blog-teaser .single-blog .footer .comments {
+.blog-teaser-v1 .single-blog .footer .comments {
   text-align: right;
 }
 
-.blog-teaser .btn-full-blog {
+.blog-teaser-v1 .btn-full-blog {
   display: block;
   position: relative;
   max-width: 200px;
