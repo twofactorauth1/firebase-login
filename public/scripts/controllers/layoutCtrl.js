@@ -1651,7 +1651,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.showFooter=function(status)
     {
       if(status)
-        $("#footer").hide();
+        $("#footer").show();
       else
         $("#footer").hide();
     }
@@ -1978,7 +1978,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
-        }, 1000)
+        }, 2000)
     })
   }
 
