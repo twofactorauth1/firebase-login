@@ -8,9 +8,7 @@
 
 <div ng-class="component.type+'-v'+component.version">
     <div class="title">
-        <div class="editable" data-class="title">
-            {{component.title}}
-        </div>
+        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe"></div>
     </div>
 
     <div class="posts">
@@ -68,7 +66,7 @@
     </div>
     <div class="clearfix mb30"></div>
     <div class="col-xs-12 mb15">
-        <a class="btn btn-primary center btn-lg btn-full-blog" href="/blog">See Full Blog</a>
+        <a class="btn btn-primary center btn-lg btn-full-blog" href="/page/blog">See Full Blog</a>
     </div>
     <div class="clearfix"></div>
 </div>
