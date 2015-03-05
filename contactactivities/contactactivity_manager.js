@@ -90,7 +90,7 @@ module.exports = {
   },
 
   findActivities: function(accountId, contactId, activityTypeAry, noteText, detailText, beforeTimestamp,
-    afterTimestamp, skip, limit, isRead, fn) {
+    afterTimestamp, skip, limit, isRead, includeDeleted, fn) {
 
     var self = this;
     log.debug('>> findActivities', activityTypeAry);
@@ -142,18 +142,42 @@ module.exports = {
       queryObj.read = false;
     }
 
-    log.debug('Submitting query: ' + JSON.stringify(queryObj));
-
-    //dao.findAllWithFieldsAndLimit(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list){
-    dao.findWithFieldsLimitAndTotal(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list) {
-      if (err) {
-        log.error('Error finding activities: ' + err);
-        fn(err, null);
-      } else {
-        log.debug('<< findActivities');
-        fn(null, list);
-      }
-    });
+    if(includeDeleted === true || includeDeleted === 'true') {
+        //do the query as is
+        dao.findWithFieldsLimitAndTotal(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list) {
+            if (err) {
+                log.error('Error finding activities: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< findActivities');
+                return fn(null, list);
+            }
+        });
+    } else {
+        var contactQuery = {};
+        if(accountId) {
+            contactQuery.accountId = accountId;
+        }
+        dao.findMany(contactQuery, $$.m.Contact, function(err, contacts){
+            if(err) {
+                log.error('Error finding activities: ' + err);
+                return fn(err, null);
+            } else {
+                var idAry = _.map(contacts, function(contact){return contact.id();});
+                queryObj.contactId = {'$in':idAry};
+                log.debug('Submitting query: ' + JSON.stringify(queryObj));
+                dao.findWithFieldsLimitAndTotal(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list) {
+                    if (err) {
+                        log.error('Error finding activities: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< findActivities');
+                        return fn(null, list);
+                    }
+                });
+            }
+        });
+    }
 
   },
 
