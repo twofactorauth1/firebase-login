@@ -202,7 +202,10 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         if (state != null) {
             type = state.socialType;
+            self.log.debug('getting social config from type: ' + type);
             config = this._getSocialConfigFromType(type);
+        } else {
+            self.log.debug('state is null');
         }
 
         callbackUrl = config.CALLBACK_URL_LOGIN;
@@ -299,16 +302,27 @@ _.extend(router.prototype, baseRouter.prototype, {
         self.log.debug('redirecting to default of admin');
         var accountId = null;
         var path = "admin";
-        if (state.accountId > 0) {
-            accountId = state.accountId;
+
+        self.log.debug('state.accountId: ' + state.accountId + ' session.accountId: ' + req.session.accountId);
+        if(state.accountId === appConfig.mainAccountID && req.session.accountId != state.accountId) {
+            self.log.debug('logged in at main site.  Need to redirect.');
+            accountId = req.session.accountId;
         } else {
-            var accountIds = user.getAllAccountIds();
-            if (accountIds.length == 1) {
-                accountId = accountIds[0];
+            if (state.accountId > 0) {
+                accountId = state.accountId;
             } else {
-                path = "/home";
+                var accountIds = user.getAllAccountIds();
+                if (accountIds.length == 1) {
+                    accountId = accountIds[0];
+                } else {
+                    path = "/home";
+                }
             }
         }
+
+
+
+
         authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), path, null, function(err, value) {
             if (err) {
                 resp.redirect("/home");
