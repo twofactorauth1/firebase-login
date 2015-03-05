@@ -822,10 +822,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(req.query.limit) {
                     limit = parseInt(req.query.limit);
                 }
+                var includeDeleted = false;
+                if(req.query.includeDeleted && req.query.includeDeleted === 'true') {
+                    includeDeleted = true;
+                }
 
 
                 contactActivityManager.findActivities(accountId, contactId, activityTypeAry, noteText, detailText,
-                    beforeTimestamp, afterTimestamp, skip, limit, read, function(err, list){
+                    beforeTimestamp, afterTimestamp, skip, limit, read, includeDeleted, function(err, list){
                         self.log.debug('<< ' + method);
                         self.sendResultOrError(resp, err, list, "Error finding activities");
                         self = null;
