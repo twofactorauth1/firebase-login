@@ -27,6 +27,15 @@ define(['app'], function(app) {
 
         };
 
+        this.likeFBPost = function(socialAccountId, postId, fn) {
+            //facebook/:socialAccountId/post/:postId/like
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post', postId, 'like'].join('/');
+            $http.post(apiUrl).success(function(data, status, headers, config) {
+                fn(data);
+            });
+
+        };
+
         this.deleteSocialConfigEntry = function(id, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'socialaccount', id].join('/');
             $http.delete(apiUrl)
@@ -69,83 +78,83 @@ define(['app'], function(app) {
 
         };
 
-    //Twitter
-    this.getTwitterFeed = function(socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'feed'].join('/');
-        $http.get(apiUrl)
-            .success(function(data, status, headers, config) {
+        //Twitter
+        this.getTwitterFeed = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'feed'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getTwitterFollowers = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'followers'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getTwitterProfile = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'profile'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.postTwitterPost = function(socialAccountId, post, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post'].join('/');
+            $http.post(apiUrl, {
+                post: post
+            }).success(function(data, status, headers, config) {
                 fn(data);
             });
-    };
+        };
 
-    this.getTwitterFollowers = function(socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'followers'].join('/');
-        $http.get(apiUrl)
-            .success(function(data, status, headers, config) {
-                fn(data);
-            });
-    };
+        //Facebook
+        this.getFBPosts = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
 
-    this.getTwitterProfile = function(socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'profile'].join('/');
-        $http.get(apiUrl)
-            .success(function(data, status, headers, config) {
-                fn(data);
-            });
-    };
+        this.getFBProfile = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'profile'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
 
-    this.postTwitterPost = function(socialAccountId, post, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post'].join('/');
-        $http.post(apiUrl, {
-            post: post
-        }).success(function(data, status, headers, config) {
-            fn(data);
-        });
-    };
+        this.importLinkedinContact = function(socialAccountId, accessToken, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'linkedin', socialAccountId, 'importcontacts'].join('/');
+            $http({
+                    url: apiUrl,
+                    method: 'GET',
+                    params: {
+                        accessToken: accessToken
+                    }
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
 
-    //Facebook
-    this.getFBPosts = function(socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
-        $http.get(apiUrl)
-            .success(function(data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.getFBProfile = function(socialAccountId, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'profile'].join('/');
-        $http.get(apiUrl)
-            .success(function(data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.importLinkedinContact = function(socialAccountId, accessToken, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'linkedin', socialAccountId, 'importcontacts'].join('/');
-        $http({
-                url: apiUrl,
-                method: 'GET',
-                params: {
-                    accessToken: accessToken
-                }
-            })
-            .success(function(data, status, headers, config) {
-                fn(data);
-            });
-    };
-
-    this.importGoogleContact = function(socialAccountId, accessToken, fn) {
-        var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
-        $http({
-                url: apiUrl,
-                method: 'GET',
-                params: {
-                    accessToken: accessToken
-                }
-            })
-            .success(function(data, status, headers, config) {
-                fn(data);
-            });
-    };
-})
+        this.importGoogleContact = function(socialAccountId, accessToken, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
+            $http({
+                    url: apiUrl,
+                    method: 'GET',
+                    params: {
+                        accessToken: accessToken
+                    }
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+    })
 });

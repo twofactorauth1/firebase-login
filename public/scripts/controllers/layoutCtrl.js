@@ -229,9 +229,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if (that.teaserposts) {
           //donothing
         } else {
-          if (route === '/' || route === '') {
-            that.teaserposts = data;
-          }
+          that.teaserposts = data;
         }
 
         that.currentTag, that.currentAuthor, that.currentCat = '';

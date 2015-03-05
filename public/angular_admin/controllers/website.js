@@ -248,6 +248,11 @@ define([
         icon: 'custom blog',
         enabled: false
       }, {
+        title: 'Blog Teaser',
+        type: 'blog-teaser',
+        preview: '',
+        enabled: true
+      }, {
         title: 'Masthead',
         type: 'masthead',
         preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
