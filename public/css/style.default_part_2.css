@@ -7954,29 +7954,62 @@ i.indi-sm {
   padding: 0 10px;
 }
 
+.marketing .submit-post-form .panel {
+  -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.4);
+}
+
 .marketing .widget-messaging img {
   display: block;
+  width: 40px;
+  margin-right: 10px;
 }
 
-.marketing #marketing-add-feed .modal-body {
-  padding: 0;
+.marketing .fb-admin-pages {
+  padding-left: 0;
 }
 
-.marketing #marketing-add-feed .fb-admin-pages li {
+.marketing .fb-admin-pages li {
   height: 50px;
   line-height: 50px;
   text-indent: 10px;
+  list-style-type: none;
+  border-bottom: 1px solid #e7e7e7;
 }
 
-.marketing #marketing-add-feed .fb-admin-pages li img {
+.marketing .fb-admin-pages li img {
   height: 40px;
   margin: 4px 0;
 }
 
-.marketing #marketing-add-feed .fb-admin-pages li .fa-plus-square {
+.marketing .fb-admin-pages li .fa-plus-square {
   line-height: 50px;
   font-size: 20px;
   color: #27ae60;
+}
+
+.marketing .fb-admin-pages li .fa-thumbs-up {
+  line-height: 45px;
+  font-size: 24px;
+  opacity: .8;
+}
+
+.marketing .fb-admin-pages li .fa-thumbs-up:hover {
+  opacity: 1;
+}
+
+.marketing .fb-admin-pages li .fa-thumbs-up.liked {
+  color: #27ae60;
+}
+
+.marketing .fb-admin-pages li .fa-spinner {
+  text-indent: 0;
+  font-size: 25px;
+  line-height: 50px;
+}
+
+.marketing #marketing-add-feed .modal-body {
+  padding: 0;
 }
 
 .marketing #marketing-add-feed .left-panel {

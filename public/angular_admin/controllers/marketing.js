@@ -290,6 +290,28 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
         };
 
+        $scope.fbAdminPagesforLikes = [];
+
+        $scope.tempPost2Like = function(post) {
+            //set array of pages 
+            for (var i = 0; i < $scope.fbAdminPages.length; i++) {
+                $scope.fbAdminPagesforLikes.push($scope.fbAdminPages[i]);
+                var matched;
+                _.find(post.likes, function(likeItem, index) {
+                    if (likeItem.sourceId == type.id) {
+                        feedIndex = index;
+                        return true;
+                    };
+                });
+                if (matched) {
+                    $scope.fbAdminPagesforLikes[i].liked = true;
+                } else {
+                    $scope.fbAdminPagesforLikes[i].liked = false;
+                }
+            };
+            $scope.tempPost = post;
+        };
+
         /*
          * @handleFBPost
          * handle the facebook post from @postToSocial
@@ -302,12 +324,27 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         };
 
         /*
-         * @likeUnlikeFBPost
-         * like or unlike a post on facebook
+         * @likeFBPost
+         * like a post on facebook
          */
 
-        $scope.likeUnlikeFBPost = function(likeType) {
-            console.log('likeType ', likeType);
+        $scope.likeFBPost = function(page, $event) {
+            var value = $event.target.attributes.class.value;
+            var tempClass = value.replace('fa-thumbs-up', 'fa-spinner fa-spin');
+            $event.target.setAttribute('class', tempClass);
+            SocialConfigService.likeFBPost(page.socialId, $scope.tempPost.sourceId, function(postReturn) {
+                var newTempClass = value + ' liked';
+                $event.target.setAttribute('class', newTempClass);
+            });
+        };
+
+        /*
+         * @removelikeFBPost
+         * remove a like post on facebook
+         */
+
+        $scope.removeLikeFBPost = function(post) {
+            console.log('remove like ', post);
         };
 
         /*
@@ -371,9 +408,16 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }, 3000);
         });
 
+        /*
+         * @updateComments
+         * update the visible comments to display in the comment modal
+         */
+
+        $scope.visibleComments = [];
+
         $scope.updateComments = function(comments) {
-          console.log('comments ', comments);
-          $scope.visibleComments = comments;
+            console.log('comments ', comments);
+            $scope.visibleComments = comments;
         };
 
         /*
@@ -384,7 +428,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.filters = [];
 
         $scope.filterFeed = function(type, $event) {
-          console.log('$scope.filters ', $scope.filters);
+            console.log('$scope.filters ', $scope.filters);
             $event.stopPropagation();
             $event.preventDefault();
 

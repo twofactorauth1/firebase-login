@@ -239,13 +239,13 @@
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
-                                                <!-- <pre>{{post}}</pre> -->
+                                                <pre>{{post}}</pre>
                                             </div>
                                         </div>
 
                                         <div class="timeline-btns" ng-show="post.postType !== 'link'">
                                             <div class="pull-left">
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike"><i class="fa fa-thumbs-up"></i></a>
+                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike" ng-click="tempPost2Like(post)"><i class="fa fa-thumbs-up"></i></a>
                                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post.comments)"><i class="fa fa-comment"></i></a>
                                                 <a href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
@@ -424,10 +424,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Like/Unlike</h4>
+                    <h4 class="modal-title">Manage Likes</h4>
                 </div>
                 <div class="modal-body">
-                    <p>All the likes and unlikes</p>
+                    <ul class="fb-admin-pages">
+                        <li ng-repeat="page in fbAdminPages"><img src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
+                        </li>
+                    </ul>
                     <div class="clearfix"></div>
                 </div>
 
@@ -440,7 +443,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Comments</h4>
+                    <h4 class="modal-title">Comments <span ng-if="visibleComments.length">({{visibleComments.length}})</span></h4>
                 </div>
                 <div class="modal-body nopadding">
                     <div class="panel panel-default panel-alt widget-messaging mb0">
@@ -448,11 +451,11 @@
                             <ul>
                                 <li ng-repeat="comment in visibleComments">
                                     <img src="{{comment.picture}}" class="img-thumbnail pull-left">
-                                    <small class="pull-right">{{comment.created}}</small>
+                                    <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
                                     <h4 class="sender">{{comment.name}}</h4>
                                     <small>{{comment.comment}}</small>
                                 </li>
-                                <li ng-if="visibleComments.length <= 0">
+                                <li ng-if="!visibleComments">
                                     <h4 class="center">No Comments</h4>
                                 </li>
                             </ul>
