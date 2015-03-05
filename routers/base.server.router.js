@@ -124,6 +124,42 @@ _.extend(baseRouter.prototype, {
         }
     },
 
+    setupForSocialSignup: function(req, resp, next) {
+        //TODO: Cache Account By Host
+        var self = this;
+        logger.debug('>> setupForSocialSignup');
+        /*
+         * If we have a session but no session accountId OR the session host doesn't match current host, do the following
+         */
+        if (req["session"] != null && (req.session["accountId"] == null )) {
+            var accountDao = require("../dao/account.dao");
+            accountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if (!err && value != null) {
+                    if (value === true) {
+                        logger.warn('We should not reach this code.  value ===true');
+                        logger.debug("host: " + req.get("host") + " -> accountId:0");
+                        req.session.accountId = 0;
+                    } else {
+                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                        req.session.accountId = 'new';
+                        req.session.subdomain = 'new';
+                        //req.session.domain = value.get('domain');
+                        req.session.locked = value.get('locked');
+                    }
+                } else {
+                    logger.warn("No account found from getAccountByHost");
+                }
+
+                return next();
+            });
+        } else {
+            logger.debug('setting session account and subdomain to new');
+            req.session.accountId = 'new';
+            req.session.subdomain = 'new';
+            return next();
+        }
+    },
+
     matchHostToSession: function(req) {
         var subObj = urlUtils.getSubdomainFromHost(req.host);
         var sSub = req.session.subdomain;
@@ -255,12 +291,13 @@ _.extend(baseRouter.prototype, {
     isAuth: function(req, resp, next) {
         var self = this;
         logger.debug('>> isAuth (' + req.originalUrl + ')');
+        logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
-        logger.debug('req.session.locked: ' + req.session.locked);
+        //logger.debug('req.session.locked: ' + req.session.locked);
         if(req.session.locked === 'true' || req.session.locked === true) {
             return resp.redirect('/interim.html');
         }
-        if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1)) {
+        if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1) && req.session.midSignup !== true) {
             logger.debug('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
@@ -308,7 +345,7 @@ _.extend(baseRouter.prototype, {
                 }
 
             }
-        } else if(req.isAuthenticated() && self.matchHostToSession(req) === false){
+        } else if(req.isAuthenticated() && (self.matchHostToSession(req) === false || req.session.midSignup === true)){
             logger.debug('authenticated to the wrong session.  logging out.');
             req.logout();
             resp.redirect('/login');

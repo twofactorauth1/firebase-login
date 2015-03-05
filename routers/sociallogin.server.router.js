@@ -35,9 +35,10 @@ _.extend(router.prototype, baseRouter.prototype, {
         //  LOGIN
         //-------------------------------------------------
         app.get("/auth/internal", this.setupForSocialAuth.bind(this), this.socialAuthInternal.bind(this));
+        app.get("/auth/signupinternal", this.setupForSocialSignup.bind(this), this.socialAuthInternal.bind(this));
 
         app.get("/login/:socialtype", this.setupForSocialAuth.bind(this), this.socialLogin.bind(this));
-        app.get("/signup/:socialtype", this.setupForSocialAuth.bind(this), this.socialSignup.bind(this));
+        app.get("/signup/:socialtype", this.setupForSocialSignup.bind(this), this.socialSignup.bind(this));
 
         app.get("/inapplogin/:socialtype", this.isAuth.bind(this), this.inAppSocialLogin.bind(this));
         app.get("/socialconfig/:socialtype", this.isAuth.bind(this), this.addSocialConfig.bind(this));
@@ -62,6 +63,12 @@ _.extend(router.prototype, baseRouter.prototype, {
     getInternalAuthRedirect: function(state) {
         var serverUrl = appConfig.server_url;
         serverUrl += "/auth/internal?state=" + JSON.stringify(state);
+        return serverUrl;
+    },
+
+    getSignupInternalAuthRedirect: function(state) {
+        var serverUrl = appConfig.server_url;
+        serverUrl += "/auth/signupinternal?state=" + JSON.stringify(state);
         return serverUrl;
     },
 
@@ -135,11 +142,12 @@ _.extend(router.prototype, baseRouter.prototype, {
 
 
     socialSignup: function(req, resp, next) {
-        var state = this.getState(this.accountId(req), "create_in_place", req.params.socialtype, req.query.redirectTo);
+        var state = this.getState(-1, "create_in_place", req.params.socialtype, req.query.redirectTo);
         console.dir(req.query);
         console.dir(state);
         //TODO: make sure we have a temp account.
         var accountToken = cookies.getAccountToken(req);
+        req.session.midSignup = true;
         if(accountToken === null) {
             var tmpAccount = new $$.m.Account({
                 token: $$.u.idutils.generateUUID()
@@ -160,8 +168,8 @@ _.extend(router.prototype, baseRouter.prototype, {
         self.log.debug('>> socialAuthInternal');
         var state = req.query.state;
         state = JSON.parse(state);
-        self.log.debug('state:');
-        console.dir(state);
+        self.log.debug('state:', state);
+        //console.dir(state);
         req.session.authMode = state.authMode;
         req.session.state = state;
         self.log.debug('<< socialAuthInternal');
@@ -200,7 +208,9 @@ _.extend(router.prototype, baseRouter.prototype, {
         callbackUrl = config.CALLBACK_URL_LOGIN;
 
         var accountId = state.accountId;
-
+        if(accountId === -1) {
+            accountId = appConfig.mainAccountID;
+        }
 
         var options = {
             callbackURL: callbackUrl,
@@ -210,7 +220,7 @@ _.extend(router.prototype, baseRouter.prototype, {
             failureFlash:true
         };
 
-        authenticationDao.getAuthenticatedUrlForRedirect(state.accountId, state.userId, options.failureRedirect, function(err, value){
+        authenticationDao.getAuthenticatedUrlForRedirect(accountId, state.userId, options.failureRedirect, function(err, value){
             if(err) {
                 //not sure what to do here
                 self.log.error('error getting authenticated url: ' + err);
@@ -273,6 +283,7 @@ _.extend(router.prototype, baseRouter.prototype, {
                 }
             }
             self.log.debug('redirecting to: ' + redirectUrl);
+            self.log.debug('right now the session accountId is: ' + req.session.accountId);
             return resp.redirect(redirectUrl);
         }
 
