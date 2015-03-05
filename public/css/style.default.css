@@ -15115,7 +15115,7 @@ body {
 .steps-indicator li.editing a:before {
   background-color: #ff0000;
 }
-.marketing ._jsPlumb_drag_select * {
+.campaign-details ._jsPlumb_drag_select * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -15129,7 +15129,7 @@ body {
   font-weight: 400;
   src: url('../fonts/opensans/OpenSans-Regular.ttf');
 }
-.marketing #like {
+.campaign-details #like {
   position: fixed;
   width: 77px;
   height: 70px;
@@ -15137,18 +15137,18 @@ body {
   right: 11px;
   bottom: -40px;
 }
-.marketing #retweet_button {
+.campaign-details #retweet_button {
   position: fixed;
   bottom: 30px;
   right: -7px;
 }
-.marketing body {
+.campaign-details body {
   padding: 0;
   margin: 0;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: whitesmoke;
 }
-.marketing #headerWrapper {
+.campaign-details #headerWrapper {
   width: 100%;
   background-color: white;
   position: fixed;
@@ -15162,7 +15162,7 @@ body {
   border-bottom: 1px solid #e5e5e5;
   box-shadow: 0px 1px #eee;
 }
-.marketing #header {
+.campaign-details #header {
   margin-top: 0;
   height: 44px;
   font-size: 13px;
@@ -15172,7 +15172,7 @@ body {
   max-width: 1000px;
   width: 80%;
 }
-.marketing .explanation {
+.campaign-details .explanation {
   position: absolute;
   text-align: center;
   background-color: #7AB02C;
@@ -15185,25 +15185,25 @@ body {
   overflow: hidden;
   box-shadow: 0px 0px 10px gray;
 }
-.marketing .explanation i {
+.campaign-details .explanation i {
   float: right;
   margin-right: 25px;
   margin-top: 13px;
   font-size: 25px;
   cursor: pointer;
 }
-.marketing .explanation i:hover {
+.campaign-details .explanation i:hover {
   color: orange;
 }
-.marketing .words {
+.campaign-details .words {
   text-align: left;
   padding: 50px;
   background-color: white;
 }
-.marketing .code {
+.campaign-details .code {
   border: 1px solid #456;
 }
-.marketing .logo {
+.campaign-details .logo {
   font-size: 30px;
   color: #1f1f1f;
   text-shadow: 1px 1px #ccc;
@@ -15212,7 +15212,7 @@ body {
   height: 44px;
   background-position: 0px 5px;
 }
-.marketing #main {
+.campaign-details #main {
   margin-top: 106px;
   font-size: 80%;
   width: 80%;
@@ -15224,7 +15224,7 @@ body {
   max-width: 1200px;
   max-height: 1000px;
 }
-.marketing .demo {
+.campaign-details .demo {
   position: relative;
   width: 100%;
   background-color: white;
@@ -15233,20 +15233,20 @@ body {
   margin-bottom: 25px;
   height: 600px;
 }
-.marketing .explanation.expanded {
+.campaign-details .explanation.expanded {
   height: auto;
   min-height: 54px;
   -webkit-transition: max-height 0.8s;
   max-height: 100%;
 }
-.marketing .commands {
+.campaign-details .commands {
   margin-bottom: 10px;
 }
-.marketing .commands:hover {
+.campaign-details .commands:hover {
   z-index: 10000;
 }
-.marketing a,
-.marketing a:visited {
+.campaign-details a,
+.campaign-details a:visited {
   text-decoration: none;
   color: black;
   border-radius: 0.2em;
@@ -15255,38 +15255,38 @@ body {
   -o-transition: color 0.15s ease-in;
   transition: color 0.15s ease-in;
 }
-.marketing a:hover {
+.campaign-details a:hover {
   color: #7AB02C;
 }
-.marketing a:active {
+.campaign-details a:active {
   color: #FF2300;
 }
-.marketing .menu,
-.marketing #render,
-.marketing #explanation {
+.campaign-details .menu,
+.campaign-details #render,
+.campaign-details #explanation {
   background-color: #fff;
 }
-.marketing .menu {
+.campaign-details .menu {
   float: right;
   font-size: 12px;
 }
-.marketing .menu a {
+.campaign-details .menu a {
   margin-right: 19px;
 }
-.marketing .otherLibraries {
+.campaign-details .otherLibraries {
   display: inline;
 }
-.marketing #render {
+.campaign-details #render {
   height: 20px;
 }
-.marketing #render a {
+.campaign-details #render a {
   margin-right: 10px;
 }
-.marketing .selected {
+.campaign-details .selected {
   color: orange !important;
 }
-.marketing .window,
-.marketing .label {
+.campaign-details .window,
+.campaign-details .label {
   text-align: center;
   z-index: 24;
   cursor: pointer;
@@ -15295,26 +15295,26 @@ body {
   -webkit-box-shadow: 2px 2px 19px #aaa;
   -moz-box-shadow: 2px 2px 19px #aaa;
 }
-.marketing path,
-.marketing ._jsPlumb_endpoint {
+.campaign-details path,
+.campaign-details ._jsPlumb_endpoint {
   cursor: pointer;
 }
-.marketing .cmd {
+.campaign-details .cmd {
   color: white;
   margin-right: 25px;
 }
-.marketing .cmd:hover {
+.campaign-details .cmd:hover {
   color: #FF2300;
   text-decoration: underline;
 }
-.marketing .cmd:active {
+.campaign-details .cmd:active {
   color: #FF2300;
 }
-.marketing .label {
+.campaign-details .label {
   font-size: 13px;
   padding: 8px;
 }
-.marketing .component {
+.campaign-details .component {
   border: 1px solid #346789;
   border-radius: 0.5em;
   opacity: 0.8;
@@ -15324,7 +15324,7 @@ body {
   padding: 0.5em;
   font-size: 0.8em;
 }
-.marketing .component:hover {
+.campaign-details .component:hover {
   border: 1px solid #123456;
   box-shadow: 2px 2px 19px #444;
   -o-box-shadow: 2px 2px 19px #444;
@@ -15333,7 +15333,7 @@ body {
   opacity: 0.9;
   filter: alpha(opacity=90);
 }
-.marketing .window {
+.campaign-details .window {
   background-color: white;
   border: 1px solid #346789;
   box-shadow: 2px 2px 19px #e0e0e0;
@@ -15355,10 +15355,10 @@ body {
   -o-transition: -o-box-shadow 0.15s ease-in;
   transition: box-shadow 0.15s ease-in;
 }
-.marketing .window a {
+.campaign-details .window a {
   font-family: helvetica;
 }
-.marketing .window:hover {
+.campaign-details .window:hover {
   border: 1px solid #123456;
   box-shadow: 2px 2px 19px #444;
   -o-box-shadow: 2px 2px 19px #444;
@@ -15367,8 +15367,8 @@ body {
   opacity: 0.9;
   filter: alpha(opacity=90);
 }
-.marketing .demo-links,
-.marketing .library-links {
+.campaign-details .demo-links,
+.campaign-details .library-links {
   position: fixed;
   right: 0;
   top: 44px;
@@ -15380,34 +15380,34 @@ body {
   text-transform: uppercase;
   z-index: 100001;
 }
-.marketing .demo-links div,
-.marketing .library-links a {
+.campaign-details .demo-links div,
+.campaign-details .library-links a {
   display: inline;
   margin-right: 7px;
   margin-left: 7px;
 }
-.marketing .demo-links i,
-.marketing .library-links i {
+.campaign-details .demo-links i,
+.campaign-details .library-links i {
   padding: 4px;
 }
-.marketing .library-links {
+.campaign-details .library-links {
   right: 515px;
   height: 19px;
   line-height: 19px;
 }
-.marketing .current-library {
+.campaign-details .current-library {
   color: #7AB02C !important;
 }
-.marketing ._jsPlumb_connector {
+.campaign-details ._jsPlumb_connector {
   z-index: 18;
 }
-.marketing ._jsPlumb_endpoint {
+.campaign-details ._jsPlumb_endpoint {
   z-index: 19;
 }
-.marketing ._jsPlumb_overlay {
+.campaign-details ._jsPlumb_overlay {
   z-index: 20;
 }
-.marketing .aLabel {
+.campaign-details .aLabel {
   background-color: white;
   padding: 0.4em;
   font: 12px sans-serif;
@@ -15418,83 +15418,83 @@ body {
   filter: alpha(opacity=80);
   cursor: pointer;
 }
-.marketing .aLabel._jsPlumb_hover {
+.campaign-details .aLabel._jsPlumb_hover {
   background-color: #5C96BC;
   color: white;
   border: 1px solid white;
 }
-.marketing .clearfix,
-.marketing .container,
-.marketing .container-fluid,
-.marketing .row,
-.marketing .form-horizontal .form-group,
-.marketing .btn-toolbar,
-.marketing .btn-group-vertical > .btn-group,
-.marketing .nav,
-.marketing .navbar,
-.marketing .navbar-header,
-.marketing .navbar-collapse,
-.marketing .pager,
-.marketing .panel-body,
-.marketing .modal-footer {
+.campaign-details .clearfix,
+.campaign-details .container,
+.campaign-details .container-fluid,
+.campaign-details .row,
+.campaign-details .form-horizontal .form-group,
+.campaign-details .btn-toolbar,
+.campaign-details .btn-group-vertical > .btn-group,
+.campaign-details .nav,
+.campaign-details .navbar,
+.campaign-details .navbar-header,
+.campaign-details .navbar-collapse,
+.campaign-details .pager,
+.campaign-details .panel-body,
+.campaign-details .modal-footer {
   *zoom: 1;
 }
-.marketing .clearfix:before,
-.marketing .clearfix:after,
-.marketing .container:before,
-.marketing .container:after,
-.marketing .container-fluid:before,
-.marketing .container-fluid:after,
-.marketing .row:before,
-.marketing .row:after,
-.marketing .form-horizontal .form-group:before,
-.marketing .form-horizontal .form-group:after,
-.marketing .btn-toolbar:before,
-.marketing .btn-toolbar:after,
-.marketing .btn-group-vertical > .btn-group:before,
-.marketing .btn-group-vertical > .btn-group:after,
-.marketing .nav:before,
-.marketing .nav:after,
-.marketing .navbar:before,
-.marketing .navbar:after,
-.marketing .navbar-header:before,
-.marketing .navbar-header:after,
-.marketing .navbar-collapse:before,
-.marketing .navbar-collapse:after,
-.marketing .pager:before,
-.marketing .pager:after,
-.marketing .panel-body:before,
-.marketing .panel-body:after,
-.marketing .modal-footer:before,
-.marketing .modal-footer:after {
+.campaign-details .clearfix:before,
+.campaign-details .clearfix:after,
+.campaign-details .container:before,
+.campaign-details .container:after,
+.campaign-details .container-fluid:before,
+.campaign-details .container-fluid:after,
+.campaign-details .row:before,
+.campaign-details .row:after,
+.campaign-details .form-horizontal .form-group:before,
+.campaign-details .form-horizontal .form-group:after,
+.campaign-details .btn-toolbar:before,
+.campaign-details .btn-toolbar:after,
+.campaign-details .btn-group-vertical > .btn-group:before,
+.campaign-details .btn-group-vertical > .btn-group:after,
+.campaign-details .nav:before,
+.campaign-details .nav:after,
+.campaign-details .navbar:before,
+.campaign-details .navbar:after,
+.campaign-details .navbar-header:before,
+.campaign-details .navbar-header:after,
+.campaign-details .navbar-collapse:before,
+.campaign-details .navbar-collapse:after,
+.campaign-details .pager:before,
+.campaign-details .pager:after,
+.campaign-details .panel-body:before,
+.campaign-details .panel-body:after,
+.campaign-details .modal-footer:before,
+.campaign-details .modal-footer:after {
   display: table;
   line-height: 0;
   content: "";
 }
-.marketing .clearfix:after,
-.marketing .container:after,
-.marketing .container-fluid:after,
-.marketing .row:after,
-.marketing .form-horizontal .form-group:after,
-.marketing .btn-toolbar:after,
-.marketing .btn-group-vertical > .btn-group:after,
-.marketing .nav:after,
-.marketing .navbar:after,
-.marketing .navbar-header:after,
-.marketing .navbar-collapse:after,
-.marketing .pager:after,
-.marketing .panel-body:after,
-.marketing .modal-footer:after {
+.campaign-details .clearfix:after,
+.campaign-details .container:after,
+.campaign-details .container-fluid:after,
+.campaign-details .row:after,
+.campaign-details .form-horizontal .form-group:after,
+.campaign-details .btn-toolbar:after,
+.campaign-details .btn-group-vertical > .btn-group:after,
+.campaign-details .nav:after,
+.campaign-details .navbar:after,
+.campaign-details .navbar-header:after,
+.campaign-details .navbar-collapse:after,
+.campaign-details .pager:after,
+.campaign-details .panel-body:after,
+.campaign-details .modal-footer:after {
   clear: both;
 }
-.marketing .hide-text {
+.campaign-details .hide-text {
   font: 0/0 a;
   color: transparent;
   text-shadow: none;
   background-color: transparent;
   border: 0;
 }
-.marketing .input-block-level {
+.campaign-details .input-block-level {
   display: block;
   width: 100%;
   min-height: 30px;
@@ -15502,7 +15502,7 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.marketing #iframe {
+.campaign-details #iframe {
   width: 98%;
   height: 1000px;
   position: absolute;
@@ -15510,7 +15510,7 @@ body {
   left: 1%;
   border: 0;
 }
-.marketing #links {
+.campaign-details #links {
   width: 143px;
   font-size: 14px;
   padding-left: 0px;
@@ -15520,49 +15520,49 @@ body {
   z-index: 20;
   background-color: white;
 }
-.marketing ul {
+.campaign-details ul {
   padding: 0;
 }
-.marketing li {
+.campaign-details li {
   list-style-type: none;
 }
-.marketing .current-tests {
+.campaign-details .current-tests {
   color: orange !important;
 }
-.marketing #qunit-tests li.pass,
-.marketing #qunit-tests li.fail {
+.campaign-details #qunit-tests li.pass,
+.campaign-details #qunit-tests li.fail {
   background-color: transparent;
 }
-.marketing .loadtest #main,
-.marketing #main.test {
+.campaign-details .loadtest #main,
+.campaign-details #main.test {
   max-width: none;
   margin-top: 52px;
   background-color: white;
   margin-left: 162px;
 }
-.marketing .loadtest ._jsPlumb_connection {
+.campaign-details .loadtest ._jsPlumb_connection {
   z-index: 3;
 }
-.marketing .loadtest .jspLoad {
+.campaign-details .loadtest .jspLoad {
   z-index: 4;
   position: absolute;
   width: 70px;
   height: 70px;
   cursor: pointer;
 }
-.marketing .loadtest #header {
+.campaign-details .loadtest #header {
   height: 11em;
   border: 2px solid #824563;
 }
-.marketing .loadtest #setup {
+.campaign-details .loadtest #setup {
   float: left;
 }
-.marketing .loadtest #demo {
+.campaign-details .loadtest #demo {
   margin-top: 10em;
   position: relative;
 }
-.marketing .loadtest #setup,
-.marketing .loadtest #output {
+.campaign-details .loadtest #setup,
+.campaign-details .loadtest #output {
   font-size: 12px;
 }
 .btn-media-manager {
@@ -22833,22 +22833,52 @@ i.indi-sm {
 .marketing .submit-post-form {
   padding: 0 10px;
 }
-.marketing #marketing-add-feed .modal-body {
-  padding: 0;
+.marketing .submit-post-form .panel {
+  -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.4);
 }
-.marketing #marketing-add-feed .fb-admin-pages li {
+.marketing .widget-messaging img {
+  display: block;
+  width: 40px;
+  margin-right: 10px;
+}
+.marketing .fb-admin-pages {
+  padding-left: 0;
+}
+.marketing .fb-admin-pages li {
   height: 50px;
   line-height: 50px;
   text-indent: 10px;
+  list-style-type: none;
+  border-bottom: 1px solid #e7e7e7;
 }
-.marketing #marketing-add-feed .fb-admin-pages li img {
+.marketing .fb-admin-pages li img {
   height: 40px;
   margin: 4px 0;
 }
-.marketing #marketing-add-feed .fb-admin-pages li .fa-plus-square {
+.marketing .fb-admin-pages li .fa-plus-square {
   line-height: 50px;
   font-size: 20px;
   color: #27ae60;
+}
+.marketing .fb-admin-pages li .fa-thumbs-up {
+  line-height: 45px;
+  font-size: 24px;
+  opacity: .8;
+}
+.marketing .fb-admin-pages li .fa-thumbs-up:hover {
+  opacity: 1;
+}
+.marketing .fb-admin-pages li .fa-thumbs-up.liked {
+  color: #27ae60;
+}
+.marketing .fb-admin-pages li .fa-spinner {
+  text-indent: 0;
+  font-size: 25px;
+  line-height: 50px;
+}
+.marketing #marketing-add-feed .modal-body {
+  padding: 0;
 }
 .marketing #marketing-add-feed .left-panel {
   padding-left: 0;
@@ -22890,6 +22920,32 @@ i.indi-sm {
   padding: 4px 8px!important;
   box-shadow: none;
 }
+.marketing .stream-wrap {
+  float: left;
+  transition: all 0.2s ease;
+}
+.marketing .fa-square-o {
+  margin-right: 4px!important;
+}
+.marketing .fa-check-square-o {
+  color: #27ae60;
+}
+.marketing .stream.isotope {
+  padding: 0px;
+}
+.marketing .isotope-item {
+  width: 260px;
+  margin: 5px;
+  margin-left: 0;
+}
+.marketing .filter-checkbox {
+  font-size: 30px;
+  line-height: 47px;
+}
+.marketing .stream-filter {
+  float: left;
+  transition: all 0.2s ease;
+}
 .marketing .stream-filter .label {
   padding: 4px 8px!important;
   box-shadow: none;
@@ -22905,6 +22961,9 @@ i.indi-sm {
   position: absolute;
   right: 0;
   margin: -7px -8px 0 0;
+}
+.marketing .stream-filter .filter-details {
+  opacity: 1;
 }
 .marketing .stream-filter .avatar {
   border-radius: 5px;
@@ -23043,6 +23102,7 @@ i.indi-sm {
 }
 .stream li {
   overflow: hidden;
+  padding: 5px;
 }
 .stream li .panel-body .media a {
   height: auto;
@@ -24784,7 +24844,6 @@ contenthover a {
 }
 .meet-team-v1 .profilepic {
   margin-bottom: 20px;
-  min-height: 385px;
 }
 .meet-team-v1 .profilepic-hover {
   opacity: 0;
@@ -26053,48 +26112,50 @@ div[data-class='image-text'] p {
   transition-delay: 0.4s;
 }
 /********** Blog Teaser v1 **********/
-.blog-teaser {
-  background: #f6f6f6;
-  padding: 40px;
+.blog-teaser-v1 {
+  color: #777;
 }
-.blog-teaser .posts {
+.blog-teaser-v1 .posts {
   margin-top: 45px;
 }
-.blog-teaser .title {
+.blog-teaser-v1 .label-info {
+  margin-right: 5px;
+}
+.blog-teaser-v1 .title {
   text-align: center;
   font-weight: bold;
 }
-.blog-teaser .single-blog {
+.blog-teaser-v1 .single-blog {
   min-height: 380px;
   display: block;
   background: #fff;
   border-bottom: 4px solid #e3e3e3;
   border-radius: 5px;
 }
-.blog-teaser .single-blog .blog-content {
+.blog-teaser-v1 .single-blog .blog-content {
   padding: 15px;
 }
-.blog-teaser .single-blog .featured-image {
+.blog-teaser-v1 .single-blog .featured-image {
   max-height: 200px;
   overflow: hidden;
 }
-.blog-teaser .single-blog .featured-image img {
+.blog-teaser-v1 .single-blog .featured-image img {
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   max-height: 200px;
   height: 100%;
   width: 100%;
 }
-.blog-teaser .single-blog .title {
+.blog-teaser-v1 .single-blog .title {
   color: #4bb0cb;
   text-align: left;
 }
-.blog-teaser .single-blog .excerpt {
+.blog-teaser-v1 .single-blog .excerpt {
   font-size: 12px;
   color: #444444;
   font-weight: bold;
 }
-.blog-teaser .single-blog .footer {
+.blog-teaser-v1 .single-blog .footer {
   height: 35px;
   width: 100%;
   padding: 15px;
@@ -26104,8 +26165,8 @@ div[data-class='image-text'] p {
   bottom: 0;
   margin-bottom: 15px;
 }
-.blog-teaser .single-blog .footer .date,
-.blog-teaser .single-blog .footer .comments {
+.blog-teaser-v1 .single-blog .footer .date,
+.blog-teaser-v1 .single-blog .footer .comments {
   display: block;
   position: relative;
   z-index: 999;
@@ -26113,10 +26174,10 @@ div[data-class='image-text'] p {
   font-size: 12px;
   padding: 0;
 }
-.blog-teaser .single-blog .footer .comments {
+.blog-teaser-v1 .single-blog .footer .comments {
   text-align: right;
 }
-.blog-teaser .btn-full-blog {
+.blog-teaser-v1 .btn-full-blog {
   display: block;
   position: relative;
   max-width: 200px;
@@ -27092,7 +27153,7 @@ div[data-type="coming-soon"] .component-inner {
   bottom: 0;
   right: 0;
   background: #000;
-  opacity: 0.8;
+  opacity: 0.7;
   filter: alpha(opacity=80);
   z-index: 999;
 }

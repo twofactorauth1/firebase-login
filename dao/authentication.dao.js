@@ -202,18 +202,6 @@ var dao = {
                         if(value.getAllAccountIds().length > 1) {
                             req.session.accounts = value.getAllAccountIds();
                             req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
-                        } else {
-                            req.session.accounts = value.getAllAccountIds();
-                            req.session.accountId = value.getAllAccountIds()[0];
-
-                        }
-                        accountDao.getAccountByID(req.session.accountId, function(err, account){
-                            if(err) {
-                                return fn(err, null);
-                            }
-                            req.session.subdomain = account.get('subdomain');
-                            req.session.domain = account.get('domain');
-                            self.log.info("Login successful. AccountId is now " + req.session.accountId);
                             accountDao.getPreviewData(req.session.accounts, function(err, data){
                                 self.log.debug('got preview data');
                                 req.session.accounts = data;
@@ -221,8 +209,26 @@ var dao = {
                                 fn = req = null;
                                 return;
                             });
-                        });
-
+                        } else {
+                            req.session.accounts = value.getAllAccountIds();
+                            req.session.accountId = value.getAllAccountIds()[0];
+                            self.log.debug('req.session.accountId: ' + req.session.accountId);
+                            accountDao.getAccountByID(req.session.accountId, function(err, account){
+                                if(err) {
+                                    return fn(err, null);
+                                }
+                                req.session.subdomain = account.get('subdomain');
+                                req.session.domain = account.get('domain');
+                                self.log.info("Login successful. AccountId is now " + req.session.accountId);
+                                accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                    self.log.debug('got preview data');
+                                    req.session.accounts = data;
+                                    self.saveOrUpdate(value, fn);
+                                    fn = req = null;
+                                    return;
+                                });
+                            });
+                        }
 
                     }
                 });

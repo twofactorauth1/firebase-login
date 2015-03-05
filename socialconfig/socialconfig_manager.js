@@ -353,9 +353,11 @@ module.exports = {
         }
     },
 
-    fetchTrackedObject: function(accountId, objIndex, fn) {
+    fetchTrackedObject: function(accountId, objIndex, since, until, limit, fn) {
         var self = this;
         log.debug('>> fetchTrackedObject ', objIndex);
+
+
         self.getSocialConfig(accountId, null, function(err, config){
             if(err || config === null) {
                 log.error('Error getting social config: ' + err);
@@ -369,9 +371,9 @@ module.exports = {
             var socialAccount = config.getSocialAccountById(trackedObject.socialId);
 
             if(socialAccount && socialAccount.type === 'tw') {
-                return self._handleTwitterTrackedObject(socialAccount, trackedObject, fn);
+                return self._handleTwitterTrackedObject(socialAccount, trackedObject, since, until, limit, fn);
             } else if (socialAccount && socialAccount.type === 'fb'){
-                return self._handleFacebookTrackedObject(socialAccount, trackedObject, fn);
+                return self._handleFacebookTrackedObject(socialAccount, trackedObject, since, until, limit, fn);
             } else {
                 return fn(null, null);
             }
@@ -394,7 +396,7 @@ module.exports = {
                 return fn('Invalid social accountId', null);
             }
 
-            facebookDao.getTokenAdminPages(socialAccount.accessToken, socialAccount.socialId, fn);
+            facebookDao.getTokenAdminPages(socialAccount.accessToken, socialAccount.socialId, null, null, null, fn);
         });
     },
 
@@ -504,6 +506,29 @@ module.exports = {
         });
     },
 
+    getFacebookPostComments: function(accountId, socialAccountId, postId, fn) {
+        var self = this;
+        log.debug('>> getFacebookPostComments');
+        log.debug('>> accountId ', accountId);
+        log.debug('>> socialAccountId ', socialAccountId);
+        log.debug('>> postId ', postId);
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            facebookDao.getPostComments(socialAccount.accessToken, socialAccount.socialId, postId, fn);
+        });
+
+    },
+
     addFacebookComment: function(accountId, socialAccountId, postId, comment, fn) {
         var self = this;
         log.debug('>> addFacebookComment');
@@ -570,7 +595,7 @@ module.exports = {
             }
 
             return twitterDao.getHomeTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, null, null, null, fn);
         });
     },
 
@@ -648,20 +673,20 @@ module.exports = {
         });
     },
 
-    _handleTwitterTrackedObject: function(socialAccount, trackedObject, fn) {
+    _handleTwitterTrackedObject: function(socialAccount, trackedObject, since, until, limit, fn) {
         var self = this;
         if(trackedObject.type === 'feed') {
             return twitterDao.getHomeTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'user') {
             return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'mentions') {
             return twitterDao.getMentionsTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'numberTweets') {
             return twitterDao.getUserTimelineTweetsForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         } else if(trackedObject.type === 'numberFollowers') {
             return twitterDao.getFollowersForId(socialAccount.accessToken, socialAccount.accessTokenSecret,
                 socialAccount.socialId, fn);
@@ -670,23 +695,23 @@ module.exports = {
                 socialAccount.socialId, fn);
         } else if(trackedObject.type === 'search') {
             return twitterDao.getSearchResults(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, trackedObject.term, fn);
+                socialAccount.socialId, trackedObject.term, since, until, limit, fn);
         } else if(trackedObject.type === 'messages') {
             return twitterDao.getDirectMessages(socialAccount.accessToken, socialAccount.accessTokenSecret,
-                socialAccount.socialId, fn);
+                socialAccount.socialId, since, until, limit, fn);
         }
 
 
     },
 
-    _handleFacebookTrackedObject: function(socialAccount, trackedObject, fn) {
+    _handleFacebookTrackedObject: function(socialAccount, trackedObject, since, until, limit, fn) {
         var self = this;
         if(trackedObject.type === 'feed') {
-            return facebookDao.getTokenStream(socialAccount.accessToken, socialAccount.socialId, fn);
+            return facebookDao.getTokenStream(socialAccount.accessToken, socialAccount.socialId, since, until, limit, fn);
         } else if (trackedObject.type === 'pages') {
-            return facebookDao.getTokenAdminPages(socialAccount.accessToken, socialAccount.socialId, fn);
+            return facebookDao.getTokenAdminPages(socialAccount.accessToken, socialAccount.socialId, since, until, limit, fn);
         } else if (trackedObject.type === 'likes') {
-            return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, fn);
+            return facebookDao.getLikedPages(socialAccount.accessToken, socialAccount.socialId, since, until, limit, fn);
         } else if (trackedObject.type === 'profile') {
             if(socialAccount.accountType === 'adminpage') {
                 return facebookDao.getTokenPageInfo(socialAccount.accessToken, socialAccount.socialId, socialAccount.socialId, fn);
@@ -696,13 +721,13 @@ module.exports = {
         } else if (trackedObject.type === 'messages') {
             return facebookDao.getMessages(socialAccount.accessToken, socialAccount.socialId, fn);
         } else if (trackedObject.type === 'search' || trackedObject.type === 'search-user') {
-            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'user', trackedObject.term, fn);
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'user', trackedObject.term, since, until, limit, fn);
         } else if (trackedObject.type === 'search-page') {
-            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'page', trackedObject.term, fn);
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'page', trackedObject.term, since, until, limit, fn);
         } else if (trackedObject.type === 'search-event') {
-            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'event', trackedObject.term, fn);
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'event', trackedObject.term, since, until, limit, fn);
         } else if (trackedObject.type === 'search-group') {
-            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'group', trackedObject.term, fn);
+            return facebookDao.getTokenSearch(socialAccount.accessToken, socialAccount.socialId, 'group', trackedObject.term, since, until, limit, fn);
         }
     },
 

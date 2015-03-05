@@ -382,6 +382,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         user.set("accountUrl", value.toLowerCase());
                         var json = user.toJSON('public', {accountId:accountId});
                         self.log.debug('<< initalizeUserAndAccount: ', json);
+                        req.session.midSignup = false;
                         res.send(json);
                     });
                 });

@@ -84,12 +84,13 @@ _.extend(apiBase.prototype, {
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
-                        this.log.warn('Deprecated code reached.');
+                        logger.warn('Deprecated code reached.');
                         req.session.accountId = 0;
                     } else {
                         req.session.accountId = value.id();
                         req.session.subdomain = value.get('subdomain');
                         req.session.domain = value.get('domain');
+                        //logger.debug('setting accountId: ' + req.session.accountId);
                     }
                 }
 

@@ -102,27 +102,27 @@ var dao = {
         });
     },
 
-    getHomeTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+    getHomeTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, since, max, limit, fn) {
         var self = this;
-        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/home_timeline.json', fn);
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/home_timeline.json', since, max, limit, fn);
     },
 
-    getUserTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+    getUserTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, since, max, limit, fn) {
         var self = this;
-        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/user_timeline.json', fn);
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/user_timeline.json', since, max, limit, fn);
     },
 
-    getMentionsTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, fn) {
+    getMentionsTimelineTweetsForId: function(accessToken, accessTokenSecret, twitterId, since, max, limit, fn) {
         var self = this;
-        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/mentions_timeline.json', fn);
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'statuses/mentions_timeline.json', since, max, limit, fn);
     },
 
-    getDirectMessages: function(accessToken, accessTokenSecret, twitterId, fn) {
+    getDirectMessages: function(accessToken, accessTokenSecret, twitterId, since, max, limit, fn) {
         var self = this;
-        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'direct_messages.json', fn);
+        return self.getTweetsForId(accessToken, accessTokenSecret, twitterId, 'direct_messages.json', since, max, limit, fn);
     },
 
-    getTweetsForId: function(accessToken, accessTokenSecret, twitterId, timeline, fn) {
+    getTweetsForId: function(accessToken, accessTokenSecret, twitterId, timeline, since_id, max_id, count, fn) {
         var self = this;
         self.log.debug('>> getting tweets ', twitterId);
         if (_.isFunction(twitterId)) {
@@ -134,8 +134,14 @@ var dao = {
         var path = timeline;
         var params = {
             user_id: twitterId,
-            count: 200
+            count: count || 200
         };
+        if(since_id) {
+            params.since_id = since_id;
+        }
+        if(max_id) {
+            params.max_id = max_id;
+        }
 
         var url = this._generateUrl(path, params);
 
@@ -423,14 +429,20 @@ var dao = {
         });
     },
 
-    getSearchResults: function(accessToken, accessTokenSecret, twitterId, term, fn) {
+    getSearchResults: function(accessToken, accessTokenSecret, twitterId, term, since_id, max_id, count, fn) {
         var self = this;
         var path = "search/tweets.json";
         var params = {
             user_id: twitterId,
-            count: 200,
+            count: limit || 200,
             q: encodeURIComponent(term)
         };
+        if(since_id) {
+            params.since_id = since_id;
+        }
+        if(max_id) {
+            params.max_id = max_id;
+        }
         var url = this._generateUrl(path, params);
 
         self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){

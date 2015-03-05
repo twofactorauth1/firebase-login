@@ -36,7 +36,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/category/*", this.setup.bind(this), this.index.bind(this));
         app.get("/author/*", this.setup.bind(this), this.index.bind(this));
         app.get("/page/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/signup", this.setup.bind(this), this.index.bind(this));
+        app.get("/signup", this.setupForSocialSignup.bind(this), this.index.bind(this));
         app.get("/post", this.setup.bind(this), this.index.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
@@ -81,6 +81,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             //resp.redirect("/home");
             new WebsiteView(req, resp).renderNewIndex(appConfig.mainAccountID);
         }
+        self.log.debug('<< index ... req.session.accountId:' + req.session.accountId);
     },
     indexTempPage: function(req,resp) {
         var self = this

@@ -1,35 +1,63 @@
 .marketing {
     .submit-post-form {
         padding: 0 10px;
-    }
-
-    #marketing-add-feed {
-        .modal-body {
-            padding: 0;
+        .panel {
+            -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .4);
+            box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .4);
         }
-
-        .fb-admin-pages {
-            li {
-                height: 50px;
+    }
+    .widget-messaging {
+        img {
+            display: block;
+            width: 40px;
+            margin-right: 10px;
+        }
+    }
+    .fb-admin-pages {
+        padding-left: 0;
+        li {
+            height: 50px;
+            line-height: 50px;
+            text-indent: 10px;
+            list-style-type: none;
+            border-bottom: 1px solid #e7e7e7;
+            img {
+                height: 40px;
+                margin: 4px 0;
+            }
+            .fa-plus-square {
                 line-height: 50px;
-                text-indent: 10px;
-                img {
-                    height: 40px;
-                    margin: 4px 0;
+                font-size: 20px;
+                color: #27ae60;
+            }
+            .fa-thumbs-up {
+                line-height: 45px;
+                font-size: 24px;
+                opacity: .8;
+                &:hover {
+                    opacity: 1;
                 }
-                .fa-plus-square {
-                    line-height: 50px;
-                    font-size: 20px;
+                &.liked {
                     color: #27ae60;
                 }
             }
+            .fa-spinner {
+                text-indent: 0;
+                font-size: 25px;
+                line-height: 50px;
+            }
+        }
+    }
+    #marketing-add-feed {
+        .modal-body {
+            padding: 0;
         }
         .left-panel {
             padding-left: 0;
         }
         .integrations {
             list-style-type: none;
-            margin:0;
+            margin: 0;
             border-right: 1px solid #cccccc;
             li {
                 height: 40px;
@@ -37,10 +65,10 @@
                 padding: 5px 15px;
                 &:hover {
                     background: #f1f1f1;
-                    color:#666666;
+                    color: #666666;
                 }
                 &.active {
-                    color:#666666;
+                    color: #666666;
                     border-right: 5px solid #faaf40;
                 }
                 i {
@@ -63,14 +91,37 @@
             margin-top: 0;
         }
     }
-
     .header-menu-row {
         .label {
             padding: 4px 8px!important;
             box-shadow: none;
         }
     }
+    .stream-wrap {
+        float: left;
+        transition: all 0.2s ease;
+    }
+    .fa-square-o {
+        margin-right: 4px!important;
+    }
+    .fa-check-square-o {
+        color: #27ae60;
+    }
+    .stream.isotope {
+        padding: 0px;
+    }
+    .isotope-item {
+        width: 260px;
+        margin: 5px;
+        margin-left: 0;
+    }
+    .filter-checkbox {
+        font-size: 30px;
+        line-height: 47px;
+    }
     .stream-filter {
+        float: left;
+        transition: all 0.2s ease;
         .label {
             padding: 4px 8px!important;
             box-shadow: none;
@@ -90,6 +141,9 @@
                 margin: -7px -8px 0 0;
             }
         }
+        .filter-details {
+            opacity: 1;
+        }
         .avatar {
             border-radius: 5px;
         }
@@ -97,10 +151,10 @@
             margin-right: 15px;
         }
         .filter-heading {
-            margin:0;
+            margin: 0;
         }
         .filter-text {
-            margin:0;
+            margin: 0;
         }
         .glyphicon-chevron-right, .glyphicon-chevron-down {
             margin-top: 13px;
@@ -110,10 +164,10 @@
         }
         .feedTypeDetail {
             h4 {
-                margin:0;
+                margin: 0;
             }
             p {
-                margin:0;
+                margin: 0;
             }
         }
     }
@@ -157,49 +211,49 @@
                 background: none;
                 padding: 0;
                 margin: 0;
-                &.rss a{
+                &.rss a {
                     background-color: #FF9800;
                 }
-                &.flickr a{
+                &.flickr a {
                     background-color: #f90784;
                 }
-                &.delicious a{
+                &.delicious a {
                     background-color: #3271CB;
                 }
-                &.twitter a{
+                &.twitter a {
                     background-color: #4ec2dc;
                 }
-                &.facebook a{
+                &.facebook a {
                     background-color: #3b5998;
                 }
-                &.google a{
+                &.google a {
                     background-color: #2d2d2d;
                 }
-                &.youtube a{
+                &.youtube a {
                     background-color: #DF1F1C;
                 }
-                &.pinterest a{
+                &.pinterest a {
                     background-color: #CB2528;
                 }
-                &.lastfm a{
+                &.lastfm a {
                     background-color: #C90E12;
                 }
-                &.dribbble a{
+                &.dribbble a {
                     background-color: #F175A8;
                 }
-                &.vimeo a{
+                &.vimeo a {
                     background-color: #4EBAFF;
                 }
-                &.stumbleupon a{
+                &.stumbleupon a {
                     background-color: #EB4924;
                 }
-                &.deviantart a{
+                &.deviantart a {
                     background-color: #EB4924;
                 }
-                &.tumblr a{
+                &.tumblr a {
                     background-color: #365472;
                 }
-                &.instagram a{
+                &.instagram a {
                     background-color: #413A33;
                 }
                 a {
@@ -216,7 +270,7 @@
                     font-size: 24px;
                     text-align: center;
                     i {
-                    	line-height: 40px!important;
+                        line-height: 40px!important;
                     }
                 }
                 img {
@@ -240,6 +294,7 @@
     }
     li {
         overflow: hidden;
+        padding: 5px;
         .panel-body {
             .media {
                 a {
@@ -472,57 +527,46 @@
     color: white;
     border: 1px solid white;
 }
-
 /* Start: Recommended Isotope styles */
-
 /**** Isotope Filtering ****/
 
 .isotope-item {
-  z-index: 2;
+    z-index: 2;
 }
-
 .isotope-hidden.isotope-item {
-  pointer-events: none;
-  z-index: 1;
+    pointer-events: none;
+    z-index: 1;
 }
-
 /**** Isotope CSS3 transitions ****/
 
-.isotope,
-.isotope .isotope-item {
-  -webkit-transition-duration: 0.8s;
-     -moz-transition-duration: 0.8s;
-      -ms-transition-duration: 0.8s;
-       -o-transition-duration: 0.8s;
-          transition-duration: 0.8s;
+.isotope, .isotope .isotope-item {
+    -webkit-transition-duration: 0.8s;
+    -moz-transition-duration: 0.8s;
+    -ms-transition-duration: 0.8s;
+    -o-transition-duration: 0.8s;
+    transition-duration: 0.8s;
 }
-
 .isotope {
-  -webkit-transition-property: height, width;
-     -moz-transition-property: height, width;
-      -ms-transition-property: height, width;
-       -o-transition-property: height, width;
-          transition-property: height, width;
+    -webkit-transition-property: height, width;
+    -moz-transition-property: height, width;
+    -ms-transition-property: height, width;
+    -o-transition-property: height, width;
+    transition-property: height, width;
 }
-
 .isotope .isotope-item {
-  -webkit-transition-property: -webkit-transform, opacity;
-     -moz-transition-property:    -moz-transform, opacity;
-      -ms-transition-property:     -ms-transform, opacity;
-       -o-transition-property:         top, left, opacity;
-          transition-property:         transform, opacity;
+    -webkit-transition-property: -webkit-transform, opacity;
+    -moz-transition-property: -moz-transform, opacity;
+    -ms-transition-property: -ms-transform, opacity;
+    -o-transition-property: top, left, opacity;
+    transition-property: transform, opacity;
 }
-
 /**** disabling Isotope CSS3 transitions ****/
 
-.isotope.no-transition,
-.isotope.no-transition .isotope-item,
-.isotope .isotope-item.no-transition {
-  -webkit-transition-duration: 0s;
-     -moz-transition-duration: 0s;
-      -ms-transition-duration: 0s;
-       -o-transition-duration: 0s;
-          transition-duration: 0s;
+.isotope.no-transition, .isotope.no-transition .isotope-item, .isotope .isotope-item.no-transition {
+    -webkit-transition-duration: 0s;
+    -moz-transition-duration: 0s;
+    -ms-transition-duration: 0s;
+    -o-transition-duration: 0s;
+    transition-duration: 0s;
 }
-
 /* End: Recommended Isotope styles */
