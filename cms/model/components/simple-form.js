@@ -86,6 +86,8 @@ var component = $$.m.ModelBase.extend({
                 }
             ],
 
+            from_email: null,
+
             /**
              *
              *
