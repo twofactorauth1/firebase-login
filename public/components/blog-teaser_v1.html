@@ -7,48 +7,62 @@
 -->
 
 <div ng-class="component.type+'-v'+component.version">
-    <h3 class="title">
+    <div class="title">
         <div class="editable" data-class="title">
             {{component.title}}
         </div>
-    </h3>
+    </div>
 
-    <div class="posts row">
+    <div class="posts">
 
-        <div class="col-sm-4" ng-repeat="blogpost in layout.teaserposts|limitTo: 3">
-            <a class="single-blog" data-ng-href="/blog/{{blogpost['post_url']}}">
-
-                <div class="featured-image" ng-if="blogpost.featured_image">
-                    <div class="editable" data-class="featimage">
-                        <img ng-src="{{blogpost.featured_image}}" />
+        <div class="row" ng-repeat="blogpost in layout.teaserposts|limitTo: 3">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>
+                            <strong>
+                                <a data-ng-href="/blog/{{blogpost['post_url']}}">
+                                    <div class="editable" data-class="title">
+                                        {{blogpost.post_title}}
+                                    </div>
+                                </a>
+                            </strong>
+                        </h4>
                     </div>
                 </div>
-
-                <div class="blog-content">
-                    <h4 class="title">
-                        <div class="editable" data-class="title">
-                            {{blogpost.post_title}}
-                        </div>
-                    </h4>
-                    <div class="excerpt">
-                        <div class="editable" data-class="subtitle">
-                            {{blogpost.post_excerpt}}
+                <div class="row">
+                    <div class="col-xs-4" ng-if="blogpost.featured_image">
+                        <div class="featured-image">
+                            <div class="editable" data-class="featimage">
+                                <img ng-src="{{blogpost.featured_image}}" class="thumbnail img-responsive" />
+                            </div>
                         </div>
                     </div>
-                    <div class="clearfix mb15"></div>
-                    <div class="footer">
-                        <div class="date col-xs-6">
-                            <span class="fa fa-calendar"></span>
-                            {{blogpost.created.date | amDateFormat:'DD-MM-YYYY'}}
-                        </div>
-                        <div class="comments col-xs-6 hidden">
-                            <span class="fa fa-comments"></span>
-                            170 Comments
-                        </div>
+                    <div ng-class="{'col-xs-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}">
+                        <p>
+                            <div class="excerpt">
+                                <div class="editable" data-class="subtitle">
+                                    {{blogpost.post_excerpt}}
+                                </div>
+                            </div>
+                        </p>
+                        <p><a class="btn btn-primary" data-ng-href="/page/blog/{{blogpost['post_url']}}">Read more</a>
+                        </p>
                     </div>
                 </div>
-            </a>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p></p>
+                        <p>
+                            <span data-ng-if="blogpost.post_author"><i class="fa fa-user"></i> by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{blogpost.created.date | amDateFormat:'MMM D, YYYY'}} <span data-ng-if="blogpost.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
+                            <a href="/tag/{{post_tags}}" data-ng-repeat="post_tags in blogpost.post_tags track by $index"><span class="label label-info">{{post_tags}}</span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <hr>
         <div class="clearfix mb15 visible-xs"></div>
 
     </div>

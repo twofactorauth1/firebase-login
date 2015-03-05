@@ -117,7 +117,9 @@ var post = $$.m.ModelBase.extend({
                 var comment_obj = {
                     sourceId: comment.from.id,
                     name: comment.from.name,
-                    comment: comment.message
+                    comment: comment.message,
+                    created: comment.created_time,
+                    like_count: comment.like_count
                 };
                 if(comment.from && comment.from.picture && comment.from.picture.data) {
                     comment_obj.picture = comment.from.picture.data.url;
