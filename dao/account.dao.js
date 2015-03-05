@@ -377,7 +377,7 @@ var dao = {
         var self = this;
         self.log.debug('>> addSubscriptionLockToAccount');
         self.getById(accountId, $$.m.Account, function(err, account){
-            if(err) {
+            if(err || account=== null) {
                 self.log.error('Error getting account for id [' + accountId + ']: ' + err);
                 return fn(err, null);
             }
