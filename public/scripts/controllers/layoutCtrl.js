@@ -1446,7 +1446,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             phones: []
           }],
           campaignId: component.campaignId,
-          skipWelcomeEmail: skipWelcomeEmail
+          skipWelcomeEmail: skipWelcomeEmail,
+          fromEmail: user.from_email
         };
         formatted.details[0].emails.push({
           email: user.email
@@ -1476,6 +1477,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             console.log('data ', data);
             user.email = "";
+            user.from_email = "";
             component.fields.forEach(function(value) {
               value.model = null;
             })
@@ -1565,6 +1567,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var contact_info = {
           first: contact.first_name,
           last: contact.last_name,
+          fromEmail : contact.from_email,
           details: [{
             emails: [],
             phones: []
@@ -1603,6 +1606,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 
             contact.email = '';
+            contact.from_email = '';
             contact.message = '';
             contact.success = true;
             component.fields.forEach(function(value) {

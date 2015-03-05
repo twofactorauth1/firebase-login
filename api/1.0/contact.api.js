@@ -440,7 +440,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 query.accountId = value.id();
                 query['details.emails.email'] = req.body.details[0].emails[0].email;
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
+                var fromContactEmail = req.body.fromEmail;
                 delete req.body.skipWelcomeEmail;
+                //delete req.body.fromEmail;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
@@ -533,7 +535,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         self.log.debug('sending email to: ',contactEmail);
 
 
-                                                        var fromEmail = component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
+                                                        var fromEmail = fromContactEmail || component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
                                                         var fromName = component.from_name || notificationConfig.WELCOME_FROM_NAME;
                                                         var emailSubject = component.email_subject || notificationConfig.WELCOME_EMAIL_SUBJECT;
                                                         var vars = [];
