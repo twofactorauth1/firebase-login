@@ -1953,18 +1953,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                 return $(this).height();
             }).get());
-            $(".feature-height").height(maxFeatureHeight + 10);
+            //$(".feature-height").height(maxFeatureHeight + 10);
+            $(".feature-height").css("min-height", maxFeatureHeight + 10);
           }
-         if($("div.feature-height").length)
+         if($("div.meet-team-height").length)
          {
             var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
             {
                 return $(this).height();
             }).get());
-            $(".meet-team-height").height(maxTeamHeight + 10);
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
-        }, 500)
+        }, 1000)
     })
   }
 
