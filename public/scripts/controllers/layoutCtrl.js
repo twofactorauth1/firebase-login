@@ -372,7 +372,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       autoHide: true,
       autoPlay: false,
       autoHideTime: 1500,
-      responsive: true,
+      responsive: false,
       stretch: 'fit',
       theme: {
         url: "../../js/libs/videogular-themes-default/videogular.css",
@@ -1446,7 +1446,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             phones: []
           }],
           campaignId: component.campaignId,
-          skipWelcomeEmail: skipWelcomeEmail
+          skipWelcomeEmail: skipWelcomeEmail,
+          fromEmail: component.from_email
         };
         formatted.details[0].emails.push({
           email: user.email
@@ -1565,6 +1566,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var contact_info = {
           first: contact.first_name,
           last: contact.last_name,
+          fromEmail : component.from_email,
           details: [{
             emails: [],
             phones: []
@@ -1645,10 +1647,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.tmpAccount = data;
       });
     }
+
+    $scope.showFooter=function(status)
+    {
+      if(status)
+        $("#footer").show();
+      else
+        $("#footer").hide();
+    }
+    
     $scope.createAccount = function(newAccount) {
       //validate
       //email
       $scope.isFormValid = false;
+      $scope.showFooter(true);
       if (!$scope.newAccount.email) {
         $scope.checkEmailExists(newAccount);
         return;
@@ -1700,6 +1712,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
       //end validate
       $scope.isFormValid = true;
+      $scope.showFooter(false);
       var tmpAccount = $scope.tmpAccount;
       tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
       userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
@@ -1718,6 +1731,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.info(error);
             $scope.$apply(function() {
               $scope.isFormValid = false;
+              $scope.showFooter(true);
             })
             switch (error.param) {
               case "number":
@@ -1763,6 +1777,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                 window.location = data.accountUrl;
               } else {
                 $scope.isFormValid = false;
+                $scope.showFooter(true);
               }
             });
           }
@@ -1951,18 +1966,19 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                 return $(this).height();
             }).get());
-            $(".feature-height").height(maxFeatureHeight + 10);
+            //$(".feature-height").height(maxFeatureHeight + 10);
+            $(".feature-height").css("min-height", maxFeatureHeight + 10);
           }
-         if($("div.feature-height").length)
+         if($("div.meet-team-height").length)
          {
             var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
             {
                 return $(this).height();
             }).get());
-            $(".meet-team-height").height(maxTeamHeight + 10);
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
-        }, 500)
+        }, 2000)
     })
   }
 

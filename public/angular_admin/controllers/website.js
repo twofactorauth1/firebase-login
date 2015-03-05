@@ -1012,6 +1012,7 @@ define([
           $scope.componentEditing = _.findWhere($scope.components, {
             _id: componentId
           });
+
           if ($scope.componentEditing) {
             $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
               type: $scope.componentEditing.type
@@ -1038,6 +1039,7 @@ define([
           }
 
         });
+        $scope.originalComponent = angular.copy($scope.componentEditing);
         //open right sidebar and component tab
         // document.body.className += ' leftpanel-collapsed rightmenu-open';
         // var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
@@ -1071,6 +1073,16 @@ define([
           }
         });
       };
+      $scope.revertComponent = function() {
+        var componentId = $scope.componentEditing._id;
+        for (var i = 0; i < $scope.components.length; i++) {
+          if ($scope.components[i]._id === componentId) {
+            $scope.components[i] = $scope.originalComponent
+          }
+        }
+        $scope.currentPage.components = $scope.components;
+        $scope.updateIframeComponents();
+      }
       $scope.saveComponent = function(update) {
 
         var componentId = $scope.componentEditing._id;

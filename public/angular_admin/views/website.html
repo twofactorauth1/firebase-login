@@ -472,6 +472,11 @@
                                     <option value="right">Right</option>
                                 </select>
                             </div>
+                            <div  class="form-group"  ng-if="componentEditing.type == 'simple-form'">
+                                <label for="from_email" tooltip-placement="top" tooltip="From email address">From Email</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="From email address."><i class="fa fa-info-circle" /></span>
+                                <input id="from_email" class="form-control input-lg" type="text" ng-model="componentEditing.from_email">
+                            </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'navigation'">
                             <tab-heading>
@@ -502,6 +507,7 @@
                                 </ul>
                             </div>
                             <div class="footer">
+
                                 <div class="row form-group">
                                     <div class="pull-left switch-navadd col-xs-12 col-sm-6 col-md-4">
                                         <input bs-switch switch-size="large"  ng-model="addNavigationLink" type="checkbox" switch-label="Add Link" ng-change="initializeLinks()">
@@ -544,7 +550,7 @@
                             </div>
                         </tab>
 
-                         <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
+                        <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
                             <tab-heading>
                                 <span>Add Address</span>
                             </tab-heading>
@@ -702,6 +708,16 @@
 
 
                     </tabset>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group row">
+                        <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">
+                            Done
+                        </button>
+                        <button type="button" ng-click="revertComponent()" class="btn btn-primary pull-right" data-dismiss="modal" style="margin-right:5px;">
+                            Revert
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
