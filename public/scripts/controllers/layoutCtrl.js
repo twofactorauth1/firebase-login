@@ -372,7 +372,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       autoHide: true,
       autoPlay: false,
       autoHideTime: 1500,
-      responsive: true,
+      responsive: false,
       stretch: 'fit',
       theme: {
         url: "../../js/libs/videogular-themes-default/videogular.css",
