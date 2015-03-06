@@ -318,35 +318,34 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var _accountId = req.body.accountId || self.accountId(req);
 
-        self.checkPermissionForAccountAndUser(user.id(), _accountId, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                //validate arguments
-                if(!cardToken && cardToken.length ===0) {
-                    return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
-                }
-                if (!contact && !user) {
-                    return this.wrapError(resp, 400, null, "Must have either contact or user");
-                }
-                if(contact && contact.stripeId && contact.stripeId.length > 0) {
-                    return this.wrapError(resp, 409, null, "Customer already exists.");
-                }
+        /*
+         * This can be called before we have a subscription
+         */
 
-                if(contact) {
-                    stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
-                        self.log.debug('<< createCustomer');
-                        self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                        self = value = null;
-                    });
-                } else {
-                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
-                        self.log.debug('<< createCustomer');
-                        self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                    });
-                }
-            }
-        });
+
+        //validate arguments
+        if(!cardToken && cardToken.length ===0) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
+        }
+        if (!contact && !user) {
+            return this.wrapError(resp, 400, null, "Must have either contact or user");
+        }
+        if(contact && contact.stripeId && contact.stripeId.length > 0) {
+            return this.wrapError(resp, 409, null, "Customer already exists.");
+        }
+
+        if(contact) {
+            stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
+                self.log.debug('<< createCustomer');
+                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                self = value = null;
+            });
+        } else {
+            stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
+                self.log.debug('<< createCustomer');
+                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+            });
+        }
 
 
     },
