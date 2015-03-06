@@ -311,16 +311,32 @@ var contact = $$.m.ModelBase.extend({
         if (photoLarge != null) { photos.photoLarge = photoLarge; }
         if (photoSquare != null) { photos.photoSquare = photoSquare; }
 
-
+        details.emails = details.emails || [];
         if (emails != null) {
-            details.emails = details.emails || [];
+
             if (_.isString(emails)) {
-                if (details.emails.indexOf(emails) == -1) {
-                    details.emails.push(emails);
+                var found = false;
+                for(var i=0; i<details.emails.length; i++) {
+                    if(details.emails[i].email === emails) {
+                        found = true;
+                    }
                 }
+                if(found === false) {
+                    details.emails.push({email:emails});
+                }
+
             } else {
                 for (var i = 0; i < emails.length; i++) {
-                    if (details.emails.indexOf(emails[i]) == -1) { details.emails.push(emails[i]); }
+                    var thisEmail = emails[i];
+                    var found = false;
+                    for(var j=0; j<details.emails.length; j++) {
+                        if(details.emails[j].email === thisEmail) {
+                            found = true;
+                        }
+                    }
+                    if(found === false) {
+                        details.emails.push({email:thisEmail});
+                    }
                 }
             }
         }

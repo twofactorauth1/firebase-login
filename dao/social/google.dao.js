@@ -185,6 +185,49 @@ var dao = {
         });
 
     },
+
+    getGroupsForAccessToken: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> getGroupsForAccessToken');
+
+        var url = self.GROUPS_API_URL + 'default/thin?v=3&alt=json&max-results=100000000&access_token=' + accessToken;
+
+        this._makeAuthenticatedRequest(url, function(err, value){
+            if(err) {
+                self.log.error('Error getting groups: ' + err.toString());
+                fn(err, null);
+            } else {
+                self.log.debug('results from the goog:');
+                console.dir(value);
+                var entries = value.feed.entry || [];
+                var processEntry = function(entry) {
+                    self.log.debug('processing: ');
+                    console.dir(entry);
+                    var obj = {};
+                    obj.id = entry.id.$t;
+                    obj.name = entry.title.$t;
+                    return obj;
+                };
+                var result = [];
+                async.each(entries, function(entry, cb) {
+                    var obj = {};
+                    obj.id = entry.id.$t;
+                    obj.name = entry.title.$t;
+                    //result.push(processEntry(entry));
+                    self.log.debug('About to push to result:');
+                    console.dir(obj);
+                    result.push(obj);
+                    cb();
+                }, function(err) {
+                    self.log.debug('<< getGroupsForAccessToken');
+                    fn(err, result);
+                });
+
+                //fn(null, value);
+            }
+        });
+
+    },
 //endregion
 //region CONTACTS
     getContactsForUser: function(user, lastUpdated, groupIdAry, fn) {
@@ -694,22 +737,22 @@ importContactsForSocialId: function(accountId, accessToken, socialAccountId, use
         groupIdAry = null;
     }
 
-    var googleBaggage = user.getUserAccountBaggage(accountId, "google");
-    googleBaggage.contacts = googleBaggage.contacts || {};
-    var updated = googleBaggage.contacts.updated;
+    //var googleBaggage = user.getUserAccountBaggage(accountId, "google");
+    //googleBaggage.contacts = googleBaggage.contacts || {};
+    //var updated = googleBaggage.contacts.updated;
 
     this.getContactsForSocialId(accessToken, socialAccountId, groupIdAry, function(err, value, params) {
         if (err) {
             return fn(err, value);
         }
 
-        googleBaggage.contacts.updated = params.updated;
+        //googleBaggage.contacts.updated = params.updated;
 
-        var googleId = self._getGoogleId(user);
+        var googleId = socialAccountId;
         var _contacts = value;
 
         var updateContactFromContactObj = function(contact, contactObj) {
-            var photo = (contactObj.photos != null && contactObj.photos.length > 0) ? contactObj.photos[0] : null;
+            var photo = (contactObj && contactObj.photos && contactObj.photos.length > 0) ? contactObj.photos[0] : null;
             var emails = contactObj.emails;
             if (emails != null) {
                 emails = _.pluck(emails, "email");
@@ -761,15 +804,21 @@ importContactsForSocialId: function(accountId, accessToken, socialAccountId, use
                                     //remove the contact from the items array so we don't process again
                                     items = _.without(items, googleContact);
 
-                                    updateContactFromContactObj(contact, googleContact);
+                                    if(googleContact) {
+                                        updateContactFromContactObj(contact, googleContact);
 
-                                    contactDao.saveOrUpdateContact(contact, function(err, value) {
-                                        if (err) {
-                                            self.log.error("An error occurred updating contact during Google import", err);
-                                        }
-                                        totalImported++;
+                                        contactDao.saveOrUpdateContact(contact, function(err, value) {
+                                            if (err) {
+                                                self.log.error("An error occurred updating contact during Google import", err);
+                                            }
+                                            totalImported++;
+                                            cb();
+                                        });
+                                    } else {
                                         cb();
-                                    });
+                                    }
+
+
 
                                 }, function(err) {
                                     callback(err);
@@ -815,23 +864,14 @@ importContactsForSocialId: function(accountId, accessToken, socialAccountId, use
                             });
                         } else {
                             self.log.info("Google Contact Import Succeeded. " + totalImported + " imports");
-                            //Last step, save the user
-                            //TODO: I think this clobbers passwords.
-                            userDao.saveOrUpdate(user, function(err, value) {
+                            self.log.info('Merging duplicates.');
+                            contactDao.mergeDuplicates(null, accountId, function(err, value){
                                 if(err) {
-                                    self.log.error('Error during user save: ' + err);
-                                    return fn(null);
+                                    self.log.error('Error occurred during duplicate merge: ' + err);
+                                    fn(null);
                                 } else {
-                                    self.log.info('Saved user.  Merging duplicates.');
-                                    contactDao.mergeDuplicates(null, accountId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error occurred during duplicate merge: ' + err);
-                                            fn(null);
-                                        } else {
-                                            self.log.info('Duplicate merge successful.');
-                                            fn(null);
-                                        }
-                                    });
+                                    self.log.info('Duplicate merge successful.');
+                                    fn(null);
                                 }
                             });
                         }

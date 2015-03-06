@@ -438,7 +438,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
               foundSocialId = true;
               $('#import-contacts-modal').modal('hide');
               ToasterService.show('success', "Contacts import initiated.");
-              SocialConfigService.importLinkedinContact(value.socialId, value.accessToken, function(data) {
+              SocialConfigService.importLinkedinContact(value.id, function(data) {
                 $('#import-contacts-modal').modal('hide');
                 ToasterService.show('success', "Contacts import complete.");
               });
@@ -457,7 +457,7 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
               foundSocialId = true;
               $('#import-contacts-modal').modal('hide');
               ToasterService.show('success', "Contacts import initiated.");
-              SocialConfigService.importGoogleContact(value.socialId, value.accessToken, function(data) {
+              SocialConfigService.importGoogleContact(value.id, function(data) {
                 $('#import-contacts-modal').modal('hide');
                 ToasterService.show('success', "Contacts import complete.");
               });
