@@ -129,32 +129,37 @@ define(['app'], function(app) {
                 });
         };
 
-        this.importLinkedinContact = function(socialAccountId, accessToken, fn) {
+        this.importLinkedinContact = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'linkedin', socialAccountId, 'importcontacts'].join('/');
             $http({
                     url: apiUrl,
-                    method: 'GET',
-                    params: {
-                        accessToken: accessToken
-                    }
+                    method: 'GET'
                 })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
         };
 
-        this.importGoogleContact = function(socialAccountId, accessToken, fn) {
+        this.importGoogleContact = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
             $http({
                     url: apiUrl,
-                    method: 'GET',
-                    params: {
-                        accessToken: accessToken
-                    }
+                    method: 'GET'
                 })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
         };
+
+        this.getGoogleGroups = function(socialAccountId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'groups'].join('/');
+            $http({
+                url: apiUrl,
+                method: 'GET'
+            })
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+        }
     })
 });

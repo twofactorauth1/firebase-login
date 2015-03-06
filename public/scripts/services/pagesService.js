@@ -46,9 +46,22 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                     websiteObject = data;
                     $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + path, { cache: true})
                         .success(function (page) {
-                            if (page !== null) {
+                            if (page !== null && page.accountId) {
                                 pages[page.handle] = page;
                                 callback(null, pages);
+                            }else if(page != null && path == 'index') {
+                                $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/coming-soon', { cache: true})
+                                    .success(function (page) {
+                                        if (page !== null) {
+                                            pages[page.handle] = page;
+                                            callback(null, pages);
+                                        } else {
+                                            callback("page not found",null);
+                                        }
+                                    }).error(function (err) {
+                                        // console.log("PageService >> DB-Hit >> ERROR");
+                                        callback(err,null);
+                                    });
                             } else {
                                 callback("page not found",null);
                             }
