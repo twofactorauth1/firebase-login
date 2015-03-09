@@ -1957,22 +1957,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
 
-    $scope.inserted = false;
-    $('body').on("DOMNodeInserted", ".feature-height, .meet-team-height", function (e)
+    $scope.feature_inserted = false;
+    $scope.team_inserted = false;
+    $('body').on("DOMNodeInserted", ".feature-height", function (e)
     {
         setTimeout(function() {
-        if(!$scope.inserted)  
+        if(!$scope.feature_inserted)  
         {
-          $scope.inserted = true;
-          if($("div.feature-height").length)
+          $scope.feature_inserted = true;          
+         if($("div.feature-height").length)
           {
             var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
             {
                 return $(this).height();
             }).get());
-            //$(".feature-height").height(maxFeatureHeight + 10);
             $(".feature-height").css("min-height", maxFeatureHeight + 10);
           }
+        }   
+        }, 1000)
+    })
+    $('body').on("DOMNodeInserted", ".meet-team-height", function (e)
+    {
+        setTimeout(function() {
+        if(!$scope.team_inserted)  
+        {
+         $scope.team_inserted = true;
          if($("div.meet-team-height").length)
          {
             var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
@@ -1985,7 +1994,5 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }, 2000)
     })
   }
-
-
 
 ]);
