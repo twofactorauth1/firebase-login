@@ -958,7 +958,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
           });
         }
+        
       });
+      setTimeout(function() {        
+         if($("div.meet-team-height").length)
+         {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
+          }
+        }, 2000)
 
       //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
@@ -1988,10 +1999,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                 return $(this).height();
             }).get());
-            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
+            //$(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
-        }, 2000)
+        }, 1000)
     })
   }
 
