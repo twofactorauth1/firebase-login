@@ -11,7 +11,7 @@ var config = require('./app.config');
  * Set up the connection strings for each environment.
  */
 var localString = "mongodb://localhost/bioindigenous";
-var testString = "mongodb://indiweb-test:testing123@kahana.mongohq.com:10074/test_indigenous";
+var testString = "mongodb://indiweb-test:testing123@c303.lighthouse.0.mongolayer.com:10303/test_indigenous";
 var prodString = "mongodb://indiweb:anime1@lighthouse.0.mongolayer.com:10188,lighthouse.1.mongolayer.com:10188/prod_indigenous";
 
 //LOCAL

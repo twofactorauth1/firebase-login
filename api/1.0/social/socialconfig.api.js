@@ -61,6 +61,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
         app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
+        app.get(this.url('google/:socialAccountId/groups'), this.isAuthApi.bind(this), this.getGoogleGroups.bind(this));
         app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
 
     },
@@ -553,12 +554,31 @@ _.extend(api.prototype, baseApi.prototype, {
           if (isAllowed !== true) {
               return self.send403(res);
           } else {
-              socialConfigManager.getGoogleContacts(accountId, req.query.accessToken, req.params.socialAccountId, req.user, function(err, contacts){
+              socialConfigManager.getGoogleContacts(accountId, socialAccountId, req.user, function(err, contacts){
                   self.log.debug('<< getGoogleContacts');
                   self.sendResultOrError(res, err, contacts, "Error importing google contacts");
               });
           }
       });
+    },
+
+    getGoogleGroups: function(req, res) {
+        var self = this;
+        self.log.debug('>> getGoogleGroups');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getGoogleContactGroups(accountId, socialAccountId, function(err, contacts){
+                    self.log.debug('<< getGoogleGroups');
+                    self.sendResultOrError(res, err, contacts, "Error getting google groups");
+                });
+            }
+        });
     },
 
     getLinkedinContacts: function(req, res) {
@@ -572,7 +592,7 @@ _.extend(api.prototype, baseApi.prototype, {
           if (isAllowed !== true) {
               return self.send403(res);
           } else {
-              socialConfigManager.getLinkedinContacts(accountId, req.query.accessToken, req.params.socialAccountId, req.user, function(err, contacts){
+              socialConfigManager.getLinkedinContacts(accountId, socialAccountId, req.user, function(err, contacts){
                   self.log.debug('<< getLinkedinContacts');
                   self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
               });

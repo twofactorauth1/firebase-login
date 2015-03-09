@@ -2,8 +2,9 @@ define(['app'], function(app) {
   app.register.service('UserService', function($http) {
     var account, that = this;
     var baseUrl = '/api/1.0/';
+
     this.getUser = function(fn) {
-      var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
+      var apiUrl = baseUrl + ['user'].join('/');
       $http.get(apiUrl)
       .success(function(data, status, headers, config) {
         fn(data);

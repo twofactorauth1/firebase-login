@@ -731,12 +731,56 @@ module.exports = {
         }
     },
 
-    getGoogleContacts: function(accountId, accessToken, socialAccountId, user, fn) {
-      return googleDao.importContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+    getGoogleContacts: function(accountId, socialAccountId, user, fn) {
+        var self = this;
+        log.debug('>> getGoogleContacts');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return googleDao.importContactsForSocialId(accountId, socialAccount.accessToken, socialAccount.socialId, user, [], fn);
+        });
     },
 
-    getLinkedinContacts: function(accountId, accessToken, socialAccountId, user, fn) {
-      return linkedinDao.importConnectionsAsContactsForSocialId(accountId, accessToken, socialAccountId, user, fn);
+    getGoogleContactGroups: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getGoogleContactGroups');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return googleDao.getGroupsForAccessToken(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getLinkedinContacts: function(accountId, socialAccountId, user, fn) {
+        var self = this;
+        log.debug('>> getLinkedinContacts');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return linkedinDao.importConnectionsAsContactsForSocialId(accountId, socialAccount.accessToken, socialAccount.socialId, user, fn);
+
+        });
     },
 
     getStripeAccessToken: function(accountId, fn) {
