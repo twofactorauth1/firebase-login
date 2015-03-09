@@ -666,58 +666,76 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.social_links = [{
         name: "adn",
-        icon: "adn"
+        icon: "adn",
+        tooltip : "Adn"
       }, {
         name: "bitbucket",
-        icon: "bitbucket"
+        icon: "bitbucket",
+        tooltip : "BitBucket"
       }, {
         name: "dropbox",
-        icon: "dropbox"
+        icon: "dropbox",
+        tooltip: "Dropbox"
       }, {
         name: "facebook",
-        icon: "facebook"
+        icon: "facebook",
+        tooltip: "Facebook"
       }, {
         name: "flickr",
-        icon: "flickr"
+        icon: "flickr",
+        tooltip: "Flickr"
       }, {
         name: "foursquare",
-        icon: "foursquare"
+        icon: "foursquare",
+        tooltip: "Four Square"
       }, {
         name: "github",
-        icon: "github"
+        icon: "github",
+        tooltip: "Github"
       }, {
         name: "google-plus",
-        icon: "google-plus"
+        icon: "google-plus",
+        tooltip: "Google Plus"
       }, {
         name: "instagram",
-        icon: "instagram"
+        icon: "instagram",
+        tooltip: "Instagram"
       }, {
         name: "microsoft",
-        icon: "windows"
+        icon: "windows",
+        tooltip: "Microsoft"
       }, {
         name: "openid",
-        icon: "openid"
+        icon: "openid",
+        tooltip: "Open Id"
       }, {
         name: "pinterest",
-        icon: "pinterest"
+        icon: "pinterest",
+        tooltip: "Pinterest"
       }, {
         name: "reddit",
-        icon: "reddit"
+        icon: "reddit",
+        tooltip: "Reddit"
       }, {
         name: "soundcloud",
-        icon: "soundcloud"
+        icon: "soundcloud",
+        tooltip: "Sound Cloud"
       }, {
         name: "twitter",
-        icon: "twitter"
+        icon: "twitter",
+        tooltip: "Twitter"
       }, {
         name: "vimeo",
-        icon: "vimeo-square"
+        icon: "vimeo-square",
+        tooltip: "Vimeo"
       }, {
         name: "vk",
-        icon: "vk"
+        icon: "vk",
+        tooltip: "Vk"
       }, {
         name: "yahoo",
-        icon: "yahoo"
+        icon: "yahoo",
+        tooltip: "Yahoo"
       }
 
     ]
