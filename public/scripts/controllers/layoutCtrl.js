@@ -959,7 +959,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           });
         }
       });
-
+        if($("div.meet-team-height").length)
+        {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
+        }
       //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
@@ -1961,24 +1968,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.team_inserted = false;
     $('body').on("DOMNodeInserted", ".feature-height", function (e)
     {
-        setTimeout(function() {
-        if(!$scope.feature_inserted)  
+      if(!$scope.feature_inserted)  
+      {
+        $scope.feature_inserted = true;          
+       if($("div.feature-height").length)
         {
-          $scope.feature_inserted = true;          
-         if($("div.feature-height").length)
+          var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
           {
-            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
-            {
-                return $(this).height();
-            }).get());
-            $(".feature-height").css("min-height", maxFeatureHeight + 10);
-          }
-        }   
-        }, 1000)
+              return $(this).height();
+          }).get());
+          $(".feature-height").css("min-height", maxFeatureHeight + 10);
+        }
+      } 
     })
     $('body').on("DOMNodeInserted", ".meet-team-height", function (e)
-    {
-        setTimeout(function() {
+    {        
         if(!$scope.team_inserted)  
         {
          $scope.team_inserted = true;
@@ -1990,8 +1994,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }).get());
             $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
-        }   
-        }, 2000)
+        } 
     })
   }
 
