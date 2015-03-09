@@ -137,6 +137,12 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
         }))
+        .state('schedule', angularAMD.route({
+          url: '/schedule',
+          templateUrl: '/angular_admin/views/schedule.html',
+          controller: 'ScheduleCtrl',
+          controllerUrl: '/angular_admin/controllers/schedule.js'
+        }))
         .state('interim', angularAMD.route({
           url: '/almost-there',
           templateUrl: '/angular_admin/views/interim.html',
