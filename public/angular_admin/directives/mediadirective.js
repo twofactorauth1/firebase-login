@@ -85,9 +85,19 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
 
                     contentElement.css('visibility', 'hidden');
                     mediaModalElement.on('shown.bs.modal', function(e) {
-                        $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
-                        $(window).trigger("resize")
-                        contentElement.css('visibility', 'visible')
+                        if(e.relatedTarget)
+                        {
+                            $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
+                            $(window).trigger("resize")
+                            contentElement.css('visibility', 'visible')  
+                        }
+                        else if($scope.$parent.showInsert)
+                        {
+                            $scope.showInsert = true;
+                            $(window).trigger("resize")
+                            contentElement.css('visibility', 'visible');
+                        }
+                        
                     });
 
                 });
@@ -126,6 +136,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.m.selectTriggerFn = function (status) {
                     $scope.selectModel.select_all = status;
                     $scope.m.selectAll();
+                    $scope.singleSelected = false;
                 };
 
                 $scope.m.selectAll = function(showType, filterOnly) {
