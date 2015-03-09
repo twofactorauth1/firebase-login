@@ -1638,6 +1638,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.newAccount.profilePhoto = null;
         $scope.newAccount.tempUserId = null;
         $scope.newAccount.email = null;
+        $scope.tmpAccount.tempUser = null;
     }
 
     $scope.makeSocailAccount = function(socialType) {

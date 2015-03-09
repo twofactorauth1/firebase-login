@@ -235,7 +235,7 @@
 
                                         <div class="media">
                                             <a href="#" class="pull-left">
-                                                <img alt="" src="{{post.from.profile_pic}}" class="media-object">
+                                                <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
@@ -250,7 +250,7 @@
 
                                         <div class="media">
                                             <a href="#">
-                                                <img alt="" src="{{post.picture}}" class="media-object">
+                                                <img alt="" ng-src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
@@ -282,7 +282,7 @@
 
                                         <div class="media">
                                             <a href="#" class="pull-left">
-                                                <img alt="" src="{{post.from.profile_pic}}" class="media-object">
+                                                <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
@@ -297,7 +297,7 @@
 
                                         <div class="media">
                                             <a href="#">
-                                                <img alt="" src="{{post.picture}}" class="media-object">
+                                                <img alt="" ng-src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
@@ -325,7 +325,7 @@
                             <div ng-if="post.type == 'twitter' && post.postType == 'follower'">
                                 <div class="post-inner">
                                     <div class="post-content">
-                                        <img class="img-thumbnail img-circle center" src="{{post.from.profileimg}}">
+                                        <img class="img-thumbnail img-circle center" ng-src="{{post.from.profileimg}}">
                                         <h4 class="center">{{post.from.name}}</h4>
                                         <!-- <p>{{post.from.description}}</p> -->
                                         <!-- <pre>{{post}}</pre> -->
@@ -500,7 +500,7 @@
                     <div class="col-xs-9 right-panel">
                         <div ng-show="modalfeed == 'facebook'">
                             <ul class="fb-admin-pages">
-                                <li ng-repeat="page in fbAdminPages"><img src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span>
+                                <li ng-repeat="page in fbAdminPages"><img ng-src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span>
                                 </li>
                             </ul>
                         </div>
@@ -526,7 +526,7 @@
                 </div>
                 <div class="modal-body">
                     <ul class="fb-admin-pages">
-                        <li ng-repeat="page in fbAdminPages"><img src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
+                        <li ng-repeat="page in fbAdminPages"><img ng-src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -548,7 +548,7 @@
                         <div class="panel-body">
                             <ul>
                                 <li ng-repeat="comment in visibleComments">
-                                    <img src="{{comment.picture}}" class="img-thumbnail pull-left">
+                                    <img ng-src="{{comment.picture}}" class="img-thumbnail pull-left">
                                     <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
                                     <h4 class="sender">{{comment.name}}</h4>
                                     <small>{{comment.comment}}</small>
