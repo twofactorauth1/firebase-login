@@ -21965,6 +21965,42 @@ input[type='file'] {
   min-height: 275px !important;
   height: 100% !important;
 }
+#add-component-modal .type-filter {
+  padding: 5px;
+  border-bottom: 1px solid #e7e7e7;
+}
+#add-component-modal .type-filter ul {
+  padding-left: 0;
+}
+#add-component-modal .type-filter ul li {
+  display: inline-block;
+  list-style-type: none;
+}
+#add-component-modal .single-type {
+  position: relative;
+  display: block;
+  height: 146px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 15px 0px;
+}
+#add-component-modal .single-type h4 {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+#add-component-modal .single-type p {
+  margin-bottom: 5px;
+  min-height: 63px;
+}
+#add-component-modal .single-type .img-wrap {
+  height: 115px;
+  background: #e7e7e7;
+}
+#add-component-modal .single-type .fa-chevron-right {
+  line-height: 114px;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+}
 .blog-item {
   background: #fcfcfc;
   margin-bottom: 20px;
@@ -24010,7 +24046,7 @@ hr {
   color: white;
   font-size: 20px;
   cursor: pointer;
-  left: 50%;
+  left: 45%;
   z-index: 9998;
   margin-top: -25px;
   padding: 5px 15px;
@@ -24172,7 +24208,6 @@ ol.circles-list > li:before {
   counter-increment: li-counter;
 }
 .componentActions,
-.add-component,
 .no-component {
   display: none;
   visibility: hidden;
