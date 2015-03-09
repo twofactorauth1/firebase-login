@@ -21727,14 +21727,19 @@ div.error label.error:before {
   z-index: -1;
   height: 60px;
 }
-.componentActions .delete,
+.componentActions .delete {
+  float: right;
+  pointer-events: all;
+}
+.componentActions .delete:hover {
+  color: #d9534f;
+}
 .componentActions .duplicate {
   float: right;
   pointer-events: all;
 }
-.componentActions .delete:hover,
 .componentActions .duplicate:hover {
-  color: #d9534f;
+  color: #219265;
 }
 .componentActions .settings {
   float: right;
@@ -24008,16 +24013,24 @@ hr {
   left: 50%;
   z-index: 9998;
   margin-top: -25px;
+  padding: 5px 15px;
+  text-align: center;
   /*
       99999 is for
         .componentActions
     */
+}
+.add-component p {
+  margin-bottom: 0;
+  font-size: 14px;
+  text-decoration: none;
 }
 .add-component i {
   margin-top: -3px;
 }
 .add-component a {
   color: #ffffff;
+  text-decoration: none;
 }
 .add-component:hover {
   pointer-events: auto;
@@ -24093,8 +24106,21 @@ body.editing .fragment:hover .add-component {
 .ui-sortable .as-sortable-placeholder {
   height: 60px!important;
 }
+.ui-sortable .componentActions span.fa {
+  padding: 10px;
+  text-align: center;
+  line-height: 19px;
+}
+.ui-sortable .componentActions p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
 .ui-sortable .componentActions h4 {
-  display: none;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 17px;
+  color: white;
+  font-size: 18px;
+  margin: 0;
 }
 .as-sortable-drag {
   pointer-events: none;
