@@ -595,7 +595,7 @@ define([
             e.preventDefault();
             e.stopPropagation();
             $("#media-manager-modal").modal('show');
-            $(".insert-image").removeClass("ng-hide");
+            $scope.showInsert = true;
             $scope.imageChange = true;
             $scope.componentArrTarget = e.currentTarget;
             $scope.componentImageIndex = e.currentTarget.attributes["data-index"].value;
@@ -1516,20 +1516,20 @@ define([
       window.clickImageButton = function() {
         $scope.insertMediaImage = true;
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.changeBlogImage = function(blog) {
         $scope.changeblobImage = true;
         $scope.blog_post = blog;
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.setPostImage = function(componentId) {
         $scope.postImage = true;
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.addImageToGallery = function(componentId, index) {
@@ -1539,7 +1539,7 @@ define([
           _id: componentId
         });
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.deleteImageFromGallery = function(componentId, index) {
@@ -1557,7 +1557,7 @@ define([
           _id: componentId
         });
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.deleteImageFromThumbnail = function(componentId, index) {
@@ -1573,7 +1573,7 @@ define([
         $scope.profilepic = true;
         $scope.customerAccount = customer;
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.changeLogoImage = function(componentId) {
@@ -1582,7 +1582,7 @@ define([
           _id: componentId
         });
         $("#media-manager-modal").modal('show');
-        $(".insert-image").removeClass("ng-hide");
+        $scope.showInsert = true;
       }
 
       window.getPostImageUrl = function() {
