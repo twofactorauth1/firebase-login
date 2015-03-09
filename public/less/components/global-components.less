@@ -131,18 +131,26 @@ hr {
     color: white;
     font-size: 20px;
     cursor: pointer;
-    left: 50%;
+    left: 45%;
     z-index: 9998;
     margin-top: -25px;
+    padding: 5px 15px;
+    text-align: center;
     /*
       99999 is for
         .componentActions
     */
+    p {
+      margin-bottom: 0;
+      font-size: 14px;
+      text-decoration: none;
+    }
     i {
       margin-top: -3px;
     }
     a {
       color: #ffffff;
+      text-decoration: none;
     }
     &:hover {
       pointer-events: auto;
@@ -224,8 +232,21 @@ body.editing {
     height: 60px!important;    
   }
   .componentActions {
+    span.fa {
+      padding: 10px;
+      text-align: center;
+      line-height: 19px;
+    }
+    p {
+      margin-bottom: 0;
+      font-size: 14px;
+    }
     h4 {
-        display: none;
+          background: rgba(44, 62, 80, 0.8);
+          padding: 17px;
+          color: white;
+          font-size: 18px;
+          margin: 0;
       }
   }
 }
@@ -285,7 +306,7 @@ ol.circles-list > li:before {
   counter-increment: li-counter;
 }
 
-.componentActions, .add-component, .no-component {
+.componentActions, .no-component {
   display: none;
   visibility: hidden;
 }
