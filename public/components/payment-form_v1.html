@@ -29,27 +29,27 @@
                 <div class="social btn-toolbar">
                     <p class="pull-left">Connect with: </p>
                     <div class="signup-social-toolbar pull-left">
-                        <a ng-if="!newAccount.profilePhoto.url" ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default facebook"><i class="fa fa-facebook"></i></a>
-                        <div ng-if="newAccount.profilePhoto.url && tmpAccount.tempUser.created.strategy === 'fb'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto img-circle">
+                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default facebook"><i class="fa fa-facebook"></i></a>
+                        <div ng-if="tmpAccount.tempUser.created.strategy === 'fb'">
+                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/assets/icons/blank-user.jpg'}}" class="img-responsive profilePhoto img-circle">
                             <span>{{tmpAccount.tempUser.username}}</span>
                             <i class="fa fa-close" ng-click="removeAccount('fb')"></i>
                         </div>
-                        <a ng-if="!newAccount.profilePhoto.url" ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default twitter"><i class="fa fa-twitter"></i></a>
-                         <div ng-if="newAccount.profilePhoto.url && tmpAccount.tempUser.created.strategy === 'tw'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto img-circle">
+                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default twitter"><i class="fa fa-twitter"></i></a>
+                         <div ng-if="tmpAccount.tempUser.created.strategy === 'tw'">
+                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/assets/icons/blank-user.jpg'}}" class="img-responsive profilePhoto img-circle">
                             <span>{{tmpAccount.tempUser.username}}</span>
                             <i class="fa fa-close" ng-click="removeAccount('tw')"></i>
                         </div>
-                        <a ng-if="!newAccount.profilePhoto.url" class="btn btn-large btn-default google-plus" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
-                        <div ng-if="newAccount.profilePhoto.url && tmpAccount.tempUser.created.strategy === 'go'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto img-circle">
+                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" class="btn btn-large btn-default google-plus" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
+                        <div ng-if="tmpAccount.tempUser.created.strategy === 'go'">
+                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/assets/icons/blank-user.jpg'}}" class="img-responsive profilePhoto img-circle">
                             <span>{{tmpAccount.tempUser.username}}</span>
                             <i class="fa fa-close" ng-click="removeAccount('go')"></i>
                         </div>
-                        <a ng-if="!newAccount.profilePhoto.url" class="btn btn-large btn-default linkedin" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
-                        <div ng-if="newAccount.profilePhoto.url && tmpAccount.tempUser.created.strategy === 'li'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url}}" class="img-responsive profilePhoto img-circle">
+                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" class="btn btn-large btn-default linkedin" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
+                        <div ng-if="tmpAccount.tempUser.created.strategy === 'li'">
+                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/assets/icons/blank-user.jpg'}}" class="img-responsive profilePhoto img-circle">
                             <span>{{tmpAccount.tempUser.username}}</span>
                             <i class="fa fa-close" ng-click="removeAccount('li')"></i>
                         </div>
