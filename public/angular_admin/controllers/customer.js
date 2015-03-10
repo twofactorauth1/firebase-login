@@ -197,8 +197,8 @@ define(['app', 'customerService', 'stateNavDirective', 'truncateDirective', 'ngP
                   //if ($scope.customerOrder === 'first') {
                   $scope.fetchedCustomers = $scope.originalCustomers.filter(function(elem) {
                     if (elem.first) {
-                      return elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1 ||
-                        elem.last.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
+                      return elem.first && elem.first.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1 ||
+                        elem.last && elem.last.toLowerCase().indexOf($scope.customerFilter.first.toLowerCase()) != -1;
                     } else if (newValue == "") {
                       return true
                     }

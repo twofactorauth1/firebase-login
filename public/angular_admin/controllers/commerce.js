@@ -272,6 +272,26 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
         $scope.sortOrderSettings = 1;
       }
     });
+    
+    $scope.inserted = false;
+
+    $('body').on("DOMNodeInserted", ".commerce-item", function (e)
+    {
+        setTimeout(function() {
+        if(!$scope.inserted)  
+        {
+         $scope.inserted = true;
+         if($("div.commerce-item").length)
+         {
+            var maxProductHeight = Math.max.apply(null, $("div.commerce-item").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $("div.commerce-item").css("min-height", maxProductHeight + 30);
+          }
+        }   
+        }, 500)
+    })
 
   }]);
 });

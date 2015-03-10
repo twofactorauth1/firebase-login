@@ -229,7 +229,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
-
+        console.log('got posts: ', data);
+        var total = data.total;
+        var limit = data.limit;
+        var start = data.start;
+        data = data.results;
         if (that.teaserposts) {
           //donothing
         } else {
@@ -666,58 +670,107 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.social_links = [{
         name: "adn",
-        icon: "adn"
+        icon: "adn",
+        tooltip : "Adn"
       }, {
         name: "bitbucket",
-        icon: "bitbucket"
+        icon: "bitbucket",
+        tooltip : "BitBucket"
       }, {
         name: "dropbox",
-        icon: "dropbox"
+        icon: "dropbox",
+        tooltip: "Dropbox"
       }, {
         name: "facebook",
-        icon: "facebook"
+        icon: "facebook",
+        tooltip: "Facebook"
       }, {
         name: "flickr",
-        icon: "flickr"
+        icon: "flickr",
+        tooltip: "Flickr"
       }, {
         name: "foursquare",
-        icon: "foursquare"
+        icon: "foursquare",
+        tooltip: "Four Square"
       }, {
         name: "github",
-        icon: "github"
+        icon: "github",
+        tooltip: "Github"
       }, {
         name: "google-plus",
-        icon: "google-plus"
+        icon: "google-plus",
+        tooltip: "Google Plus"
       }, {
         name: "instagram",
-        icon: "instagram"
+        icon: "instagram",
+        tooltip: "Instagram"
+      },
+      {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin"
       }, {
         name: "microsoft",
-        icon: "windows"
+        icon: "windows",
+        tooltip: "Microsoft"
       }, {
         name: "openid",
-        icon: "openid"
+        icon: "openid",
+        tooltip: "Open Id"
       }, {
         name: "pinterest",
-        icon: "pinterest"
+        icon: "pinterest",
+        tooltip: "Pinterest"
       }, {
         name: "reddit",
-        icon: "reddit"
+        icon: "reddit",
+        tooltip: "Reddit"
+      }, {name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat"
       }, {
         name: "soundcloud",
-        icon: "soundcloud"
+        icon: "soundcloud",
+        tooltip: "Sound Cloud"
+      },{
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr"
       }, {
         name: "twitter",
-        icon: "twitter"
+        icon: "twitter",
+        tooltip: "Twitter"
       }, {
         name: "vimeo",
-        icon: "vimeo-square"
+        icon: "vimeo-square",
+        tooltip: "Vimeo"
+      },  {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine"
       }, {
         name: "vk",
-        icon: "vk"
-      }, {
+        icon: "vk",
+        tooltip: "Vk"
+      }, 
+      {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website"
+      },
+      {
         name: "yahoo",
-        icon: "yahoo"
+        icon: "yahoo",
+        tooltip: "Yahoo"
+      },
+        {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp"
       }
 
     ]
@@ -958,7 +1011,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
           });
         }
+        
       });
+      setTimeout(function() {        
+         if($("div.meet-team-height").length)
+         {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").css("min-height", maxTeamHeight);
+          }
+        }, 500)
 
       //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
@@ -1638,6 +1702,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.newAccount.profilePhoto = null;
         $scope.newAccount.tempUserId = null;
         $scope.newAccount.email = null;
+        $scope.tmpAccount.tempUser = null;
     }
 
     $scope.makeSocailAccount = function(socialType) {
@@ -1956,22 +2021,31 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
 
-    $scope.inserted = false;
-    $('body').on("DOMNodeInserted", ".feature-height, .meet-team-height", function (e)
+    $scope.feature_inserted = false;
+    $scope.team_inserted = false;
+    $('body').on("DOMNodeInserted", ".feature-height", function (e)
     {
         setTimeout(function() {
-        if(!$scope.inserted)  
+        if(!$scope.feature_inserted)  
         {
-          $scope.inserted = true;
-          if($("div.feature-height").length)
+          $scope.feature_inserted = true;          
+         if($("div.feature-height").length)
           {
             var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
             {
                 return $(this).height();
             }).get());
-            //$(".feature-height").height(maxFeatureHeight + 10);
             $(".feature-height").css("min-height", maxFeatureHeight + 10);
           }
+        }   
+        }, 1000)
+    })
+    $('body').on("DOMNodeInserted", ".meet-team-height", function (e)
+    {
+        setTimeout(function() {
+        if(!$scope.team_inserted)  
+        {
+         $scope.team_inserted = true;
          if($("div.meet-team-height").length)
          {
             var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
@@ -1981,10 +2055,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
-        }, 2000)
+        }, 1000)
     })
   }
-
-
 
 ]);

@@ -7,7 +7,7 @@
             <h2><i class="fa fa-bullhorn"></i>  Marketing</h2>
         </div>
         <div class="col-xs-4">
-            <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
+            <!-- <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
                 <button type="button" class="btn btn-outline dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-plus"></i>
                     <span class="hidden-xs">Add</span>
@@ -16,10 +16,10 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="" data-toggle="modal" data-target="#marketing-add-campaign"> Campaign</a>
                     </li>
-                    <!-- <li><a href="" data-toggle="modal" data-target="#marketing-add-feed"> Social Feed</a>
-                    </li> -->
+                    <li><a href="" data-toggle="modal" data-target="#marketing-add-feed"> Social Feed</a>
+                    </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
         <div class="clear"></div>
     </div>
@@ -32,7 +32,7 @@
                     <span class="hidden-xs">Social Feed</span>
                 </div>
             </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'" disabled="true">
+            <button type="button" class="btn btn-default btn-lg col-xs-6" ng-class="{'active': activeTab === 'campaigns'}" ng-click="activeTab = 'campaigns'">
                 <div tooltip-placement="bottom" tooltip-html-unsafe="Reach out to your customers?">
                     <i class="fa fa-flag"></i>
                     <span class="hidden-xs">Campaigns <span class="label label-primary">Coming Soon</span>
@@ -44,11 +44,27 @@
 
     <div class="contentpanel" ng-style="styleMarketingSection()" indigeweb-resize>
         <div class="campaign-section" ng-show="activeTab == 'campaigns'">
-            <div class="col-xs-12 col-sm-4" ng-repeat="campaign in campaigns track by $index">
+            <div class="col-xs-12 col-sm-6 col-md-4 add-campaign">
+                <div class="grid-list-item">
+                    <div class="add-wrap">
+                        <div class="center">
+                            <span class="fa fa-bullhorn"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="center">
+                            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#marketing-add-campaign"><span class="fa fa-plus"></span> ADD CAMPAIGN</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 single-campaign" ng-repeat="campaign in campaigns track by $index">
                 <div class="grid-list-item btn-view-product-details" data-productid="1">
                     <a href="#/marketing/campaign/{{campaign._id}}">
                         <div class="col-xs-12">
-                            <h4 class="title center">{{campaign.title}}</h4>
+                            <div class="img-wrap">
+                                <img src="">
+                            </div>
+                            <h4 class="title">{{campaign.title}}</h4>
                             <hr class="clearfix mb15">
                             <div class="campaign-stats">
                                 <div class="status" ng-if="campaignSettings.showStatus">
@@ -153,7 +169,6 @@
                                 </div> -->
 
                         <!-- FACEBOOK -->
-                        } }
 
                         <!--  <div class="col-xs-12" ng-if="type.type == 'facebook'">
                             <input type="checkbox" name="likes" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".likes-{{type.socialId}}">
@@ -220,7 +235,7 @@
 
                                         <div class="media">
                                             <a href="#" class="pull-left">
-                                                <img alt="" src="{{post.from.profile_pic}}" class="media-object">
+                                                <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
@@ -235,7 +250,7 @@
 
                                         <div class="media">
                                             <a href="#">
-                                                <img alt="" src="{{post.picture}}" class="media-object">
+                                                <img alt="" ng-src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
@@ -267,7 +282,7 @@
 
                                         <div class="media">
                                             <a href="#" class="pull-left">
-                                                <img alt="" src="{{post.from.profile_pic}}" class="media-object">
+                                                <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
@@ -282,7 +297,7 @@
 
                                         <div class="media">
                                             <a href="#">
-                                                <img alt="" src="{{post.picture}}" class="media-object">
+                                                <img alt="" ng-src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
                                                 <p class="center">{{post.message}}</p>
@@ -310,7 +325,7 @@
                             <div ng-if="post.type == 'twitter' && post.postType == 'follower'">
                                 <div class="post-inner">
                                     <div class="post-content">
-                                        <img class="img-thumbnail img-circle center" src="{{post.from.profileimg}}">
+                                        <img class="img-thumbnail img-circle center" ng-src="{{post.from.profileimg}}">
                                         <h4 class="center">{{post.from.name}}</h4>
                                         <!-- <p>{{post.from.description}}</p> -->
                                         <!-- <pre>{{post}}</pre> -->
@@ -351,10 +366,93 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Add New Campaign</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body nopadding">
+                    <div class="campaign-type-filter">
+                        <ul class="mb0" ng-init="typefilter = 'all'">
+                            <li><a href="#" class="label label-primary" ng-click="typefilter = 'all'">All</a></li>
+                            <li><a href="#" class="label label-default" ng-click="typefilter = 'email'">Email</a></li>
+                            <li><a href="#" class="label label-default" ng-click="typefilter = 'social'">Social</a></li>
+                            <li><a href="#" class="label label-default" ng-click="typefilter = 'search'">Search Engine</a></li>
+                            <li><a href="#" class="label label-default">SMS</a></li>
+                            <li><a href="#" class="label label-default">Retarketing</a></li>
+                            <li><a href="#" class="label label-default">Print</a></li>
+                        </ul>
+                    </div>
+                    <div class="campaign-types">
+                        <div class="single-campaign" ng-show="typefilter == 'search' || typefilter == 'all'">
+                            <div class="col-xs-3">
+                                <div class="img-wrap">
+                                    <img src="">
+                                </div>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4>Adwords Campaign</h4>
+                                <div class="star-rating">
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star-o"></span>
+                                </div>
+                                <p>A simple one ad, Adwords campaign with unlimited keywords to custom landing pages</p>
+
+                            </div>
+                            <div class="col-xs-1">
+                                <span class="fa fa-chevron-right"></span>
+                            </div>
+                        </div>
+                        <div class="single-campaign" ng-show="typefilter == 'email' || typefilter == 'all'">
+                            <div class="col-xs-3">
+                                <div class="img-wrap">
+                                    <img src="">
+                                </div>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4>One Time Email</h4>
+                                <div class="star-rating">
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star-o"></span>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam, laboriosam?</p>
+
+                            </div>
+                            <div class="col-xs-1">
+                                <span class="fa fa-chevron-right"></span>
+                            </div>
+                        </div>
+                        <div class="single-campaign" ng-show="typefilter == 'social' || typefilter == 'all'">
+                            <div class="col-xs-3">
+                                <div class="img-wrap">
+                                    <img src="">
+                                </div>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4>Social Meida</h4>
+                                <div class="star-rating">
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star-o"></span>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam, laboriosam?</p>
+
+                            </div>
+                            <div class="col-xs-1">
+                                <span class="fa fa-chevron-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="campaign-details">
+                        
+                    </div>
+                    <div class="clearfix"></div>
 
 
-                    <form role="form">
+                    <!-- <form role="form">
                         <div class="form-group">
                             <label for="productName">Campaign Name</label>
                             <input type="text" class="form-control input-lg" id="campaignName" placeholder="Enter a name for your campaign" ng-model='newCampaign.title' />
@@ -363,18 +461,18 @@
                             <label for="campaignType">Campaign Type</label>
                             <select id="campaignType" ng-model="newCampaign.type" class="form-control input-lg">
                                 <option value="autoresponder">AutoResponder</option>
-                                <!-- <option value="one_time" disabled="">One Time</option>
+                                <option value="one_time" disabled="">One Time</option>
                                 <option value="webinar">Webinar</option>
                                 <option value="date_based" disabled="">Date Based</option>
-                                <option value="custom" disabled="">Custom</option> -->
+                                <option value="custom" disabled="">Custom</option>
                             </select>
                         </div>
 
-                    </form>
+                    </form> -->
                 </div>
-                <div class="modal-footer">
+                <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addCampaignFn()"><i class="fa fa-plus" /> Add</button>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -402,7 +500,7 @@
                     <div class="col-xs-9 right-panel">
                         <div ng-show="modalfeed == 'facebook'">
                             <ul class="fb-admin-pages">
-                                <li ng-repeat="page in fbAdminPages"><img src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span>
+                                <li ng-repeat="page in fbAdminPages"><img ng-src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span>
                                 </li>
                             </ul>
                         </div>
@@ -428,7 +526,7 @@
                 </div>
                 <div class="modal-body">
                     <ul class="fb-admin-pages">
-                        <li ng-repeat="page in fbAdminPages"><img src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
+                        <li ng-repeat="page in fbAdminPages"><img ng-src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -450,7 +548,7 @@
                         <div class="panel-body">
                             <ul>
                                 <li ng-repeat="comment in visibleComments">
-                                    <img src="{{comment.picture}}" class="img-thumbnail pull-left">
+                                    <img ng-src="{{comment.picture}}" class="img-thumbnail pull-left">
                                     <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
                                     <h4 class="sender">{{comment.name}}</h4>
                                     <small>{{comment.comment}}</small>

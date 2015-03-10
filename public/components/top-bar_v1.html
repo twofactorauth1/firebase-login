@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label for="Link Type">Choose a Link Type* </label>
                             <div class="modal-events col-sm-12">           
-                                <a ng-repeat="social_link in social_links" class="btn btn-social-icon btn-{{social_link.name}}" ng-click="setSelectedLink(social_link)"><i class="fa fa-{{social_link.icon}}"></i></a>  
+                                <a tooltip-placement="bottom" tooltip="{{social_link.tooltip}}" ng-repeat="social_link in social_links" class="btn btn-social-icon btn-{{social_link.name}}" ng-click="setSelectedLink(social_link)"><i class="fa fa-{{social_link.icon}}"></i></a>  
                             </div>
                         </div> 
                         <div class="form-group" id="social-link-name">   

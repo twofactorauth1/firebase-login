@@ -54,6 +54,8 @@ var post = $$.m.ModelBase.extend({
 
     },
 
+    publish_date: null,
+
 
     initialize: function(options) {
 

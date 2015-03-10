@@ -472,6 +472,11 @@ define([
           $scope.newVsReturningConfig = data;
           $scope.newVsReturningConfig.loading = false;
         });
+        
+        ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {
+          $scope.customerOverviewConfig = data;
+          $scope.customerOverviewConfig.loading = false;
+        });
 
         ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
 
