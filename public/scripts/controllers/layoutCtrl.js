@@ -229,7 +229,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
-
+        console.log('got posts: ', data);
+        var total = data.total;
+        var limit = data.limit;
+        var start = data.start;
+        data = data.results;
         if (that.teaserposts) {
           //donothing
         } else {
