@@ -2048,7 +2048,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                 return $(this).height();
             }).get());
-            //$(".meet-team-height").css("min-height", maxTeamHeight + 10);
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
         }, 1000)
