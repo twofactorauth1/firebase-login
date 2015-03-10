@@ -17366,24 +17366,28 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 .account .integrations-section .thumbnail .img-wrap .facebook-icon-color:hover {
   opacity: .8;
+  cursor: pointer;
 }
 .account .integrations-section .thumbnail .img-wrap .google-icon-color {
   color: #dd4b39;
 }
 .account .integrations-section .thumbnail .img-wrap .google-icon-color:hover {
   opacity: .8;
+  cursor: pointer;
 }
 .account .integrations-section .thumbnail .img-wrap .linkedin-icon-color {
   color: #007bb6;
 }
 .account .integrations-section .thumbnail .img-wrap .linkedin-icon-color:hover {
   opacity: .8;
+  cursor: pointer;
 }
 .account .integrations-section .thumbnail .img-wrap .twitter-icon-color {
   color: #00aced;
 }
 .account .integrations-section .thumbnail .img-wrap .twitter-icon-color:hover {
   opacity: .8;
+  cursor: pointer;
 }
 .account .integrations-section .thumbnail .connected {
   height: 70px;
