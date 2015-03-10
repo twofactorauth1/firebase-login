@@ -245,13 +245,14 @@ define([
       $scope.componentTypes = [{
         title: 'Blog',
         type: 'blog',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
         filter: 'blog',
         description: 'Use this component for your main blog pages which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
-        enabled: false
+        enabled: true
       }, {
         title: 'Blog Teaser',
         type: 'blog-teaser',
-        preview: '',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
         filter: 'blog',
         description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to you full blog page.',
         enabled: true
@@ -309,6 +310,7 @@ define([
         title: 'Meet Team',
         type: 'meet-team',
         icon: 'fa fa-users',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/meet-team.png',
         filter: 'team',
         description: 'Let your visitors know about the team behind your business. Show profile image, position, bio, and social links for each member.',
         enabled: true
@@ -340,6 +342,7 @@ define([
         title: 'Products',
         type: 'products',
         icon: 'fa fa-money',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/products.png',
         filter: 'products',
         description: 'Use this as the main products page to start selling. It comes together with a cart and checkout built in.',
         enabled: true
@@ -375,6 +378,7 @@ define([
         title: 'Video',
         type: 'video',
         icon: 'fa fa-video',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/video.png',
         filter: 'video',
         description: 'Showcase a video from Youtube, Vimeo, or an uploaded one. You can simply add the url your video is currently located.',
         enabled: true
@@ -396,6 +400,7 @@ define([
         title: 'Top Bar',
         type: 'top-bar',
         icon: 'fa fa-info',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/top-bar.png',
         filter: 'contact',
         description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
         enabled: true
