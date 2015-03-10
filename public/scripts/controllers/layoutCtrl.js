@@ -700,6 +700,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         name: "instagram",
         icon: "instagram",
         tooltip: "Instagram"
+      },
+      {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin"
       }, {
         name: "microsoft",
         icon: "windows",
@@ -716,10 +721,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         name: "reddit",
         icon: "reddit",
         tooltip: "Reddit"
+      }, {name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat"
       }, {
         name: "soundcloud",
         icon: "soundcloud",
         tooltip: "Sound Cloud"
+      },{
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr"
       }, {
         name: "twitter",
         icon: "twitter",
@@ -728,14 +740,33 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         name: "vimeo",
         icon: "vimeo-square",
         tooltip: "Vimeo"
+      },  {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine"
       }, {
         name: "vk",
         icon: "vk",
         tooltip: "Vk"
-      }, {
+      }, 
+      {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website"
+      },
+      {
         name: "yahoo",
         icon: "yahoo",
         tooltip: "Yahoo"
+      },
+        {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp"
       }
 
     ]
