@@ -62,6 +62,22 @@ define(['app'], function (app) {
             });
 		};
 
+		this.getPagesWithLimit = function (accountId, queryParams, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
+			$http({
+                url: apiUrl,
+                method: 'GET',
+                params: queryParams
+            })			
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPosts = function (fn) {
 			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
 			$http.get(apiUrl)

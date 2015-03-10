@@ -39,6 +39,10 @@ define([
       $scope.onboardingSteps = [{
         overlay: false
       }];
+      $scope.numPerPage = 10;
+      $scope.pagesPaging = {};
+      $scope.pagesPaging.take = $scope.numPerPage;
+      $scope.pagesPaging.page = 1;
 
 
       $scope.beginOnboarding = function(type) {
@@ -159,50 +163,8 @@ define([
       UserService.getAccount(function(account) {
         $scope.account = account;
         this.account = account;
-        //get pages and find this page
-        WebsiteService.getPages(account.website.websiteId, function(pages) {
-          var _pages = [];
-          for (var i in pages) {
-            if (pages.hasOwnProperty(i)) {
-              _pages.unshift(pages[i]);
-            }
-            if (pages[i].handle == 'blog') {
-              $scope.blogId = pages[i]._id;
-            }
-            if (pages[i].handle == 'post') {
-              $scope.postId = pages[i]._id;
-            }
-          }
-          $scope.pages = _pages;
-          var editPageHandle = WebsiteService.getEditedPageHandle();
-          if ($scope.activeTab === 'pages' && editPageHandle) {
 
-            $scope.editedPage = _.findWhere($scope.pages, {
-              handle: editPageHandle
-            });
-            if ($scope.editedPage && $scope.editedPage.screenshot == null) {
-              var pagesBlockUI = blockUI.instances.get('pagesBlockUI');
-              pagesBlockUI.start();
-              var maxTries = 10;
-              var getScreenShot = function() {
-                WebsiteService.getPageScreenShot(editPageHandle, function(data) {
-                  if ((!data || !data.length) && maxTries > 0) {
-                    getScreenShot();
-                    maxTries = maxTries - 1;
-                  } else {
-                    WebsiteService.setEditedPageHandle();
-                    if (data && data.length)
-                      $scope.editedPage.screenshot = data;
-                    pagesBlockUI.stop();
-                  }
-                })
-              }
-              setTimeout(function() {
-                getScreenShot();
-              }, 5000);
-            }
-          }
-        });
+        $scope.loadWebsitePages();
 
         UserService.getUserPreferences(function(preferences) {
           $scope.preferences = preferences;
@@ -248,6 +210,82 @@ define([
           }
         });
       });
+
+       $scope.loadWebsitePages = function()
+          {
+                    var queryParams = { 
+                        limit: $scope.pagesPaging.take,
+                        skip: ($scope.pagesPaging.page - 1) * $scope.pagesPaging.take
+                    }
+                    //get pages and find this page
+                WebsiteService.getPagesWithLimit($scope.account.website.websiteId, queryParams, function(pages) {
+                  var _pages = [];
+                  $scope.pagesPaging.total = pages.total; 
+                  $scope.disablePaging = false;
+                  for (var i in pages.results) {
+                    if (pages.results.hasOwnProperty(i)) {
+                      _pages.unshift(pages.results[i]);
+                    }
+                    if (pages.results[i].handle == 'blog') {
+                      $scope.blogId = pages.results[i]._id;
+                    }
+                    if (pages.results[i].handle == 'post') {
+                      $scope.postId = pages.results[i]._id;
+                    }
+                  }
+                  $scope.pages = _pages;
+                  var editPageHandle = WebsiteService.getEditedPageHandle();
+                  if ($scope.activeTab === 'pages' && editPageHandle) {
+
+                    $scope.editedPage = _.findWhere($scope.pages, {
+                      handle: editPageHandle
+                    });
+                    if ($scope.editedPage && $scope.editedPage.screenshot == null) {
+                      var pagesBlockUI = blockUI.instances.get('pagesBlockUI');
+                      pagesBlockUI.start();
+                      var maxTries = 10;
+                      var getScreenShot = function() {
+                        WebsiteService.getPageScreenShot(editPageHandle, function(data) {
+                          if ((!data || !data.length) && maxTries > 0) {
+                            getScreenShot();
+                            maxTries = maxTries - 1;
+                          } else {
+                            WebsiteService.setEditedPageHandle();
+                            if (data && data.length)
+                              $scope.editedPage.screenshot = data;
+                            pagesBlockUI.stop();
+                          }
+                        })
+                      }
+                      setTimeout(function() {
+                        getScreenShot();
+                      }, 5000);
+                    }
+                  }
+                });
+
+              }
+      
+      $scope.nextPage = function() { 
+                $scope.disablePaging = true; 
+                $scope.pagesPaging.page++;  
+                $scope.loadWebsitePages();          
+        };
+       
+        $scope.previousPage = function() {
+               $scope.disablePaging = true;
+               $scope.pagesPaging.page--;
+               $scope.loadWebsitePages();
+        };  
+        $scope.nextPageDisabled = function() {
+            return $scope.pagesPaging.page === $scope.pageCount() ? true : false;
+        }; 
+        $scope.prevPageDisabled = function() {
+            return $scope.pagesPaging.page <= 1 ? true : false;
+        }; 
+        $scope.pageCount = function() {
+            return Math.ceil($scope.pagesPaging.total/$scope.numPerPage);
+        };
 
       $scope.changeTheme = function(theme) {
 

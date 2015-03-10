@@ -1329,6 +1329,34 @@ module.exports = {
         });
     },
 
+    getPagesByWebsiteIdWithLimit: function(websiteId, accountId, skip, limit, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPagesByWebsiteIdWithLimit');
+        var query = {
+            accountId: accountId,
+            websiteId: websiteId,
+            latest: true,
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+        };
+        var skip =  skip;
+        var limit = limit;
+        self.log.debug('start query');
+        
+        cmsDao.findWithFieldsLimitAndTotal(query, skip, limit, null, null, $$.m.cms.Page, function(err, list){
+            self.log.debug('end query');
+            if(err) {
+                self.log.error('Error getting pages by websiteId: ' + err);
+                fn(err, null);
+            } else {
+                fn(null, list);
+            }
+        });
+    },
+
     getSecurePage: function(accountId, pageHandle, websiteId, fn) {
         var self = this;
         self.log = log;
