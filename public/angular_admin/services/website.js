@@ -78,9 +78,13 @@ define(['app'], function (app) {
             });
 		};
 
-		this.getPosts = function (fn) {
+		this.getPosts = function (queryParams, fn) {
 			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
-			$http.get(apiUrl)
+			$http({
+                url: apiUrl,
+                method: 'GET',
+                params: queryParams
+            })
 			.success(function (data, status, headers, config) {
 				fn(data);
 			})

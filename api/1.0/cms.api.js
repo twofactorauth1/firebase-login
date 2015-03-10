@@ -1232,8 +1232,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query['limit'] || 0);//suitable default?
         var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
 
-        cmsManager.listBlogPosts(accountId, limit, function (err, value) {
-            self.log.debug('<< listBlogPosts '+value);
+        cmsManager.listBlogPosts(accountId, limit, skip, function (err, value) {
+            self.log.debug('<< listBlogPosts '+ value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });

@@ -43,6 +43,9 @@ define([
       $scope.pagesPaging = {};
       $scope.pagesPaging.take = $scope.numPerPage;
       $scope.pagesPaging.page = 1;
+      $scope.postPaging = {};
+      $scope.postPaging.take = $scope.numPerPage;
+      $scope.postPaging.page = 1;
 
 
       $scope.beginOnboarding = function(type) {
@@ -171,9 +174,7 @@ define([
           // UserService.updateUserPreferences(preferences, false, function() {});
         });
 
-        WebsiteService.getPosts(function(posts) {
-          $scope.posts = posts;
-        });
+        $scope.loadWebsitePosts();
 
         WebsiteService.getThemes(function(themes) {
           $scope.themes = themes;
@@ -266,7 +267,7 @@ define([
 
               }
       
-      $scope.nextPage = function() { 
+        $scope.nextPage = function() { 
                 $scope.disablePaging = true; 
                 $scope.pagesPaging.page++;  
                 $scope.loadWebsitePages();          
@@ -285,6 +286,36 @@ define([
         }; 
         $scope.pageCount = function() {
             return Math.ceil($scope.pagesPaging.total/$scope.numPerPage);
+        };
+
+        $scope.loadWebsitePosts = function()
+        {
+              var queryParams = { 
+                  limit: $scope.postPaging.take,
+                  skip: ($scope.postPaging.page - 1) * $scope.postPaging.take
+              }
+              WebsiteService.getPosts(queryParams, function(posts) {
+                $scope.postPaging.total = posts.total; 
+                $scope.postPaging.disablePaging = false;
+                $scope.posts = posts.results;
+            });
+     
+        }
+
+        $scope.postNextPage = function() { 
+                $scope.postPaging.disablePaging = true; 
+                $scope.postPaging.page++;  
+                $scope.loadWebsitePosts();          
+        };
+       
+        $scope.postPreviousPage = function() {
+               $scope.postPaging.disablePaging = true;
+               $scope.postPaging.page--;
+               $scope.loadWebsitePosts();
+        };  
+      
+        $scope.postCount = function() {
+            return Math.ceil($scope.postPaging.total/$scope.numPerPage);
         };
 
       $scope.changeTheme = function(theme) {

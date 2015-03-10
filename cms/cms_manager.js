@@ -771,8 +771,8 @@ module.exports = {
         blogPostDao.getPostsByTags(tag, fn);
     },
 
-    listBlogPosts: function(accountId, limit, fn) {
-        blogPostDao.findManyWithLimit({'accountId':accountId}, limit, $$.m.BlogPost, fn);
+    listBlogPosts: function(accountId, limit, skip, fn) {
+        blogPostDao.findWithFieldsLimitAndTotal({'accountId':accountId}, skip, limit, null, null, $$.m.BlogPost, fn);
     },
     listBlogPostsByPageId: function(pageId, limit, fn) {
         blogPostDao.findManyWithLimit({'pageId':pageId}, limit, $$.m.BlogPost, fn);

@@ -236,6 +236,29 @@
                         </div>
 
                     </div>
+                     <div class="pagination pagination-centered website-pagination" ng-if="postPaging.total && postPaging.total > numPerPage">
+                        <ul class="pagination-controle">
+                            <li>
+                              <button type="button" class="btn btn-primary"
+                              ng-disabled="postPaging.disablePaging || postPaging.page <= 1" ng-click='postPreviousPage()'>
+                                 <span class="fa fa-arrow-left"></span>
+                                 <span class="hidden-xs">PREV</span>
+                              </button>
+                            </li>
+                            <li>
+                                <span>Page {{postPaging.page}} of {{ postCount() }}</span>
+                                <i ng-if="postPaging.disablePaging" class="fa fa-spinner fa-spin"></i>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-primary"
+                                 ng-disabled="postPaging.disablePaging || (postPaging.page === postCount())"
+                                 ng-click='postNextPage()'>
+                                 <span class="hidden-xs">Next</span>
+                                 <span class="fa fa-arrow-right"></span>
+                                </button>
+                            </li>
+                        </ul>
+                     </div>
                 </div>
             </div>
 
