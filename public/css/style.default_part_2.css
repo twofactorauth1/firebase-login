@@ -5001,6 +5001,11 @@ div.error label.error:before {
   color: #636e7b;
 }
 
+.website-manage .website-pagination {
+  width: 100%;
+  float: left;
+}
+
 .iconpicker-popover {
   z-index: 9999!important;
 }
