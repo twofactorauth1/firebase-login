@@ -671,106 +671,131 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.social_links = [{
         name: "adn",
         icon: "adn",
-        tooltip : "Adn"
+        tooltip : "Adn",
+        url: "http://www.adn.com"
       }, {
         name: "bitbucket",
         icon: "bitbucket",
-        tooltip : "BitBucket"
+        tooltip : "BitBucket",
+        url: "https://bitbucket.org"
       }, {
         name: "dropbox",
         icon: "dropbox",
-        tooltip: "Dropbox"
+        tooltip: "Dropbox",
+        url: "https://www.dropbox.com"
       }, {
         name: "facebook",
         icon: "facebook",
-        tooltip: "Facebook"
+        tooltip: "Facebook",
+        url: "https://www.facebook.com"
       }, {
         name: "flickr",
         icon: "flickr",
-        tooltip: "Flickr"
+        tooltip: "Flickr",
+        url: "https://www.flickr.com"
       }, {
         name: "foursquare",
         icon: "foursquare",
-        tooltip: "Four Square"
+        tooltip: "Four Square",
+        url: "https://foursquare.com"
       }, {
         name: "github",
         icon: "github",
-        tooltip: "Github"
+        tooltip: "Github",
+        url: "https://github.com"
       }, {
         name: "google-plus",
         icon: "google-plus",
-        tooltip: "Google Plus"
+        tooltip: "Google Plus",
+        url:"https://www.gmail.com"
       }, {
         name: "instagram",
         icon: "instagram",
-        tooltip: "Instagram"
+        tooltip: "Instagram",
+        url: "https://instagram.com"
       },
       {
         name: "linkedin",
         icon: "linkedin",
-        tooltip: "Linkedin"
+        tooltip: "Linkedin",
+        url: "https://www.linkedin.com"
       }, {
         name: "microsoft",
         icon: "windows",
-        tooltip: "Microsoft"
+        tooltip: "Microsoft",
+        url: "http://www.microsoft.com"
       }, {
         name: "openid",
         icon: "openid",
-        tooltip: "Open Id"
+        tooltip: "Open Id",
+        url: "http://openid.com"
       }, {
         name: "pinterest",
         icon: "pinterest",
-        tooltip: "Pinterest"
+        tooltip: "Pinterest",
+        url: "https://www.pinterest.com"
       }, {
         name: "reddit",
         icon: "reddit",
-        tooltip: "Reddit"
+        tooltip: "Reddit",
+        url: "http://www.reddit.com"
       }, {name: "comment-o",
         icon: "comment-o",
-        tooltip: "Snapchat"
+        tooltip: "Snapchat",
+        url: "https://www.snapchat.com"
       }, {
         name: "soundcloud",
         icon: "soundcloud",
-        tooltip: "Sound Cloud"
+        tooltip: "Sound Cloud",
+        url: "https://soundcloud.com"
       },{
         name: "tumblr",
         icon: "tumblr",
-        tooltip: "Tumblr"
+        tooltip: "Tumblr",
+        url:"https://www.tumblr.com"
       }, {
         name: "twitter",
         icon: "twitter",
-        tooltip: "Twitter"
+        tooltip: "Twitter",
+        url: "https://twitter.com"
       }, {
         name: "vimeo",
         icon: "vimeo-square",
-        tooltip: "Vimeo"
+        tooltip: "Vimeo",
+        url: "https://vimeo.com"
       },  {
         name: "vine",
         icon: "vine",
-        tooltip: "Vine"
+        tooltip: "Vine",
+        url: "http://www.vinemarket.com"
       }, {
         name: "vk",
         icon: "vk",
-        tooltip: "Vk"
+        tooltip: "Vk",
+        url: "http://vk.com"
       }, 
       {
         name: "desktop",
         icon: "desktop",
-        tooltip: "Website"
+        tooltip: "Website",
+        url: "http://www.website.com"
       },
       {
         name: "yahoo",
         icon: "yahoo",
-        tooltip: "Yahoo"
+        tooltip: "Yahoo",
+        url: "https://yahoo.com"
       },
         {
         name: "youtube",
         icon: "youtube",
-        tooltip: "Youtube"
+        tooltip: "Youtube",
+        url: "https://www.youtube.com"
       }, {
         name: "yelp",
         icon: "yelp",
-        tooltip: "Yelp"
+        tooltip: "Yelp",
+        url: "http://www.yelp.com"
       }
 
     ]
@@ -799,6 +824,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.setSelectedLink = function(social_link) {
       $scope.social.name = social_link.name;
       $scope.social.icon = social_link.icon;
+      $scope.social.url = social_link.url;
     }
     $scope.saveSocialLink = function(social, id, mode) {
       $("#social-link-name .error").html("");

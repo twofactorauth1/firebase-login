@@ -73,7 +73,7 @@
                                 <a tooltip-placement="bottom" tooltip="{{social_link.tooltip}}" ng-repeat="social_link in social_links" class="btn btn-social-icon btn-{{social_link.name}}" ng-click="setSelectedLink(social_link)"><i class="fa fa-{{social_link.icon}}"></i></a>  
                             </div>
                         </div> 
-                        <div class="form-group" id="social-link-name">   
+                        <div ng-if="social.icon" class="form-group" id="social-link-name">   
                             <label for="link-name">Selected Link Type </label>     
                             <a id="link-name" class="btn btn-social-icon btn-{{social.name}}"><i class="fa fa-{{social.icon}}"></i></a>
                             <span class="error help-block" />
