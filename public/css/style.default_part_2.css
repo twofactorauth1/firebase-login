@@ -6968,6 +6968,40 @@ input[type='file'] {
   font-size: 30px;
 }
 
+.as-sortable-drag {
+  opacity: .8;
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  background: #f6f6f6!important;
+  color: #6a6a6a;
+}
+
+#reorderNavBarContainer .as-sortable-placeholder {
+  background: #eeeeee;
+  border: 1px dashed #c2c2c2!important;
+  margin-bottom: 10px;
+}
+
+#reorderNavBarContainer ul {
+  list-style: none;
+  padding-left: 0;
+  text-transform: capitalize;
+}
+
+#reorderNavBarContainer ul li,
+#reorderNavBarContainer ul .as-sortable-item {
+  position: relative;
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  background: #f6f6f6!important;
+  color: #6a6a6a;
+}
+
+#reorderNavBarContainer .radio-inline label {
+  float: right;
+  padding: 0;
+}
+
 .blog-item {
   background: #fcfcfc;
   margin-bottom: 20px;
