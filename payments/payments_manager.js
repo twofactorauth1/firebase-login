@@ -35,5 +35,10 @@ module.exports = {
             });
         }
 
+    },
+
+    listStripeCoupons: function(accessToken, fn) {
+        log.debug('listStripeCoupons(' + accessToken + ',fn)');
+        return stripeDao.listCoupons(accessToken, fn);
     }
 };

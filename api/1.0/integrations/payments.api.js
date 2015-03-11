@@ -12,6 +12,7 @@ var customerLinkDao = require('../../../payments/dao/customer_link.dao.js');
 var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
 var appConfig = require('../../../configs/app.config');
 var accountDao = require('../../../dao/account.dao');
+var paymentsManager = require('../../../payments/payments_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -92,6 +93,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
 
         //Coupons
+        app.get(this.url('coupons'), this.isAuthApi.bind(this), this.listCoupons.bind(this));
+        app.get(this.url('coupon/:name/validate'), this.setup.bind(this), this.validateCoupon.bind(this));
+        app.get(this.url('coupon/:name'), this.isAuthApi.bind(this), this.getCouponByName.bind(this));
+        app.post(this.url('coupons'), this.isAuthApi.bind(this), this.createCoupon.bind(this));
+        //stripe coupons cannot be updated
+        app.delete(this.url('coupon/:name'), this.isAuthApi.bind(this), this.deleteCoupon.bind(this));
+
         //Discounts
 
         //Tokens - CG
@@ -261,6 +269,48 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+
+    },
+
+    /*
+     * COUPONS
+     */
+
+    listCoupons: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listCoupons');
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.listStripeCoupons(accessToken, function(err, coupons){
+                    self.log.debug('<< listCoupons');
+                    self.sendResultOrError(resp, err, coupons, "Error listing Stripe Coupons");
+                });
+            }
+        });
+
+
+    },
+
+    validateCoupon: function(req, resp) {
+
+    },
+
+    getCouponByName: function(req, resp) {
+
+    },
+
+    createCoupon: function(req, resp) {
+
+    },
+
+    deleteCoupon: function(req, resp) {
 
     },
 

@@ -1243,7 +1243,34 @@ var dao = {
 
     },
 
-    //coupons
+    //coupons - crdl
+
+    createCoupon: function() {
+
+    },
+
+    getCoupon: function() {
+
+    },
+
+    deleteCoupon: function() {
+
+    },
+
+    listCoupons: function(accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listCoupons');
+
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.coupons.list({}, apiToken, function(err, coupons){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< listCoupons');
+            return fn(null, coupons);
+        });
+    },
 
     //discounts
 
