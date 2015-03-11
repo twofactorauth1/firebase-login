@@ -229,7 +229,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
-
+        console.log('got posts: ', data);
+        var total = data.total;
+        var limit = data.limit;
+        var start = data.start;
+        data = data.results;
         if (that.teaserposts) {
           //donothing
         } else {
@@ -700,6 +704,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         name: "instagram",
         icon: "instagram",
         tooltip: "Instagram"
+      },
+      {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin"
       }, {
         name: "microsoft",
         icon: "windows",
@@ -716,10 +725,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         name: "reddit",
         icon: "reddit",
         tooltip: "Reddit"
+      }, {name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat"
       }, {
         name: "soundcloud",
         icon: "soundcloud",
         tooltip: "Sound Cloud"
+      },{
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr"
       }, {
         name: "twitter",
         icon: "twitter",
@@ -728,14 +744,33 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         name: "vimeo",
         icon: "vimeo-square",
         tooltip: "Vimeo"
+      },  {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine"
       }, {
         name: "vk",
         icon: "vk",
         tooltip: "Vk"
-      }, {
+      }, 
+      {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website"
+      },
+      {
         name: "yahoo",
         icon: "yahoo",
         tooltip: "Yahoo"
+      },
+        {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp"
       }
 
     ]
@@ -2017,7 +2052,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             {
                 return $(this).height();
             }).get());
-            //$(".meet-team-height").css("min-height", maxTeamHeight + 10);
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
         }   
         }, 1000)

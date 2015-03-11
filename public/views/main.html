@@ -20,7 +20,7 @@
         </div>
         <div ng-include="'/components/component-wrap.html'"></div>
         <div ng-class="{'zee-blur': !component.visibility}"></div>
-        <div class="add-component" data-index = "{{$index + 1}}">
+        <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing">
             <a href="">
             <i class="fa fa-plus"></i>
             <p>Add New</p>
