@@ -368,13 +368,17 @@
                             <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
                             <input id="page-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title"  ng-change="validateCreatePost(post)">
                         </div>
-                        <div class="form-group" ng-class="{ 'has-error': postUrlError}">
+                        <div class="form-group" ng-class="{ 'has-error': postUrlError}" ng-show="showChangeURL">
                             <slug from="post.post_title" to="post.post_url"></slug>
                             <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
                             <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post)">
                         </div>
+                        <p ng-show="post.post_title">Post Url will be <strong>/{{post.post_url}}</strong>
+                            <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                            <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+                        </p>
                         <div class="clearfix mb15"></div>
-                        <div class="form-group">
+                        <div class="form-group hidden">
                             <div class="ckbox ckbox-success">
                                 <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
                                 <label for="comment_status">Comment Status On?</label>
