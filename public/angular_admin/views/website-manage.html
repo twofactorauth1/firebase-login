@@ -320,11 +320,15 @@
                             <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
                             <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title" ng-change="validateCreatePage(page)">
                         </div>
-                        <div class="form-group" ng-class="{ 'has-error': handleError}">
+                        <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
                             <slug from="page.title" to="page.handle"></slug>
                             <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
                             <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle" ng-change="validateCreatePage(page)">
                         </div>
+                        <p ng-show="page.title">Page Url will be <strong>/{{page.handle}}</strong>
+                            <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                            <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+                        </p>
                         <div class="clearfix mb15"></div>
                         <div class="form-group">
                             <div class="ckbox ckbox-success">
