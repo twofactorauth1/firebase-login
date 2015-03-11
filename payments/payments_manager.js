@@ -38,12 +38,47 @@ module.exports = {
     },
 
     listStripeCoupons: function(accessToken, fn) {
-        log.debug('listStripeCoupons(' + accessToken + ',fn)');
+        log.debug('>> listStripeCoupons(' + accessToken + ',fn)');
         return stripeDao.listCoupons(accessToken, fn);
     },
 
     getStripeCouponByName: function(couponName, accessToken, fn) {
-        log.debug('getStripeCouponByName(' + couponName + ',' + accessToken + ',fn)');
+        log.debug('>> getStripeCouponByName(' + couponName + ',' + accessToken + ',fn)');
         return stripeDao.getCoupon(couponName, accessToken, fn);
+    },
+
+    createStripeCoupon: function(couponObj, accessToken, fn) {
+        log.debug('>> createStripeCoupon');
+        /**
+         *  duration: (forever|once|repeating) required
+         *  amount_off | percent_off required
+         *  duration_in_months: required if duration is repeating
+         */
+        var id = couponObj.id;
+        var duration = couponObj.duration;
+        if(duration !== 'forever' && duration !== 'once' && duration !== ' repeating') {
+            return fn('Validation Error: duration must be one of: duration, once, repeating', null);
+        }
+        var amount_off = couponObj.amount_off;
+        var currency = couponObj.currency || 'usd';
+        var duration_in_months = couponObj.duration_in_months;
+        if(duration === 'repeating' && !duration_in_months) {
+            return fn('Validation Error: duration_in_months must be a postive integer if duration is repeating', null);
+        }
+        var max_redemptions = couponObj.max_redemptions;
+        var metadata = couponObj.metadata;
+        var percent_off = couponObj.percent_off;
+        if(!amount_off && !percent_off) {
+            return fn('Validation Error: either amount_off or percent_off is required', null);
+        }
+        var redeem_by = couponObj.redeem_by;
+        return stripeDao.createCoupon(id, duration, amount_off, currency, duration_in_months, max_redemptions,
+            metadata, percent_off, redeem_by, accessToken, fn);
+
+    },
+
+    deleteStripeCoupon: function(couponName, accessToken, fn) {
+        log.debug('>> deleteStripeCoupon');
+        return stripeDao.deleteCoupon(couponName, accessToken, fn);
     }
 };

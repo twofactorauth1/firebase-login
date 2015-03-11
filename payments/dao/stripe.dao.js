@@ -1245,8 +1245,50 @@ var dao = {
 
     //coupons - crdl
 
-    createCoupon: function() {
+    /**
+     *  duration: (forever|once|repeating) required
+     *  amount_off | percent_off required
+     *  duration_in_months: required if duration is repeating
+     */
+    createCoupon: function(id, duration, amount_off, currency, duration_in_months, max_redemptions, metadata,
+                           percent_off, redeem_by, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createCoupon');
+        var params = {duration: duration};
+        if(id) {
+            params.id = id;
+        }
+        if(amount_off) {
+            params.amount_off = amount_off;
+        }
+        if(currency) {
+            params.currency = currency;
+        }
+        if(duration_in_months) {
+            params.duration_in_months = duration_in_months;
+        }
+        if(max_redemptions) {
+            params.max_redemptions = max_redemptions;
+        }
+        if(metadata) {
+            params.metadata = metadata;
+        }
+        if(percent_off) {
+            params.percent_off = percent_off;
+        }
+        if(redeem_by) {
+            params.redeem_by = redeem_by;
+        }
+        var apiToken = self.delegateStripe(accessToken);
 
+        stripe.coupons.create(params, apiToken, function(err, coupon) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< createCoupon');
+            return fn(null, coupon);
+        });
     },
 
     getCoupon: function(couponId, accessToken, fn) {
@@ -1264,8 +1306,19 @@ var dao = {
         });
     },
 
-    deleteCoupon: function() {
+    deleteCoupon: function(couponId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> deleteCoupon');
 
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.coupons.del(couponId, apiToken, function(err, confirmation){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< deleteCoupon');
+            return fn(null, confirmation);
+        });
     },
 
     listCoupons: function(accessToken, fn) {

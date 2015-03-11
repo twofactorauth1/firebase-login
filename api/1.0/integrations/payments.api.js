@@ -324,11 +324,46 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createCoupon');
 
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if (accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.createStripeCoupon(req.body, accessToken, function(err, coupon){
+                    self.log.debug('<< createCoupon');
+                    self.sendResultOrError(resp, err, coupon, "Error creating Stripe Coupon");
+                });
+            }
+        });
     },
 
     deleteCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteCoupon');
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                var couponName = req.params.name;
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.deleteStripeCoupon(couponName, accessToken, function(err, coupon){
+                    self.log.debug('<< deleteCoupon');
+                    self.sendResultOrError(resp, err, coupon, "Error deleting Stripe Coupon");
+                });
 
+            }
+        });
     },
 
     getCustomer: function(req, resp) {
