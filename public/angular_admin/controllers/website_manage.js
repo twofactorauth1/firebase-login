@@ -302,7 +302,7 @@ define([
                   limit: $scope.postPaging.take,
                   skip: ($scope.postPaging.page - 1) * $scope.postPaging.take
               }
-              WebsiteService.getPosts(queryParams, function(posts) {
+              WebsiteService.getPostsWithLimit(queryParams, function(posts) {
                 $scope.postPaging.total = posts.total;
                 $scope.postPaging.disablePaging = false;
                 $scope.posts = posts.results;

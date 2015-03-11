@@ -233,7 +233,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var total = data.total;
         var limit = data.limit;
         var start = data.start;
-        data = data.results;
+        if (data.results)
+          data = data.results;
         if (that.teaserposts) {
           //donothing
         } else {
