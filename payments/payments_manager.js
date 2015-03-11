@@ -40,5 +40,10 @@ module.exports = {
     listStripeCoupons: function(accessToken, fn) {
         log.debug('listStripeCoupons(' + accessToken + ',fn)');
         return stripeDao.listCoupons(accessToken, fn);
+    },
+
+    getStripeCouponByName: function(couponName, accessToken, fn) {
+        log.debug('getStripeCouponByName(' + couponName + ',' + accessToken + ',fn)');
+        return stripeDao.getCoupon(couponName, accessToken, fn);
     }
 };

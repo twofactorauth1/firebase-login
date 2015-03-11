@@ -1249,8 +1249,19 @@ var dao = {
 
     },
 
-    getCoupon: function() {
+    getCoupon: function(couponId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getCoupon');
 
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.coupons.retrieve(couponId, apiToken, function(err, coupon) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< getCoupon');
+            return fn(null, coupon);
+        });
     },
 
     deleteCoupon: function() {

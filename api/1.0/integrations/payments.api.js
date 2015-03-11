@@ -295,7 +295,6 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
-
     },
 
     validateCoupon: function(req, resp) {
@@ -303,7 +302,25 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     getCouponByName: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getCouponByName');
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                var couponName = req.params.name;
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+                    self.log.debug('<< getCouponByName');
+                    self.sendResultOrError(resp, err, coupon, "Error getting Stripe Coupon");
+                });
 
+            }
+        });
     },
 
     createCoupon: function(req, resp) {
