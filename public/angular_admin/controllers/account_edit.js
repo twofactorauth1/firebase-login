@@ -20,6 +20,8 @@ define(['app', 'userService', 'underscore', 'commonutils', 'adminValidationDirec
         $scope.finishOnboarding();
       }
     });
+    if($('body').hasClass('rightmenu-open'))
+      $(".menutoggle-right").click();
 
     $scope.beginOnboarding = function(type) {
       if (type == 'basic-info') {
