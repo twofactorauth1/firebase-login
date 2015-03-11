@@ -18,7 +18,7 @@
                             <a id="link-name" class="btn btn-social-icon btn-{{social.name}}"><i class="fa fa-{{social.icon}}"></i></a>
                             <span class="error help-block" />
                         </div>
-                        <div class="form-group" id="social-link-url">
+                        <div ng-if="social.icon" class="form-group" id="social-link-url">
                             <label for="link-url">Link Url* </label>
                             <input id="link-url" class="form-control input-lg" type="text" ng-model="social.url">
                             <span class="error help-block" />
