@@ -298,6 +298,18 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     validateCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> validateCoupon');
+        var accessToken = self._getAccessToken(req);
+        var accountId = parseInt(self.accountId(req));
+        var couponName = req.params.name;
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
+        paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+            self.log.debug('<< validateCoupon');
+            self.sendResultOrError(resp, err, coupon, "Error getting Stripe Coupon");
+        });
 
     },
 
