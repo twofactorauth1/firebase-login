@@ -78,7 +78,19 @@ define(['app'], function (app) {
             });
 		};
 
-		this.getPosts = function (queryParams, fn) {
+		this.getPosts = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Get Posts with ERROR');
+                fn(err, null);
+            });
+		};
+
+		this.getPostsWithLimit = function (queryParams, fn) {
 			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
 			$http({
                 url: apiUrl,
