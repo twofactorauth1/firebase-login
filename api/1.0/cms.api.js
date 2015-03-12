@@ -69,19 +69,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
 
 
-
-        //THEME Updated URLs
-
-        app.get(this.url('theme'), this.isAuthApi.bind(this), this.listThemes.bind(this));
-        app.get(this.url('theme/:id'), this.isAuthApi.bind(this), this.getThemeById.bind(this));
-        app.get(this.url('theme/name/:name'), this.isAuthApi.bind(this), this.getThemeByName.bind(this));
-        app.post(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.createTheme.bind(this));
-        app.post(this.url('theme/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createThemeFromWebsite.bind(this));
-        app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTheme.bind(this));
-        app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTheme.bind(this));
-        app.put(this.url('theme/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTheme.bind(this));
-        app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTheme.bind(this));
-        app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTheme.bind(this));
+        // TEMPLATES
+        app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
+        // app.get(this.url('template/:id'), this.isAuthApi.bind(this), this.getTemplateById.bind(this));
+        // app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
+        app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
+        // app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
+        // app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
+        // app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
+        // app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
+        // app.post(this.url('template/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
+        // app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
 
 
         // COMPONENTS
@@ -586,94 +584,94 @@ _.extend(api.prototype, baseApi.prototype, {
     },
     //endregion
 
-
-    //region THEME
+    //region TEMPLATES
 
     /*
-     app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
-     app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
-     app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
-     app.post(this.url('theme'), this.isAuthApi, this.createTheme.bind(this));
-     app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
-     app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
-     app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
-     app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
-     app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+     app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
+    app.get(this.url('template/:id'), this.isAuthApi.bind(this), this.getTemplateById.bind(this));
+    app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
+    app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
+    app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
+    app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
+    app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
+    app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
+    app.post(this.url('template/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
+    app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
      */
 
-    listThemes: function(req, res) {
+    listTemplates: function(req, res) {
         var self = this;
-        self.log.debug('>> listThemes');
         var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> listTemplates accountId ', accountId);
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                cmsManager.getAllThemes(accountId, function(err, value){
-                    self.log.debug('<< listThemes');
-                    self.sendResultOrError(res, err, value, 'Error retrieving all themes.');
+                cmsManager.getAllTemplates(accountId, function(err, value){
+                    self.log.debug('<< listTemplates');
+                    self.sendResultOrError(res, err, value, 'Error retrieving all templates.');
                 });
             }
         });
 
     },
 
-    getThemeById: function(req, res) {
+    // getThemeById: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> getThemeById');
+
+    //     var themeId = req.params.id;
+    //     var accountId = parseInt(self.accountId(req));
+
+    //     self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             cmsManager.getThemeById(themeId, function(err, value){
+    //                 self.log.debug('<< getThemeById');
+    //                 self.sendResultOrError(res, err, value, 'Error retrieving theme by id.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
+
+    // getThemeByName: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> getThemeByName');
+    //     var themeName = req.params.name;
+    //     var accountId = parseInt(self.accountId(req));
+    //     self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             cmsManager.getThemeByName(themeName, function(err, value){
+    //                 self.log.debug('<< getThemeByName');
+    //                 self.sendResultOrError(res, err, value, 'Error retrieving theme by name.');
+    //             });
+    //         }
+    //     });
+
+    // },
+
+    createTemplate: function(req, res) {
         var self = this;
-        self.log.debug('>> getThemeById');
 
-        var themeId = req.params.id;
+        self.log.debug('>> createTemplate');
         var accountId = parseInt(self.accountId(req));
-
-        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.getThemeById(themeId, function(err, value){
-                    self.log.debug('<< getThemeById');
-                    self.sendResultOrError(res, err, value, 'Error retrieving theme by id.');
-                });
-            }
-        });
-
-
-    },
-
-    getThemeByName: function(req, res) {
-        var self = this;
-        self.log.debug('>> getThemeByName');
-        var themeName = req.params.name;
-        var accountId = parseInt(self.accountId(req));
-        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.getThemeByName(themeName, function(err, value){
-                    self.log.debug('<< getThemeByName');
-                    self.sendResultOrError(res, err, value, 'Error retrieving theme by name.');
-                });
-            }
-        });
-
-    },
-
-    createTheme: function(req, res) {
-        var self = this;
-
-        self.log.debug('>> createTheme');
-        var accountId = parseInt(self.accountId(req));
-        var themeObj = new $$.m.cms.Theme(req.body);
-        themeObj.set('accountId', accountId);
-        themeObj.set('created.by', self.userId(req));
+        var templateObj = new $$.m.cms.Template(req.body);
+        templateObj.set('accountId', accountId);
+        templateObj.set('created.by', self.userId(req));
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                cmsManager.createTheme(themeObj, function(err, value){
-                    self.log.debug('<< createTheme');
-                    self.sendResultOrError(res, err, value, 'Error creating theme.');
+                cmsManager.createTemplate(templateObj, function(err, value){
+                    self.log.debug('<< createTemplate');
+                    self.sendResultOrError(res, err, value, 'Error creating template.');
                 });
             }
         });
@@ -686,148 +684,148 @@ _.extend(api.prototype, baseApi.prototype, {
      * @param {websiteId} websiteID in URL
      * @param {theme} theme object in body of POST.  The name field MUST be populated.
      */
-    createThemeFromWebsite: function(req, res) {
-        var self = this;
-        self.log.debug('>> createThemeFromWebsite');
+    // createThemeFromWebsite: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> createThemeFromWebsite');
 
-        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var websiteId = req.params.websiteId;
-                var accountId = parseInt(self.accountId(req));
-                var themeObj = new $$.m.cms.Theme(req.body);
-                if(themeObj.get('name') === '') {
-                    self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
-                }
-                themeObj.set('accountId', accountId);
-                themeObj.set('created.by', self.userId(req));
+    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var websiteId = req.params.websiteId;
+    //             var accountId = parseInt(self.accountId(req));
+    //             var themeObj = new $$.m.cms.Theme(req.body);
+    //             if(themeObj.get('name') === '') {
+    //                 self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
+    //             }
+    //             themeObj.set('accountId', accountId);
+    //             themeObj.set('created.by', self.userId(req));
 
-                cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
-                    self.log.debug('<< createThemeFromWebsite');
-                    self.sendResultOrError(res, err, value, 'Error creating theme from website.');
-                });
-            }
-        });
-
-
-    },
+    //             cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
+    //                 self.log.debug('<< createThemeFromWebsite');
+    //                 self.sendResultOrError(res, err, value, 'Error creating theme from website.');
+    //             });
+    //         }
+    //     });
 
 
-    updateTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> updateTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
-                var accountId = parseInt(self.accountId(req));
-                var themeObj = new $$.m.cms.Theme(req.body);
-                themeObj.set('modified.by', self.userId(req));
-                themeObj.set('modified.date', new Date());
-                themeObj.set('_id', themeId);
-
-                cmsManager.updateTheme(themeObj, function(err, value){
-                    self.log.debug('<< updateTheme');
-                    self.sendResultOrError(res, err, value, 'Error updating theme.');
-
-                });
-            }
-        });
+    // },
 
 
+    // updateTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> updateTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var accountId = parseInt(self.accountId(req));
+    //             var themeObj = new $$.m.cms.Theme(req.body);
+    //             themeObj.set('modified.by', self.userId(req));
+    //             themeObj.set('modified.date', new Date());
+    //             themeObj.set('_id', themeId);
 
-    },
+    //             cmsManager.updateTheme(themeObj, function(err, value){
+    //                 self.log.debug('<< updateTheme');
+    //                 self.sendResultOrError(res, err, value, 'Error updating theme.');
 
-
-    deleteTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> deleteTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
-                var accountId = parseInt(self.accountId(req));
-
-                cmsManager.deleteTheme(themeId, function(err, value){
-                    self.log.debug('<< deleteTheme');
-                    self.sendResultOrError(res, err, value, 'Error deleting theme.');
-                });
-            }
-        });
-
-
-    },
-
-    createWebsiteFromTheme: function(req, res) {
-        var self = this;
-
-        self.log.debug('>> createWebsiteFromTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
-                var accountId = parseInt(self.accountId(req));
-
-                cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), null, null, function(err, websiteAndPage){
-                    self.log.debug('<< createWebsiteFromTheme');
-                    self.sendResultOrError(res, err, websiteAndPage.website, 'Error creating website from theme.');
-                });
-            }
-        });
+    //             });
+    //         }
+    //     });
 
 
-    },
 
-    createPageFromTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> createPageFromTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
-                var websiteId = req.params.websiteId;
-                var accountId = parseInt(self.accountId(req));
-
-                var handle = req.params.handle;
-                cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
-                    self.log.debug('<< createWebsiteFromTheme');
-                    self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
-                    cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
-                        self = null;
-                    });
-                });
-            }
-        });
-
-    },
-
-    setTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> setTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.themeId;
-                var websiteId = req.params.websiteId;
-                var accountId = parseInt(self.accountId(req));
-
-                //TODO: validate this method.
-                cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
-                    self.log.debug('<< setTheme');
-                    self.sendResultOrError(res, err, value, 'Error setting theme on account.');
-                });
-            }
-        });
+    // },
 
 
-    },
+    // deleteTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> deleteTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var accountId = parseInt(self.accountId(req));
+
+    //             cmsManager.deleteTheme(themeId, function(err, value){
+    //                 self.log.debug('<< deleteTheme');
+    //                 self.sendResultOrError(res, err, value, 'Error deleting theme.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
+
+    // createWebsiteFromTheme: function(req, res) {
+    //     var self = this;
+
+    //     self.log.debug('>> createWebsiteFromTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var accountId = parseInt(self.accountId(req));
+
+    //             cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), null, null, function(err, websiteAndPage){
+    //                 self.log.debug('<< createWebsiteFromTheme');
+    //                 self.sendResultOrError(res, err, websiteAndPage.website, 'Error creating website from theme.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
+
+    // createPageFromTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> createPageFromTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var websiteId = req.params.websiteId;
+    //             var accountId = parseInt(self.accountId(req));
+
+    //             var handle = req.params.handle;
+    //             cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
+    //                 self.log.debug('<< createWebsiteFromTheme');
+    //                 self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
+    //                 cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
+    //                     if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
+    //                     self = null;
+    //                 });
+    //             });
+    //         }
+    //     });
+
+    // },
+
+    // setTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> setTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.themeId;
+    //             var websiteId = req.params.websiteId;
+    //             var accountId = parseInt(self.accountId(req));
+
+    //             //TODO: validate this method.
+    //             cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+    //                 self.log.debug('<< setTheme');
+    //                 self.sendResultOrError(res, err, value, 'Error setting theme on account.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
 
     //endregion
 

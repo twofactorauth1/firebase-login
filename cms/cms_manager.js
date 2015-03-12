@@ -4,6 +4,7 @@ var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
+var templateDao = require('./dao/template.dao.js');
 var urlboxhelper = require('../utils/urlboxhelper');
 var s3dao = require('../dao/integrations/s3.dao');
 var fs = require('fs');
@@ -47,14 +48,14 @@ module.exports = {
         });
     },
 
-    getAllThemes: function(accountId, fn) {
-        log.debug('>> getAllThemes');
-        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Theme, function(err, list){
+    getAllTemplates: function(accountId, fn) {
+        log.debug('>> getAllTemplates');
+        templateDao.findMany({}, $$.m.cms.Template, function(err, list){
             if(err) {
-                log.error('Exception thrown listing themes: ' + err);
+                log.error('Exception thrown listing templates: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getAllThemes');
+                log.debug('<< getAllTemplates');
                 fn(null, list);
             }
         });
