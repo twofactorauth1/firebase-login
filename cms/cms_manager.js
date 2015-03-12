@@ -328,6 +328,9 @@ module.exports = {
         var self = this;
         self.log = log;
         self.log.debug('>> createBlogPost');
+        if (blogPost.featured_image) {
+          blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
+        }
         blogPostDao.createPost(blogPost, function(err, savedPost){
             if(err) {
                 self.log.error('Error creating post: ' + err);
@@ -686,6 +689,9 @@ module.exports = {
 
     updateBlogPost: function(accountId, blogPost, fn) {
         var self = this;
+        if (blogPost.featured_image) {
+          blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
+        }
         console.dir('blogPost '+JSON.stringify(blogPost));
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
@@ -1348,7 +1354,7 @@ module.exports = {
         var skip =  skip;
         var limit = limit;
         self.log.debug('start query');
-        
+
         cmsDao.findWithFieldsLimitAndTotal(query, skip, limit, null, null, $$.m.cms.Page, function(err, list){
             self.log.debug('end query');
             if(err) {
