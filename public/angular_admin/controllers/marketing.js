@@ -405,7 +405,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         }
                     }
                 });
-            }, 3000);
+            }, 4000);
         });
 
         /*
