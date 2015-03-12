@@ -98,6 +98,30 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                             <li ng-click="startTask('website-editor', 'edit-home')" ng-class="{complete: userPreferences.tasks.edit_home }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.edit_home , 'fa-circle-o' : !userPreferences.tasks.edit_home }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.edit_home">Complete</small>
+                                <h3 class="pull-left">Edit the home page</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Lets make the home page according to your taste.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('website', 'add-post')" ng-class="{complete: userPreferences.tasks.add_post }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_post , 'fa-circle-o' : !userPreferences.tasks.add_post }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_post">Complete</small>
+                                <h3 class="pull-left">Create First Blog Post</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Keep everyone up to date and informed with a regular blog.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('account', 'connect-social')" ng-class="{complete: userPreferences.tasks.connect_social }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.connect_social , 'fa-circle-o' : !userPreferences.tasks.connect_social }"></i></h1>
                                 <small class="pull-right done" ng-if="userPreferences.tasks.connect_social">Complete</small>
@@ -166,30 +190,6 @@
                                 <div class="task-desc">
                                     <p>
                                         <b>Import or create new products to start selling and creating revenue.</b>
-                                    </p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
-                            <li ng-click="startTask('website', 'add-post')" ng-class="{complete: userPreferences.tasks.add_post }">
-                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_post , 'fa-circle-o' : !userPreferences.tasks.add_post }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.add_post">Complete</small>
-                                <h3 class="pull-left">Create First Blog Post</h3>
-                                <div class="clearfix"></div>
-                                <div class="task-desc">
-                                    <p>
-                                        <b>Keep everyone up to date and informed with a regular blog.</b>
-                                    </p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
-                            <li ng-click="startTask('website-editor', 'edit-home')" ng-class="{complete: userPreferences.tasks.edit_home }">
-                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.edit_home , 'fa-circle-o' : !userPreferences.tasks.edit_home }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.edit_home">Complete</small>
-                                <h3 class="pull-left">Edit the home page</h3>
-                                <div class="clearfix"></div>
-                                <div class="task-desc">
-                                    <p>
-                                        <b>Lets make the home page according to your taste.</b>
                                     </p>
                                 </div>
                                 <div class="clearfix"></div>
