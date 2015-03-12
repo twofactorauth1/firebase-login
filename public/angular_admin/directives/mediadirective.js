@@ -67,6 +67,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     response.files[0].mimeType = fileItem.file.type;
                     $scope.originalAssets.push(response.files[0]);
                     $scope.assets.push(response.files[0]);
+                    response.files[0].checked = true;
+                    $scope.m.singleSelect(response.files[0]);
                 };
 
                 uploader.onErrorItem = function(item, response, status, headers) {
