@@ -134,6 +134,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         $scope.feedLengths = [];
         $scope.feeds = [];
         $scope.feedTypes = [];
+        $scope.filters = [];
+        $scope.filtersValues = [".posts-", ".link-", ".status-", ".video-", ".photo-"]
         $scope.fbPostsLength = 0;
 
         SocialConfigService.getAllSocialConfig(function(config) {
@@ -220,15 +222,23 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(profile, socialId) {
                             profile.type = 'twitter';
                             profile.socialId = socialId;
-                            profile.open = false;
+                            profile.open = true;
                             $scope.feedTypes.push(profile);
+                            $scope.filtersValues.forEach(function(value, index) {
+                               $scope.filters.push(value+socialId);
+                            });
+
                         });
                     } else if (socialAccountMap[obj.socialId] === 'fb') {
                         SocialConfigService.getTrackedObject(i, obj.socialId, function(profile, socialId) {
                             profile.socialId = socialId;
                             profile.type = 'facebook';
-                            profile.open = false;
+                            profile.open = true;
                             $scope.feedTypes.push(profile);
+                            $scope.filtersValues.forEach(function(value, index) {
+                               $scope.filters.push(value+socialId);
+                            });
+
                         });
 
                     }
@@ -425,7 +435,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
          * filter the feed when the checkboxes are check on the left panel
          */
 
-        $scope.filters = [];
+
 
         $scope.filterFeed = function(type, $event) {
             console.log('$scope.filters ', $scope.filters);
@@ -443,10 +453,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 };
             });
 
-            if ($scope.feedTypes[feedIndex].open == false) {
-                $scope.feedTypes[feedIndex].open = true;
-            } else {
+            if ($scope.feedTypes[feedIndex].open == true) {
                 $scope.feedTypes[feedIndex].open = false;
+            } else {
+                $scope.feedTypes[feedIndex].open = true;
             }
 
             $('.stream').isotope({
