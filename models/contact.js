@@ -302,7 +302,7 @@ var contact = $$.m.ModelBase.extend({
         phones: [],
         addresses: []
       };
-      validateData({details: detail});
+      this.validateData({details: detail});
       this.get("details").push(detail);
     }
 
@@ -370,8 +370,8 @@ var contact = $$.m.ModelBase.extend({
         }
       }
     }
-    
-    validateData({details: details});
+
+    this.validateData({details: details});
 
 
     if (websites != null) {
