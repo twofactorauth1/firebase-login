@@ -204,6 +204,14 @@ define([
 
           $scope.primaryFontStack = $scope.website.settings.font_family;
           $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+          if ($scope.website.settings == {}) {
+            $scope.primaryFontFamily = 'Spinnaker';
+            $scope.secondaryFontFamily = 'Spinnaker';
+            $scope.googleFontFamily = 'Spinnaker';
+
+            $scope.primaryFontStack = 'Spinnaker';
+            $scope.secondaryFontStack = 'Spinnaker';
+          }
 
           ngProgress.complete();
           if ($location.$$search.onboarding) {
@@ -214,14 +222,14 @@ define([
 
        $scope.loadWebsitePages = function()
           {
-                    var queryParams = { 
+                    var queryParams = {
                         limit: $scope.pagesPaging.take,
                         skip: ($scope.pagesPaging.page - 1) * $scope.pagesPaging.take
                     }
                     //get pages and find this page
                 WebsiteService.getPagesWithLimit($scope.account.website.websiteId, queryParams, function(pages) {
                   var _pages = [];
-                  $scope.pagesPaging.total = pages.total; 
+                  $scope.pagesPaging.total = pages.total;
                   $scope.disablePaging = false;
                   for (var i in pages.results) {
                     if (pages.results.hasOwnProperty(i)) {
@@ -266,54 +274,54 @@ define([
                 });
 
               }
-      
-        $scope.nextPage = function() { 
-                $scope.disablePaging = true; 
-                $scope.pagesPaging.page++;  
-                $scope.loadWebsitePages();          
+
+        $scope.nextPage = function() {
+                $scope.disablePaging = true;
+                $scope.pagesPaging.page++;
+                $scope.loadWebsitePages();
         };
-       
+
         $scope.previousPage = function() {
                $scope.disablePaging = true;
                $scope.pagesPaging.page--;
                $scope.loadWebsitePages();
-        };  
+        };
         $scope.nextPageDisabled = function() {
             return $scope.pagesPaging.page === $scope.pageCount() ? true : false;
-        }; 
+        };
         $scope.prevPageDisabled = function() {
             return $scope.pagesPaging.page <= 1 ? true : false;
-        }; 
+        };
         $scope.pageCount = function() {
             return Math.ceil($scope.pagesPaging.total/$scope.numPerPage);
         };
 
         $scope.loadWebsitePosts = function()
         {
-              var queryParams = { 
+              var queryParams = {
                   limit: $scope.postPaging.take,
                   skip: ($scope.postPaging.page - 1) * $scope.postPaging.take
               }
-              WebsiteService.getPosts(queryParams, function(posts) {
-                $scope.postPaging.total = posts.total; 
+              WebsiteService.getPostsWithLimit(queryParams, function(posts) {
+                $scope.postPaging.total = posts.total;
                 $scope.postPaging.disablePaging = false;
                 $scope.posts = posts.results;
             });
-     
+
         }
 
-        $scope.postNextPage = function() { 
-                $scope.postPaging.disablePaging = true; 
-                $scope.postPaging.page++;  
-                $scope.loadWebsitePosts();          
+        $scope.postNextPage = function() {
+                $scope.postPaging.disablePaging = true;
+                $scope.postPaging.page++;
+                $scope.loadWebsitePosts();
         };
-       
+
         $scope.postPreviousPage = function() {
                $scope.postPaging.disablePaging = true;
                $scope.postPaging.page--;
                $scope.loadWebsitePosts();
-        };  
-      
+        };
+
         $scope.postCount = function() {
             return Math.ceil($scope.postPaging.total/$scope.numPerPage);
         };

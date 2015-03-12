@@ -1434,6 +1434,18 @@ define([
         $scope.initializeLinks();
       }
 
+      $scope.deleteLinkFromNav = function(index)
+      {
+        $scope.website.linkLists.forEach(function(value) {
+            if (value.handle === "head-menu") {
+              value.links.splice(index,1);
+              setTimeout(function() {
+                $scope.updateLinkList();
+              }, 1000)
+            }
+          });
+      }
+
 
       $scope.addLinkToNav = function() {
         var linkTitle = null;
@@ -1463,13 +1475,17 @@ define([
             }
           });
         }
-
+        setTimeout(function() {
+          $scope.updateLinkList();
+        }, 1000)
       }
 
       //when the navigation is reordered, update the linklist in the website object
-      $scope.updateLinkList = function(linkLists) {
+      $scope.updateLinkList = function(index) {
         var linkLabelsArr = [];
-        var editedLinksLists = document.getElementById("reorderNavBarContainer").querySelectorAll('.head-menu-links');
+        var editedLinksLists = $('.head-menu-links');
+       // if(index)
+         // editedLinksLists.splice(index,1);
         for (var i = 0; i < editedLinksLists.length; i++) {
           var linkLabel = editedLinksLists[i].attributes['data-label'].value;
           if (linkLabel)
@@ -1480,10 +1496,13 @@ define([
             if (value.handle === "head-menu") {
               var newLinkListOrder = [];
               for (var i = 0; i < editedLinksLists.length; i++) {
-                var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[i]
-                });
-                newLinkListOrder.push(matchedLinkList);
+                if(value)
+                {
+                  var matchedLinkList = _.findWhere(value.links, {
+                    label: linkLabelsArr[i]
+                  });
+                  newLinkListOrder.push(matchedLinkList);
+                }
               };
               if (newLinkListOrder.length) {
                 $scope.website.linkLists[index].links = newLinkListOrder;
@@ -1497,6 +1516,13 @@ define([
           });
         }
       };
+
+      $scope.sortableOptions = { 
+      dragEnd: function(e, ui) {
+        console.log('sorting end');
+        $scope.updateLinkList();
+      }
+    };
 
       /********** LISTENERS ***********/
 
