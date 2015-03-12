@@ -17759,6 +17759,9 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel .nav {
   margin-top: 0!important;
 }
+.leftpanel .nav > li > a:focus {
+  background-color: inherit !important;
+}
 .leftpanel .searchform::after {
   content: '';
   display: block;
