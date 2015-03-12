@@ -19,8 +19,9 @@ var contact = $$.m.ModelBase.extend({
     }
     if (validationErrors.length) {
       throw new Error(JSON.stringify(validationErrors));
+    } else {
+      return;
     }
-    return validationErrors;
   },
 
   defaults: function() {
@@ -301,7 +302,7 @@ var contact = $$.m.ModelBase.extend({
         phones: [],
         addresses: []
       };
-
+      validateData({details: detail});
       this.get("details").push(detail);
     }
 
@@ -369,6 +370,8 @@ var contact = $$.m.ModelBase.extend({
         }
       }
     }
+    
+    validateData({details: details});
 
 
     if (websites != null) {
