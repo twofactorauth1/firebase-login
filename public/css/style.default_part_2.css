@@ -6428,6 +6428,10 @@ div.error label.error:before {
   margin-top: 50px;
 }
 
+.editing .post_content_div {
+  min-height: 500px;
+}
+
 .editing .edit-wrap {
   margin: -1px;
   position: relative;
