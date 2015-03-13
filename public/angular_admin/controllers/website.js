@@ -21,32 +21,155 @@ define([
     'bootstrap-iconpicker',
     'ngSweetAlert',
     'blockUI',
-    'adminValidationDirective', 'constants',
-    'commonutils',
-    'ngOnboarding'
-], function(app) {
-    app.register.controller('WebsiteCtrl', [
-        '$scope',
-        '$window',
-        '$timeout',
-        '$location',
-        'WebsiteService',
-        'UserService',
-        'toaster',
-        'ngProgress',
-        '$rootScope',
-        'CourseService',
-        'NavigationService',
-        'SweetAlert',
-        'blockUI',
-        function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
-            var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
-            ngProgress.start();
-            UserService.getUserPreferences(function(preferences) {
-                $scope.userPreferences = preferences;
-                if ($scope.showOnboarding = false && $scope.userPreferences.tasks.edit_home == undefined || $scope.userPreferences.tasks.edit_home == false) {
-                    $scope.finishOnboarding();
-                }
+    function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+      var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
+      ngProgress.start();
+      UserService.getUserPreferences(function(preferences) {
+        $scope.userPreferences = preferences;
+        if ($scope.showOnboarding = false && $scope.userPreferences.tasks.edit_home == undefined || $scope.userPreferences.tasks.edit_home == false) {
+          $scope.finishOnboarding();
+        }
+      });
+      $scope.showOnboarding = false;
+      $scope.stepIndex = 0;
+      $scope.onboardingSteps = [{
+        overlay: false
+      }]
+      $scope.beginOnboarding = function(type) {
+
+        $scope.obType = type;
+        if (type == 'edit-home') {
+          $scope.stepIndex = 0
+          $scope.activeTab = 'pages';
+          $scope.onboardingSteps = [{
+            overlay: true,
+            title: 'Task: Edit home page',
+            description: "Find the home page in the list to edit.",
+            position: 'centered'
+          }, {
+            position: 'bottom',
+            overlay: false,
+            title: 'Task: Click edit',
+            width: 400,
+            description: "Once you find the page click the edit button in the tile."
+          }, {
+            position: 'bottom',
+            overlay: false,
+            title: 'Task: Save edit',
+            width: 400,
+            description: 'After all your editing is done click save in top right of the view and your are done.'
+          }];
+        }
+      };
+
+      $scope.finishOnboarding = function() {
+        $scope.userPreferences.tasks.edit_home = true;
+        UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+      };
+
+      if ($location.$$search['onboarding']) {
+        $scope.beginOnboarding($location.$$search['onboarding']);
+      }
+
+
+
+      if ($location.$$search['pagehandle']) {
+        document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
+      }
+
+      if ($location.$$search['posthandle']) {
+        document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+      }
+
+      // if ($location.$$search['custid']) {
+      //     current_src = document.getElementById("iframe-website").getAttribute("src");
+      //     document.getElementById("iframe-website").setAttribute("src", current_src + '&custid=' + $location.$$search['custid']);
+      // }
+
+      NavigationService.updateNavigation();
+      $scope.$back = function() {
+        window.history.back();
+      };
+      var editBlockUI = blockUI.instances.get('editBlockUI');
+      editBlockUI.start("Initializing Edit Mode");
+      var iFrame = document.getElementById("iframe-website");
+      var subdomainCharLimit = 4;
+      $scope.primaryFontStack = '';
+      $scope.secondaryFontStack = '';
+      $scope.iframeData = {};
+      $scope.allPages = [];
+      $scope.backup = {};
+      $scope.components = [];
+      $scope.isEditing = true;
+      $scope.isMobile = false;
+      $scope.tabs = {};
+      $scope.addLinkType = 'page';
+      $scope.saveLoading = false;
+      $scope.hours = $$.constants.contact.business_hour_times;
+      $scope.typefilter = 'all';
+      $scope.components.sort(function(a, b) {
+        return a.i > b.i;
+      });
+
+      $scope.status = {
+        isopen: false
+      };
+
+      $scope.spectrum = {
+        options: {
+          showPalette: true,
+          clickoutFiresChange: true,
+          showInput: true,
+          showButtons: false,
+          allowEmpty: true,
+          hideAfterPaletteSelect: false,
+          showPaletteOnly: true,
+          togglePaletteOnly: true,
+          togglePaletteMoreText: 'more',
+          togglePaletteLessText: 'less',
+          appendTo: $("#component-setting-modal"),
+          palette: [
+            ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
+            ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+            ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
+            ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
+            ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
+            ["#26C281", "#049372", "#2ABB9B", "#16A085", "#36D7B7", "#03A678", "#4DAF7C", "#D9B611", "#F3C13A", "#F7CA18"],
+            ["#E2B13C", "#A17917", "#F5D76E", "#F4D03F", "#FFA400", "#E08A1E", "#FFB61E", "#FAA945", "#FFA631", "#FFB94E"],
+            ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
+            ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6"]
+          ]
+        }
+      }
+
+      //get all the courses avliable
+      CourseService.getAllCourses(function(data) {
+        $scope.courses = data;
+      });
+
+      UserService.getAccount(function(account) {
+        $scope.account = account;
+        that.account = account;
+        //get pages and find this page
+        WebsiteService.getPages(account.website.websiteId, function(pages) {
+          //TODO should be dynamic based on the history
+          currentPage = 'index';
+          that.allPages = pages;
+          var parsed = angular.fromJson(pages);
+          var arr = [];
+
+          for (var x in parsed) {
+            arr.push(parsed[x]);
+          }
+          $scope.allPages = arr;
+
+          //$scope.currentPage = _.findWhere(pages, {
+          //  handle: currentPage
+          //});
+
+          if ($scope.editingPageId) {
+            $scope.currentPage = _.findWhere(pages, {
+              _id: $scope.editingPageId
             });
             $scope.showOnboarding = false;
             $scope.stepIndex = 0;
@@ -89,14 +212,341 @@ define([
                 $scope.beginOnboarding($location.$$search['onboarding']);
             }
 
+          } else {
+            console.log('Falied to retrieve Page');
+          }
 
+        });
 
-            if ($location.$$search['pagehandle']) {
-                document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
-            }
+        //get website
+        WebsiteService.getWebsite(account.website.websiteId, function(website) {
 
-            if ($location.$$search['posthandle']) {
-                document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+          $scope.website = website;
+          $scope.website.settings = $scope.website.settings || {};
+
+          $scope.primaryColor = $scope.website.settings.primary_color;
+          $scope.secondaryColor = $scope.website.settings.secondary_color;
+          $scope.primaryHighlight = $scope.website.settings.primary_highlight;
+          $scope.primaryTextColor = $scope.website.settings.primary_text_color;
+          $scope.primaryFontFamily = $scope.website.settings.font_family;
+          $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
+          $scope.googleFontFamily = $scope.website.settings.google_font_family;
+
+          $scope.primaryFontStack = $scope.website.settings.font_family;
+          $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+        });
+
+        //get themes
+        WebsiteService.getThemes(function(themes) {
+          $scope.themes = themes;
+          $scope.currentTheme = _.findWhere($scope.themes, {
+            _id: account.website.themeId
+          });
+        });
+      });
+
+      //an array of component types and icons for the add component modal
+      $scope.componentTypes = [{
+        title: 'Blog',
+        type: 'blog',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+        filter: 'blog',
+        description: 'Use this component for your main blog pages which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
+        enabled: true
+      }, {
+        title: 'Blog Teaser',
+        type: 'blog-teaser',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
+        filter: 'blog',
+        description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to you full blog page.',
+        enabled: true
+      }, {
+        title: 'Masthead',
+        type: 'masthead',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
+        filter: 'misc',
+        description: 'Introduce your business with this component on the top of your home page.',
+        enabled: true
+      }, {
+        title: 'Feature List',
+        type: 'feature-list',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
+        filter: 'features',
+        description: 'Showcase what your business offers with a feature list.',
+        enabled: true
+      }, {
+        title: 'Contact Us',
+        type: 'contact-us',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
+        filter: 'contact',
+        description: 'Let your visitors where your located, how to contact you, and what your business hours are.',
+        enabled: true
+      }, {
+        title: 'Coming Soon',
+        type: 'coming-soon',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
+        filter: 'misc',
+        description: 'Even if your site isn\'t ready you can use this component to let your visitors know you will be availiable soon.',
+        enabled: true
+      }, {
+        title: 'Feature block',
+        type: 'feature-block',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
+        filter: 'features',
+        description: 'Use this component to show one important feature or maybe a quote.',
+        enabled: true
+      }, {
+        title: 'Image Gallery',
+        type: 'image-gallery',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
+        filter: 'images',
+        description: 'Display your images in this image gallery component with fullscreen large view.',
+        enabled: true
+      }, {
+        title: 'Image Text',
+        version: 1,
+        type: 'image-text',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
+        filter: 'images',
+        description: 'Show an image next to a block of text on the right or the left.',
+        enabled: true
+      }, {
+        title: 'Meet Team',
+        type: 'meet-team',
+        icon: 'fa fa-users',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/meet-team.png',
+        filter: 'team',
+        description: 'Let your visitors know about the team behind your business. Show profile image, position, bio, and social links for each member.',
+        enabled: true
+      }, {
+        title: 'Navigation 1',
+        type: 'navigation',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+        filter: 'navigation',
+        description: 'A simple navigation bar with the logo on the left and nav links on the right. Perfect for horizontal logos.',
+        version: 1,
+        enabled: true
+      }, {
+        title: 'Navigation 2',
+        type: 'navigation',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
+        filter: 'navigation',
+        description: 'If your logo is horizontal or square, this navigation will showcase your logo perfectly with addtional space for more links.',
+        version: 2,
+        enabled: true
+      }, {
+        title: 'Navigation 3',
+        type: 'navigation',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
+        filter: 'navigation',
+        description: 'This navigation features a large block navigation links for a modern feel.',
+        version: 3,
+        enabled: true
+      }, {
+        title: 'Products',
+        type: 'products',
+        icon: 'fa fa-money',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/products.png',
+        filter: 'products',
+        description: 'Use this as the main products page to start selling. It comes together with a cart and checkout built in.',
+        enabled: true
+      }, {
+        title: 'Pricing Tables',
+        type: 'pricing-tables',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
+        filter: 'products',
+        description: 'Subscription product types with multiple options are best when shown in a pricing table to help the visitor decide which one is best for them.',
+        enabled: true
+      }, {
+        title: 'Simple form',
+        type: 'simple-form',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/simple-form.jpg',
+        filter: 'forms',
+        description: 'Automatically create contacts in the backend when a visitor submits this form. Add first name, last name, email, or phone number fields.',
+        enabled: true
+      }, {
+        title: 'Single Post',
+        type: 'single-post',
+        icon: 'custom single-post',
+        filter: 'blog',
+        description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
+        enabled: false
+      }, {
+        title: 'Social',
+        type: 'social-link',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
+        filter: 'social',
+        description: 'Let your visitors know where else to find you on your social networks. Choose from 18 different networks.',
+        enabled: true
+      }, {
+        title: 'Video',
+        type: 'video',
+        icon: 'fa fa-video',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/video.png',
+        filter: 'video',
+        description: 'Showcase a video from Youtube, Vimeo, or an uploaded one. You can simply add the url your video is currently located.',
+        enabled: true
+      }, {
+        title: 'Text Block',
+        type: 'text-only',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
+        filter: 'text',
+        description: 'A full width component for a large volume of text. You can also add images within the text.',
+        enabled: true
+      }, {
+        title: 'Thumbnail Slider',
+        type: 'thumbnail-slider',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
+        filter: 'images',
+        description: 'Perfect for sponsor or client logos you have worked with in the past. Works best with logos that have a transparent background. ',
+        enabled: true
+      }, {
+        title: 'Top Bar',
+        type: 'top-bar',
+        icon: 'fa fa-info',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/top-bar.png',
+        filter: 'contact',
+        description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
+        enabled: true
+      }];
+
+      var componentLabel,
+          enabledComponentTypes = _.where( $scope.componentTypes, { enabled: true } );
+
+      /************************************************************************************************************
+       * Takes the componentTypes object and gets the value for the filter property from any that are enabled.
+       * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
+       * it exists. (The misc value is added back on to the end of the list later)
+       ************************************************************************************************************/
+      $scope.componentFilters = _.without( _.uniq( _.pluck( _.sortBy( enabledComponentTypes, 'filter' ), 'filter' ) ), 'misc');
+
+      // Iterates through the array of filters and replaces each one with an object containing an
+      // upper and lowercase version
+      _.each( $scope.componentFilters, function( element, index ) {
+        componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+        $scope.componentFilters[index] = { 'capitalized': componentLabel, 'lowercase': element };
+        componentLabel = null;
+      });
+
+      // Manually add the All option to the begining of the list
+      $scope.componentFilters.unshift({'capitalized': 'All', 'lowercase': 'all'});
+      // Manually add the Misc section back on to the end of the list
+      $scope.componentFilters.push({'capitalized': 'Misc', 'lowercase': 'misc'});
+
+      $scope.setFilterType = function( label ) {
+        $scope.typefilter = label;
+      };
+
+      /*****
+          {
+              title: 'Customer SignUp',
+              type: 'customer-signup',
+              icon: 'fa fa-male',
+              enabled: false
+          },
+          {
+              title: 'Customer Login',
+              type: 'customer-login',
+              icon: 'fa fa-sign-in',
+              enabled: false
+          },
+          {
+              title: 'Customer Forgot Password',
+              type: 'customer-forgot-password',
+              icon: 'fa fa-lock',
+              enabled: false
+          },
+          {
+              title: 'Customer Account',
+              type: 'customer-account',
+              icon: 'fa fa-user',
+              enabled: false
+          },
+          {
+              title: 'Logo List',
+              type: 'logo-list',
+              icon: 'custom logo-list',
+              enabled: false
+          },
+          {
+              title: 'Image Slider',
+              type: 'image-slider',
+              icon: 'custom image-slider',
+              enabled: false
+          },
+          {
+              title: 'Campaign',
+              type: 'campaign',
+              icon: 'fa fa-bullhorn',
+              enabled: false
+          },
+          {
+              title: 'Footer',
+              type: 'footer',
+              icon: 'custom footer',
+              enabled: false
+          }
+      *****/
+      $scope.activated = false;
+      document.getElementById("iframe-website").onload = function() {
+
+        ngProgress.complete();
+        $scope.updatePage($location.$$search['pagehandle'], true);
+        //$scope.bindEvents();
+        // var iframe = document.getElementById("iframe-website");
+        // var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        // // to do need to check when iframe content is loaded properly
+        if ($scope.isEditing) {
+          if ($("#iframe-website").contents().find("body").length) {
+            setTimeout(function() {
+              $scope.editPage();
+              $scope.iframeLoaded = true;
+              editBlockUI.stop();
+              if ($location.$$search.onboarding) {
+                $scope.showOnboarding = true;
+              }
+            }, 5000)
+          }
+        }
+
+      }
+      $scope.removeImage = function(remove)
+      {
+        if($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img)
+        {
+          if(($scope.componentEditing.bg.img.show == false && remove == true) || remove == false)
+          {
+            if(remove == false)
+              $scope.componentEditing.bg.img.url = null;
+            $scope.componentEditing.bg.img.blur = false;
+            $scope.componentEditing.bg.img.parallax = false;
+            $scope.componentEditing.bg.img.overlay = false;
+          }
+
+        }
+      }
+      $scope.bindEvents = function() {
+        var iframe = document.getElementById("iframe-website");
+        if (!iframe)
+          return;
+        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+        //wait for iframe to load completely
+        //TODO: get trigger instead of timeout
+        var elementBindingFn = function() {
+          //unhide no-component
+          if (iframeDoc.body.querySelectorAll('.no-component')[0]) {
+            iframeDoc.body.querySelectorAll('.no-component')[0].style.display = "block";
+            iframeDoc.body.querySelectorAll('.no-component')[0].style.visibility = "visible";
+          }
+          //unbind all click handler
+          $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
+
+          //Disable all links in edit
+          $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
+            if (!$(this).hasClass("clickable-link")) {
+              e.preventDefault();
+              e.stopPropagation();
             }
 
             // if ($location.$$search['custid']) {

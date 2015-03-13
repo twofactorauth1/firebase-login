@@ -6322,6 +6322,10 @@ div.error label.error:before {
   background: #dddddd;
 }
 
+.website #add-component-modal .modal-content {
+  width: 665px;
+}
+
 .website #add-component-modal .modal-body {
   height: 300px;
   overflow-y: auto;
@@ -6967,6 +6971,7 @@ input[type='file'] {
   list-style-type: none;
 }
 
+<<<<<<< HEAD
 #add-component-modal h1,
 #create-page-modal h1 {
   margin: 0;
@@ -6990,6 +6995,13 @@ input[type='file'] {
 
 #add-component-modal .single-type,
 #create-page-modal .single-type {
+=======
+#add-component-modal .type-filter ul li span {
+  cursor: pointer;
+}
+
+#add-component-modal .single-type {
+>>>>>>> develop
   position: relative;
   display: block;
   height: 146px;
