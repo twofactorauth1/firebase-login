@@ -298,6 +298,9 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             if (type == 'facebook') {
                 $scope.handleFBPost(socialAccountId, post);
             }
+            if (type == 'twitter') {
+                $scope.handleTwitterPost(socialAccountId, post);
+            }
         };
 
         $scope.fbAdminPagesforLikes = [];
@@ -329,6 +332,17 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
         $scope.handleFBPost = function(socialAccountId, post) {
             SocialConfigService.postFBPost(socialAccountId, post, function(data) {
+                $scope.afterPosting();
+            });
+        };
+
+        /*
+         * @handleFBPost
+         * handle the facebook post from @postToSocial
+         */
+
+        $scope.handleTwitterPost = function(socialAccountId, post) {
+            SocialConfigService.postTwitterPost(socialAccountId, post, function(data) {
                 $scope.afterPosting();
             });
         };
