@@ -50,7 +50,7 @@ module.exports = {
 
     getAllTemplates: function(accountId, fn) {
         log.debug('>> getAllTemplates');
-        templateDao.findMany({}, $$.m.cms.Template, function(err, list){
+        templateDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Template, function(err, list){
             if(err) {
                 log.error('Exception thrown listing templates: ' + err);
                 fn(err, null);
@@ -213,36 +213,36 @@ module.exports = {
 
     },
 
-    createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
+    createWebsiteAndPageFromTemplate: function(accountId, templateId, userId, websiteId, pageTitle, pageHandle, fn) {
         log.debug('>> createWebsiteFromTheme');
         if(fn === null) {
             fn = pageHandle;
             pageHandle = null;
         }
         //default to index page if none is specified
-        var title = '';
-        if(pageHandle === null) {
-            pageHandle = 'index';
-            title = 'Home';
-        } else {
-            title = pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1);
-        }
+        var title = pageTitle;
+        // if(pageHandle === null) {
+        //     pageHandle = 'index';
+        //     title = 'Home';
+        // } else {
+        //     title = pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1);
+        // }
 
-        var theme, website, page;
+        var template, website, page;
 
         var p1 = $.Deferred();
-        themeDao.getById(themeId, $$.m.cms.Theme, function(err, _theme) {
+        templateDao.getById(templateId, $$.m.cms.Template, function(err, _template) {
             if (err) {
-                log.error('Exception getting theme: ' + err);
+                log.error('Exception getting template: ' + err);
                 p1.reject();
             } else {
-                log.debug('Got theme.');
-                theme = _theme;
+                log.debug('Got Template.');
+                template = _template;
 
                 if(websiteId === null) {
-                    log.debug('creating website');
+                    log.debug('creating template');
                     //create it
-                    var settings = theme.get('config')['settings'];
+                    var settings = template.get('config')['settings'];
                     website = new $$.m.cms.Website({
                         'accountId': accountId,
                         'settings': settings,
@@ -274,7 +274,7 @@ module.exports = {
         $.when(p1).done(function(){
             //at this point we have the theme and website.
             log.debug('Creating Page');
-            var componentAry = theme.get('config')['components'];
+            var componentAry = template.get('config')['components'];
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
@@ -288,7 +288,8 @@ module.exports = {
                 'modified': {
                     'by': userId,
                     'date': new Date()
-                }
+                },
+                'latest': true
             });
             cmsDao.saveOrUpdate(page, function(err, savedPage){
                 if(err) {

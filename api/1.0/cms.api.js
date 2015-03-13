@@ -73,12 +73,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
         // app.get(this.url('template/:id'), this.isAuthApi.bind(this), this.getTemplateById.bind(this));
         // app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
-        app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
+        // app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
         // app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
         // app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
         // app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
         // app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
-        // app.post(this.url('template/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
+        app.post(this.url('template/:id/website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
         // app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
 
 
@@ -656,28 +656,28 @@ _.extend(api.prototype, baseApi.prototype, {
 
     // },
 
-    createTemplate: function(req, res) {
-        var self = this;
+    // createTemplate: function(req, res) {
+    //     var self = this;
 
-        self.log.debug('>> createTemplate');
-        var accountId = parseInt(self.accountId(req));
-        var templateObj = new $$.m.cms.Template(req.body);
-        templateObj.set('accountId', accountId);
-        templateObj.set('created.by', self.userId(req));
+    //     self.log.debug('>> createTemplate');
+    //     var accountId = parseInt(self.accountId(req));
+    //     var templateObj = new $$.m.cms.Template(req.body);
+    //     templateObj.set('accountId', accountId);
+    //     templateObj.set('created.by', self.userId(req));
 
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.createTemplate(templateObj, function(err, value){
-                    self.log.debug('<< createTemplate');
-                    self.sendResultOrError(res, err, value, 'Error creating template.');
-                });
-            }
-        });
+    //     self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             cmsManager.createTemplate(templateObj, function(err, value){
+    //                 self.log.debug('<< createTemplate');
+    //                 self.sendResultOrError(res, err, value, 'Error creating template.');
+    //             });
+    //         }
+    //     });
 
 
-    },
+    // },
 
     /**
      * This function creates a new theme from an existing website object.
@@ -780,30 +780,32 @@ _.extend(api.prototype, baseApi.prototype, {
 
     // },
 
-    // createPageFromTheme: function(req, res) {
-    //     var self = this;
-    //     self.log.debug('>> createPageFromTheme');
-    //     self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
-    //         if (isAllowed !== true) {
-    //             return self.send403(req);
-    //         } else {
-    //             var themeId = req.params.id;
-    //             var websiteId = req.params.websiteId;
-    //             var accountId = parseInt(self.accountId(req));
+    createPageFromTemplate: function(req, res) {
+        var self = this;
+        self.log.debug('>> createPageFromTemplate');
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageData = req.body;
+                var templateId = req.params.id;
+                var websiteId = req.params.websiteId;
+                var accountId = parseInt(self.accountId(req));
 
-    //             var handle = req.params.handle;
-    //             cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
-    //                 self.log.debug('<< createWebsiteFromTheme');
-    //                 self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
-    //                 cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
-    //                     if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
-    //                     self = null;
-    //                 });
-    //             });
-    //         }
-    //     });
+                var title = pageData.title;
+                var handle = pageData.handle;
+                cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, function(err, websiteAndPage){
+                    self.log.debug('<< createPageFromTemplate');
+                    self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating page from template.');
+                    cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
+                        if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
+                        self = null;
+                    });
+                });
+            }
+        });
 
-    // },
+    },
 
     // setTheme: function(req, res) {
     //     var self = this;

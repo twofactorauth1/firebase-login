@@ -27,6 +27,8 @@ var template = $$.m.ModelBase.extend({
 
             isPublic: false,
 
+            filter: '',
+
             previewUrl: '',
 
             config: {},
