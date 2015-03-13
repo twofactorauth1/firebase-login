@@ -309,9 +309,81 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Create Page</h4>
+                <h4 class="modal-title">Create Page {{currentTemplateView}}</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body nopadding">
+                <div class="select-template" ng-hide="templateDetails">
+                    <div class="type-filter">
+                        <ul class="mb0" ng-init="typefilter = 'home'">
+                            <li><a href="#" class="label label-primary" ng-click="typefilter = 'all'">All</a>
+                            </li>
+                            <li><a href="#" class="label label-default" ng-click="typefilter = 'home'">Home</a>
+                            </li>
+                            <li><a href="#" class="label label-default" ng-click="typefilter = 'coming-soon'">Coming Soon</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="types">
+                        <div ng-show="typefilter == template.filter || typefilter == 'all'" ng-repeat="template in templates | orderBy:'title'" style="position: relative;">
+                            <div ng-if="template.filter == 'coming-soon'" class="coming-soon-overlay">
+                                <h1 class="center">COMING SOON</h1>
+                            </div>
+                            <div class="single-type" ng-click="setTemplateDetails(template)">
+                                <div class="col-xs-3">
+                                    <div class="img-wrap">
+                                        <span style="  background: url('{{template.previewUrl}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-8">
+                                    <h4>{{template.name}}</h4>
+                                    <p>{{template.description}}</p>
+                                    <!-- <a href="" ng-if="typefilter != 'coming-soon'" ng-click="addPage(template)" data-dismiss="modal" aria-hidden="true"><span class="fa fa-plus"></span> Add</a> -->
+                                </div>
+                                <div class="col-xs-1">
+                                    <h1><span class="fa fa-chevron-right"></span></h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="template-details" ng-show="templateDetails">
+                    <div id="new_page">
+                        <div class="col-xs-5">
+                            <p>Template Selected</p>
+                            <img src="{{selectedTemplate.previewUrl}}" class="img-thumbnail">
+                            <h4>{{selectedTemplate.name}}</h4>
+                        </div>
+                        <div class="col-xs-7">
+                            <div class="form-group" ng-class="{ 'has-error': titleError}">
+                                <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                                <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title" ng-change="validateCreatePage(page)">
+                            </div>
+                            <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
+                                <slug from="page.title" to="page.handle"></slug>
+                                <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                                <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle" ng-change="validateCreatePage(page)">
+                            </div>
+                            <p ng-show="page.title">Page Url will be <strong>/{{page.handle}}</strong>
+                                <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                                <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+                            </p>
+                            <div class="clearfix mb15"></div>
+                            <div class="form-group">
+                                <div class="ckbox ckbox-success">
+                                    <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
+                                    <label for="add-to-menu">Add to Main Menu?</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" ng-show="templateDetails">
+                <button type="button" class="btn btn-default pull-left" ng-click="templateDetails = false"><span class="fa fa-chevron-left"></span> Back</button>
+                <button type="button" class="btn btn-primary" ng-click="createPageFromTemplate(page, $event)">Create Page</button>
+            </div>
+            <!-- <div class="modal-body hidden">
                 <div id="new_page">
                     <div class="form-group" ng-class="{ 'has-error': titleError}">
                         <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
@@ -338,7 +410,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)">Create Page</button>
-            </div>
+            </div> -->
         </div>
         <!-- /.modal-content -->
     </div>

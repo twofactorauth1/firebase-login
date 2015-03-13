@@ -21980,37 +21980,78 @@ input[type='file'] {
   min-height: 275px !important;
   height: 100% !important;
 }
-#add-component-modal .type-filter {
+.coming-soon-overlay {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 999;
+}
+.coming-soon-overlay h1 {
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 50px;
+  text-indent: 30px;
+}
+#add-component-modal .type-filter,
+#create-page-modal .type-filter {
   padding: 5px;
   border-bottom: 1px solid #e7e7e7;
 }
-#add-component-modal .type-filter ul {
+#add-component-modal .type-filter ul,
+#create-page-modal .type-filter ul {
   padding-left: 0;
 }
-#add-component-modal .type-filter ul li {
+#add-component-modal .type-filter ul li,
+#create-page-modal .type-filter ul li {
   display: inline-block;
   list-style-type: none;
 }
-#add-component-modal .single-type {
+#add-component-modal h1,
+#create-page-modal h1 {
+  margin: 0;
+}
+#add-component-modal #new_page .img-thumbnail,
+#create-page-modal #new_page .img-thumbnail {
+  width: 150px;
+}
+#add-component-modal .template-details,
+#create-page-modal .template-details {
+  padding: 15px;
+}
+#add-component-modal .modal-body,
+#create-page-modal .modal-body {
+  max-height: 350px;
+  overflow-y: auto;
+}
+#add-component-modal .single-type,
+#create-page-modal .single-type {
   position: relative;
   display: block;
   height: 146px;
   border-bottom: 1px solid #e6e6e6;
   padding: 15px 0px;
 }
-#add-component-modal .single-type h4 {
+#add-component-modal .single-type:hover,
+#create-page-modal .single-type:hover {
+  background: #e7e7e7;
+}
+#add-component-modal .single-type h4,
+#create-page-modal .single-type h4 {
   margin-top: 0px;
   margin-bottom: 5px;
 }
-#add-component-modal .single-type p {
+#add-component-modal .single-type p,
+#create-page-modal .single-type p {
   margin-bottom: 5px;
   min-height: 63px;
 }
-#add-component-modal .single-type .img-wrap {
+#add-component-modal .single-type .img-wrap,
+#create-page-modal .single-type .img-wrap {
   height: 115px;
   background: #e7e7e7;
 }
-#add-component-modal .single-type .fa-chevron-right {
+#add-component-modal .single-type .fa-chevron-right,
+#create-page-modal .single-type .fa-chevron-right {
   line-height: 114px;
   text-align: center;
   width: 100%;

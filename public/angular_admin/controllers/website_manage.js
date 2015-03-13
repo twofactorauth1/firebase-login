@@ -176,17 +176,8 @@ define([
 
                 $scope.loadWebsitePosts();
 
-                WebsiteService.getThemes(function(themes) {
-                    $scope.themes = themes;
-                    for (var i = 0; i < themes.length; i++) {
-                        var comingSoonThemes = ['SAAS', 'Ethlete', 'Charity', 'Inventor', 'Real Estate', 'Public Speaker', 'Fit Writer', 'Fit Tester II', 'FitTester', 'CopyWriter', 'Hair Stylist'];
-                        if (comingSoonThemes.indexOf(themes[i].name) > -1) {
-                            themes[i].coming_soon = true;
-                        }
-                    };
-                    $scope.currentTheme = _.findWhere($scope.themes, {
-                        _id: account.website.themeId
-                    });
+                WebsiteService.getTemplates(function(templates) {
+                    $scope.templates = templates;
                 });
 
                 WebsiteService.getWebsite(account.website.websiteId, function(website) {
@@ -271,8 +262,7 @@ define([
                         }
                     }
                 });
-
-            }
+            };
 
             $scope.nextPage = function() {
                 $scope.disablePaging = true;
@@ -418,6 +408,55 @@ define([
                     $event.stopPropagation();
                 }
             };
+
+            $scope.createPageFromTemplate = function(page, $event) {
+                $scope.validateCreatePage(page);
+                console.log('$scope.createPageValidated ', $scope.createPageValidated);
+
+                if (!$scope.createPageValidated) {
+                    $('#page-title').parents('div.form-group').addClass('has-error');
+                    $('#page-url').parents('div.form-group').addClass('has-error');
+                    return false;
+                } else {
+                    $('#page-title').parents('div.form-group').removeClass('has-error');
+                    $('#page-url').parents('div.form-group').removeClass('has-error');
+                }
+
+                var websiteId = $scope.website._id;
+
+                var pageData = {
+                    title: page.title,
+                    handle: page.handle,
+                    mainmenu: page.mainmenu
+                };
+
+                var hasHandle = false;
+                for (var i = 0; i < $scope.pages.length; i++) {
+                    if ($scope.pages[i].handle === page.handle) {
+                        hasHandle = true;
+                    }
+                };
+
+
+                if (!hasHandle) {
+                    WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, websiteId, pageData, function(newpage) {
+                        toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
+                        $('#create-page-modal').modal('hide');
+                        $scope.pages.push(newpage);
+                    });
+                } else {
+                    toaster.pop('error', "Page URL " + page.handle, "Already exists");
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                }
+            };
+
+            $scope.setTemplateDetails = function(templateDetails) {
+                console.log('setTemplateDetails >>> ', templateDetails);
+                $scope.templateDetails = true;
+                $scope.selectedTemplate = templateDetails;
+            };
+
             $scope.createPostValidated = false;
             $scope.validateCreatePost = function(post) {
                 if (!post.post_title || post.post_title == '') {
@@ -491,7 +530,6 @@ define([
                     //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
                 }
             };
-
         }
     ]);
 });
