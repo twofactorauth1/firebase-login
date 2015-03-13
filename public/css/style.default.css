@@ -13,6 +13,7 @@
 @import '../js/libs_misc/powertour/css/powertour-style-clean.css';
 @import '../js/libs_misc/powertour/css/powertour-connectors.css';
 @import '../js/libs/fullcalendar/dist/fullcalendar.min.css';
+@import '../js/libs/ng-sortable/dist/ng-sortable.min.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -17806,7 +17807,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 #leftnav .nav-bracket > li.active > a,
 #leftnav .nav-bracket > li.focus > a,
 #leftnav .nav-bracket > li.visted > a {
-  background-color: #50afc8;
+  background-color: #50afc8!important;
   color: #333333;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
@@ -18022,7 +18023,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 .leftpanel-collapsed .nav-bracket li a:hover {
   color: white;
   text-shadow: 0px 1px 1px #307e93;
-  background: #50afc8;
+  background: #50afc8!important;
 }
 .leftpanel-collapsed .nav-bracket li a:hover i {
   text-shadow: 0px 1px 1px #307e93;
@@ -18034,7 +18035,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   background-image: none;
 }
 .leftpanel-collapsed .nav-bracket li.active {
-  background: #50afc8;
+  background: #50afc8!important;
 }
 .leftpanel-collapsed .nav-bracket li.active a {
   color: white;
@@ -21421,7 +21422,7 @@ div.error label.error:before {
   background-color: #efa022;
   border: medium none;
   border-radius: 0;
-  height: auto ;
+  height: auto;
   margin-top: 1px;
   max-width: 200px;
   overflow: visible;
@@ -21478,9 +21479,6 @@ div.error label.error:before {
 }
 .website .componentOption .thumbnail:hover {
   background: #dddddd;
-}
-.website #add-component-modal .modal-content {
-  width: 665px;
 }
 .website #add-component-modal .modal-body {
   height: 300px;
@@ -21571,6 +21569,9 @@ div.error label.error:before {
 }
 .editing .ui-sortable {
   margin-top: 50px;
+}
+.editing .post_content_div {
+  min-height: 500px;
 }
 .editing .edit-wrap {
   margin: -1px;
@@ -21982,6 +21983,112 @@ input[type='file'] {
   min-height: 275px !important;
   height: 100% !important;
 }
+.coming-soon-overlay {
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 999;
+}
+.coming-soon-overlay h1 {
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 50px;
+  text-indent: 30px;
+}
+#add-component-modal .type-filter,
+#create-page-modal .type-filter {
+  padding: 5px;
+  border-bottom: 1px solid #e7e7e7;
+}
+#add-component-modal .type-filter ul,
+#create-page-modal .type-filter ul {
+  padding-left: 0;
+}
+#add-component-modal .type-filter ul li,
+#create-page-modal .type-filter ul li {
+  display: inline-block;
+  list-style-type: none;
+}
+#add-component-modal h1,
+#create-page-modal h1 {
+  margin: 0;
+}
+#add-component-modal #new_page .img-thumbnail,
+#create-page-modal #new_page .img-thumbnail {
+  width: 150px;
+}
+#add-component-modal .template-details,
+#create-page-modal .template-details {
+  padding: 15px;
+}
+#add-component-modal .modal-body,
+#create-page-modal .modal-body {
+  max-height: 350px;
+  overflow-y: auto;
+}
+#add-component-modal .single-type,
+#create-page-modal .single-type {
+  position: relative;
+  display: block;
+  height: 146px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 15px 0px;
+}
+#add-component-modal .single-type:hover,
+#create-page-modal .single-type:hover {
+  background: #e7e7e7;
+}
+#add-component-modal .single-type h4,
+#create-page-modal .single-type h4 {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+#add-component-modal .single-type p,
+#create-page-modal .single-type p {
+  margin-bottom: 5px;
+  min-height: 63px;
+}
+#add-component-modal .single-type .img-wrap,
+#create-page-modal .single-type .img-wrap {
+  height: 115px;
+  background: #e7e7e7;
+}
+#add-component-modal .single-type .fa-chevron-right,
+#create-page-modal .single-type .fa-chevron-right {
+  line-height: 114px;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+}
+.as-sortable-drag {
+  opacity: .8;
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  background: #f6f6f6!important;
+  color: #6a6a6a;
+}
+#reorderNavBarContainer .as-sortable-placeholder {
+  background: #eeeeee;
+  border: 1px dashed #c2c2c2!important;
+  margin-bottom: 10px;
+}
+#reorderNavBarContainer ul {
+  list-style: none;
+  padding-left: 0;
+  text-transform: capitalize;
+}
+#reorderNavBarContainer ul li,
+#reorderNavBarContainer ul .as-sortable-item {
+  position: relative;
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  background: #f6f6f6!important;
+  color: #6a6a6a;
+}
+.cke_panel.cke_combopanel {
+  min-height: 275px !important;
+  height: 100% !important;
+}
 #add-component-modal .type-filter {
   padding: 5px;
   border-bottom: 1px solid #e7e7e7;
@@ -21995,6 +22102,10 @@ input[type='file'] {
 }
 #add-component-modal .type-filter ul li span {
   cursor: pointer;
+}
+#add-component-modal .type-filter .radio-inline label {
+  float: right;
+  padding: 0;
 }
 #add-component-modal .single-type {
   position: relative;

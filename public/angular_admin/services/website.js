@@ -238,6 +238,24 @@ define(['app'], function (app) {
             });
 		};
 
+		//template/:id/website/:websiteId/page/
+		this.createPageFromTemplate = function(templateId, websiteId, pagedata, fn) {
+			var self = this;
+			var apiUrl = baseUrl + ['cms', 'template', templateId, 'website', websiteId, 'page'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				console.log('data >>> ', data);
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:createPageFromTemplate with ERROR');
+            });
+		};
+
 		this.createPost = function (pageId, postdata, fn) {
 			postdata.post_tags = null;
 			if(!postdata.created)
@@ -279,8 +297,8 @@ define(['app'], function (app) {
             });
 		};
 
-		this.getThemes = function (fn) {
-			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
+		this.getTemplates = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'template'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);

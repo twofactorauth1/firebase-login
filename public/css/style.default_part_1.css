@@ -28,6 +28,8 @@
 
 @import '../js/libs/fullcalendar/dist/fullcalendar.min.css';
 
+@import '../js/libs/ng-sortable/dist/ng-sortable.min.css';
+
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 
 html {

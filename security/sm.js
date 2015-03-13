@@ -29,6 +29,8 @@ var defaultPrivileges = [
     'MODIFY_WEBSITE',
     'VIEW_THEME',
     'MODIFY_THEME',
+    'VIEW_TEMPLATE',
+    'MODIFY_TEMPLATE',
     'VIEW_CONTACT',
     'MODIFY_CONTACT',
     'VIEW_COURSE',

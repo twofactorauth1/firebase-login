@@ -1546,11 +1546,17 @@ define([
       };
 
       $scope.sortableOptions = {
-      dragEnd: function(e, ui) {
-        console.log('sorting end');
-        $scope.updateLinkList();
-      }
-    };
+          dragMove: function(event) {
+              console.log('dragMove >>>');
+          },
+          itemMoved: function(event) {
+              console.log('itemMoved');
+          },
+          orderChanged: function(event) {
+              console.log('orderChanged');
+          },
+          scrollableContainer: 'reorderNavBarContainer'
+      };
 
       /********** LISTENERS ***********/
 
