@@ -290,7 +290,7 @@
                 </div>
                 <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
                     <tabset>
-                        <tab ng-show="componentEditing">
+                        <tab>
                             <tab-heading>
                                 <span>Basic</span>
                             </tab-heading>
@@ -506,6 +506,7 @@
                                             <div class="container-fluid">
                                                 <div class="col-sm-9">
                                                 <h4>
+                                                    <span data-as-sortable-item-handle class="fa fa-arrows"></span>
                                                      <span ng-show="!edit[$index]">{{link.label}}</span>
                                                      <input ng-blur="updateLinkList()" ng-show="edit[$index]" type="text" ng-model="link.label">
                                                  </h4>

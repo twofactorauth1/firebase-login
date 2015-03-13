@@ -21480,9 +21480,6 @@ div.error label.error:before {
 .website .componentOption .thumbnail:hover {
   background: #dddddd;
 }
-.website #add-component-modal .modal-content {
-  width: 665px;
-}
 .website #add-component-modal .modal-body {
   height: 300px;
   overflow-y: auto;
@@ -22012,7 +22009,6 @@ input[type='file'] {
   display: inline-block;
   list-style-type: none;
 }
-<<<<<<< HEAD
 #add-component-modal h1,
 #create-page-modal h1 {
   margin: 0;
@@ -22032,12 +22028,6 @@ input[type='file'] {
 }
 #add-component-modal .single-type,
 #create-page-modal .single-type {
-=======
-#add-component-modal .type-filter ul li span {
-  cursor: pointer;
-}
-#add-component-modal .single-type {
->>>>>>> develop
   position: relative;
   display: block;
   height: 146px;
@@ -22095,9 +22085,52 @@ input[type='file'] {
   background: #f6f6f6!important;
   color: #6a6a6a;
 }
-#reorderNavBarContainer .radio-inline label {
+.cke_panel.cke_combopanel {
+  min-height: 275px !important;
+  height: 100% !important;
+}
+#add-component-modal .type-filter {
+  padding: 5px;
+  border-bottom: 1px solid #e7e7e7;
+}
+#add-component-modal .type-filter ul {
+  padding-left: 0;
+}
+#add-component-modal .type-filter ul li {
+  display: inline-block;
+  list-style-type: none;
+}
+#add-component-modal .type-filter ul li span {
+  cursor: pointer;
+}
+#add-component-modal .type-filter .radio-inline label {
   float: right;
   padding: 0;
+}
+#add-component-modal .single-type {
+  position: relative;
+  display: block;
+  height: 146px;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 15px 0px;
+}
+#add-component-modal .single-type h4 {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+#add-component-modal .single-type p {
+  margin-bottom: 5px;
+  min-height: 63px;
+}
+#add-component-modal .single-type .img-wrap {
+  height: 115px;
+  background: #e7e7e7;
+}
+#add-component-modal .single-type .fa-chevron-right {
+  line-height: 114px;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
 }
 .blog-item {
   background: #fcfcfc;
