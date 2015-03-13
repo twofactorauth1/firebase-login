@@ -199,7 +199,7 @@
   }
 
   .modal-footer {
-    margin-top: 0px; 
+    margin-top: 0px;
   }
 
   .modal-header {
@@ -249,6 +249,9 @@
     }
   }
   #add-component-modal {
+    .modal-content {
+      width: 665px;
+    }
     .modal-body {
       height: 300px;
       overflow-y: auto;
@@ -848,7 +851,7 @@ input[type='file'] {
 
 .ribbon-green:before, .ribbon-green:after {
   content: "";
-  border-top:   3px solid #6e8900;   
+  border-top:   3px solid #6e8900;
   border-left:  3px solid transparent;
   border-right: 3px solid transparent;
   position:absolute;
@@ -868,40 +871,51 @@ input[type='file'] {
 }
 
 #add-component-modal {
-        .type-filter {
-            padding: 5px;
-              border-bottom: 1px solid #e7e7e7;
-            ul {
-                padding-left: 0;
-                li {
-                    display: inline-block;
-                    list-style-type: none;
-                }
-            }
+  .type-filter {
+    padding: 5px;
+    border-bottom: 1px solid #e7e7e7;
+
+    ul {
+      padding-left: 0;
+
+      li {
+        display: inline-block;
+        list-style-type: none;
+
+        span {
+          cursor: pointer;
         }
-        .single-type {
-            position: relative;
-            display: block;
-            height: 146px;
-            border-bottom: 1px solid #e6e6e6;
-            padding: 15px 0px;
-            h4 {
-              margin-top: 0px;
-              margin-bottom: 5px;
-            }
-            p {
-              margin-bottom: 5px;
-              min-height: 63px;
-            }
-            .img-wrap {
-                height: 115px;
-                background: #e7e7e7;
-            }
-            .fa-chevron-right {
-                line-height: 114px;
-                text-align: center;
-                width: 100%;
-                font-size: 30px;
-            }
-        }
+      }
     }
+  }
+
+  .single-type {
+    position: relative;
+    display: block;
+    height: 146px;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 15px 0px;
+
+    h4 {
+      margin-top: 0px;
+      margin-bottom: 5px;
+    }
+
+    p {
+      margin-bottom: 5px;
+      min-height: 63px;
+    }
+
+    .img-wrap {
+      height: 115px;
+      background: #e7e7e7;
+    }
+
+    .fa-chevron-right {
+      line-height: 114px;
+      text-align: center;
+      width: 100%;
+      font-size: 30px;
+    }
+  }
+}

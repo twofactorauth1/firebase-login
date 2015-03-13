@@ -124,6 +124,7 @@ define([
       $scope.addLinkType = 'page';
       $scope.saveLoading = false;
       $scope.hours = $$.constants.contact.business_hour_times;
+      $scope.typefilter = 'all';
       $scope.components.sort(function(a, b) {
         return a.i > b.i;
       });
@@ -406,6 +407,33 @@ define([
         enabled: true
       }];
 
+      var componentLabel,
+          enabledComponentTypes = _.where( $scope.componentTypes, { enabled: true } );
+
+      /************************************************************************************************************
+       * Takes the componentTypes object and gets the value for the filter property from any that are enabled.
+       * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
+       * it exists. (The misc value is added back on to the end of the list later)
+       ************************************************************************************************************/
+      $scope.componentFilters = _.without( _.uniq( _.pluck( _.sortBy( enabledComponentTypes, 'filter' ), 'filter' ) ), 'misc');
+
+      // Iterates through the array of filters and replaces each one with an object containing an
+      // upper and lowercase version
+      _.each( $scope.componentFilters, function( element, index ) {
+        componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+        $scope.componentFilters[index] = { 'capitalized': componentLabel, 'lowercase': element };
+        componentLabel = null;
+      });
+
+      // Manually add the All option to the begining of the list
+      $scope.componentFilters.unshift({'capitalized': 'All', 'lowercase': 'all'});
+      // Manually add the Misc section back on to the end of the list
+      $scope.componentFilters.push({'capitalized': 'Misc', 'lowercase': 'misc'});
+
+      $scope.setFilterType = function( label ) {
+        $scope.typefilter = label;
+      };
+
       /*****
           {
               title: 'Customer SignUp',
@@ -491,7 +519,7 @@ define([
             $scope.componentEditing.bg.img.parallax = false;
             $scope.componentEditing.bg.img.overlay = false;
           }
-          
+
         }
       }
       $scope.bindEvents = function() {
@@ -1517,7 +1545,7 @@ define([
         }
       };
 
-      $scope.sortableOptions = { 
+      $scope.sortableOptions = {
       dragEnd: function(e, ui) {
         console.log('sorting end');
         $scope.updateLinkList();

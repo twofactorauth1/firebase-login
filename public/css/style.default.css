@@ -21479,6 +21479,9 @@ div.error label.error:before {
 .website .componentOption .thumbnail:hover {
   background: #dddddd;
 }
+.website #add-component-modal .modal-content {
+  width: 665px;
+}
 .website #add-component-modal .modal-body {
   height: 300px;
   overflow-y: auto;
@@ -21989,6 +21992,9 @@ input[type='file'] {
 #add-component-modal .type-filter ul li {
   display: inline-block;
   list-style-type: none;
+}
+#add-component-modal .type-filter ul li span {
+  cursor: pointer;
 }
 #add-component-modal .single-type {
   position: relative;
