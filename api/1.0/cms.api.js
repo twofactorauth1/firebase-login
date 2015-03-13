@@ -16,6 +16,8 @@ var Page = require('../../cms/model/page');
 
 
 var cmsManager = require('../../cms/cms_manager');
+var preRenderConfig = require('../../configs/prerender.config');
+var request = require('request');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -404,6 +406,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.revertPage(pageId, version, function(err, page){
                     self.log.debug('<< revertPage');
                     self.sendResultOrError(resp, err, page, "Error reverting page version");
+
                     self = null;
                     return;
                 });
@@ -436,6 +439,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         if(err) {self.log.warn('Error updating screenshot for pageId ' + updatedPage.id() + ': ' + err);}
                         self = null;
                     });
+                    var pageUrl = self._buildPageUrl(req, page.get('handle'));
+                    self._updatePageCache(pageUrl);
                 });
             }
         });
@@ -478,6 +483,8 @@ _.extend(api.prototype, baseApi.prototype, {
                             if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
                             self = null;
                         });
+                        var pageUrl = self._buildPageUrl(req, page.get('handle'));
+                        self._updatePageCache(pageUrl);
                     });
                 } else {
                     self.log.error('Cannot create null page.');
@@ -511,6 +518,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
                         self = null;
                     });
+                    var pageUrl = self._buildPageUrl(req, value.get('handle'));
+                    self._updatePageCache(pageUrl);
                 });
             }
         });
@@ -1190,6 +1199,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updateBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< updateBlogPost');
                     self.sendResultOrError(res, err, value, "Error updating Blog Post");
+                    var pageUrl = self._buildPageUrl(req, 'blog/' + value.get('post_url'));
+                    self._updatePageCache(pageUrl);
                     self = null;
                 });
             }
@@ -1521,6 +1532,41 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getBlogTitles');
             self.sendResultOrError(resp, err, value, 'Error getting blog titles');
             self = null;
+        });
+    },
+
+    _buildPageUrl: function(req, handle) {
+        var host = req.host;
+        //replace main with www on for main site
+        if(host.indexOf('main.') != -1) {
+            host = host.replace('main.', 'www.');
+        }
+
+        return host + '/page/' + handle;
+    },
+
+    _updatePageCache: function(url) {
+        var self = this;
+        self.log.debug('>> _updatePageCache(' + url + ')');
+        var params = {
+            prerenderToken: preRenderConfig.PRERENDER_TOKEN,
+            url:url
+        };
+
+        var options = {
+            json: true,
+            body: params
+        };
+
+        request.post(preRenderConfig.RECACHE_URL, options, function(err, resp, body){
+
+            if(err) {
+                self.log.error('Error sending recache request: ', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< _updatePageCache', body);
+                return;
+            }
         });
     }
 
