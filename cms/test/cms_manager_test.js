@@ -50,6 +50,11 @@ module.exports.group =  {
 
     },
 
+    testOk: function(test) {
+        test.ok(true);
+        test.done();
+    }
+
     // testGetThemeById: function(test) {
     //     test.expect(1);
     //     var theme = new $$.m.cms.Theme({
