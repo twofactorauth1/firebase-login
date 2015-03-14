@@ -244,7 +244,8 @@ define(['app', 'userService', 'navigationService', 'powertour', 'toasterService'
         UserService.getUserPreferences(function(preferences) {
             $scope.userPreferences = preferences;
             $scope.activeTab = preferences.support_default_tab || 'getting-started';
-            $scope.initialWelcome = preferences.welcome_alert.initial;
+            if(preferences.welcome_alert)
+                $scope.initialWelcome = preferences.welcome_alert.initial;
         });
 
         $scope.savePreferencesFn = function() {

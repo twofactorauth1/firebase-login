@@ -43,6 +43,7 @@ angular.module('var.directives').directive('indigewebResize', function ($window)
             }, true);
 
             w.bind('resize', function () {
+                if(!scope.$$phase)
                 scope.$apply();
             });
     };
