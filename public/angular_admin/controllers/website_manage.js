@@ -39,7 +39,7 @@ define([
             $scope.onboardingSteps = [{
                 overlay: false
             }];
-            $scope.numPerPage = 10;
+            $scope.numPerPage = 12;
             $scope.pagesPaging = {};
             $scope.pagesPaging.take = $scope.numPerPage;
             $scope.pagesPaging.page = 1;
@@ -220,7 +220,7 @@ define([
                 WebsiteService.getPagesWithLimit($scope.account.website.websiteId, queryParams, function(pages) {
                     var _pages = [];
                     $scope.pagesPaging.total = pages.total;
-                    $scope.disablePaging = false;
+                    $scope.pagesPaging.disablePaging = false;
                     for (var i in pages.results) {
                         if (pages.results.hasOwnProperty(i)) {
                             _pages.unshift(pages.results[i]);
@@ -265,16 +265,32 @@ define([
             };
 
             $scope.nextPage = function() {
-                $scope.disablePaging = true;
-                $scope.pagesPaging.page++;
-                $scope.loadWebsitePages();
+                if($scope.pagesPaging.page !== $scope.pageCount())
+                {
+                    $scope.pagesPaging.disablePaging = true;
+                    $scope.pagesPaging.page++;
+                    $scope.loadWebsitePages();
+                }
             };
 
             $scope.previousPage = function() {
-                $scope.disablePaging = true;
-                $scope.pagesPaging.page--;
-                $scope.loadWebsitePages();
+                if($scope.pagesPaging.page !== 1)
+                {
+                    $scope.pagesPaging.disablePaging = true;
+                    $scope.pagesPaging.page--;
+                    $scope.loadWebsitePages();
+                }                
             };
+
+            $scope.goToPage = function(index) { 
+                if($scope.pagesPaging.page !==  index + 1)
+                {
+                    $scope.pagesPaging.disablePaging = true;
+                    $scope.pagesPaging.page = index + 1;
+                    $scope.loadWebsitePages();
+                } 
+            };
+
             $scope.nextPageDisabled = function() {
                 return $scope.pagesPaging.page === $scope.pageCount() ? true : false;
             };
@@ -282,7 +298,13 @@ define([
                 return $scope.pagesPaging.page <= 1 ? true : false;
             };
             $scope.pageCount = function() {
-                return Math.ceil($scope.pagesPaging.total / $scope.numPerPage);
+                var totalPages = Math.ceil($scope.pagesPaging.total / $scope.numPerPage);
+                $scope.paging = [];
+                for(i=0;i<totalPages;i++)
+                {
+                    $scope.paging.push(i);
+                }           
+                return totalPages;
             };
 
             $scope.loadWebsitePosts = function() {
@@ -297,21 +319,40 @@ define([
                 });
 
             }
-
+            $scope.goToPostPage = function(index) { 
+                if($scope.postPaging.page !==  index + 1)
+                {
+                    $scope.postPaging.disablePaging = true;
+                    $scope.postPaging.page = index + 1;
+                    $scope.loadWebsitePosts();
+                } 
+            };
             $scope.postNextPage = function() {
-                $scope.postPaging.disablePaging = true;
-                $scope.postPaging.page++;
-                $scope.loadWebsitePosts();
+                 if($scope.postPaging.page !== $scope.pageCount())
+                 {
+                    $scope.postPaging.disablePaging = true;
+                    $scope.postPaging.page++;
+                    $scope.loadWebsitePosts();
+                 }
             };
 
             $scope.postPreviousPage = function() {
-                $scope.postPaging.disablePaging = true;
-                $scope.postPaging.page--;
-                $scope.loadWebsitePosts();
+                if($scope.postPaging.page !== 1)
+                {
+                    $scope.postPaging.disablePaging = true;
+                    $scope.postPaging.page--;
+                    $scope.loadWebsitePosts();
+                }
             };
 
             $scope.postCount = function() {
-                return Math.ceil($scope.postPaging.total / $scope.numPerPage);
+                var totalPosts = Math.ceil($scope.postPaging.total / $scope.numPerPage);
+                $scope.pagingPosts = [];
+                for(i=0;i<totalPosts;i++)
+                {
+                    $scope.pagingPosts.push(i);
+                }   
+                return totalPosts;
             };
 
             $scope.changeTheme = function(theme) {
