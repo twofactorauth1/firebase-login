@@ -1,0 +1,25 @@
+<!-- Historical Page Modal -->
+    <div class="modal fade" id="historical-page-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Historical Pages</h4>
+                </div>
+                <div class="modal-body">
+                    <div ng-repeat="version in pageVersions">
+                        <ul>
+                            <li>
+                                <div class="col-xs-6">{{version.created.date}}</div>
+                                <div class="col-xs-6"><a href="">Restore</a> | <a href="">Delete</a></div>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->

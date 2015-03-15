@@ -50,6 +50,19 @@ define(['app'], function (app) {
             });
 		};
 
+		//page/:id/versions
+		this.getPageVersions = function (pageId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:getPageVersions with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPages = function (accountId, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)
