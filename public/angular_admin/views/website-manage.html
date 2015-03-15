@@ -167,7 +167,7 @@
                 <div class="pagination pagination-centered website-pagination" ng-if="pagesPaging.total && pagesPaging.total > numPerPage">
                     <ul class="pagination">
                         <li ng-class="{disabled: pagesPaging.disablePaging || pagesPaging.page <= 1}"><a href="" ng-click="pagesPaging.disablePaging ? '' : previousPage()">PREV</a></li>
-                        <li ng-class="{disabled: pagesPaging.disablePaging, active:$index+1 === pagesPaging.page}" ng-repeat="page in paging track by $index"><a href="" ng-click="pagesPaging.disablePaging ? '' : goToPage($index)">{{$index + 1}}</a></li>                        
+                        <li ng-class="{disabled: pagesPaging.disablePaging || page === '...', active:page === pagesPaging.page}" ng-repeat="page in paging track by $index"><a href="" ng-click="pagesPaging.disablePaging ? '' : goToPage(page)">{{page}}</a></li>                        
                         <li  ng-class="{disabled: pagesPaging.disablePaging || (pagesPaging.page === pageCount())}"><a href="" ng-click="pagesPaging.disablePaging ? '' : nextPage()">NEXT</a></li>
                         <li ng-if="pagesPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
                     </ul>
@@ -232,7 +232,7 @@
                 <div class="pagination pagination-centered website-pagination" ng-if="postPaging.total && postPaging.total > numPerPage">
                     <ul class="pagination">
                         <li ng-class="{disabled: postPaging.disablePaging || postPaging.page <= 1}"><a href="" ng-click="postPaging.disablePaging ? '' :  postPreviousPage()">PREV</a></li>
-                        <li ng-class="{disabled: postPaging.disablePaging, active:$index+1 === postPaging.page}" ng-repeat="post in postPaging track by $index"><a href="" ng-click="postPaging.disablePaging ? '' : goToPostPage($index)">{{$index + 1}}</a></li>
+                        <li ng-class="{disabled: postPaging.disablePaging || post === '...', active:post === postPaging.page}" ng-repeat="post in pagingPost track by $index"><a href="" ng-click="postPaging.disablePaging ? '' : goToPostPage(post)">{{post}}</a></li>
                         <li  ng-class="{disabled: postPaging.disablePaging || (postPaging.page === postCount())}"><a href="" ng-click="postPaging.disablePaging ? '' : postNextPage()">NEXT</a></li>
                         <li ng-if="postPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
                     </ul>
