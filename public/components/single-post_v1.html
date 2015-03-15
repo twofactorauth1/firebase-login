@@ -47,7 +47,8 @@
                                 </div>
                                 <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
                                         <span class="fa fa-edit"></span>
-                                        <span class="hidden-xs">Change Image</span>
+                                        <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
+                                        <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
                                 </a>
                                 <!-- end .thumb -->
 
