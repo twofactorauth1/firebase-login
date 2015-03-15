@@ -89,8 +89,6 @@ define([
         $scope.beginOnboarding($location.$$search['onboarding']);
       }
 
-
-
       if ($location.$$search['pagehandle']) {
         document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
       }
@@ -168,52 +166,6 @@ define([
       UserService.getAccount(function(account) {
         $scope.account = account;
         that.account = account;
-        //get pages and find this page
-        WebsiteService.getPages(account.website.websiteId, function(pages) {
-          //TODO should be dynamic based on the history
-          currentPage = 'index';
-          that.allPages = pages;
-          var parsed = angular.fromJson(pages);
-          var arr = [];
-
-          for (var x in parsed) {
-            arr.push(parsed[x]);
-          }
-          $scope.allPages = arr;
-
-          //$scope.currentPage = _.findWhere(pages, {
-          //  handle: currentPage
-          //});
-
-          if ($scope.editingPageId) {
-            $scope.currentPage = _.findWhere(pages, {
-              _id: $scope.editingPageId
-            });
-            // if ($scope.currentPage && $scope.currentPage.components) {
-            //     $scope.components = $scope.currentPage.components;
-            // } else {
-            //     $scope.components = [];
-            // }
-            // console.log('$scope.currentPage >>> ', $scope.currentPage);
-            // $scope.resfeshIframe();
-          } else {
-            //$scope.currentPage = _.findWhere(pages, {
-            //    handle: currentPage
-            //});
-          }
-          //get components from page
-          if ($scope.currentPage) {
-            if ($scope.currentPage.components) {
-              $scope.components = $scope.currentPage.components;
-              if ($location.$$search['posthandle']) {
-                //$scope.updatePage("post", true);
-              }
-            }
-          } else {
-            console.log('Falied to retrieve Page');
-          }
-
-        });
 
         //get website
         WebsiteService.getWebsite(account.website.websiteId, function(website) {
@@ -233,13 +185,6 @@ define([
           $scope.secondaryFontStack = $scope.website.settings.font_family_2;
         });
 
-        //get themes
-        WebsiteService.getThemes(function(themes) {
-          $scope.themes = themes;
-          $scope.currentTheme = _.findWhere($scope.themes, {
-            _id: account.website.themeId
-          });
-        });
       });
 
       //an array of component types and icons for the add component modal
@@ -928,6 +873,18 @@ define([
             handle: currentPage
           });
 
+          // $scope.historicalPages = _.where(pages, {
+          //   handle: $scope.currentPage.handle
+          // });
+
+          // console.log('pages >>> ', pages);
+          // console.log('historicalPages >>> ', $scope.historicalPages);
+
+          WebsiteService.getPageVersions($scope.currentPage._id, function(pageVersions) {
+            console.log('retireved page versions >>> ', pageVersions);
+            $scope.pageVersions = pageVersions;
+          });
+
           var localPage = _.findWhere(pages, {
             handle: currentPage
           });
@@ -1434,6 +1391,10 @@ define([
 
       //Add Link to navigation
 
+      $scope.$watch('website.linkLists', function(newValue, oldValue) {
+          console.log('website.linkLists changed >>> ');
+      });
+
       $scope.setLinkUrl = function() {
         $scope.newLink.linkTitle = $("#linkSection option:selected").html();
       }
@@ -1462,8 +1423,7 @@ define([
         $scope.initializeLinks();
       }
 
-      $scope.deleteLinkFromNav = function(index)
-      {
+      $scope.deleteLinkFromNav = function(index) {
         $scope.website.linkLists.forEach(function(value) {
             if (value.handle === "head-menu") {
               value.links.splice(index,1);
