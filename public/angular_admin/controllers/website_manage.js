@@ -40,6 +40,7 @@ define([
                 overlay: false
             }];
             $scope.numPerPage = 12;
+            $scope.paginationRange = 12;
             $scope.pagesPaging = {};
             $scope.pagesPaging.take = $scope.numPerPage;
             $scope.pagesPaging.page = 1;
@@ -220,6 +221,7 @@ define([
                 WebsiteService.getPagesWithLimit($scope.account.website.websiteId, queryParams, function(pages) {
                     var _pages = [];
                     $scope.pagesPaging.total = pages.total;
+                    $scope.calculatePages();
                     $scope.pagesPaging.disablePaging = false;
                     for (var i in pages.results) {
                         if (pages.results.hasOwnProperty(i)) {
@@ -283,29 +285,73 @@ define([
             };
 
             $scope.goToPage = function(index) { 
-                if($scope.pagesPaging.page !==  index + 1)
+                if($scope.pagesPaging.page !==  index && index !=="...")
                 {
                     $scope.pagesPaging.disablePaging = true;
-                    $scope.pagesPaging.page = index + 1;
+                    $scope.pagesPaging.page = index;
                     $scope.loadWebsitePages();
                 } 
             };
 
-            $scope.nextPageDisabled = function() {
+            $scope.calculatePages = function()
+            {
+                var totalPages = Math.ceil($scope.pagesPaging.total / $scope.numPerPage);
+                var halfWay = Math.ceil($scope.paginationRange / 2);
+                var position;
+
+                if ($scope.pagesPaging.page <= halfWay) {
+                    position = 'start';
+                } else if (totalPages - halfWay < $scope.pagesPaging.page) {
+                    position = 'end';
+                } else {
+                    position = 'middle';
+                }
+                $scope.paging = [];
+                var i = 1;
+                var ellipsesNeeded = $scope.paginationRange < totalPages;
+                while (i <= totalPages && i <= $scope.paginationRange) {
+                    var pageNumber = $scope.calculatePageNumber(i, $scope.pagesPaging.page, $scope.paginationRange, totalPages);
+
+                    var openingEllipsesNeeded = (i === 2 && (position === 'middle' || position === 'end'));
+                    var closingEllipsesNeeded = (i === $scope.paginationRange - 1 && (position === 'middle' || position === 'start'));
+                    if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
+                        $scope.paging.push('...');
+                    } else {
+                        $scope.paging.push(pageNumber);
+                    }
+                    i ++;
+                }  
+            }
+
+            $scope.nextPageDisabled = function() {                
                 return $scope.pagesPaging.page === $scope.pageCount() ? true : false;
             };
-            $scope.prevPageDisabled = function() {
+            $scope.prevPageDisabled = function() {                
                 return $scope.pagesPaging.page <= 1 ? true : false;
             };
             $scope.pageCount = function() {
-                var totalPages = Math.ceil($scope.pagesPaging.total / $scope.numPerPage);
-                $scope.paging = [];
-                for(i=0;i<totalPages;i++)
-                {
-                    $scope.paging.push(i);
-                }           
+                var totalPages = Math.ceil($scope.pagesPaging.total / $scope.numPerPage);                                     
                 return totalPages;
             };
+
+            $scope.calculatePageNumber=function(i, currentPage, paginationRange, totalPages) {
+            var halfWay = Math.ceil(paginationRange/2);
+            if (i === paginationRange) {
+                return totalPages;
+            } else if (i === 1) {
+                return i;
+            } else if (paginationRange < totalPages) {
+                if (totalPages - halfWay < currentPage) {
+                    return totalPages - paginationRange + i;
+                } else if (halfWay < currentPage) {
+                    return currentPage - halfWay + i;
+                } else {
+                    return i;
+                }
+            } else {
+                return i;
+            }
+        }
 
             $scope.loadWebsitePosts = function() {
                 var queryParams = {
@@ -314,16 +360,17 @@ define([
                 }
                 WebsiteService.getPostsWithLimit(queryParams, function(posts) {
                     $scope.postPaging.total = posts.total;
+                    $scope.calculatePagePosts();
                     $scope.postPaging.disablePaging = false;
                     $scope.posts = posts.results;
                 });
 
             }
             $scope.goToPostPage = function(index) { 
-                if($scope.postPaging.page !==  index + 1)
+                if($scope.postPaging.page !==  index && index !== '...')
                 {
                     $scope.postPaging.disablePaging = true;
-                    $scope.postPaging.page = index + 1;
+                    $scope.postPaging.page = index;
                     $scope.loadWebsitePosts();
                 } 
             };
@@ -345,13 +392,38 @@ define([
                 }
             };
 
+            $scope.calculatePagePosts = function()
+            {
+                var totalPages = Math.ceil($scope.postPaging.total / $scope.numPerPage);
+                var halfWay = Math.ceil($scope.paginationRange / 2);
+                var position;
+
+                if ($scope.postPaging.page <= halfWay) {
+                    position = 'start';
+                } else if (totalPages - halfWay < $scope.postPaging.page) {
+                    position = 'end';
+                } else {
+                    position = 'middle';
+                }
+                $scope.pagingPost = [];
+                var i = 1;
+                var ellipsesNeeded = $scope.paginationRange < totalPages;
+                while (i <= totalPages && i <= $scope.paginationRange) {
+                    var pageNumber = $scope.calculatePageNumber(i, $scope.postPaging.page, $scope.paginationRange, totalPages);
+
+                    var openingEllipsesNeeded = (i === 2 && (position === 'middle' || position === 'end'));
+                    var closingEllipsesNeeded = (i === $scope.paginationRange - 1 && (position === 'middle' || position === 'start'));
+                    if (ellipsesNeeded && (openingEllipsesNeeded || closingEllipsesNeeded)) {
+                        $scope.pagingPost.push('...');
+                    } else {
+                        $scope.pagingPost.push(pageNumber);
+                    }
+                    i ++;
+                }  
+            }
+
             $scope.postCount = function() {
-                var totalPosts = Math.ceil($scope.postPaging.total / $scope.numPerPage);
-                $scope.pagingPosts = [];
-                for(i=0;i<totalPosts;i++)
-                {
-                    $scope.pagingPosts.push(i);
-                }   
+                var totalPosts = Math.ceil($scope.postPaging.total / $scope.numPerPage);                
                 return totalPosts;
             };
 
