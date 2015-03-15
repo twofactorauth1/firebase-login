@@ -11737,6 +11737,10 @@ div[data-class='image-text'] p {
   margin-top: 8px;
 }
 
+.mt200 {
+  margin-top: -200px;
+}
+
 .masthead-v1 {
   margin-top: 0;
   transition: none;
