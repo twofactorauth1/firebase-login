@@ -94,6 +94,7 @@ define([
       }
 
       if ($location.$$search['posthandle']) {
+        $scope.single_post = true;
         document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
       }
 
@@ -618,7 +619,6 @@ define([
         if (iframe.contentWindow.copyPostMode) {
           iframe.contentWindow.copyPostMode();
           $scope.post_data = iframe.contentWindow.getPostData();
-          $scope.single_post = true;
         }
         $scope.activateAloha();
         $scope.backup['website'] = angular.copy($scope['website']);
@@ -688,6 +688,7 @@ define([
           iFrame.contentWindow.checkOrSetPageDirty(true);
         }
         if ($location.$$search['posthandle']) {
+          $scope.single_post = true;
           iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
           $scope.isEditing = true;
         } else {
@@ -848,6 +849,7 @@ define([
         }
 
         if ($location.$$search['posthandle']) {
+          $scope.single_post = true;
           route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
           //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
         }
