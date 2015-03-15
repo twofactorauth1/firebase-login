@@ -1,30 +1,16 @@
 <div class="products-v1" data-class="products" data-id="{{component._id}}">
-    <div class="title">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title" />
-        </div>
-    </div>
 
     <div class="products">
 
-        <!--<div class="container">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#tests" role="tab" data-toggle="tab">Tests</a><span class="arrowsprite"></span>
-                </li>
-                <li><a href="#equipment" role="tab" data-toggle="tab">Equipment</a><span class="arrowsprite"></span></li>
-                <li><a href="#training-plans" role="tab" data-toggle="tab">Training Plans</a><span
-                        class="arrowsprite"></span></li>
-                <li><a href="#coaching" role="tab" data-toggle="tab">Coaching</a><span class="arrowsprite"></span></li>
-            </ul>
-        </div>-->
-
-        <!-- Tab panes -->
-
-        <!-- <div class="tab-content container" ng-repeat="productSection in component['product-sections'] track by $index"> -->
-
         <header class="jumbotron hero-spacer col-xs-12d">
-            <h1>Welcome to Our Store</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+            <div class="title">
+                <div class="editable" data-class="title" ng-bind-html="component.title">
+                </div>
+            </div>
+            <div class="text">
+                <div class="editable" data-class="text" ng-bind-html="component.text">
+                </div>
+            </div>
         </header>
 
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
