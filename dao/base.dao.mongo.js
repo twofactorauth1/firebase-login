@@ -292,6 +292,46 @@ var mongodao = {
 
     },
 
+    _findWithFieldsLimitOrderAndTotalMongo: function(query, skip, limit, sort, fields, type, order_dir, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+        var mongoColl = this.mongo(collection);
+        var _query = query || {};
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+        var sort_order = order_dir || -1;
+
+        mongoColl.count(query, function(err, count){
+            var fxn = function (err, value) {
+                if (!err) {
+                    return self._wrapArrayAndCountMongo(value, fields, type, count, _skip, fn);
+                } else {
+                    self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                    fn(err, value);
+                }
+            };
+            if (fields) {
+                if (sort) {
+                    mongoColl.find(query, fields, {sort: [
+                        [sort, sort_order]
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
+                }
+            } else {
+                if (sort) {
+                    mongoColl.find(query, {sort: [
+                        [sort, sort_order]
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
+                }
+            }
+        });
+
+    },
+
     _aggregateMongoWithCustomStages: function (stageAry, type, fn) {
         var self = this;
 

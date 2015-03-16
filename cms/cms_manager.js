@@ -783,7 +783,7 @@ module.exports = {
         blogPostDao.findManyWithLimit({'accountId':accountId}, limit, $$.m.BlogPost, fn);
     },
     listBlogPostsWithLimit: function(accountId, limit, skip, fn) {
-        blogPostDao.findWithFieldsLimitAndTotal({'accountId':accountId}, skip, limit, null, null, $$.m.BlogPost, fn);
+        blogPostDao.findWithFieldsLimitOrderAndTotal({'accountId':accountId}, skip, limit, "modified.date", null, $$.m.BlogPost, -1, fn);
     },
     listBlogPostsByPageId: function(pageId, limit, fn) {
         blogPostDao.findManyWithLimit({'pageId':pageId}, limit, $$.m.BlogPost, fn);
@@ -1357,7 +1357,7 @@ module.exports = {
         var limit = limit;
         self.log.debug('start query');
 
-        cmsDao.findWithFieldsLimitAndTotal(query, skip, limit, null, null, $$.m.cms.Page, function(err, list){
+        cmsDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, "modified.date", null, $$.m.cms.Page,-1, function(err, list){
             self.log.debug('end query');
             if(err) {
                 self.log.error('Error getting pages by websiteId: ' + err);
