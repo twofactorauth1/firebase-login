@@ -510,6 +510,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 var pageId = req.params.id;
                 var _page = req.body;
                 var pageObj = new Page(_page);
+                console.dir(pageObj);
+                pageObj.attributes.modified.date = new Date();
                 pageObj.set('screenshot', null);
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
@@ -1127,6 +1129,8 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 blogPost.set('accountId', accountId);
                 blogPost.set('pageId', pageId);
+                blogPost.attributes.modified.date = new Date();
+                blogPost.attributes.created.date = new Date();
 
                 cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
@@ -1193,7 +1197,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('accountId', accountId);
                 blogPost.set('_id', postId);
                 blogPost.set('pageId', pageId);
-
+                blogPost.attributes.modified.date = new Date();
                 console.dir(req.body);
 
                 cmsManager.updateBlogPost(accountId, blogPost, function (err, value) {
