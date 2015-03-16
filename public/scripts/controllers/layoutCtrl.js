@@ -1013,6 +1013,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
+      for(name in CKEDITOR.instances)
+      {
+          CKEDITOR.instances[name].destroy()
+      }
       $scope.isEditing = true;
       CKEDITOR.disableAutoInline = true;
       var elements = $('.editable');
@@ -1026,8 +1030,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
-                var editor = ev.editor;
-                CKEDITOR.remove(editor);
+                var editor = ev.editor;                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
