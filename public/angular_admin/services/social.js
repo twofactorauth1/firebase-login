@@ -85,6 +85,11 @@ define(['app'], function (app) {
             //     });
         };
 
+        this.getGooglePlusPostsPromise = function (socialId, fn) {
+            var apiUrl = baseUrl + ['facebook', 'posts', socialId].join('/');
+            return $http.get(apiUrl);
+        };
+
         this.getFBPageSocialConfig = function(socialId, fn) {
           var apiUrl = baseUrl + ['socialconfig', 'facebook', socialId, 'pages'].join('/');
           $http.get(apiUrl)
