@@ -10250,6 +10250,10 @@ div[data-type='campaign'] .inner-page .overlay {
   float: none;
 }
 
+.feature-list-v4 .feature img {
+  max-width: 225px;
+}
+
 @media (min-width: 768px) {
   .feature-list-v4 .container-sm-height {
     display: table;
@@ -11735,6 +11739,10 @@ div[data-class='image-text'] p {
 
 .masthead .btn .fa {
   margin-top: 8px;
+}
+
+.mt200 {
+  margin-top: -200px;
 }
 
 .masthead-v1 {
