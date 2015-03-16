@@ -375,7 +375,7 @@ define([
                 } 
             };
             $scope.postNextPage = function() {
-                 if($scope.postPaging.page !== $scope.pageCount())
+                 if($scope.postPaging.page !== $scope.postCount())
                  {
                     $scope.postPaging.disablePaging = true;
                     $scope.postPaging.page++;
