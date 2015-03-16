@@ -291,11 +291,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
          // $scope.activated = true;
-        if(!$(this).hasClass('cke_editable')) {
+        //if(!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
                 var editor = ev.editor;
+                CKEDITOR.remove(editor);
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -306,7 +307,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
               top: 'editor-toolbar'
             }
           });
-        }
+        //}
         });
 
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
