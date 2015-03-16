@@ -131,7 +131,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      */
 
     $scope.fbAdminPages = [];
-    $scope.feedLengths = [];
+    $scope.feedLengths = {};
     $scope.feeds = [];
     $scope.feedTypes = [];
     $scope.filters = [];
@@ -141,7 +141,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.typeLogic = {
       feed: {
         tw: function(tweets, socialId) {
-          $scope.feedLengths[socialId] += tweets.length;
+          $scope.feedLengths[socialId] = tweets.length;
           for (var i = 0; i < tweets.length; i++) {
             tweets[i].type = 'twitter';
             tweets[i].socialAccountId = socialId;
@@ -149,7 +149,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           };
         },
         fb: function(posts, socialId) {
-          $scope.feedLengths[socialId] += posts.length;
+          $scope.feedLengths[socialId] = posts.length;
           for (var i = 0; i < posts.length; i++) {
             posts[i].type = 'facebook';
             posts[i].socialAccountId = socialId;
@@ -171,7 +171,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       },
       numberFollowers: {
         tw: function(followers, socialId) {
-          $scope.feedLengths[socialId] += followers.length;
+          $scope.feedLengths[socialId] = followers.length;
           for (var i = 0; i < followers.length; i++) {
             followers[i].type = 'twitter';
             followers[i].socialId = socialId;
@@ -179,6 +179,32 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             $scope.feed.push(followers[i]);
           };
         }
+      },
+      profile: {
+        tw: function(profile, socialId) {
+          profile.type = 'twitter';
+          profile.socialId = socialId;
+          profile.open = true;
+          $scope.feedTypes.push(profile);
+          $scope.filtersValues.forEach(function(value, index) {
+            $scope.filters.push(value + socialId);
+          });
+        },
+        fb: function(profile, socialId) {
+          profile.socialId = socialId;
+          profile.type = 'facebook';
+          profile.open = true;
+          $scope.feedTypes.push(profile);
+          $scope.filtersValues.forEach(function(value, index) {
+            $scope.filters.push(value + socialId);
+          });
+        }
+      },
+      go: function(posts) {
+        for (var i = 0; i < posts.length; i++) {
+          posts[i].type = 'google-plus';
+          $scope.feed.push(posts[i]);
+        };
       }
     };
 
@@ -193,8 +219,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       });
 
       config.trackedObjects.forEach(function(value, index) {
-        $scope.feedLengths[value.socialId] = 0;
         promiseProcessor.push([]);
+        $scope.feedLengths[value.socialId] = 0;
 
         if (value.type == 'feed') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
@@ -221,6 +247,19 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor[index] = [value.type, socialAccountMap[value.socialId]];
         }
+
+        if (value.type === 'profile') {
+          socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
+          promiseProcessor[index] = [value.type, socialAccountMap[value.socialId]];
+        }
+
+        // config.socialAccounts.forEach(function(value, index) {
+        //   if (value.type == 'go') {
+        //     $scope.feedTypes.push('google-plus');
+        //     socialPromises.push(SocialService.getGooglePlusPostsPromise(value.socialId));
+        //     promiseProcessor.push([value.type]);
+        //   }
+        // });
 
         // if (obj.type === 'likes') {
         //   continue;
@@ -257,71 +296,18 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
               ];
             }
 
+            if (promiseProcessor[index].length == 1) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]];
+            }
+
             if (logicFn) {
               logicFn(value.data, value.socialId);
+            } else {
+              console.log(promiseProcessor[index]);
             }
           });
           $scope.displayedFeed = $scope.feed;
         });
-    });
-
-    SocialConfigService.getAllSocialConfig(function(config) {
-      $scope.config = config;
-      var socialAccountMap = {};
-      for (var i = 0; i < config.socialAccounts.length; i++) {
-        socialAccountMap[config.socialAccounts[i].id] = config.socialAccounts[i].type;
-      }
-      //handle each tracked object
-      for (var i = 0; i < config.trackedObjects.length; i++) {
-        var obj = config.trackedObjects[i];
-        if (obj.type === 'profile') {
-          if (socialAccountMap[obj.socialId] === 'tw') {
-            SocialConfigService.getTrackedObject(i, obj.socialId, function(profile, socialId) {
-              profile.type = 'twitter';
-              profile.socialId = socialId;
-              profile.open = true;
-              $scope.feedTypes.push(profile);
-              $scope.filtersValues.forEach(function(value, index) {
-                $scope.filters.push(value + socialId);
-              });
-
-            });
-          } else if (socialAccountMap[obj.socialId] === 'fb') {
-            SocialConfigService.getTrackedObject(i, obj.socialId, function(profile, socialId) {
-              profile.socialId = socialId;
-              profile.type = 'facebook';
-              profile.open = true;
-              $scope.feedTypes.push(profile);
-              $scope.filtersValues.forEach(function(value, index) {
-                $scope.filters.push(value + socialId);
-              });
-
-            });
-
-          }
-
-        }
-      }
-      $scope.displayedFeed = $scope.feed;
-
-
-      /*
-       * Social config does not yet have google plus posts.  Next TODO.
-       */
-      for (var i = 0; i < config.socialAccounts.length; i++) {
-        var thisSocial = config.socialAccounts[i];
-
-        if (thisSocial.type == 'go') {
-          $scope.feedTypes.push('google-plus');
-          SocialService.getGooglePlusPosts(thisSocial.socialId, function(posts) {
-            for (var i = 0; i < posts.length; i++) {
-              posts[i].type = 'google-plus';
-              $scope.feed.push(posts[i]);
-            };
-          });
-        }
-      };
-      $scope.displayedFeed = $scope.feed;
     });
 
     /*
