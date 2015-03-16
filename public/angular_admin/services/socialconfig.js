@@ -58,6 +58,11 @@ define(['app'], function(app) {
         });
     };
 
+    this.getFBPagesPromise = function(socialAccountId, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
+      return $http.get(apiUrl);
+    };
+
     this.getFBPageInfo = function(socialAccountId, pageId, fn) {
       var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
       $http.get(apiUrl)

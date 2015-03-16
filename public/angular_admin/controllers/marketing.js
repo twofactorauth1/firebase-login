@@ -139,23 +139,35 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.fbPostsLength = 0;
 
     $scope.typeLogic = {
-      tw: function(tweets) {
-        $scope.feedLengths.tw = $scope.feedLengths.tw + tweets.length;
-        for (var i = 0; i < tweets.length; i++) {
-          tweets[i].type = 'twitter';
-          tweets[i].socialAccountId = 'tw';
-          $scope.feed.push(tweets[i]);
-        };
+      feed: {
+        tw: function(tweets) {
+          $scope.feedLengths.tw = $scope.feedLengths.tw + tweets.length;
+          for (var i = 0; i < tweets.length; i++) {
+            tweets[i].type = 'twitter';
+            tweets[i].socialAccountId = 'tw';
+            $scope.feed.push(tweets[i]);
+          };
+        },
+        fb: function(posts) {
+          $scope.feedLengths.fb = $scope.feedLengths.fb + posts.length;
+          for (var i = 0; i < posts.length; i++) {
+            posts[i].type = 'facebook';
+            posts[i].socialAccountId = 'fb';
+            $scope.fbPostsLength += 1;
+            posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
+            $scope.feed.push(posts[i]);
+          };
+        }
       },
-      fb: function(posts) {
-        $scope.feedLengths.fb = $scope.feedLengths.fb + posts.length;
-        for (var i = 0; i < posts.length; i++) {
-          posts[i].type = 'facebook';
-          posts[i].socialAccountId = 'fb';
-          $scope.fbPostsLength += 1;
-          posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
-          $scope.feed.push(posts[i]);
-        };
+      pages: {
+        fb: {
+          account: function(fbAdminPages) {
+            for (var k = 0; k < fbAdminPages.length; k++) {
+              fbAdminPages[k].socialId = 'fb';
+              $scope.fbAdminPages.push(fbAdminPages[k]);
+            };
+          }
+        }
       }
     };
 
@@ -163,6 +175,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       $scope.config = config;
       var socialAccountMap = {};
       var socialPromises = [];
+      var promiseProcessor = [];
 
       config.socialAccounts.forEach(function(value, index) {
         socialAccountMap[value.id] = value.type;
@@ -170,21 +183,70 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
       config.trackedObjects.forEach(function(value, index) {
         $scope.feedLengths[value.socialId] = 0;
+        promiseProcessor.push([]);
+
         if (value.type == 'feed') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
+          promiseProcessor[index] = [value.type, socialAccountMap[value.socialId]];
         }
+
+        if (value.type === 'pages') {
+          if (socialAccountMap[value.socialId] === 'fb') {
+            var accounts = config.socialAccounts;
+            var matchingAccount = '';
+            for (var l = 0; l < accounts.length; l++) {
+              if (accounts[l].id == value.socialId) {
+                matchingAccount = accounts[l];
+              }
+            }
+            if (matchingAccount.accountType == 'account') {
+              socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
+            }
+            promiseProcessor[index] = [value.type, value.socialId, matchingAccount.accountType];
+          }
+        }
+
+        // if (obj.type === 'likes') {
+        //   continue;
+        // }
+        //
+        // if (obj.type === 'user') {
+        //   continue;
+        // }
+        //
+        // if (obj.type === 'mentions') {
+        //   continue;
+        // }
+        //
+        // if (obj.type === 'numberTweets') {
+        //   continue;
+        // }
       });
 
       $q.all(socialPromises)
-      .then(function(data) {
-        data.forEach(function(value, index) {
-          if (value.data && value.data.length) {
-            $scope.typeLogic[value.data[0].type](value.data);
-          }
-        });
-      });
-    });
+        .then(function(data) {
+          data.forEach(function(value, index) {
+            var logicFn = null;
 
+            if (promiseProcessor[index].length == 3) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
+                promiseProcessor[index][1]
+              ][
+                promiseProcessor[index][2]
+              ];
+            }
+            if (promiseProcessor[index].length == 2) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
+                promiseProcessor[index][1]
+              ];
+            }
+
+            if (logicFn) {
+              logicFn(value.data);
+            }
+          });
+        });
+    });
 
     SocialConfigService.getAllSocialConfig(function(config) {
       $scope.config = config;
@@ -195,35 +257,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       //handle each tracked object
       for (var i = 0; i < config.trackedObjects.length; i++) {
         var obj = config.trackedObjects[i];
-        if (obj.type === 'pages') {
-
-          if (socialAccountMap[obj.socialId] === 'fb') {
-            var accounts = config.socialAccounts;
-            var matchingAccount = '';
-            for (var l = 0; l < accounts.length; l++) {
-              if (accounts[l].id == obj.socialId) {
-                matchingAccount = accounts[l];
-              }
-            }
-            if (matchingAccount.accountType == 'account') {
-              SocialConfigService.getFBPages(obj.socialId, function(fbAdminPages) {
-                for (var k = 0; k < fbAdminPages.length; k++) {
-                  fbAdminPages[k].socialId = obj.socialId;
-                  $scope.fbAdminPages.push(fbAdminPages[k]);
-                };
-              });
-            }
-          }
-
-        } else if (obj.type === 'likes') {
-
-        } else if (obj.type === 'user') {
-
-        } else if (obj.type === 'mentions') {
-
-        } else if (obj.type === 'numberTweets') {
-
-        } else if (obj.type === 'numberFollowers') {
+        if (obj.type === 'numberFollowers') {
           if (socialAccountMap[obj.socialId] === 'tw') {
             SocialConfigService.getTrackedObject(i, obj.socialId, function(followers, socialId) {
               $scope.feedLengths[socialId] = $scope.feedLengths[socialId] + followers.length;
