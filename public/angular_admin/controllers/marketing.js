@@ -261,6 +261,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
               logicFn(value.data, value.socialId);
             }
           });
+          $scope.displayedFeed = $scope.feed;
         });
     });
 
