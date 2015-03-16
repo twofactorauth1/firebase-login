@@ -1,25 +1,45 @@
 <!-- Historical Page Modal -->
-    <div class="modal fade" id="historical-page-modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Historical Pages</h4>
+<div class="modal fade" id="historical-page-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Historical Pages</h4>
+            </div>
+            <div class="modal-body nopadding">
+                <div class="revisions" ng-hide="previewSwitch">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Modified</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="version in pageVersions | orderBy: 'modified.date':true">
+                                <th scope="row">{{version.modified.date | date:'MMM d, y h:mm:ss a'}}</th>
+                                <td><a href="" ng-click="showPreview(version)">Preview</a> | <a href="" ng-click="revertPage(version)">Restore</a> | <a href="" ng-click="deletePage()" class="hidden">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix"></div>
                 </div>
-                <div class="modal-body">
-                    <div ng-repeat="version in pageVersions">
-                        <ul>
-                            <li>
-                                <div class="col-xs-6">{{version.created.date | date:'fullDate shortTime'}}</div>
-                                <div class="col-xs-6"><a href="">Restore</a> | <a href="">Delete</a></div>
-                            </li>
-                        </ul>
-                        <div class="clearfix"></div>
+                <div class="revision-preview" ng-show="previewSwitch">
+                    <img id="previewImg" src="{{selectedVersion.screenshot}}" class="img-responsive img-thumbnail" ng-hide="!selectedVersion.screenshot">
+                    <div ng-if="!selectedVersion.screenshot" style="height: 300px;">
+                        <h4 class="center" style="line-height: 260px;">No Preview Available</h4>
                     </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
+            <div class="modal-footer" ng-show="previewSwitch">
+                <button type="button" class="btn btn-primary pull-left" ng-click="hidePreview()">
+                    <span class="fa fa-chevron-left"></span> Back
+                </button>
+            </div>
         </div>
-        <!-- /.modal-dialog -->
+        <!-- /.modal-content -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

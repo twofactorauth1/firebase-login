@@ -7120,6 +7120,11 @@ input[type='file'] {
   font-size: 30px;
 }
 
+#historical-page-modal .modal-body {
+  max-height: 450px;
+  overflow-y: auto;
+}
+
 #historical-page-modal ul {
   padding-left: 0;
 }
