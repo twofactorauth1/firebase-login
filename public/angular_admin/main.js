@@ -179,7 +179,11 @@ require.config({
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'angularConfig' : 'scripts/config',
         'angularSlugifier': 'libs/angular-slugify/angular-slugify',
-        'ui.sortable':'libs_misc/ng-sortable/dist/ng-sortable'
+        'ui.sortable':'libs_misc/ng-sortable/dist/ng-sortable',
+        'blueimp-helper': 'libs/blueimp-gallery/js/blueimp-helper',
+        'blueimp-gallery': 'libs/blueimp-gallery/js/blueimp-gallery',
+        'blueimp-gallery-video': 'libs/blueimp-gallery/js/blueimp-gallery-video',
+        'blueimp' : 'libs/blueimp-gallery/js/jquery.blueimp-gallery.min'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -254,7 +258,8 @@ require.config({
         'angularSlugifier': ['angular'],
         'blockUI': ['angular'],
         'carousel': ['angular','angularBootstrap'],
-        'ui.sortable': ['angular']
+        'ui.sortable': ['angular'],        
+        'blueimp': {deps: ['blueimp-gallery']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
