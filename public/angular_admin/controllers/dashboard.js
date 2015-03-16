@@ -165,7 +165,7 @@ define([
                  $scope.setReportData(data);
         });
 
-        ChartCommerceService.runReports($scope.date, function(data) {
+        ChartCommerceService.runReports(function(data) {
           $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
           $scope.avgRevenue = data.avgRevenue;
           $scope.annualRunRate = data.annualRunRate;
@@ -439,11 +439,14 @@ define([
       }
 
       $scope.renderAnalyticsCharts = function() {
-        ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
-        if (!$scope.displayVisitors) {
-          var deshBlockUI = blockUI.instances.get('deshboardBlock');
-           deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
-        }
+        if($("#visitor_locations").length)
+        {
+              ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
+                if (!$scope.displayVisitors) {
+                  var deshBlockUI = blockUI.instances.get('deshboardBlock');
+                   deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
+                }
+        }        
         ngProgress.complete();
         if ($location.$$search.onboarding) {
           $scope.showOnboarding = true;

@@ -140,7 +140,7 @@ define(['app'], function (app) {
 			var self = this;
 
 			if (!pagedata.modified) {pagedata.modified = {}}
-			pagedata.modified.date = new Date().getTime();
+			pagedata.modified.date = new Date();
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
 			$http({
 			    url: apiUrl,

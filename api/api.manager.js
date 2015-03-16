@@ -49,6 +49,9 @@ var assetsApi = require('./1.0/assets.api');
 //Dashboard
 var dashboardApi = require('./1.0/dashboard.api');
 
+//Order
+var orderApi = require('./1.0/order.api');
+
 module.exports = {
 
 };
