@@ -1113,7 +1113,9 @@ define(['app', 'keenService'], function(app) {
                 "code": "AK"
             }];
 
-            var chart1 = new Highcharts.Map({
+            if($("#visitor_locations").length)
+            {
+                var chart1 = new Highcharts.Map({
                 chart: {
                     renderTo: 'visitor_locations'
                 },
@@ -1167,6 +1169,7 @@ define(['app', 'keenService'], function(app) {
                     enabled: false
                 }
             });
+            }
         };
 
     }]);
