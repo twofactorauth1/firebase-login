@@ -10,6 +10,7 @@ var log = $$.g.getLogger("order_manager");
 var async = require('async');
 var stripeDao = require('../payments/dao/stripe.dao');
 var contactDao = require('../dao/contact.dao');
+require('./model/order');
 
 module.exports = {
 
@@ -201,6 +202,23 @@ module.exports = {
             } else {
                 log.debug('<< getOrderById');
                 return fn(null, order);
+            }
+        });
+    },
+
+    listOrdersByAccount: function(accountId, fn) {
+        log.debug('>> listOrdersByAccount');
+        var query = {
+            account_id: accountId
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            if(err) {
+                log.error('Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                log.debug('<< listOrdersByAccount');
+                return fn(null, orders);
             }
         });
     }
