@@ -29,9 +29,12 @@ var component = $$.m.ModelBase.extend({
              * navigation directly to thise component
              */
             anchor: null,
-            
+
             txtcolor : "#444",
 
+            title : "<div style=\"text-align: center;\"><span style=\"font-size:28px;\">Welcome to Our Store<br></span><br></div>",
+
+            text : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae culpa reprehenderit porro quod repudiandae nisi fuga voluptatem commodi animi numquam aliquid corporis ea vero distinctio fugit error, maiores officiis vel id laboriosam nemo soluta. Vitae cum quae mollitia similique recusandae, voluptatum, debitis ipsam eaque libero, veniam rem rerum facilis id minima.&nbsp;",
 
             /**
              * The type of component this is

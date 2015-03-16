@@ -4,11 +4,11 @@
 
         <header class="jumbotron hero-spacer col-xs-12d">
             <div class="title">
-                <div class="editable" data-class="title" ng-bind-html="component.title">
+                <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
                 </div>
             </div>
             <div class="text">
-                <div class="editable" data-class="text" ng-bind-html="component.text">
+                <div class="editable" data-class="text" ng-bind-html="component.text | unsafe">
                 </div>
             </div>
         </header>
