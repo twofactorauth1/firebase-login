@@ -278,9 +278,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           that.latestposts.slice(Math.max(data.length - 3, 1));
         }
 
-        if (route.indexOf('blog') > -1) {
+       // if (route.indexOf('blog') > -1) {
           that.blogposts = data;
-        }
+       // }
 
         //if tagname is present, filter the cached posts with the tagname
         if ($route.current.params.tagname != null) {
