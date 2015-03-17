@@ -4,17 +4,9 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 <div class="customer">
 
     <div class="pageheader row">
-        <div class="col-xs-7">
+        <div class="col-xs-12">
             <h2><i class="fa fa-users"></i> Customers</h2>
-        </div>
-
-        <div class="col-xs-5">
-            <div indigeweb-state-nav="customerAdd" class="btn btn-outline pull-right btn-create-contact"
-            type="button">
-                <i class="fa fa-plus"></i>
-                <span class="hidden-xs">Add</span>
-            </div>
-        </div>
+        </div>        
     </div>
 
     <div style="background: #e7e7e7;" id="scrollTop" class="contentpanel" ng-style="styleCustomers()"
@@ -91,10 +83,21 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
         <div ng-switch on="userPreferences.customerSettings.gridViewDisplay" class="people-list">
             <div ng-switch-when="true" class="row">
                 <div>
-                    <div ng-if="renderedCustomers.length <= 0" class="empty">
-                        <h1 class="center"><span class="fa fa-file-text-o"></span></h1>
-                        <h3 class="center">No Customers Yet</h3>
-                        <h5 class="center">Add customers for them to appear here.</h5>
+                    <div  class="col-xs-12 col-sm-4 col-md-3">
+                        <div class="people-item btn-view-contact-details contact-item" style="opacity:1">
+                            <div indigeweb-state-nav="customerAdd" class="media">
+                                <div class="clearfix mb10"></div>
+                                <div class="clear clearfix"></div>
+                                <div class="center add-wrap">
+                                    <span class="add-customer fa fa-file-text-o"></span>
+                                </div>
+                                <div class="center">
+                                    <button class="btn btn-success btn-lg">
+                                        <span class="fa fa-plus"></span> ADD CUSTOMER
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div  ng-repeat="customer in renderedCustomers" class="col-xs-12 col-sm-4 col-md-3">
                         <div data-contactid="{{customer._id}}" class="people-item btn-view-contact-details contact-item"
@@ -193,6 +196,20 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
             </div>
             <div ng-switch-when="false" class="row">
                 <div class="tb-main table">
+                    <div class="container-fluid tb-row">
+                        <div class="tb-col col-md-12">
+                            <div class="people-item add-people-item btn-view-contact-details contact-item" indigeweb-state-nav="customerAdd">
+                                <div class="clearfix mb10"></div>
+                                <div class="clear clearfix"></div>
+                                <div class="center add-wrap">
+                                    <span class="add-customer fa fa-file-text-o"></span>
+                                    <button class="btn btn-add btn-success btn-lg">
+                                        <span class="fa fa-plus"></span> ADD CUSTOMER
+                                    </button>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
                     <div class="container-fluid tb-row" ng-repeat="customer in renderedCustomers">
                         <div class="tb-col col-md-1">
                             <div class="people-item" style="opacity:1">
@@ -271,13 +288,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div ng-if="renderedCustomers.length < 0" class="empty">
-            <h1 class="center"><span class="fa fa-users"></span></h1>
-            <h3 class="center">No Contacts Yet</h3>
-            <h5 class="center">Add contacts for them to appear here.</h5>
-        </div>
+        </div>        
     </div>
 
     <div class="rightpanel rightpanel-website">

@@ -4,29 +4,8 @@
 </div>
 <div class="website-manage">
     <div class="pageheader row">
-        <div class="col-xs-7">
+        <div class="col-xs-12">
             <h2><i class="fa fa-desktop website-manage-icon"></i> <div class="hidden-xs div-header">  Website</div></h2>
-        </div>
-
-        <div class="col-xs-5">
-            <a class="btn btn-outline pull-right media-modal btn-header hidden" style="margin-right: 2px;" on-insert-mediacb="insertMedia" user='user' data-main='true'>
-                <i class="fa fa fa-image"></i>
-                <span class="hidden-xs">Media</span>
-            </a>
-            <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 6px;">
-                <button type="button" class="btn btn-outline dropdown-toggle btn-header" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i>
-                    <span class="hidden-xs">Add</span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="" data-toggle="modal" data-target="#create-page-modal"> Page</a>
-                    </li>
-                    <li><a href="" data-toggle="modal" data-target="#create-post-modal"> Post</a>
-                    </li>
-                </ul>
-            </div>
-
         </div>
     </div>
 
@@ -140,11 +119,21 @@
         <div class="pages-section" ng-switch-when="pages">
 
             <div class="row">
-                <div ng-if="pages.length <= 0" class="empty">
-                    <h1 class="center"><span class="fa fa-file-text-o"></span></h1>
-                    <h3 class="center">No Pages Yet</h3>
-                    <h5 class="center">Add pages for them to appear here.</h5>
-                </div>
+                 <div class="col-xs-18 col-sm-6 col-md-3">
+                    <div class="thumbnail layered-paper">                        
+                            <h4 class="title">Add new page</h4>
+                        <h5 style="margin-top:0;color: #999;font-weight: normal;">&nbsp;</h5>
+                            <div class="screenshot-wrap scrollhover">
+                                <div class="page-icon">
+                                    <h1 class="center"><i class="fa fa-file-text-o"></i></h1>
+                                </div>
+                            </div>
+                            <div class="caption">                                
+                                <a href="" class="btn btn-green btn-block" role="button" data-toggle="modal" data-target="#create-page-modal">
+                                    <i class="fa fa fa-plus"></i> Add</a>
+                            </div>
+                        </div>
+                    </div>
                 <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true track by $index">
                     <div class="thumbnail layered-paper">
                         <a href="/admin#/website-editor?pagehandle={{page.handle}}">
@@ -178,12 +167,42 @@
         </div>
 
         <div class="posts-section" ng-switch-when="posts">
-            <div class="row">
-                <div ng-if="posts.length <= 0" class="empty">
-                    <h1 class="center"><span class="fa fa-newspaper-o"></span></h1>
-                    <h3 class="center">No Posts Yet</h3>
-                    <h5 class="center">Add posts for them to appear here.</h5>
+            <div class="row">                
+                <div class="col-xs-12 col-sm-6 col-md-3">                   
+                    <div class="paper-wrap">
+                        <div class="paper">
+                            <div class="tape"></div>                           
+                            <ul id="lines">
+                                <li class="first">
+                                    <h4 class="title">Add new post</h4>
+                                </li>
+                                <li class="second">
+                                    <h5 class="timeago" style="font-weight: normal;">&nbsp;</h5>
+                                </li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                                <div class="screenshot-wrap">
+                                    <div class="screenshot-overflow">    
+                                        <div class="excerpt">
+                                            <h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-newspaper-o"></i></h1>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="caption">
+                                    <a href="" data-toggle="modal"  class="btn btn-green btn-block" role="button" data-target="#create-post-modal"><i class="fa fa-add"></i> Add</a>                                   
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="left-shadow"></div>
+                        <div class="right-shadow"></div>
+                    </div>
                 </div>
+
                 <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'modified.date':true track by $index">
                     <!-- <div class="thumbnail box14">
                             <div class="caption">

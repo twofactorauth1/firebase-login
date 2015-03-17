@@ -483,10 +483,29 @@
                             <input id="show-hours" bs-switch ng-model="componentEditing.showHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
                         </div>
                         <div class="form-group" ng-if="componentEditing.showHours">
+                            <label for="split-hours">I'd like to enter two sets of hours for a single day</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
+                            <input id="splitHours" bs-switch ng-model="componentEditing.splitHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.showHours">
                             <label for="location-hours">Business Hours </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
-                            <div class="col-xs-12" ng-repeat="val in componentEditing.hours">
 
+                            <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
+                                <label class="col-xs-1" for="val.day">{{val.day}}:</label>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <label class="pull-left" ng-hide="val.closed" style="margin:10px" > & </label>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <label class="col-xs-2" for="colorpicker">Closed:</label>
+                                <input class="" ng-model="val.closed" type="checkbox">
+                            </div>
+                            <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
                                 <label class="col-xs-1" for="val.day">{{val.day}}:</label>
                                 <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>

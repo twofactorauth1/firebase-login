@@ -4,7 +4,7 @@
             <div tabindex="0" class="leaflet-container leaflet-fade-anim" id="map-marker" style="height: 250px; width: 100%; position: relative;">
                 <leaflet center="mapLocation" markers="markers" defaults="defaults" width="100%" height="250px"></leaflet>
             </div>
-            <div data-ng-repeat="contact in contactDetails track by $index" data-ng-if="contact.contactId == component._id" class="panel panel-default widget-weather col-sm-4 col-md-3 col-lg-3  col-sm-offset-9 hidden-xs">
+            <div data-ng-repeat="contact in contactDetails track by $index" data-ng-if="contact.contactId == component._id" class="panel panel-default widget-weather col-sm-4 col-md-3 col-lg-3  col-sm-offset-9 hidden-xs" style="{{component.splitHours ? 'width:30%' : ''}}">
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12 temp  settings" tab-active="address" data-id="{{component._id}}">
@@ -13,7 +13,8 @@
                             <span class="blocked" ng-if="!contact.contactPhone">Enter Phone Number here</span>
                             <span class="blocked" ng-bind-html="contact.contactPhone"></span>
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->
-                            <div ng-if="component.showHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed">{{val.start}}-{{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                            <div ng-if="component.showHours && !component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed">{{val.start}}-{{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                            <div ng-if="component.showHours && component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed">{{val.start}}-{{val.end}} and {{val.start2}}-{{val.end2}}</span><span ng-show="val.closed">Closed</span></div>
                         </div>
                     </div> 
                 </div>
