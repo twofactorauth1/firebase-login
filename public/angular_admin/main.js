@@ -259,7 +259,7 @@ require.config({
         'blockUI': ['angular'],
         'carousel': ['angular','angularBootstrap'],
         'ui.sortable': ['angular'],        
-        'blueimp': {deps: ['blueimp-gallery']}
+        'blueimp': {deps: ['angularAMD']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
