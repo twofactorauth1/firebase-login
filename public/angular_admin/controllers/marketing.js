@@ -306,7 +306,24 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
               console.log(promiseProcessor[index]);
             }
           });
+
           $scope.displayedFeed = $scope.feed;
+
+          $timeout(function() {
+            var $container = $('.stream');
+            // init
+            $container.removeClass('hidden');
+            $container.isotope({
+              // options
+              itemSelector: '.item',
+              layoutMode: 'masonry',
+              getSortData: {
+                date: function($elem) {
+                  return Date.parse($elem.data('date'));
+                }
+              }
+            });
+          }, 2000);
         });
     });
 
@@ -457,23 +474,23 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.displayedFeed = [];
     var feedTimer;
 
-    $scope.$watchCollection('feed', function(newFeed, oldFeed) {
-      $timeout.cancel(feedTimer);
-      feedTimer = $timeout(function() {
-        var $container = $('.stream');
-        // init
-        $container.isotope({
-          // options
-          itemSelector: '.item',
-          layoutMode: 'masonry',
-          getSortData: {
-            date: function($elem) {
-              return Date.parse($elem.data('date'));
-            }
-          }
-        });
-      }, 4000);
-    });
+    // $scope.$watchCollection('feed', function(newFeed, oldFeed) {
+    //   $timeout.cancel(feedTimer);
+    //   feedTimer = $timeout(function() {
+    //     var $container = $('.stream');
+    //     // init
+    //     $container.isotope({
+    //       // options
+    //       itemSelector: '.item',
+    //       layoutMode: 'masonry',
+    //       getSortData: {
+    //         date: function($elem) {
+    //           return Date.parse($elem.data('date'));
+    //         }
+    //       }
+    //     });
+    //   }, 4000);
+    // });
 
     /*
      * @updateComments
