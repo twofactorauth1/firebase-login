@@ -1,3 +1,16 @@
+.stickyheader.leftpanel-collapsed .headerbar {
+  left: 51px;
+}
+
+.stickyheader.leftpanel-collapsed .header-right {
+  margin-right: 0;
+}
+
+.stickyheader.rightmenu-open .headerbar {
+  right: 240px;
+  width: auto;
+}
+
 .center {
   text-align: center;
   margin: 0 auto;
@@ -6263,7 +6276,7 @@ div.error label.error:before {
 }
 
 .website .nav-tabs {
-  background: #eeeeee;
+  background: #ececec;
 }
 
 .website .modal-content {
@@ -6525,7 +6538,7 @@ div.error label.error:before {
 }
 
 .tab-content {
-  background: #fff!important;
+  background: #f9f9f9!important;
 }
 
 #theme-editor .headermenu {
