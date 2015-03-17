@@ -1272,9 +1272,111 @@ module.exports = {
                 self.log.error('Error getting pages by version: ' + err);
                 return fn(err, null);
             } else {
+                if(version !== 'all' && version !== 'latest') {
+                    var filteredList = [];
+                    _.each(list, function(page){
+                        if(page.get('version') === version) {
+                            filteredList.push(page);
+                        }
+                    });
+                    list = filteredList;
+                }
+
+
+
                 self.log.debug('<< getPageVersions');
                 return fn(null, list);
             }
+        });
+
+    },
+
+    getPreviousVersion: function(pageId, version, fn) {
+        var self = this;
+        if(version >= 0) {
+            self.getPageVersions(pageId, version-1, function(err, page){
+                if(err) {
+                    return fn(err, null);
+                }
+                if(page === null || page.length === 0) {
+                    return self.getPreviousVersion(pageId, version-1, fn);
+                } else {
+                    return fn(null, page[0]);
+                }
+            });
+        } else {
+            fn(null, []);
+        }
+    },
+
+    deletePageVersion: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deletePageVersion');
+
+        self.getPageVersions(pageId, version, function(err, page){
+            if(err || page === null || page.length === 0) {
+                self.log.error('Error finding page version: ' + err);
+                return fn(err, null);
+            } else if(page[0].get('latest') !== true || version === 0) {
+                cmsDao.removeById(page[0].id(), $$.m.cms.Page, function(err, result){
+                    if(err) {
+                        self.log.error('Error removing page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        self.log.debug('<< deletePageVersion');
+                        return fn(null, result);
+                    }
+                });
+            } else {
+                //find previous version, set it to be latest, delete this version
+                self.getPreviousVersion(pageId, version, function(err, previousPage){
+                    if(err) {
+                        self.log.error('Error finding previous page version: ' + err);
+                        return fn(err, null);
+                    } else if(previousPage === null || previousPage.length===0) {
+                        //we can just delete it
+                        cmsDao.removeById(page[0].id(), $$.m.cms.Page, function(err, result){
+                            if(err) {
+                                self.log.error('Error removing page: ' + err);
+                                return fn(err, null);
+                            } else {
+                                self.log.debug('<< deletePageVersion');
+                                return fn(null, result);
+                            }
+                        });
+                    } else {
+                        self.log.debug('removing page.');
+                        cmsDao.removeById(page[0].id(), $$.m.cms.Page, function(err, result){
+                            if(err) {
+                                self.log.error('Error removing page: ' + err);
+                                return fn(err, null);
+                            } else {
+                                self.log.debug('promoting page with version ' + previousPage.get('version') + ' to latest.');
+                                previousPage.set('_id', pageId);
+                                previousPage.set('latest', true);
+                                //self.log.debug('about to save ', previousPage);
+                                cmsDao.saveOrUpdate(previousPage, function(err, updatedPage){
+                                    if(err) {
+                                        self.log.error('Error updating new latest page: ' + err);
+                                        return fn(err, null);
+                                    }
+                                    self.log.debug('Updated page.');
+                                    cmsDao.removeById(page[0].id() + '_' + updatedPage.get('version'), $$.m.cms.Page, function(err, result){
+                                        self.log.debug('<< deletePageVersion');
+                                        return fn(null, result);
+                                    });
+
+                                });
+
+                            }
+                        });
+
+
+                    }
+                });
+            }
+
         });
 
     },
