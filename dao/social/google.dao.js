@@ -16,6 +16,8 @@ var userDao = require('../user.dao');
 var async = require('async');
 
 var Contact = require('../../models/contact');
+var awsConfig = require('../../configs/aws.config.js');
+var s3Dao = require('../../dao/integrations/s3.dao');
 
 var dao = {
 
@@ -333,6 +335,7 @@ var dao = {
                 if (emails != null) {
                     emails = _.pluck(emails, "email");
                 }
+
                 contact.updateContactInfo(contactObj.first, contactObj.middle, contactObj.last, photo, photo, null);
 
                 //Update contact details
@@ -757,6 +760,26 @@ importContactsForSocialId: function(accountId, accessToken, socialAccountId, use
             if (emails != null) {
                 emails = _.pluck(emails, "email");
             }
+            if(photo)
+                   {
+                    var file = {};
+                    file.name = new Date().getTime() + '.png';
+                    file.type = 'image/png';                    
+                    file.path = photo;                  
+                    var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
+                    var accountId = accountId;
+                    var directory = "acct_indigenous";
+                    if (accountId > 0) {
+                        directory = "acct_" + accountId;
+                    } 
+                    s3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
+                        if (err) {
+                            self.log.error('Error uploading to s3: ' + err);
+                        } else {                   
+                           photo = 'http://' + bucket + '.s3.amazonaws.com/' + directory + '/' + file.name;                          
+                        }
+                    })
+                   } 
             contact.updateContactInfo(contactObj.first, contactObj.middle, contactObj.last, photo, photo, null);
 
             //Update contact details
