@@ -1394,66 +1394,175 @@ define([
                     $scope.saveComponent();
                     return;
                 }
-                $scope.updateIframeComponents();
-            };
 
-            //when changing the subdomain associated with the account, check to make sure it exisits
-            $scope.checkIfSubdomaddCKEditorImageInputainExists = function() {
-                var parent_div = $('div.form-group.subdomain');
-                UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function(result) {
-                    if (result === "true") {
-                        parent_div.addClass('has-error');
-                        parent_div.find('span.error').remove();
-                        parent_div.append("<span class='error help-block'>Domain already exists</span>");
-                    } else {
-                        UserService.putAccount($scope.account, function(account) {
-                            parent_div.removeClass('has-error');
-                            parent_div.find('span.error').remove();
-                        });
-                    }
-                });
-            };
+              }
+              //remove "/n"
+              componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
 
-            $scope.changesConfirmed = false;
-            $scope.isDirty = false;
-            //Before user leaves editor, ask if they want to save changes
-            var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
-                var isDirty = false;
-                var iFrame = document.getElementById("iframe-website");
-                if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
-                    var isDirty = iFrame.contentWindow.checkOrSetPageDirty() || $scope.isDirty;
-                }
+              var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+              if (regex.test(componentVarContents)) {
+                var jHtmlObject = $(componentVarContents);
+                var editor = jQuery("<p>").append(jHtmlObject);
+                editor.find(".cke_reset").remove();
+                var newHtml = editor.html();
+                componentVarContents = newHtml;
+              }
 
-                if (isDirty && !$scope.changesConfirmed) {
-                    event.preventDefault();
 
-                    SweetAlert.swal({
-                            title: "Are you sure?",
-                            text: "You have unsaved data that will be lost",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Yes, save changes!",
-                            cancelButtonText: "No, do not save changes!",
-                            closeOnConfirm: false,
-                            closeOnCancel: false
-                        },
-                        function(isConfirm) {
-                            if (isConfirm) {
-                                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-                                $scope.savePage();
-                            } else {
-                                SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-                            }
-                            $scope.changesConfirmed = true;
-                            $scope.isDirty = false;
-                            $location.path(newUrl);
-                            offFn();
-                        });
-                } else if ($scope.changesConfirmed) {
-                    //do nothing
-                }
+              var setterKey, pa;
+              //if contains an array of variables
+              if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
+                //get index in array
+                var first = componentVar.split(".")[0];
+                var second = componentEditable[i2].attributes['data-index'].value;
+                var third = componentVar.split(".")[2];
+                if (matchingComponent[first][second])
+                  matchingComponent[first][second][third] = componentVarContents;
+              }
+              //if contains an array of array variables
+              if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                //get parent index in array
+                var first = componentVar.split(".")[0];
+                var second = componentEditable[i2].attributes['parent-data-index'].value;
+                //get child index in array
+                var third = componentVar.split(".")[2];
+                var fourth = componentEditable[i2].attributes['data-index'].value;
+                var last = componentVar.split(".")[3];
+                if (matchingComponent[first][second][third][fourth])
+                  matchingComponent[first][second][third][fourth][last] = componentVarContents;
+              }
+              //if needs to traverse a single
+              if (componentVar.indexOf('-') > 0) {
+                var first = componentVar.split("-")[0];
+                var second = componentVar.split("-")[1];
+                if (matchingComponent[first])
+                  matchingComponent[first][second] = componentVarContents;
+              }
+              //simple
+              if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                matchingComponent[componentVar] = componentVarContents;
+              }
+            }
+          }
+        }
+        return matchingComponent;
+      }
 
+      $scope.saveCustomComponent = function(networks) {
+        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
+      };
+
+      $scope.saveContactComponent = function() {
+        var currentComponentId = $scope.componentEditing._id;
+        $scope.updateSingleComponent(currentComponentId);
+        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
+      };
+
+      //delete page
+      $scope.deletePage = function() {
+
+        var pageId = $scope.currentPage._id;
+        var websiteId = $scope.currentPage.websiteId;
+        var title = $scope.currentPage.title;
+
+        WebsiteService.deletePage(pageId, websiteId, title, function(data) {
+          toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
+          $(".menutoggle-right").click();
+          $location.path("/admin#/website");
+        });
+      };
+
+      //delete post
+      $scope.deletePost = function(post_data) {
+        $(".menutoggle-right").click();
+        iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
+      };
+
+      //selected component when choosing from modal
+      $scope.selectComponent = function(type) {
+        if (type.enabled) {
+          $scope.selectedComponent = type;
+        }
+      };
+
+      //insertmedia into various components
+      $scope.insertMedia = function(asset) {
+        if ($scope.imageChange) {
+          $scope.imageChange = false;
+          var type = $scope.componentEditing.type;
+          //if image/text component
+          if (type == 'image-text') {
+            $scope.componentEditing.imgurl = asset.url;
+          } else if (type == 'feature-list') {
+            var targetIndex = $($scope.componentArrTarget).closest('.single-feature').data('index');
+            $scope.componentEditing.features[targetIndex].imgurl = asset.url;
+          } else if (type == 'simple-form') {
+            $scope.componentEditing.imgurl = asset.url;
+          } else if (type == 'image-gallery') {
+            $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
+          } else if (type == 'thumbnail-slider') {
+            $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
+          } else if (type == 'meet-team') {
+            $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
+          } else {
+            console.log('unknown component or image location');
+          }
+          $scope.bindEvents();
+        } else if ($scope.postImage && !$scope.componentEditing) {
+          $scope.postImage = false;
+          $scope.postImageUrl = asset.url;
+          toaster.pop('success', "Post Image added successfully");
+          return;
+        } else if ($scope.profilepic && !$scope.componentEditing) {
+          $scope.profilepic = false;
+          $scope.customerAccount.photo = asset.url;
+          return;
+        } else if ($scope.insertMediaImage) {
+          $scope.insertMediaImage = false;
+          var iFrame = document.getElementById("iframe-website");
+          iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
+          //iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImageInput && iFrame.contentWindow.addCKEditorImageInput(asset.url);
+          return;
+        } else if ($scope.logoImage && $scope.componentEditing) {
+          $scope.logoImage = false;
+          $scope.componentEditing.logourl = asset.url;
+        } else if ($scope.changeblobImage) {
+          $scope.changeblobImage = false;
+          $scope.blog_post.featured_image = asset.url;
+          var iFrame = document.getElementById("iframe-website");
+          iFrame && iFrame.contentWindow && iFrame.contentWindow.setBlogImage && iFrame.contentWindow.setBlogImage(asset.url);
+          iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
+          return;
+        } else if ($scope.imgGallery && $scope.componentEditing) {
+          $scope.imgGallery = false;
+          $scope.componentEditing.images.splice($scope.imgGalleryIndex + 1, 0, {
+            url: asset.url
+          });
+        } else if ($scope.imgThumbnail && $scope.componentEditing) {
+          $scope.imgThumbnail = false;
+          $scope.componentEditing.thumbnailCollection.push({
+            url: asset.url
+          });
+        } else {
+          $scope.componentEditing.bg.img.url = asset.url;
+          $scope.saveComponent();
+          return;
+        }
+        $scope.updateIframeComponents();
+      };
+
+      //when changing the subdomain associated with the account, check to make sure it exisits
+      $scope.checkIfSubdomaddCKEditorImageInputainExists = function() {
+        var parent_div = $('div.form-group.subdomain');
+        UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function(result) {
+          if (result === "true") {
+            parent_div.addClass('has-error');
+            parent_div.find('span.error').remove();
+            parent_div.append("<span class='error help-block'>Domain already exists</span>");
+          } else {
+            UserService.putAccount($scope.account, function(account) {
+              parent_div.removeClass('has-error');
+              parent_div.find('span.error').remove();
             });
 
             //Add Link to navigation

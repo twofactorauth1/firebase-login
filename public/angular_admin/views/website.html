@@ -236,8 +236,31 @@
 
                                 </div>
 
-                                <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="!componentEditing.bg.img.url">
-                                    <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
+                            <div class="clearfix"></div>
+
+                            <div class="form-group">
+                                <label for="bg_opacity">Add BG Opacity</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Add bg opacity."><i class="fa fa-info-circle" /></span>
+                                <select id="bg_opacity" ng-model="componentEditing.bg.opacity" ng-change="saveComponent()" class="pull-right input-lg">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                    <option value="60">60</option>
+                                    <option value="70">70</option>
+                                    <option value="80">80</option>
+                                    <option value="90">90</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.bg.img.url">
+                                <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Add/remove background image of component."><i class="fa fa-info-circle" /></span>
+                                <div class="bgimg" id="bgimg">
+                                    <i class="fa fa-close" ng-click="removeImage(false)"></i>
+                                    <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.type != 'navigation'">
                                     <label for="bg_blur">Blur BG</label>
@@ -249,7 +272,7 @@
                                         <span class="switch-handle"></span>
                                     </label>
 
-                                </div>
+                            </div>
 
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
@@ -442,26 +465,86 @@
                                 </div>
 
                             </div> -->
-                        </tab>
+                    </tab>
 
-                        <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
-                            <tab-heading>
-                                <span>Add Address</span>
-                            </tab-heading>
-                            <div class="form-group">
-                                <label for="location-address-type">Address type </label>
-                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address type."><i class="fa fa-info-circle" /></span>
-                                <input id="location-address-type" class="form-control input-lg" type="text" ng-model="componentEditing.location.addressDisplayLabel" ng-blur="updateContactUsAddress()">
+                    <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
+                        <tab-heading>
+                            <span>Add Address</span>
+                        </tab-heading>
+                        <div class="form-group">
+                            <label for="location-address-type">Address type </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address type."><i class="fa fa-info-circle" /></span>
+                            <input id="location-address-type" class="form-control input-lg" type="text" ng-model="componentEditing.location.addressDisplayLabel" ng-blur="updateContactUsAddress()">
+                        </div>
+                        <div class="form-group">
+                            <label for="location-address">Address </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
+                            <input id="location-address" class="form-control input-lg" type="text" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
+                        </div>
+                        <div class="form-group">
+                            <label for="location-address2">Address2 </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
+                            <input id="location-address2" class="form-control input-lg" type="text" ng-model="componentEditing.location.address2" ng-blur="updateContactUsAddress()">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location-city">City </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
+                            <input id="location-city" class="form-control input-lg" type="text" ng-model="componentEditing.location.city" ng-blur="updateContactUsAddress()">
+                            <div class="error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location-state">State </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
+                            <input id="location-state" class="form-control input-lg" type="text" ng-model="componentEditing.location.state" ng-blur="updateContactUsAddress()">
+                            <div class="error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location-zip">Zip Code </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
+                            <input id="location-zip" validation-type="zip" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.location.zip" ng-blur="updateContactUsAddress()">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone">Phone number </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us Phone number."><i class="fa fa-info-circle" /></span>
+                            <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.contact.phone" ng-blur="updateContactUsAddress()">
+                        </div>
+                        <div class="form-group">
+                            <label for="show-hours">Show Business Hours</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business hours to contact us component."><i class="fa fa-info-circle" /></span>
+                            <input id="show-hours" bs-switch ng-model="componentEditing.showHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.showHours">
+                            <label for="split-hours">I'd like to enter two sets of hours for a single day</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
+                            <input id="splitHours" bs-switch ng-model="componentEditing.splitHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.showHours">
+                            <label for="location-hours">Business Hours </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
+
+                            <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
+                                <label class="col-xs-1" for="val.day">{{val.day}}:</label>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <label class="pull-left" ng-hide="val.closed" style="margin:10px" > & </label>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <label class="col-xs-2" for="colorpicker">Closed:</label>
+                                <input class="" ng-model="val.closed" type="checkbox">
                             </div>
-                            <div class="form-group">
-                                <label for="location-address">Address </label>
-                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
-                                <input id="location-address" class="form-control input-lg" type="text" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
-                            </div>
-                            <div class="form-group">
-                                <label for="location-address2">Address2 </label>
-                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
-                                <input id="location-address2" class="form-control input-lg" type="text" ng-model="componentEditing.location.address2" ng-blur="updateContactUsAddress()">
+                            <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
+                                <label class="col-xs-1" for="val.day">{{val.day}}:</label>
+                                <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                </select>
+                                <label class="col-xs-2" for="colorpicker">Closed:</label>
+                                <input class="" ng-model="val.closed" type="checkbox">
                             </div>
 
                             <div class="form-group">
