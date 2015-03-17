@@ -183,7 +183,7 @@ require.config({
         'blueimp-helper': 'libs/blueimp-gallery/js/blueimp-helper',
         'blueimp-gallery': 'libs/blueimp-gallery/js/blueimp-gallery',
         'blueimp-gallery-video': 'libs/blueimp-gallery/js/blueimp-gallery-video',
-        'blueimp' : 'libs/blueimp-gallery/js/jquery.blueimp-gallery.min'
+        'blueimp' : 'libs/blueimp-gallery/js/jquery.blueimp-gallery'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
