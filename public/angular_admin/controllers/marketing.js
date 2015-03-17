@@ -1,5 +1,6 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope'], function(app) {
-  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress'], function(app) {
+  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress) {
+    ngProgress.start();
 
     /*
      * @beginOnboarding
@@ -306,7 +307,25 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
               console.log(promiseProcessor[index]);
             }
           });
+
           $scope.displayedFeed = $scope.feed;
+
+          $timeout(function() {
+            var $container = $('.stream');
+            // init
+            $container.removeClass('hidden');
+            $container.isotope({
+              // options
+              itemSelector: '.item',
+              layoutMode: 'masonry',
+              getSortData: {
+                date: function($elem) {
+                  return Date.parse($elem.data('date'));
+                }
+              }
+            });
+            ngProgress.complete();
+          }, 500);
         });
     });
 
@@ -457,23 +476,23 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.displayedFeed = [];
     var feedTimer;
 
-    $scope.$watchCollection('feed', function(newFeed, oldFeed) {
-      $timeout.cancel(feedTimer);
-      feedTimer = $timeout(function() {
-        var $container = $('.stream');
-        // init
-        $container.isotope({
-          // options
-          itemSelector: '.item',
-          layoutMode: 'masonry',
-          getSortData: {
-            date: function($elem) {
-              return Date.parse($elem.data('date'));
-            }
-          }
-        });
-      }, 4000);
-    });
+    // $scope.$watchCollection('feed', function(newFeed, oldFeed) {
+    //   $timeout.cancel(feedTimer);
+    //   feedTimer = $timeout(function() {
+    //     var $container = $('.stream');
+    //     // init
+    //     $container.isotope({
+    //       // options
+    //       itemSelector: '.item',
+    //       layoutMode: 'masonry',
+    //       getSortData: {
+    //         date: function($elem) {
+    //           return Date.parse($elem.data('date'));
+    //         }
+    //       }
+    //     });
+    //   }, 4000);
+    // });
 
     /*
      * @updateComments

@@ -33,7 +33,7 @@
 
     <div class="contentpanel" ng-style="styleMarketingSection()" indigeweb-resize>
         <div class="campaign-section" ng-show="activeTab == 'campaigns'">
-            
+
             <div class="col-xs-12 col-sm-6 col-md-4 single-campaign" ng-repeat="campaign in campaigns track by $index">
                 <div class="grid-list-item btn-view-product-details" data-productid="1">
                     <a href="#/marketing/campaign/{{campaign._id}}">
@@ -194,7 +194,7 @@
                         <!-- panel-footer -->
                     </div>
                 </div>
-                <ul class="stream">
+                <ul class="stream hidden">
                     <li ng-repeat="post in displayedFeed track by $index | orderBy: 'date':true" class="item {{post.postType}}-{{post.socialAccountId}}" data-date="{{post.date}}">
                         <div class="item-inner">
                             <div ng-if="post.type == 'facebook'">
@@ -424,7 +424,7 @@
                         </div>
                     </div>
                     <div class="campaign-details">
-                        
+
                     </div>
                     <div class="clearfix"></div>
 
