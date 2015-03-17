@@ -1307,7 +1307,7 @@ define([
         } else if ($scope.logoImage && $scope.componentEditing) {
           $scope.logoImage = false;
           $scope.componentEditing.logourl = asset.url;
-        } else if ($scope.changeblobImage && !$scope.componentEditing) {
+        } else if ($scope.changeblobImage) {
           $scope.changeblobImage = false;
           $scope.blog_post.featured_image = asset.url;
           var iFrame = document.getElementById("iframe-website");
