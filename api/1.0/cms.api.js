@@ -49,6 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.get(this.url('page/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
         app.get(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.delete(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.deletePageVersionById.bind(this));
         app.post(this.url('page/:id/revert'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
         app.post(this.url('page/:id/revert/:version'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
@@ -376,6 +377,36 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.getPageVersions(pageId, version, function(err, pages){
                     self.log.debug('<< getPageVersionsById');
                     self.sendResultOrError(resp, err, pages, "Error Retrieving Page Versions");
+                    self = null;
+                    return;
+                });
+            }
+        });
+
+    },
+
+    deletePageVersionById: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deletePageVersionById');
+        var pageId = req.params.id;
+        var version = parseInt(req.params.version);
+        var accountId = parseInt(self.accountId(req));
+
+        if(!pageId || !version) {
+            self.log.error('pageId or version not specified');
+            return self.wrapError(resp, 400, 'Bad Request', 'Both pageId and version are required');
+        }
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.deletePageVersion(pageId, version, function(err, result){
+                    self.log.debug('<< deletePageVersionById');
+                    if(!err) {
+                        result = {success:true};
+                    }
+                    self.sendResultOrError(resp, err, result, "Error Deleting Page Versions");
                     self = null;
                     return;
                 });
