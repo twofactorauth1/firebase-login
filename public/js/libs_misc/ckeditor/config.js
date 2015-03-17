@@ -26,7 +26,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about' }
 	];
 
-	config.font_names = 'GoogleWebFonts;' + config.font_names;
+	// config.font_names = 'GoogleWebFonts;' + config.font_names;
+	// ckeditor-gwf-plugin
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
@@ -48,7 +49,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'colordialog,colorbutton,pastetext,doksoft_button,lineheight,mediamanager,sharedspace,image2,tooltip,ckeditor-gwf-plugin';
+	config.extraPlugins = 'colordialog,colorbutton,pastetext,doksoft_button,lineheight,mediamanager,sharedspace,image2,tooltip';
 
 	config.filebrowserBrowseUrl = '';
 
