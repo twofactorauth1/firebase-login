@@ -1,5 +1,6 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope'], function(app) {
-  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress'], function(app) {
+  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress) {
+    ngProgress.start();
 
     /*
      * @beginOnboarding
@@ -323,7 +324,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
                 }
               }
             });
-          }, 2000);
+            ngProgress.complete();
+          }, 500);
         });
     });
 
