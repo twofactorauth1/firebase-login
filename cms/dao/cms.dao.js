@@ -367,7 +367,7 @@ var dao = {
         blogPostUrl = blogPostUrl.toString();
         console.log('Account ID: ' + accountId + ' Blog Post Url: ' + JSON.stringify(blogPostUrl));
         var query = {
-            accountId: accountId,
+            accountId: parseInt(accountId),
             post_url: blogPostUrl
         };
         this.findOne(query, BlogPost, fn);
@@ -858,7 +858,7 @@ var dao = {
                 console.log('saved');
                 return fn(null, saved);
             });
-            
+
         });
     },
 
