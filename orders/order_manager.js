@@ -184,9 +184,13 @@ module.exports = {
     },
 
 
-    completeOrder: function(orderId, note, userId, fn) {
+    completeOrder: function(accountId, orderId, note, userId, fn) {
         log.debug('>> completeOrder');
-        dao.getById(orderId, $$.m.Order, function(err, order){
+        var query = {
+            _id: orderId,
+            accountId: accountId
+        };
+        dao.findOne(query, $$.m.Order, function(err, order){
             if(err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
@@ -219,9 +223,14 @@ module.exports = {
      * @param userId
      * @param fn
      */
-    cancelOrder: function(orderId, note, userId, fn) {
+    cancelOrder: function(accountId, orderId, note, userId, fn) {
+        var self = this;
         log.debug('>> cancelOrder');
-        dao.getById(orderId, $$.m.Order, function(err, order) {
+        var query = {
+            _id: orderId,
+            accountId: accountId
+        };
+        dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
@@ -255,9 +264,14 @@ module.exports = {
      * @param reason (duplicate|fraudulent|requested_by_customer)
      * @param fn
      */
-    refundOrder: function(orderId, note, userId, amount, reason, accessToken, fn) {
+    refundOrder: function(accountId, orderId, note, userId, amount, reason, accessToken, fn) {
+        var self = this;
         log.debug('>> refundOrder');
-        dao.getById(orderId, $$.m.Order, function(err, order) {
+        var query = {
+            _id: orderId,
+            accountId: accountId
+        };
+        dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
@@ -309,9 +323,14 @@ module.exports = {
      * @param userId
      * @param fn
      */
-    holdOrder: function(orderId, note, userId, fn) {
+    holdOrder: function(accountId, orderId, note, userId, fn) {
+        var self = this;
         log.debug('>> holdOrder');
-        dao.getById(orderId, $$.m.Order, function(err, order) {
+        var query = {
+            _id: orderId,
+            accountId: accountId
+        };
+        dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
@@ -342,9 +361,14 @@ module.exports = {
      * @param userId
      * @param fn
      */
-    failOrder: function(orderId, note, userId, fn) {
+    failOrder: function(accountId, orderId, note, userId, fn) {
+        var self = this;
         log.debug('>> failOrder');
-        dao.getById(orderId, $$.m.Order, function(err, order) {
+        var query = {
+            _id: orderId,
+            accountId: accountId
+        };
+        dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
@@ -369,6 +393,7 @@ module.exports = {
     },
 
     getOrderById: function(orderId, fn) {
+        var self = this;
         log.debug('>> getOrderById');
         dao.getById(orderId, $$.m.Order, function(err, order){
             if(err) {
