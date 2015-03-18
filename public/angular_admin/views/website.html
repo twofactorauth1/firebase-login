@@ -515,13 +515,15 @@
                                 </select>
                                 <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                 </select>
-                                <label class="pull-left" ng-hide="val.closed" style="margin:10px" > & </label>
-                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px" > & </label>
+                                <select class="col-xs-2" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select" ng-model="val.start2" ng-options="item for item in hours.HOURS">
                                 </select>
-                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                <select class="col-xs-2" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end2" ng-options="item for item in hours.HOURS">
                                 </select>
-                                <label class="col-xs-2" for="colorpicker">Closed:</label>
-                                <input class="" ng-model="val.closed" type="checkbox">
+                                <label style="min-width:80px;" class="col-xs-1" for="colorpicker">Closed:</label>
+                                <input class="pull-left" ng-model="val.closed" type="checkbox">
+                                <label style="min-width:80px;" class="col-xs-1" for="split">Split:</label>
+                                <input id="split" class="pull-left" ng-model="val.split" type="checkbox">
                             </div>
                             <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
                                 <label class="col-xs-1" for="val.day">{{val.day}}:</label>
