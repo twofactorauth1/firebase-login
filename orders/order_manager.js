@@ -119,7 +119,17 @@ module.exports = {
                         function(err, charge){
                             if(err) {
                                 log.error('Error creating Stripe Charge: ' + err);
-                                callback(err);
+                                //set the status of the order to failed
+                                savedOrder.set('status', savedOrder.status.FAILED);
+                                savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                var modified = {
+                                    date: new Date(),
+                                    by: userId
+                                };
+                                savedOrder.set('modified', modified);
+                                dao.saveOrUpdate(savedOrder, function(err, updatedSavedOrder){
+                                    callback(err);
+                                });
                             } else {
                                 callback(null, savedOrder, charge);
                             }
@@ -144,6 +154,7 @@ module.exports = {
                 savedOrder.set('status', savedOrder.status.PENDING);
                 var paymentDetails = savedOrder.get('payment_details');
                 paymentDetails.paid = true;
+                paymentDetails.charge = charge;
                 savedOrder.set('payment_details', paymentDetails);
                 var modified = {
                     date: new Date(),
@@ -173,24 +184,188 @@ module.exports = {
     },
 
 
-    completeOrder: function(orderId, note, fn) {
-        //TODO
+    completeOrder: function(orderId, note, userId, fn) {
+        log.debug('>> completeOrder');
+        dao.getById(orderId, $$.m.Order, function(err, order){
+            if(err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            }
+            order.set('note', order.get('note') + '\n' + note);
+            order.set('completed_at', new Date());
+            order.set('status', order.status.COMPLETED);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            order.set('modified', modified);
+            dao.saveOrUpdate(order, function(err, updatedOrder){
+                if(err) {
+                    log.error('Error updating order: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< completeOrder');
+                return fn(null, updatedOrder);
+            });
+
+        });
+
     },
 
-    cancelOrder: function(orderId, note, fn) {
-        //TODO
+    /**
+     * This method marks an order cancelled without refunding any charges or making any other changes to the order.
+     * @param orderId
+     * @param note
+     * @param userId
+     * @param fn
+     */
+    cancelOrder: function(orderId, note, userId, fn) {
+        log.debug('>> cancelOrder');
+        dao.getById(orderId, $$.m.Order, function(err, order) {
+            if (err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            }
+            order.set('note', order.get('note') + '\n' + note);
+            order.set('status', order.status.CANCELLED);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            order.set('modified', modified);
+
+            dao.saveOrUpdate(order, function(err, updatedOrder){
+                if(err) {
+                    log.error('Error updating order: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< cancelOrder');
+                return fn(null, updatedOrder);
+            });
+        });
     },
 
-    refundOrder: function(orderId, note, fn) {
-        //TODO
+    /**
+     * This method marks an order refunded and attempts to return charges.
+     * @param orderId
+     * @param note
+     * @param userId
+     * @param amount
+     * @param accessToken
+     * @param reason (duplicate|fraudulent|requested_by_customer)
+     * @param fn
+     */
+    refundOrder: function(orderId, note, userId, amount, reason, accessToken, fn) {
+        log.debug('>> refundOrder');
+        dao.getById(orderId, $$.m.Order, function(err, order) {
+            if (err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            }
+            var paymentDetails = order.get('payment_details');
+            if(!paymentDetails.charge) {
+                log.error('Error creating refund.  No charge found.');
+                return fn('No charge found', null);
+            }
+
+            var chargeId = paymentDetails.charge.id;
+            var refundAmount = paymentDetails.charge.amount;
+            if(amount) {
+                refundAmount = amount;
+            }
+            var metadata = null;
+            stripeDao.createRefund(chargeId, refundAmount, false, reason, metadata, accessToken, function(err, refund){
+                if(err) {
+                    log.error('Error creating refund: ' + err);
+                    return fn(err, null);
+                }
+                paymentDetails.refund = refund;
+                order.set('note', order.get('note') + '\n' + note);
+                order.set('status', order.status.REFUNDED);
+                order.set('updated_at', new Date());
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                order.set('modified', modified);
+
+                dao.saveOrUpdate(order, function(err, updatedOrder){
+                    if(err) {
+                        log.error('Error updating order: ' + err);
+                        return fn(err, null);
+                    }
+                    log.debug('<< refundOrder');
+                    return fn(null, updatedOrder);
+                });
+            });
+        });
+
     },
 
-    holdOrder: function(orderId, note, fn) {
-        //TODO
+    /**
+     * This method marks an order on_hold without making any other changes to the order.
+     * @param orderId
+     * @param note
+     * @param userId
+     * @param fn
+     */
+    holdOrder: function(orderId, note, userId, fn) {
+        log.debug('>> holdOrder');
+        dao.getById(orderId, $$.m.Order, function(err, order) {
+            if (err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            }
+            order.set('note', order.get('note') + '\n' + note);
+            order.set('status', order.status.ON_HOLD);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            order.set('modified', modified);
+
+            dao.saveOrUpdate(order, function(err, updatedOrder){
+                if(err) {
+                    log.error('Error updating order: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< holdOrder');
+                return fn(null, updatedOrder);
+            });
+        });
     },
 
-    failOrder: function(orderId, note, fn) {
-        //TODO
+    /**
+     * This method marks an order failed without making any other changes to the order.
+     * @param orderId
+     * @param note
+     * @param userId
+     * @param fn
+     */
+    failOrder: function(orderId, note, userId, fn) {
+        log.debug('>> failOrder');
+        dao.getById(orderId, $$.m.Order, function(err, order) {
+            if (err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            }
+            order.set('note', order.get('note') + '\n' + note);
+            order.set('status', order.status.FAILED);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            order.set('modified', modified);
+
+            dao.saveOrUpdate(order, function(err, updatedOrder){
+                if(err) {
+                    log.error('Error updating order: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< failOrder');
+                return fn(null, updatedOrder);
+            });
+        });
     },
 
     getOrderById: function(orderId, fn) {

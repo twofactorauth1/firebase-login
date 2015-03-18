@@ -26,7 +26,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listOrders.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
-
+        app.post(this.ulr(':id/complete'), this.isAuthAndSubscribedApi.bind(this), this.completeOrder.bind(this));
+        app.post(this.ulr(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelOrder.bind(this));
+        app.post(this.ulr(':id/refund'), this.isAuthAndSubscribedApi.bind(this), this.refundOrder.bind(this));
+        app.post(this.ulr(':id/hold'), this.isAuthAndSubscribedApi.bind(this), this.holdOrder.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -70,6 +73,22 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< listOrders');
             self.sendResultOrError(res, err, orders, 'Error listing orders');
         });
+    },
+
+    completeOrder: function(req, res) {
+
+    },
+
+    cancelOrder: function(req, res) {
+
+    },
+
+    refundOrder: function(req, res) {
+
+    },
+
+    holdOrder: function(req, res) {
+
     }
 });
 
