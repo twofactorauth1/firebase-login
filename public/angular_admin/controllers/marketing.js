@@ -214,6 +214,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       var socialAccountMap = {};
       var socialPromises = [];
       var promiseProcessor = [];
+      var promiseSocialId = [];
 
       config.socialAccounts.forEach(function(value, index) {
         socialAccountMap[value.id] = value.type;
@@ -225,6 +226,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           return;
         }
         promiseProcessor.push([]);
+        promiseSocialId.push(value.socialId);
         $scope.feedLengths[value.socialId] = 0;
 
         if (value.type == 'feed') {
@@ -304,8 +306,11 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
               var logicFn = $scope.typeLogic[promiseProcessor[index][0]];
             }
 
-            if (logicFn) {
-              logicFn(value.data, value.socialId);
+            if (logicFn && value.data.length) {
+              console.info('found function', promiseSocialId[index]);
+              logicFn(value.data, promiseSocialId[index]);
+            } else {
+              console.warn('not found', config.trackedObjects[index], socialAccountMap[config.trackedObjects[index].socialId], value.data);
             }
           });
 
