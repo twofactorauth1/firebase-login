@@ -11644,16 +11644,58 @@ contenthover a {
 
 /********** Testimonials **********/
 
+.editing .testimonials-v1 .testimonial-wrap .single-testimonial {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .testimonials-v1 .testimonial-wrap .single-testimonial.edit-mode {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.editing .testimonials-v1 .testimonial-wrap .single-testimonial:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .testimonials-v1 .testimonial-wrap .single-testimonial:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+  bottom: -25px;
+}
+
+.editing .testimonials-v1 .testimonial-wrap .single-testimonial:hover .delete-single-testimonial .btn-delete-single-testimonial {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .testimonials-v1 .testimonial-wrap .delete-single-testimonial .btn-delete-single-testimonial {
+  display: none;
+}
+
 .testimonials-v1 div[data-class="testimonials"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
 }
 
 .testimonials-v1 .testimonials {
-  height: 100%;
   display: block;
   position: relative;
-  min-height: 400px;
+}
+
+.testimonials-v1 .testimonials span[data-cke-display-name="image"] {
+  max-width: 100%;
+}
+
+.testimonials-v1 .testimonials span[data-cke-display-name="image"] img {
+  max-width: 100%;
 }
 
 .testimonials-v1 .testimonials .slick-dots {
@@ -11661,7 +11703,6 @@ contenthover a {
 }
 
 .testimonials-v1 .testimonials .single-testimonial {
-  border-bottom: 1px solid #eee;
   padding-bottom: 25px;
 }
 
@@ -11675,27 +11716,22 @@ contenthover a {
 }
 
 .testimonials-v1 .testimonials .img img {
-  width: 185px;
-  height: 185px;
-  border-radius: 100px;
   margin: 0 auto;
+  min-width: 100%;
 }
 
 .testimonials-v1 .testimonials .name {
-  color: #4bafca;
   position: relative;
   margin-bottom: 0;
   font-weight: bold;
 }
 
 .testimonials-v1 .testimonials .site {
-  color: #888888;
   font-size: 14px;
   font-weight: bold;
 }
 
 .testimonials-v1 .testimonials .text {
-  color: #888888;
   line-height: 18px;
   font-size: 14px;
   margin-top: 20px;
