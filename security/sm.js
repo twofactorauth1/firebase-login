@@ -48,6 +48,8 @@ var defaultPrivileges = [
     'MODIFY_DASHBOARD',
     'VIEW_SOCIALCONFIG',
     'MODIFY_SOCIALCONFIG',
+    'VIEW_ORDER',
+    'MODIFY_ORDER',
     'ALL'
 
 ];
@@ -67,6 +69,7 @@ var defaultSubscriptionPrivs = [
     'products',
     'user',
     'social/socialconfig',
+    'order',
     'all'
 ];
 

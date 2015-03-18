@@ -5,6 +5,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
+      if(route.startsWith('/')) {
+          route = route.replace('/', '');
+      }
+      console.log('route is initially set to: ' + route);
     window.oldScope;
     $scope.$route = $route;
     $scope.$location = $location;
@@ -103,10 +107,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       } else {
         // setNavigation(data);
         if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
-          route = 'index';
-          route = route.replace('/', '');
-          if (!angular.isDefined(data[route])) {
-            route = 'coming-soon';
+            route = 'index';
+            /*
+             * if you just set a variable... why would you need to replace a character that ISN'T IN IT?
+             */
+            route = route.replace('/', '');// <-- why?
+            console.log('setting route to: ' + route + ' and $$path is ' + $scope.$location.$$path);
+            if (!angular.isDefined(data[route])) {
+                route = 'coming-soon';
+                console.log('set route to coming-soon');
               /*
                * This is pants-on-head stupid.  Why would you be able to create a page from the front-end?
                * var pageData = {
@@ -124,15 +133,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                that.pages = newpage;
                });
                */
-            that.pages = data[route];
-          }
-          if (angular.isDefined(data[route]))
-            that.pages = data[route];
+                that.pages = data[route];
+            }
+            if (angular.isDefined(data[route])) {
+                that.pages = data[route];
+            } else {
+                console.log('there is no route defined for ' + route);
+            }
+
         } else {
-          route = $scope.$location.$$path.replace('/page/', '');
-          route = route.replace('/', '');
-          that.pages = data[route];
+            route = $scope.$location.$$path.replace('/page/', '');
+            route = route.replace('/', '');
+            console.log('else block route is now ' + route);
+            that.pages = data[route];
         }
+
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function(data) {
             var tmpAccount = data;
