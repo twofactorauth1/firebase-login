@@ -96,7 +96,10 @@ _.extend(view.prototype, BaseView.prototype, {
         data.account.website.settings = {};
       }
 
-      var blogUrlParts = self.req.params[0].split('/');
+      var blogUrlParts = [];
+      if (self.req.params.length) {
+        blogUrlParts = self.req.params[0].split('/');
+      }
       if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
         cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function(err, post) {
           if (post) {
