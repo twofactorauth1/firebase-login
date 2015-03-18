@@ -3,24 +3,9 @@
 <div class="marketing">
 
     <div class="pageheader row">
-        <div class="col-xs-8">
+        <div class="col-xs-12">
             <h2><i class="fa fa-bullhorn"></i>  Marketing</h2>
-        </div>
-        <div class="col-xs-4">
-            <!-- <div class="btn-group pull-right btn-add" ng-show="!isEditing" style="margin-right: 10px;">
-                <button type="button" class="btn btn-outline dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-plus"></i>
-                    <span class="hidden-xs">Add</span>
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="" data-toggle="modal" data-target="#marketing-add-campaign"> Campaign</a>
-                    </li>
-                    <li><a href="" data-toggle="modal" data-target="#marketing-add-feed"> Social Feed</a>
-                    </li>
-                </ul>
-            </div> -->
-        </div>
+        </div>        
         <div class="clear"></div>
     </div>
 
@@ -44,18 +29,18 @@
 
     <div class="contentpanel" ng-style="styleMarketingSection()" indigeweb-resize>
         <div class="campaign-section" ng-show="activeTab == 'campaigns'">
-            <div class="col-xs-12 col-sm-6 col-md-4 add-campaign">
-                <div class="grid-list-item">
-                    <div class="add-wrap">
-                        <div class="center">
-                            <span class="fa fa-bullhorn"></span>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="center">
-                            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#marketing-add-campaign"><span class="fa fa-plus"></span> ADD CAMPAIGN</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-xs-12 col-sm-6 col-md-4 add-campaign">                  
+                <div class="grid-list-item">       
+                    <div class="add-wrap">     
+                        <div class="center">       
+                            <span class="fa fa-bullhorn"></span>       
+                        </div>     
+                        <div class="clearfix"></div>       
+                        <div class="center">       
+                            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#marketing-add-campaign"><span class="fa fa-plus"></span> ADD CAMPAIGN</button>        
+                        </div>     
+                    </div>     
+                </div>     
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4 single-campaign" ng-repeat="campaign in campaigns track by $index">
                 <div class="grid-list-item btn-view-product-details" data-productid="1">
@@ -217,7 +202,7 @@
                         <!-- panel-footer -->
                     </div>
                 </div>
-                <ul class="stream">
+                <ul class="stream hidden">
                     <li ng-repeat="post in displayedFeed track by $index | orderBy: 'date':true" class="item {{post.postType}}-{{post.socialAccountId}}" data-date="{{post.date}}">
                         <div class="item-inner">
                             <div ng-if="post.type == 'facebook'">
@@ -447,7 +432,7 @@
                         </div>
                     </div>
                     <div class="campaign-details">
-                        
+
                     </div>
                     <div class="clearfix"></div>
 

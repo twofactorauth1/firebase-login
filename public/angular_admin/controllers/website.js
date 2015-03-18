@@ -89,13 +89,12 @@ define([
         $scope.beginOnboarding($location.$$search['onboarding']);
       }
 
-
-
       if ($location.$$search['pagehandle']) {
         document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
       }
 
       if ($location.$$search['posthandle']) {
+        $scope.single_post = true;
         document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
       }
 
@@ -124,6 +123,7 @@ define([
       $scope.addLinkType = 'page';
       $scope.saveLoading = false;
       $scope.hours = $$.constants.contact.business_hour_times;
+      $scope.typefilter = 'all';
       $scope.components.sort(function(a, b) {
         return a.i > b.i;
       });
@@ -167,52 +167,6 @@ define([
       UserService.getAccount(function(account) {
         $scope.account = account;
         that.account = account;
-        //get pages and find this page
-        WebsiteService.getPages(account.website.websiteId, function(pages) {
-          //TODO should be dynamic based on the history
-          currentPage = 'index';
-          that.allPages = pages;
-          var parsed = angular.fromJson(pages);
-          var arr = [];
-
-          for (var x in parsed) {
-            arr.push(parsed[x]);
-          }
-          $scope.allPages = arr;
-
-          //$scope.currentPage = _.findWhere(pages, {
-          //  handle: currentPage
-          //});
-
-          if ($scope.editingPageId) {
-            $scope.currentPage = _.findWhere(pages, {
-              _id: $scope.editingPageId
-            });
-            // if ($scope.currentPage && $scope.currentPage.components) {
-            //     $scope.components = $scope.currentPage.components;
-            // } else {
-            //     $scope.components = [];
-            // }
-            // console.log('$scope.currentPage >>> ', $scope.currentPage);
-            // $scope.resfeshIframe();
-          } else {
-            //$scope.currentPage = _.findWhere(pages, {
-            //    handle: currentPage
-            //});
-          }
-          //get components from page
-          if ($scope.currentPage) {
-            if ($scope.currentPage.components) {
-              $scope.components = $scope.currentPage.components;
-              if ($location.$$search['posthandle']) {
-                //$scope.updatePage("post", true);
-              }
-            }
-          } else {
-            console.log('Falied to retrieve Page');
-          }
-
-        });
 
         //get website
         WebsiteService.getWebsite(account.website.websiteId, function(website) {
@@ -232,13 +186,6 @@ define([
           $scope.secondaryFontStack = $scope.website.settings.font_family_2;
         });
 
-        //get themes
-        WebsiteService.getThemes(function(themes) {
-          $scope.themes = themes;
-          $scope.currentTheme = _.findWhere($scope.themes, {
-            _id: account.website.themeId
-          });
-        });
       });
 
       //an array of component types and icons for the add component modal
@@ -404,7 +351,43 @@ define([
         filter: 'contact',
         description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
         enabled: true
+      },
+      {
+        title: 'Testimonials',
+        type: 'testimonials',
+        icon: 'fa fa-info',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/testimonials.png',
+        filter: 'text',
+        description: 'A component to showcase your testimonials.',
+        enabled: true
       }];
+
+      var componentLabel,
+          enabledComponentTypes = _.where( $scope.componentTypes, { enabled: true } );
+
+      /************************************************************************************************************
+       * Takes the componentTypes object and gets the value for the filter property from any that are enabled.
+       * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
+       * it exists. (The misc value is added back on to the end of the list later)
+       ************************************************************************************************************/
+      $scope.componentFilters = _.without( _.uniq( _.pluck( _.sortBy( enabledComponentTypes, 'filter' ), 'filter' ) ), 'misc');
+
+      // Iterates through the array of filters and replaces each one with an object containing an
+      // upper and lowercase version
+      _.each( $scope.componentFilters, function( element, index ) {
+        componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+        $scope.componentFilters[index] = { 'capitalized': componentLabel, 'lowercase': element };
+        componentLabel = null;
+      });
+
+      // Manually add the All option to the begining of the list
+      $scope.componentFilters.unshift({'capitalized': 'All', 'lowercase': 'all'});
+      // Manually add the Misc section back on to the end of the list
+      $scope.componentFilters.push({'capitalized': 'Misc', 'lowercase': 'misc'});
+
+      $scope.setFilterType = function( label ) {
+        $scope.typefilter = label;
+      };
 
       /*****
           {
@@ -491,7 +474,7 @@ define([
             $scope.componentEditing.bg.img.parallax = false;
             $scope.componentEditing.bg.img.overlay = false;
           }
-          
+
         }
       }
       $scope.bindEvents = function() {
@@ -645,7 +628,6 @@ define([
         if (iframe.contentWindow.copyPostMode) {
           iframe.contentWindow.copyPostMode();
           $scope.post_data = iframe.contentWindow.getPostData();
-          $scope.single_post = true;
         }
         $scope.activateAloha();
         $scope.backup['website'] = angular.copy($scope['website']);
@@ -715,6 +697,7 @@ define([
           iFrame.contentWindow.checkOrSetPageDirty(true);
         }
         if ($location.$$search['posthandle']) {
+          $scope.single_post = true;
           iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
           $scope.isEditing = true;
         } else {
@@ -875,6 +858,7 @@ define([
         }
 
         if ($location.$$search['posthandle']) {
+          $scope.single_post = true;
           route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
           //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
         }
@@ -898,6 +882,18 @@ define([
           that.allPages = arr;
           $scope.currentPage = _.findWhere(that.allPages, {
             handle: currentPage
+          });
+
+          // $scope.historicalPages = _.where(pages, {
+          //   handle: $scope.currentPage.handle
+          // });
+
+          // console.log('pages >>> ', pages);
+          // console.log('historicalPages >>> ', $scope.historicalPages);
+
+          WebsiteService.getPageVersions($scope.currentPage._id, function(pageVersions) {
+            console.log('retireved page versions >>> ', pageVersions);
+            $scope.pageVersions = pageVersions;
           });
 
           var localPage = _.findWhere(pages, {
@@ -1320,7 +1316,7 @@ define([
         } else if ($scope.logoImage && $scope.componentEditing) {
           $scope.logoImage = false;
           $scope.componentEditing.logourl = asset.url;
-        } else if ($scope.changeblobImage && !$scope.componentEditing) {
+        } else if ($scope.changeblobImage) {
           $scope.changeblobImage = false;
           $scope.blog_post.featured_image = asset.url;
           var iFrame = document.getElementById("iframe-website");
@@ -1406,6 +1402,10 @@ define([
 
       //Add Link to navigation
 
+      $scope.$watch('website.linkLists', function(newValue, oldValue) {
+          console.log('website.linkLists changed >>> ');
+      });
+
       $scope.setLinkUrl = function() {
         $scope.newLink.linkTitle = $("#linkSection option:selected").html();
       }
@@ -1434,8 +1434,7 @@ define([
         $scope.initializeLinks();
       }
 
-      $scope.deleteLinkFromNav = function(index)
-      {
+      $scope.deleteLinkFromNav = function(index) {
         $scope.website.linkLists.forEach(function(value) {
             if (value.handle === "head-menu") {
               value.links.splice(index,1);
@@ -1517,12 +1516,18 @@ define([
         }
       };
 
-      $scope.sortableOptions = { 
-      dragEnd: function(e, ui) {
-        console.log('sorting end');
-        $scope.updateLinkList();
-      }
-    };
+      $scope.sortableOptions = {
+          dragMove: function(event) {
+              console.log('dragMove >>>');
+          },
+          itemMoved: function(event) {
+              console.log('itemMoved');
+          },
+          orderChanged: function(event) {
+              console.log('orderChanged');
+          },
+          scrollableContainer: 'reorderNavBarContainer'
+      };
 
       /********** LISTENERS ***********/
 
@@ -1626,6 +1631,15 @@ define([
         });
         $scope.updateSingleComponent(componentId);
         $scope.componentEditing.teamMembers.splice(index, 1);
+        $scope.saveCustomComponent();
+      }
+
+      window.deleteTestimonial = function(componentId, index) {
+        $scope.componentEditing = _.findWhere($scope.components, {
+          _id: componentId
+        });
+        $scope.updateSingleComponent(componentId);
+        $scope.componentEditing.testimonials.splice(index, 1);
         $scope.saveCustomComponent();
       }
 
@@ -1783,6 +1797,14 @@ define([
         });
         $scope.updateSingleComponent(componentId);
         $scope.componentEditing.teamMembers.splice(index + 1, 0, newTeam);
+        $scope.saveCustomComponent();
+      }
+      window.addTestimonial = function(componentId, newTestimonial, index) {
+        $scope.componentEditing = _.findWhere($scope.components, {
+          _id: componentId
+        });
+        $scope.updateSingleComponent(componentId);
+        $scope.componentEditing.testimonials.splice(index + 1, 0, newTestimonial);
         $scope.saveCustomComponent();
       }
       window.updateComponent = function(componentId) {

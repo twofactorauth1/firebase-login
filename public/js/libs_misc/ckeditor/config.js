@@ -26,6 +26,9 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about' }
 	];
 
+	// config.font_names = 'GoogleWebFonts;' + config.font_names;
+	// ckeditor-gwf-plugin
+
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
 	config.removeButtons = 'PasteText,Cut,Copy,Paste,Underline,Strike,Subscript,Superscript,Image,maximize,resize,Format,Indent,HorizontalRule,Outdent,Blockquote,lineheight,BGColor';

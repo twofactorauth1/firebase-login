@@ -278,9 +278,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           that.latestposts.slice(Math.max(data.length - 3, 1));
         }
 
-        if (route.indexOf('blog') > -1) {
+       // if (route.indexOf('blog') > -1) {
           that.blogposts = data;
-        }
+       // }
 
         //if tagname is present, filter the cached posts with the tagname
         if ($route.current.params.tagname != null) {
@@ -1003,6 +1003,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
+    $scope.deleteTestimonial = function(componentId, index) {
+      window.parent.deleteTestimonial(componentId, index);
+    }
+
+
+    $scope.addTestimonial = function(componentId, index) {
+      // to do: the information should fetch from component model
+      var newTestimonial = {
+        "img": "",
+        "name": "Name",
+        "site": "Site",
+        "text": "Description"       
+      }
+      window.parent.addTestimonial(componentId, newTestimonial, index);
+    }
+
 
     function toTitleCase(str) {
       return str.replace(/\w\S*/g, function(txt) {
@@ -1013,6 +1029,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
+      for(name in CKEDITOR.instances)
+      {
+          CKEDITOR.instances[name].destroy()
+      }
       $scope.isEditing = true;
       CKEDITOR.disableAutoInline = true;
       var elements = $('.editable');
@@ -1022,11 +1042,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
         }
         // $scope.activated = true;
-        if (!$(this).hasClass('cke_editable')) {
+        //if (!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
-                var editor = ev.editor;
+                var editor = ev.editor;                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -1037,7 +1057,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               top: 'editor-toolbar'
             }
           });
-        }
+        //}
         
       });
       setTimeout(function() {        

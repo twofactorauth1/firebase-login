@@ -217,6 +217,9 @@ var allowCrossDomain = function (req, res, next) {
 log.info('Allowing xd scripting calls from: ' + appConfig.xdhost_whitelist.join());
 app.use(allowCrossDomain);
 
+//prerender?
+//app.use(require('prerender-node').set('prerenderServiceUrl', 'http://localhost:3002/'));
+app.use(require('prerender-node').set('prerenderToken', 'zGq6CesNtm0s9kUTJXhG'));
 
 //-----------------------------------------------------
 //  START LISTENING

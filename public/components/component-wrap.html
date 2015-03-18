@@ -3,8 +3,11 @@
         background: {{component.bg.img.overlaycolor || 'rgba(0, 0, 0, 0.58)'}}!important;
         opacity: {{component.bg.img.overlayopacity/100 || 1}};
     }
+    .{{component.type}}{{$index + 1}} {
+       opacity: {{component.bg.opacity/100 || 1}};
+    }
 </style>
-<div class="component-wrap" ng-if="component.visibility">
+<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead' && component.bg.img.undernav}">
 
     <div class="component {{component.type}}{{$index + 1}}" data-id="{{component._id}}" data-type="{{component.type}}">
 

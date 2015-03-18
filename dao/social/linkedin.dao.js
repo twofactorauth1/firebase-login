@@ -15,6 +15,8 @@ var userDao = require('../user.dao');
 var Contact = require('../../models/contact');
 var async = require('async');
 var querystring = require('querystring');
+var awsConfig = require('../../configs/aws.config.js');
+var s3Dao = require('../../dao/integrations/s3.dao');
 
 var dao = {
 
@@ -611,6 +613,7 @@ var dao = {
 
     importConnectionsAsContactsForSocialId: function(accountId, accessToken, socialAccountId, user, fn) {
         var self = this, totalImported = 0;
+
         var linkedInBaggage = user.getUserAccountBaggage(accountId, "linkedin");
         linkedInBaggage.contacts = linkedInBaggage.contacts || {};
         var updated = linkedInBaggage.contacts.updated;
@@ -619,7 +622,6 @@ var dao = {
             if (err) {
                 return fn(err, value);
             }
-
             linkedInBaggage.contacts.updated = new Date().getTime();
 
             var linkedInId = socialAccountId;
@@ -627,9 +629,31 @@ var dao = {
             var _connections = _.filter(value.values, Boolean);
 
             var updateContactFromConnection = function(contact, connection) {
-
                 var location= null;
-                if(connection) {
+                if(connection) {                   
+                   if(connection.pictureUrl)
+                   {
+                     var file = {};
+                    file.name = new Date().getTime() + '.png';
+                    file.type = 'image/png';                    
+                    file.path = photo;    
+                    //var ssURL = urlboxhelper.getUrl(serverUrl, options);
+                    var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
+                    var accountId = accountId;
+                    var directory = "acct_indigenous";
+                    if (accountId > 0) {
+                        directory = "acct_" + accountId;
+                    } 
+                    s3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
+                        if (err) {
+                            log.error('Error uploading to s3: ' + err);
+                        } else {
+                           connection.pictureUrl = 'http://' + bucket + '.s3.amazonaws.com/' + directory + '/' + file.name;
+                        }
+                    })  
+
+                   }
+                    
                     if (connection.location && connection.location.name) { location = connection.location.name; }
                     contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
 

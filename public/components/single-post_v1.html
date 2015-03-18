@@ -28,7 +28,7 @@
 
                                 <div class="blog-meta">
                                    <span data-ng-if="blog.post.publish_date || blog.post.created.date">
-                                     • {{blog.post.publish_date || blog.post.created.date | date: 'fullDate'}}
+                                     Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'fullDate'}}
                                     </span>
                                      <span data-ng-if="blog.post.post_author">
                                        Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
@@ -47,13 +47,17 @@
                                 </div>
                                 <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
                                         <span class="fa fa-edit"></span>
-                                        <span class="hidden-xs">Change Image</span>
+                                        <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
+                                        <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
                                 </a>
                                 <!-- end .thumb -->
 
                                 <div class="entry-excerpt"><p>
-                                    <div class="editable post_excerpt_div" data-class="post_excerpt">
-                                        {{blog.post.post_excerpt}}
+                                    <div ng-if="blog.post.post_excerpt" class="editable post_excerpt_div" data-class="post_excerpt">
+                                        {{blog.post.post_excerpt }}
+                                    </div>
+                                    <div ng-if="!blog.post.post_excerpt" class="editable post_excerpt_div" data-class="post_excerpt">
+                                        <span> Enter Post Excerpt</span>
                                     </div>
                                     </p></div>
                                     <a type="button" ng-click="refreshPost()" class="btn btn-orange pull-right"><span>Refresh Post Preview</span></a>
@@ -80,7 +84,7 @@
                             </h2>
                             <div class="blog-meta">
                                 <div data-class="publish_date">
-                                    <input ng-if="isEditing" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
+                                    Posted Date: <input ng-if="isEditing" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'fullDate' }} </span>
                             </div>

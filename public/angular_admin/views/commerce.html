@@ -5,15 +5,11 @@
 </div>
 <div class="commerce">
   <div class="pageheader row">
-    <div class="col-xs-8">
+    <div class="col-xs-12">
       <h2>
 				<i class="fa fa-shopping-cart"></i> Commerce
 			</h2>
-    </div>
-    <div class="col-xs-4">
-      <a class="btn btn-outline pull-right" type="button" data-toggle="modal" data-target="#commerce-add-product"> <span class="fa fa-plus"></span> <span class="hidden-xs">Add</span>
-      </a>
-    </div>
+    </div>    
     <div class="clear"></div>
   </div>
 
@@ -79,12 +75,25 @@
 			</div>
 		</headroom>
 		<div class="products-list" ng-switch on="commerceSettings.gridViewDisplay">
-       <div ng-if="products.length <= 0" class="empty">
-            <h1 class="center"><span class="fa fa-shopping-cart"></span></h1>
-            <h3 class="center">No Products Yet</h3>
-            <h5 class="center">Add products for them to appear here.</h5>
-        </div>
+       
 			<div ng-switch-when="true" class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+          <div class="commerce-item">
+            <div class="media">
+              <div class="clearfix mb10"></div>
+              <div class="clear clearfix"></div>
+              <div class="center add-wrap">
+                <span class="add-product fa fa-shopping-cart"></span>
+              </div>
+              <div class="center">
+                <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#commerce-add-product">
+                  <span class="fa fa-plus"></span> ADD PRODUCT
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
           <div class="commerce-item btn-view-product-details" data-productid="1">
@@ -131,6 +140,20 @@
       </div>
       <div ng-switch-when="false" class="row">
         <div class="tb-main table">
+          <div class="container-fluid tb-row">
+            <div class="tb-col col-md-12">
+              <div class="commerce-item commerce-add-item">
+                <div class="clearfix mb10"></div>
+                <div class="clear clearfix"></div>
+                <div class="center add-wrap">
+                  <span class="add-product fa fa-shopping-cart"></span>
+                  <button class="btn btn-add btn-success btn-lg" data-toggle="modal" data-target="#commerce-add-product">
+                    <span class="fa fa-plus"></span> ADD PRODUCT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="container-fluid tb-row" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
             <div class="tb-col col-md-1">
               <div class="commerce-item">

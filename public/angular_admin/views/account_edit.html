@@ -282,8 +282,27 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 				            </div>
 				        </div>
 
+
 				        <div class="row">
-				            <!-- UPDATE category -->
+				            <div class="form-group col-xs-6">
+				                <label>Business Size</label>
+				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size' name="business-size" ng-change='setFormDirtyFn()'>
+
+				                    <option value="1">Single (1)</option>
+
+				                    <option value="2">Small (1-5)</option>
+
+				                    <option value="3">Medium (6-15)</option>
+
+				                    <option value="4">Large (15 -50)</option>
+
+				                    <option value="5">Enterprise (50+)</option>
+
+				                </select>
+				            </div>
+				        </div>
+
+				        <!-- <div class="row">
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Category</label>
@@ -292,26 +311,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 				            </div>
 				        </div>
 
-				        <div class="row">
-				            <div class="form-group col-xs-6">
-				                <label>Business Size</label>
-				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size' name="business-size" ng-change='setFormDirtyFn()'>
-
-				                    <option value="1">Single</option>
-
-				                    <option value="2">Small</option>
-
-				                    <option value="3">Medium</option>
-
-				                    <option value="4">Large</option>
-
-				                    <option value="5">Enterprise</option>
-
-				                </select>
-				            </div>
-				        </div>
-
-				        <div class="row">
+				         <div class="row">
 				            <div class="form-group col-xs-6">
 				                <label>Business Type</label>
 				                <select id="select-business-type" class="form-control input-lg" ng-model='account.business.type' ng-change='setFormDirtyFn()'>
@@ -324,7 +324,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
 				                </select>
 				            </div>
-				        </div>
+				        </div> -->
 
 				        <div class="row">
 				            <!-- UPDATE Non-Profit -->
