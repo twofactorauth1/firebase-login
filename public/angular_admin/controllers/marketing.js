@@ -306,10 +306,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
               var logicFn = $scope.typeLogic[promiseProcessor[index][0]];
             }
 
-            if (logicFn && value.data.length) {
-              console.info('found function', promiseSocialId[index]);
+            if (logicFn) {
               logicFn(value.data, promiseSocialId[index]);
             } else {
+              console.warn(promiseProcessor[index]);
               console.warn('not found', config.trackedObjects[index], socialAccountMap[config.trackedObjects[index].socialId], value.data);
             }
           });
