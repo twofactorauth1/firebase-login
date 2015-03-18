@@ -1003,6 +1003,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
+    $scope.deleteTestimonial = function(componentId, index) {
+      window.parent.deleteTestimonial(componentId, index);
+    }
+
+
+    $scope.addTestimonial = function(componentId, index) {
+      // to do: the information should fetch from component model
+      var newTestimonial = {
+        "img": "",
+        "name": "Name",
+        "site": "Site",
+        "text": "Description"       
+      }
+      window.parent.addTestimonial(componentId, newTestimonial, index);
+    }
+
 
     function toTitleCase(str) {
       return str.replace(/\w\S*/g, function(txt) {
