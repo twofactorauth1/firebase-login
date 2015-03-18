@@ -225,13 +225,13 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           console.warn(value.socialId, 'Account mapping missing.');
           return;
         }
-        promiseProcessor.push([]);
+        // promiseProcessor.push([]);
         promiseSocialId.push(value.socialId);
         $scope.feedLengths[value.socialId] = 0;
 
         if (value.type == 'feed') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
-          promiseProcessor[index] = [value.type, socialAccountMap[value.socialId]];
+          promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
         }
 
         if (value.type === 'pages') {
@@ -246,18 +246,18 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             if (matchingAccount.accountType == 'account') {
               socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
             }
-            promiseProcessor[index] = [value.type, socialAccountMap[value.socialId], matchingAccount.accountType];
+            promiseProcessor.push([value.type, socialAccountMap[value.socialId], matchingAccount.accountType]);
           }
         }
 
         if (value.type == 'numberFollowers') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
-          promiseProcessor[index] = [value.type, socialAccountMap[value.socialId]];
+          promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
         }
 
         if (value.type === 'profile') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
-          promiseProcessor[index] = [value.type, socialAccountMap[value.socialId]];
+          promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
         }
 
         // config.socialAccounts.forEach(function(value, index) {
