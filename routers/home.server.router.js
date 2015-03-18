@@ -27,6 +27,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/", this.setup.bind(this), this.index.bind(this));
+        app.get("/*", this.setup.bind(this), this.index.bind(this));
 
         //send all routes to index and let the app router to navigate to the appropiate view
         app.get("/index", this.setup.bind(this), this.index.bind(this));

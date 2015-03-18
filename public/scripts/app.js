@@ -90,7 +90,15 @@ var mainApp = angular
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
-            .otherwise({redirectTo: '/'});
+            .when('/blog/:postname', {
+                templateUrl: '../views/singlepostpage.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .otherwise( {
+                templateUrl: '../views/main.html',
+                controller: 'LayoutCtrl as layout'
+            });
+            //.otherwise({redirectTo: '/'});
     }])
     .controller('LayoutCtrl', function($scope, parallaxHelper){
         $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
