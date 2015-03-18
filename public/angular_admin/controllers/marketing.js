@@ -220,6 +220,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       });
 
       config.trackedObjects.forEach(function(value, index) {
+        if (socialAccountMap[value.socialId] == undefined) {
+          console.warn(value.socialId, 'Account mapping missing.');
+          return;
+        }
         promiseProcessor.push([]);
         $scope.feedLengths[value.socialId] = 0;
 
@@ -240,7 +244,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             if (matchingAccount.accountType == 'account') {
               socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
             }
-            promiseProcessor[index] = [value.type, value.socialId, matchingAccount.accountType];
+            promiseProcessor[index] = [value.type, socialAccountMap[value.socialId], matchingAccount.accountType];
           }
         }
 
@@ -283,7 +287,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         .then(function(data) {
           data.forEach(function(value, index) {
             var logicFn = null;
-
             if (promiseProcessor[index].length == 3) {
               var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
                 promiseProcessor[index][1]
@@ -303,8 +306,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
             if (logicFn) {
               logicFn(value.data, value.socialId);
-            } else {
-              console.log(promiseProcessor[index]);
             }
           });
 
