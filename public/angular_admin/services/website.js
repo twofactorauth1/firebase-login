@@ -63,6 +63,22 @@ define(['app'], function (app) {
             });
 		};
 
+		//page/:id/revert/:version
+		this.revertPageVersion = function (pageId, versionId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'revert', versionId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST"
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service revertPageVersion with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPages = function (accountId, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)
