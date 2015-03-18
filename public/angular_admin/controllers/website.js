@@ -351,6 +351,15 @@ define([
         filter: 'contact',
         description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
         enabled: true
+      },
+      {
+        title: 'Testimonials',
+        type: 'testimonials',
+        icon: 'fa fa-info',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/testimonials.png',
+        filter: 'text',
+        description: 'A component to showcase your testimonials.',
+        enabled: true
       }];
 
       var componentLabel,
@@ -1625,6 +1634,15 @@ define([
         $scope.saveCustomComponent();
       }
 
+      window.deleteTestimonial = function(componentId, index) {
+        $scope.componentEditing = _.findWhere($scope.components, {
+          _id: componentId
+        });
+        $scope.updateSingleComponent(componentId);
+        $scope.componentEditing.testimonials.splice(index, 1);
+        $scope.saveCustomComponent();
+      }
+
       window.updateSocialNetworks = function(old_value, mode, new_value) {
         var selectedName;
         switch (mode) {
@@ -1779,6 +1797,14 @@ define([
         });
         $scope.updateSingleComponent(componentId);
         $scope.componentEditing.teamMembers.splice(index + 1, 0, newTeam);
+        $scope.saveCustomComponent();
+      }
+      window.addTestimonial = function(componentId, newTestimonial, index) {
+        $scope.componentEditing = _.findWhere($scope.components, {
+          _id: componentId
+        });
+        $scope.updateSingleComponent(componentId);
+        $scope.componentEditing.testimonials.splice(index + 1, 0, newTestimonial);
         $scope.saveCustomComponent();
       }
       window.updateComponent = function(componentId) {
