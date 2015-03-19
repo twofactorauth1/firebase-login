@@ -21,7 +21,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       ToasterService.processPending();
       ToasterService.processHtmlPending();
 
-      
+
 
       //
       $scope.currentHost = window.location.host;
@@ -287,6 +287,11 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       });
 
       UserService.getAccount(function(account) {
+        if (account.credentials.length == 0) {
+          ToasterService.show('warning', "No Subscription");
+        }
+        ToasterService.processPending();
+        ToasterService.processHtmlPending();
         $scope.account = account;
         $scope.currentAccount.membership = account.billing.subscriptionId;
         /*
@@ -426,7 +431,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
         //Set the amount of time a socailAccount should last.
         var expireTime = new Date();
         expireTime.setMinutes(expireTime.getMinutes() + 10);
-        var msg = socailAccount + ' is integreted successfully.'; 
+        var msg = socailAccount + ' is integreted successfully.';
         if (account_cookie == undefined) {
         ipCookie("socialAccount", msg, {
           expires: expireTime,

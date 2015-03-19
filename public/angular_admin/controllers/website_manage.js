@@ -167,10 +167,13 @@ define([
 
             UserService.getAccount(function(account) {
               if (account.credentials.length == 0) {
-                $scope.userPreferences.account_default_tab = 'billing';
-                UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {
-                  ToasterService.setPending('warning', "No Subscription");
-                  $state.go('account');
+                UserService.getUserPreferences(function(preferences) {
+                    $scope.preferences = preferences;
+                    $scope.userPreferences.account_default_tab = 'billing';
+                  UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {
+                    ToasterService.setPending('warning', "No Subscription");
+                    $state.go('account');
+                  });
                 });
               }
                 $scope.account = account;
