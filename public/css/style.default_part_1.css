@@ -7470,8 +7470,8 @@ h4,
 }
 
 .btn-green {
-  background-color: #138f77;
-  border-bottom: 4px solid #0f6c5a;
+  background-color: #39b06c;
+  border-bottom: 4px solid #268d49;
   color: white;
 }
 
@@ -7479,14 +7479,14 @@ h4,
 .btn-green:active,
 .btn-green.active,
 .open .dropdown-toggle.btn-green {
-  background-color: #16a085;
-  border-color: #16a085;
+  background-color: #39b06c;
+  border-color: #39b06c;
   color: white;
 }
 
 .btn-light-green {
   background-color: #2abb9b;
-  border-bottom: 4px solid #1f8972;
+  border-bottom: 4px solid #268d49;
   color: white;
 }
 
@@ -7750,14 +7750,12 @@ h4,
 .btn-orange {
   color: #fff;
   background: #f38108;
-  border-color: #de7504;
 }
 
 .btn-orange:hover,
 .btn-orange:active,
 .btn-orange:focus {
   background: #de7504;
-  border-color: #d67003;
   color: #fff;
 }
 

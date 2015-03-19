@@ -6567,6 +6567,29 @@ div.error label.error:before {
   color: #b6b6b6;
 }
 
+#component-setting-modal .fa-close {
+  position: absolute;
+  right: 0;
+  margin: -5px 6px 0 0;
+  background: #fff;
+  border-radius: 12px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  line-height: 20px;
+  border: 1px solid #e7e7e7;
+}
+
+#component-setting-modal .fa-close:hover {
+  background: #e7e7e7;
+}
+
+#component-setting-modal .add-image {
+  background: #e7e7e7;
+  height: 180px;
+  border-radius: 5px;
+}
+
 .add_section {
   padding: 10px;
   border-radius: 5px;
@@ -7204,8 +7227,8 @@ input[type='file'] {
   position: relative;
   display: inline-block;
   vertical-align: top;
-  width: 56px;
-  height: 20px;
+  width: 75px;
+  height: 25px;
   padding: 3px;
   background-color: white;
   border-radius: 18px;
@@ -7259,14 +7282,14 @@ input[type='file'] {
   content: attr(data-off);
   right: 11px;
   color: #aaa;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 .switch-label:after {
   content: attr(data-on);
   left: 11px;
   color: white;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
   opacity: 0;
 }
 
@@ -7286,9 +7309,9 @@ input[type='file'] {
 .switch-handle {
   position: absolute;
   top: 4px;
-  left: 4px;
-  width: 18px;
-  height: 18px;
+  left: 5px;
+  width: 22px;
+  height: 22px;
   background: white;
   border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
@@ -7320,12 +7343,12 @@ input[type='file'] {
 }
 
 .switch-input:checked ~ .switch-handle {
-  left: 40px;
+  left: 48px;
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 .switch-green > .switch-input:checked ~ .switch-label {
-  background: #4fb845;
+  background: #42b77a;
 }
 
 .blog-item {
@@ -9942,7 +9965,7 @@ body.editing .fragment:hover .add-component {
 
 .ui-sortable .componentActions h4 {
   background: rgba(44, 62, 80, 0.8);
-  padding: 17px;
+  padding: 16px;
   color: white;
   font-size: 18px;
   margin: 0;

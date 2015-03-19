@@ -139,35 +139,53 @@
                                 <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                                     <label for="colorpicker">Active Text Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Nav bar Active menu color."><i class="fa fa-info-circle" /></span>
-                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    <div class="pull-right">
+                                        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                        <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    </div>
                                 </div>
                                 <hr ng-show="!componentEditing.bg.img.show"/>
                                 <div class="form-group" ng-if="componentEditing.type === 'navigation'">
                                     <label>Nav BG Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
-                                    <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    <div class="pull-right">
+                                        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                        <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    </div>
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                                     <label for="colorpicker">Nav Hover Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Nav bar menu hover color."><i class="fa fa-info-circle" /></span>
-                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hover" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    <div class="pull-right">
+                                        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                        <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hover" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    </div>
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                                     <label for="colorpicker">Nav Hover BG Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Navigation bar on hover BG color."><i class="fa fa-info-circle" /></span>
-                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hoverbg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    <div class="pull-right">
+                                        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                        <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.hoverbg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    </div>
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type === 'pricing-tables'">
                                     <label>Pricing Table BG Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Background color of Pricing table."><i class="fa fa-info-circle" /></span>
-                                    <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    <div class="pull-right">
+                                        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                        <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    </div>
                                 </div>
                                 <hr ng-show="componentEditing.type == 'navigation'"/>
 
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span>
-                                    <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    <div class="pull-right">
+                                        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                        <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                                    </div>
                                 </div>
                                 <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <div class="row">
@@ -193,78 +211,117 @@
                                 </form>
                                 <hr/>
                                 <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
-                                    <label for="bg_hide">Show Background Image</label>
+                                    <label for="bg_hide" class="mb0">Show Background Image</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
-                                    <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="removeImage(true);saveComponent()">
+                                    <!-- <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="removeImage(true);saveComponent()"> -->
+                                    <label class="switch switch-green pull-right">
+                                      <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.show" ng-change="removeImage(true);saveComponent()">
+                                      <span class="switch-label" data-on="On" data-off="Off"></span>
+                                      <span class="switch-handle"></span>
+                                    </label>
                                     <br>
                                     <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.bg.img.url">
-                                    <label for="bgimg" tooltip-placement="top" tooltip="The bg image of the component">Background Image</label>
-                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove background image of component."><i class="fa fa-info-circle" /></span>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="!componentEditing.bg.img.url">
-                                        <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group add-image" ng-show="componentEditing.bg.img.show" ng-if="!componentEditing.bg.img.url">
+                                            <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
+                                        </div>
+                                         <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
+                                            <i class="fa fa-close" ng-click="removeImage(false)"></i>
+                                            <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
+                                        </div>
+                                        <div class="clearfix mb10"></div>
+                                        <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
+                                            <label for="bg_position">Background Position</label>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Set Background image position."><i class="fa fa-info-circle" /></span>
+                                            <!-- <select id="bg_position" ng-model="componentEditing.bg.img.position" ng-change="saveComponent()" class="form-control input-lg">
+                                                <option value="center">Center</option>
+                                                <option value="left">Left</option>
+                                                <option value="right">Right</option>
+                                            </select> -->
+                                            <div class="clearfix"></div>
+                                            <label class="radio-inline">
+                                              <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="left" ng-model="componentEditing.bg.img.position"> Left
+                                            </label>
+                                            <label class="radio-inline">
+                                              <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="right" ng-model="componentEditing.bg.img.position"> Right
+                                            </label>
+                                            <label class="radio-inline">
+                                              <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="center" ng-model="componentEditing.bg.img.position"> Center
+                                            </label>
+                                        </div>
                                     </div>
-                                     <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url">
-                                        <i class="fa fa-close" ng-click="removeImage(false)"></i>
-                                        <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.type != 'navigation'">
-                                        <label for="bg_blur">Blur BG</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
-                                        <input id="bg_blur" bs-switch ng-model="componentEditing.bg.img.blur" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.type != 'navigation'">
+                                            <label for="bg_blur">Blur BG</label>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
+                                            <label class="switch switch-green pull-right">
+                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.blur" ng-change="saveComponent()">
+                                              <span class="switch-label" data-on="On" data-off="Off"></span>
+                                              <span class="switch-handle"></span>
+                                            </label>
+                                        </div>
 
-                                    <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
-                                        <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
-                                        <input id="bg_parallax" bs-switch ng-model="componentEditing.bg.img.parallax" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                                    </div>
-                                    <div class="form-group" ng-show="componentEditing.bg.img.show">
-                                        <label for="bg_overlay">Under Nav</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
-                                        <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.undernav" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                                    </div>
-                                    <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
-                                        <label for="bg_overlay">Add Overlay</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
-                                        <input id="bg_overlay" bs-switch ng-model="componentEditing.bg.img.overlay" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                                    </div>
-                                    <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
-                                        <label for="bg_overlay_color">Add Overlay Color</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
-                                        <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
-                                    </div>
-                                    <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
-                                        <label for="bg_overlay_opacity">Add Overlay Opacity Percentage</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
-                                        <select id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" ng-change="saveComponent()" class="pull-right input-lg">
-                                            <option value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="30">30</option>
-                                            <option value="40">40</option>
-                                            <option value="50">50</option>
-                                            <option value="60">60</option>
-                                            <option value="70">70</option>
-                                            <option value="80">80</option>
-                                            <option value="90">90</option>
-                                            <option value="100">100</option>
-                                        </select>
-
-                                    </div>
-                                    <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
-                                        <label for="bg_position">BG Position</label>
-                                        <span tooltip-placement="top" tooltip-html-unsafe="Set Background image position."><i class="fa fa-info-circle" /></span>
-                                        <select id="bg_position" ng-model="componentEditing.bg.img.position" ng-change="saveComponent()" class="form-control input-lg">
-                                            <option value="center">Center</option>
-                                            <option value="left">Left</option>
-                                            <option value="right">Right</option>
-                                        </select>
+                                        <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
+                                            <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
+                                            <label class="switch switch-green pull-right">
+                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.parallax" ng-change="saveComponent()">
+                                              <span class="switch-label" data-on="On" data-off="Off"></span>
+                                              <span class="switch-handle"></span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group" ng-show="componentEditing.bg.img.show">
+                                            <label for="bg_overlay">Under Nav</label>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
+                                            <label class="switch switch-green pull-right">
+                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.undernav" ng-change="saveComponent()">
+                                              <span class="switch-label" data-on="On" data-off="Off"></span>
+                                              <span class="switch-handle"></span>
+                                            </label>
+                                        </div>
+                                        <hr ng-show="componentEditing.bg.img.show"></hr>
+                                        <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
+                                            <label for="bg_overlay">Add Overlay</label>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
+                                            <label class="switch switch-green pull-right">
+                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.overlay" ng-change="saveComponent()">
+                                              <span class="switch-label" data-on="On" data-off="Off"></span>
+                                              <span class="switch-handle"></span>
+                                            </label>
+                                        </div>
+                                        <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                            <label for="bg_overlay_color">Overlay Color</label>
+                                            <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
+                                            <div class="pull-right">
+                                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                                <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                            </div>
+                                        </div>
+                                        <div ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                            <div class="row">
+                                                <div class="col-xs-8">
+                                                    <label for="bg_overlay_opacity">Overlay Opacity</label>
+                                                    <span tooltip-placement="top" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
+                                                </div>
+                                                <div class="col-xs-4">
+                                                    <select id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" ng-change="saveComponent()" class="pull-right form-control mb0">
+                                                        <option value="10">10</option>
+                                                        <option value="20">20</option>
+                                                        <option value="30">30</option>
+                                                        <option value="40">40</option>
+                                                        <option value="50">50</option>
+                                                        <option value="60">60</option>
+                                                        <option value="70">70</option>
+                                                        <option value="80">80</option>
+                                                        <option value="90">90</option>
+                                                        <option value="100">100</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -278,20 +335,27 @@
                             <div class="form-group">
                                 <label for="colorpicker">Visibility:</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Show/hide component."><i class="fa fa-info-circle" /></span>
-                                <input bs-switch ng-model="componentEditing.visibility" type="checkbox" class="pull-right" ng-change="saveComponent()">
+                                <label class="switch switch-green pull-right">
+                                  <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.visibility" ng-change="saveComponent()">
+                                  <span class="switch-label" data-on="On" data-off="Off"></span>
+                                  <span class="switch-handle"></span>
+                                </label>
                             </div>
+                            <hr ng-if="componentEditing.type != 'navigation'"></hr>
                             <div class="form-group" ng-if="componentEditing.type != 'navigation'">
                                 <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
                                 <input class="form-control input-lg" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
                             </div>
+                            <hr></hr>
                             <div class="form-group">
-                                <label for="component-title" tooltip-placement="top" tooltip="The version of the component">Version</label>
+                                <label for="component-title">Version</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
                                 <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
                                 </select>
 
                             </div>
+                            <hr ng-if="componentEditing.type == 'image-text'"></hr>
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
                                 <label for="colorpicker">Image Position:</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
@@ -300,6 +364,7 @@
                                     <option value="right">Right</option>
                                 </select>
                             </div>
+                            <hr ng-if="componentEditing.type == 'simple-form'"></hr>
                             <div class="form-group" ng-if="componentEditing.type == 'simple-form'">
                                 <label for="from_email" tooltip-placement="top" tooltip="From email address">From Email</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="From email address."><i class="fa fa-info-circle" /></span>
@@ -597,10 +662,10 @@
                 </div>
                 <div class="modal-footer">
                     <div class="form-group row mb0">
-                        <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">
+                        <button type="button" class="btn btn-orange pull-right" data-dismiss="modal">
                             Done
                         </button>
-                        <button type="button" ng-click="revertComponent()" class="btn btn-primary pull-right" data-dismiss="modal" style="margin-right:5px;">
+                        <button type="button" ng-click="revertComponent()" class="btn btn-green pull-right" data-dismiss="modal" style="margin-right:5px;">
                             Revert
                         </button>
                     </div>
