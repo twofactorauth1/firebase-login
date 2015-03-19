@@ -29,7 +29,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
             meta(name="fragment" content="!")
             meta(property='og:type', content=og.type)
             meta(property='og:title', content=og.title)
-            meta(property='og:image', content=og.image)
+            if og.image
+                meta(property='og:image', content=og.image)
             base(href="/")
             link(rel="shortcut icon", href=account.website.settings.favicon)
 

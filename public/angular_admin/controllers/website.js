@@ -1015,7 +1015,7 @@ define([
       $scope.deleteComponent = function(componentId) {
         var pageId = $scope.currentPage._id;
         var deletedType;
-        $scope.deactivateAloha();
+        //$scope.deactivateAloha();
         for (var i = 0; i < $scope.components.length; i++) {
           if ($scope.components[i]._id == componentId) {
             deletedType = $scope.components[i].type;
