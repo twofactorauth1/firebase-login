@@ -773,10 +773,13 @@ define([
                 //if contains an array of variables
                 if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
                   //get index in array
-                  var first = componentVar.split(".")[0];
-                  var second = componentEditable[i2].attributes['data-index'].value;
-                  var third = componentVar.split(".")[2];
-                  matchingComponent[first][second][third] = componentVarContents;
+                  if(!$(componentEditable[i2]).parents().hasClass("slick-cloned"))
+                  {
+                    var first = componentVar.split(".")[0];
+                    var second = componentEditable[i2].attributes['data-index'].value;
+                    var third = componentVar.split(".")[2];
+                    matchingComponent[first][second][third] = componentVarContents;
+                  }                 
                 }
                 //if contains an array of array variables
                 if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
@@ -1203,11 +1206,15 @@ define([
               //if contains an array of variables
               if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
                 //get index in array
+               if(!$(componentEditable[i2]).parents().hasClass("slick-cloned"))
+               {
                 var first = componentVar.split(".")[0];
                 var second = componentEditable[i2].attributes['data-index'].value;
                 var third = componentVar.split(".")[2];
                 if (matchingComponent[first][second])
                   matchingComponent[first][second][third] = componentVarContents;
+               }
+                
               }
               //if contains an array of array variables
               if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {

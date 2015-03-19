@@ -1005,6 +1005,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.deleteTestimonial = function(componentId, index) {
       window.parent.deleteTestimonial(componentId, index);
+
     }
 
 
@@ -1017,6 +1018,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         "text": "Description"       
       }
       window.parent.addTestimonial(componentId, newTestimonial, index);
+     // $(".slick-slider")[0].slick.unload();
+     // $(".slick-slider")[0].slick.reinit();
     }
 
 
@@ -1246,7 +1249,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
+          if($(".slick-slider"))         
+            $(".slick-slider")[0].slick.refresh();
       }, 200);
+
     };
 
     window.updateContactComponent = function(data, networks) {

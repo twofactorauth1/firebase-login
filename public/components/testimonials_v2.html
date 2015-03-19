@@ -12,39 +12,47 @@
 <div ng-class="component.type+'-v'+component.version">
     
     <div class="title col-xs-12">
-        <div class="editable" data-class="title">
-            <span ng-bind-html="component.title"></span>
-        </div>
+        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
     </div>
 
    <div class="clearfix"></div>
 
-   <div style="position: relative;">
-    <slick slides-to-show='1' slides-to-scroll='1' autoplay= "true" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
-        <div ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active">
-        <img ng-src="{{testimonial.image}}" style="margin:auto;">
-        <div class="">
-                <div class="single-testimonial row ">
-                    <div class="col-sm-12">
-                        <div class="text">
-                            <div class="editable" data-class="testimonials.item.text" data-index="{{$index}}">
-                                <span ng-bind-html="testimonial.text"></span>
+   <div style="position: relative;" class="testimonial-wrap">
+    <slick slides-to-show='1' slides-to-scroll='1' on-re-init autoplay= "{{isEditing ? false : true}}" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
+            <div ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
+                <div class="img">
+                    <div class="center editable" data-index="{{$index}}" data-class="testimonials.item.img" ng-bind-html="testimonial.img | unsafe"></div>
+                </div>
+               
+                    <div class="row ">
+                        <div class="col-sm-12">
+                            <div class="text">
+                                <div class="editable" data-class="testimonials.item.text" data-index="{{$index}}" ng-bind-html="testimonial.text">
+                                </div>
                             </div>
-                        </div>
-                        <h4 class="name">
-                            <div class="editable" data-class="testimonials.item.name" data-index="{{$index}}">
-                                <convert-html contents="{{testimonial.name}}"></convert-html>
-                            </div>
-                        </h4>
-                        <div class="site">
-                            <div class="editable" data-class="testimonials.item.site" data-index="{{$index}}">
-                                <span ng-bind-html="testimonial.site"></span>
+                            <h4 class="name">
+                                <div class="editable" data-class="testimonials.item.name" data-index="{{$index}}" ng-bind-html="testimonial.name">
+                                </div>
+                            </h4>
+                            <div class="site">
+                                <div class="editable" data-class="testimonials.item.site" data-index="{{$index}}" ng-bind-html="testimonial.site">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-        </div>
-      </div>
+                    <div ng-if="isEditing" class="delete-single-testimonial center">
+                        <button ng-click="deleteTestimonial(component._id,$index)" class="ng-scope btn-delete-single-testimonial">
+                        <i class='fa fa-trash'></i>
+                        </button>
+                    </div>
+                    <div ng-if="isEditing" class="add-addtional center">
+                        <a href="" ng-click="addTestimonial(component._id,$index)">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>                      
+                
+            </div>        
+        
     </slick>
   </div>
 </div>
