@@ -12,7 +12,8 @@ define([
     'jquery',
     'mediaDirective',
     'checkImageDirective',
-    'blockUI'
+    'blockUI',
+    'toasterService'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -21,8 +22,8 @@ define([
         'WebsiteService',
         'ngProgress',
         'toaster',
-        'blockUI',
-        function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI) {
+        'blockUI', '$state', 'ToasterService',
+        function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI, $state, ToasterService) {
             ngProgress.start();
             var account;
             $scope.showToaster = false;
@@ -165,6 +166,13 @@ define([
             });
 
             UserService.getAccount(function(account) {
+              if (account.credentials.length == 0) {
+                $scope.userPreferences.account_default_tab = 'billing';
+                UserService.updateUserPreferences($scope.userPreferences, $scope.showToaster, function() {
+                  ToasterService.setPending('warning', "No Subscription");
+                  $state.go('account');
+                });
+              }
                 $scope.account = account;
                 this.account = account;
 
@@ -281,16 +289,16 @@ define([
                     $scope.pagesPaging.disablePaging = true;
                     $scope.pagesPaging.page--;
                     $scope.loadWebsitePages();
-                }                
+                }
             };
 
-            $scope.goToPage = function(index) { 
+            $scope.goToPage = function(index) {
                 if($scope.pagesPaging.page !==  index && index !=="...")
                 {
                     $scope.pagesPaging.disablePaging = true;
                     $scope.pagesPaging.page = index;
                     $scope.loadWebsitePages();
-                } 
+                }
             };
 
             $scope.calculatePages = function()
@@ -320,17 +328,17 @@ define([
                         $scope.paging.push(pageNumber);
                     }
                     i ++;
-                }  
+                }
             }
 
-            $scope.nextPageDisabled = function() {                
+            $scope.nextPageDisabled = function() {
                 return $scope.pagesPaging.page === $scope.pageCount() ? true : false;
             };
-            $scope.prevPageDisabled = function() {                
+            $scope.prevPageDisabled = function() {
                 return $scope.pagesPaging.page <= 1 ? true : false;
             };
             $scope.pageCount = function() {
-                var totalPages = Math.ceil($scope.pagesPaging.total / $scope.numPerPage);                                     
+                var totalPages = Math.ceil($scope.pagesPaging.total / $scope.numPerPage);
                 return totalPages;
             };
 
@@ -366,13 +374,13 @@ define([
                 });
 
             }
-            $scope.goToPostPage = function(index) { 
+            $scope.goToPostPage = function(index) {
                 if($scope.postPaging.page !==  index && index !== '...')
                 {
                     $scope.postPaging.disablePaging = true;
                     $scope.postPaging.page = index;
                     $scope.loadWebsitePosts();
-                } 
+                }
             };
             $scope.postNextPage = function() {
                  if($scope.postPaging.page !== $scope.postCount())
@@ -419,11 +427,11 @@ define([
                         $scope.pagingPost.push(pageNumber);
                     }
                     i ++;
-                }  
+                }
             }
 
             $scope.postCount = function() {
-                var totalPosts = Math.ceil($scope.postPaging.total / $scope.numPerPage);                
+                var totalPosts = Math.ceil($scope.postPaging.total / $scope.numPerPage);
                 return totalPosts;
             };
 
