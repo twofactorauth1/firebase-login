@@ -1810,7 +1810,7 @@ define([
         $scope.componentEditing = _.findWhere($scope.components, {
           _id: componentId
         });
-        $scope.updateSingleComponent(componentId);
+       // $scope.updateSingleComponent(componentId);
         $scope.componentEditing.testimonials.splice(index + 1, 0, newTestimonial);
         $scope.saveCustomComponent();
       }

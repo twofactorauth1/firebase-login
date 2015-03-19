@@ -1264,8 +1264,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
-          if($(".slick-slider"))         
-            $(".slick-slider")[0].slick.refresh();
+          //if($(".slick-slider"))         
+            //$(".slick-slider")[0].slick.refresh();
       }, 200);
 
     };
