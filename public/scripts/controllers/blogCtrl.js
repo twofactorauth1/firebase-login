@@ -237,6 +237,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 that.post.post_excerpt = post_excerpt_container.text();
+            setTimeout(function() {
+              $scope.$apply(function() {
+                activateAloha();
+              });
+            });
         }
         $scope.changeBlogImage = function(blogpost) {
           window.parent.changeBlogImage(blogpost);
@@ -285,7 +290,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         $scope.isEditing = true;
         for(name in CKEDITOR.instances)
         {
-            CKEDITOR.instances[name].destroy()
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
         }
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
