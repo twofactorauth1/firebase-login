@@ -21703,6 +21703,14 @@ div.error label.error:before {
   height: 180px;
   border-radius: 5px;
 }
+#component-setting-modal .add-image input {
+  margin-top: 60px;
+}
+#component-setting-modal .add-image .btn-wrap {
+  width: 125px;
+  height: 35px;
+  margin: 0 auto;
+}
 .add_section {
   padding: 10px;
   border-radius: 5px;
