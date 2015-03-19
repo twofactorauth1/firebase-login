@@ -30,7 +30,7 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
-            title:"<h1>Thumbnail Slider</h1>",
+            title:"<h1>Testimonials</h1>",
 
             txtcolor: "#444",
 

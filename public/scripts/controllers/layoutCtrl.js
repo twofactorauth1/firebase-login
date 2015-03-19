@@ -1020,6 +1020,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.deleteTestimonial = function(componentId, index) {
       window.parent.deleteTestimonial(componentId, index);
+
     }
 
 
@@ -1032,6 +1033,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         "text": "Description"       
       }
       window.parent.addTestimonial(componentId, newTestimonial, index);
+     // $(".slick-slider")[0].slick.unload();
+     // $(".slick-slider")[0].slick.reinit();
     }
 
 
@@ -1045,9 +1048,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     window.activateAloha = function() {
       //if ($scope.activated == false) {
       for(name in CKEDITOR.instances)
-      {
-          CKEDITOR.instances[name].destroy()
-      }
+        {
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
+        }
       $scope.isEditing = true;
       CKEDITOR.disableAutoInline = true;
       var elements = $('.editable');
@@ -1062,6 +1066,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             on: {
               instanceReady: function(ev) {
                 var editor = ev.editor;                
+               // CKEDITOR.replace(editor.name);                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -1261,7 +1266,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
+          //if($(".slick-slider"))         
+            //$(".slick-slider")[0].slick.refresh();
       }, 200);
+
     };
 
     window.updateContactComponent = function(data, networks) {

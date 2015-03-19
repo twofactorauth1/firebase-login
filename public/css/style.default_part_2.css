@@ -11728,6 +11728,52 @@ contenthover a {
   margin-top: 20px;
 }
 
+.editing .testimonials-v2 .testimonial-wrap .testimonials {
+  left: 20%;
+  right: 20%;
+}
+
+.editing .testimonials-v2 .testimonial-wrap .single-testimonial {
+  border: 4px solid rgba(0, 0, 0, 0);
+  position: relative;
+}
+
+.editing .testimonials-v2 .testimonial-wrap .single-testimonial.edit-mode {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover {
+  border: 4px dashed rgba(0, 0, 0, 0.4);
+}
+
+.editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .add-addtional {
+  display: block;
+  font-size: 28px;
+  bottom: -25px;
+}
+
+.editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .delete-single-testimonial .btn-delete-single-testimonial {
+  background: rgba(0, 0, 0, 0.5);
+  display: block;
+  border: 0;
+  color: #ffffff;
+  padding: 10px 15px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1050;
+}
+
+.editing .testimonials-v2 .testimonial-wrap .delete-single-testimonial .btn-delete-single-testimonial {
+  display: none;
+}
+
+.editing .testimonials-v2 .testimonials {
+  padding: 25px;
+  margin-bottom: 20px;
+}
+
 .testimonials-v2 {
   height: 100%;
   display: block;
@@ -11754,6 +11800,11 @@ contenthover a {
   text-align: center;
   top: 0px;
   text-shadow: none;
+}
+
+.testimonials-v2 .img img {
+  margin: 0 auto;
+  max-width: 100%;
 }
 
 .testimonials-v2 .slick-dots {
