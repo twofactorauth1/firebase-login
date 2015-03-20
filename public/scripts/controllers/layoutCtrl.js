@@ -1360,6 +1360,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.wait;
 
     $scope.sortableOptions = {
+      parentElement : "body",
       dragStart: function(e, ui) {
         console.log('Start sorting');
         var componentId = e.source.itemScope.modelValue._id;

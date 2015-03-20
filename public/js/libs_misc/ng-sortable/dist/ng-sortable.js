@@ -766,6 +766,23 @@
               targetX = eventObj.pageX - $document[0].documentElement.scrollLeft;
               targetY = eventObj.pageY - ($window.pageYOffset || $document[0].documentElement.scrollTop);
 
+              //Fix to move dragable item over scrolls
+
+              //alert(scope.options["parentElement"])
+              if(scope.options["parentElement"])
+              {
+                var parentElement = $(scope.options["parentElement"]);
+                var top = parentElement.scrollTop();
+                var containerHeight = parentElement.height() + 10;
+                if (targetY > containerHeight) {
+                  parentElement.scrollTop(top + 10);
+                }
+                if (targetY < containerHeight) {
+                  parentElement.scrollTop(top - 10);
+                }
+              }
+              
+
               //IE fixes: hide show element, call element from point twice to return pick correct element.
               dragElement.addClass(sortableConfig.hiddenClass);
               $document[0].elementFromPoint(targetX, targetY);

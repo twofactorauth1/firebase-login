@@ -1531,6 +1531,7 @@ define([
           orderChanged: function(event) {
               console.log('orderChanged');
           },
+          parentElement : "#component-setting-modal .tab-content",
           scrollableContainer: 'reorderNavBarContainer'
       };
 
