@@ -27,6 +27,7 @@ define([
 ], function(app) {
   app.register.controller('WebsiteCtrl', [
     '$scope',
+    '$interval',
     '$window',
     '$timeout',
     '$location',
@@ -39,7 +40,7 @@ define([
     'NavigationService',
     'SweetAlert',
     'blockUI',
-    function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
       var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
       ngProgress.start();
       UserService.getUserPreferences(function(preferences) {
@@ -49,10 +50,15 @@ define([
         }
       });
       $scope.showOnboarding = false;
+      $scope.timeInterval = 200000;
+      $scope.redirect = false;
+      var stopInterval;
+
       $scope.stepIndex = 0;
       $scope.onboardingSteps = [{
         overlay: false
       }]
+
       $scope.beginOnboarding = function(type) {
 
         $scope.obType = type;
@@ -687,16 +693,19 @@ define([
       };
 
       //TODO: use scope connection
-      $scope.savePage = function() {
+      $scope.savePage = function(autoSave) {         
         $scope.saveLoading = true;
         $scope.isDirty = false;
+        var msg = "Post Saved";
+        if(autoSave)
+          msg = "Auto Saved";
         var iFrame = document.getElementById("iframe-website");
         if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
           iFrame.contentWindow.checkOrSetPageDirty(true);
         }
         if ($location.$$search['posthandle']) {
           $scope.single_post = true;
-          iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
+          iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
           $scope.isEditing = true;
         } else {
           $scope.validateEditPage($scope.currentPage);
@@ -825,8 +834,15 @@ define([
           WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
             $scope.isEditing = true;
             WebsiteService.setEditedPageHandle($scope.currentPage.handle);
-
-            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+            if(!$scope.redirect)
+              $scope.autoSavePage();            
+            else
+              $scope.stopAutoSavePage();
+            $scope.redirect = false;  
+            if(autoSave)
+              toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+            else
+              toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
             $scope.saveLoading = false;
             iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
 
@@ -1365,8 +1381,8 @@ define([
 
       $scope.changesConfirmed = false;
       $scope.isDirty = false;
-      //Before user leaves editor, ask if they want to save changes
-      var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+      //Before user leaves editor, ask if they want to save changes      
+      var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {            
         var isDirty = false;
         var iFrame = document.getElementById("iframe-website");
         if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
@@ -1374,8 +1390,7 @@ define([
         }
 
         if (isDirty && !$scope.changesConfirmed) {
-          event.preventDefault();
-
+          event.preventDefault();                    
           SweetAlert.swal({
               title: "Are you sure?",
               text: "You have unsaved data that will be lost",
@@ -1390,6 +1405,7 @@ define([
             function(isConfirm) {
               if (isConfirm) {
                 SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                $scope.redirect = true;
                 $scope.savePage();
               } else {
                 SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
@@ -1400,9 +1416,13 @@ define([
               offFn();
             });
         } else if ($scope.changesConfirmed) {
-          //do nothing
+          $scope.stopAutoSavePage();
         }
-
+        else
+        {
+          $scope.stopAutoSavePage();
+        }
+          
       });
 
       //Add Link to navigation
@@ -1734,13 +1754,30 @@ define([
         else
           return $scope.componentEditing.networks;
       }
+     
+      $scope.autoSavePage = function() {
+          $scope.stopAutoSavePage();  
+          stopInterval = $interval(function() { 
+          console.log("Auto saving data...");           
+              $scope.savePage(true);           
+          }, $scope.timeInterval);
+      };
+
+      $scope.stopAutoSavePage = function() {
+        if (angular.isDefined(stopInterval)) {
+          $interval.cancel(stopInterval);
+          stopInterval = undefined;          
+          console.log("Cancel interval");
+        }
+      };
 
       window.updateAdminPageScope = function(page) {
         $scope.singlePost = false;
         console.log("Updating admin scope")
         $scope.$apply(function() {
            editBlockUI.stop();
-           $scope.iframeLoaded = true;
+           $scope.iframeLoaded = true; 
+           $scope.autoSavePage();
         })       
         if(page)
         {

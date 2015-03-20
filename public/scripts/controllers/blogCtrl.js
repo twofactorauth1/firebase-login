@@ -176,7 +176,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
         };
 
-         window.savePostMode=function(toaster){
+         window.savePostMode=function(toaster, msg){
 
             var post_data =  angular.copy(that.post);
             post_data.post_tags.forEach(function(v,i) {
@@ -212,10 +212,10 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
             PostService.updatePost(pageId, post_data._id,post_data,function(data){
                 console.log(data);
-                console.log("Post Saved");
+                console.log(msg);
                 window.parent.window.setLoading(false);
                 if(toaster)
-                    toaster.pop('success', "Post Saved");
+                    toaster.pop('success', msg);
             });
         };
         $scope.refreshPost = function()
