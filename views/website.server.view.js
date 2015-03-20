@@ -87,7 +87,7 @@ _.extend(view.prototype, BaseView.prototype, {
         title: value.website.title,
         image: value.website.settings.favicon
       };
-        if(data.og.image.indexOf('//') === 0) {
+        if(data.og.image && data.og.image.indexOf('//') === 0) {
             data.og.image = 'http:' + data.og.image;
         }
       data.includeEditor = isEditor;
