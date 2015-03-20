@@ -27,6 +27,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
+                    var iframe = window.parent.document.getElementById("iframe-website")
+                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope();
                     // console.log("current Page");
                     // console.log($scope.$parent)
             }

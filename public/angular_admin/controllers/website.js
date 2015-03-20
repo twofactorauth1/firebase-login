@@ -451,13 +451,11 @@ define([
         if ($scope.isEditing) {
           if ($("#iframe-website").contents().find("body").length) {
             setTimeout(function() {
-              $scope.editPage();
-              $scope.iframeLoaded = true;
-              editBlockUI.stop();
+              $scope.editPage();              
               if ($location.$$search.onboarding) {
                 $scope.showOnboarding = true;
               }
-            }, 5000)
+            }, 1000)
           }
         }
 
@@ -627,7 +625,7 @@ define([
 
         if (iframe.contentWindow.copyPostMode) {
           iframe.contentWindow.copyPostMode();
-          $scope.post_data = iframe.contentWindow.getPostData();
+          $scope.post_data = iframe.contentWindow.getPostData();          
         }
         $scope.activateAloha();
         $scope.backup['website'] = angular.copy($scope['website']);
@@ -1739,19 +1737,25 @@ define([
       window.updateAdminPageScope = function(page) {
         $scope.singlePost = false;
         console.log("Updating admin scope")
-        if (!$scope.currentPage) {
-          $scope.$apply(function() {
-            $scope.currentPage = page;
-            //get components from page
-            if ($scope.currentPage && $scope.currentPage.components) {
-              $scope.components = $scope.currentPage.components;
-            } else {
-              $scope.components = [];
-            }
-            $scope.originalCurrentPage = angular.copy($scope.currentPage);
-          })
-        }
-
+        $scope.$apply(function() {
+           editBlockUI.stop();
+           $scope.iframeLoaded = true;
+        })       
+        if(page)
+        {
+          if (!$scope.currentPage) {
+            $scope.$apply(function() {
+              $scope.currentPage = page;
+              //get components from page
+              if ($scope.currentPage && $scope.currentPage.components) {
+                $scope.components = $scope.currentPage.components;
+              } else {
+                $scope.components = [];
+              }
+              $scope.originalCurrentPage = angular.copy($scope.currentPage);
+            })
+          }
+        } 
       }
 
       window.checkIfSinglePost = function(post) {
