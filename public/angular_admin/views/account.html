@@ -282,7 +282,8 @@
                                     <h2 class="center total" ng-show="upcomingInvoice">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}
                                             <span>/{{subscription.plan.interval}}</span>
                                         </h2>
-                                    <p class="center">Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
+                                    <p class="center" ng-show='upcomingInvoice'>Next Billing Date: {{upcomingInvoice.next_payment_attempt*1000 | date : 'longDate'}}</p>
+                                    <p class="center" ng-hide='upcomingInvoice'>No subscription</p>
                                 </div>
                             </div>
                             <div class="col-sm-6">
