@@ -166,7 +166,7 @@ define([
             });
 
             UserService.getAccount(function(account) {
-              if (account.credentials.length == 0) {
+              if (account.locked_sub == undefined || account.locked_sub == false) {
                 UserService.getUserPreferences(function(preferences) {
                     $scope.preferences = preferences;
                     $scope.userPreferences.account_default_tab = 'billing';

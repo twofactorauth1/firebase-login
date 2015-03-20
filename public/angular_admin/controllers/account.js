@@ -287,7 +287,7 @@ define(['app', 'userService', 'paymentService', 'skeuocardDirective', 'ngProgres
       });
 
       UserService.getAccount(function(account) {
-        if (account.credentials.length == 0) {
+        if (account.locked_sub == undefined || account.locked_sub == false) {
           ToasterService.show('warning', "No Subscription");
         }
         ToasterService.processPending();
