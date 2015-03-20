@@ -5,7 +5,7 @@
     <div class="pageheader row">
         <div class="col-xs-12">
             <h2><i class="fa fa-bullhorn"></i>  Marketing</h2>
-        </div>        
+        </div>
         <div class="clear"></div>
     </div>
 
@@ -29,18 +29,18 @@
 
     <div class="contentpanel" ng-style="styleMarketingSection()" indigeweb-resize>
         <div class="campaign-section" ng-show="activeTab == 'campaigns'">
-            <div class="col-xs-12 col-sm-6 col-md-4 add-campaign">                  
-                <div class="grid-list-item">       
-                    <div class="add-wrap">     
-                        <div class="center">       
-                            <span class="fa fa-bullhorn"></span>       
-                        </div>     
-                        <div class="clearfix"></div>       
-                        <div class="center">       
-                            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#marketing-add-campaign"><span class="fa fa-plus"></span> ADD CAMPAIGN</button>        
-                        </div>     
-                    </div>     
-                </div>     
+            <div class="col-xs-12 col-sm-6 col-md-4 add-campaign">
+                <div class="grid-list-item">
+                    <div class="add-wrap">
+                        <div class="center">
+                            <span class="fa fa-bullhorn"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="center">
+                            <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#marketing-add-campaign"><span class="fa fa-plus"></span> ADD CAMPAIGN</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4 single-campaign" ng-repeat="campaign in campaigns track by $index">
                 <div class="grid-list-item btn-view-product-details" data-productid="1">
