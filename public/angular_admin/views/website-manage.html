@@ -117,10 +117,14 @@
         </div>
 
         <div class="pages-section" ng-switch-when="pages">
-
+          <div class='row'>
+            <div class='col-sm-4'></div>
+            <div class='col-sm-4'><input type='text' placeholder='search for page' class='form-control' ng-model='pageSearch.title'></div>
+            <div class='col-sm-4'></div>
+          </div>
             <div class="row">
                  <div class="col-xs-18 col-sm-6 col-md-3">
-                    <div class="thumbnail layered-paper">                        
+                    <div class="thumbnail layered-paper">
                             <h4 class="title">Add new page</h4>
                         <h5 style="margin-top:0;color: #999;font-weight: normal;">&nbsp;</h5>
                             <div class="screenshot-wrap scrollhover">
@@ -128,13 +132,13 @@
                                     <h1 class="center"><i class="fa fa-file"></i></h1>
                                 </div>
                             </div>
-                            <div class="caption">                                
+                            <div class="caption">
                                 <a href="" class="btn btn-green btn-block" role="button" data-toggle="modal" data-target="#create-page-modal">
                                     <i class="fa fa fa-plus"></i> Add</a>
                             </div>
                         </div>
                     </div>
-                <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|orderBy:'modified.date':true track by $index">
+                <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
                     <div class="thumbnail layered-paper">
                         <a href="/admin#/website-editor?pagehandle={{page.handle}}">
                             <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
@@ -156,7 +160,7 @@
                 <div class="pagination pagination-centered website-pagination" ng-if="pagesPaging.total && pagesPaging.total > numPerPage">
                     <ul class="pagination">
                         <li ng-class="{disabled: pagesPaging.disablePaging || pagesPaging.page <= 1}"><a href="" ng-click="pagesPaging.disablePaging ? '' : previousPage()">PREV</a></li>
-                        <li ng-class="{disabled: pagesPaging.disablePaging || page === '...', active:page === pagesPaging.page}" ng-repeat="page in paging track by $index"><a href="" ng-click="pagesPaging.disablePaging ? '' : goToPage(page)">{{page}}</a></li>                        
+                        <li ng-class="{disabled: pagesPaging.disablePaging || page === '...', active:page === pagesPaging.page}" ng-repeat="page in paging track by $index"><a href="" ng-click="pagesPaging.disablePaging ? '' : goToPage(page)">{{page}}</a></li>
                         <li  ng-class="{disabled: pagesPaging.disablePaging || (pagesPaging.page === pageCount())}"><a href="" ng-click="pagesPaging.disablePaging ? '' : nextPage()">NEXT</a></li>
                         <li ng-if="pagesPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
                     </ul>
@@ -167,11 +171,16 @@
         </div>
 
         <div class="posts-section" ng-switch-when="posts">
-            <div class="row">                
-                <div class="col-xs-12 col-sm-6 col-md-3">                   
+          <div class='row'>
+            <div class='col-sm-4'></div>
+            <div class='col-sm-4'><input type='text' placeholder='search for post' class='form-control' ng-model='postSearch.post_title'></div>
+            <div class='col-sm-4'></div>
+          </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="paper-wrap">
                         <div class="paper">
-                            <div class="tape"></div>                           
+                            <div class="tape"></div>
                             <ul id="lines">
                                 <li class="first">
                                     <h4 class="title">Add new post</h4>
@@ -187,14 +196,14 @@
                                 <li></li>
                                 <li></li>
                                 <div class="screenshot-wrap">
-                                    <div class="screenshot-overflow">    
+                                    <div class="screenshot-overflow">
                                         <div class="excerpt">
                                             <h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-file-text"></i></h1>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="caption">
-                                    <a href="" data-toggle="modal"  class="btn btn-green btn-block" role="button" data-target="#create-post-modal"><i class="fa fa-add"></i> Add</a>                                   
+                                    <a href="" data-toggle="modal"  class="btn btn-green btn-block" role="button" data-target="#create-post-modal"><i class="fa fa-add"></i> Add</a>
                                 </div>
                             </ul>
                         </div>
@@ -202,8 +211,7 @@
                         <div class="right-shadow"></div>
                     </div>
                 </div>
-
-                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | orderBy :'modified.date':true track by $index">
+                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | filter: postSearch| orderBy :'modified.date':true track by $index">
                     <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
