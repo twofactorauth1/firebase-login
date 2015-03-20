@@ -1,5 +1,10 @@
 mainApp.filter('urlFilter', function() {
     return function(url) {
-	      return url.replace(/\W+/g, "").toLowerCase();
+        if(url) {
+            return url.replace(/\W+/g, "").toLowerCase();
+        } else {
+            //console.log('url is undefined.');
+        }
+
     }
 });
