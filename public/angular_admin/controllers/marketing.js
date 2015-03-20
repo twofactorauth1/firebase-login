@@ -156,6 +156,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             posts[i].socialAccountId = socialId;
             $scope.fbPostsLength += 1;
             posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
+            console.log('posts[i] ', posts[i]);
             $scope.feed.push(posts[i]);
           };
         }
@@ -220,6 +221,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         socialAccountMap[value.id] = value.type;
       });
 
+
       config.trackedObjects.forEach(function(value, index) {
         if (socialAccountMap[value.socialId] == undefined) {
           console.warn(value.socialId, 'Account mapping missing.');
@@ -260,6 +262,11 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
         }
 
+        if (value.type != 'profile' && value.type != 'numberFollowers' && value.type!= 'pages' && value.type != 'feed') {
+          console.warn('missing value.type ', value.type);
+          socialPromises.push([]);
+        }
+
         // config.socialAccounts.forEach(function(value, index) {
         //   if (value.type == 'go') {
         //     $scope.feedTypes.push('google-plus');
@@ -284,7 +291,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         //   continue;
         // }
       });
-
+      console.log('socialPromises ', socialPromises.length);
+      console.log('promiseProcessor ', promiseProcessor.length);
       $q.all(socialPromises)
         .then(function(data) {
           data.forEach(function(value, index) {

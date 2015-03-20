@@ -6054,21 +6054,21 @@ h4,
   border-color: #3d8b9f;
 }
 .btn-green {
-  background-color: #138f77;
-  border-bottom: 4px solid #0f6c5a;
+  background-color: #39b06c;
+  border-bottom: 4px solid #268d49;
   color: white;
 }
 .btn-green:hover,
 .btn-green:active,
 .btn-green.active,
 .open .dropdown-toggle.btn-green {
-  background-color: #16a085;
-  border-color: #16a085;
+  background-color: #39b06c;
+  border-color: #39b06c;
   color: white;
 }
 .btn-light-green {
   background-color: #2abb9b;
-  border-bottom: 4px solid #1f8972;
+  border-bottom: 4px solid #268d49;
   color: white;
 }
 .btn-light-green:hover,
@@ -6294,13 +6294,11 @@ h4,
 .btn-orange {
   color: #fff;
   background: #f38108;
-  border-color: #de7504;
 }
 .btn-orange:hover,
 .btn-orange:active,
 .btn-orange:focus {
   background: #de7504;
-  border-color: #d67003;
   color: #fff;
 }
 .btn-orange-alt {
@@ -20151,6 +20149,13 @@ div.error label.error:before {
   overflow: hidden;
   border: 1px solid #dddddd;
 }
+.website-manage .screenshot-wrap .screenshot {
+  width: 255px;
+  height: 120px;
+  background-size: cover;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+}
 .website-manage .screenshot-wrap img {
   width: 100%;
   height: auto;
@@ -20171,6 +20176,17 @@ div.error label.error:before {
 .website-manage .timeago {
   margin-top: 0;
   color: #999;
+}
+.website-manage .pages-section .add-wrap {
+  height: 245px;
+  background: #e4e7ea;
+  border-radius: 3px;
+}
+.website-manage .pages-section .add-wrap .page-icon .fa {
+  font-size: 134px;
+  text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5), -1px -1px 1px rgba(119, 119, 119, 0.7);
+  color: #bdc3c9;
+  line-height: 180px;
 }
 .website-manage .pages-section .thumbnail {
   padding: 10px;
@@ -20324,7 +20340,7 @@ div.error label.error:before {
 }
 .website-manage .posts-section .paper {
   position: relative;
-  width: 275px;
+  width: 255px;
   height: 260px;
   background-color: #fff;
   border: 1px solid #e3e3e3;
@@ -20355,7 +20371,7 @@ div.error label.error:before {
 }
 .website-manage .posts-section .paper .caption .btn-green {
   margin: -36px 0 10px 9px;
-  width: 255px;
+  width: 235px;
 }
 .website-manage .posts-section ul#lines {
   margin-top: 40px;
@@ -21681,6 +21697,41 @@ div.error label.error:before {
 #component-setting-modal ul.nav {
   margin-top: 0!important;
 }
+#component-setting-modal .form-horizontal label {
+  margin-top: 8px;
+}
+#component-setting-modal .tab-content h4 {
+  margin: 2px 10px 0 0;
+  color: #b6b6b6;
+}
+#component-setting-modal .fa-close {
+  position: absolute;
+  right: 0;
+  margin: -5px 6px 0 0;
+  background: #fff;
+  border-radius: 12px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  line-height: 20px;
+  border: 1px solid #e7e7e7;
+}
+#component-setting-modal .fa-close:hover {
+  background: #e7e7e7;
+}
+#component-setting-modal .add-image {
+  background: #e7e7e7;
+  height: 180px;
+  border-radius: 5px;
+}
+#component-setting-modal .add-image input {
+  margin-top: 60px;
+}
+#component-setting-modal .add-image .btn-wrap {
+  width: 125px;
+  height: 35px;
+  margin: 0 auto;
+}
 .add_section {
   padding: 10px;
   border-radius: 5px;
@@ -22206,8 +22257,8 @@ input[type='file'] {
   position: relative;
   display: inline-block;
   vertical-align: top;
-  width: 56px;
-  height: 20px;
+  width: 75px;
+  height: 25px;
   padding: 3px;
   background-color: white;
   border-radius: 18px;
@@ -22257,13 +22308,13 @@ input[type='file'] {
   content: attr(data-off);
   right: 11px;
   color: #aaa;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
 }
 .switch-label:after {
   content: attr(data-on);
   left: 11px;
   color: white;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
   opacity: 0;
 }
 .switch-input:checked ~ .switch-label {
@@ -22279,9 +22330,9 @@ input[type='file'] {
 .switch-handle {
   position: absolute;
   top: 4px;
-  left: 4px;
-  width: 18px;
-  height: 18px;
+  left: 5px;
+  width: 22px;
+  height: 22px;
   background: white;
   border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
@@ -22311,11 +22362,11 @@ input[type='file'] {
   background-image: linear-gradient(to bottom, #eeeeee, #ffffff);
 }
 .switch-input:checked ~ .switch-handle {
-  left: 40px;
+  left: 48px;
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 .switch-green > .switch-input:checked ~ .switch-label {
-  background: #4fb845;
+  background: #42b77a;
 }
 .blog-item {
   background: #fcfcfc;
@@ -24490,7 +24541,7 @@ body.editing .fragment:hover .add-component {
 }
 .ui-sortable .componentActions h4 {
   background: rgba(44, 62, 80, 0.8);
-  padding: 17px;
+  padding: 16px;
   color: white;
   font-size: 18px;
   margin: 0;
