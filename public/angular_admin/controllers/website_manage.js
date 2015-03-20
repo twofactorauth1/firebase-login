@@ -476,6 +476,7 @@ define([
             $scope.createPageValidated = false;
 
             $scope.validateCreatePage = function(page) {
+                $scope.createPageValidated = false;
                 if (page.handle == '') {
                     $scope.handleError = true
                 } else {
@@ -524,6 +525,7 @@ define([
                     WebsiteService.createPage(websiteId, pageData, function(newpage) {
                         toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
                         $('#create-page-modal').modal('hide');
+                        validateCreatePage
                         $scope.pages.push(newpage);
                     });
                 } else {
@@ -567,6 +569,9 @@ define([
                         toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
                         $('#create-page-modal').modal('hide');
                         $scope.pages.push(newpage);
+                        page.title = "";
+                        page.handle= "";
+                        $scope.showChangeURL = false;                        
                     });
                 } else {
                     toaster.pop('error', "Page URL " + page.handle, "Already exists");
