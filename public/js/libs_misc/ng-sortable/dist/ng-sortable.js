@@ -59,7 +59,7 @@
          * @returns {String} Height
          */
         height: function (element) {
-          return element[0].getBoundingClientRect().height;
+          return element.prop('offsetHeight');
         },
 
         /**
@@ -69,7 +69,7 @@
          * @returns {String} Width
          */
         width: function (element) {
-          return element[0].getBoundingClientRect().width;
+          return element.prop('offsetWidth');
         },
 
         /**
@@ -205,7 +205,7 @@
          */
         movePosition: function (event, element, pos, container, containerPositioning, scrollableContainer) {
           var bounds;
-          var useRelative = (containerPositioning === 'relative');
+          var useRelative = true; //(containerPositioning === 'relative');
 
           element.x = event.pageX - pos.offsetX;
           element.y = event.pageY - pos.offsetY;
@@ -221,18 +221,7 @@
               // reset bounds
               bounds.left = 0;
               bounds.top = 0;
-            }
-
-            if (element.x < bounds.left) {
-              element.x = bounds.left;
-            } else if (element.x >= bounds.width + bounds.left - this.offset(element).width) {
-              element.x = bounds.width + bounds.left - this.offset(element).width;
-            }
-            if (element.y < bounds.top) {
-              element.y = bounds.top;
-            } else if (element.y >= bounds.height + bounds.top - this.offset(element).height) {
-              element.y = bounds.height + bounds.top - this.offset(element).height;
-            }
+            }            
           }
 
           element.css({
@@ -337,7 +326,9 @@
      * @param itemData - the item model data.
      */
     $scope.insertItem = function (index, itemData) {
-      $scope.modelValue.splice(index, 0, itemData);
+      $scope.safeApply(function () {
+        $scope.modelValue.splice(index, 0, itemData);
+      });
     };
 
     /**
@@ -349,7 +340,9 @@
     $scope.removeItem = function (index) {
       var removedItem = null;
       if (index > -1) {
-        removedItem = $scope.modelValue.splice(index, 1)[0];
+        $scope.safeApply(function () {
+          removedItem = $scope.modelValue.splice(index, 1)[0];
+        });
       }
       return removedItem;
     };
@@ -373,6 +366,22 @@
      */
     $scope.accept = function (sourceItemHandleScope, destScope, destItemScope) {
       return $scope.callbacks.accept(sourceItemHandleScope, destScope, destItemScope);
+    };
+
+    /**
+     * Checks the current phase before executing the function.
+     *
+     * @param fn the function to execute.
+     */
+    $scope.safeApply = function (fn) {
+      var phase = this.$root.$$phase;
+      if (phase === '$apply' || phase === '$digest') {
+        if (fn && (typeof fn === 'function')) {
+          fn();
+        }
+      } else {
+        this.$apply(fn);
+      }
     };
 
   }]);
@@ -584,7 +593,7 @@
               element.unbind('touchend', unbindMoveListen);
               element.unbind('touchcancel', unbindMoveListen);
             };
-            
+
             var startPosition;
             var moveListen = function (e) {
               e.preventDefault();
@@ -597,7 +606,7 @@
                 dragStart(event);
               }
             };
-            
+
             angular.element($document).bind('mousemove', moveListen);
             angular.element($document).bind('touchmove', moveListen);
             element.bind('mouseup', unbindMoveListen);
@@ -611,8 +620,6 @@
            * @param event the event object.
            */
           dragStart = function (event) {
-
-            $(".ui-sortable").addClass("active");
 
             var eventObj, tagName;
 
@@ -631,7 +638,7 @@
             dragHandled = true;
             event.preventDefault();
             eventObj = $helper.eventObj(event);
-
+            $(".ui-sortable").addClass("active");
             // (optional) Scrollable container as reference for top & left offset calculations, defaults to Document
             scrollableContainer = angular.element($document[0].querySelector(scope.sortableScope.options.scrollableContainer)).length > 0 ?
               $document[0].querySelector(scope.sortableScope.options.scrollableContainer) : $document[0].documentElement;
@@ -642,7 +649,7 @@
             containment.css('cursor', 'move');
 
             // container positioning
-            containerPositioning = scope.sortableScope.options.containerPositioning || 'relative';
+            containerPositioning = scope.sortableScope.options.containerPositioning || 'absolute';
 
             dragItemInfo = $helper.dragItem(scope);
             tagName = scope.itemScope.element.prop('tagName');
@@ -758,8 +765,6 @@
 
               targetX = eventObj.pageX - $document[0].documentElement.scrollLeft;
               targetY = eventObj.pageY - ($window.pageYOffset || $document[0].documentElement.scrollTop);
-
-              
 
               //IE fixes: hide show element, call element from point twice to return pick correct element.
               dragElement.addClass(sortableConfig.hiddenClass);
