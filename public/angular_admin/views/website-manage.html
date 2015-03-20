@@ -318,11 +318,11 @@
                 <div class="select-template" ng-hide="templateDetails">
                     <div class="type-filter">
                         <ul class="mb0" ng-init="typefilter = 'home'">
-                            <li><a href="#" class="label label-primary" ng-click="typefilter = 'all'">All</a>
+                            <li><a href="#" ng-class="{ active: typefilter === 'all'}" class="label label-default" ng-click="typefilter = 'all'">All</a>
                             </li>
-                            <li><a href="#" class="label label-default" ng-click="typefilter = 'home'">Home</a>
+                            <li><a href="#" ng-class="{ active: typefilter === 'home'}" class="label label-default" ng-click="typefilter = 'home'">Home</a>
                             </li>
-                            <li><a href="#" class="label label-default" ng-click="typefilter = 'coming-soon'">Coming Soon</a>
+                            <li><a href="#" ng-class="{ active: typefilter === 'coming-soon'}" class="label label-default" ng-click="typefilter = 'coming-soon'">Coming Soon</a>
                             </li>
                         </ul>
                     </div>

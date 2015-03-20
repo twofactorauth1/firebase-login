@@ -5043,6 +5043,10 @@ div.error label.error:before {
   padding: 6px 6px;
 }
 
+.select-template ul > li a.active {
+  background: #428bca !important;
+}
+
 .dataTables_length .chosen-container {
   min-width: 75px;
 }
