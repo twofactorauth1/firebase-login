@@ -313,7 +313,14 @@ module.exports = {
                 return fn(err, null);
             }
             log.debug('creating page screenshot');
-            self.updatePageScreenshot(page.id(), fn);
+            self.updatePageScreenshot(page.id(), function(err, value){
+                if(err) {
+                    log.error('Error updating screenshot: ' + err);
+                } else {
+                    log.debug('updated screenshot: ' + value);
+                }
+            });
+            return fn(null, page);
         });
     },
 

@@ -1434,6 +1434,85 @@ var dao = {
 
     },
 
+    //refunds
+
+    createRefund: function(chargeId, amount, refundApplicationFee, reason, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createRefund');
+        var apiToken = self.delegateStripe(accessToken);
+        var params ={};
+        if(amount) {
+            params.amount = amount;
+        }
+        if(refundApplicationFee && refundApplicationFee===true) {
+            params.refundApplicationFee = true;
+        }
+        if(reason) {
+            params.reason = reason;
+        }
+        if(metadata) {
+            params.metadata = metadata;
+        }
+
+        stripe.charges.createRefund(chargeId, params, apiToken, function(err, refund){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< createRefund');
+            return fn(err, refund);
+        });
+    },
+
+    getRefund: function(chargeId, refundId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getRefund');
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.charges.retrieveRefund(chargeId, refundId, apiToken, function(err, refund){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< getRefund');
+            return fn(err, refund);
+        });
+    },
+
+    updateRefund: function(chargeId, refundId, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateRefund');
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.charges.updateRefund(chargeId, refundId, metadata, apiToken, function(err, refund){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< updateRefund');
+            return fn(err, refund);
+        });
+    },
+
+    listRefund: function(chargeId, ending_before, limit, starting_after, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listRefund');
+        var apiToken = self.delegateStripe(accessToken);
+        var params = {};
+        if(ending_before) {params.ending_before = ending_before;}
+        if(limit && (limit > 0 || limit <=100)) {params.limit = limit;}
+        if(starting_after) {params.starting_after = starting_after;}
+
+        stripe.charges.listRefunds(chargeId, params, apiToken, function(err, refunds){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< listRefund');
+            return fn(err, refunds);
+        });
+    },
+
     delegateStripe: function(accessToken) {
         var self = this;
         if(accessToken && accessToken.length > 0) {

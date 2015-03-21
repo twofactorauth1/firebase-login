@@ -136,7 +136,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.feeds = [];
     $scope.feedTypes = [];
     $scope.filters = [];
-    $scope.filtersValues = [".posts-", ".link-", ".status-", ".video-", ".photo-"]
+    $scope.filtersValues = [".posts-", ".link-", ".status-", ".video-", ".photo-"];
     $scope.fbPostsLength = 0;
 
     $scope.typeLogic = {
@@ -156,6 +156,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             posts[i].socialAccountId = socialId;
             $scope.fbPostsLength += 1;
             posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
+            console.log('posts[i] ', posts[i]);
             $scope.feed.push(posts[i]);
           };
         }
@@ -220,6 +221,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         socialAccountMap[value.id] = value.type;
       });
 
+
       config.trackedObjects.forEach(function(value, index) {
         if (socialAccountMap[value.socialId] == undefined) {
           console.warn(value.socialId, 'Account mapping missing.');
@@ -260,6 +262,11 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
         }
 
+        if (value.type != 'profile' && value.type != 'numberFollowers' && value.type!= 'pages' && value.type != 'feed') {
+          console.warn('missing value.type ', value.type);
+          socialPromises.push([]);
+        }
+
         // config.socialAccounts.forEach(function(value, index) {
         //   if (value.type == 'go') {
         //     $scope.feedTypes.push('google-plus');
@@ -284,7 +291,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         //   continue;
         // }
       });
-
+      console.log('socialPromises ', socialPromises.length);
+      console.log('promiseProcessor ', promiseProcessor.length);
       $q.all(socialPromises)
         .then(function(data) {
           data.forEach(function(value, index) {
@@ -524,46 +532,38 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       $event.stopPropagation();
       $event.preventDefault();
 
-      var value = $event.target.attributes['data-value'].value;
+      var value = $($event.target).attr('data-value');
       console.log('value ', value);
 
-      var feedIndex;
-      _.find($scope.feedTypes, function(feedItem, index) {
-        if (feedItem.id == type.id) {
-          feedIndex = index;
-          return true;
-        };
-      });
+      var isChecked = $($event.target).hasClass('fa-square-o');
 
-      if ($scope.feedTypes[feedIndex].open == true) {
-        $scope.feedTypes[feedIndex].open = false;
-      } else {
-        $scope.feedTypes[feedIndex].open = true;
-      }
+      $scope.feedTypes.forEach(function(v, index) {
+        if (v.id == type.id) {
+          $scope.feedTypes[index].open = isChecked;
+        }
+      });
 
       $('.stream').isotope({
         itemSelector: '.item'
       });
 
       var split = value.split(',');
-      for (var i = 0; i < split.length; i++) {
-        var singleSplit = split[i].replace(/\s/g, '');
-        console.log('finding ... ', singleSplit);
-        console.log('in ... ', $scope.filters);
-        console.log('index of ... ', $scope.filters.indexOf(singleSplit));
-        if ($scope.filters.indexOf(singleSplit) > -1) {
-          $scope.filters.splice($scope.filters.indexOf(singleSplit), 1);
-        } else {
-          $scope.filters.push(singleSplit);
-        }
-      };
+      split.forEach(function(v, i) {
+        v = v.trim();
 
-      var filtersArr = [];
+        if (isChecked) {
+          if ($scope.filters.indexOf(v) == -1) {
+            $scope.filters.push(v);
+          }
+        } else {
+          if ($scope.filters.indexOf(v) > -1) {
+            $scope.filters.splice($scope.filters.indexOf(v), 1);
+          }
+        }
+      });
 
       console.log('$scope.filters >>> ', $scope.filters);
 
-
-      // ['.red', '.blue'] -> '.red, .blue'
       var filters = $scope.filters.join(',');
       console.log('stream filters');
       $('.stream').isotope({

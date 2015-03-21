@@ -396,6 +396,45 @@
     ul.nav {
         margin-top: 0!important;
     }
+    .form-horizontal {
+        label {
+              margin-top: 8px;
+        }
+    }
+    .tab-content {
+        h4 {
+            margin: 2px 10px 0 0;
+            color:#b6b6b6;
+        }
+    }
+    .fa-close {
+      position: absolute;
+      right: 0;
+      margin: -5px 6px 0 0;
+      background: #fff;
+      border-radius: 12px;
+      height: 20px;
+      width: 20px;
+      text-align: center;
+      line-height: 20px;
+      border: 1px solid #e7e7e7;
+    }
+    .fa-close:hover {
+      background: #e7e7e7;
+    }
+    .add-image {
+        background: #e7e7e7;
+        height: 180px;
+        border-radius: 5px;
+        input {
+            margin-top: 60px;
+        }
+        .btn-wrap {
+          width: 125px;
+          height: 35px;
+          margin: 0 auto;
+        }
+    }
 }
 .add_section {
     padding: 10px;
@@ -944,8 +983,8 @@ input[type='file'] {
   position: relative;
   display: inline-block;
   vertical-align: top;
-  width: 56px;
-  height: 20px;
+  width: 75px;
+  height: 25px;
   padding: 3px;
   background-color: white;
   border-radius: 18px;
@@ -996,13 +1035,13 @@ input[type='file'] {
   content: attr(data-off);
   right: 11px;
   color: #aaa;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
 }
 .switch-label:after {
   content: attr(data-on);
   left: 11px;
   color: white;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
   opacity: 0;
 }
 .switch-input:checked ~ .switch-label {
@@ -1019,9 +1058,9 @@ input[type='file'] {
 .switch-handle {
   position: absolute;
   top: 4px;
-  left: 4px;
-  width: 18px;
-  height: 18px;
+  left: 5px;
+  width: 22px;
+  height: 22px;
   background: white;
   border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
@@ -1051,10 +1090,10 @@ input[type='file'] {
   background-image: linear-gradient(to bottom, #eeeeee, white);
 }
 .switch-input:checked ~ .switch-handle {
-  left: 40px;
+  left: 48px;
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 .switch-green > .switch-input:checked ~ .switch-label {
-  background: #4fb845;
+  background: #42b77a;
 }

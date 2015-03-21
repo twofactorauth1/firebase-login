@@ -27,6 +27,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
+                    var iframe = window.parent.document.getElementById("iframe-website")
+                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope();
                     // console.log("current Page");
                     // console.log($scope.$parent)
             }
@@ -174,7 +176,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
         };
 
-         window.savePostMode=function(toaster){
+         window.savePostMode=function(toaster, msg){
 
             var post_data =  angular.copy(that.post);
             post_data.post_tags.forEach(function(v,i) {
@@ -210,10 +212,10 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
             PostService.updatePost(pageId, post_data._id,post_data,function(data){
                 console.log(data);
-                console.log("Post Saved");
+                console.log(msg);
                 window.parent.window.setLoading(false);
                 if(toaster)
-                    toaster.pop('success', "Post Saved");
+                    toaster.pop('success', msg);
             });
         };
         $scope.refreshPost = function()
@@ -237,6 +239,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 that.post.post_excerpt = post_excerpt_container.text();
+            setTimeout(function() {
+              $scope.$apply(function() {
+                activateAloha();
+              });
+            });
         }
         $scope.changeBlogImage = function(blogpost) {
           window.parent.changeBlogImage(blogpost);
@@ -285,7 +292,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         $scope.isEditing = true;
         for(name in CKEDITOR.instances)
         {
-            CKEDITOR.instances[name].destroy()
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
         }
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');

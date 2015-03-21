@@ -5,6 +5,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
+      if(route.startsWith('/')) {
+          route = route.replace('/', '');
+      }
+      console.log('route is initially set to: ' + route);
     window.oldScope;
     $scope.$route = $route;
     $scope.$location = $location;
@@ -103,10 +107,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       } else {
         // setNavigation(data);
         if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
-          route = 'index';
-          route = route.replace('/', '');
-          if (!angular.isDefined(data[route])) {
-            route = 'coming-soon';
+            route = 'index';
+            /*
+             * if you just set a variable... why would you need to replace a character that ISN'T IN IT?
+             */
+            route = route.replace('/', '');// <-- why?
+            console.log('setting route to: ' + route + ' and $$path is ' + $scope.$location.$$path);
+            if (!angular.isDefined(data[route])) {
+                route = 'coming-soon';
+                console.log('set route to coming-soon');
               /*
                * This is pants-on-head stupid.  Why would you be able to create a page from the front-end?
                * var pageData = {
@@ -124,15 +133,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                that.pages = newpage;
                });
                */
-            that.pages = data[route];
-          }
-          if (angular.isDefined(data[route]))
-            that.pages = data[route];
+                that.pages = data[route];
+            }
+            if (angular.isDefined(data[route])) {
+                that.pages = data[route];
+            } else {
+                console.log('there is no route defined for ' + route);
+            }
+
         } else {
-          route = $scope.$location.$$path.replace('/page/', '');
-          route = route.replace('/', '');
-          that.pages = data[route];
+            route = $scope.$location.$$path.replace('/page/', '');
+            route = route.replace('/', '');
+            console.log('else block route is now ' + route);
+            that.pages = data[route];
         }
+
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function(data) {
             var tmpAccount = data;
@@ -1005,6 +1020,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.deleteTestimonial = function(componentId, index) {
       window.parent.deleteTestimonial(componentId, index);
+
     }
 
 
@@ -1017,6 +1033,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         "text": "Description"       
       }
       window.parent.addTestimonial(componentId, newTestimonial, index);
+     // $(".slick-slider")[0].slick.unload();
+     // $(".slick-slider")[0].slick.reinit();
     }
 
 
@@ -1030,9 +1048,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     window.activateAloha = function() {
       //if ($scope.activated == false) {
       for(name in CKEDITOR.instances)
-      {
-          CKEDITOR.instances[name].destroy()
-      }
+        {
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
+        }
       $scope.isEditing = true;
       CKEDITOR.disableAutoInline = true;
       var elements = $('.editable');
@@ -1047,6 +1066,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             on: {
               instanceReady: function(ev) {
                 var editor = ev.editor;                
+               // CKEDITOR.replace(editor.name);                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -1246,7 +1266,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
+          //if($(".slick-slider"))         
+            //$(".slick-slider")[0].slick.refresh();
       }, 200);
+
     };
 
     window.updateContactComponent = function(data, networks) {
@@ -1337,6 +1360,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.wait;
 
     $scope.sortableOptions = {
+      parentElement : "body",
       dragStart: function(e, ui) {
         console.log('Start sorting');
         var componentId = e.source.itemScope.modelValue._id;

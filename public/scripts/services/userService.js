@@ -72,7 +72,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
-    var maxAttempts = 10;
+    var maxAttempts = 1;
     var attemptNumber = 0;
 
     this.initializeUser = function(user, fn) {

@@ -86,7 +86,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/";
         var api_key = keenConfig.KEEN_WRITE_KEY;
         async.eachSeries(messagesToSend, function(message, callback){
-            console.log('url ', url + message.collection + '?api_key=' + api_key);
+            self.log.debug('url ', url + message.collection + '?api_key=' + api_key);
             var newrequest = request.post(url + message.collection + '?api_key=' + api_key)
                 .send(message.value)
                 .end(function(error, result){
@@ -97,7 +97,7 @@ _.extend(api.prototype, baseApi.prototype, {
             callback();
         }, function(err){
             if(err) {
-                console.log('Error duing send to keen: ' + err);
+                self.log.error('Error during send to keen: ' + err);
             } else {
                 self.log.debug('<< sendToKeen');
             }

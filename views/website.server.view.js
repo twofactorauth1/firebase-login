@@ -74,8 +74,8 @@ _.extend(view.prototype, BaseView.prototype, {
     self.log.debug('isEditor: ', isEditor);
     cmsDao.getDataForWebpage(accountId, 'index', function(err, value) {
       data.account = value;
-      data.title = value.title;
-      data.author = 'Indigenous.IO';
+      data.title = value.website.title;
+      data.author = 'Indigenous';
       data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
       data.website = value.website || {};
       data.seo = {
@@ -83,10 +83,13 @@ _.extend(view.prototype, BaseView.prototype, {
         keywords: ''
       };
       data.og = {
-        type: 'article',
-        title: '',
-        image: ''
+        type: 'website',
+        title: value.website.title,
+        image: value.website.settings.favicon
       };
+        if(data.og.image && data.og.image.indexOf('//') === 0) {
+            data.og.image = 'http:' + data.og.image;
+        }
       data.includeEditor = isEditor;
       //self.log.debug('>> data');
       //console.dir(data);
@@ -103,8 +106,12 @@ _.extend(view.prototype, BaseView.prototype, {
       if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
         cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function(err, post) {
           if (post) {
-            data.og.title = post.attributes.post_title;
-            data.og.image = post.attributes.featured_image;
+              data.og.type = 'article';
+              data.og.title = post.attributes.post_title;
+              data.og.image = post.attributes.featured_image;
+              if(data.og.image && data.og.image.indexOf("//") === 0) {
+                data.og.image = "http:" + data.og.image;
+              }
           }
           app.render('index', data, function(err, html) {
             if (err) {
