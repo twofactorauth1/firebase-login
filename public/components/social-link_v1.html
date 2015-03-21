@@ -3,7 +3,7 @@
         <ul>
             <li ng-repeat="network in component.networks">
                 <div ng-if="!isEditing">
-                    <a href="{{network.url}}" class="btn btn-social-icon btn-lg btn-{{network.name}}"><i class="fa fa-{{network.icon}}"></i></a>
+                    <a href="{{network.url}}" class="btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>
                 </div>
                 <div ng-if="isEditing">
                     <button ng-if="isEditing" style="z-index:1033;" ng-click="setSelectedSocialLink(network, component._id, true)" class="btn btn-social-icon btn-lg btn-{{network.name}}" data-toggle="modal" data-target="#socialComponentModal">
