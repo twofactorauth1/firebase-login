@@ -28,21 +28,21 @@
     <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
         <div class="pages-section" ng-switch-when="pages">
             <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
-                 <div class="panel panel-default row pages-filter">
+                <div class="panel panel-default row pages-filter">
                     <div class="panel-body">
-                      <div class="col-xs-6">
-                        <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
-                      </div>
-                      <div class="col-xs-6 form-horizontal">
-                        <div class="row">
-                            <select class="form-control chosen-select input" ng-model="sortOrder">
-                                <option value="" disabled selected>Filter Pages</option>
-                                <option value="1">A to Z</option>
-                                <option value="2">Z to A</option>
-                                <option value="3">Date Added</option>
-                            </select>
+                        <div class="col-xs-6">
+                            <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
                         </div>
-                      </div>
+                        <div class="col-xs-6 form-horizontal">
+                            <div class="row">
+                                <select class="form-control chosen-select input" ng-model="sortOrder">
+                                    <option value="" disabled selected>Filter Pages</option>
+                                    <option value="1">A to Z</option>
+                                    <option value="2">Z to A</option>
+                                    <option value="3">Date Added</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <!-- panel-body -->
                 </div>
