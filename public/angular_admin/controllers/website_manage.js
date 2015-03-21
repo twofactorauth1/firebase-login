@@ -13,7 +13,9 @@ define([
     'mediaDirective',
     'checkImageDirective',
     'blockUI',
-    'toasterService'
+    'toasterService',
+    'headroom',
+    'ngHeadroom'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',

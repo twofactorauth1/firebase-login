@@ -20168,6 +20168,7 @@ div.error label.error:before {
 .website-manage .template-btns {
   margin-bottom: 0px;
   padding: 0;
+  z-index: 999;
 }
 .website-manage .title {
   margin-top: -5px;
