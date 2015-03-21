@@ -20150,7 +20150,7 @@ div.error label.error:before {
   border: 1px solid #dddddd;
 }
 .website-manage .screenshot-wrap .screenshot {
-  width: 255px;
+  width: 235px;
   height: 120px;
   background-size: cover;
   margin: 0 auto;
@@ -20468,7 +20468,8 @@ div.error label.error:before {
 .select-template ul > li a.active {
   background: #428bca !important;
 }
-.pages-filter .panel-body {
+.pages-filter .panel-body,
+.posts-filter .panel-body {
   padding: 15px;
 }
 .dataTables_length .chosen-container {
