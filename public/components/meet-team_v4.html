@@ -1,5 +1,5 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="editable" data-class="component.title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
+    <div class="editable" data-class="title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
     <div class="team-member-wrap">
         <div class="row clearfix mb30 team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
             <div class="col-md-4 text-center">
