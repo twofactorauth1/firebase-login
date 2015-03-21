@@ -20467,6 +20467,9 @@ div.error label.error:before {
 .select-template ul > li a.active {
   background: #428bca !important;
 }
+.pages-filter .panel-body {
+  padding: 15px;
+}
 .dataTables_length .chosen-container {
   min-width: 75px;
 }

@@ -5068,6 +5068,10 @@ div.error label.error:before {
   background: #428bca !important;
 }
 
+.pages-filter .panel-body {
+  padding: 15px;
+}
+
 .dataTables_length .chosen-container {
   min-width: 75px;
 }

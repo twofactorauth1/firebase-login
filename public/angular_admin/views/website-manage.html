@@ -27,14 +27,27 @@
     </div>
     <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
         <div class="pages-section" ng-switch-when="pages">
-            <div class='row'>
-                <div class='col-sm-4'></div>
-                <div class='col-sm-4'>
-                    <input type='text' placeholder='search for page' class='form-control' ng-model='pageSearch.title'>
+            <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
+                 <div class="panel panel-default row pages-filter">
+                    <div class="panel-body">
+                      <div class="col-xs-6">
+                        <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
+                      </div>
+                      <div class="col-xs-6 form-horizontal">
+                        <div class="row">
+                            <select class="form-control chosen-select input" ng-model="sortOrder">
+                                <option value="" disabled selected>Filter Pages</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                            </select>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- panel-body -->
                 </div>
-                <div class='col-sm-4'></div>
-            </div>
-            <div class="row">
+            </headroom>
+            <div class="row" style="margin-top: 60px;">
                 <div class="col-xs-18 col-sm-6 col-md-3">
                     <div class="thumbnail layered-paper">
                         <div class="add-wrap">
