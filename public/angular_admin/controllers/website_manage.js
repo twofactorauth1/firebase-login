@@ -42,7 +42,7 @@ define([
             $scope.onboardingSteps = [{
                 overlay: false
             }];
-            $scope.numPerPage = 11;
+            $scope.numPerPage = 27;
             $scope.paginationRange = 12;
             $scope.pagesPaging = {};
             $scope.pagesPaging.take = $scope.numPerPage;

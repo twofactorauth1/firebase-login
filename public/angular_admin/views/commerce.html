@@ -6,8 +6,8 @@
     <div class="pageheader row">
         <div class="col-xs-12">
             <h2>
-        <i class="fa fa-shopping-cart"></i> Commerce
-      </h2>
+              <i class="fa fa-shopping-cart"></i> Commerce
+            </h2>
         </div>
         <div class="clear"></div>
     </div>
@@ -58,14 +58,14 @@
                     <div class="commerce-item btn-view-product-details" data-productid="1">
                         <div class="media">
                             <span class="important-star">
-                  <i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
-                  <i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
-                </span>
+                              <i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
+                              <i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
+                            </span>
                             <div class="media">
                                 <a href="#/commerce/edit/{{product._id}}">
                                     <div class="col-xs-12" ng-if="commerceSettings.showProductThumb">
                                         <span ng-if="!product.is_image" class="icon"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
-                    </span>
+                                        </span>
                                         <img ng-if="product.is_image" style="width:75px;height:75px" class="img-responsive img-circle hand center" ng-src="{{ product.icon }}">
                                         <div class="clear"></div>
                                     </div>
@@ -130,7 +130,7 @@
                                         <div class="vcenter img-outer">
                                             <div class="hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
                                                 <span ng-if="!product.is_image" class="icon media-object"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
-                      </span>
+                                                </span>
                                                 <img ng-if="product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">
                                             </div>
                                         </div>

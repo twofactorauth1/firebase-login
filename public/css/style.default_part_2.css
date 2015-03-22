@@ -4736,16 +4736,16 @@ div.error label.error:before {
 }
 
 .website-manage .pages-section .add-wrap {
-  height: 245px;
+  height: 198px;
   background: #e4e7ea;
   border-radius: 3px;
 }
 
 .website-manage .pages-section .add-wrap .page-icon .fa {
-  font-size: 134px;
+  font-size: 90px;
   text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5), -1px -1px 1px rgba(119, 119, 119, 0.7);
   color: #bdc3c9;
-  line-height: 180px;
+  line-height: 130px;
 }
 
 .website-manage .pages-section .thumbnail {
@@ -4826,6 +4826,19 @@ div.error label.error:before {
   /* This is the top right shadow */
   /* This is the top left shadow */
   /* This class establishes the tape of the top side of the box */
+}
+
+.website-manage .posts-section .add-wrap {
+  height: 198px;
+  background: #e4e7ea;
+  border-radius: 3px;
+}
+
+.website-manage .posts-section .add-wrap .page-icon .fa {
+  font-size: 90px;
+  text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5), -1px -1px 1px rgba(119, 119, 119, 0.7);
+  color: #bdc3c9;
+  line-height: 130px;
 }
 
 .website-manage .posts-section .thumbnail {
