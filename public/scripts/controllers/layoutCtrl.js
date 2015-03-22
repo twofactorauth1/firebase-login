@@ -5,7 +5,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
-      if(route.startsWith('/')) {
+      if(route.indexOf('/') ===0) {
           route = route.replace('/', '');
       }
       console.log('route is initially set to: ' + route);

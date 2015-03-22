@@ -33,7 +33,7 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                 path = 'blog';
         }
 
-        if(path.startsWith('/')) {
+        if(path.indexOf('/')===0) {
             path = path.replace('/', '');
         }
 
