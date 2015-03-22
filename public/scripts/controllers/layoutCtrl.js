@@ -1032,9 +1032,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         "site": "Site",
         "text": "Description"       
       }
-      window.parent.addTestimonial(componentId, newTestimonial, index);
-     // $(".slick-slider")[0].slick.unload();
-     // $(".slick-slider")[0].slick.reinit();
+      window.parent.addTestimonial(componentId, newTestimonial, index);     
     }
 
 
@@ -1222,15 +1220,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }, 200);
       });
     };
+
     window.updateCustomComponent = function(data, networks) {
       var scroll = $(window).scrollTop();
-
+      $scope.dataLoaded = false;
       console.log('updateCustomComponent >>>');
       if (data) {
         $scope.currentpage.components = data;
+        
         setTimeout(function() {
           $scope.$apply(function() {
             activateAloha();
+            $scope.dataLoaded = true;
           });
         });
       } else {
@@ -1389,6 +1390,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.planStatus = {};
     $scope.$watch('currentpage.components', function(newValue, oldValue) {
       if (newValue) {
+        $scope.dataLoaded = false;
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
           if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
@@ -1449,6 +1451,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if (value && value.type == 'contact-us') {
             $scope.updateContactUsMap(value);
           }
+          $scope.dataLoaded = true;
         });
       }
     });
