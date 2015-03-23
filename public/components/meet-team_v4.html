@@ -16,11 +16,11 @@
                             <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
                                 <span class="fa fa-{{network.icon}}"></span>
                             </a>
-                            <a ng-if="isEditing" href="#" ng-click="setSelectedSocialLink(network, component._id, true, true, $parent.$parent.$index)" class="clickable-link" data-toggle="modal" data-target="#meetteamSocialModal"><span class="fa fa-{{network.icon}}"></span></a>
+                            <a ng-if="isEditing" href="#" data-index="{{$index}}" parent-data-index="{{$parent.$parent.$index}}" class="clickable-link btn-social-link"><span class="fa fa-{{network.icon}}"></span></a>
                         </li>
                     </ul>
-                    <div ng-if="isEditing" class="add-addtional-team center">
-                        <a ng-if="isEditing" class="clickable-link" data-toggle="modal" ng-click="setSelectedSocialLink(network, component._id, false, true, $parent.$parent.$index)" data-target="#meetteamSocialModal"><i class="fa fa-plus"></i></a>
+                   <div ng-if="isEditing" class="add-addtional-team center">
+                        <a ng-if="isEditing" parent-data-index="{{$parent.$index}}" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
             </div>
@@ -37,4 +37,4 @@
         </div>
     </div>
 </div>
-<div ng-if="isEditing" ng-include="'/components/meet-team-social-links.html'"></div>
+
