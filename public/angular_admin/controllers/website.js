@@ -957,6 +957,8 @@ define([
       //            }
 
       $scope.updateContactUsAddress = function(location) {
+        console.log('updateContactUsAddress >>> ');
+        console.log('location: ', location);
         if ($scope.componentEditing.location.city) {
           $('#location-city').parents('.form-group').find('.error').html('');
           $('#location-city').parents('.form-group').removeClass('has-error');
@@ -976,6 +978,12 @@ define([
         if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
           $scope.saveContactComponent();
         }
+      }
+
+      $scope.saveContactComponent = function() {
+        var currentComponentId = $scope.componentEditing._id;
+        $scope.updateSingleComponent(currentComponentId);
+        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
       }
 
       $scope.addComponent = function(addedType) {
@@ -1228,7 +1236,7 @@ define([
                 if (matchingComponent[first][second])
                   matchingComponent[first][second][third] = componentVarContents;
                }
-                
+
               }
               //if contains an array of array variables
               if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
@@ -1261,12 +1269,6 @@ define([
 
       $scope.saveCustomComponent = function(networks) {
         iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
-      };
-
-      $scope.saveContactComponent = function() {
-        var currentComponentId = $scope.componentEditing._id;
-        $scope.updateSingleComponent(currentComponentId);
-        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
       };
 
       //delete page
