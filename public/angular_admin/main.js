@@ -31,7 +31,7 @@ require.config({
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'ngload': 'libs/angularAMD/ngload.min',
         'underscore': 'libs/underscore/underscore',
-        'skeuocard': 'libs/skeuocard/lib/js/card',
+        'skeuocard': 'libs/skeuocard/lib/js/jquery.card',
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
