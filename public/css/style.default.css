@@ -20253,9 +20253,11 @@ div.error label.error:before {
   /* This class establishes the tape of the top side of the box */
 }
 .website-manage .posts-section .add-wrap {
-  height: 198px;
+  height: 180px;
   background: #e4e7ea;
   border-radius: 3px;
+  margin-top: -262px;
+  position: relative;
 }
 .website-manage .posts-section .add-wrap .page-icon .fa {
   font-size: 90px;
@@ -20353,7 +20355,7 @@ div.error label.error:before {
 .website-manage .posts-section .paper {
   position: relative;
   width: 255px;
-  height: 260px;
+  height: 207px;
   background-color: #fff;
   border: 1px solid #e3e3e3;
   margin: 15px auto;
@@ -20374,7 +20376,7 @@ div.error label.error:before {
   height: 155px;
   overflow: hidden;
   border: none;
-  margin-top: -192px;
+  margin-top: -135px;
 }
 .website-manage .posts-section .paper .screenshot-wrap img {
   width: 100%;
@@ -20423,6 +20425,7 @@ div.error label.error:before {
   -moz-transform: rotate(-2deg) skew(0, 0) translate(0%, -5px);
   -o-transform: rotate(-2deg) skew(0, 0) translate(0%, -5px);
   transform: rotate(-2deg) skew(0, 0) translate(0%, -5px);
+  z-index: 99;
 }
 .website-manage .paper-wrap {
   max-width: 275px;
