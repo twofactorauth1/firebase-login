@@ -1,39 +1,41 @@
 <toaster-container toaster-options="{{toasterOptions}}"></toaster-container>
 <div ng-if="showOnboarding">
-    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' on-finish-callback='finishOnboarding'></onboarding-popover>
+  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' on-finish-callback='finishOnboarding'></onboarding-popover>
 </div>
 <div class="website-manage">
-    <div class="pageheader row">
-        <div class="col-xs-12">
-            <h2><i class="fa fa-desktop website-manage-icon"></i> <div class="hidden-xs div-header">  Website</div></h2>
-        </div>
+  <div class="pageheader row">
+    <div class="col-xs-12">
+      <h2><i class="fa fa-desktop website-manage-icon"></i>
+        <div class="hidden-xs div-header"> Website</div>
+      </h2>
     </div>
-    <div class="header-menu-row">
-        <div class="btn-group col-xs-12 template-btns">
-            <!-- <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-themes" ng-class="{'active': activeTab === 'themes'}" ng-click="showToaster = false; activeTab = 'themes'">
+  </div>
+  <div class="header-menu-row">
+    <div class="btn-group col-xs-12 template-btns">
+      <!-- <button type="button" class="btn btn-default btn-lg col-xs-4 btn-view-themes" ng-class="{'active': activeTab === 'themes'}" ng-click="showToaster = false; activeTab = 'themes'">
                 <i class="fa fa-paint-brush"></i>
                 <span class="hidden-xs">Themes</span>
             </button> -->
-            <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-pages" ng-class="{'active': activeTab === 'pages'}" ng-click="showToaster = false; activeTab = 'pages'">
-                <i class="fa fa-file-text-o"></i>
-                <span class="hidden-xs">Pages
-                </span>
-            </button>
-            <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-posts" ng-class="{'active': activeTab === 'posts'}" ng-click="showToaster = false; activeTab = 'posts'">
-                <i class="fa fa-newspaper-o"></i>
-                <span class="hidden-xs">Posts</span>
-            </button>
-        </div>
+      <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-pages" ng-class="{'active': activeTab === 'pages'}" ng-click="showToaster = false; activeTab = 'pages'">
+        <i class="fa fa-file-text-o"></i>
+        <span class="hidden-xs">Pages
+        </span>
+      </button>
+      <button type="button" class="btn btn-default btn-lg col-xs-6 btn-view-posts" ng-class="{'active': activeTab === 'posts'}" ng-click="showToaster = false; activeTab = 'posts'">
+        <i class="fa fa-newspaper-o"></i>
+        <span class="hidden-xs">Posts</span>
+      </button>
     </div>
-    <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
-        <div class="pages-section" ng-switch-when="pages">
-            <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
-                <div class="panel panel-default row pages-filter">
-                    <div class="panel-body">
-                        <div class="col-xs-12">
-                            <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
-                        </div>
-                        <!-- <div class="col-xs-6 form-horizontal">
+  </div>
+  <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
+    <div class="pages-section" ng-switch-when="pages">
+      <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
+        <div class="panel panel-default row pages-filter">
+          <div class="panel-body">
+            <div class="col-xs-12">
+              <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
+            </div>
+            <!-- <div class="col-xs-6 form-horizontal">
                             <div class="row">
                                 <select class="form-control chosen-select input" ng-model="sortOrder">
                                     <option value="" disabled selected>Filter Pages</option>
@@ -43,63 +45,65 @@
                                 </select>
                             </div>
                         </div> -->
-                    </div>
-                    <!-- panel-body -->
+          </div>
+          <!-- panel-body -->
+        </div>
+      </headroom>
+      <div class="row" style="margin-top: 60px;">
+        <div class="col-xs-18 col-sm-6 col-md-3">
+          <div class="thumbnail layered-paper">
+            <div class="add-wrap">
+              <div class="center">
+                <div class="page-icon">
+                  <h1 class="center"><i class="fa fa-file-text-o"></i></h1>
                 </div>
-            </headroom>
-            <div class="row" style="margin-top: 60px;">
-                <div class="col-xs-18 col-sm-6 col-md-3">
-                    <div class="thumbnail layered-paper">
-                        <div class="add-wrap">
-                            <div class="center">
-                                <div class="page-icon">
-                                    <h1 class="center"><i class="fa fa-file-text-o"></i></h1>
-                                </div>
-                            </div>
-                            <div class="center">
-                                <a href="" class="btn btn-success btn-lg" role="button" data-toggle="modal" data-target="#create-page-modal">
-                                    <i class="fa fa fa-plus"></i> Add Page</a>
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div class="center">
+                <a href="" class="btn btn-success btn-lg" role="button" data-toggle="modal" data-target="#create-page-modal">
+                  <i class="fa fa fa-plus"></i> Add Page</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div  indiscroller indiscroller-update='loadMorePagesFn' indiscroller-save='saveScrollFn'>
+          <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
+            <a href="/admin#/website-editor?pagehandle={{page.handle}}">
+              <div class="thumbnail layered-paper">
+                <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
+                <h5 style="margin-top:0;color: #999;font-weight: normal;">{{page.modified.date ? (page.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
+                <div class="screenshot-wrap scrollhover" block-ui="{{ editedPage.handle === page.handle ? 'pagesBlockUI' : '' }} ">
+                  <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
+                  <img ng-if="page.screenshot" ng-src="{{page.screenshot}}" err-src="<div class='page-icon'><h1 class='center'><i class='fa fa-photo'></i></h1></div>" alt="" class="screenshot">
+                  <div class="page-icon" ng-if="!page.screenshot">
+                    <h1 class="center"><i class="fa fa-photo"></i></h1>
+                  </div>
                 </div>
-                <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
-                    <a href="/admin#/website-editor?pagehandle={{page.handle}}">
-                        <div class="thumbnail layered-paper">
-                            <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
-                            <h5 style="margin-top:0;color: #999;font-weight: normal;">{{page.modified.date ? (page.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
-                            <div class="screenshot-wrap scrollhover" block-ui="{{ editedPage.handle === page.handle ? 'pagesBlockUI' : '' }} ">
-                                <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
-                                <img ng-if="page.screenshot" ng-src="{{page.screenshot}}" err-src="<div class='page-icon'><h1 class='center'><i class='fa fa-photo'></i></h1></div>" alt="" class="screenshot">
-                                <div class="page-icon" ng-if="!page.screenshot">
-                                    <h1 class="center"><i class="fa fa-photo"></i></h1>
-                                </div>
-                            </div>
-                            <!-- <div class="caption">
+                <!-- <div class="caption">
                                 <a href="/admin#/website-editor?pagehandle={{page.handle}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
                             </div> -->
-                        </div>
-                    </a>
-                </div>
-                <div class="pagination pagination-centered website-pagination" ng-if="pagesPaging.total && pagesPaging.total > numPerPage">
-                    <ul class="pagination">
-                        <li ng-class="{disabled: pagesPaging.disablePaging || pagesPaging.page <= 1}"><a href="" ng-click="pagesPaging.disablePaging ? '' : previousPage()">PREV</a></li>
-                        <li ng-class="{disabled: pagesPaging.disablePaging || page === '...', active:page === pagesPaging.page}" ng-repeat="page in paging track by $index"><a href="" ng-click="pagesPaging.disablePaging ? '' : goToPage(page)">{{page}}</a></li>
-                        <li ng-class="{disabled: pagesPaging.disablePaging || (pagesPaging.page === pageCount())}"><a href="" ng-click="pagesPaging.disablePaging ? '' : nextPage()">NEXT</a></li>
-                        <li ng-if="pagesPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-            <!-- End row -->
+              </div>
+            </a>
+          </div>
         </div>
-        <div class="posts-section" ng-switch-when="posts">
-            <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
-                <div class="panel panel-default row posts-filter">
-                    <div class="panel-body">
-                        <div class="col-xs-12">
-                            <input type="text" placeholder="Search" class="form-control input" ng-model="postSearch.post_title" />
-                        </div>
-                        <!-- <div class="col-xs-6 form-horizontal">
+        <div class="pagination pagination-centered website-pagination" ng-if="pagesPaging.total && pagesPaging.total > numPerPage">
+          <ul class="pagination">
+            <li ng-class="{disabled: pagesPaging.disablePaging || pagesPaging.page <= 1}"><a href="" ng-click="pagesPaging.disablePaging ? '' : previousPage()">PREV</a></li>
+            <li ng-class="{disabled: pagesPaging.disablePaging || page === '...', active:page === pagesPaging.page}" ng-repeat="page in paging track by $index"><a href="" ng-click="pagesPaging.disablePaging ? '' : goToPage(page)">{{page}}</a></li>
+            <li ng-class="{disabled: pagesPaging.disablePaging || (pagesPaging.page === pageCount())}"><a href="" ng-click="pagesPaging.disablePaging ? '' : nextPage()">NEXT</a></li>
+            <li ng-if="pagesPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- End row -->
+    </div>
+    <div class="posts-section" ng-switch-when="posts">
+      <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
+        <div class="panel panel-default row posts-filter">
+          <div class="panel-body">
+            <div class="col-xs-12">
+              <input type="text" placeholder="Search" class="form-control input" ng-model="postSearch.post_title" />
+            </div>
+            <!-- <div class="col-xs-6 form-horizontal">
                             <div class="row">
                                 <select class="form-control chosen-select input" ng-model="sortOrder">
                                     <option value="" disabled selected>Filter Pages</option>
@@ -109,203 +113,209 @@
                                 </select>
                             </div>
                         </div> -->
+          </div>
+          <!-- panel-body -->
+        </div>
+      </headroom>
+      <div class="row" style="margin-top: 60px;">
+        <div class="col-xs-12 col-sm-6 col-md-3">
+          <div class="paper-wrap">
+            <div class="paper">
+              <div class="tape"></div>
+              <ul id="lines">
+                <li class="first"></li>
+                <li class="second"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <div style="padding:15px">
+                  <div class="add-wrap">
+                    <div class="page-icon">
+                      <h1 class="center" style="font-size: 98px;margin-top: 0px;color: #e7e7e7;"><i class="fa fa-file-text"></i></h1>
                     </div>
-                    <!-- panel-body -->
-                </div>
-            </headroom>
-            <div class="row" style="margin-top: 60px;">
-                <div class="col-xs-12 col-sm-6 col-md-3">
-                    <div class="paper-wrap">
-                        <div class="paper">
-                            <div class="tape"></div>
-                            <ul id="lines">
-                                <li class="first"></li>
-                                <li class="second"></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <div style="padding:15px">
-                                    <div class="add-wrap">
-                                        <div class="page-icon">
-                                            <h1 class="center" style="font-size: 98px;margin-top: 0px;color: #e7e7e7;"><i class="fa fa-file-text"></i></h1>
-                                        </div>
-                                        <div class="center">
-                                            <a href="" data-toggle="modal" class="btn btn-success btn-lg" role="button" data-target="#create-post-modal"><i class="fa fa-plus"></i> Add Post</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </ul>
-                        </div>
-                        <div class="left-shadow"></div>
-                        <div class="right-shadow"></div>
+                    <div class="center">
+                      <a href="" data-toggle="modal" class="btn btn-success btn-lg" role="button" data-target="#create-post-modal"><i class="fa fa-plus"></i> Add Post</a>
                     </div>
+                  </div>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | filter: postSearch| orderBy :'modified.date':true track by $index">
-                    <!-- <div class="thumbnail box14">
+              </ul>
+            </div>
+            <div class="left-shadow"></div>
+            <div class="right-shadow"></div>
+          </div>
+        </div>
+        <div indiscroller indiscroller-update='loadMorePostsFn' indiscroller-save='saveScrollFn'>
+        <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | filter: postSearch| orderBy :'modified.date':true track by $index">
+          <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
                             </div>
                         </div>
                     </div> -->
-                    <div class="paper-wrap">
-                        <div class="paper">
-                            <div class="tape"></div>
-                            <!-- <div class="red-line first"></div>
+          <div class="paper-wrap">
+            <div class="paper">
+              <div class="tape"></div>
+              <!-- <div class="red-line first"></div>
                             <div class="red-line"></div> -->
-                            <ul id="lines">
-                                <li class="first">
-                                    <h4 class="title">{{post.post_title | characters:23 }}</h4>
-                                </li>
-                                <li class="second">
-                                    <h5 class="timeago" style="font-weight: normal;">{{post.modified.date ? (post.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
-                                </li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <div class="screenshot-wrap">
-                                    <div class="screenshot-overflow">
-                                        <div class="screenshot" ng-if="post.featured_image" style="background-image: url({{post.featured_image}});"></div>
-                                        <div class="excerpt" ng-if="!post.featured_image">
-                                            <h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-photo"></i></h1>
-                                        </div>
-                                        <!-- <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt=""> -->
-                                    </div>
-                                </div>
-                                <!-- <div class="caption">
+              <ul id="lines">
+                <li class="first">
+                  <h4 class="title">{{post.post_title | characters:23 }}</h4>
+                </li>
+                <li class="second">
+                  <h5 class="timeago" style="font-weight: normal;">{{post.modified.date ? (post.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
+                </li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <div class="screenshot-wrap">
+                  <div class="screenshot-overflow">
+                    <div class="screenshot" ng-if="post.featured_image" style="background-image: url({{post.featured_image}});"></div>
+                    <div class="excerpt" ng-if="!post.featured_image">
+                      <h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-photo"></i></h1>
+                    </div>
+                    <!-- <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt=""> -->
+                  </div>
+                </div>
+                <!-- <div class="caption">
                                     <a href="/admin#/website-editor?posthandle={{post.post_url}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
                                 </div> -->
-                            </ul>
-                        </div>
-                        <div class="left-shadow"></div>
-                        <div class="right-shadow"></div>
-                    </div>
-                </div>
-                <div class="pagination pagination-centered website-pagination" ng-if="postPaging.total && postPaging.total > numPerPage">
-                    <ul class="pagination">
-                        <li ng-class="{disabled: postPaging.disablePaging || postPaging.page <= 1}"><a href="" ng-click="postPaging.disablePaging ? '' :  postPreviousPage()">PREV</a></li>
-                        <li ng-class="{disabled: postPaging.disablePaging || post === '...', active:post === postPaging.page}" ng-repeat="post in pagingPost track by $index"><a href="" ng-click="postPaging.disablePaging ? '' : goToPostPage(post)">{{post}}</a></li>
-                        <li ng-class="{disabled: postPaging.disablePaging || (postPaging.page === postCount())}"><a href="" ng-click="postPaging.disablePaging ? '' : postNextPage()">NEXT</a></li>
-                        <li ng-if="postPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
-                    </ul>
-                </div>
+              </ul>
             </div>
+            <div class="left-shadow"></div>
+            <div class="right-shadow"></div>
+          </div>
         </div>
-        <!-- End container -->
+      </div>
+        <div class="pagination pagination-centered website-pagination" ng-if="postPaging.total && postPaging.total > numPerPage">
+          <ul class="pagination">
+            <li ng-class="{disabled: postPaging.disablePaging || postPaging.page <= 1}"><a href="" ng-click="postPaging.disablePaging ? '' :  postPreviousPage()">PREV</a></li>
+            <li ng-class="{disabled: postPaging.disablePaging || post === '...', active:post === postPaging.page}" ng-repeat="post in pagingPost track by $index"><a href="" ng-click="postPaging.disablePaging ? '' : goToPostPage(post)">{{post}}</a></li>
+            <li ng-class="{disabled: postPaging.disablePaging || (postPaging.page === postCount())}"><a href="" ng-click="postPaging.disablePaging ? '' : postNextPage()">NEXT</a></li>
+            <li ng-if="postPaging.disablePaging"><a href=""><i class="fa fa-spinner fa-spin"></i></a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="rightpanel rightpanel-website">
-        <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a href="javascript:void(0)" data-toggle="tab">Settings</a>
-            </li>
-        </ul>
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div class="tab-pane pane-settings active" id="rp-settings">
-                <div class="rightpanelinner">
-                    <div id="current-settings">
-                        <h3>Default Tab</h3>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="default_tab" id="pages" ng-value="'pages'" ng-model="userPreferences.website_default_tab" ng-change="showToaster = true; activeTab = 'pages'">Pages
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="default_tab" id="posts" ng-value="'posts'" ng-model="userPreferences.website_default_tab" ng-change="showToaster = true; activeTab = 'posts'">Posts
-                            </label>
-                        </div>
-                    </div>
-                </div>
+    <!-- End container -->
+  </div>
+  <div class="rightpanel rightpanel-website">
+    <ul class="nav nav-tabs nav-justified">
+      <li class="active"><a href="javascript:void(0)" data-toggle="tab">Settings</a>
+      </li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane pane-settings active" id="rp-settings">
+        <div class="rightpanelinner">
+          <div id="current-settings">
+            <h3>Default Tab</h3>
+            <div class="radio">
+              <label>
+                <input type="radio" name="default_tab" id="pages" ng-value="'pages'" ng-model="userPreferences.website_default_tab" ng-change="showToaster = true; activeTab = 'pages'">Pages
+              </label>
             </div>
-            <!-- tab-pane -->
+            <div class="radio">
+              <label>
+                <input type="radio" name="default_tab" id="posts" ng-value="'posts'" ng-model="userPreferences.website_default_tab" ng-change="showToaster = true; activeTab = 'posts'">Posts
+              </label>
+            </div>
+          </div>
         </div>
+      </div>
+      <!-- tab-pane -->
     </div>
+  </div>
 </div>
 <!-- Create Page Modal -->
 <div class="modal fade" id="create-page-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Create Page {{currentTemplateView}}</h4>
-            </div>
-            <div class="modal-body nopadding">
-                <div class="select-template" ng-hide="templateDetails">
-                    <div class="type-filter">
-                        <ul class="mb0" ng-init="typefilter = 'home'">
-                            <li><a href="#" ng-class="{ active: typefilter === 'all'}" class="label label-default" ng-click="typefilter = 'all'">All</a>
-                            </li>
-                            <li><a href="#" ng-class="{ active: typefilter === 'home'}" class="label label-default" ng-click="typefilter = 'home'">Home</a>
-                            </li>
-                            <li><a href="#" ng-class="{ active: typefilter === 'coming-soon'}" class="label label-default" ng-click="typefilter = 'coming-soon'">Coming Soon</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="types">
-                        <div ng-show="typefilter == template.filter || typefilter == 'all'" ng-repeat="template in templates | orderBy:'title'" style="position: relative;">
-                            <div ng-if="template.filter == 'coming-soon'" class="coming-soon-overlay">
-                                <h1 class="center">COMING SOON</h1>
-                            </div>
-                            <div class="single-type" ng-click="setTemplateDetails(template)">
-                                <div class="col-xs-3">
-                                    <div class="img-wrap">
-                                        <span style="  background: url('{{template.previewUrl}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-8">
-                                    <h4>{{template.name}}</h4>
-                                    <p>{{template.description}}</p>
-                                    <!-- <a href="" ng-if="typefilter != 'coming-soon'" ng-click="addPage(template)" data-dismiss="modal" aria-hidden="true"><span class="fa fa-plus"></span> Add</a> -->
-                                </div>
-                                <div class="col-xs-1">
-                                    <h1><span class="fa fa-chevron-right"></span></h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Create Page {{currentTemplateView}}</h4>
+      </div>
+      <div class="modal-body nopadding">
+        <div class="select-template" ng-hide="templateDetails">
+          <div class="type-filter">
+            <ul class="mb0" ng-init="typefilter = 'home'">
+              <li><a href="#" ng-class="{ active: typefilter === 'all'}" class="label label-default" ng-click="typefilter = 'all'">All</a>
+              </li>
+              <li><a href="#" ng-class="{ active: typefilter === 'home'}" class="label label-default" ng-click="typefilter = 'home'">Home</a>
+              </li>
+              <li><a href="#" ng-class="{ active: typefilter === 'coming-soon'}" class="label label-default" ng-click="typefilter = 'coming-soon'">Coming Soon</a>
+              </li>
+            </ul>
+          </div>
+          <div class="types">
+            <div ng-show="typefilter == template.filter || typefilter == 'all'" ng-repeat="template in templates | orderBy:'title'" style="position: relative;">
+              <div ng-if="template.filter == 'coming-soon'" class="coming-soon-overlay">
+                <h1 class="center">COMING SOON</h1>
+              </div>
+              <div class="single-type" ng-click="setTemplateDetails(template)">
+                <div class="col-xs-3">
+                  <div class="img-wrap">
+                    <span style="  background: url('{{template.previewUrl}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                  </div>
                 </div>
-                <div class="template-details" ng-show="templateDetails">
-                    <div id="new_page">
-                        <div class="col-xs-5">
-                            <p>Template Selected</p>
-                            <img src="{{selectedTemplate.previewUrl}}" class="img-thumbnail">
-                            <h4>{{selectedTemplate.name}}</h4>
-                        </div>
-                        <div class="col-xs-7">
-                            <div class="form-group" ng-class="{ 'has-error': titleError}">
-                                <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
-                                <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title" ng-change="validateCreatePage(page)">
-                            </div>
-                            <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
-                                <slug from="page.title" to="page.handle"></slug>
-                                <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
-                                <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle" ng-change="validateCreatePage(page)">
-                            </div>
-                            <p ng-show="page.title">Page Url will be <strong>/{{page.handle}}</strong>
-                                <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
-                                <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
-                            </p>
-                            <div class="clearfix mb15"></div>
-                            <div class="form-group">
-                                <div class="ckbox ckbox-success">
-                                    <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
-                                    <label for="add-to-menu">Add to Main Menu?</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-xs-8">
+                  <h4>{{template.name}}</h4>
+                  <p>{{template.description}}</p>
+                  <!-- <a href="" ng-if="typefilter != 'coming-soon'" ng-click="addPage(template)" data-dismiss="modal" aria-hidden="true"><span class="fa fa-plus"></span> Add</a> -->
                 </div>
+                <div class="col-xs-1">
+                  <h1>
+                    <span class="fa fa-chevron-right"></span>
+                  </h1>
+                </div>
+              </div>
             </div>
-            <div class="modal-footer" ng-show="templateDetails">
-                <button type="button" class="btn btn-default pull-left" ng-click="templateDetails = false"><span class="fa fa-chevron-left"></span> Back</button>
-                <button type="button" class="btn btn-primary" ng-click="createPageFromTemplate(page, $event)">Create Page</button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="template-details" ng-show="templateDetails">
+          <div id="new_page">
+            <div class="col-xs-5">
+              <p>Template Selected</p>
+              <img src="{{selectedTemplate.previewUrl}}" class="img-thumbnail">
+              <h4>{{selectedTemplate.name}}</h4>
             </div>
-            <!-- <div class="modal-body hidden">
+            <div class="col-xs-7">
+              <div class="form-group" ng-class="{ 'has-error': titleError}">
+                <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                <input id="page-title" class="form-control input-lg" type="text" ng-model="page.title" ng-change="validateCreatePage(page)">
+              </div>
+              <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
+                <slug from="page.title" to="page.handle"></slug>
+                <label for="page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                <input id="page-url" class="form-control input-lg" type="text" ng-model="page.handle" ng-change="validateCreatePage(page)">
+              </div>
+              <p ng-show="page.title">Page Url will be
+                <strong>/{{page.handle}}</strong>
+                <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+              </p>
+              <div class="clearfix mb15"></div>
+              <div class="form-group">
+                <div class="ckbox ckbox-success">
+                  <input type="checkbox" id="add-to-menu" ng-model="page.mainmenu" checked>
+                  <label for="add-to-menu">Add to Main Menu?</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" ng-show="templateDetails">
+        <button type="button" class="btn btn-default pull-left" ng-click="templateDetails = false">
+          <span class="fa fa-chevron-left"></span> Back</button>
+        <button type="button" class="btn btn-primary" ng-click="createPageFromTemplate(page, $event)">Create Page</button>
+      </div>
+      <!-- <div class="modal-body hidden">
                 <div id="new_page">
                     <div class="form-group" ng-class="{ 'has-error': titleError}">
                         <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
@@ -333,56 +343,59 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" ng-click="createPage(page, $event)">Create Page</button>
             </div> -->
-        </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
 <!-- Post Modal -->
 <div class="modal fade" id="create-post-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Add Post</h4>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Add Post</h4>
+      </div>
+      <div class="modal-body">
+        <div id="new_page">
+          <div class="form-group" ng-class="{ 'has-error': postAuthorError}">
+            <label for="page-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
+            <input id="page-author" class="form-control input-lg" type="text" placeholder="Post Author" ng-model="post.post_author" ng-change="validateCreatePost(post)">
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': postTitleError}">
+            <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
+            <input id="page-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title" ng-change="validateCreatePost(post)">
+          </div>
+          <div class="form-group" ng-class="{ 'has-error': postUrlError}" ng-show="showChangeURL">
+            <slug from="post.post_title" to="post.post_url"></slug>
+            <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
+            <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post)">
+          </div>
+          <p ng-show="post.post_title">Post Url will be
+            <strong>/{{post.post_url}}</strong>
+            <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+            <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+          </p>
+          <div class="clearfix mb15"></div>
+          <div class="form-group hidden">
+            <div class="ckbox ckbox-success">
+              <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
+              <label for="comment_status">Comment Status On?</label>
             </div>
-            <div class="modal-body">
-                <div id="new_page">
-                    <div class="form-group" ng-class="{ 'has-error': postAuthorError}">
-                        <label for="page-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
-                        <input id="page-author" class="form-control input-lg" type="text" placeholder="Post Author" ng-model="post.post_author" ng-change="validateCreatePost(post)">
-                    </div>
-                    <div class="form-group" ng-class="{ 'has-error': postTitleError}">
-                        <label for="page-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
-                        <input id="page-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title" ng-change="validateCreatePost(post)">
-                    </div>
-                    <div class="form-group" ng-class="{ 'has-error': postUrlError}" ng-show="showChangeURL">
-                        <slug from="post.post_title" to="post.post_url"></slug>
-                        <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
-                        <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post)">
-                    </div>
-                    <p ng-show="post.post_title">Post Url will be <strong>/{{post.post_url}}</strong>
-                        <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
-                        <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
-                    </p>
-                    <div class="clearfix mb15"></div>
-                    <div class="form-group hidden">
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
-                            <label for="comment_status">Comment Status On?</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)">Create</button>
-            </div>
+          </div>
         </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)">Create</button>
+      </div>
     </div>
+  </div>
 </div>
 <!-- /.modal -->
 <div id="model_container"></div>
