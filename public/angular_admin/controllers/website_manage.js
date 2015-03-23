@@ -185,23 +185,33 @@ define([
           $scope.pages = $scope.fetchedPages.slice(0, $scope.scrollInitialLoad);
 
           $scope.loadMorePagesFn = function() {
-            $scope.pages += $scope.fetchedPages.slice($scope.pages.length - 1, $scope.scrollLimit);
-            console.info('Fetch pages', $scope.pages.length - 1, $scope.scrollLimit);
+            if ($scope.fetchedPages.length > $scope.pages.length) {
+              $scope.pages = $scope.pages.concat($scope.fetchedPages.slice($scope.pages.length - 1, $scope.scrollLimit));
+              console.info('Fetch pages', $scope.pages.length - 1, $scope.scrollLimit);
+            }
           };
         });
 
-        WebsiteService.getPosts(function(pages) {
-          $scope.fetchedPosts = [];
-          for (var k in posts) {
-            $scope.fetchedPosts.push(pages[k]);
-          }
+        WebsiteService.getPosts(function(posts) {
+          $scope.fetchedPosts = posts;
           $scope.posts = $scope.fetchedPosts.slice(0, $scope.scrollInitialLoad);
 
           $scope.loadMorePostsFn = function() {
-            $scope.posts += $scope.fetchedPosts.slice($scope.posts.length - 1, $scope.scrollLimit);
-            console.info('Fetch posts', $scope.posts.length - 1, $scope.scrollLimit);
+            if ($scope.fetchedPosts.length > $scope.posts.length) {
+              $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice($scope.posts.length - 1, $scope.scrollLimit));
+              console.info('Fetch posts', $scope.posts.length - 1, $scope.scrollLimit);
+            }
           };
         });
+
+        $scope.loadMoreFn = function() {
+          if ($scope.activeTab == 'pages') {
+            return $scope.loadMorePagesFn();
+          }
+          if ($scope.activeTab === 'posts') {
+            return $scope.loadMorePostsFn();
+          }
+        };
 
         $scope.saveScrollFn = function() {
 

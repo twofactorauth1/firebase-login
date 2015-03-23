@@ -27,7 +27,7 @@
       </button>
     </div>
   </div>
-  <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
+  <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize  indiscroller indiscroller-update='loadMoreFn' indiscroller-save='saveScrollFn'>
     <div class="pages-section" ng-switch-when="pages">
       <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
         <div class="panel panel-default row pages-filter">
@@ -65,7 +65,6 @@
             </div>
           </div>
         </div>
-        <div  indiscroller indiscroller-update='loadMorePagesFn' indiscroller-save='saveScrollFn'>
           <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
             <a href="/admin#/website-editor?pagehandle={{page.handle}}">
               <div class="thumbnail layered-paper">
@@ -84,7 +83,6 @@
               </div>
             </a>
           </div>
-        </div>
         <div class="pagination pagination-centered website-pagination" ng-if="pagesPaging.total && pagesPaging.total > numPerPage">
           <ul class="pagination">
             <li ng-class="{disabled: pagesPaging.disablePaging || pagesPaging.page <= 1}"><a href="" ng-click="pagesPaging.disablePaging ? '' : previousPage()">PREV</a></li>
