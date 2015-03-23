@@ -27,6 +27,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
+                    $(document).ready(function() {
+                      setTimeout(function() {
+                        $scope.$apply(function() {
+                          console.log("Page loaded");
+                          $scope.isLoaded = true;
+                        })
+                        
+                      }, 500);
+                    })
                     var iframe = window.parent.document.getElementById("iframe-website")
                     iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope();
                     // console.log("current Page");

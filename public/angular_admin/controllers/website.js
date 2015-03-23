@@ -1,6 +1,7 @@
 define([
   'app',
   'websiteService',
+  'geocodeService',
   'jqueryUI',
   'angularUI',
   'userService',
@@ -33,6 +34,7 @@ define([
     '$location',
     'WebsiteService',
     'UserService',
+    'GeocodeService',
     'toaster',
     'ngProgress',
     '$rootScope',
@@ -40,7 +42,7 @@ define([
     'NavigationService',
     'SweetAlert',
     'blockUI',
-    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
       var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
       ngProgress.start();
       UserService.getUserPreferences(function(preferences) {
@@ -50,7 +52,7 @@ define([
         }
       });
       $scope.showOnboarding = false;
-      $scope.timeInterval = 200000;
+      $scope.timeInterval = 1200000;
       $scope.redirect = false;
       var stopInterval;
 
@@ -581,6 +583,28 @@ define([
             }
           });
 
+          // Social components
+          $("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+              _id: $(e.currentTarget).closest('.component').data('id')
+            }); 
+            var network = [];          
+            var editIndex = e.currentTarget.attributes["data-index"] ? e.currentTarget.attributes["data-index"].value : null;
+            var parent_index = e.currentTarget.attributes["parent-data-index"] ? e.currentTarget.attributes["parent-data-index"].value : null;
+            var nested = parent_index ? true : false;
+            if(nested)
+              network = editIndex ? $scope.componentEditing.teamMembers[parent_index].networks[editIndex] : null;
+            else
+              network = editIndex ? $scope.componentEditing.networks[editIndex] : null;
+
+            var update = editIndex ? true : false;
+            $("#socialComponentModal").modal('show');  
+            
+            $scope.setSelectedSocialLink(network, $scope.componentEditing._id, update, nested, parent_index);                          
+            
+          });
+
+
           //add media modal click events to all images in image gallery
 
           $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {
@@ -605,6 +629,259 @@ define([
         }
       };
 
+      $scope.saveSocialLink = function(social, id, mode) {
+        $("#social-link-name .error").html("");
+        $("#social-link-name").removeClass('has-error');
+        $("#social-link-url .error").html("");
+        $("#social-link-url").removeClass('has-error');
+        var old_value = _.findWhere($scope.networks, {
+          name: $scope.social.selectedLink
+        });
+      var selectedName;
+      switch (mode) {
+        case "add":
+          if (social && social.name) {
+            if (!social.url || social.url == "") {
+              $("#social-link-url .error").html("Link url can not be blank.");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+
+            if (social.url) {
+              var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+              if (urlRegex.test(social.url) == false) {
+                $("#social-link-url .error").html("Link url incorrect format");
+                $("#social-link-url").addClass('has-error');
+                return;
+              }
+            }
+            selectedName = _.findWhere($scope.networks, {
+              name: social.name
+            });
+            if (selectedName) {
+              $("#social-link-name .error").html("Link icon already exists");
+              $("#social-link-name").addClass('has-error');
+              return;
+            }
+            var selectedUrl = _.findWhere($scope.networks, {
+              url: social.url
+            });
+            if (selectedUrl) {
+              $("#social-link-url .error").html("Link url already exists");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+          } else {
+            $("#social-link-url .error").html("Please enter link url.");
+            $("#social-link-url").addClass('has-error');
+            $("#social-link-name .error").html("Please select link icon.");
+            $("#social-link-name").addClass('has-error');
+            return;
+          }
+          $("#social-link-name .error").html("");
+          $("#social-link-name").removeClass('has-error');
+          $("#social-link-url .error").html("");
+          $("#social-link-url").removeClass('has-error');
+          break;
+        case "update":
+          if (social && social.name && social.url) {
+            var networks = angular.copy($scope.networks);
+
+            selectedName = _.findWhere(networks, {
+              name: old_value.name
+            });
+            selectedName.name = social.name;
+            selectedName.url = social.url;
+            selectedName.icon = social.icon;
+
+
+            var existingName = _.where(networks, {
+              name: social.name
+            });
+            var existingUrl = _.where(networks, {
+              url: social.url
+            });
+            if (existingName.length > 1) {
+              $("#social-link-name .error").html("Link icon already exists");
+              $("#social-link-name").addClass('has-error');
+              return;
+            } else if (existingUrl.length > 1) {
+              $("#social-link-url .error").html("Link url already exists");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+          }
+          break;
+      }
+      if ($scope.meetTeamIndex !== null)
+        $scope.updateTeamNetworks(old_value, mode, social, $scope.meetTeamIndex);
+      else
+        $scope.updateSocialNetworks(old_value, mode, social);
+      $scope.social = {};
+      $scope.meetTeamIndex = null;
+      if ($("#socialComponentModal").length)
+        $("#socialComponentModal").modal("hide");
+    };
+
+      $scope.setSelectedLink = function(social_link) {
+        $scope.social.name = social_link.name;
+        $scope.social.icon = social_link.icon;
+        $scope.social.url = social_link.url;
+      }
+      $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
+        if (!$scope.social)
+          $scope.social = {};
+        if (nested)
+          $scope.meetTeamIndex = index;
+        else
+          $scope.meetTeamIndex = null;
+        if (update) {
+          $scope.social.selectedLink = link.name;
+          $scope.social.name = link.name;
+          $scope.social.icon = link.icon;
+          $scope.social.url = link.url;
+        } else {
+          $scope.social = {};
+        }
+        $("#social-link-name .error").html("");
+        $("#social-link-name").removeClass('has-error');
+        $("#social-link-url .error").html("");
+        $("#social-link-url").removeClass('has-error');
+        $scope.$apply(function() {
+          $scope.networks = $scope.getSocialNetworks(nested, index);
+        })
+    }
+      $scope.social_links = [{
+        name: "adn",
+        icon: "adn",
+        tooltip : "Adn",
+        url: "http://www.adn.com"
+      }, {
+        name: "bitbucket",
+        icon: "bitbucket",
+        tooltip : "BitBucket",
+        url: "https://bitbucket.org"
+      }, {
+        name: "dropbox",
+        icon: "dropbox",
+        tooltip: "Dropbox",
+        url: "https://www.dropbox.com"
+      }, {
+        name: "facebook",
+        icon: "facebook",
+        tooltip: "Facebook",
+        url: "https://www.facebook.com"
+      }, {
+        name: "flickr",
+        icon: "flickr",
+        tooltip: "Flickr",
+        url: "https://www.flickr.com"
+      }, {
+        name: "foursquare",
+        icon: "foursquare",
+        tooltip: "Four Square",
+        url: "https://foursquare.com"
+      }, {
+        name: "github",
+        icon: "github",
+        tooltip: "Github",
+        url: "https://github.com"
+      }, {
+        name: "google-plus",
+        icon: "google-plus",
+        tooltip: "Google Plus",
+        url:"https://www.gmail.com"
+      }, {
+        name: "instagram",
+        icon: "instagram",
+        tooltip: "Instagram",
+        url: "https://instagram.com"
+      },
+      {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin",
+        url: "https://www.linkedin.com"
+      }, {
+        name: "microsoft",
+        icon: "windows",
+        tooltip: "Microsoft",
+        url: "http://www.microsoft.com"
+      }, {
+        name: "openid",
+        icon: "openid",
+        tooltip: "Open Id",
+        url: "http://openid.com"
+      }, {
+        name: "pinterest",
+        icon: "pinterest",
+        tooltip: "Pinterest",
+        url: "https://www.pinterest.com"
+      }, {
+        name: "reddit",
+        icon: "reddit",
+        tooltip: "Reddit",
+        url: "http://www.reddit.com"
+      }, {name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat",
+        url: "https://www.snapchat.com"
+      }, {
+        name: "soundcloud",
+        icon: "soundcloud",
+        tooltip: "Sound Cloud",
+        url: "https://soundcloud.com"
+      },{
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr",
+        url:"https://www.tumblr.com"
+      }, {
+        name: "twitter",
+        icon: "twitter",
+        tooltip: "Twitter",
+        url: "https://twitter.com"
+      }, {
+        name: "vimeo",
+        icon: "vimeo-square",
+        tooltip: "Vimeo",
+        url: "https://vimeo.com"
+      },  {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine",
+        url: "http://www.vinemarket.com"
+      }, {
+        name: "vk",
+        icon: "vk",
+        tooltip: "Vk",
+        url: "http://vk.com"
+      }, 
+      {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website",
+        url: "http://www.website.com"
+      },
+      {
+        name: "yahoo",
+        icon: "yahoo",
+        tooltip: "Yahoo",
+        url: "https://yahoo.com"
+      },
+        {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube",
+        url: "https://www.youtube.com"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp",
+        url: "http://www.yelp.com"
+      }
+
+    ]
       $scope.toggled = function(open) {
 
         //console.log('Dropdown is now: ', open);
@@ -956,7 +1233,19 @@ define([
       //                $scope.saveComponent();
       //            }
 
+      $scope.stringifyAddress = function(address) {
+        if (address) {
+          return _.filter([address.address, address.city, address.state, address.zip], function(str) {
+            return str !== "";
+          }).join(", ")
+        }
+      };
+
       $scope.updateContactUsAddress = function(location) {
+        // console.log('updateContactUsAddress >>> ');
+        // console.log('location: ', $scope.componentEditing.location);
+        // console.log('$scope.stringifyAddress ', $scope.stringifyAddress($scope.componentEditing.location));
+
         if ($scope.componentEditing.location.city) {
           $('#location-city').parents('.form-group').find('.error').html('');
           $('#location-city').parents('.form-group').removeClass('has-error');
@@ -973,9 +1262,26 @@ define([
           $('#location-state').parents('.form-group').find('.error').html('State is required');
         }
 
-        if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
-          $scope.saveContactComponent();
-        }
+        GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function(data) {
+          // console.log('getGeoSearchAddress data >>> ');
+          // console.log('lat: ', data.lat);
+          // console.log('lon: ', data.lon);
+          if (data.lat && data.lon) {
+            $scope.componentEditing.location.lat = data.lat;
+            $scope.componentEditing.location.lon = data.lon;
+            $scope.saveContactComponent();
+          }
+        });
+
+        // if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
+        //   $scope.saveContactComponent();
+        // }
+      }
+
+      $scope.saveContactComponent = function() {
+        var currentComponentId = $scope.componentEditing._id;
+        $scope.updateSingleComponent(currentComponentId);
+        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
       }
 
       $scope.addComponent = function(addedType) {
@@ -1228,7 +1534,7 @@ define([
                 if (matchingComponent[first][second])
                   matchingComponent[first][second][third] = componentVarContents;
                }
-                
+
               }
               //if contains an array of array variables
               if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
@@ -1261,12 +1567,6 @@ define([
 
       $scope.saveCustomComponent = function(networks) {
         iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
-      };
-
-      $scope.saveContactComponent = function() {
-        var currentComponentId = $scope.componentEditing._id;
-        $scope.updateSingleComponent(currentComponentId);
-        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
       };
 
       //delete page
@@ -1669,7 +1969,7 @@ define([
         $scope.saveCustomComponent();
       }
 
-      window.updateSocialNetworks = function(old_value, mode, new_value) {
+      $scope.updateSocialNetworks = function(old_value, mode, new_value) {
         var selectedName;
         switch (mode) {
           case "add":
@@ -1706,7 +2006,7 @@ define([
         }
       }
 
-      window.updateTeamNetworks = function(old_value, mode, new_value, parent_index) {
+      $scope.updateTeamNetworks = function(old_value, mode, new_value, parent_index) {
         var selectedName;
         switch (mode) {
           case "add":
@@ -1745,10 +2045,7 @@ define([
         }
       }
 
-      window.getSocialNetworks = function(componentId, nested, parent_index) {
-        $scope.componentEditing = _.findWhere($scope.components, {
-          _id: componentId
-        });
+      $scope.getSocialNetworks = function(nested, parent_index) {       
         if (nested)
           return $scope.componentEditing.teamMembers[parent_index].networks;
         else
