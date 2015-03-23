@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
-  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData',
+  function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
@@ -573,8 +573,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.updateContactUsMap = function(component) {
-        console.log('updateContactUsMap >>> ');
-        console.log('component: ', component);
         var matchingContact = _.find($scope.contactDetails, function(item) {
           return item.contactId == component._id
         })
@@ -603,22 +601,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if (!component.contact.phone && that.account.business.phones.length)
           matchingContact.contactPhone = that.account.business.phones[0].number;
         if (matchingContact.geo_address_string) {
-          console.log('matchingContact.geo_address_string: ', matchingContact.geo_address_string);
           angular.extend($scope, {
             mapLocation: {
               lat: parseFloat(component.location.lat),
               lng: parseFloat(component.location.lon),
-              zoom: 12
+              zoom: 10
             },
             markers: {
               mainMarker: {
                 lat: parseFloat(component.location.lat),
                 lng: parseFloat(component.location.lon),
-                focus: true,
+                focus: false,
                 message: matchingContact.geo_address_string,
                 draggable: false
               }
             }
+          });
+          leafletData.getMap('leafletmap').then(function(map) {
+             $timeout(function () {
+                map.invalidateSize();
+              }, 500);
           });
         }
       }

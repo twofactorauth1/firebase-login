@@ -1235,16 +1235,16 @@ define([
 
       $scope.stringifyAddress = function(address) {
         if (address) {
-          return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
+          return _.filter([address.address, address.city, address.state, address.zip], function(str) {
             return str !== "";
           }).join(", ")
         }
       };
 
       $scope.updateContactUsAddress = function(location) {
-        console.log('updateContactUsAddress >>> ');
-        console.log('location: ', $scope.componentEditing.location);
-        console.log('$scope.stringifyAddress ', $scope.stringifyAddress($scope.componentEditing.location));
+        // console.log('updateContactUsAddress >>> ');
+        // console.log('location: ', $scope.componentEditing.location);
+        // console.log('$scope.stringifyAddress ', $scope.stringifyAddress($scope.componentEditing.location));
 
         if ($scope.componentEditing.location.city) {
           $('#location-city').parents('.form-group').find('.error').html('');
@@ -1266,10 +1266,11 @@ define([
           // console.log('getGeoSearchAddress data >>> ');
           // console.log('lat: ', data.lat);
           // console.log('lon: ', data.lon);
-
-          $scope.componentEditing.location.lat = data.lat;
-          $scope.componentEditing.location.lon = data.lon;
-          $scope.saveContactComponent();
+          if (data.lat && data.lon) {
+            $scope.componentEditing.location.lat = data.lat;
+            $scope.componentEditing.location.lon = data.lon;
+            $scope.saveContactComponent();
+          }
         });
 
         // if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
