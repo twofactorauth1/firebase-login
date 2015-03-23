@@ -52,8 +52,6 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
                 }    
             }    
         });
-
-        
         //  window.updateWebsite = function(data) {
         //     console.log('data recieved >>> ', data);
         //     $scope.account.website = data;
