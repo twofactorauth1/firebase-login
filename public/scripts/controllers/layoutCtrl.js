@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
-  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData',
+  function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
@@ -573,8 +573,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.updateContactUsMap = function(component) {
-        console.log('updateContactUsMap >>> ');
-        console.log('component: ', component);
         var matchingContact = _.find($scope.contactDetails, function(item) {
           return item.contactId == component._id
         })
@@ -603,22 +601,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if (!component.contact.phone && that.account.business.phones.length)
           matchingContact.contactPhone = that.account.business.phones[0].number;
         if (matchingContact.geo_address_string) {
-          console.log('matchingContact.geo_address_string: ', matchingContact.geo_address_string);
           angular.extend($scope, {
             mapLocation: {
               lat: parseFloat(component.location.lat),
               lng: parseFloat(component.location.lon),
-              zoom: 12
+              zoom: 10
             },
             markers: {
               mainMarker: {
                 lat: parseFloat(component.location.lat),
                 lng: parseFloat(component.location.lon),
-                focus: true,
+                focus: false,
                 message: matchingContact.geo_address_string,
                 draggable: false
               }
             }
+          });
+          leafletData.getMap('leafletmap').then(function(map) {
+             $timeout(function () {
+                map.invalidateSize();
+              }, 500);
           });
         }
       }
@@ -686,264 +688,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
     }
 
-
-
-    $scope.social_links = [{
-        name: "adn",
-        icon: "adn",
-        tooltip : "Adn",
-        url: "http://www.adn.com"
-      }, {
-        name: "bitbucket",
-        icon: "bitbucket",
-        tooltip : "BitBucket",
-        url: "https://bitbucket.org"
-      }, {
-        name: "dropbox",
-        icon: "dropbox",
-        tooltip: "Dropbox",
-        url: "https://www.dropbox.com"
-      }, {
-        name: "facebook",
-        icon: "facebook",
-        tooltip: "Facebook",
-        url: "https://www.facebook.com"
-      }, {
-        name: "flickr",
-        icon: "flickr",
-        tooltip: "Flickr",
-        url: "https://www.flickr.com"
-      }, {
-        name: "foursquare",
-        icon: "foursquare",
-        tooltip: "Four Square",
-        url: "https://foursquare.com"
-      }, {
-        name: "github",
-        icon: "github",
-        tooltip: "Github",
-        url: "https://github.com"
-      }, {
-        name: "google-plus",
-        icon: "google-plus",
-        tooltip: "Google Plus",
-        url:"https://www.gmail.com"
-      }, {
-        name: "instagram",
-        icon: "instagram",
-        tooltip: "Instagram",
-        url: "https://instagram.com"
-      },
-      {
-        name: "linkedin",
-        icon: "linkedin",
-        tooltip: "Linkedin",
-        url: "https://www.linkedin.com"
-      }, {
-        name: "microsoft",
-        icon: "windows",
-        tooltip: "Microsoft",
-        url: "http://www.microsoft.com"
-      }, {
-        name: "openid",
-        icon: "openid",
-        tooltip: "Open Id",
-        url: "http://openid.com"
-      }, {
-        name: "pinterest",
-        icon: "pinterest",
-        tooltip: "Pinterest",
-        url: "https://www.pinterest.com"
-      }, {
-        name: "reddit",
-        icon: "reddit",
-        tooltip: "Reddit",
-        url: "http://www.reddit.com"
-      }, {name: "comment-o",
-        icon: "comment-o",
-        tooltip: "Snapchat",
-        url: "https://www.snapchat.com"
-      }, {
-        name: "soundcloud",
-        icon: "soundcloud",
-        tooltip: "Sound Cloud",
-        url: "https://soundcloud.com"
-      },{
-        name: "tumblr",
-        icon: "tumblr",
-        tooltip: "Tumblr",
-        url:"https://www.tumblr.com"
-      }, {
-        name: "twitter",
-        icon: "twitter",
-        tooltip: "Twitter",
-        url: "https://twitter.com"
-      }, {
-        name: "vimeo",
-        icon: "vimeo-square",
-        tooltip: "Vimeo",
-        url: "https://vimeo.com"
-      },  {
-        name: "vine",
-        icon: "vine",
-        tooltip: "Vine",
-        url: "http://www.vinemarket.com"
-      }, {
-        name: "vk",
-        icon: "vk",
-        tooltip: "Vk",
-        url: "http://vk.com"
-      }, 
-      {
-        name: "desktop",
-        icon: "desktop",
-        tooltip: "Website",
-        url: "http://www.website.com"
-      },
-      {
-        name: "yahoo",
-        icon: "yahoo",
-        tooltip: "Yahoo",
-        url: "https://yahoo.com"
-      },
-        {
-        name: "youtube",
-        icon: "youtube",
-        tooltip: "Youtube",
-        url: "https://www.youtube.com"
-      }, {
-        name: "yelp",
-        icon: "yelp",
-        tooltip: "Yelp",
-        url: "http://www.yelp.com"
-      }
-
-    ]
-
-    $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
-      if (!$scope.social)
-        $scope.social = {};
-      if (nested)
-        $scope.meetTeamIndex = index;
-      else
-        $scope.meetTeamIndex = null;
-      if (update) {
-        $scope.social.selectedLink = link.name;
-        $scope.social.name = link.name;
-        $scope.social.icon = link.icon;
-        $scope.social.url = link.url;
-      } else {
-        $scope.social = {};
-      }
-      $("#social-link-name .error").html("");
-      $("#social-link-name").removeClass('has-error');
-      $("#social-link-url .error").html("");
-      $("#social-link-url").removeClass('has-error');
-      $scope.networks = window.parent.getSocialNetworks(id, nested, index);
-    }
-    $scope.setSelectedLink = function(social_link) {
-      $scope.social.name = social_link.name;
-      $scope.social.icon = social_link.icon;
-      $scope.social.url = social_link.url;
-    }
-    $scope.saveSocialLink = function(social, id, mode) {
-      $("#social-link-name .error").html("");
-      $("#social-link-name").removeClass('has-error');
-      $("#social-link-url .error").html("");
-      $("#social-link-url").removeClass('has-error');
-      var old_value = _.findWhere($scope.networks, {
-        name: $scope.social.selectedLink
-      });
-      var selectedName;
-      switch (mode) {
-        case "add":
-          if (social && social.name) {
-            if (!social.url || social.url == "") {
-              $("#social-link-url .error").html("Link url can not be blank.");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-
-            if (social.url) {
-              var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-              if (urlRegex.test(social.url) == false) {
-                $("#social-link-url .error").html("Link url incorrect format");
-                $("#social-link-url").addClass('has-error');
-                return;
-              }
-            }
-            selectedName = _.findWhere($scope.networks, {
-              name: social.name
-            });
-            if (selectedName) {
-              $("#social-link-name .error").html("Link icon already exists");
-              $("#social-link-name").addClass('has-error');
-              return;
-            }
-            var selectedUrl = _.findWhere($scope.networks, {
-              url: social.url
-            });
-            if (selectedUrl) {
-              $("#social-link-url .error").html("Link url already exists");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-          } else {
-            $("#social-link-url .error").html("Please enter link url.");
-            $("#social-link-url").addClass('has-error');
-            $("#social-link-name .error").html("Please select link icon.");
-            $("#social-link-name").addClass('has-error');
-            return;
-          }
-          $("#social-link-name .error").html("");
-          $("#social-link-name").removeClass('has-error');
-          $("#social-link-url .error").html("");
-          $("#social-link-url").removeClass('has-error');
-          break;
-        case "update":
-          if (social && social.name && social.url) {
-            var networks = angular.copy($scope.networks);
-
-            selectedName = _.findWhere(networks, {
-              name: old_value.name
-            });
-            selectedName.name = social.name;
-            selectedName.url = social.url;
-            selectedName.icon = social.icon;
-
-
-            var existingName = _.where(networks, {
-              name: social.name
-            });
-            var existingUrl = _.where(networks, {
-              url: social.url
-            });
-            if (existingName.length > 1) {
-              $("#social-link-name .error").html("Link icon already exists");
-              $("#social-link-name").addClass('has-error');
-              return;
-            } else if (existingUrl.length > 1) {
-              $("#social-link-url .error").html("Link url already exists");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-          }
-          break;
-      }
-      if ($scope.meetTeamIndex !== null)
-        window.parent.updateTeamNetworks(old_value, mode, social, $scope.meetTeamIndex);
-      else
-        window.parent.updateSocialNetworks(old_value, mode, social);
-      $scope.social = {};
-      $scope.meetTeamIndex = null;
-      if ($("#meetteamSocialModal").length)
-        $("#meetteamSocialModal").modal("hide");
-      if ($("#socialComponentModal").length)
-        $("#socialComponentModal").modal("hide");
-      if ($("#topbarSocialComponentModal").length)
-        $("#topbarSocialComponentModal").modal("hide");
-      $(".modal-backdrop").remove();
-    };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
     }
