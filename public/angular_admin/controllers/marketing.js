@@ -155,7 +155,13 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             posts[i].type = 'facebook';
             posts[i].socialAccountId = socialId;
             $scope.fbPostsLength += 1;
-            posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
+            if (posts[i].hasOwnProperty('from') && posts[i].from.hasOwnProperty('sourceId')){
+              posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
+            } 
+            else if (posts[i].hasOwnProperty('from') && posts[i].from.hasOwnProperty('profile_pic')) {
+              posts[i].from.profile_pic = posts[i].from.profile_pic;
+            }
+            
             console.log('posts[i] ', posts[i]);
             $scope.feed.push(posts[i]);
           };
@@ -193,6 +199,8 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           });
         },
         fb: function(profile, socialId) {
+          if (angular.isUndefined(profile))
+            profile = {};
           profile.socialId = socialId;
           profile.type = 'facebook';
           profile.open = true;
@@ -297,28 +305,32 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
         .then(function(data) {
           data.forEach(function(value, index) {
             var logicFn = null;
-            if (promiseProcessor[index].length == 3) {
-              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
-                promiseProcessor[index][1]
-              ][
-                promiseProcessor[index][2]
-              ];
-            }
-            if (promiseProcessor[index].length == 2) {
-              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
-                promiseProcessor[index][1]
-              ];
-            }
+            var counter = 0;
+            if (!angular.isArray(value)) {
+              if (promiseProcessor[counter].length == 3) {
+                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][
+                  promiseProcessor[counter][1]
+                ][
+                  promiseProcessor[counter][2]
+                ];
+              }
+              if (promiseProcessor[counter].length == 2) {
+                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][
+                  promiseProcessor[counter][1]
+                ];
+              }
 
-            if (promiseProcessor[index].length == 1) {
-              var logicFn = $scope.typeLogic[promiseProcessor[index][0]];
-            }
+              if (promiseProcessor[counter].length == 1) {
+                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]];
+              }
 
-            if (logicFn) {
-              logicFn(value.data, promiseSocialId[index]);
-            } else {
-              console.warn(promiseProcessor[index]);
-              console.warn('not found', config.trackedObjects[index], socialAccountMap[config.trackedObjects[index].socialId], value.data);
+              if (logicFn && value.data.length) {
+                logicFn(value.data, promiseSocialId[counter]);
+              } else {
+                console.warn(promiseProcessor[counter]);
+                console.warn('not found', config.trackedObjects[counter], socialAccountMap[config.trackedObjects[counter].socialId], value.data);
+              }
+              counter = counter+1;
             }
           });
 
