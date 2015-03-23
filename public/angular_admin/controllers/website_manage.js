@@ -190,11 +190,8 @@ define([
           };
         });
 
-        WebsiteService.getPosts(function(pages) {
-          $scope.fetchedPosts = [];
-          for (var k in posts) {
-            $scope.fetchedPosts.push(pages[k]);
-          }
+        WebsiteService.getPosts(function(posts) {
+          $scope.fetchedPosts = posts;
           $scope.posts = $scope.fetchedPosts.slice(0, $scope.scrollInitialLoad);
 
           $scope.loadMorePostsFn = function() {
@@ -202,6 +199,15 @@ define([
             console.info('Fetch posts', $scope.posts.length - 1, $scope.scrollLimit);
           };
         });
+
+        $scope.loadMoreFn = function() {
+          if ($scope.activeTab == 'pages') {
+            return $scope.loadMorePagesFn();
+          }
+          if ($scope.activeTab === 'posts') {
+            return $scope.loadMorePostsFn();
+          }
+        };
 
         $scope.saveScrollFn = function() {
 
