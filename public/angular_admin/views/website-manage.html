@@ -28,21 +28,21 @@
     <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize>
         <div class="pages-section" ng-switch-when="pages">
             <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
-                 <div class="panel panel-default row pages-filter">
+                <div class="panel panel-default row pages-filter">
                     <div class="panel-body">
-                      <div class="col-xs-6">
-                        <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
-                      </div>
-                      <div class="col-xs-6 form-horizontal">
-                        <div class="row">
-                            <select class="form-control chosen-select input" ng-model="sortOrder">
-                                <option value="" disabled selected>Filter Pages</option>
-                                <option value="1">A to Z</option>
-                                <option value="2">Z to A</option>
-                                <option value="3">Date Added</option>
-                            </select>
+                        <div class="col-xs-12">
+                            <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
                         </div>
-                      </div>
+                        <!-- <div class="col-xs-6 form-horizontal">
+                            <div class="row">
+                                <select class="form-control chosen-select input" ng-model="sortOrder">
+                                    <option value="" disabled selected>Filter Pages</option>
+                                    <option value="1">A to Z</option>
+                                    <option value="2">Z to A</option>
+                                    <option value="3">Date Added</option>
+                                </select>
+                            </div>
+                        </div> -->
                     </div>
                     <!-- panel-body -->
                 </div>
@@ -64,22 +64,22 @@
                     </div>
                 </div>
                 <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
-                    <div class="thumbnail layered-paper">
-                        <a href="/admin#/website-editor?pagehandle={{page.handle}}">
+                    <a href="/admin#/website-editor?pagehandle={{page.handle}}">
+                        <div class="thumbnail layered-paper">
                             <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
-                        </a>
-                        <h5 style="margin-top:0;color: #999;font-weight: normal;">{{page.modified.date ? (page.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
-                        <div class="screenshot-wrap scrollhover" block-ui="{{ editedPage.handle === page.handle ? 'pagesBlockUI' : '' }} ">
-                            <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
-                            <img ng-if="page.screenshot" ng-src="{{page.screenshot}}" err-src="<div class='page-icon'><h1 class='center'><i class='fa fa-photo'></i></h1></div>" alt="" class="screenshot">
-                            <div class="page-icon" ng-if="!page.screenshot">
-                                <h1 class="center"><i class="fa fa-photo"></i></h1>
+                            <h5 style="margin-top:0;color: #999;font-weight: normal;">{{page.modified.date ? (page.modified.date | timeAgoFilter) : "No Date Specified"}}</h5>
+                            <div class="screenshot-wrap scrollhover" block-ui="{{ editedPage.handle === page.handle ? 'pagesBlockUI' : '' }} ">
+                                <!-- <div class="screenshot" ng-if="page.screenshot" style="background-image: url({{page.screenshot}});height: 160px;background-size: cover;"></div> -->
+                                <img ng-if="page.screenshot" ng-src="{{page.screenshot}}" err-src="<div class='page-icon'><h1 class='center'><i class='fa fa-photo'></i></h1></div>" alt="" class="screenshot">
+                                <div class="page-icon" ng-if="!page.screenshot">
+                                    <h1 class="center"><i class="fa fa-photo"></i></h1>
+                                </div>
                             </div>
+                            <!-- <div class="caption">
+                                <a href="/admin#/website-editor?pagehandle={{page.handle}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
+                            </div> -->
                         </div>
-                        <div class="caption">
-                            <a href="/admin#/website-editor?pagehandle={{page.handle}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
-                        </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="pagination pagination-centered website-pagination" ng-if="pagesPaging.total && pagesPaging.total > numPerPage">
                     <ul class="pagination">
@@ -93,41 +93,49 @@
             <!-- End row -->
         </div>
         <div class="posts-section" ng-switch-when="posts">
-            <div class='row'>
-                <div class='col-sm-4'></div>
-                <div class='col-sm-4'>
-                    <input type='text' placeholder='search for post' class='form-control' ng-model='postSearch.post_title'>
+            <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
+                <div class="panel panel-default row posts-filter">
+                    <div class="panel-body">
+                        <div class="col-xs-12">
+                            <input type="text" placeholder="Search" class="form-control input" ng-model="postSearch.post_title" />
+                        </div>
+                        <!-- <div class="col-xs-6 form-horizontal">
+                            <div class="row">
+                                <select class="form-control chosen-select input" ng-model="sortOrder">
+                                    <option value="" disabled selected>Filter Pages</option>
+                                    <option value="1">A to Z</option>
+                                    <option value="2">Z to A</option>
+                                    <option value="3">Date Added</option>
+                                </select>
+                            </div>
+                        </div> -->
+                    </div>
+                    <!-- panel-body -->
                 </div>
-                <div class='col-sm-4'></div>
-            </div>
-            <div class="row">
+            </headroom>
+            <div class="row" style="margin-top: 60px;">
                 <div class="col-xs-12 col-sm-6 col-md-3">
                     <div class="paper-wrap">
                         <div class="paper">
                             <div class="tape"></div>
                             <ul id="lines">
-                                <li class="first">
-                                    <h4 class="title">Add new post</h4>
-                                </li>
-                                <li class="second">
-                                    <h5 class="timeago" style="font-weight: normal;">&nbsp;</h5>
-                                </li>
+                                <li class="first"></li>
+                                <li class="second"></li>
                                 <li></li>
                                 <li></li>
                                 <li></li>
                                 <li></li>
                                 <li></li>
                                 <li></li>
-                                <li></li>
-                                <div class="screenshot-wrap">
-                                    <div class="screenshot-overflow">
-                                        <div class="excerpt">
-                                            <h1 class="center" style="font-size: 98px;margin-top: 10px;color: #e7e7e7;"><i class="fa fa-file-text"></i></h1>
+                                <div style="padding:15px">
+                                    <div class="add-wrap">
+                                        <div class="page-icon">
+                                            <h1 class="center" style="font-size: 98px;margin-top: 0px;color: #e7e7e7;"><i class="fa fa-file-text"></i></h1>
+                                        </div>
+                                        <div class="center">
+                                            <a href="" data-toggle="modal" class="btn btn-success btn-lg" role="button" data-target="#create-post-modal"><i class="fa fa-plus"></i> Add Post</a>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="caption">
-                                    <a href="" data-toggle="modal" class="btn btn-green btn-block" role="button" data-target="#create-post-modal"><i class="fa fa-add"></i> Add</a>
                                 </div>
                             </ul>
                         </div>
@@ -159,8 +167,6 @@
                                 <li></li>
                                 <li></li>
                                 <li></li>
-                                <li></li>
-                                <li></li>
                                 <div class="screenshot-wrap">
                                     <div class="screenshot-overflow">
                                         <div class="screenshot" ng-if="post.featured_image" style="background-image: url({{post.featured_image}});"></div>
@@ -170,9 +176,9 @@
                                         <!-- <img ng-if="!post.screenshot" src="{{post.featured_image || 'http://placehold.it/500x300'}}" alt=""> -->
                                     </div>
                                 </div>
-                                <div class="caption">
+                                <!-- <div class="caption">
                                     <a href="/admin#/website-editor?posthandle={{post.post_url}}" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
-                                </div>
+                                </div> -->
                             </ul>
                         </div>
                         <div class="left-shadow"></div>
@@ -210,11 +216,6 @@
                         <div class="radio">
                             <label>
                                 <input type="radio" name="default_tab" id="posts" ng-value="'posts'" ng-model="userPreferences.website_default_tab" ng-change="showToaster = true; activeTab = 'posts'">Posts
-                            </label>
-                        </div>
-                        <div class="radio disabled">
-                            <label>
-                                <input type="radio" name="default_tab" id="themes" ng-value="'themes'" ng-model="userPreferences.website_default_tab" ng-change="showToaster = true; activeTab = 'themes'">Themes
                             </label>
                         </div>
                     </div>

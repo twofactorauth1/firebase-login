@@ -16,18 +16,14 @@
                         {{currentPage.title}}</div>
                     <span class="caret"></span>
                 </button>
-
             </div>
         </div>
         <div class="col-xs-4">
-
             <a class="btn btn-outline pull-right btn-edit-page" type="button" ng-click="editPage()" ng-show="!isEditing">
                 <i class="fa fa fa-edit"></i>
                 <span class="hidden-xs">Edit</span>
             </a>
-
             <a class="btn btn-outline pull-right btn-save-page" type="button" ng-click="savePage()" ng-show="isEditing" ng-disabled="!iframeLoaded">
-
                 <span>
                      <span class="hidden-xs" ng-if="!saveLoading"> Save </span>
                 <span class="hidden-xs" ng-if="saveLoading"> Saving </span>
@@ -38,16 +34,13 @@
                 <i class="fa fa fa-times"></i>
                 <span class="hidden-xs">Cancel</span>
             </a>
-
             <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>
             </a>
-
             <div class="clearfix"></div>
         </div>
     </div>
-
     <img ng-show="isMobile" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/iphone-background.png">
     <div block-ui="editBlockUI">
         <iframe id="iframe-website" name="iframe-website" src="" ng-style="styleWebsite()" indigeweb-resize></iframe>
@@ -75,13 +68,9 @@
                         <label>Secure:</label>
                         <input bs-switch ng-model="currentPage.secure" type="checkbox" class="pull-right" ng-change="editPage()">
                     </div>
-
                     <div class="mb20"></div>
-
                     <button class="btn btn-block btn-success" data-toggle="modal" data-target="#historical-page-modal"> Historical Pages</button>
-
                     <div class="mb20"></div>
-
                     <div class="well">
                         <p>Danger Zone</p>
                         <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-ng-disabled="currentPage.handle==='index'" confirm-click2-confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
@@ -96,9 +85,7 @@
                         <label>URL:</label>
                         <input class="form-control input-lg" type="text" ng-model="post_data.post_url">
                     </div>
-
                     <div class="mb20"></div>
-
                     <div class="well">
                         <p>Danger Zone</p>
                         <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" confirm-click2-confirm="deletePost(post_data)"><i class="fa fa-trash"></i> Delete Post</button>
@@ -107,9 +94,7 @@
             </tab>
         </tabset>
     </div>
-
     <div data-ng-include data-src="'angular_admin/views/partials/add-component-modal.html'"></div>
-
     <!-- Component Settings Modal -->
     <div class="modal" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" indigeweb-draggable-modal aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -144,7 +129,7 @@
                                         <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.activetxtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                     </div>
                                 </div>
-                                <hr ng-show="!componentEditing.bg.img.show"/>
+                                <hr ng-show="!componentEditing.bg.img.show" />
                                 <div class="form-group" ng-if="componentEditing.type === 'navigation'">
                                     <label>Nav BG Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
@@ -177,8 +162,7 @@
                                         <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                     </div>
                                 </div>
-                                <hr ng-show="componentEditing.type == 'navigation'"/>
-
+                                <hr ng-show="componentEditing.type == 'navigation'" />
                                 <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                                     <label for="colorpicker">Background Color:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span>
@@ -215,9 +199,9 @@
                                     <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
                                     <!-- <input id="bg_hide" bs-switch ng-model="componentEditing.bg.img.show" type="checkbox" class="pull-right" ng-change="removeImage(true);saveComponent()"> -->
                                     <label class="switch switch-green pull-right">
-                                      <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.show" ng-change="removeImage(true);saveComponent()">
-                                      <span class="switch-label" data-on="On" data-off="Off"></span>
-                                      <span class="switch-handle"></span>
+                                        <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.show" ng-change="removeImage(true);saveComponent()">
+                                        <span class="switch-label" data-on="On" data-off="Off"></span>
+                                        <span class="switch-handle"></span>
                                     </label>
                                     <br>
                                     <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
@@ -230,7 +214,7 @@
                                                 <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" ng-model="componentEditing.bg.img.url" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" value="Add BG Image">
                                             </div>
                                         </div>
-                                         <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
+                                        <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
                                             <i class="fa fa-close" ng-click="removeImage(false)"></i>
                                             <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" ng-change="saveComponent()" class="img-thumbnail">
                                         </div>
@@ -245,13 +229,13 @@
                                             </select> -->
                                             <div class="clearfix"></div>
                                             <label class="radio-inline">
-                                              <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="left" ng-model="componentEditing.bg.img.position"> Left
+                                                <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="left" ng-model="componentEditing.bg.img.position"> Left
                                             </label>
                                             <label class="radio-inline">
-                                              <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="right" ng-model="componentEditing.bg.img.position"> Right
+                                                <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="right" ng-model="componentEditing.bg.img.position"> Right
                                             </label>
                                             <label class="radio-inline">
-                                              <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="center" ng-model="componentEditing.bg.img.position"> Center
+                                                <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="center" ng-model="componentEditing.bg.img.position"> Center
                                             </label>
                                         </div>
                                     </div>
@@ -260,28 +244,27 @@
                                             <label for="bg_blur">Blur BG</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
                                             <label class="switch switch-green pull-right">
-                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.blur" ng-change="saveComponent()">
-                                              <span class="switch-label" data-on="On" data-off="Off"></span>
-                                              <span class="switch-handle"></span>
+                                                <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.blur" ng-change="saveComponent()">
+                                                <span class="switch-label" data-on="On" data-off="Off"></span>
+                                                <span class="switch-handle"></span>
                                             </label>
                                         </div>
-
                                         <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
                                             <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
                                             <label class="switch switch-green pull-right">
-                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.parallax" ng-change="saveComponent()">
-                                              <span class="switch-label" data-on="On" data-off="Off"></span>
-                                              <span class="switch-handle"></span>
+                                                <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.parallax" ng-change="saveComponent()">
+                                                <span class="switch-label" data-on="On" data-off="Off"></span>
+                                                <span class="switch-handle"></span>
                                             </label>
                                         </div>
                                         <div class="form-group" ng-show="componentEditing.bg.img.show">
                                             <label for="bg_overlay">Under Nav</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
                                             <label class="switch switch-green pull-right">
-                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.undernav" ng-change="saveComponent()">
-                                              <span class="switch-label" data-on="On" data-off="Off"></span>
-                                              <span class="switch-handle"></span>
+                                                <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.undernav" ng-change="saveComponent()">
+                                                <span class="switch-label" data-on="On" data-off="Off"></span>
+                                                <span class="switch-handle"></span>
                                             </label>
                                         </div>
                                         <hr ng-show="componentEditing.bg.img.show"></hr>
@@ -289,9 +272,9 @@
                                             <label for="bg_overlay">Add Overlay</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
                                             <label class="switch switch-green pull-right">
-                                              <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.overlay" ng-change="saveComponent()">
-                                              <span class="switch-label" data-on="On" data-off="Off"></span>
-                                              <span class="switch-handle"></span>
+                                                <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.bg.img.overlay" ng-change="saveComponent()">
+                                                <span class="switch-label" data-on="On" data-off="Off"></span>
+                                                <span class="switch-handle"></span>
                                             </label>
                                         </div>
                                         <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
@@ -326,7 +309,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="clearfix mb15"></div>
                             </div>
                         </tab>
@@ -338,9 +320,9 @@
                                 <label for="colorpicker">Visibility:</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Show/hide component."><i class="fa fa-info-circle" /></span>
                                 <label class="switch switch-green pull-right">
-                                  <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.visibility" ng-change="saveComponent()">
-                                  <span class="switch-label" data-on="On" data-off="Off"></span>
-                                  <span class="switch-handle"></span>
+                                    <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.visibility" ng-change="saveComponent()">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
                                 </label>
                             </div>
                             <hr ng-if="componentEditing.type != 'navigation'"></hr>
@@ -355,7 +337,6 @@
                                 <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
                                 <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
                                 </select>
-
                             </div>
                             <hr ng-if="componentEditing.type == 'image-text'"></hr>
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
@@ -384,7 +365,6 @@
                             <div class="clearfix"></div>
                             <div id="reorderNavBarContainer" class="form-group" onmouseover="$('#component-setting-modal').removeAttr('indigeweb-draggable-modal')" onmouseout="$('#component-setting-modal').attr('indigeweb-draggable-modal', '')">
                                 <ul as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
-
                                     <li data-ng-repeat="link in mainMenu.links" as-sortable-item class="mb10">
                                         <div class="head-menu-links" data-label="{{link.label}}">
                                             <div class="container-fluid">
@@ -438,7 +418,6 @@
                                                     <div class="clearfix mb10"></div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </li>
                                 </ul>
@@ -484,50 +463,46 @@
                             <tab-heading>
                                 <span>Hours</span>
                             </tab-heading>
-
                             <div class="form-group">
                                 <label for="show-hours">Show Business Hours</label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business hours to contact us component."><i class="fa fa-info-circle" /></span>
                                 <input id="show-hours" bs-switch ng-model="componentEditing.showHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
                             <div class="form-group" ng-if="componentEditing.showHours">
-                            <label for="split-hours">I'd like to enter two sets of hours for a single day</label>
-                            <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
-                            <input id="splitHours" bs-switch ng-model="componentEditing.splitHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
-                        </div>
-                        <div class="form-group" ng-if="componentEditing.showHours">
-                            <label for="location-hours">Business Hours </label>
-                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
-
-                            <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
-                                <label class="col-xs-1" for="val.day">{{val.day}}:</label>
-                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
-                                </select>
-                                <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                                <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px" > & </label>
-                                <select class="col-xs-2" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select" ng-model="val.start2" ng-options="item for item in hours.HOURS">
-                                </select>
-                                <select class="col-xs-2" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end2" ng-options="item for item in hours.HOURS">
-                                </select>
-                                <label style="min-width:80px;" class="col-xs-1" for="colorpicker">Closed:</label>
-                                <input class="pull-left" ng-model="val.closed" type="checkbox">
-                                <label style="min-width:80px;" class="col-xs-1" for="split" ng-hide="val.closed">Split:</label>
-                                <input id="split" class="pull-left" ng-model="val.split" type="checkbox" ng-hide="val.closed">
+                                <label for="split-hours">I'd like to enter two sets of hours for a single day</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
+                                <input id="splitHours" bs-switch ng-model="componentEditing.splitHours" type="checkbox" class="pull-right" ng-change="saveComponent()">
                             </div>
-                            <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
-                                <label class="col-xs-1" for="val.day">{{val.day}}:</label>
-                                <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
-                                </select>
-                                <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                                <label class="col-xs-2" for="colorpicker">Closed:</label>
-                                <input class="" ng-model="val.closed" type="checkbox">
+                            <div class="form-group" ng-if="componentEditing.showHours">
+                                <label for="location-hours">Business Hours </label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
+                                <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
+                                    <label class="col-xs-1" for="val.day">{{val.day}}:</label>
+                                    <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <select class="col-xs-2" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
+                                    <select class="col-xs-2" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <select class="col-xs-2" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <label style="min-width:80px;" class="col-xs-1" for="colorpicker">Closed:</label>
+                                    <input class="pull-left" ng-model="val.closed" type="checkbox">
+                                    <label style="min-width:80px;" class="col-xs-1" for="split" ng-hide="val.closed">Split:</label>
+                                    <input id="split" class="pull-left" ng-model="val.split" type="checkbox" ng-hide="val.closed">
+                                </div>
+                                <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
+                                    <label class="col-xs-1" for="val.day">{{val.day}}:</label>
+                                    <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <select class="col-xs-3" ng-hide="val.closed" class="chosen-select hour-start-select" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                    <label class="col-xs-2" for="colorpicker">Closed:</label>
+                                    <input class="" ng-model="val.closed" type="checkbox">
+                                </div>
                             </div>
-
-                        </div>
                         </tab>
-
                         <tab active="tabs.address" ng-if="componentEditing.type === 'contact-us'">
                             <tab-heading>
                                 <span>Address</span>
@@ -542,7 +517,6 @@
                                 <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
                                 <input id="location-address2" class="form-control input-lg" type="text" ng-model="componentEditing.location.address2" ng-blur="updateContactUsAddress()">
                             </div>
-
                             <div class="form-group">
                                 <label for="location-city">City </label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
@@ -577,7 +551,6 @@
                                 </div>
                             </div>
                         </tab>
-
                         <tab ng-if="componentEditing.type === 'video'">
                             <tab-heading>
                                 <span>Video</span>
@@ -656,10 +629,7 @@
                                 <span tooltip-placement="top" tooltip-html-unsafe="Add Email to topbar."><i class="fa fa-info-circle" /></span>
                                 <input id="top-bar-email" class="form-control input-lg" type="text" ng-model="componentEditing.email">
                             </div>
-
                         </tab>
-
-
                     </tabset>
                 </div>
                 <div class="modal-footer">
@@ -676,9 +646,6 @@
         </div>
     </div>
     <!-- /.modal -->
-
     <div data-ng-include data-src="'angular_admin/views/partials/historical-page-modal.html'"></div>
-
     <div id="model_container"></div>
-
 </div>

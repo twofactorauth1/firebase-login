@@ -13,7 +13,9 @@ define([
     'mediaDirective',
     'checkImageDirective',
     'blockUI',
-    'toasterService'
+    'toasterService',
+    'headroom',
+    'ngHeadroom'
 ], function(app) {
     app.register.controller('WebsiteManageCtrl', [
         '$scope',
@@ -40,7 +42,7 @@ define([
             $scope.onboardingSteps = [{
                 overlay: false
             }];
-            $scope.numPerPage = 11;
+            $scope.numPerPage = 27;
             $scope.paginationRange = 12;
             $scope.pagesPaging = {};
             $scope.pagesPaging.take = $scope.numPerPage;

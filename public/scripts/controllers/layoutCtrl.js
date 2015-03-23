@@ -8,7 +8,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if(route.indexOf('/') ===0) {
           route = route.replace('/', '');
       }
-      console.log('route is initially set to: ' + route);
     window.oldScope;
     $scope.$route = $route;
     $scope.$location = $location;
@@ -251,7 +250,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
-        console.log('got posts: ', data);
         var total = data.total;
         var limit = data.limit;
         var start = data.start;
@@ -575,6 +573,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.updateContactUsMap = function(component) {
+        console.log('updateContactUsMap >>> ');
+        console.log('component: ', component);
         var matchingContact = _.find($scope.contactDetails, function(item) {
           return item.contactId == component._id
         })
@@ -603,24 +603,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if (!component.contact.phone && that.account.business.phones.length)
           matchingContact.contactPhone = that.account.business.phones[0].number;
         if (matchingContact.geo_address_string) {
-          analyticsService.getGeoSearchAddress(matchingContact.geo_address_string, function(data) {
-            if (data.error === undefined) {
-              angular.extend($scope, {
-                mapLocation: {
-                  lat: parseFloat(data.lat),
-                  lng: parseFloat(data.lon),
-                  zoom: 10
-                },
-                markers: {
-                  mainMarker: {
-                    lat: parseFloat(data.lat),
-                    lng: parseFloat(data.lon),
-                    focus: true,
-                    message: matchingContact.geo_address_string,
-                    draggable: false
-                  }
-                }
-              });
+          console.log('matchingContact.geo_address_string: ', matchingContact.geo_address_string);
+          angular.extend($scope, {
+            mapLocation: {
+              lat: parseFloat(component.location.lat),
+              lng: parseFloat(component.location.lon),
+              zoom: 12
+            },
+            markers: {
+              mainMarker: {
+                lat: parseFloat(component.location.lat),
+                lng: parseFloat(component.location.lon),
+                focus: true,
+                message: matchingContact.geo_address_string,
+                draggable: false
+              }
             }
           });
         }
