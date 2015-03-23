@@ -11817,11 +11817,6 @@ contenthover a {
   margin-top: 20px;
 }
 
-.editing .testimonials-v2 .testimonial-wrap .testimonials {
-  left: 20%;
-  right: 20%;
-}
-
 .editing .testimonials-v2 .testimonial-wrap .single-testimonial {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;

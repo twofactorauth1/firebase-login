@@ -50,7 +50,7 @@ define([
         }
       });
       $scope.showOnboarding = false;
-      $scope.timeInterval = 200000;
+      $scope.timeInterval = 1200000;
       $scope.redirect = false;
       var stopInterval;
 
