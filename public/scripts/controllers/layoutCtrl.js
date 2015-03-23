@@ -202,6 +202,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         $(document).ready(function() {
           setTimeout(function() {
+            $scope.isLoaded = true;
             var locId = $location.$$hash;
             if (locId) {
               var element = document.getElementById(locId);
@@ -210,6 +211,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
           }, 500);
         })
+
+        
         var iframe = window.parent.document.getElementById("iframe-website")
         $scope.isAdmin = iframe;
         iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
