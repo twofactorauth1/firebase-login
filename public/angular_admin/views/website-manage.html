@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div infinite-scroll='loadMorePagesFn()' infinite-scroll-distance='2'>
+        <div  indiscroller indiscroller-update='loadMorePagesFn' indiscroller-save='saveScrollFn'>
           <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
             <a href="/admin#/website-editor?pagehandle={{page.handle}}">
               <div class="thumbnail layered-paper">
@@ -147,7 +147,7 @@
             <div class="right-shadow"></div>
           </div>
         </div>
-        <div infinite-scroll='loadMorePostsFn()' infinite-scroll-distance='2'>
+        <div indiscroller indiscroller-update='loadMorePostsFn' indiscroller-save='saveScrollFn'>
         <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | filter: postSearch| orderBy :'modified.date':true track by $index">
           <!-- <div class="thumbnail box14">
                             <div class="caption">

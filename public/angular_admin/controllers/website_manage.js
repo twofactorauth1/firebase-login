@@ -15,7 +15,8 @@ define([
   'blockUI',
   'toasterService',
   'headroom',
-  'ngHeadroom'
+  'ngHeadroom',
+  'scrollerDirective'
 ], function(app) {
   app.register.controller('WebsiteManageCtrl', [
     '$scope',
@@ -201,6 +202,10 @@ define([
             console.info('Fetch posts', $scope.posts.length - 1, $scope.scrollLimit);
           };
         });
+
+        $scope.saveScrollFn = function() {
+
+        };
 
         this.account = account;
 
