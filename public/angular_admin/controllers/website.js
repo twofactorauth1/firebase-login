@@ -1,6 +1,7 @@
 define([
   'app',
   'websiteService',
+  'geocodeService',
   'jqueryUI',
   'angularUI',
   'userService',
@@ -33,6 +34,7 @@ define([
     '$location',
     'WebsiteService',
     'UserService',
+    'GeocodeService',
     'toaster',
     'ngProgress',
     '$rootScope',
@@ -40,7 +42,7 @@ define([
     'NavigationService',
     'SweetAlert',
     'blockUI',
-    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
       var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
       ngProgress.start();
       UserService.getUserPreferences(function(preferences) {
@@ -956,9 +958,19 @@ define([
       //                $scope.saveComponent();
       //            }
 
+      $scope.stringifyAddress = function(address) {
+        if (address) {
+          return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
+            return str !== "";
+          }).join(", ")
+        }
+      };
+
       $scope.updateContactUsAddress = function(location) {
         console.log('updateContactUsAddress >>> ');
-        console.log('location: ', location);
+        console.log('location: ', $scope.componentEditing.location);
+        console.log('$scope.stringifyAddress ', $scope.stringifyAddress($scope.componentEditing.location));
+
         if ($scope.componentEditing.location.city) {
           $('#location-city').parents('.form-group').find('.error').html('');
           $('#location-city').parents('.form-group').removeClass('has-error');
@@ -975,9 +987,19 @@ define([
           $('#location-state').parents('.form-group').find('.error').html('State is required');
         }
 
-        if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
+        GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function(data) {
+          // console.log('getGeoSearchAddress data >>> ');
+          // console.log('lat: ', data.lat);
+          // console.log('lon: ', data.lon);
+
+          $scope.componentEditing.location.lat = data.lat;
+          $scope.componentEditing.location.lon = data.lon;
           $scope.saveContactComponent();
-        }
+        });
+
+        // if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
+        //   $scope.saveContactComponent();
+        // }
       }
 
       $scope.saveContactComponent = function() {
