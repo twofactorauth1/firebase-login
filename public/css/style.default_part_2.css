@@ -10986,6 +10986,7 @@ ul.nav {
 
 div[data-type="feature-block"] .component-inner {
   min-height: 340px;
+  position: relative;
 }
 
 .feature-block.parallax-background {
