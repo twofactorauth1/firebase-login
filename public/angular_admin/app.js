@@ -178,7 +178,7 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail', 'singlePageAnalytics'];
-          var excludeSettings = ['support', 'dashboard', 'marketing','customerDetail','accountEdit'];
+          var excludeSettings = ['support', 'dashboard','customerDetail','accountEdit'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,
