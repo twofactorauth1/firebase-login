@@ -155,13 +155,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             posts[i].type = 'facebook';
             posts[i].socialAccountId = socialId;
             $scope.fbPostsLength += 1;
-            if (posts[i].hasOwnProperty('from') && posts[i].from.hasOwnProperty('sourceId')){
-              posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
-            } 
-            else if (posts[i].hasOwnProperty('from') && posts[i].from.hasOwnProperty('profile_pic')) {
-              posts[i].from.profile_pic = posts[i].from.profile_pic;
-            }
-            
+            posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
             console.log('posts[i] ', posts[i]);
             $scope.feed.push(posts[i]);
           };
@@ -199,8 +193,6 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           });
         },
         fb: function(profile, socialId) {
-          if (angular.isUndefined(profile))
-            profile = {};
           profile.socialId = socialId;
           profile.type = 'facebook';
           profile.open = true;
@@ -235,13 +227,13 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           console.warn(value.socialId, 'Account mapping missing.');
           return;
         }
-        // promiseProcessor.push([]);
-        promiseSocialId.push(value.socialId);
+
         $scope.feedLengths[value.socialId] = 0;
 
         if (value.type == 'feed') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type === 'pages') {
@@ -258,79 +250,49 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
             promiseProcessor.push([value.type, socialAccountMap[value.socialId], matchingAccount.accountType]);
           }
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type == 'numberFollowers') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type === 'profile') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
-        if (value.type != 'profile' && value.type != 'numberFollowers' && value.type!= 'pages' && value.type != 'feed') {
-          console.warn('missing value.type ', value.type);
-          socialPromises.push([]);
-        }
-
-        // config.socialAccounts.forEach(function(value, index) {
-        //   if (value.type == 'go') {
-        //     $scope.feedTypes.push('google-plus');
-        //     socialPromises.push(SocialService.getGooglePlusPostsPromise(value.socialId));
-        //     promiseProcessor.push([value.type]);
-        //   }
-        // });
-
-        // if (obj.type === 'likes') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'user') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'mentions') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'numberTweets') {
-        //   continue;
-        // }
       });
-      console.log('socialPromises ', socialPromises.length);
-      console.log('promiseProcessor ', promiseProcessor.length);
+
       $q.all(socialPromises)
         .then(function(data) {
-          var counter = 0;
           data.forEach(function(value, index) {
             var logicFn = null;
-            if (!angular.isArray(value)) {
-              if (promiseProcessor[counter].length == 3) {
-                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][
-                  promiseProcessor[counter][1]
-                ][
-                  promiseProcessor[counter][2]
-                ];
-              }
-              if (promiseProcessor[counter].length == 2) {
-                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][
-                  promiseProcessor[counter][1]
-                ];
-              }
+            if (promiseProcessor[index].length == 3) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
+                promiseProcessor[index][1]
+              ][
+                promiseProcessor[index][2]
+              ];
+            }
+            if (promiseProcessor[index].length == 2) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
+                promiseProcessor[index][1]
+              ];
+            }
 
-              if (promiseProcessor[counter].length == 1) {
-                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]];
-              }
+            if (promiseProcessor[index].length == 1) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]];
+            }
 
-              if (logicFn && value.data.length) {
-                logicFn(value.data, promiseSocialId[counter]);
-              } else {
-                console.warn(promiseProcessor[counter]);
-                console.warn('not found', config.trackedObjects[counter], socialAccountMap[config.trackedObjects[counter].socialId], value.data);
-              }
-              counter = counter+1;
+            if (logicFn) {
+              logicFn(value.data, promiseSocialId[index]);
+            } else {
+              console.warn('Logic not found');
+              console.warn(value.data, promiseSocialId[index]);
             }
           });
 
@@ -480,14 +442,14 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.addPageFeed = function(page) {
       var config = $scope.config.socialAccounts;
       var newSocialAccount;
-      for (var i = 0; i < config.length; i++) {
-        if (config[i].id == page.socialId) {
-          newSocialAccount = config[i];
+      $scope.config.socialAccounts.forEach(function(value, index) {
+        if (value.id == page.socialId) {
+          newSocialAccount = value;
           newSocialAccount.socialId = page.sourceId;
           newSocialAccount.accountType = 'adminpage';
           newSocialAccount.socialUrl = 'https://www.facebook.com/app_scoped_user_id/' + page.sourceId + '/';
         }
-      }
+      });
       SocialConfigService.postSocialAccount(newSocialAccount, function(data) {
         console.log('return ', data);
       });
