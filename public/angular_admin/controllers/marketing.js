@@ -303,9 +303,9 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       console.log('promiseProcessor ', promiseProcessor.length);
       $q.all(socialPromises)
         .then(function(data) {
+          var counter = 0;
           data.forEach(function(value, index) {
             var logicFn = null;
-            var counter = 0;
             if (!angular.isArray(value)) {
               if (promiseProcessor[counter].length == 3) {
                 var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][

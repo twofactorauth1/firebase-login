@@ -568,7 +568,7 @@ var dao = {
             if (!err && response.statusCode == 200) {
                 fn(null, body);
             } else {
-                fn(err, response, body);
+                fn(err, body);
             }
         });
     }
