@@ -227,7 +227,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           console.warn(value.socialId, 'Account mapping missing.');
           return;
         }
-        // promiseProcessor.push([]);
+
         promiseSocialId.push(value.socialId);
         $scope.feedLengths[value.socialId] = 0;
 
@@ -262,40 +262,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
         }
 
-        if (value.type != 'profile' && value.type != 'numberFollowers' && value.type!= 'pages' && value.type != 'feed') {
-          console.warn('missing value.type ', value.type);
-          socialPromises.push([]);
-        }
-
-        // config.socialAccounts.forEach(function(value, index) {
-        //   if (value.type == 'go') {
-        //     $scope.feedTypes.push('google-plus');
-        //     socialPromises.push(SocialService.getGooglePlusPostsPromise(value.socialId));
-        //     promiseProcessor.push([value.type]);
-        //   }
-        // });
-
-        // if (obj.type === 'likes') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'user') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'mentions') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'numberTweets') {
-        //   continue;
-        // }
       });
-      console.log('socialPromises ', socialPromises.length);
-      console.log('promiseProcessor ', promiseProcessor.length);
+      
       $q.all(socialPromises)
         .then(function(data) {
-          var counter = 0;
           data.forEach(function(value, index) {
             var logicFn = null;
             if (promiseProcessor[index].length == 3) {
@@ -316,7 +286,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
 
             if (logicFn) {
-              logicFn(value.data, promiseSocialId[index]);
+              logicFn(value.data, config.trackedObjects[index].socialId);
             } else {
               console.warn(promiseProcessor[index]);
               console.warn('not found', config.trackedObjects[index], socialAccountMap[config.trackedObjects[index].socialId], value.data);
