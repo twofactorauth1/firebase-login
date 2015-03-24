@@ -29,6 +29,8 @@ var defaultPrivileges = [
     'MODIFY_WEBSITE',
     'VIEW_THEME',
     'MODIFY_THEME',
+    'VIEW_TEMPLATE',
+    'MODIFY_TEMPLATE',
     'VIEW_CONTACT',
     'MODIFY_CONTACT',
     'VIEW_COURSE',
@@ -46,6 +48,8 @@ var defaultPrivileges = [
     'MODIFY_DASHBOARD',
     'VIEW_SOCIALCONFIG',
     'MODIFY_SOCIALCONFIG',
+    'VIEW_ORDER',
+    'MODIFY_ORDER',
     'ALL'
 
 ];
@@ -65,6 +69,7 @@ var defaultSubscriptionPrivs = [
     'products',
     'user',
     'social/socialconfig',
+    'order',
     'all'
 ];
 

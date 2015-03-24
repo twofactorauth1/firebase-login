@@ -65,6 +65,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
         app.get('/main/:page', this.setup.bind(this), this.serveMainHtml.bind(this));
+        app.get("/*", this.setup.bind(this), this.index.bind(this));
 
         return this;
     },

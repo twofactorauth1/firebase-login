@@ -191,7 +191,7 @@ _.extend(router.prototype, baseRouter.prototype, {
          */
         if(req.query.error || req.query.denied) {
             self.log.warn('Error parameter: ' + req.query.error);
-            //TODO: put redirect logic here.
+            return resp.redirect('/admin#/account');
         }
 
         var type
@@ -351,4 +351,3 @@ _.extend(router.prototype, baseRouter.prototype, {
 });
 
 module.exports = new router();
-

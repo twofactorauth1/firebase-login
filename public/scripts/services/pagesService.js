@@ -33,6 +33,10 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                 path = 'blog';
         }
 
+        if(path.indexOf('/')===0) {
+            path = path.replace('/', '');
+        }
+
         websiteService(function (err, data) {
             if (err) {
                 // console.log(err, "PageService >> WebsiteService ERROR");

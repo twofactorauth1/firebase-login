@@ -30,11 +30,32 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
+            title:"<h1>Testimonials</h1>",
+
+            txtcolor: "#444",
+
 
             /**
              * The type of component this is
              */
             type: "testimonials",
+
+            testimonials : [ 
+                {
+                    "img" : "",
+                    "name" : "Name",
+                    "site" : "Site",
+                    "text" : "Description",
+                    "active" : false
+                }, 
+                {
+                    "img" : "",
+                    "name" : "Name",
+                    "site" : "Site",
+                    "text" : "Description",
+                    "active" : false
+                }
+            ]
 
         }
     },

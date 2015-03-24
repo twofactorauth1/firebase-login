@@ -1,6 +1,7 @@
 define([
   'app',
   'websiteService',
+  'geocodeService',
   'jqueryUI',
   'angularUI',
   'userService',
@@ -27,11 +28,13 @@ define([
 ], function(app) {
   app.register.controller('WebsiteCtrl', [
     '$scope',
+    '$interval',
     '$window',
     '$timeout',
     '$location',
     'WebsiteService',
     'UserService',
+    'GeocodeService',
     'toaster',
     'ngProgress',
     '$rootScope',
@@ -39,7 +42,7 @@ define([
     'NavigationService',
     'SweetAlert',
     'blockUI',
-    function($scope, $window, $timeout, $location, WebsiteService, UserService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
       var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
       ngProgress.start();
       UserService.getUserPreferences(function(preferences) {
@@ -49,10 +52,15 @@ define([
         }
       });
       $scope.showOnboarding = false;
+      $scope.timeInterval = 1200000;
+      $scope.redirect = false;
+      var stopInterval;
+
       $scope.stepIndex = 0;
       $scope.onboardingSteps = [{
         overlay: false
       }]
+
       $scope.beginOnboarding = function(type) {
 
         $scope.obType = type;
@@ -89,13 +97,12 @@ define([
         $scope.beginOnboarding($location.$$search['onboarding']);
       }
 
-
-
       if ($location.$$search['pagehandle']) {
         document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
       }
 
       if ($location.$$search['posthandle']) {
+        $scope.single_post = true;
         document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
       }
 
@@ -124,6 +131,7 @@ define([
       $scope.addLinkType = 'page';
       $scope.saveLoading = false;
       $scope.hours = $$.constants.contact.business_hour_times;
+      $scope.typefilter = 'all';
       $scope.components.sort(function(a, b) {
         return a.i > b.i;
       });
@@ -167,52 +175,6 @@ define([
       UserService.getAccount(function(account) {
         $scope.account = account;
         that.account = account;
-        //get pages and find this page
-        WebsiteService.getPages(account.website.websiteId, function(pages) {
-          //TODO should be dynamic based on the history
-          currentPage = 'index';
-          that.allPages = pages;
-          var parsed = angular.fromJson(pages);
-          var arr = [];
-
-          for (var x in parsed) {
-            arr.push(parsed[x]);
-          }
-          $scope.allPages = arr;
-
-          //$scope.currentPage = _.findWhere(pages, {
-          //  handle: currentPage
-          //});
-
-          if ($scope.editingPageId) {
-            $scope.currentPage = _.findWhere(pages, {
-              _id: $scope.editingPageId
-            });
-            // if ($scope.currentPage && $scope.currentPage.components) {
-            //     $scope.components = $scope.currentPage.components;
-            // } else {
-            //     $scope.components = [];
-            // }
-            // console.log('$scope.currentPage >>> ', $scope.currentPage);
-            // $scope.resfeshIframe();
-          } else {
-            //$scope.currentPage = _.findWhere(pages, {
-            //    handle: currentPage
-            //});
-          }
-          //get components from page
-          if ($scope.currentPage) {
-            if ($scope.currentPage.components) {
-              $scope.components = $scope.currentPage.components;
-              if ($location.$$search['posthandle']) {
-                //$scope.updatePage("post", true);
-              }
-            }
-          } else {
-            console.log('Falied to retrieve Page');
-          }
-
-        });
 
         //get website
         WebsiteService.getWebsite(account.website.websiteId, function(website) {
@@ -232,13 +194,6 @@ define([
           $scope.secondaryFontStack = $scope.website.settings.font_family_2;
         });
 
-        //get themes
-        WebsiteService.getThemes(function(themes) {
-          $scope.themes = themes;
-          $scope.currentTheme = _.findWhere($scope.themes, {
-            _id: account.website.themeId
-          });
-        });
       });
 
       //an array of component types and icons for the add component modal
@@ -404,7 +359,43 @@ define([
         filter: 'contact',
         description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
         enabled: true
+      },
+      {
+        title: 'Testimonials',
+        type: 'testimonials',
+        icon: 'fa fa-info',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/testimonials.png',
+        filter: 'text',
+        description: 'A component to showcase your testimonials.',
+        enabled: true
       }];
+
+      var componentLabel,
+          enabledComponentTypes = _.where( $scope.componentTypes, { enabled: true } );
+
+      /************************************************************************************************************
+       * Takes the componentTypes object and gets the value for the filter property from any that are enabled.
+       * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
+       * it exists. (The misc value is added back on to the end of the list later)
+       ************************************************************************************************************/
+      $scope.componentFilters = _.without( _.uniq( _.pluck( _.sortBy( enabledComponentTypes, 'filter' ), 'filter' ) ), 'misc');
+
+      // Iterates through the array of filters and replaces each one with an object containing an
+      // upper and lowercase version
+      _.each( $scope.componentFilters, function( element, index ) {
+        componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+        $scope.componentFilters[index] = { 'capitalized': componentLabel, 'lowercase': element };
+        componentLabel = null;
+      });
+
+      // Manually add the All option to the begining of the list
+      $scope.componentFilters.unshift({'capitalized': 'All', 'lowercase': 'all'});
+      // Manually add the Misc section back on to the end of the list
+      $scope.componentFilters.push({'capitalized': 'Misc', 'lowercase': 'misc'});
+
+      $scope.setFilterType = function( label ) {
+        $scope.typefilter = label;
+      };
 
       /*****
           {
@@ -468,13 +459,11 @@ define([
         if ($scope.isEditing) {
           if ($("#iframe-website").contents().find("body").length) {
             setTimeout(function() {
-              $scope.editPage();
-              $scope.iframeLoaded = true;
-              editBlockUI.stop();
+              $scope.editPage();              
               if ($location.$$search.onboarding) {
                 $scope.showOnboarding = true;
               }
-            }, 5000)
+            }, 1000)
           }
         }
 
@@ -491,7 +480,7 @@ define([
             $scope.componentEditing.bg.img.parallax = false;
             $scope.componentEditing.bg.img.overlay = false;
           }
-          
+
         }
       }
       $scope.bindEvents = function() {
@@ -594,6 +583,28 @@ define([
             }
           });
 
+          // Social components
+          $("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+              _id: $(e.currentTarget).closest('.component').data('id')
+            }); 
+            var network = [];          
+            var editIndex = e.currentTarget.attributes["data-index"] ? e.currentTarget.attributes["data-index"].value : null;
+            var parent_index = e.currentTarget.attributes["parent-data-index"] ? e.currentTarget.attributes["parent-data-index"].value : null;
+            var nested = parent_index ? true : false;
+            if(nested)
+              network = editIndex ? $scope.componentEditing.teamMembers[parent_index].networks[editIndex] : null;
+            else
+              network = editIndex ? $scope.componentEditing.networks[editIndex] : null;
+
+            var update = editIndex ? true : false;
+            $("#socialComponentModal").modal('show');  
+            
+            $scope.setSelectedSocialLink(network, $scope.componentEditing._id, update, nested, parent_index);                          
+            
+          });
+
+
           //add media modal click events to all images in image gallery
 
           $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {
@@ -618,6 +629,259 @@ define([
         }
       };
 
+      $scope.saveSocialLink = function(social, id, mode) {
+        $("#social-link-name .error").html("");
+        $("#social-link-name").removeClass('has-error');
+        $("#social-link-url .error").html("");
+        $("#social-link-url").removeClass('has-error');
+        var old_value = _.findWhere($scope.networks, {
+          name: $scope.social.selectedLink
+        });
+      var selectedName;
+      switch (mode) {
+        case "add":
+          if (social && social.name) {
+            if (!social.url || social.url == "") {
+              $("#social-link-url .error").html("Link url can not be blank.");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+
+            if (social.url) {
+              var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+              if (urlRegex.test(social.url) == false) {
+                $("#social-link-url .error").html("Link url incorrect format");
+                $("#social-link-url").addClass('has-error');
+                return;
+              }
+            }
+            selectedName = _.findWhere($scope.networks, {
+              name: social.name
+            });
+            if (selectedName) {
+              $("#social-link-name .error").html("Link icon already exists");
+              $("#social-link-name").addClass('has-error');
+              return;
+            }
+            var selectedUrl = _.findWhere($scope.networks, {
+              url: social.url
+            });
+            if (selectedUrl) {
+              $("#social-link-url .error").html("Link url already exists");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+          } else {
+            $("#social-link-url .error").html("Please enter link url.");
+            $("#social-link-url").addClass('has-error');
+            $("#social-link-name .error").html("Please select link icon.");
+            $("#social-link-name").addClass('has-error');
+            return;
+          }
+          $("#social-link-name .error").html("");
+          $("#social-link-name").removeClass('has-error');
+          $("#social-link-url .error").html("");
+          $("#social-link-url").removeClass('has-error');
+          break;
+        case "update":
+          if (social && social.name && social.url) {
+            var networks = angular.copy($scope.networks);
+
+            selectedName = _.findWhere(networks, {
+              name: old_value.name
+            });
+            selectedName.name = social.name;
+            selectedName.url = social.url;
+            selectedName.icon = social.icon;
+
+
+            var existingName = _.where(networks, {
+              name: social.name
+            });
+            var existingUrl = _.where(networks, {
+              url: social.url
+            });
+            if (existingName.length > 1) {
+              $("#social-link-name .error").html("Link icon already exists");
+              $("#social-link-name").addClass('has-error');
+              return;
+            } else if (existingUrl.length > 1) {
+              $("#social-link-url .error").html("Link url already exists");
+              $("#social-link-url").addClass('has-error');
+              return;
+            }
+          }
+          break;
+      }
+      if ($scope.meetTeamIndex !== null)
+        $scope.updateTeamNetworks(old_value, mode, social, $scope.meetTeamIndex);
+      else
+        $scope.updateSocialNetworks(old_value, mode, social);
+      $scope.social = {};
+      $scope.meetTeamIndex = null;
+      if ($("#socialComponentModal").length)
+        $("#socialComponentModal").modal("hide");
+    };
+
+      $scope.setSelectedLink = function(social_link) {
+        $scope.social.name = social_link.name;
+        $scope.social.icon = social_link.icon;
+        $scope.social.url = social_link.url;
+      }
+      $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
+        if (!$scope.social)
+          $scope.social = {};
+        if (nested)
+          $scope.meetTeamIndex = index;
+        else
+          $scope.meetTeamIndex = null;
+        if (update) {
+          $scope.social.selectedLink = link.name;
+          $scope.social.name = link.name;
+          $scope.social.icon = link.icon;
+          $scope.social.url = link.url;
+        } else {
+          $scope.social = {};
+        }
+        $("#social-link-name .error").html("");
+        $("#social-link-name").removeClass('has-error');
+        $("#social-link-url .error").html("");
+        $("#social-link-url").removeClass('has-error');
+        $scope.$apply(function() {
+          $scope.networks = $scope.getSocialNetworks(nested, index);
+        })
+    }
+      $scope.social_links = [{
+        name: "adn",
+        icon: "adn",
+        tooltip : "Adn",
+        url: "http://www.adn.com"
+      }, {
+        name: "bitbucket",
+        icon: "bitbucket",
+        tooltip : "BitBucket",
+        url: "https://bitbucket.org"
+      }, {
+        name: "dropbox",
+        icon: "dropbox",
+        tooltip: "Dropbox",
+        url: "https://www.dropbox.com"
+      }, {
+        name: "facebook",
+        icon: "facebook",
+        tooltip: "Facebook",
+        url: "https://www.facebook.com"
+      }, {
+        name: "flickr",
+        icon: "flickr",
+        tooltip: "Flickr",
+        url: "https://www.flickr.com"
+      }, {
+        name: "foursquare",
+        icon: "foursquare",
+        tooltip: "Four Square",
+        url: "https://foursquare.com"
+      }, {
+        name: "github",
+        icon: "github",
+        tooltip: "Github",
+        url: "https://github.com"
+      }, {
+        name: "google-plus",
+        icon: "google-plus",
+        tooltip: "Google Plus",
+        url:"https://www.gmail.com"
+      }, {
+        name: "instagram",
+        icon: "instagram",
+        tooltip: "Instagram",
+        url: "https://instagram.com"
+      },
+      {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin",
+        url: "https://www.linkedin.com"
+      }, {
+        name: "microsoft",
+        icon: "windows",
+        tooltip: "Microsoft",
+        url: "http://www.microsoft.com"
+      }, {
+        name: "openid",
+        icon: "openid",
+        tooltip: "Open Id",
+        url: "http://openid.com"
+      }, {
+        name: "pinterest",
+        icon: "pinterest",
+        tooltip: "Pinterest",
+        url: "https://www.pinterest.com"
+      }, {
+        name: "reddit",
+        icon: "reddit",
+        tooltip: "Reddit",
+        url: "http://www.reddit.com"
+      }, {name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat",
+        url: "https://www.snapchat.com"
+      }, {
+        name: "soundcloud",
+        icon: "soundcloud",
+        tooltip: "Sound Cloud",
+        url: "https://soundcloud.com"
+      },{
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr",
+        url:"https://www.tumblr.com"
+      }, {
+        name: "twitter",
+        icon: "twitter",
+        tooltip: "Twitter",
+        url: "https://twitter.com"
+      }, {
+        name: "vimeo",
+        icon: "vimeo-square",
+        tooltip: "Vimeo",
+        url: "https://vimeo.com"
+      },  {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine",
+        url: "http://www.vinemarket.com"
+      }, {
+        name: "vk",
+        icon: "vk",
+        tooltip: "Vk",
+        url: "http://vk.com"
+      }, 
+      {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website",
+        url: "http://www.website.com"
+      },
+      {
+        name: "yahoo",
+        icon: "yahoo",
+        tooltip: "Yahoo",
+        url: "https://yahoo.com"
+      },
+        {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube",
+        url: "https://www.youtube.com"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp",
+        url: "http://www.yelp.com"
+      }
+
+    ]
       $scope.toggled = function(open) {
 
         //console.log('Dropdown is now: ', open);
@@ -644,8 +908,7 @@ define([
 
         if (iframe.contentWindow.copyPostMode) {
           iframe.contentWindow.copyPostMode();
-          $scope.post_data = iframe.contentWindow.getPostData();
-          $scope.single_post = true;
+          $scope.post_data = iframe.contentWindow.getPostData();          
         }
         $scope.activateAloha();
         $scope.backup['website'] = angular.copy($scope['website']);
@@ -707,15 +970,19 @@ define([
       };
 
       //TODO: use scope connection
-      $scope.savePage = function() {
+      $scope.savePage = function(autoSave) {         
         $scope.saveLoading = true;
         $scope.isDirty = false;
+        var msg = "Post Saved";
+        if(autoSave)
+          msg = "Auto Saved";
         var iFrame = document.getElementById("iframe-website");
         if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
           iFrame.contentWindow.checkOrSetPageDirty(true);
         }
         if ($location.$$search['posthandle']) {
-          iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster);
+          $scope.single_post = true;
+          iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
           $scope.isEditing = true;
         } else {
           $scope.validateEditPage($scope.currentPage);
@@ -790,10 +1057,13 @@ define([
                 //if contains an array of variables
                 if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
                   //get index in array
-                  var first = componentVar.split(".")[0];
-                  var second = componentEditable[i2].attributes['data-index'].value;
-                  var third = componentVar.split(".")[2];
-                  matchingComponent[first][second][third] = componentVarContents;
+                  if(!$(componentEditable[i2]).parents().hasClass("slick-cloned"))
+                  {
+                    var first = componentVar.split(".")[0];
+                    var second = componentEditable[i2].attributes['data-index'].value;
+                    var third = componentVar.split(".")[2];
+                    matchingComponent[first][second][third] = componentVarContents;
+                  }                 
                 }
                 //if contains an array of array variables
                 if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
@@ -841,8 +1111,15 @@ define([
           WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
             $scope.isEditing = true;
             WebsiteService.setEditedPageHandle($scope.currentPage.handle);
-
-            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+            if(!$scope.redirect)
+              $scope.autoSavePage();            
+            else
+              $scope.stopAutoSavePage();
+            $scope.redirect = false;  
+            if(autoSave)
+              toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+            else
+              toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
             $scope.saveLoading = false;
             iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
 
@@ -875,6 +1152,7 @@ define([
         }
 
         if ($location.$$search['posthandle']) {
+          $scope.single_post = true;
           route = '/page/' + sPage + '/' + $location.$$search['posthandle'] + '?editor=true';
           //document.getElementById("iframe-website").setAttribute("src", route + '?editor=true');
         }
@@ -898,6 +1176,18 @@ define([
           that.allPages = arr;
           $scope.currentPage = _.findWhere(that.allPages, {
             handle: currentPage
+          });
+
+          // $scope.historicalPages = _.where(pages, {
+          //   handle: $scope.currentPage.handle
+          // });
+
+          // console.log('pages >>> ', pages);
+          // console.log('historicalPages >>> ', $scope.historicalPages);
+
+          WebsiteService.getPageVersions($scope.currentPage._id, function(pageVersions) {
+            console.log('retireved page versions >>> ', pageVersions);
+            $scope.pageVersions = pageVersions;
           });
 
           var localPage = _.findWhere(pages, {
@@ -943,7 +1233,19 @@ define([
       //                $scope.saveComponent();
       //            }
 
+      $scope.stringifyAddress = function(address) {
+        if (address) {
+          return _.filter([address.address, address.city, address.state, address.zip], function(str) {
+            return str !== "";
+          }).join(", ")
+        }
+      };
+
       $scope.updateContactUsAddress = function(location) {
+        // console.log('updateContactUsAddress >>> ');
+        // console.log('location: ', $scope.componentEditing.location);
+        // console.log('$scope.stringifyAddress ', $scope.stringifyAddress($scope.componentEditing.location));
+
         if ($scope.componentEditing.location.city) {
           $('#location-city').parents('.form-group').find('.error').html('');
           $('#location-city').parents('.form-group').removeClass('has-error');
@@ -960,9 +1262,26 @@ define([
           $('#location-state').parents('.form-group').find('.error').html('State is required');
         }
 
-        if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
-          $scope.saveContactComponent();
-        }
+        GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function(data) {
+          // console.log('getGeoSearchAddress data >>> ');
+          // console.log('lat: ', data.lat);
+          // console.log('lon: ', data.lon);
+          if (data.lat && data.lon) {
+            $scope.componentEditing.location.lat = data.lat;
+            $scope.componentEditing.location.lon = data.lon;
+            $scope.saveContactComponent();
+          }
+        });
+
+        // if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
+        //   $scope.saveContactComponent();
+        // }
+      }
+
+      $scope.saveContactComponent = function() {
+        var currentComponentId = $scope.componentEditing._id;
+        $scope.updateSingleComponent(currentComponentId);
+        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
       }
 
       $scope.addComponent = function(addedType) {
@@ -1016,7 +1335,7 @@ define([
       $scope.deleteComponent = function(componentId) {
         var pageId = $scope.currentPage._id;
         var deletedType;
-        $scope.deactivateAloha();
+        //$scope.deactivateAloha();
         for (var i = 0; i < $scope.components.length; i++) {
           if ($scope.components[i]._id == componentId) {
             deletedType = $scope.components[i].type;
@@ -1207,11 +1526,15 @@ define([
               //if contains an array of variables
               if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
                 //get index in array
+               if(!$(componentEditable[i2]).parents().hasClass("slick-cloned"))
+               {
                 var first = componentVar.split(".")[0];
                 var second = componentEditable[i2].attributes['data-index'].value;
                 var third = componentVar.split(".")[2];
                 if (matchingComponent[first][second])
                   matchingComponent[first][second][third] = componentVarContents;
+               }
+
               }
               //if contains an array of array variables
               if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
@@ -1244,12 +1567,6 @@ define([
 
       $scope.saveCustomComponent = function(networks) {
         iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
-      };
-
-      $scope.saveContactComponent = function() {
-        var currentComponentId = $scope.componentEditing._id;
-        $scope.updateSingleComponent(currentComponentId);
-        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
       };
 
       //delete page
@@ -1320,7 +1637,7 @@ define([
         } else if ($scope.logoImage && $scope.componentEditing) {
           $scope.logoImage = false;
           $scope.componentEditing.logourl = asset.url;
-        } else if ($scope.changeblobImage && !$scope.componentEditing) {
+        } else if ($scope.changeblobImage) {
           $scope.changeblobImage = false;
           $scope.blog_post.featured_image = asset.url;
           var iFrame = document.getElementById("iframe-website");
@@ -1364,8 +1681,8 @@ define([
 
       $scope.changesConfirmed = false;
       $scope.isDirty = false;
-      //Before user leaves editor, ask if they want to save changes
-      var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+      //Before user leaves editor, ask if they want to save changes      
+      var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {            
         var isDirty = false;
         var iFrame = document.getElementById("iframe-website");
         if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
@@ -1373,8 +1690,7 @@ define([
         }
 
         if (isDirty && !$scope.changesConfirmed) {
-          event.preventDefault();
-
+          event.preventDefault();                    
           SweetAlert.swal({
               title: "Are you sure?",
               text: "You have unsaved data that will be lost",
@@ -1389,6 +1705,7 @@ define([
             function(isConfirm) {
               if (isConfirm) {
                 SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                $scope.redirect = true;
                 $scope.savePage();
               } else {
                 SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
@@ -1399,12 +1716,20 @@ define([
               offFn();
             });
         } else if ($scope.changesConfirmed) {
-          //do nothing
+          $scope.stopAutoSavePage();
         }
-
+        else
+        {
+          $scope.stopAutoSavePage();
+        }
+          
       });
 
       //Add Link to navigation
+
+      $scope.$watch('website.linkLists', function(newValue, oldValue) {
+          console.log('website.linkLists changed >>> ');
+      });
 
       $scope.setLinkUrl = function() {
         $scope.newLink.linkTitle = $("#linkSection option:selected").html();
@@ -1434,8 +1759,7 @@ define([
         $scope.initializeLinks();
       }
 
-      $scope.deleteLinkFromNav = function(index)
-      {
+      $scope.deleteLinkFromNav = function(index) {
         $scope.website.linkLists.forEach(function(value) {
             if (value.handle === "head-menu") {
               value.links.splice(index,1);
@@ -1517,12 +1841,19 @@ define([
         }
       };
 
-      $scope.sortableOptions = { 
-      dragEnd: function(e, ui) {
-        console.log('sorting end');
-        $scope.updateLinkList();
-      }
-    };
+      $scope.sortableOptions = {
+          dragMove: function(event) {
+              console.log('dragMove >>>');
+          },
+          itemMoved: function(event) {
+              console.log('itemMoved');
+          },
+          orderChanged: function(event) {
+              console.log('orderChanged');
+          },
+          parentElement : "#component-setting-modal .tab-content",
+          scrollableContainer: 'reorderNavBarContainer'
+      };
 
       /********** LISTENERS ***********/
 
@@ -1629,7 +1960,16 @@ define([
         $scope.saveCustomComponent();
       }
 
-      window.updateSocialNetworks = function(old_value, mode, new_value) {
+      window.deleteTestimonial = function(componentId, index) {
+        $scope.componentEditing = _.findWhere($scope.components, {
+          _id: componentId
+        });
+        $scope.updateSingleComponent(componentId);
+        $scope.componentEditing.testimonials.splice(index, 1);
+        $scope.saveCustomComponent();
+      }
+
+      $scope.updateSocialNetworks = function(old_value, mode, new_value) {
         var selectedName;
         switch (mode) {
           case "add":
@@ -1666,7 +2006,7 @@ define([
         }
       }
 
-      window.updateTeamNetworks = function(old_value, mode, new_value, parent_index) {
+      $scope.updateTeamNetworks = function(old_value, mode, new_value, parent_index) {
         var selectedName;
         switch (mode) {
           case "add":
@@ -1705,32 +2045,52 @@ define([
         }
       }
 
-      window.getSocialNetworks = function(componentId, nested, parent_index) {
-        $scope.componentEditing = _.findWhere($scope.components, {
-          _id: componentId
-        });
+      $scope.getSocialNetworks = function(nested, parent_index) {       
         if (nested)
           return $scope.componentEditing.teamMembers[parent_index].networks;
         else
           return $scope.componentEditing.networks;
       }
+     
+      $scope.autoSavePage = function() {
+          $scope.stopAutoSavePage();  
+          stopInterval = $interval(function() { 
+          console.log("Auto saving data...");           
+              $scope.savePage(true);           
+          }, $scope.timeInterval);
+      };
+
+      $scope.stopAutoSavePage = function() {
+        if (angular.isDefined(stopInterval)) {
+          $interval.cancel(stopInterval);
+          stopInterval = undefined;          
+          console.log("Cancel interval");
+        }
+      };
 
       window.updateAdminPageScope = function(page) {
         $scope.singlePost = false;
         console.log("Updating admin scope")
-        if (!$scope.currentPage) {
-          $scope.$apply(function() {
-            $scope.currentPage = page;
-            //get components from page
-            if ($scope.currentPage && $scope.currentPage.components) {
-              $scope.components = $scope.currentPage.components;
-            } else {
-              $scope.components = [];
-            }
-            $scope.originalCurrentPage = angular.copy($scope.currentPage);
-          })
-        }
-
+        $scope.$apply(function() {
+           editBlockUI.stop();
+           $scope.iframeLoaded = true; 
+           $scope.autoSavePage();
+        })       
+        if(page)
+        {
+          if (!$scope.currentPage) {
+            $scope.$apply(function() {
+              $scope.currentPage = page;
+              //get components from page
+              if ($scope.currentPage && $scope.currentPage.components) {
+                $scope.components = $scope.currentPage.components;
+              } else {
+                $scope.components = [];
+              }
+              $scope.originalCurrentPage = angular.copy($scope.currentPage);
+            })
+          }
+        } 
       }
 
       window.checkIfSinglePost = function(post) {
@@ -1783,6 +2143,14 @@ define([
         });
         $scope.updateSingleComponent(componentId);
         $scope.componentEditing.teamMembers.splice(index + 1, 0, newTeam);
+        $scope.saveCustomComponent();
+      }
+      window.addTestimonial = function(componentId, newTestimonial, index) {
+        $scope.componentEditing = _.findWhere($scope.components, {
+          _id: componentId
+        });
+        $scope.updateSingleComponent(componentId);
+        $scope.componentEditing.testimonials.splice(index + 1, 0, newTestimonial);
         $scope.saveCustomComponent();
       }
       window.updateComponent = function(componentId) {

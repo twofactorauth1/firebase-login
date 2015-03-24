@@ -27,6 +27,17 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         route = 'blog';
                     }
                     that.pages = data[route];
+                    $(document).ready(function() {
+                      setTimeout(function() {
+                        $scope.$apply(function() {
+                          console.log("Page loaded");
+                          $scope.isLoaded = true;
+                        })
+                        
+                      }, 500);
+                    })
+                    var iframe = window.parent.document.getElementById("iframe-website")
+                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope();
                     // console.log("current Page");
                     // console.log($scope.$parent)
             }
@@ -174,7 +185,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
         };
 
-         window.savePostMode=function(toaster){
+         window.savePostMode=function(toaster, msg){
 
             var post_data =  angular.copy(that.post);
             post_data.post_tags.forEach(function(v,i) {
@@ -210,10 +221,10 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
             PostService.updatePost(pageId, post_data._id,post_data,function(data){
                 console.log(data);
-                console.log("Post Saved");
+                console.log(msg);
                 window.parent.window.setLoading(false);
                 if(toaster)
-                    toaster.pop('success', "Post Saved");
+                    toaster.pop('success', msg);
             });
         };
         $scope.refreshPost = function()
@@ -237,6 +248,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 that.post.post_excerpt = post_excerpt_container.text();
+            setTimeout(function() {
+              $scope.$apply(function() {
+                activateAloha();
+              });
+            });
         }
         $scope.changeBlogImage = function(blogpost) {
           window.parent.changeBlogImage(blogpost);
@@ -283,6 +299,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
     window.activateAloha = function() {
       //if ($scope.activated == false) {
         $scope.isEditing = true;
+        for(name in CKEDITOR.instances)
+        {
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
+        }
         CKEDITOR.disableAutoInline = true;
         var elements = $('.editable');
         elements.each(function() {
@@ -291,11 +312,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
           }
          // $scope.activated = true;
-        if(!$(this).hasClass('cke_editable')) {
+        //if(!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
-                var editor = ev.editor;
+                var editor = ev.editor;                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -306,7 +327,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
               top: 'editor-toolbar'
             }
           });
-        }
+        //}
         });
 
         //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?

@@ -193,7 +193,7 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
 
                             PaymentService.getStripeCardToken(cardInput, function(token) {
 
-                                if (scope.user.stripeId) {
+                                if (scope.user && scope.user.stripeId) {
                                     UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                                         scope.updateFn(billing);
                                     });
@@ -204,7 +204,8 @@ define(['angularAMD', 'skeuocard', 'paymentService', 'userService'], function(an
                                 } else {
                                     if (token !== undefined) {
                                         PaymentService.postStripeCustomer(token, function(stripeUser) {
-                                            scope.user.stripeId = stripeUser.id;
+                                            if(scope.user)
+                                                scope.user.stripeId = stripeUser.id;
                                             UserService.postAccountBilling(stripeUser.id, token, function(billing) {
                                                 scope.updateFn(billing);
                                             });

@@ -1,10 +1,13 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
-  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData',
+  function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
+      if(route.indexOf('/') ===0) {
+          route = route.replace('/', '');
+      }
     window.oldScope;
     $scope.$route = $route;
     $scope.$location = $location;
@@ -103,10 +106,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       } else {
         // setNavigation(data);
         if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
-          route = 'index';
-          route = route.replace('/', '');
-          if (!angular.isDefined(data[route])) {
-            route = 'coming-soon';
+            route = 'index';
+            /*
+             * if you just set a variable... why would you need to replace a character that ISN'T IN IT?
+             */
+            route = route.replace('/', '');// <-- why?
+            console.log('setting route to: ' + route + ' and $$path is ' + $scope.$location.$$path);
+            if (!angular.isDefined(data[route])) {
+                route = 'coming-soon';
+                console.log('set route to coming-soon');
               /*
                * This is pants-on-head stupid.  Why would you be able to create a page from the front-end?
                * var pageData = {
@@ -124,15 +132,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
                that.pages = newpage;
                });
                */
-            that.pages = data[route];
-          }
-          if (angular.isDefined(data[route]))
-            that.pages = data[route];
+                that.pages = data[route];
+            }
+            if (angular.isDefined(data[route])) {
+                that.pages = data[route];
+            } else {
+                console.log('there is no route defined for ' + route);
+            }
+
         } else {
-          route = $scope.$location.$$path.replace('/page/', '');
-          route = route.replace('/', '');
-          that.pages = data[route];
+            route = $scope.$location.$$path.replace('/page/', '');
+            route = route.replace('/', '');
+            console.log('else block route is now ' + route);
+            that.pages = data[route];
         }
+
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function(data) {
             var tmpAccount = data;
@@ -187,6 +201,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }
         $(document).ready(function() {
           setTimeout(function() {
+            $scope.$apply(function() {
+              console.log("Page loaded");
+              $scope.isLoaded = true;
+            })
             var locId = $location.$$hash;
             if (locId) {
               var element = document.getElementById(locId);
@@ -214,6 +232,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /*PostService.getAllPosts(function(posts) {
             that.blogposts = posts;
         });*/
+        
+          
+        
       }
     });
 
@@ -229,7 +250,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
-        console.log('got posts: ', data);
         var total = data.total;
         var limit = data.limit;
         var start = data.start;
@@ -278,9 +298,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           that.latestposts.slice(Math.max(data.length - 3, 1));
         }
 
-        if (route.indexOf('blog') > -1) {
+       // if (route.indexOf('blog') > -1) {
           that.blogposts = data;
-        }
+       // }
 
         //if tagname is present, filter the cached posts with the tagname
         if ($route.current.params.tagname != null) {
@@ -581,25 +601,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         if (!component.contact.phone && that.account.business.phones.length)
           matchingContact.contactPhone = that.account.business.phones[0].number;
         if (matchingContact.geo_address_string) {
-          analyticsService.getGeoSearchAddress(matchingContact.geo_address_string, function(data) {
-            if (data.error === undefined) {
-              angular.extend($scope, {
-                mapLocation: {
-                  lat: parseFloat(data.lat),
-                  lng: parseFloat(data.lon),
-                  zoom: 10
-                },
-                markers: {
-                  mainMarker: {
-                    lat: parseFloat(data.lat),
-                    lng: parseFloat(data.lon),
-                    focus: true,
-                    message: matchingContact.geo_address_string,
-                    draggable: false
-                  }
-                }
-              });
+          angular.extend($scope, {
+            mapLocation: {
+              lat: parseFloat(component.location.lat),
+              lng: parseFloat(component.location.lon),
+              zoom: 10
+            },
+            markers: {
+              mainMarker: {
+                lat: parseFloat(component.location.lat),
+                lng: parseFloat(component.location.lon),
+                focus: false,
+                message: matchingContact.geo_address_string,
+                draggable: false
+              }
             }
+          });
+          leafletData.getMap('leafletmap').then(function(map) {
+             $timeout(function () {
+                map.invalidateSize();
+              }, 500);
           });
         }
       }
@@ -667,264 +688,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
     }
 
-
-
-    $scope.social_links = [{
-        name: "adn",
-        icon: "adn",
-        tooltip : "Adn",
-        url: "http://www.adn.com"
-      }, {
-        name: "bitbucket",
-        icon: "bitbucket",
-        tooltip : "BitBucket",
-        url: "https://bitbucket.org"
-      }, {
-        name: "dropbox",
-        icon: "dropbox",
-        tooltip: "Dropbox",
-        url: "https://www.dropbox.com"
-      }, {
-        name: "facebook",
-        icon: "facebook",
-        tooltip: "Facebook",
-        url: "https://www.facebook.com"
-      }, {
-        name: "flickr",
-        icon: "flickr",
-        tooltip: "Flickr",
-        url: "https://www.flickr.com"
-      }, {
-        name: "foursquare",
-        icon: "foursquare",
-        tooltip: "Four Square",
-        url: "https://foursquare.com"
-      }, {
-        name: "github",
-        icon: "github",
-        tooltip: "Github",
-        url: "https://github.com"
-      }, {
-        name: "google-plus",
-        icon: "google-plus",
-        tooltip: "Google Plus",
-        url:"https://www.gmail.com"
-      }, {
-        name: "instagram",
-        icon: "instagram",
-        tooltip: "Instagram",
-        url: "https://instagram.com"
-      },
-      {
-        name: "linkedin",
-        icon: "linkedin",
-        tooltip: "Linkedin",
-        url: "https://www.linkedin.com"
-      }, {
-        name: "microsoft",
-        icon: "windows",
-        tooltip: "Microsoft",
-        url: "http://www.microsoft.com"
-      }, {
-        name: "openid",
-        icon: "openid",
-        tooltip: "Open Id",
-        url: "http://openid.com"
-      }, {
-        name: "pinterest",
-        icon: "pinterest",
-        tooltip: "Pinterest",
-        url: "https://www.pinterest.com"
-      }, {
-        name: "reddit",
-        icon: "reddit",
-        tooltip: "Reddit",
-        url: "http://www.reddit.com"
-      }, {name: "comment-o",
-        icon: "comment-o",
-        tooltip: "Snapchat",
-        url: "https://www.snapchat.com"
-      }, {
-        name: "soundcloud",
-        icon: "soundcloud",
-        tooltip: "Sound Cloud",
-        url: "https://soundcloud.com"
-      },{
-        name: "tumblr",
-        icon: "tumblr",
-        tooltip: "Tumblr",
-        url:"https://www.tumblr.com"
-      }, {
-        name: "twitter",
-        icon: "twitter",
-        tooltip: "Twitter",
-        url: "https://twitter.com"
-      }, {
-        name: "vimeo",
-        icon: "vimeo-square",
-        tooltip: "Vimeo",
-        url: "https://vimeo.com"
-      },  {
-        name: "vine",
-        icon: "vine",
-        tooltip: "Vine",
-        url: "http://www.vinemarket.com"
-      }, {
-        name: "vk",
-        icon: "vk",
-        tooltip: "Vk",
-        url: "http://vk.com"
-      }, 
-      {
-        name: "desktop",
-        icon: "desktop",
-        tooltip: "Website",
-        url: "http://www.website.com"
-      },
-      {
-        name: "yahoo",
-        icon: "yahoo",
-        tooltip: "Yahoo",
-        url: "https://yahoo.com"
-      },
-        {
-        name: "youtube",
-        icon: "youtube",
-        tooltip: "Youtube",
-        url: "https://www.youtube.com"
-      }, {
-        name: "yelp",
-        icon: "yelp",
-        tooltip: "Yelp",
-        url: "http://www.yelp.com"
-      }
-
-    ]
-
-    $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
-      if (!$scope.social)
-        $scope.social = {};
-      if (nested)
-        $scope.meetTeamIndex = index;
-      else
-        $scope.meetTeamIndex = null;
-      if (update) {
-        $scope.social.selectedLink = link.name;
-        $scope.social.name = link.name;
-        $scope.social.icon = link.icon;
-        $scope.social.url = link.url;
-      } else {
-        $scope.social = {};
-      }
-      $("#social-link-name .error").html("");
-      $("#social-link-name").removeClass('has-error');
-      $("#social-link-url .error").html("");
-      $("#social-link-url").removeClass('has-error');
-      $scope.networks = window.parent.getSocialNetworks(id, nested, index);
-    }
-    $scope.setSelectedLink = function(social_link) {
-      $scope.social.name = social_link.name;
-      $scope.social.icon = social_link.icon;
-      $scope.social.url = social_link.url;
-    }
-    $scope.saveSocialLink = function(social, id, mode) {
-      $("#social-link-name .error").html("");
-      $("#social-link-name").removeClass('has-error');
-      $("#social-link-url .error").html("");
-      $("#social-link-url").removeClass('has-error');
-      var old_value = _.findWhere($scope.networks, {
-        name: $scope.social.selectedLink
-      });
-      var selectedName;
-      switch (mode) {
-        case "add":
-          if (social && social.name) {
-            if (!social.url || social.url == "") {
-              $("#social-link-url .error").html("Link url can not be blank.");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-
-            if (social.url) {
-              var urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-              if (urlRegex.test(social.url) == false) {
-                $("#social-link-url .error").html("Link url incorrect format");
-                $("#social-link-url").addClass('has-error');
-                return;
-              }
-            }
-            selectedName = _.findWhere($scope.networks, {
-              name: social.name
-            });
-            if (selectedName) {
-              $("#social-link-name .error").html("Link icon already exists");
-              $("#social-link-name").addClass('has-error');
-              return;
-            }
-            var selectedUrl = _.findWhere($scope.networks, {
-              url: social.url
-            });
-            if (selectedUrl) {
-              $("#social-link-url .error").html("Link url already exists");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-          } else {
-            $("#social-link-url .error").html("Please enter link url.");
-            $("#social-link-url").addClass('has-error');
-            $("#social-link-name .error").html("Please select link icon.");
-            $("#social-link-name").addClass('has-error');
-            return;
-          }
-          $("#social-link-name .error").html("");
-          $("#social-link-name").removeClass('has-error');
-          $("#social-link-url .error").html("");
-          $("#social-link-url").removeClass('has-error');
-          break;
-        case "update":
-          if (social && social.name && social.url) {
-            var networks = angular.copy($scope.networks);
-
-            selectedName = _.findWhere(networks, {
-              name: old_value.name
-            });
-            selectedName.name = social.name;
-            selectedName.url = social.url;
-            selectedName.icon = social.icon;
-
-
-            var existingName = _.where(networks, {
-              name: social.name
-            });
-            var existingUrl = _.where(networks, {
-              url: social.url
-            });
-            if (existingName.length > 1) {
-              $("#social-link-name .error").html("Link icon already exists");
-              $("#social-link-name").addClass('has-error');
-              return;
-            } else if (existingUrl.length > 1) {
-              $("#social-link-url .error").html("Link url already exists");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-          }
-          break;
-      }
-      if ($scope.meetTeamIndex !== null)
-        window.parent.updateTeamNetworks(old_value, mode, social, $scope.meetTeamIndex);
-      else
-        window.parent.updateSocialNetworks(old_value, mode, social);
-      $scope.social = {};
-      $scope.meetTeamIndex = null;
-      if ($("#meetteamSocialModal").length)
-        $("#meetteamSocialModal").modal("hide");
-      if ($("#socialComponentModal").length)
-        $("#socialComponentModal").modal("hide");
-      if ($("#topbarSocialComponentModal").length)
-        $("#topbarSocialComponentModal").modal("hide");
-      $(".modal-backdrop").remove();
-    };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
     }
@@ -1003,6 +766,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
+    $scope.deleteTestimonial = function(componentId, index) {
+      window.parent.deleteTestimonial(componentId, index);
+
+    }
+
+
+    $scope.addTestimonial = function(componentId, index) {
+      // to do: the information should fetch from component model
+      var newTestimonial = {
+        "img": "",
+        "name": "Name",
+        "site": "Site",
+        "text": "Description"       
+      }
+      window.parent.addTestimonial(componentId, newTestimonial, index);     
+    }
+
 
     function toTitleCase(str) {
       return str.replace(/\w\S*/g, function(txt) {
@@ -1013,6 +793,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
+      for(name in CKEDITOR.instances)
+        {
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
+        }
       $scope.isEditing = true;
       CKEDITOR.disableAutoInline = true;
       var elements = $('.editable');
@@ -1022,11 +807,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
         }
         // $scope.activated = true;
-        if (!$(this).hasClass('cke_editable')) {
+        //if (!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
-                var editor = ev.editor;
+                var editor = ev.editor;                
+               // CKEDITOR.replace(editor.name);                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -1037,7 +823,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               top: 'editor-toolbar'
             }
           });
-        }
+        //}
         
       });
       setTimeout(function() {        
@@ -1182,15 +968,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         }, 200);
       });
     };
+
     window.updateCustomComponent = function(data, networks) {
       var scroll = $(window).scrollTop();
-
+      $scope.dataLoaded = false;
       console.log('updateCustomComponent >>>');
       if (data) {
         $scope.currentpage.components = data;
+        
         setTimeout(function() {
           $scope.$apply(function() {
             activateAloha();
+            $scope.dataLoaded = true;
           });
         });
       } else {
@@ -1226,7 +1015,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       };
       setTimeout(function() {
         $(window).scrollTop(scroll);
+          //if($(".slick-slider"))         
+            //$(".slick-slider")[0].slick.refresh();
       }, 200);
+
     };
 
     window.updateContactComponent = function(data, networks) {
@@ -1317,6 +1109,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.wait;
 
     $scope.sortableOptions = {
+      parentElement : "body",
       dragStart: function(e, ui) {
         console.log('Start sorting');
         var componentId = e.source.itemScope.modelValue._id;
@@ -1345,6 +1138,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.planStatus = {};
     $scope.$watch('currentpage.components', function(newValue, oldValue) {
       if (newValue) {
+        $scope.dataLoaded = false;
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
           if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
@@ -1405,6 +1199,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           if (value && value.type == 'contact-us') {
             $scope.updateContactUsMap(value);
           }
+          $scope.dataLoaded = true;
         });
       }
     });

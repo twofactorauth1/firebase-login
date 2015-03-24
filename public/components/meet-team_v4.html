@@ -1,41 +1,40 @@
 <div ng-class="component.type+'-v'+component.version">
-<div class="editable" data-class="component.title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
-<div class="team-member-wrap">
-    <div class="row clearfix mb30 team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
-        <div class="col-md-4 text-center">
-            <div class="mb10"></div>
-            <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img meet-team-image" data-index="{{$index}}" style="width: 200px;height: 200px" />
-        </div>
-        <div class="col-md-8">
-            <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
-            <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
-            <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
-
-            <div class="row social-link {{isEditing ? 'edit-mode' : ''}}">
-                <ul class="social">
-                    <li ng-repeat="network in teamMember.networks">
-                        <a ng-if="!isEditing" href="{{network.url}}" target="_blank">
-                            <span class="fa fa-{{network.icon}}"></span>
-                        </a>
-                        <a ng-if="isEditing" href="#" ng-click="setSelectedSocialLink(network, component._id, true, true, $parent.$parent.$index)" class="clickable-link" data-toggle="modal" data-target="#meetteamSocialModal"><span class="fa fa-{{network.icon}}"></span></a>
-                    </li>                    
-                </ul>
-                <div ng-if="isEditing" class="add-addtional-team center">
-                    <a ng-if="isEditing" class="clickable-link" data-toggle="modal" ng-click="setSelectedSocialLink(network, component._id, false, true, $parent.$parent.$index)" data-target="#meetteamSocialModal"><i class="fa fa-plus"></i></a>
+    <div class="editable" data-class="title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
+    <div class="team-member-wrap">
+        <div class="row clearfix mb30 team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
+            <div class="col-md-4 text-center">
+                <div class="mb10"></div>
+                <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img meet-team-image" data-index="{{$index}}" style="width: 200px;height: 200px" />
+            </div>
+            <div class="col-md-8">
+                <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
+                <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
+                <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
+                <div class="row social-link {{isEditing ? 'edit-mode' : ''}}">
+                    <ul class="social">
+                        <li ng-repeat="network in teamMember.networks">
+                            <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
+                                <span class="fa fa-{{network.icon}}"></span>
+                            </a>
+                            <a ng-if="isEditing" href="#" data-index="{{$index}}" parent-data-index="{{$parent.$parent.$index}}" class="clickable-link btn-social-link"><span class="fa fa-{{network.icon}}"></span></a>
+                        </li>
+                    </ul>
+                   <div ng-if="isEditing" class="add-addtional-team center">
+                        <a ng-if="isEditing" parent-data-index="{{$parent.$index}}" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div ng-if="isEditing" class="delete-team-member center">
-            <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
-                <i class='fa fa-trash'></i>
-            </button>
-        </div>
-        <div ng-if="isEditing" class="add-addtional center">
-            <a href="" ng-click="addTeamMember(component._id,$index)">
-                <i class="fa fa-plus"></i>
-            </a>
+            <div ng-if="isEditing" class="delete-team-member center">
+                <button ng-click="deleteTeamMember(component._id,$index)" class="ng-scope btn-delete-team-member">
+                    <i class='fa fa-trash'></i>
+                </button>
+            </div>
+            <div ng-if="isEditing" class="add-addtional center">
+                <a href="" ng-click="addTeamMember(component._id,$index)">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
         </div>
     </div>
 </div>
-</div>
-<div ng-if="isEditing" ng-include="'/components/meet-team-social-links.html'"></div>
+

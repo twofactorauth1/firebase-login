@@ -1,301 +1,272 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
 <div ng-if="showOnboarding">
-  <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
-  on-finish-callback='finishOnboarding'></onboarding-popover>
+    <onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex' on-finish-callback='finishOnboarding'></onboarding-popover>
 </div>
 <div class="commerce">
-  <div class="pageheader row">
-    <div class="col-xs-8">
-      <h2>
-				<i class="fa fa-shopping-cart"></i> Commerce
-			</h2>
-    </div>
-    <div class="col-xs-4">
-      <a class="btn btn-outline pull-right" type="button" data-toggle="modal" data-target="#commerce-add-product"> <span class="fa fa-plus"></span> <span class="hidden-xs">Add</span>
-      </a>
-    </div>
-    <div class="clear"></div>
-  </div>
-
-  <div class="alert alert-info fade in hidden">
-    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-    <h4 class="center">Hi Robin, Welcome to Products!</h4>
-    <p class="center">Okay, it's time to start managing your products. If you need assitance use any of the three ways below.</p>
-    <hr class="mb30">
-    <div class="col-sm-6">
-      <h4>
-				<i class="fa fa-youtube-play"></i> Watch this 30 second video about
-				manage your products.
-			</h4>
-      <img class="onboard-vid" src="/assets/images/video-holder.jpg">
-    </div>
-    <div class="mb30"></div>
-    <div class="col-sm-6">
-      <h4>
-				<i class="fa fa-compass"></i> Schedule a Demo
-			</h4>
-      <p>Schedule a personal demo with one of our customer support representatives who can show you via screen share how to manage your products.
-      </p>
-      <button class="btn btn-primary btn-lg">
-        Schedule Now <i class="fa fa-caret-right"></i>
-      </button>
-      <hr class="mb30">
-      <h4>
-				<i class="fa fa-file-text-o"></i> Read the Documentation
-			</h4>
-      <p>If you prefer a list of steps to read, then head over to our detailed documentation about all the aspects of managing your products.
-      </p>
-      <button class="btn btn-primary btn-lg">
-        View Docs <i class="fa fa-caret-right"></i>
-      </button>
-    </div>
-    <div class="clearfix mb30"></div>
-  </div>
-
-  <div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
-    <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
-      <div class="panel panel-default row commerce-filter">
-        <div class="panel-body">
-          <div class="col-xs-6">
-            <input type="text" placeholder="Search" class="form-control input-lg" ng-model="productSearch.name" />
-          </div>
-          <div class="col-xs-6 form-horizontal">
-            <div class="form-group row">
-
-							<select class="form-control chosen-select input-lg" ng-model="sortOrder">
-								<option value="" disabled selected>Filter Products</option>
-								<option value="1">A to Z</option>
-								<option value="2">Z to A</option>
-								<option value="3">Date Added</option>
-                <option value="4">Best Selling</option>
-                <option value="5">Price: Low to High</option>
-                <option value="6">Price: High to Low</option>
-                <option value="7">Starred</option>
-							</select>
-						</div>
-					</div>
-				</div>
-				<!-- panel-body -->
-			</div>
-		</headroom>
-		<div class="products-list" ng-switch on="commerceSettings.gridViewDisplay">
-       <div ng-if="products.length <= 0" class="empty">
-            <h1 class="center"><span class="fa fa-shopping-cart"></span></h1>
-            <h3 class="center">No Products Yet</h3>
-            <h5 class="center">Add products for them to appear here.</h5>
+    <div class="pageheader row">
+        <div class="col-xs-12">
+            <h2>
+              <i class="fa fa-shopping-cart"></i> Commerce
+            </h2>
         </div>
-			<div ng-switch-when="true" class="row">
-
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
-          <div class="commerce-item btn-view-product-details" data-productid="1">
-            <div class="media">
-              <span class="important-star">
-									<i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
-									<i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
-								</span>
-              <div class="media">
-                <a href="#/commerce/edit/{{product._id}}">
-                  <div class="col-xs-12" ng-if="commerceSettings.showProductThumb">
-                    <span ng-if="!product.is_image" class="icon"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
-										</span>
-                    <img ng-if = "product.is_image" style="width:75px;height:75px" class="img-responsive img-circle hand center" ng-src="{{ product.icon }}">
-                    <div class="clear"></div>
-                  </div>
-                  <div class="media-body col-xs-12">
-                    <h4 class="person-name center">{{product.name}}</h4>
-                    <hr class="clearfix mb15">
-                    <div class="customer-stats">
-                      <div class="last-active"  ng-if="commerceSettings.showSku">
-                        <i class="fa fa-bolt"></i> Sku: <span class="data">{{product.sku}}</span>
-                      </div>
-                      <div class="purchased"  ng-if="commerceSettings.showPrice">
-                        <i class="fa fa-money"></i> Price: <span class="data">${{ min_value(product.product_attributes.stripePlans) || product.regular_price}}<span ng-if="product.product_attributes.stripePlans">  -  ${{ max_value(product.product_attributes.stripePlans) || '0.00'}} </span></span>
-                      </div>
-                      <div class="emails-opened"  ng-if="commerceSettings.showProductType">
-                        <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
-                      </div>
-                      <div class="emails-opened" ng-if='commerceSettings.showProductStatus'>
-                        <i class="fa fa-envelope"></i> Status: <span class="data">{{product.status}}</span>
-                      </div>
-                      <div class="emails-opened" ng-if='product.cost && commerceSettings.showProductCost'>
-                        <i class="fa fa-money"></i> cost: <span class="data">${{product.cost}}</span>
-                      </div>
-
+        <div class="clear"></div>
+    </div>
+    <div class="contentpanel" ng-style="styleCommerce()" indigeweb-resize>
+        <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}">
+            <div class="panel panel-default row commerce-filter">
+                <div class="panel-body">
+                    <div class="col-xs-6">
+                        <input type="text" placeholder="Search" class="form-control input-lg" ng-model="productSearch.name" />
                     </div>
-                  </div>
-                </a>
-              </div>
+                    <div class="col-xs-6 form-horizontal">
+                        <div class="form-group row">
+                            <select class="form-control chosen-select input-lg" ng-model="sortOrder">
+                                <option value="" disabled selected>Filter Products</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                                <option value="4">Best Selling</option>
+                                <option value="5">Price: Low to High</option>
+                                <option value="6">Price: High to Low</option>
+                                <option value="7">Starred</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- panel-body -->
             </div>
-          </div>
-        </div>
-      </div>
-      <div ng-switch-when="false" class="row">
-        <div class="tb-main table">
-          <div class="container-fluid tb-row" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
-            <div class="tb-col col-md-1">
-              <div class="commerce-item">
-                <div class="media">
-                  <span class="important-star">
+        </headroom>
+        <div class="products-list" ng-switch on="commerceSettings.gridViewDisplay">
+            <div ng-switch-when="true" class="row">
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                    <div class="commerce-item">
+                        <div class="media">
+                            <div class="clearfix mb10"></div>
+                            <div class="clear clearfix"></div>
+                            <div class="center add-wrap">
+                                <span class="add-product fa fa-shopping-cart"></span>
+                            </div>
+                            <div class="center">
+                                <button class="btn btn-success btn-lg" data-toggle="modal" data-target="#commerce-add-product">
+                                    <span class="fa fa-plus"></span> ADD PRODUCT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
+                    <div class="commerce-item btn-view-product-details" data-productid="1">
+                        <div class="media">
+                            <span class="important-star">
+                              <i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
+                              <i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
+                            </span>
+                            <div class="media">
+                                <a href="#/commerce/edit/{{product._id}}">
+                                    <div class="col-xs-12" ng-if="commerceSettings.showProductThumb">
+                                        <span ng-if="!product.is_image" class="icon"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
+                                        </span>
+                                        <img ng-if="product.is_image" style="width:75px;height:75px" class="img-responsive img-circle hand center" ng-src="{{ product.icon }}">
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="media-body col-xs-12">
+                                        <h4 class="person-name center">{{product.name}}</h4>
+                                        <hr class="clearfix mb15">
+                                        <div class="customer-stats">
+                                            <div class="last-active" ng-if="commerceSettings.showSku">
+                                                <i class="fa fa-bolt"></i> Sku: <span class="data">{{product.sku}}</span>
+                                            </div>
+                                            <div class="purchased" ng-if="commerceSettings.showPrice">
+                                                <i class="fa fa-money"></i> Price: <span class="data">${{ min_value(product.product_attributes.stripePlans) || product.regular_price}}<span ng-if="product.product_attributes.stripePlans">  -  ${{ max_value(product.product_attributes.stripePlans) || '0.00'}} </span></span>
+                                            </div>
+                                            <div class="emails-opened" ng-if="commerceSettings.showProductType">
+                                                <i class="fa fa-envelope"></i> Product Type: <span class="data">{{product.type}}</span>
+                                            </div>
+                                            <div class="emails-opened" ng-if='commerceSettings.showProductStatus'>
+                                                <i class="fa fa-envelope"></i> Status: <span class="data">{{product.status}}</span>
+                                            </div>
+                                            <div class="emails-opened" ng-if='product.cost && commerceSettings.showProductCost'>
+                                                <i class="fa fa-money"></i> cost: <span class="data">${{product.cost}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-when="false" class="row">
+                <div class="tb-main table">
+                    <div class="container-fluid tb-row">
+                        <div class="tb-col col-md-12">
+                            <div class="commerce-item commerce-add-item">
+                                <div class="clearfix mb10"></div>
+                                <div class="clear clearfix"></div>
+                                <div class="center add-wrap">
+                                    <span class="add-product fa fa-shopping-cart"></span>
+                                    <button class="btn btn-add btn-success btn-lg" data-toggle="modal" data-target="#commerce-add-product">
+                                        <span class="fa fa-plus"></span> ADD PRODUCT
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid tb-row" ng-repeat="product in products | filter : productSearch | orderBy : productOrder : productSortReverse">
+                        <div class="tb-col col-md-1">
+                            <div class="commerce-item">
+                                <div class="media">
+                                    <span class="important-star">
                       <i class="fa fa-star-o" ng-hide="product.starred" ng-click="productStarredFn(product, true)"></i>
                       <i class="fa fa-star" ng-show="product.starred"  ng-click="productStarredFn(product, false)"></i>
                   </span>
-                </div>
-              </div>
-            </div>
-            <div class="tb-col col-md-4">
-              <div class="commerce-item">
-                <a href="#/commerce/edit/{{product._id}}">
-                  <div class="media">
-                    <div class="vcenter img-outer">
-                    <div class="hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
-                      <span ng-if="!product.is_image" class="icon media-object"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
-                      </span>
-                      <img ng-if = "product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tb-col col-md-4">
+                            <div class="commerce-item">
+                                <a href="#/commerce/edit/{{product._id}}">
+                                    <div class="media">
+                                        <div class="vcenter img-outer">
+                                            <div class="hidden-xs vcenter" ng-if="commerceSettings.showProductThumb">
+                                                <span ng-if="!product.is_image" class="icon media-object"> <i class="fa {{product.icon || userPreferences.default_product_icon}}"></i>
+                                                </span>
+                                                <img ng-if="product.is_image" class="img-responsive img-circle hand center media-object" ng-src="{{ product.icon }}">
+                                            </div>
+                                        </div>
+                                        <div class="media-body hidden-xs vcenter">
+                                            <h4 class="person-name">{{product.name}}</h4>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="tb-col col-md-2">
+                            <div class="commerce-item">
+                                <div class="">
+                                    <div class="last-active" ng-if="commerceSettings.showSku">
+                                        <p class="pull-left title pull-right value"><i class="fa fa-bolt"></i> Sku: </p> <span class="data  pull-right value">{{product.sku}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tb-col col-md-2">
+                            <div class="commerce-item">
+                                <div class="">
+                                    <div class="purchased" ng-if="commerceSettings.showPrice">
+                                        <p class="pull-left title"><i class="fa fa-money"></i> Price:</p>
+                                        <span class="data  pull-right value">${{product.regular_price}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tb-col col-md-3">
+                            <div class="commerce-item">
+                                <div class="">
+                                    <div class="emails-opened" ng-if="commerceSettings.showProductType">
+                                        <p class="pull-left title"><i class="fa fa-envelope"></i> Product Type:</p>
+                                        <span class="data pull-right value">{{product.type}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    </div>
-
-                    <div class="media-body hidden-xs vcenter">
-                      <h4 class="person-name">{{product.name}}</h4>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="tb-col col-md-2">
-              <div class="commerce-item">
-                <div class="">
-                  <div class="last-active"  ng-if="commerceSettings.showSku">
-                              <p class="pull-left title pull-right value"><i class="fa fa-bolt"></i> Sku: </p> <span class="data  pull-right value">{{product.sku}}</span>
-                  </div>
                 </div>
-              </div>
             </div>
-            <div class="tb-col col-md-2">
-              <div class="commerce-item">
-                <div class="">
-                  <div class="purchased"  ng-if="commerceSettings.showPrice">
-                    <p class="pull-left title"><i class="fa fa-money"></i> Price:</p>
-                        <span class="data  pull-right value">${{product.regular_price}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tb-col col-md-3">
-              <div class="commerce-item">
-                <div class="">
-                 <div class="emails-opened"  ng-if="commerceSettings.showProductType">
-                     <p class="pull-left title"><i class="fa fa-envelope"></i> Product Type:</p>
-                        <span class="data pull-right value">{{product.type}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-
-  <div class="rightpanel rightpanel-commerce">
-
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs nav-justified">
-      <li class="active"><a href="javascript:void(0)" data-toggle="tab" id="rp-page-tab">Commerce Settings</a>
-      </li>
-    </ul>
-
-    <!-- Tab panes -->
-
-    <div class="tab-content">
-      <div class="tab-pane pane-settings active" id="rp-page">
-        <div class="rightpanelinner">
-          <!--
+    <div class="rightpanel rightpanel-commerce">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified">
+            <li class="active"><a href="javascript:void(0)" data-toggle="tab" id="rp-page-tab">Commerce Settings</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane pane-settings active" id="rp-page">
+                <div class="rightpanelinner">
+                    <!--
           <button class="btn btn-orange btn-block mb15"><span class="fa fa-upload"></span> Import Products</button>
           -->
-          <div class="form-group">
-            <label>Default View</label>
-            <div class="btn-group">
-              <button type="button" ng-click="setDefaultView('true')" ng-class="{'active': commerceSettings.gridViewDisplay === 'true'}" class="btn btn-default"> <span class="fa fa-th"></span> Grid</button>
-              <button type="button" ng-click="setDefaultView('false')" class="btn btn-default" ng-class="{'active': commerceSettings.gridViewDisplay === 'false'}"><span class="fa fa-list"></span> List</button>
+                    <div class="form-group">
+                        <label>Default View</label>
+                        <div class="btn-group">
+                            <button type="button" ng-click="setDefaultView('true')" ng-class="{'active': commerceSettings.gridViewDisplay === 'true'}" class="btn btn-default"> <span class="fa fa-th"></span> Grid</button>
+                            <button type="button" ng-click="setDefaultView('false')" class="btn btn-default" ng-class="{'active': commerceSettings.gridViewDisplay === 'false'}"><span class="fa fa-list"></span> List</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Default Order</label>
+                        <select class="form-control" ng-model="sortOrderSettings">
+                            <option value="1">A to Z</option>
+                            <option value="2">Z to A</option>
+                            <option value="3">Date Added</option>
+                            <option value="4">Best Selling</option>
+                            <option value="5">Price: Low to High</option>
+                            <option value="6">Price: High to Low</option>
+                            <option value="7">Starred</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Show/Hide</label>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" ng-model="toggleProductThumb" id="showProductThumb" ng-checked="true">
+                            <label for="showProductThumb">Thumbnail</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" ng-model="toggleSku" ng-checked="true" id="showSku">
+                            <label for="showSku">Sku</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" ng-model="togglePrice" ng-checked="true" id="showPrice">
+                            <label for="showPrice">Price</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="showProductType" ng-model="toggleProductType" ng-checked="true">
+                            <label for="showProductType">Type</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="showProductStatus" ng-model='toggleProductStatus' checked="true">
+                            <label for="showProductStatus">Status</label>
+                        </div>
+                        <div class="ckbox ckbox-primary">
+                            <input type="checkbox" value="1" id="showProductCost" ng-model='toggleProductCost' checked="true">
+                            <label for="showProductCost">Cost</label>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="form-group">
-            <label>Default Order</label>
-            <select class="form-control" ng-model="sortOrderSettings">
-              <option value="1">A to Z</option>
-              <option value="2">Z to A</option>
-              <option value="3">Date Added</option>
-              <option value="4">Best Selling</option>
-              <option value="5">Price: Low to High</option>
-              <option value="6">Price: High to Low</option>
-              <option value="7">Starred</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Show/Hide</label>
-            <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" ng-model="toggleProductThumb" id="showProductThumb" ng-checked="true">
-              <label for="showProductThumb">Thumbnail</label>
-            </div>
-            <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" ng-model="toggleSku" ng-checked="true" id="showSku">
-              <label for="showSku">Sku</label>
-            </div>
-            <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" ng-model="togglePrice" ng-checked="true" id="showPrice">
-              <label for="showPrice">Price</label>
-            </div>
-            <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductType" ng-model="toggleProductType" ng-checked="true" >
-              <label for="showProductType">Type</label>
-            </div>
-            <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductStatus" ng-model='toggleProductStatus' checked="true">
-              <label for="showProductStatus">Status</label>
-            </div>
-            <div class="ckbox ckbox-primary">
-              <input type="checkbox" value="1" id="showProductCost" ng-model='toggleProductCost' checked="true">
-              <label for="showProductCost">Cost</label>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-
-  </div>
-  <!-- rightpanel -->
+    <!-- rightpanel -->
 </div>
-
 <div class="modal fade" id="commerce-add-product">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Add New Product</h4>
-      </div>
-      <div class="modal-body">
-
-
-        <form role="form">
-          <div class="form-group">
-            <label for="productName">Title</label>
-            <input type="text" class="form-control input-lg" id="productName" placeholder="Enter a name for your product" ng-model='newProduct.name' />
-          </div>
-          <div class="form-group">
-            <label for="productType">Type</label>
-            <select id="productType" ng-model="newProduct.type" class="form-control input-lg">
-              <option value="subscription">Subscription</option>
-              <option value="physical" >Physical</option>
-              <option value="digital">Digital</option>
-              <option value="external_link">External Link</option>
-            </select>
-          </div>
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addProductFn()"><i class="fa fa-plus" /> Add</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add New Product</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="productName">Title</label>
+                        <input type="text" class="form-control input-lg" id="productName" placeholder="Enter a name for your product" ng-model='newProduct.name' />
+                    </div>
+                    <div class="form-group">
+                        <label for="productType">Type</label>
+                        <select id="productType" ng-model="newProduct.type" class="form-control input-lg">
+                            <option value="subscription">Subscription</option>
+                            <option value="physical">Physical</option>
+                            <option value="digital">Digital</option>
+                            <option value="external_link">External Link</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addProductFn()"><i class="fa fa-plus" /> Add</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

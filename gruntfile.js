@@ -102,9 +102,53 @@ module.exports = function(grunt) {
         },
 
         csssplit: {
-            your_target: {
+            split_style: {
               src: ['../indigeweb/public/css/style.default.css'],
               dest: '../indigeweb/public/css'
+            }
+        },
+
+        cssmin: {
+            target: {
+                /*files: [{
+                    expand: true,
+                    cwd: '../indigeweb/public/css',
+                    src: ['*.css', 'style.default_part_1.css', '!*.min.css'],
+                    dest: '../indigeweb/public/css',
+                    ext: '.min.css'
+                }]*/
+                files: [
+                    {
+                        'public/css/global_o.min.css': ['public/css/global_o.css']
+                    },
+                    {
+                        'public/css/style.default_o.min.css': ['public/css/style.default_o.css']
+                    },
+                    {
+                        'public/css/pages.min.css': ['public/css/pages.css']
+                    },
+                    {
+                        'public/css/style.inverse.min.css': ['public/css/style.inverse.css']
+                    },
+                    {
+                        'public/css/style.default.min.css': ['public/css/style.default.css']
+                    },
+                    {
+                        'public/css/site.min.css': ['public/css/site.css']
+                    },
+                    {
+                        'public/css/angular-admin.min.css': ['public/css/angular-admin.css']
+                    },
+                    {
+                        'public/css/pages.min.css': ['public/css/pages.css']
+                    },
+                    {
+                        'public/css/style.default_part_2.min.css': ['public/css/style.default_part_2.css']
+                    },
+                    {
+                        'public/css/style.default_part_1.min.css': ['public/css/style.default_part_1.css']
+                    }
+                ]
             }
         },
 
@@ -510,12 +554,13 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-csssplit');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
 
-    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
 
 
     /*

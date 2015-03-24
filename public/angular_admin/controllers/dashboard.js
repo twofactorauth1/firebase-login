@@ -83,8 +83,8 @@ define([
         if (newValue != oldValue && newValue == 'analytics') {
           setTimeout(function() {
             ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
-          }, 100);
-        }
+          }, 100);          
+        }        
         //$(window).trigger('resize');
       });
 
@@ -163,7 +163,32 @@ define([
 
         ChartAnalyticsService.runReports($scope.date, account, function(data) {
                  $scope.setReportData(data);
-        });        
+        });
+
+        ChartCommerceService.runReports(function(data) {
+          $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
+          $scope.avgRevenue = data.avgRevenue;
+          $scope.annualRunRate = data.annualRunRate;
+          $scope.arpu = data.arpu || null;
+          $scope.totalCanceledSubscriptions = data.totalCanceledSubscriptions;
+          $scope.cancelSubscriptionPercent = data.cancelSubscriptionPercent;
+          $scope.cancelSubscriptionData = data.cancelSubscriptionData;
+          $scope.cancelStart = data.cancelStart;
+          $scope.potentialMRRLoss = data.potentialMRRLoss;
+          $scope.userChurn = data.userChurn;
+          $scope.lifetimeValue = data.lifetimeValue;
+          $scope.totalRevenue = data.totalRevenue;
+          $scope.totalFees = data.totalFees;
+          $scope.totalRevenuePercent = data.totalRevenuePercent || null;
+          $scope.netRevenue = data.netRevenue || null;
+          $scope.totalCustomerData = data.totalCustomerData;
+          $scope.totalPayingCustomerPercent = data.totalPayingCustomerPercent;
+          $scope.customerStart = data.customerStart;
+          $scope.totalPayingCustomers = data.totalPayingCustomers;
+          $scope.renderCommerceCharts();
+      });
+
+       // $scope.renderCommerceCharts();
       };
       UserService.getAccount(function(account) {
         $scope.analyticsAccount = account;
@@ -204,17 +229,7 @@ define([
             };
 
             $scope.visitorsData = visitorsData;
-
-            // var readyVisitorsData = [];
-            // if (currentTotalVisitors > totalVisitors) {
-            //     totalVisitors = currentTotalVisitors;
-            //     readyVisitorsData = visitorsData;
-            //     if (firstQuery) {
-            //         readyVisitorsData = visitorsData;
-            //     } else {
-            //         $scope.analyticsOverviewConfig.series[2].data = visitorsData;
-            //     }
-            // }
+            
 
             var vistorsPreviousData = 0;
             for (var h = 0; h < results[3].result.length; h++) {
@@ -239,18 +254,14 @@ define([
                 subArr.push(value);
                 pageviewsData.push(subArr);
             };
+            
             $scope.pageviews = currentTotalPageviews;
-            $scope.pageviewsData = pageviewsData;
-
-            // if ($scope.currentTotalPageviews > $scope.totalPageviews) {
-            //     $scope.totalPageviews = $scope.currentTotalPageviews;
-            //     $scope.pageviews = $scope.totalPageviews;
-            //     if ($scope.firstQuery) {
-            //         $scope.readyPageviewsData = $scope.pageviewsData;
-            //     } else {
-            //         $scope.analyticsOverviewConfig.series[0].data = $scope.pageviewsData;
-            //     }
-            // }
+            $scope.pageviewsData = pageviewsData;            
+           
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, function(data) {
+              $scope.analyticsOverviewConfig = data;
+              $scope.analyticsOverviewConfig.loading = false;
+            });
 
             var pageviewsPreviousData = 0;
             for (var r = 0; r < results[5].result.length; r++) {
@@ -278,15 +289,7 @@ define([
             };
             $scope.sessions = _totalSessions;
             $scope.sessionsData = _sessionsData;
-            // if (_totalSessions > $scope.sessions) {
-            //     $scope.sessions = _totalSessions;
-            //     if ($scope.firstQuery) {
-            //         $scope.sessionsData = _sessionsData;
-            //     } else {
-            //         $scope.analyticsOverviewConfig.series[1].data = _sessionsData;
-            //     }
-            // }
-
+            
             var sessionsPreviousData = 0;
             for (var w = 0; w < results[7].result.length; w++) {
                 var value = results[7].result[w].value || 0;
@@ -327,6 +330,8 @@ define([
             };
 
              $scope.avgSessionData = avgSessionData;
+
+
             // ======================================
             // Bounces
             // ======================================
@@ -345,14 +350,11 @@ define([
             $scope.bounces = _totalBounces;
             $scope.bouncesData = _bouncesData;
 
-            // if (_totalBounces >= $scope.bounces) {
-            //     $scope.bounces = _totalBounces;
-            //     if ($scope.firstQuery) {
-            //         $scope.bouncesData = _bouncesData;
-            //     } else {
-            //         $scope.timeonSiteConfig.series[1].data = _bouncesData;
-            //     }
-            // }
+            ChartAnalyticsService.timeOnSite($scope.avgSessionData, $scope.bouncesData, function(data) {
+              $scope.timeonSiteConfig = data;
+              $scope.timeonSiteConfig.loading = false;
+            });
+
 
             var bouncesPercent = ChartAnalyticsService.calculatePercentage(_totalBounces, results[11].result);
             $scope.bouncesPercent = bouncesPercent;
@@ -374,18 +376,12 @@ define([
                 _trafficSourceData.push(subObj);
             };
              $scope.totalTypes = _totalTypes;
-             $scope.trafficSourceData = _trafficSourceData;
-
-            // if (_totalTypes >= $scope.totalTypes) {
-            //     $scope.totalTypes = _totalTypes;
-            //     if ($scope.firstQuery) {
-            //         $scope.totalTypes = _totalTypes;
-            //         $scope.trafficSourceData = _trafficSourceData;
-            //     } else {
-            //         $scope.trafficSourcesConfig.series[0].data = _trafficSourceData;
-            //     }
-            // }
-
+             $scope.trafficSourceData = _trafficSourceData;            
+            
+            ChartAnalyticsService.trafficSources($scope.trafficSourceData, function(data) {
+              $scope.trafficSourcesConfig = data;
+              $scope.trafficSourcesConfig.loading = false;
+            });
             // // ======================================
             // // New vs. Returning Customers
             // // ======================================
@@ -395,6 +391,12 @@ define([
                 ['Returning', results[13].result]
             ];
             $scope.newVsReturning = newVsReturning;
+
+            ChartAnalyticsService.newVsReturning($scope.newVsReturning, function(data) {
+              $scope.newVsReturningConfig = data;
+              $scope.newVsReturningConfig.loading = false;
+            });
+
 
             // // ======================================
             // // Content
@@ -430,21 +432,6 @@ define([
             // // Page Depth
             // // ======================================
 
-
-            // var _depthValues = [];
-            // for (var i = 0; i < results[16].result.length; i++) {
-            //     _depthValues.push( results[16].result[i].result );
-            // };
-
-            // var testing = $scope.countDuplicates(_depthValues);
-
-            // if($scope.firstQuery) {
-            //     ngProgress.complete();
-            //     $scope.renderAnalyticsChart();
-            //     $scope.firstQuery = false;
-            // }
-
-
             //put all data is reportData
             
             $scope.displayVisitors = $scope.visitors > 0;                    
@@ -452,88 +439,29 @@ define([
       }
 
       $scope.renderAnalyticsCharts = function() {
-
-        ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, function(data) {
-          $scope.analyticsOverviewConfig = data;
-          $scope.analyticsOverviewConfig.loading = false;
-        });
-
-        ChartAnalyticsService.timeOnSite($scope.avgSessionData, $scope.bouncesData, function(data) {
-          $scope.timeonSiteConfig = data;
-          $scope.timeonSiteConfig.loading = false;
-        });
-
-        ChartAnalyticsService.trafficSources($scope.trafficSourceData, function(data) {
-          $scope.trafficSourcesConfig = data;
-          $scope.trafficSourcesConfig.loading = false;
-        });
-
-        ChartAnalyticsService.newVsReturning($scope.newVsReturning, function(data) {
-          $scope.newVsReturningConfig = data;
-          $scope.newVsReturningConfig.loading = false;
-        });
-        
-        ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {
-          $scope.customerOverviewConfig = data;
-          $scope.customerOverviewConfig.loading = false;
-        });
-
-        ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
-
-        // var resizeTimer = 0;
-        // window.onresize = function() {
-        //     if (resizeTimer)
-        //         clearTimeout(resizeTimer);
-
-        //     resizeTimer = setTimeout(function() {
-        //         if ($scope.analyticsOverviewConfig && $scope.customerOverviewConfig) {
-        //             $scope.analyticsOverviewConfig.options.chart.width = (document.getElementById('main-viewport').offsetWidth) - 60;
-        //             $scope.customerOverviewConfig.options.chart.width = (document.getElementById('activity-section').offsetWidth) - 20;
-        //         }
-        //     }, 100);
-        // };
-        if (!$scope.displayVisitors) {
-          var deshBlockUI = blockUI.instances.get('deshboardBlock');
-          deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
-        }
+        if($("#visitor_locations").length)
+        {
+              ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
+                if (!$scope.displayVisitors) {
+                  var deshBlockUI = blockUI.instances.get('deshboardBlock');
+                   deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
+                }
+        }        
         ngProgress.complete();
         if ($location.$$search.onboarding) {
           $scope.showOnboarding = true;
         }
       };
+     
       $scope.renderCommerceCharts = function() {
         ChartCommerceService.customerOverview($scope.totalCustomerData, $scope.customerStart, $scope.cancelSubscriptionData, $scope.cancelStart, function(data) {
           $scope.customerOverviewConfig = data;
-          $scope.customerOverviewConfig.loading = false;
+          $scope.$apply(function() {
+            $scope.customerOverviewConfig.loading = false;
+          })
         });
       };
-
-      $scope.runCommerceReports = ChartCommerceService.runReports(function(data) {
-        $scope.monthlyRecurringRevenue = data.monthlyRecurringRevenue;
-        $scope.avgRevenue = data.avgRevenue;
-        $scope.annualRunRate = data.annualRunRate;
-        $scope.arpu = data.arpu || null;
-        $scope.totalCanceledSubscriptions = data.totalCanceledSubscriptions;
-        $scope.cancelSubscriptionPercent = data.cancelSubscriptionPercent;
-        $scope.cancelSubscriptionData = data.cancelSubscriptionData;
-        $scope.cancelStart = data.cancelStart;
-        $scope.potentialMRRLoss = data.potentialMRRLoss;
-        $scope.userChurn = data.userChurn;
-        $scope.lifetimeValue = data.lifetimeValue;
-        $scope.totalRevenue = data.totalRevenue;
-        $scope.totalFees = data.totalFees;
-        $scope.totalRevenuePercent = data.totalRevenuePercent || null;
-        $scope.netRevenue = data.netRevenue || null;
-        $scope.totalCustomerData = data.totalCustomerData;
-        $scope.totalPayingCustomerPercent = data.totalPayingCustomerPercent;
-        $scope.customerStart = data.customerStart;
-        $scope.totalPayingCustomers = data.totalPayingCustomers;
-
-        $scope.renderCommerceCharts();
-      });
-
-      $scope.runCommerceReports;
-
+      
       // window.setInterval(function() {
       //     console.log('running reports');
       //     $scope.runReports;

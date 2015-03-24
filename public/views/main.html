@@ -9,7 +9,8 @@
 <div ng-show="isEditing">
     <div id="editor-toolbar"></div>
 </div>
-<ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
+<div ng-show="isEditing ? true : isLoaded">
+    <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
     <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
         <div class="componentActions" as-sortable-item-handle>
             <span  class="reorder fa fa-arrows"><p>Reorder</p></span>
@@ -40,6 +41,8 @@
         </div>
     </li>
 </ul>
+</div>
+
 
 
 <style>

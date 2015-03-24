@@ -1,0 +1,57 @@
+<!-- Add Component Modal -->
+<div class="modal fade" id="add-component-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add New Component</h4>
+            </div>
+            <div class="type-filter">
+                <ul class="mb0">
+                    <li ng-repeat="componentFilter in componentFilters">
+                        <span ng-class="{'label-primary': typefilter === componentFilter.lowercase, 'label-default': typefilter !== componentFilter.lowercase }" class="label" ng-click="setFilterType(componentFilter.lowercase)">
+                            {{componentFilter.capitalized}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-body nopadding">
+                <div class="types">
+                    <div class="single-type" ng-show="typefilter == type.filter || typefilter == 'all'" ng-repeat="type in componentTypes| orderBy:'title'">
+                        <div class="col-xs-3">
+                            <div class="img-wrap">
+                                <a ng-href="{{type.preview}}" title="La finestra" data-gallery="">
+                                    <span style="  background: url('{{type.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xs-9">
+                            <h4>{{type.title}}</h4>
+                            <div class="star-rating hidden">
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star-o"></span>
+                            </div>
+                            <p>{{type.description}}</p>
+                            <a href="" ng-click="addComponent(type)" data-dismiss="modal" aria-hidden="true"><span class="fa fa-plus"></span> Add</a>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
+ <div id="blueimp-gallery" class="blueimp-gallery">
+                <div class="slides"></div>
+                <h3 class="title"></h3>
+                <a class="prev">‹</a>
+                <a class="next">›</a>
+                <a class="close">×</a>
+                <a class="play-pause"></a>
+                <ol class="indicator"></ol>
+</div>

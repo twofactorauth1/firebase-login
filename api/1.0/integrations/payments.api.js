@@ -1169,7 +1169,14 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.error('Error getting account: ' + err);
                     return self.wrapError(resp, 500, null, err);
                 }
-                var accountBilling = account.get('billing');
+
+                var credentials = account.get('credentials');
+                var accountBilling = {};
+                credentials.forEach(function(value, index) {
+                  if (value.type == 'stripe') {
+                    accountBilling = value;
+                  }
+                });
                 if(!accountBilling.accessToken || accountBilling.accessToken.length < 1) {
                     self.log.warn('Account has not been connected to Stripe');
                     return self.wrapError(resp, 400, 'Bad Request', 'No Stripe accessToken found.');

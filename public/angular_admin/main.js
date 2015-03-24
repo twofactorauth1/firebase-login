@@ -31,7 +31,7 @@ require.config({
         'angularAMD': 'libs/angularAMD/angularAMD.min',
         'ngload': 'libs/angularAMD/ngload.min',
         'underscore': 'libs/underscore/underscore',
-        'skeuocard': 'libs/skeuocard/lib/js/card',
+        'skeuocard': 'libs/skeuocard/lib/js/jquery.card',
         'webfontloader': 'libs/jd-fontselect/dist/libs/webfontloader',
         'jdfontselect': 'libs/jd-fontselect/dist/angular-fontselect.min',
         'stripe': 'https://js.stripe.com/v2/?tmp',
@@ -179,7 +179,11 @@ require.config({
         'datepicker': 'libs/bootstrap-datepicker/js/bootstrap-datepicker',
         'angularConfig' : 'scripts/config',
         'angularSlugifier': 'libs/angular-slugify/angular-slugify',
-        'ui.sortable':'libs_misc/ng-sortable/dist/ng-sortable'
+        'ui.sortable':'libs_misc/ng-sortable/dist/ng-sortable',
+        'blueimp-helper': 'libs/blueimp-gallery/js/blueimp-helper',
+        'blueimp-gallery': 'libs/blueimp-gallery/js/blueimp-gallery',
+        'blueimp-gallery-video': 'libs/blueimp-gallery/js/blueimp-gallery-video',
+        'blueimp' : 'libs/blueimp-gallery/js/jquery.blueimp-gallery'
     },
     shim: {
         'jqueryUI': {deps: ['jquery']},
@@ -254,7 +258,8 @@ require.config({
         'angularSlugifier': ['angular'],
         'blockUI': ['angular'],
         'carousel': ['angular','angularBootstrap'],
-        'ui.sortable': ['angular']
+        'ui.sortable': ['angular'],        
+        'blueimp': {deps: ['angularAMD']}
     },
     deps: ['adminCommon', 'bootstrap', 'app']
 });
