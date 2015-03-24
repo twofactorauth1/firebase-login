@@ -1,19 +1,3 @@
-@import "../js/libs/skeuocard/lib/css/card.css";
-@import '../js/libs/spectrum/spectrum.css';
-@import '../js/libs/AngularJS-Toaster/toaster.css';
-@import '../js/libs/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
-@import '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css';
-@import '../js/libs/animate.css/animate.min.css';
-@import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
-@import '../js/libs/ngOnboarding/dist/ng-onboarding.css';
-@import '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css';
-@import '../js/libs/sweetalert/lib/sweet-alert.css';
-@import '../js/libs/slick-carousel/slick/slick.css';
-@import '../js/libs_misc/powertour/css/powertour.2.1.4.css';
-@import '../js/libs_misc/powertour/css/powertour-style-clean.css';
-@import '../js/libs_misc/powertour/css/powertour-connectors.css';
-@import '../js/libs/fullcalendar/dist/fullcalendar.min.css';
-@import '../js/libs/ng-sortable/dist/ng-sortable.min.css';
 /*! normalize.css v3.0.0 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -14993,145 +14977,6 @@ body {
   background: rgba(255, 255, 255, 0.75);
   color: #666;
 }
-.steps-indicator {
-  /* ---- steps quantity ---- */
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  height: 30px;
-  list-style: none;
-  /* --- http://www.paulirish.com/2012/box-sizing-border-box-ftw/ ---- */
-}
-.steps-indicator:before {
-  background-color: #e6e6e6;
-  content: '';
-  position: absolute;
-  height: 1px;
-}
-.steps-indicator.steps-2:before {
-  left: calc(100% / 2 / 2);
-  right: calc(100% / 2 / 2);
-}
-.steps-indicator.steps-3:before {
-  left: calc(100% / 3 / 2);
-  right: calc(100% / 3 / 2);
-}
-.steps-indicator.steps-4:before {
-  left: calc(100% / 4 / 2);
-  right: calc(100% / 4 / 2);
-}
-.steps-indicator.steps-5:before {
-  left: calc(100% / 5 / 2);
-  right: calc(100% / 5 / 2);
-}
-.steps-indicator.steps-6:before {
-  left: calc(100% / 6 / 2);
-  right: calc(100% / 6 / 2);
-}
-.steps-indicator.steps-7:before {
-  left: calc(100% / 7 / 2);
-  right: calc(100% / 7 / 2);
-}
-.steps-indicator.steps-8:before {
-  left: calc(100% / 8 / 2);
-  right: calc(100% / 8 / 2);
-}
-.steps-indicator.steps-9:before {
-  left: calc(100% / 9 / 2);
-  right: calc(100% / 9 / 2);
-}
-.steps-indicator.steps-10:before {
-  left: calc(100% / 10 / 2);
-  right: calc(100% / 10 / 2);
-}
-.steps-indicator * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.steps-indicator li {
-  position: relative;
-  float: left;
-  margin: 0;
-  padding: 0;
-  padding-top: 10px;
-  text-align: center;
-  line-height: 15px;
-}
-.steps-indicator li a {
-  color: #808080;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: 0.25s;
-  cursor: pointer;
-}
-.steps-indicator li a:before {
-  position: absolute;
-  top: -7px;
-  left: calc(50% - 7px);
-  width: 14px;
-  height: 14px;
-  border-radius: 100%;
-  background-color: #e6e6e6;
-  content: '';
-  transition: 0.25s;
-}
-.steps-indicator li a:hover {
-  color: #4d4d4d;
-}
-.steps-indicator.steps-2 li {
-  width: calc(100% / 2);
-}
-.steps-indicator.steps-3 li {
-  width: calc(100% / 3);
-}
-.steps-indicator.steps-4 li {
-  width: calc(100% / 4);
-}
-.steps-indicator.steps-5 li {
-  width: calc(100% / 5);
-}
-.steps-indicator.steps-6 li {
-  width: calc(100% / 6);
-}
-.steps-indicator.steps-7 li {
-  width: calc(100% / 7);
-}
-.steps-indicator.steps-8 li {
-  width: calc(100% / 8);
-}
-.steps-indicator.steps-9 li {
-  width: calc(100% / 9);
-}
-.steps-indicator.steps-10 li {
-  width: calc(100% / 10);
-}
-.steps-indicator.steps-11 li {
-  width: calc(100% / 11);
-}
-.steps-indicator li.default {
-  pointer-events: none;
-}
-.steps-indicator li.default a:hover {
-  color: #808080;
-}
-.steps-indicator li.current,
-.steps-indicator li.editing {
-  pointer-events: none;
-}
-.steps-indicator li.current a:before {
-  background-color: #808080;
-}
-.steps-indicator li.done a:before {
-  background-color: #339933;
-}
-.steps-indicator li.editing a:before {
-  background-color: #ff0000;
-}
 .campaign-details ._jsPlumb_drag_select * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -20150,8 +19995,7 @@ div.error label.error:before {
   border: 1px solid #dddddd;
 }
 .website-manage .screenshot-wrap .screenshot {
-  width: 235px;
-  height: 120px;
+  width: 239px;
   background-size: cover;
   margin: 0 auto;
   border: 1px solid #ddd;
@@ -20284,12 +20128,12 @@ div.error label.error:before {
   -webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
-  -webkit-border-bottom-right-radius: 60px 5px;
-  -moz-border-radius-bottomright: 60px 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
   border-bottom-right-radius: 60px 5px;
 }
 .website-manage .posts-section .box14:before {
-  content: ”;
+  content: '';
   width: 98%;
   z-index: -1;
   height: 100%;
@@ -20304,8 +20148,8 @@ div.error label.error:before {
   -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
   box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
-  -webkit-border-bottom-right-radius: 60px 5px;
-  -moz-border-radius-bottomright: 60px 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
   border-bottom-right-radius: 60px 5px;
   -webkit-transform: skew(2deg, 2deg) translate(3px, 8px);
   -moz-transform: skew(2deg, 2deg) translate(3px, 8px);
@@ -20313,7 +20157,7 @@ div.error label.error:before {
   transform: skew(2deg, 2deg) translate(3px, 8px);
 }
 .website-manage .posts-section .box14:after {
-  content: ”;
+  content: '';
   width: 98%;
   z-index: -1;
   height: 98%;
