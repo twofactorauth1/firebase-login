@@ -228,12 +228,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           return;
         }
 
-        promiseSocialId.push(value.socialId);
         $scope.feedLengths[value.socialId] = 0;
 
         if (value.type == 'feed') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type === 'pages') {
@@ -250,20 +250,23 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
             promiseProcessor.push([value.type, socialAccountMap[value.socialId], matchingAccount.accountType]);
           }
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type == 'numberFollowers') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type === 'profile') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
       });
-      
+
       $q.all(socialPromises)
         .then(function(data) {
           data.forEach(function(value, index) {
@@ -286,10 +289,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
 
             if (logicFn) {
-              logicFn(value.data, config.trackedObjects[index].socialId);
+              logicFn(value.data, promiseSocialId[index]);
             } else {
-              console.warn(promiseProcessor[index]);
-              console.warn('not found', config.trackedObjects[index], socialAccountMap[config.trackedObjects[index].socialId], value.data);
+              console.warn('Logic not found');
+              console.warn(value.data, promiseSocialId[index]);
             }
           });
 
@@ -439,14 +442,14 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.addPageFeed = function(page) {
       var config = $scope.config.socialAccounts;
       var newSocialAccount;
-      for (var i = 0; i < config.length; i++) {
-        if (config[i].id == page.socialId) {
-          newSocialAccount = config[i];
+      $scope.config.socialAccounts.forEach(function(value, index) {
+        if (value.id == page.socialId) {
+          newSocialAccount = value;
           newSocialAccount.socialId = page.sourceId;
           newSocialAccount.accountType = 'adminpage';
           newSocialAccount.socialUrl = 'https://www.facebook.com/app_scoped_user_id/' + page.sourceId + '/';
         }
-      }
+      });
       SocialConfigService.postSocialAccount(newSocialAccount, function(data) {
         console.log('return ', data);
       });
