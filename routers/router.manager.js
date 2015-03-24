@@ -14,6 +14,6 @@ var stripeRouter = require('../routers/stripeconnect.server.router');
 module.exports = {
     loginRouter: loginRouter,
     courseRouter: courseRouter,
-    homeRouter: homeRouter,
-    stripeRouter: stripeRouter
+    stripeRouter: stripeRouter,
+    homeRouter: homeRouter
 };

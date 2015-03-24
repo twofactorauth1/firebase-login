@@ -31,7 +31,8 @@ module.exports = {
                 log.error('Error getting temp account: ' + err);
                 return fn(err, null);
             }
-            var user = new $$.m.User(tempAccount.tempUser);
+            log.debug('got tempAccount: ', tempAccount);
+            var user = new $$.m.User(tempAccount.get('tempUser'));
             accountDao.convertTempAccount(accountToken, function(err, account) {
                 if(err) {
                     log.error('Error converting temp account: ' + err);
@@ -41,7 +42,9 @@ module.exports = {
                 var roleAry = ["super","admin","member"];
                 var username = user.get('username');
                 var email = user.get('email');
+
                 user.createUserAccount(accountId, username, null, roleAry);
+                
                 user.set('_id', null);
                 dao.saveOrUpdate(user, function(err, savedUser){
                     if(err) {
@@ -201,8 +204,13 @@ module.exports = {
                         }
                         var userId = savedUser.id();
                         log.debug('Created user with id: ' + userId);
-                        analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
-
+                        //analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
+                        socialConfigManager.createSocialConfigFromUser(accountId, savedUser, function(err, value){
+                            if(err) {
+                                log.error('Error creating social config for account:' + accountId);
+                            }
+                            return;
+                        });
                         /*
                          * Send welcome email.  This is done asynchronously.
                          * But only do this if we are not running unit tests.

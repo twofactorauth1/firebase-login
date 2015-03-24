@@ -367,7 +367,7 @@ var dao = {
         blogPostUrl = blogPostUrl.toString();
         console.log('Account ID: ' + accountId + ' Blog Post Url: ' + JSON.stringify(blogPostUrl));
         var query = {
-            accountId: accountId,
+            accountId: parseInt(accountId),
             post_url: blogPostUrl
         };
         this.findOne(query, BlogPost, fn);
@@ -858,7 +858,7 @@ var dao = {
                 console.log('saved');
                 return fn(null, saved);
             });
-            
+
         });
     },
 
@@ -1271,7 +1271,10 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "modified" : null
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            }
 
         });
         var componentId = $$.u.idutils.generateUUID();
@@ -1317,7 +1320,7 @@ var dao = {
                 "by" : null
             },
             "modified" : {
-                "date" : "",
+                "date" : new Date(),
                 "by" : null
             },
             "mainmenu" : null,
@@ -1340,7 +1343,10 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "modified" : null
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            }
         });
 
         self.saveOrUpdate(page, function(err, value){

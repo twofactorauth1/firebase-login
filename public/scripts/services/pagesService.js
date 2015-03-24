@@ -13,6 +13,10 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
             path = "index";
         }
 
+        if ( path =="/signup") {
+            path = "signup";
+        }
+
         if (path.indexOf("blog/") > -1) {
             path = 'single-post';
         }
@@ -29,6 +33,10 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                 path = 'blog';
         }
 
+        if(path.indexOf('/')===0) {
+            path = path.replace('/', '');
+        }
+
         websiteService(function (err, data) {
             if (err) {
                 // console.log(err, "PageService >> WebsiteService ERROR");
@@ -42,9 +50,22 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                     websiteObject = data;
                     $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + path, { cache: true})
                         .success(function (page) {
-                            if (page !== null) {
+                            if (page !== null && page.accountId) {
                                 pages[page.handle] = page;
                                 callback(null, pages);
+                            }else if(page != null && path == 'index') {
+                                $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/coming-soon', { cache: true})
+                                    .success(function (page) {
+                                        if (page !== null) {
+                                            pages[page.handle] = page;
+                                            callback(null, pages);
+                                        } else {
+                                            callback("page not found",null);
+                                        }
+                                    }).error(function (err) {
+                                        // console.log("PageService >> DB-Hit >> ERROR");
+                                        callback(err,null);
+                                    });
                             } else {
                                 callback("page not found",null);
                             }

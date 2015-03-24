@@ -7,10 +7,11 @@
 
 var cookies = require('../utils/cookieutil');
 var authenticationDao = require('../dao/authentication.dao');
-var securityManager = require('../security/sm');
+var securityManager = require('../security/sm')(false);
 var logger = $$.g.getLogger("baserouter");
 var urlUtils = require('../utils/urlutils.js');
 var accountDao = require("../dao/account.dao");
+var appConfig = require('../configs/app.config');
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -65,8 +66,26 @@ _.extend(baseRouter.prototype, {
                 } else {
                     logger.warn("No account found from getAccountByHost");
                 }
+                if(req.session.accountId !== appConfig.mainAccountID) {
+                    self.sm.verifySubscription(req, function(err, isValid){
+                        if(err) {
+                            logger.error('Could not verify subscription: ' + err);
+                            accountDao.addSubscriptionLockToAccount(req.session.accountId, function(err, value){
+                                return next();
+                            });
+                        } else if(isValid !== true) {
+                            logger.warn('Subscription for account ' + req.session.accountId + ' is not valid.');
+                            accountDao.addSubscriptionLockToAccount(req.session.accountId, function(err, value){
+                                return next();
+                            });
+                        } else {
+                            return next();
+                        }
+                    });
+                } else {
 
-                return next();
+                    return next();
+                }
             });
         } else {
             return next();
@@ -92,6 +111,7 @@ _.extend(baseRouter.prototype, {
                         req.session.accountId = value.id();
                         req.session.subdomain = value.get('subdomain');
                         req.session.domain = value.get('domain');
+                        req.session.locked = value.get('locked');
                     }
                 } else {
                     logger.warn("No account found from getAccountByHost");
@@ -100,6 +120,42 @@ _.extend(baseRouter.prototype, {
                 return next();
             });
         } else {
+            return next();
+        }
+    },
+
+    setupForSocialSignup: function(req, resp, next) {
+        //TODO: Cache Account By Host
+        var self = this;
+        logger.debug('>> setupForSocialSignup');
+        /*
+         * If we have a session but no session accountId OR the session host doesn't match current host, do the following
+         */
+        if (req["session"] != null && (req.session["accountId"] == null )) {
+            var accountDao = require("../dao/account.dao");
+            accountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if (!err && value != null) {
+                    if (value === true) {
+                        logger.warn('We should not reach this code.  value ===true');
+                        logger.debug("host: " + req.get("host") + " -> accountId:0");
+                        req.session.accountId = 0;
+                    } else {
+                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                        req.session.accountId = 'new';
+                        req.session.subdomain = 'new';
+                        //req.session.domain = value.get('domain');
+                        req.session.locked = value.get('locked');
+                    }
+                } else {
+                    logger.warn("No account found from getAccountByHost");
+                }
+
+                return next();
+            });
+        } else {
+            logger.debug('setting session account and subdomain to new');
+            req.session.accountId = 'new';
+            req.session.subdomain = 'new';
             return next();
         }
     },
@@ -235,8 +291,13 @@ _.extend(baseRouter.prototype, {
     isAuth: function(req, resp, next) {
         var self = this;
         logger.debug('>> isAuth (' + req.originalUrl + ')');
+        logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
-        if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1)) {
+        //logger.debug('req.session.locked: ' + req.session.locked);
+        if(req.session.locked === 'true' || req.session.locked === true) {
+            return resp.redirect('/interim.html');
+        }
+        if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1) && req.session.midSignup !== true) {
             logger.debug('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
@@ -284,7 +345,7 @@ _.extend(baseRouter.prototype, {
                 }
 
             }
-        } else if(req.isAuthenticated() && self.matchHostToSession(req) === false){
+        } else if(req.isAuthenticated() && (self.matchHostToSession(req) === false || req.session.midSignup === true)){
             logger.debug('authenticated to the wrong session.  logging out.');
             req.logout();
             resp.redirect('/login');

@@ -59,14 +59,14 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                     $scope.london.lng = parseFloat(data.lon);
                                     $scope.markers.mainMarker.lat = parseFloat(data.lat);
                                     $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                                } 
-                                else 
+                                }
+                                else
                                     $('.map-wrap').addClass("blur-map");
 
                                 mapBlockUI.stop();
                             });
                         }
-                        else 
+                        else
                             mapBlockUI.stop();
                     });
                 } else {
@@ -82,12 +82,12 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                                 $scope.markers.mainMarker.lat = parseFloat(data.lat);
                                 $scope.markers.mainMarker.lng = parseFloat(data.lon);
                             }
-                            else 
+                            else
                                 $('.map-wrap').addClass("blur-map");
                             mapBlockUI.stop();
                         });
                     }
-                    else 
+                    else
                         mapBlockUI.stop();
                 }
 
@@ -95,6 +95,7 @@ define(['app', 'customerService', 'stateNavDirective', 'ngProgress', 'toasterSer
                 $scope.contactLabel = CustomerService.contactLabel(customer);
                 $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
                 ToasterService.processPending();
+                ToasterService.processHtmlPending();
                 ngProgress.complete();
             });
             angular.extend($scope, {

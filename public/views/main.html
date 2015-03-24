@@ -9,19 +9,22 @@
 <div ng-show="isEditing">
     <div id="editor-toolbar"></div>
 </div>
-<ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
+<div ng-show="isEditing ? true : isLoaded">
+    <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
     <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
         <div class="componentActions" as-sortable-item-handle>
-            <span  class="reorder fa fa-arrows" tooltip="Re-Order {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="right"></span>
-            <h4 class="pull-left">{{component.type}}</h4>
-            <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" tooltip="Delete {{component.type | cleanType}}"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
-            <span class="settings fa fa-cog" data-id="{{component._id}}" tooltip="{{component.type | cleanType}} Settings"  tooltip-trigger="mouseenter" tooltip-placement="bottom" ng-if="component.type != 'footer'"></span>
+            <span  class="reorder fa fa-arrows"><p>Reorder</p></span>
+            <h4 class="pull-left">{{component.type | cleanType}}</h4>
+            <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Delete</p></span>
+            <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation'"><p>Duplicate</p></span>
+            <span class="settings fa fa-cog" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Settings</p></span>
         </div>
         <div ng-include="'/components/component-wrap.html'"></div>
         <div ng-class="{'zee-blur': !component.visibility}"></div>
-        <div class="add-component" data-index = "{{$index + 1}}" tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
+        <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing">
             <a href="">
-            <i class="fa fa-plus" tooltip-placement="bottom" tooltip="Theme"></i>
+            <i class="fa fa-plus"></i>
+            <p>Add New</p>
             </a>
         </div>
     </li>
@@ -38,6 +41,8 @@
         </div>
     </li>
 </ul>
+</div>
+
 
 
 <style>

@@ -1243,7 +1243,98 @@ var dao = {
 
     },
 
-    //coupons
+    //coupons - crdl
+
+    /**
+     *  duration: (forever|once|repeating) required
+     *  amount_off | percent_off required
+     *  duration_in_months: required if duration is repeating
+     */
+    createCoupon: function(id, duration, amount_off, currency, duration_in_months, max_redemptions, metadata,
+                           percent_off, redeem_by, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createCoupon');
+        var params = {duration: duration};
+        if(id) {
+            params.id = id;
+        }
+        if(amount_off) {
+            params.amount_off = amount_off;
+        }
+        if(currency) {
+            params.currency = currency;
+        }
+        if(duration_in_months) {
+            params.duration_in_months = duration_in_months;
+        }
+        if(max_redemptions) {
+            params.max_redemptions = max_redemptions;
+        }
+        if(metadata) {
+            params.metadata = metadata;
+        }
+        if(percent_off) {
+            params.percent_off = percent_off;
+        }
+        if(redeem_by) {
+            params.redeem_by = redeem_by;
+        }
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.coupons.create(params, apiToken, function(err, coupon) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< createCoupon');
+            return fn(null, coupon);
+        });
+    },
+
+    getCoupon: function(couponId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getCoupon');
+
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.coupons.retrieve(couponId, apiToken, function(err, coupon) {
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< getCoupon');
+            return fn(null, coupon);
+        });
+    },
+
+    deleteCoupon: function(couponId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> deleteCoupon');
+
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.coupons.del(couponId, apiToken, function(err, confirmation){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< deleteCoupon');
+            return fn(null, confirmation);
+        });
+    },
+
+    listCoupons: function(accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listCoupons');
+
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.coupons.list({}, apiToken, function(err, coupons){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, null);
+            }
+            self.log.debug('<< listCoupons');
+            return fn(null, coupons);
+        });
+    },
 
     //discounts
 
@@ -1341,6 +1432,85 @@ var dao = {
             return fn(err, events);
         });
 
+    },
+
+    //refunds
+
+    createRefund: function(chargeId, amount, refundApplicationFee, reason, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> createRefund');
+        var apiToken = self.delegateStripe(accessToken);
+        var params ={};
+        if(amount) {
+            params.amount = amount;
+        }
+        if(refundApplicationFee && refundApplicationFee===true) {
+            params.refundApplicationFee = true;
+        }
+        if(reason) {
+            params.reason = reason;
+        }
+        if(metadata) {
+            params.metadata = metadata;
+        }
+
+        stripe.charges.createRefund(chargeId, params, apiToken, function(err, refund){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< createRefund');
+            return fn(err, refund);
+        });
+    },
+
+    getRefund: function(chargeId, refundId, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> getRefund');
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.charges.retrieveRefund(chargeId, refundId, apiToken, function(err, refund){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< getRefund');
+            return fn(err, refund);
+        });
+    },
+
+    updateRefund: function(chargeId, refundId, metadata, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> updateRefund');
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.charges.updateRefund(chargeId, refundId, metadata, apiToken, function(err, refund){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< updateRefund');
+            return fn(err, refund);
+        });
+    },
+
+    listRefund: function(chargeId, ending_before, limit, starting_after, accessToken, fn) {
+        var self = this;
+        self.log.debug('>> listRefund');
+        var apiToken = self.delegateStripe(accessToken);
+        var params = {};
+        if(ending_before) {params.ending_before = ending_before;}
+        if(limit && (limit > 0 || limit <=100)) {params.limit = limit;}
+        if(starting_after) {params.starting_after = starting_after;}
+
+        stripe.charges.listRefunds(chargeId, params, apiToken, function(err, refunds){
+            if(err) {
+                self.log.error('error: ' + err);
+                return fn(err, charges);
+            }
+            self.log.debug('<< listRefund');
+            return fn(err, refunds);
+        });
     },
 
     delegateStripe: function(accessToken) {

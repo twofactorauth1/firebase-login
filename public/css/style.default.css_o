@@ -6035,21 +6035,21 @@ h4,
   border-color: #3d8b9f;
 }
 .btn-green {
-  background-color: #138f77;
-  border-bottom: 4px solid #0f6c5a;
+  background-color: #39b06c;
+  border-bottom: 4px solid #268d49;
   color: white;
 }
 .btn-green:hover,
 .btn-green:active,
 .btn-green.active,
 .open .dropdown-toggle.btn-green {
-  background-color: #16a085;
-  border-color: #16a085;
+  background-color: #39b06c;
+  border-color: #39b06c;
   color: white;
 }
 .btn-light-green {
   background-color: #2abb9b;
-  border-bottom: 4px solid #1f8972;
+  border-bottom: 4px solid #268d49;
   color: white;
 }
 .btn-light-green:hover,
@@ -6275,13 +6275,11 @@ h4,
 .btn-orange {
   color: #fff;
   background: #f38108;
-  border-color: #de7504;
 }
 .btn-orange:hover,
 .btn-orange:active,
 .btn-orange:focus {
   background: #de7504;
-  border-color: #d67003;
   color: #fff;
 }
 .btn-orange-alt {
@@ -6619,6 +6617,9 @@ h4,
   font-size: 13px;
   border-color: #ddd;
 }
+.modal-dialog {
+  z-index: 99999;
+}
 .modal-content {
   box-shadow: 0 0px 7px rgba(0, 0, 0, 0.5);
 }
@@ -6719,20 +6720,27 @@ h4,
 }
 .nav-tabs {
   background: #d8dbde;
-  border: 0;
+  border-bottom: 1px solid #dfdfdf;
   border-radius: 3px 3px 0 0;
 }
 .nav-tabs > li > a {
   border: 0;
   padding: 14px 20px;
   color: #666;
+  -moz-box-shadow: inset 0 0 2px #fff;
+  -webkit-box-shadow: inset 0 0 2px #fff;
+  box-shadow: inner 0 0 2px #fff;
+  border-radius: 0;
+  margin: 0;
+  border-right: 1px solid #dfdfdf;
 }
 .nav-tabs > li > a:hover {
   background: none;
   color: #333;
+  border-right: 1px solid #dfdfdf;
 }
 .tab-content {
-  background: #fcfcfc;
+  background: #f9f9f9;
   padding: 15px;
   -webkit-box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
   box-shadow: 0 3px 0 rgba(12, 12, 12, 0.03);
@@ -6741,8 +6749,18 @@ h4,
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
-  background-color: #fcfcfc;
+  background-color: #f9f9f9;
   border: 0;
+  border-right: 1px solid #dddddd;
+  border-radius: 0;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.nav-tabs > li.active:first-child > a,
+.nav-tabs > li.active:first-child > a:hover,
+.nav-tabs > li.active:first-child > a:focus {
+  border-left: 0;
 }
 .tab-pane address:last-child {
   margin-bottom: 0;

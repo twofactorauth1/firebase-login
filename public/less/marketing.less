@@ -1,8 +1,83 @@
 .marketing {
     .submit-post-form {
         padding: 0 10px;
+        .panel {
+            -webkit-box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .4);
+            box-shadow: 0 2px 10px 0 rgba(0, 0, 0, .4);
+        }
     }
-
+    .widget-messaging {
+        img {
+            display: block;
+            width: 40px;
+            margin-right: 10px;
+        }
+    }
+    .fb-admin-pages {
+        padding-left: 0;
+        li {
+            height: 50px;
+            line-height: 50px;
+            text-indent: 10px;
+            list-style-type: none;
+            border-bottom: 1px solid #e7e7e7;
+            img {
+                height: 40px;
+                margin: 4px 0;
+            }
+            .fa-plus-square {
+                line-height: 50px;
+                font-size: 20px;
+                color: #27ae60;
+            }
+            .fa-thumbs-up {
+                line-height: 45px;
+                font-size: 24px;
+                opacity: .8;
+                &:hover {
+                    opacity: 1;
+                }
+                &.liked {
+                    color: #27ae60;
+                }
+            }
+            .fa-spinner {
+                text-indent: 0;
+                font-size: 25px;
+                line-height: 50px;
+            }
+        }
+    }
+    #marketing-add-campaign {
+        .campaign-type-filter {
+            padding: 5px;
+            ul {
+                padding-left: 0;
+                li {
+                    display: inline-block;
+                    list-style-type: none;
+                }
+            }
+        }
+        .single-campaign {
+            position: relative;
+            display: block;
+            height: 146px;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 15px 0px;
+            border-top: 1px solid #e6e6e6;
+            .img-wrap {
+                height: 115px;
+                background: #e7e7e7;
+            }
+            .fa-chevron-right {
+                line-height: 114px;
+                text-align: center;
+                width: 100%;
+                font-size: 30px;
+            }
+        }
+    }
     #marketing-add-feed {
         .modal-body {
             padding: 0;
@@ -12,7 +87,7 @@
         }
         .integrations {
             list-style-type: none;
-            margin:0;
+            margin: 0;
             border-right: 1px solid #cccccc;
             li {
                 height: 40px;
@@ -20,10 +95,10 @@
                 padding: 5px 15px;
                 &:hover {
                     background: #f1f1f1;
-                    color:#666666;
+                    color: #666666;
                 }
                 &.active {
-                    color:#666666;
+                    color: #666666;
                     border-right: 5px solid #faaf40;
                 }
                 i {
@@ -46,29 +121,70 @@
             margin-top: 0;
         }
     }
-
     .header-menu-row {
         .label {
             padding: 4px 8px!important;
             box-shadow: none;
         }
     }
+    .stream-wrap {
+        float: left;
+        transition: all 0.2s ease;
+    }
+    .fa-square-o {
+        margin-right: 4px!important;
+    }
+    .fa-check-square-o {
+        color: #27ae60;
+    }
+    .stream.isotope {
+        padding: 0px;
+    }
+    .isotope-item {
+        width: 260px;
+        margin: 5px;
+        margin-left: 0;
+    }
+    .filter-checkbox {
+        font-size: 30px;
+        line-height: 47px;
+    }
     .stream-filter {
+        float: left;
+        transition: all 0.2s ease;
         .label {
             padding: 4px 8px!important;
             box-shadow: none;
         }
-        .avatar {
+        .panel-group {
+            // position: fixed;
+        }
+        .filter-avatar {
             width: 50px;
             float: left;
             margin-right: 10px;
+            position: relative;
+            display: block;
+            .badge {
+                position: absolute;
+                right: 0;
+                margin: -7px -8px 0 0;
+            }
+        }
+        .filter-details {
+            opacity: 1;
+        }
+        .avatar {
             border-radius: 5px;
         }
+        input[type='checkbox'] {
+            margin-right: 15px;
+        }
         .filter-heading {
-            margin:0;
+            margin: 0;
         }
         .filter-text {
-            margin:0;
+            margin: 0;
         }
         .glyphicon-chevron-right, .glyphicon-chevron-down {
             margin-top: 13px;
@@ -78,10 +194,10 @@
         }
         .feedTypeDetail {
             h4 {
-                margin:0;
+                margin: 0;
             }
             p {
-                margin:0;
+                margin: 0;
             }
         }
     }
@@ -125,49 +241,49 @@
                 background: none;
                 padding: 0;
                 margin: 0;
-                &.rss a{
+                &.rss a {
                     background-color: #FF9800;
                 }
-                &.flickr a{
+                &.flickr a {
                     background-color: #f90784;
                 }
-                &.delicious a{
+                &.delicious a {
                     background-color: #3271CB;
                 }
-                &.twitter a{
+                &.twitter a {
                     background-color: #4ec2dc;
                 }
-                &.facebook a{
+                &.facebook a {
                     background-color: #3b5998;
                 }
-                &.google a{
+                &.google a {
                     background-color: #2d2d2d;
                 }
-                &.youtube a{
+                &.youtube a {
                     background-color: #DF1F1C;
                 }
-                &.pinterest a{
+                &.pinterest a {
                     background-color: #CB2528;
                 }
-                &.lastfm a{
+                &.lastfm a {
                     background-color: #C90E12;
                 }
-                &.dribbble a{
+                &.dribbble a {
                     background-color: #F175A8;
                 }
-                &.vimeo a{
+                &.vimeo a {
                     background-color: #4EBAFF;
                 }
-                &.stumbleupon a{
+                &.stumbleupon a {
                     background-color: #EB4924;
                 }
-                &.deviantart a{
+                &.deviantart a {
                     background-color: #EB4924;
                 }
-                &.tumblr a{
+                &.tumblr a {
                     background-color: #365472;
                 }
-                &.instagram a{
+                &.instagram a {
                     background-color: #413A33;
                 }
                 a {
@@ -184,7 +300,7 @@
                     font-size: 24px;
                     text-align: center;
                     i {
-                    	line-height: 40px!important;
+                        line-height: 40px!important;
                     }
                 }
                 img {
@@ -203,8 +319,25 @@
     }
 }
 .stream {
+    .item-inner {
+        // padding: 5px!important;
+    }
     li {
         overflow: hidden;
+        padding: 5px;
+        .panel-body {
+            .media {
+                a {
+                    height: auto;
+                    overflow: hidden;
+                    img {
+                        margin: 0 auto 15px;
+                        max-width: 370px;
+                        width: 100%;
+                    }
+                }
+            }
+        }
         .post-inner {
             background-color: #FFFFFF;
             line-height: 1.35em;
@@ -217,9 +350,11 @@
         .post-content {
             padding: 15px;
             img {
-                max-width: 75px;
-                height: 75px;
+                max-width: 226px;
+                height: 130px;
                 display: block;
+                margin: 0 auto;
+                border-radius: 5px;
             }
         }
         .post-bottom-bar {
@@ -228,8 +363,6 @@
             padding: 5px;
             display: block;
             width: 100%;
-            bottom: 0;
-            position: absolute;
             color: white;
             i {
                 font-size: 35px;
@@ -295,36 +428,160 @@
 }
 .marketing-icon {
     font-size: 40px;
-    text-shadow: 2px 2px 1px white;
-    color: #000;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
     &.start {
         font-size: 60px;
         color: #2ecc71;
     }
 }
+.campaign-details {
+    .demo {
+        background-color: #ffffff;
+    }
+    .panel-default {
+        z-index: 2;
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        position: relative;
+        p {
+            line-height: 10px;
+            margin: 0;
+            margin-top: -10px;
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+        }
+        .window {
+            float: left;
+            margin-right:15px;
+        }
+    }
+    .window {
+        width: 100px;
+        height: 100px;
+        border: none;
+        opacity: .6;
+        &:hover {
+            cursor: move;
+            opacity: 1;
+            border: none;
+            box-shadow: 1px 1px 11px rgba(0, 0, 0, 0.4);
+            -o-box-shadow: 1px 1px 11px rgba(0, 0, 0, 0.4);
+            -webkit-box-shadow: 1px 1px 11px rgba(0, 0, 0, 0.4);
+            -moz-box-shadow: 1px 1px 11px rgba(0, 0, 0, 0.4);
+        }
+    }
+}
+.campaign-section {
+    .single-campaign {
+        .campaign-stats {
+            color: #c2c2c2;
+            span {
+                color: black;
+            }
+        }
+        .img-wrap {
+            background: #e7e7e7;
+            border: 1px solid #d9dcdf;
+            height: 150px;
+            border-radius: 3px;
+        }
+        hr {
+            margin: 10px 0;
+        }
+        h4 {
+            color: black;
+            margin: 0 0 5px;
+        }
+    }
+    .add-campaign {
+        .grid-list-item {
+            height: 288px;
+            padding: 15px;
+        }
+        .add-wrap {
+            height: 100%;
+            padding: 10px;
+            background: #e4e7ea;
+            border-radius: 3px;
+            .fa-bullhorn {
+                font-size: 134px;
+                text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5), -1px -1px 1px rgba(119, 119, 119, 0.7);
+                color: #bdc3c9;
+                line-height: 180px;
+            }
+        }
+    }
+}
+@media (max-width: 767px) {
+    .grid-list-item {
+        margin-bottom: 20px;
+        padding: 15px 5px;
+    }
+}
+[data-type="page"] {
+    background-color: #7ab260!important;
+    color: #538737!important;
+}
+[data-type="email"] {
+    background-color: #ffd600!important;
+    color: #cfb21a!important;
+}
+[data-type="wait"] {
+    background-color: #fa6740!important;
+    color: #ca3d18!important;
+}
+[data-type="conditional"] {
+    background-color: #0054a6!important;
+    color: #0c3965!important;
+}
+[data-type="absplit"] {
+    background: #362f2d!important;
+    color: #000000!important;
+}
 .flowchart-demo {
+    #lines {
+        background-size: 40px 40px;
+        background-image: repeating-linear-gradient(0deg, #777, #777 1px, transparent 1px, transparent 40px), repeating-linear-gradient(-90deg, #777, #777 1px, transparent 1px, transparent 40px);
+        height: 100%;
+        width: 100%;
+        opacity: 0.14;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
     .window {
         position: relative;
+        opacity: 1!important;
         &.start {
             .deleteWidget {
                 display: none!important;
             }
         }
         &:hover {
+            opacity: 0.8!important;
             .deleteWidget {
                 display: block;
             }
         }
+        p {
+            margin-top: -15px;
+            padding: 0;
+            line-height: 12px;
+            color: white;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+        }
     }
     .deleteWidget {
-        display: none;
         right: -7px;
         position: absolute;
         top: -10px;
-        font-size: 25px;
+        font-size: 30px;
         background: white;
-        border-radius: 65px;
+        border-radius: 15px;
         color: #888888;
+        height: 28px;
+        width: 28px;
+        cursor: pointer;
         &:hover {
             color: #d9534f;
         }
@@ -342,6 +599,7 @@
         li {
             display: inline-block;
             margin-left: 10px;
+            margin-right: 30px;
             width: 90px;
             &:first-child {
                 margin-left: 0px;
@@ -350,7 +608,6 @@
     }
 }
 .flowchart-demo .window {
-    border: 1px solid #346789;
     -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, .3);
     -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, .3);
     box-shadow: 0px 1px 3px rgba(0, 0, 0, .3);
@@ -424,3 +681,46 @@
     color: white;
     border: 1px solid white;
 }
+/* Start: Recommended Isotope styles */
+/**** Isotope Filtering ****/
+
+.isotope-item {
+    z-index: 2;
+}
+.isotope-hidden.isotope-item {
+    pointer-events: none;
+    z-index: 1;
+}
+/**** Isotope CSS3 transitions ****/
+
+.isotope, .isotope .isotope-item {
+    -webkit-transition-duration: 0.8s;
+    -moz-transition-duration: 0.8s;
+    -ms-transition-duration: 0.8s;
+    -o-transition-duration: 0.8s;
+    transition-duration: 0.8s;
+}
+.isotope {
+    -webkit-transition-property: height, width;
+    -moz-transition-property: height, width;
+    -ms-transition-property: height, width;
+    -o-transition-property: height, width;
+    transition-property: height, width;
+}
+.isotope .isotope-item {
+    -webkit-transition-property: -webkit-transform, opacity;
+    -moz-transition-property: -moz-transform, opacity;
+    -ms-transition-property: -ms-transform, opacity;
+    -o-transition-property: top, left, opacity;
+    transition-property: transform, opacity;
+}
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition, .isotope.no-transition .isotope-item, .isotope .isotope-item.no-transition {
+    -webkit-transition-duration: 0s;
+    -moz-transition-duration: 0s;
+    -ms-transition-duration: 0s;
+    -o-transition-duration: 0s;
+    transition-duration: 0s;
+}
+/* End: Recommended Isotope styles */

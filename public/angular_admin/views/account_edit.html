@@ -6,7 +6,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 	<div class="pageheader">
 		<div class="col-xs-7">
 			<button ng-click="$back()"
- 					class="btn btn-success pull-left"
+ 					class="btn btn-outline pull-left"
 					type="button">
 				<span class="fa fa-chevron-left"></span> <span class="hidden-xs">Back</span>
 			</button>
@@ -17,7 +17,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
 		<div class="col-xs-5">
 			<div id="saveAccount">
-				<button class="btn btn-success pull-right" ng-disabled="accountForm.$invalid" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
+				<button class="btn btn-outline pull-right" ng-disabled="accountForm.$invalid" type="button" ng-click="saveAccount()"  data-powertour-action="stop">
 	                <span class="visible-xs" ng-hide="saveLoading">
 	                 <i class="fa fa-save"></i>
 	                </span>
@@ -89,7 +89,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 							</div>
 						</div>
 
-						<div id="phone-row" class="row" ng-repeat="phone in user.details[0].phones">
+						<div id="phone-row"  class="row" ng-repeat="phone in user.details[0].phones">
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-phone"></i>
 							</div>
@@ -148,13 +148,20 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
 							</div>
 						</div>
-
-						<div id="address-row" class="row">
+						<div class="row add-new" ng-hide="user.details[0].phones.length">
+							<div class="col-xs-10">
+									Add Phone
+								</div>
+								<div class="col-xs-2">
+								<button id="btn-new-address" tooltip-placement="top" tooltip-html-unsafe="Add Phone Number" class="btn btn-primary btn-lg pull-right" ng-click="addUserContactFn()"><i class="fa fa-plus"></i></button>
+							</div>
+							</div>
+						<div id="address-row" class="row"  ng-repeat="address in user.details[0].addresses">
 							<div class="col-xs-1">
 								<i class="icon-main fa fa-map-marker"></i>
 							</div>
 							<div class="col-xs-11">
-								<div class="row" ng-repeat="address in user.details[0].addresses">
+								<div class="row">
 								<div id="edit-addresses-container">
 									<div class="form-group">
 										<input class="form-control input-edit-map input-lg" placeholder="Address 1" ng-model='address.address1' type="text" ng-change="userSaveFn(address.address1)">
@@ -174,10 +181,21 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 									<div class="form-group">
 										<input class="form-control input-edit-map input-lg" placeholder="Country" ng-model='address.country' type="text" ng-change="userSaveFn(address.country)">
 									</div>
+									<div class="form-group">
+								<button id="btn-new-address" class="btn btn-primary btn-lg pull-right" ng-click="deleteUserAddressFn($index)"><i class="fa fa-minus"></i></button>
+							</div>
 								</div>
 							</div>
 							</div>
 						</div>
+						<div class="row add-new" ng-hide="user.details[0].addresses.length">
+							<div class="col-xs-10">
+									Add Address
+								</div>
+								<div class="col-xs-2">
+								<button id="btn-new-address" tooltip-placement="top" tooltip-html-unsafe="Add Address" class="btn btn-primary btn-lg pull-right" ng-click="addUserAddressFn()"><i class="fa fa-plus"></i></button>
+							</div>
+							</div>
 
 						<div id="email-row" class="row">
 							<div class="col-xs-1">
@@ -217,7 +235,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 				                <div class="col-xs-12">
                                     <div id="bussiness_logo_container" >
                                         <div>
-                                            <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" />
+                                            <img id="bussiness_logo" class="img-responsive img-rounded hand btn-edit-photo" ng-src="{{account.business.logo}}" style="max-width:200px;margin:0 auto;" />
                                             <h1 ng-if="!account.business.logo" style="font-size:95px;"><span class="fa fa-image"></span></h1>
                                         </div>
                                     </div>
@@ -264,8 +282,27 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 				            </div>
 				        </div>
 
+
 				        <div class="row">
-				            <!-- UPDATE category -->
+				            <div class="form-group col-xs-6">
+				                <label>Business Size</label>
+				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size' name="business-size" ng-change='setFormDirtyFn()'>
+
+				                    <option value="1">Single (1)</option>
+
+				                    <option value="2">Small (1-5)</option>
+
+				                    <option value="3">Medium (6-15)</option>
+
+				                    <option value="4">Large (15 -50)</option>
+
+				                    <option value="5">Enterprise (50+)</option>
+
+				                </select>
+				            </div>
+				        </div>
+
+				        <!-- <div class="row">
 				            <div class="col-xs-12 form" role="form">
 				                <div class="form-group">
 				                    <label class="">Business Category</label>
@@ -274,26 +311,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 				            </div>
 				        </div>
 
-				        <div class="row">
-				            <div class="form-group col-xs-6">
-				                <label>Business Size</label>
-				                <select id="select-business-size" class="form-control input-lg" ng-model='account.business.size' name="business-size" ng-change='setFormDirtyFn()'>
-
-				                    <option value="1">Single</option>
-
-				                    <option value="2">Small</option>
-
-				                    <option value="3">Medium</option>
-
-				                    <option value="4">Large</option>
-
-				                    <option value="5">Enterprise</option>
-
-				                </select>
-				            </div>
-				        </div>
-
-				        <div class="row">
+				         <div class="row">
 				            <div class="form-group col-xs-6">
 				                <label>Business Type</label>
 				                <select id="select-business-type" class="form-control input-lg" ng-model='account.business.type' ng-change='setFormDirtyFn()'>
@@ -306,7 +324,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 
 				                </select>
 				            </div>
-				        </div>
+				        </div> -->
 
 				        <div class="row">
 				            <!-- UPDATE Non-Profit -->
@@ -394,7 +412,7 @@ on-finish-callback='finishOnboarding'></onboarding-popover>
 </form>
 	 <div class="rightpanel rightpanel-account">
         <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a href="#rp-settings" data-toggle="tab">Settings</a>
+            <li class="active"><a href="javascript:void(0)" data-toggle="tab">Settings</a>
             </li>
         </ul>
 

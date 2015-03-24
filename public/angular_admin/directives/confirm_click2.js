@@ -8,13 +8,14 @@ define([
             scope: {
                 confirmClick2Confirm: "&",
                 confirmClick2Cancel: "&",
-                confirmClick2Href: '@'
+                confirmClick2Href: '@',
+                confirmClick2BtnOkLabel: '='
             },
             link: function (scope, element) {
                 var href= '#/';
 
                 if (scope.confirmClick2Href !== undefined) {
-                    if (scope.confirmClick2Href == "#") 
+                    if (scope.confirmClick2Href == "#")
                         href = scope.confirmClick2Href;
                     else
                         href += scope.confirmClick2Href;
@@ -24,6 +25,7 @@ define([
 
                 $(element).confirmation({
                   placement: 'top',
+                  btnOkLabel: scope.confirmClick2BtnOkLabel,
                     onConfirm: function() {
                         scope.confirmClick2Confirm && scope.confirmClick2Confirm();
                     },

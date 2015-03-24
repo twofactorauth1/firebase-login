@@ -284,18 +284,25 @@ define(['app', 'keenService'], function(app) {
 
         //local variables
         var client;
-        var timeframeStart = '2015-01-17T23:05:20.075Z';
-        var timeframeEnd = '2015-02-17T23:05:20.075Z';
-        var timeframePreviousStart = '2014-10-15T23:05:20.075Z';
-        var timeframePreviousEnd = '2014-11-14T23:05:20.075Z';
+        /*
+         * I assume these timeframes are the past 30days and the past 60 days.
+         * .utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
+         * moment().subtract(29, 'days'), moment()
+         */
+        var timeframeStart = moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: 30d ago
+        var timeframeEnd = moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: today
+        var timeframePreviousStart = moment().subtract(60, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 60d ago
+        var timeframePreviousEnd = moment().subtract(30, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: 30d ago
         var interval = "daily";
         var firstQuery = true;
         var totalVisitors = 0;
 
         //reports
 
-        this.queryReports = function(date) {
+        this.queryReports = function(date, _hostname) {
             var queryData = {};
+            var hostname = _hostname || window.location.hostname;
+            console.log('>> queryReports ' + hostname);
 
             queryData.visitorLocations = new Keen.Query("count", {
                 eventCollection: "session_data",
@@ -307,7 +314,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }, {
                     "property_name": "ip_geo_info",
                     "operator": "ne",
@@ -325,7 +332,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -340,7 +347,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -355,7 +362,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -369,7 +376,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "url.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -383,7 +390,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "url.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -398,7 +405,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -413,7 +420,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -428,7 +435,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -442,7 +449,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -462,7 +469,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -481,7 +488,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -496,7 +503,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -510,7 +517,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -528,7 +535,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -547,7 +554,7 @@ define(['app', 'keenService'], function(app) {
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
-                    "property_value": window.location.hostname
+                    "property_value": hostname
                 }]
             });
 
@@ -567,22 +574,49 @@ define(['app', 'keenService'], function(app) {
         this.runReports = function(date, account, fn) {
 
             var self = this;
-
-            var filters = [];
+            var hostname = window.location.hostname;
             if(account.subdomain === 'main') {
-                //add a special filter for main
-                filters.push({
-                    "property_name": "url.domain",
-                    "operator": "eq",
-                    "property_value": window.location.hostname.replace('main', 'www')
-                });
-            } else {
-                filters.push({
-                    "property_name": "url.domain",
-                    "operator": "eq",
-                    "property_value": window.location.hostname
-                });
+                hostname = hostname.replace('main', 'www');
             }
+            
+            keenService.keenClient(function(client) {
+                var queryData = self.queryReports(date, hostname);
+                client.run([
+                    queryData.visitorLocations,
+                    queryData.deviceReportByCategory,
+                    queryData.userReport,
+                    queryData.userReportPreviousMonth,
+                    queryData.pageviewsReport,
+                    queryData.pageviewsPreviousReport,
+                    queryData.sessionsReport,
+                    queryData.sessionsPreviousReport,
+                    queryData.sessionLengthReport,
+                    queryData.sessionAvgLengthReport,
+                    queryData.bouncesReport,
+                    queryData.bouncesPreviousReport,
+                    queryData.trafficSources,
+                    queryData.returningVisitors,
+                    queryData.newVisitors,
+                    // queryData.pageDepth,
+                    queryData.sessionPreviousAvgLengthReport
+                ], function(results) {
+                    fn(results);
+                });
+            });
+        };
+
+        this.runPagedReports = function(date, account, fn) {
+            var self = this;
+            var filters = [];
+            var hostname = window.location.hostname;
+            if(account.subdomain === 'main') {
+                hostname = hostname.replace('main', 'www');
+            }
+            filters.push({
+                "property_name": "url.domain",
+                "operator": "eq",
+                "property_value": hostname
+            });
 
             if (account && account.domain) {
                 filters.push({
@@ -656,318 +690,9 @@ define(['app', 'keenService'], function(app) {
                 };
 
                 pagedformattedTopPages = formattedTopPages.slice(0, 15);
-
                 reportData.formattedTopPages = formattedTopPages;
                 reportData.pagedformattedTopPages = pagedformattedTopPages;
-            });
-
-            keenService.keenClient(function(client) {
-                var queryData = self.queryReports(date);
-                client.run([
-                    queryData.visitorLocations,
-                    queryData.deviceReportByCategory,
-                    queryData.userReport,
-                    queryData.userReportPreviousMonth,
-                    queryData.pageviewsReport,
-                    queryData.pageviewsPreviousReport,
-                    queryData.sessionsReport,
-                    queryData.sessionsPreviousReport,
-                    queryData.sessionLengthReport,
-                    queryData.sessionAvgLengthReport,
-                    queryData.bouncesReport,
-                    queryData.bouncesPreviousReport,
-                    queryData.trafficSources,
-                    queryData.returningVisitors,
-                    queryData.newVisitors,
-                    // queryData.pageDepth,
-                    queryData.sessionPreviousAvgLengthReport
-                ], function(results) {
-
-                    // ----------------------------------------
-                    // Device
-                    // ----------------------------------------
-
-                    var desktop, mobile;
-
-                    for (var i = 0; i < results[1].result.length; i++) {
-                        var category = results[1].result[i]['user_agent.device'];
-                        if (category === 'desktop') {
-                            desktop = results[1].result[i].result;
-                        }
-                        if (category === 'mobile') {
-                            mobile = results[1].result[i].result;
-                        } else {
-                            mobile = 0;
-                        }
-                    };
-
-                    // ----------------------------------------
-                    // Visitors
-                    // ----------------------------------------
-
-                    var visitorsData = [];
-                    var currentTotalVisitors = 0;
-                    for (var k = 0; k < results[2].result.length; k++) {
-                        var subArr = [];
-                        var value = results[2].result[k].value || 0;
-                        currentTotalVisitors += value;
-                        subArr.push(new Date(results[2].result[k].timeframe.start).getTime());
-                        subArr.push(value);
-                        visitorsData.push(subArr);
-                    };
-
-                    // var readyVisitorsData = [];
-                    // if (currentTotalVisitors > totalVisitors) {
-                    //     totalVisitors = currentTotalVisitors;
-                    //     readyVisitorsData = visitorsData;
-                    //     if (firstQuery) {
-                    //         readyVisitorsData = visitorsData;
-                    //     } else {
-                    //         $scope.analyticsOverviewConfig.series[2].data = visitorsData;
-                    //     }
-                    // }
-
-                    var vistorsPreviousData = 0;
-                    for (var h = 0; h < results[3].result.length; h++) {
-                        var value = results[3].result[h].value || 0;
-                        vistorsPreviousData += value;
-                    };
-
-                    var visitorsPercent = self.calculatePercentage(vistorsPreviousData, currentTotalVisitors);
-
-                    // ----------------------------------------
-                    // Pageviews Metric
-                    // ----------------------------------------
-
-                    var pageviewsData = [];
-                    var currentTotalPageviews = 0;
-                    for (var j = 0; j < results[4].result.length; j++) {
-                        var subArr = [];
-                        var value = results[4].result[j].value || 0;
-                        currentTotalPageviews += value;
-                        subArr.push(new Date(results[4].result[j].timeframe.start).getTime());
-                        subArr.push(value);
-                        pageviewsData.push(subArr);
-                    };
-
-                    // if ($scope.currentTotalPageviews > $scope.totalPageviews) {
-                    //     $scope.totalPageviews = $scope.currentTotalPageviews;
-                    //     $scope.pageviews = $scope.totalPageviews;
-                    //     if ($scope.firstQuery) {
-                    //         $scope.readyPageviewsData = $scope.pageviewsData;
-                    //     } else {
-                    //         $scope.analyticsOverviewConfig.series[0].data = $scope.pageviewsData;
-                    //     }
-                    // }
-
-                    var pageviewsPreviousData = 0;
-                    for (var r = 0; r < results[5].result.length; r++) {
-                        var value = results[5].result[r].value || 0;
-                        pageviewsPreviousData += value;
-                    };
-
-                    var pageviewsPercent = self.calculatePercentage(currentTotalPageviews, pageviewsPreviousData);
-
-                    // ----------------------------------------
-                    // Sessions
-                    // ----------------------------------------
-
-                    _sessionsData = [];
-                    _totalSessions = 0;
-                    for (var j = 0; j < results[6].result.length; j++) {
-                        var subArr = [];
-                        var value = results[6].result[j].value || 0;
-                        _totalSessions += value;
-                        subArr.push(new Date(results[6].result[j].timeframe.start).getTime());
-                        subArr.push(value);
-                        _sessionsData.push(subArr);
-                    };
-
-                    // if (_totalSessions > $scope.sessions) {
-                    //     $scope.sessions = _totalSessions;
-                    //     if ($scope.firstQuery) {
-                    //         $scope.sessionsData = _sessionsData;
-                    //     } else {
-                    //         $scope.analyticsOverviewConfig.series[1].data = _sessionsData;
-                    //     }
-                    // }
-
-                    var sessionsPreviousData = 0;
-                    for (var w = 0; w < results[7].result.length; w++) {
-                        var value = results[7].result[w].value || 0;
-                        sessionsPreviousData += value;
-                    };
-
-                    var sessionsPercent = self.calculatePercentage(_totalSessions, sessionsPreviousData);
-
-                    var secsToConv = 0;
-                    if (results[9].result && _totalSessions) {
-                      secsToConv = results[9].result / _totalSessions;
-                    }
-                    var visitDuration = self.secToTime(secsToConv);
-
-                    if (results[15].result == null) {
-                        results[15].result = 0;
-                    }
-
-                    var previousVisitDuration = results[15].result;
-
-                    var visitDurationPercent = self.calculatePercentage(results[9].result, previousVisitDuration);
-
-                    // ----------------------------------------
-                    // Average Visit Duration
-                    // ----------------------------------------
-
-                    var avgSessionData = [];
-                    for (var b = 0; b < results[8].result.length; b++) {
-                        var subArr = [];
-                        var value = results[8].result[b].value || 0;
-                        subArr.push(new Date(results[8].result[b].timeframe.start).getTime());
-                        subArr.push(value);
-                        avgSessionData.push(subArr);
-                    };
-
-
-                    // ======================================
-                    // Bounces
-                    // ======================================
-
-                    var _bouncesData = [];
-                    var _totalBounces = 0;
-                    for (var r = 0; r < results[10].result.length; r++) {
-                        var subArr = [];
-                        var value = results[10].result[r].value || 0;
-                        _totalBounces += value;
-                        subArr.push(new Date(results[10].result[r].timeframe.start).getTime());
-                        subArr.push(value);
-                        _bouncesData.push(subArr);
-                    };
-
-                    // if (_totalBounces >= $scope.bounces) {
-                    //     $scope.bounces = _totalBounces;
-                    //     if ($scope.firstQuery) {
-                    //         $scope.bouncesData = _bouncesData;
-                    //     } else {
-                    //         $scope.timeonSiteConfig.series[1].data = _bouncesData;
-                    //     }
-                    // }
-
-                    var bouncesPercent = self.calculatePercentage(_totalBounces, results[11].result);
-
-                    // // ======================================
-                    // // Traffic Sources
-                    // // ======================================
-
-                    var _trafficSourceData = [];
-                    var _totalTypes = 0;
-                    for (var i = 0; i < results[12].result.length; i++) {
-                        var subObj = [];
-                        if (results[12].result[i].source_type) {
-                            subObj.push(results[12].result[i].source_type.charAt(0).toUpperCase() + results[12].result[i].source_type.slice(1));
-                        } else {
-                            subObj.push('Other');
-                        }
-                        subObj.push(results[12].result[i].result);
-                        _totalTypes += results[12].result[i].result;
-                        _trafficSourceData.push(subObj);
-                    };
-
-                    // if (_totalTypes >= $scope.totalTypes) {
-                    //     $scope.totalTypes = _totalTypes;
-                    //     if ($scope.firstQuery) {
-                    //         $scope.totalTypes = _totalTypes;
-                    //         $scope.trafficSourceData = _trafficSourceData;
-                    //     } else {
-                    //         $scope.trafficSourcesConfig.series[0].data = _trafficSourceData;
-                    //     }
-                    // }
-
-                    // // ======================================
-                    // // New vs. Returning Customers
-                    // // ======================================
-
-                    var newVsReturning = [
-                        ['New', results[14].result],
-                        ['Returning', results[13].result]
-                    ];
-
-
-                    // // ======================================
-                    // // Content
-                    // // Time on Site, Bounces
-                    // // ======================================
-
-                    //  //"filters": [{"property_name":"url.domain","operator":"eq","property_value":"main.indigenous.local"}],
-
-                    //  // "entrances":{
-                    //  //            "analysis_type":"count"
-                    //  //        },
-                    //  //        "exits":{
-                    //  //            "analysis_type":"count"
-                    //  //        },
-                    //  //        "bounces":{
-                    //  //            "analysis_type":"count"
-                    //  //        }
-                    //  //    }
-
-                    // ======================================
-                    // Visitor Locations
-                    // ======================================
-                    var locationData = [];
-                    console.log('locationData >>> ', results[0]);
-                    for (var i = 0; i < results[0].result.length; i++) {
-                        var subObj = {};
-                        subObj.code = self.stateToAbbr(results[0].result[i]['ip_geo_info.province']);
-                        subObj.value = results[0].result[i].result;
-                        locationData.push(subObj);
-                    };
-
-                    // // ======================================
-                    // // Page Depth
-                    // // ======================================
-
-
-                    // var _depthValues = [];
-                    // for (var i = 0; i < results[16].result.length; i++) {
-                    //     _depthValues.push( results[16].result[i].result );
-                    // };
-
-                    // var testing = $scope.countDuplicates(_depthValues);
-
-                    // if($scope.firstQuery) {
-                    //     ngProgress.complete();
-                    //     $scope.renderAnalyticsChart();
-                    //     $scope.firstQuery = false;
-                    // }
-
-
-                    //put all data is reportData
-                    reportData.desktop = desktop;
-                    reportData.mobile = mobile;
-                    reportData.visitorsData = visitorsData;
-                    reportData.currentTotalVisitors = currentTotalVisitors;
-                    reportData.vistorsPreviousData = vistorsPreviousData;
-                    reportData.visitorsPercent = visitorsPercent;
-                    reportData.currentTotalPageviews = currentTotalPageviews;
-                    reportData.pageviewsData = pageviewsData;
-                    reportData.sessionData = _sessionsData;
-                    reportData.sessionsPercent = sessionsPercent;
-                    reportData.totalSessions = _totalSessions;
-                    reportData.pageviewsPreviousData = pageviewsPreviousData;
-                    reportData.pageviewsPercent = pageviewsPercent;
-                    reportData.bouncesData = _bouncesData;
-                    reportData.totalBounces = _totalBounces;
-                    reportData.bouncesPercent = bouncesPercent;
-                    reportData.trafficSourceData = _trafficSourceData;
-                    reportData.totalTypes = _totalTypes;
-                    reportData.newVsReturning = newVsReturning;
-                    reportData.locationData = locationData;
-                    reportData.visitDuration = visitDuration;
-                    reportData.visitDurationPercent = visitDurationPercent;
-                    reportData.avgSessionData = avgSessionData;
-
-                    fn(reportData);
-                });
+                fn(reportData);
             });
         };
 
@@ -1388,7 +1113,9 @@ define(['app', 'keenService'], function(app) {
                 "code": "AK"
             }];
 
-            var chart1 = new Highcharts.Map({
+            if($("#visitor_locations").length)
+            {
+                var chart1 = new Highcharts.Map({
                 chart: {
                     renderTo: 'visitor_locations'
                 },
@@ -1442,6 +1169,7 @@ define(['app', 'keenService'], function(app) {
                     enabled: false
                 }
             });
+            }
         };
 
     }]);

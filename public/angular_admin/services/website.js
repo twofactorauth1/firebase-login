@@ -50,9 +50,54 @@ define(['app'], function (app) {
             });
 		};
 
+		//page/:id/versions
+		this.getPageVersions = function (pageId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'versions'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:getPageVersions with ERROR');
+                fn(err, null);
+            });
+		};
+
+		//page/:id/revert/:version
+		this.revertPageVersion = function (pageId, versionId, fn) {
+			var apiUrl = baseUrl + ['cms', 'page', pageId, 'revert', versionId].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST"
+			})
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service revertPageVersion with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPages = function (accountId, fn) {
 			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
 			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
+		};
+
+		this.getPagesWithLimit = function (accountId, queryParams, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
+			$http({
+                url: apiUrl,
+                method: 'GET',
+                params: queryParams
+            })			
 			.success(function (data, status, headers, config) {
 				fn(data);
 			})
@@ -74,12 +119,28 @@ define(['app'], function (app) {
             });
 		};
 
+		this.getPostsWithLimit = function (queryParams, fn) {
+			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
+			$http({
+                url: apiUrl,
+                method: 'GET',
+                params: queryParams
+            })
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Get Posts with ERROR');
+                fn(err, null);
+            });
+		};
+
 		// website/:websiteId/page/:id
 		this.updatePage = function(websiteId, pageId, pagedata, fn) {
 			var self = this;
 
 			if (!pagedata.modified) {pagedata.modified = {}}
-			pagedata.modified.date = new Date().getTime();
+			pagedata.modified.date = new Date();
 			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
 			$http({
 			    url: apiUrl,
@@ -206,6 +267,24 @@ define(['app'], function (app) {
             });
 		};
 
+		//template/:id/website/:websiteId/page/
+		this.createPageFromTemplate = function(templateId, websiteId, pagedata, fn) {
+			var self = this;
+			var apiUrl = baseUrl + ['cms', 'template', templateId, 'website', websiteId, 'page'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				console.log('data >>> ', data);
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:createPageFromTemplate with ERROR');
+            });
+		};
+
 		this.createPost = function (pageId, postdata, fn) {
 			postdata.post_tags = null;
 			if(!postdata.created)
@@ -247,8 +326,8 @@ define(['app'], function (app) {
             });
 		};
 
-		this.getThemes = function (fn) {
-			var apiUrl = baseUrl + ['cms', 'theme'].join('/');
+		this.getTemplates = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'template'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);

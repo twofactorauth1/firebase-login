@@ -12,6 +12,7 @@ var customerLinkDao = require('../../../payments/dao/customer_link.dao.js');
 var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
 var appConfig = require('../../../configs/app.config');
 var accountDao = require('../../../dao/account.dao');
+var paymentsManager = require('../../../payments/payments_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -28,7 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         //Contacts
-        app.post(this.url('contacts/:id/charge'), this.setup, this.createChargeForContact.bind(this));
+        app.post(this.url('contacts/:id/charge'), this.setup.bind(this), this.createChargeForContact.bind(this));
 
         //Customers
         app.get(this.url('customers'), this.isAuthApi.bind(this), this.listCustomers.bind(this));
@@ -92,6 +93,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
 
         //Coupons
+        app.get(this.url('coupons'), this.isAuthApi.bind(this), this.listCoupons.bind(this));
+        app.get(this.url('coupon/:name/validate'), this.setup.bind(this), this.validateCoupon.bind(this));
+        app.get(this.url('coupon/:name'), this.isAuthApi.bind(this), this.getCouponByName.bind(this));
+        app.post(this.url('coupons'), this.isAuthApi.bind(this), this.createCoupon.bind(this));
+        //stripe coupons cannot be updated
+        app.delete(this.url('coupon/:name'), this.isAuthApi.bind(this), this.deleteCoupon.bind(this));
+
         //Discounts
 
         //Tokens - CG
@@ -264,6 +272,112 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /*
+     * COUPONS
+     */
+
+    listCoupons: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listCoupons');
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.listStripeCoupons(accessToken, function(err, coupons){
+                    self.log.debug('<< listCoupons');
+                    self.sendResultOrError(resp, err, coupons, "Error listing Stripe Coupons");
+                });
+            }
+        });
+
+    },
+
+    validateCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> validateCoupon');
+        var accessToken = self._getAccessToken(req);
+        var accountId = parseInt(self.accountId(req));
+        var couponName = req.params.name;
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
+        paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+            self.log.debug('<< validateCoupon');
+            self.sendResultOrError(resp, err, coupon, "Error getting Stripe Coupon");
+        });
+
+    },
+
+    getCouponByName: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getCouponByName');
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                var couponName = req.params.name;
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+                    self.log.debug('<< getCouponByName');
+                    self.sendResultOrError(resp, err, coupon, "Error getting Stripe Coupon");
+                });
+
+            }
+        });
+    },
+
+    createCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createCoupon');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                if (accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.createStripeCoupon(req.body, accessToken, function(err, coupon){
+                    self.log.debug('<< createCoupon');
+                    self.sendResultOrError(resp, err, coupon, "Error creating Stripe Coupon");
+                });
+            }
+        });
+    },
+
+    deleteCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteCoupon');
+        self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var accessToken = self._getAccessToken(req);
+                var accountId = parseInt(self.accountId(req));
+                var couponName = req.params.name;
+                if(accessToken === null && accountId != appConfig.mainAccountID) {
+                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                }
+                paymentsManager.deleteStripeCoupon(couponName, accessToken, function(err, coupon){
+                    self.log.debug('<< deleteCoupon');
+                    self.sendResultOrError(resp, err, coupon, "Error deleting Stripe Coupon");
+                });
+
+            }
+        });
+    },
+
     getCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> getCustomer');
@@ -318,35 +432,34 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var _accountId = req.body.accountId || self.accountId(req);
 
-        self.checkPermissionForAccountAndUser(user.id(), _accountId, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                //validate arguments
-                if(!cardToken && cardToken.length ===0) {
-                    return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
-                }
-                if (!contact && !user) {
-                    return this.wrapError(resp, 400, null, "Must have either contact or user");
-                }
-                if(contact && contact.stripeId && contact.stripeId.length > 0) {
-                    return this.wrapError(resp, 409, null, "Customer already exists.");
-                }
+        /*
+         * This can be called before we have a subscription
+         */
 
-                if(contact) {
-                    stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
-                        self.log.debug('<< createCustomer');
-                        self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                        self = value = null;
-                    });
-                } else {
-                    stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
-                        self.log.debug('<< createCustomer');
-                        self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                    });
-                }
-            }
-        });
+
+        //validate arguments
+        if(!cardToken && cardToken.length ===0) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
+        }
+        if (!contact && !user) {
+            return this.wrapError(resp, 400, null, "Must have either contact or user");
+        }
+        if(contact && contact.stripeId && contact.stripeId.length > 0) {
+            return this.wrapError(resp, 409, null, "Customer already exists.");
+        }
+
+        if(contact) {
+            stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
+                self.log.debug('<< createCustomer');
+                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                self = value = null;
+            });
+        } else {
+            stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
+                self.log.debug('<< createCustomer');
+                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+            });
+        }
 
 
     },
@@ -482,20 +595,14 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getPlan');
         var accountId = parseInt(self.accountId(req));
 
-        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                var planId = req.params.id;
-                var accessToken = self._getAccessToken(req);
-                if(accessToken === null && accountId != appConfig.mainAccountID) {
-                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-                }
-                stripeDao.getStripePlan(planId, accessToken, function(err, value){
-                    self.log.debug('<< getPlan');
-                    return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
-                });
-            }
+        var planId = req.params.id;
+        var accessToken = self._getAccessToken(req);
+        if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+        }
+        stripeDao.getStripePlan(planId, accessToken, function(err, value){
+            self.log.debug('<< getPlan');
+            return self.sendResultOrError(resp, err, value, "Error retrieving Stripe Plan");
         });
 
     },
@@ -1062,7 +1169,14 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.error('Error getting account: ' + err);
                     return self.wrapError(resp, 500, null, err);
                 }
-                var accountBilling = account.get('billing');
+
+                var credentials = account.get('credentials');
+                var accountBilling = {};
+                credentials.forEach(function(value, index) {
+                  if (value.type == 'stripe') {
+                    accountBilling = value;
+                  }
+                });
                 if(!accountBilling.accessToken || accountBilling.accessToken.length < 1) {
                     self.log.warn('Account has not been connected to Stripe');
                     return self.wrapError(resp, 400, 'Bad Request', 'No Stripe accessToken found.');

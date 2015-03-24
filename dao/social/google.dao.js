@@ -16,6 +16,8 @@ var userDao = require('../user.dao');
 var async = require('async');
 
 var Contact = require('../../models/contact');
+var awsConfig = require('../../configs/aws.config.js');
+var s3Dao = require('../../dao/integrations/s3.dao');
 
 var dao = {
 
@@ -59,7 +61,7 @@ var dao = {
         }
     },
 
-    
+
 
 
     checkAccessToken: function(user, fn) {
@@ -185,6 +187,49 @@ var dao = {
         });
 
     },
+
+    getGroupsForAccessToken: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> getGroupsForAccessToken');
+
+        var url = self.GROUPS_API_URL + 'default/thin?v=3&alt=json&max-results=100000000&access_token=' + accessToken;
+
+        this._makeAuthenticatedRequest(url, function(err, value){
+            if(err) {
+                self.log.error('Error getting groups: ' + err.toString());
+                fn(err, null);
+            } else {
+                self.log.debug('results from the goog:');
+                console.dir(value);
+                var entries = value.feed.entry || [];
+                var processEntry = function(entry) {
+                    self.log.debug('processing: ');
+                    console.dir(entry);
+                    var obj = {};
+                    obj.id = entry.id.$t;
+                    obj.name = entry.title.$t;
+                    return obj;
+                };
+                var result = [];
+                async.each(entries, function(entry, cb) {
+                    var obj = {};
+                    obj.id = entry.id.$t;
+                    obj.name = entry.title.$t;
+                    //result.push(processEntry(entry));
+                    self.log.debug('About to push to result:');
+                    console.dir(obj);
+                    result.push(obj);
+                    cb();
+                }, function(err) {
+                    self.log.debug('<< getGroupsForAccessToken');
+                    fn(err, result);
+                });
+
+                //fn(null, value);
+            }
+        });
+
+    },
 //endregion
 //region CONTACTS
     getContactsForUser: function(user, lastUpdated, groupIdAry, fn) {
@@ -232,7 +277,7 @@ var dao = {
                 var _entryAry = entryAry;
                 self._makeAuthenticatedRequest(url, function(err, value){
                     if(!err) {
-                        
+
                         var entries = value.feed.entry || [];
                         updated = value.feed.updated.$t;
 
@@ -290,6 +335,7 @@ var dao = {
                 if (emails != null) {
                     emails = _.pluck(emails, "email");
                 }
+
                 contact.updateContactInfo(contactObj.first, contactObj.middle, contactObj.last, photo, photo, null);
 
                 //Update contact details
@@ -606,8 +652,259 @@ var dao = {
         }
 
         return obj;
-    }
+    },
+
 //endregion
+
+//socialconfig changes
+getContactsForSocialId: function(accessToken, socialAccountId, lastUpdated, groupIdAry, fn) {
+    if (_.isFunction(lastUpdated)) {
+        fn = lastUpdated;
+        lastUpdated = null;
+    } else if(_.isFunction(groupIdAry)){
+        fn = groupIdAry;
+        groupIdAry = null;
+    }
+    var self = this;
+
+    var socialId = socialAccountId;
+    var accessToken = accessToken;
+
+    if (socialId == null || accessToken == null) {
+        return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to Google");
+    }
+
+    var url = this.CONTACT_API_URL + "default/full?v=3&alt=json&max-results=100000000&access_token=" + accessToken;
+    if (String.isNullOrEmpty(lastUpdated) === false) {
+        url += "&updated-min=" + lastUpdated;
+    }
+
+    /*
+     * collect the entries for each group specified (or all groups if none are specified)
+     * process each entry into a contact
+     * return list of contacts
+     */
+
+    var entryAry = [];
+    var urlAry = [];
+    var updated = 0;
+    if(groupIdAry === null || groupIdAry.length ===0) {
+        urlAry.push(url);
+    } else {
+        for(var i=0; i<groupIdAry.length; i++) {
+            urlAry.push(url + '&group=' + groupIdAry[i]);
+        }
+    }
+
+    async.concat(urlAry,
+        function(url, cb){
+            self.log.debug('calling ' + url);
+            var _entryAry = entryAry;
+            self._makeAuthenticatedRequest(url, function(err, value){
+                if(!err) {
+
+                    var entries = value.feed.entry || [];
+                    updated = value.feed.updated.$t;
+
+                    cb(null, entries);
+                } else {
+                    return fn(err, value);
+                }
+
+            });
+        }, function(err, results){
+            if(err) {
+                return fn(err, value);
+            } else {
+                self.log.debug('Processing ' + results.length + ' contacts from google');
+                var result = [];
+                var count = 0;
+                async.each(results, function(entry, cb) {
+                    result.push(self._processContact(entry));
+                    cb();
+                }, function(err) {
+                    fn(err, result, {updated: updated});
+                });
+            }
+        });
+
+    return null;
+},
+
+
+importContactsForSocialId: function(accountId, accessToken, socialAccountId, user, groupIdAry, fn) {
+    var self = this;
+    var totalImported = 0;
+    if(fn === null) {
+        fn = groupIdAry;
+        groupIdAry = null;
+    }
+
+    //var googleBaggage = user.getUserAccountBaggage(accountId, "google");
+    //googleBaggage.contacts = googleBaggage.contacts || {};
+    //var updated = googleBaggage.contacts.updated;
+
+    this.getContactsForSocialId(accessToken, socialAccountId, groupIdAry, function(err, value, params) {
+        if (err) {
+            return fn(err, value);
+        }
+
+        //googleBaggage.contacts.updated = params.updated;
+
+        var googleId = socialAccountId;
+        var _contacts = value;
+
+        var updateContactFromContactObj = function(contact, contactObj) {
+            var photo = (contactObj && contactObj.photos && contactObj.photos.length > 0) ? contactObj.photos[0] : null;
+            var emails = contactObj.emails;
+            if (emails != null) {
+                emails = _.pluck(emails, "email");
+            }
+            if(photo)
+                   {
+                    var file = {};
+                    file.name = new Date().getTime() + '.png';
+                    file.type = 'image/png';                    
+                    file.path = photo;                  
+                    var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
+                    var accountId = accountId;
+                    var directory = "acct_indigenous";
+                    if (accountId > 0) {
+                        directory = "acct_" + accountId;
+                    } 
+                    s3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
+                        if (err) {
+                            self.log.error('Error uploading to s3: ' + err);
+                        } else {                   
+                           photo = 'http://' + bucket + '.s3.amazonaws.com/' + directory + '/' + file.name;                          
+                        }
+                    })
+                   } 
+            contact.updateContactInfo(contactObj.first, contactObj.middle, contactObj.last, photo, photo, null);
+
+            //Update contact details
+            contact.createOrUpdateDetails($$.constants.social.types.GOOGLE, googleId, contactObj.id, photo, photo, null, emails, null);
+
+            //Update addresses
+            if (contactObj.addresses != null && contactObj.addresses.length > 0) {
+                contactObj.addresses.forEach(function(address) {
+                    contact.createAddress($$.constants.social.types.GOOGLE, address.type, null, null, null, null, null, null, null, address.address, null, null, false, false);
+                });
+            }
+
+            //update phones
+            if (contactObj.phones != null && contactObj.phones.length > 0) {
+                contactObj.phones.forEach(function(phone) {
+                    contact.createOrUpdatePhone($$.constants.social.types.GOOGLE, phone.type, phone.number, phone.primary);
+                });
+            }
+        };
+
+
+        (function importContacts(contacts, page) {
+            if (contacts != null) {
+                var numPerPage = 50, socialType = $$.constants.social.types.GOOGLE;
+
+                var pagingInfo = paging.getPagingInfo(contacts.length, numPerPage, page);
+
+                var items = paging.getItemsForCurrentPage(contacts, page, numPerPage);
+                var socialIds = _.pluck(items, "id");
+
+                contactDao.getContactsBySocialIds(accountId, socialType, socialIds, function(err, value) {
+                    if (err) {
+                        return fn(err, value);
+                    }
+
+                    var contactValues = value;
+                    async.series([
+                        function(callback) {
+                            if (contactValues != null && contactValues.length > 0) {
+                                async.eachSeries(contactValues, function(contact, cb) {
+
+                                    //Get reference to current Google Contact
+                                    var googleContact = _.findWhere(items, {id:contact.getSocialId(socialType)});
+
+                                    //remove the contact from the items array so we don't process again
+                                    items = _.without(items, googleContact);
+
+                                    if(googleContact) {
+                                        updateContactFromContactObj(contact, googleContact);
+
+                                        contactDao.saveOrUpdateContact(contact, function(err, value) {
+                                            if (err) {
+                                                self.log.error("An error occurred updating contact during Google import", err);
+                                            }
+                                            totalImported++;
+                                            cb();
+                                        });
+                                    } else {
+                                        cb();
+                                    }
+
+
+
+                                }, function(err) {
+                                    callback(err);
+                                });
+                            } else {
+                                callback(null);
+                            }
+                        },
+
+                        function(callback) {
+                            //Iterate through remaining items
+                            if (items != null && items.length > 0) {
+                                async.eachSeries(items, function(googleContact, cb) {
+
+                                    var contact = new Contact({
+                                        accountId: accountId,
+                                        type: $$.constants.contact.contact_types.OTHER
+                                    });
+
+                                    contact.createdBy(user.id(), socialType, googleId);
+                                    updateContactFromContactObj(contact, googleContact);
+
+                                    contactDao.saveOrMerge(contact, function(err, value) {
+                                        if (err) {
+                                            self.log.error("An error occurred saving contact during Google import", err);
+                                        }
+                                        totalImported++;
+                                        cb();
+                                    });
+
+                                }, function(err) {
+                                    callback(err);
+                                });
+                            } else {
+                                callback(null);
+                            }
+                        }
+
+                    ], function(err, results) {
+                        if (pagingInfo.nextPage > page) {
+                            process.nextTick(function() {
+                                importContacts(contacts, pagingInfo.nextPage);
+                            });
+                        } else {
+                            self.log.info("Google Contact Import Succeeded. " + totalImported + " imports");
+                            self.log.info('Merging duplicates.');
+                            contactDao.mergeDuplicates(null, accountId, function(err, value){
+                                if(err) {
+                                    self.log.error('Error occurred during duplicate merge: ' + err);
+                                    fn(null);
+                                } else {
+                                    self.log.info('Duplicate merge successful.');
+                                    fn(null);
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        })(_contacts, 1);
+    });
+}
+//end social config
 };
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
@@ -616,4 +913,3 @@ $$.dao.social = $$.dao.social || {};
 $$.dao.social.GoogleDao = dao;
 
 module.exports = dao;
-

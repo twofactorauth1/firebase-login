@@ -363,6 +363,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         req.session.accountId = updatedAccount.id();
                         req.session.subdomain = updatedAccount.get('subdomain');
                         req.session.domain = updatedAccount.get('domain');
+                        req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
                         callback(null, account.id(), sub.id, user);
                     });
@@ -381,6 +382,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         user.set("accountUrl", value.toLowerCase());
                         var json = user.toJSON('public', {accountId:accountId});
                         self.log.debug('<< initalizeUserAndAccount: ', json);
+                        req.session.midSignup = false;
                         res.send(json);
                     });
                 });
@@ -618,7 +620,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 //console.log(value);
                 user.set("credentials",value.get("credentials"));
                 user.set('accounts', value.get('accounts'));
-
+                if(user.get('welcome_alert')) {
+                    self.log.warn('user object contains welcome_alert:', user);
+                    var userPreferences = user.get('user_preferences');
+                    userPreferences.welcome_alert = user.get('welcome_alert');
+                    delete user.attributes.welcome_alert;
+                }
                 self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
                     if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
                         return self.send403(res);

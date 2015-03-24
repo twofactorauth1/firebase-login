@@ -47,13 +47,13 @@
             <div class="getting-started-section" ng-switch-when="getting-started">
                 <div class="panel panel-info">
                     <div class="panel-heading">
-                        <div class="avatar col-sm-1 col-sm-offset-2 col-xs-12">
+                        <div class="avatar col-sm-1 col-sm-offset-3 col-xs-12">
                             <h1 style="font-size:65px"><i class="fa fa-magic"></i></h1>
                             <div class="visible-xs clearfix mb20"></div>
                         </div>
-                        <div class="content col-sm-7 col-xs-12">
+                        <div class="content col-sm-5 col-xs-12">
                             <h3>Getting the Most Out of Indigenous</h3>
-                            <h4>Complete the tasks below to set up your account and take full advantage of the platform</h4>
+                            <h4>Complete the tasks below to set up your account <br> and take full advantage of the platform</h4>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -64,9 +64,9 @@
                         <ul class="task-list">
                             <li class="complete">
                                 <h1 class="pull-left"><i class="fa fa-check-circle-o"></i></h1>
-                                <small class="pull-right done">COMPLETE</small>
+                                <small class="pull-right done">Complete</small>
                                 <h3 class="pull-left">Sign Up For Indigenous</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>You completed the most difficult task of starting to take control of your business.</b>
@@ -76,9 +76,9 @@
                             </li>
                             <li ng-click="startTask('account/edit', 'basic-info')" ng-class="{complete: userPreferences.tasks.basic_info }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.basic_info , 'fa-circle-o' : !userPreferences.tasks.basic_info }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.basic_info">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.basic_info">Complete</small>
                                 <h3 class="pull-left">Basic Account Information</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Enter the basic information about your business like your address and logo.</b>
@@ -88,9 +88,9 @@
                             </li>
                             <li ng-click="startTask('website', 'select-theme')" ng-class="{complete: userPreferences.tasks.select_theme }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.select_theme , 'fa-circle-o' : !userPreferences.tasks.select_theme }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.select_theme">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.select_theme">Complete</small>
                                 <h3 class="pull-left">Select A Theme</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Select a theme for your front facing website where your customers can visit.</b>
@@ -98,11 +98,35 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                             <li ng-click="startTask('website-editor', 'edit-home')" ng-class="{complete: userPreferences.tasks.edit_home }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.edit_home , 'fa-circle-o' : !userPreferences.tasks.edit_home }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.edit_home">Complete</small>
+                                <h3 class="pull-left">Edit the home page</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Lets make the home page according to your taste.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                            <li ng-click="startTask('website', 'add-post')" ng-class="{complete: userPreferences.tasks.add_post }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_post , 'fa-circle-o' : !userPreferences.tasks.add_post }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_post">Complete</small>
+                                <h3 class="pull-left">Create First Blog Post</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Keep everyone up to date and informed with a regular blog.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('account', 'connect-social')" ng-class="{complete: userPreferences.tasks.connect_social }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.connect_social , 'fa-circle-o' : !userPreferences.tasks.connect_social }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.connect_social">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.connect_social">Complete</small>
                                 <h3 class="pull-left">Connect Social Accounts</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Connect your social account so you can import contacts and create marketing campaigns.</b>
@@ -110,11 +134,23 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                            <li ng-click="startTask('marketing', 'add-feed')" ng-class="{complete: userPreferences.tasks.add_feed }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_feed , 'fa-circle-o' : !userPreferences.tasks.add_feed }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_feed">Complete</small>
+                                <h3 class="pull-left">Add Social Feed</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Add social feeds of your friends.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('customer', 'create-contact')" ng-class="{complete: userPreferences.tasks.create_contact }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_contact , 'fa-circle-o' : !userPreferences.tasks.create_contact }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.create_contact">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.create_contact">Complete</small>
                                 <h3 class="pull-left">Import / Create Contacts</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Import your contact from your various accounts or create them.</b>
@@ -122,11 +158,23 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
+                            <li ng-click="startTask('customer/add', 'add-contact')" ng-class="{complete: userPreferences.tasks.add_contact }">
+                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_contact , 'fa-circle-o' : !userPreferences.tasks.add_contact }"></i></h1>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_contact">Complete</small>
+                                <h3 class="pull-left">Add a new contact</h3>
+                                <div class="clearfix"></div>
+                                <div class="task-desc">
+                                    <p>
+                                        <b>Add a new contact.</b>
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
                             <li ng-click="startTask('marketing', 'create-campaign')" ng-class="{complete: userPreferences.tasks.create_campaign }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.create_campaign , 'fa-circle-o' : !userPreferences.tasks.create_campaign }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.create_campaign">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.create_campaign">Complete</small>
                                 <h3 class="pull-left">Create First Campaign</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Create your first campaign to start getting vistors.</b>
@@ -136,9 +184,9 @@
                             </li>
                             <li ng-click="startTask('commerce', 'add-product')" ng-class="{complete: userPreferences.tasks.add_product }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_product , 'fa-circle-o' : !userPreferences.tasks.add_product }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.add_product">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.add_product">Complete</small>
                                 <h3 class="pull-left">Import / Create Products</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Import or create new products to start selling and creating revenue.</b>
@@ -146,23 +194,11 @@
                                 </div>
                                 <div class="clearfix"></div>
                             </li>
-                            <li ng-click="startTask('website', 'add-post')" ng-class="{complete: userPreferences.tasks.add_post }">
-                                <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.add_post , 'fa-circle-o' : !userPreferences.tasks.add_post }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.add_post">COMPLETE</small>
-                                <h3 class="pull-left">Create First Blog Post</h3>
-                                <div class="clearfix mb5"></div>
-                                <div class="task-desc">
-                                    <p>
-                                        <b>Keep everyone up to date and informed with a regular blog.</b>
-                                    </p>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
                             <li ng-click="startTask('dashboard', 'dashboard')" ng-class="{complete: userPreferences.tasks.dashboard }">
                                 <h1 class="pull-left"><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks.dashboard , 'fa-circle-o' : !userPreferences.tasks.dashboard }"></i></h1>
-                                <small class="pull-right done" ng-if="userPreferences.tasks.dashboard">COMPLETE</small>
+                                <small class="pull-right done" ng-if="userPreferences.tasks.dashboard">Complete</small>
                                 <h3 class="pull-left">Discover the Dashboard</h3>
-                                <div class="clearfix mb5"></div>
+                                <div class="clearfix"></div>
                                 <div class="task-desc">
                                     <p>
                                         <b>Now evetything is set up, its time to start trakcing.</b>
@@ -199,6 +235,18 @@
     </div>
 
     <div class="rightpanel rightpanel-website">
+         <div class="rightpanel rightpanel-marketing">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="javascript:void(0)" data-toggle="tab">Settings</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane pane-settings active" id="rp-settings">
+                    <h4>No Settings Avaliable</h4>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="step-1" class="single-step carousel-step">
@@ -217,7 +265,7 @@
                     </div>
                     <div class="carousel-ctrls">
                         <!-- Controls -->
-                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" ng-click="preventClick($event)" role="button" data-slide="next">
                             Next <i class="fa fa-chevron-right"></i>
                         </a>
                     </div>
@@ -230,7 +278,7 @@
                     </div>
                     <div class="carousel-ctrls">
                         <!-- Controls -->
-                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" role="button" data-slide="next">
+                        <a class="btn btn-block btn-lg btn-primary pull-right" href="#carousel-example-generic" ng-click="preventClick($event)" role="button" data-slide="next">
                             Next <i class="fa fa-chevron-right"></i>
                         </a>
                     </div>
@@ -246,7 +294,7 @@
                     </div>
                     <div class="carousel-ctrls">
                         <!-- Controls -->
-                        <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop" ng-click="clearWelcome()">
+                        <a class="btn btn-success btn-lg btn-block" href="#" data-powertour-action="stop" ng-click="clearWelcome($event)">
                             GET STARTED <i class="fa fa-chevron-right"></i>
                         </a>
                     </div>

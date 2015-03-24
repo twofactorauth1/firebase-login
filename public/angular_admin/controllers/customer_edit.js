@@ -9,7 +9,7 @@ define(['app',
   'toasterService',
   'mediaDirective',
   'userService',
-  'geocodeService','constants',
+  'geocodeService', 'constants', 'ngOnboarding', 'toaster'
 ], function(app) {
   app.register.controller('CustomerEditCtrl', ['$scope',
     'CustomerService',
@@ -18,9 +18,38 @@ define(['app',
     'ngProgress',
     'ToasterService',
     'UserService',
-    'GeocodeService',
-    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService) {
+    'GeocodeService', '$location', 'toaster',
+    function($scope, CustomerService, $stateParams, $state, ngProgress, ToasterService, UserService, GeocodeService, $location, toaster) {
       ngProgress.start();
+
+          $scope.showOnboarding = false;
+          $scope.onboardingSteps = [{
+            overlay: false
+          }]
+          $scope.stepIndex = 0;
+          $scope.beginOnboarding = function(type) {
+            $scope.showOnboarding = true;
+              if (type == 'add-contact') {
+                  $scope.activeTab = 'integrations';
+                  $scope.onboardingSteps = [{
+                      overlay: true,
+                      title: 'Task: Add contact',
+                      description: "In this view you can add the details of the contact and hit save.",
+                      position: 'centered',
+                      width: 400
+                  }];
+              }
+          };
+
+          $scope.finishOnboarding = function() {
+              $scope.userPreferences.tasks.add_contact = true;
+              UserService.updateUserPreferences($scope.userPreferences, false, function() {});
+          };
+
+          if ($location.$$search.onboarding) {
+              $scope.beginOnboarding($location.$$search.onboarding);
+          }
+
       var displayAddressCharLimit = 2;
       $scope.currentState = $state.current.name;
       $scope.customerId = $stateParams.id;
@@ -96,6 +125,9 @@ define(['app',
       };
 
       $scope.customerSaveFn = function() {
+        if ($location.$$search.onboarding) {
+          ToasterService.setHtmlPending('success', 'You completed the Add a new contact Task!', '<div class="mb15"></div><a href="/admin#/marketing?onboarding=create-campaign" class="btn btn-primary">Next Step: Create First Campaign</a>', 0, 'trustedHtml');
+        }
         $scope.saveLoading = true;
         if ($scope.customer.details[0].phones) {
           $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {

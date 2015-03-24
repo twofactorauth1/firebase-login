@@ -14,7 +14,7 @@
                     </div>
                     <article class="entry clearfix" data-ng-if="control.blogposts||blog.blogposts">
                         <div class="single-blog responsive clearfix"
-                             ng-repeat="blogpost in control.blogposts || blog.blogposts | filter: blogpost.created.date | orderBy :'created.date':true | offset:  curPage * pageSize | limitTo: pageSize"
+                             ng-repeat="blogpost in control.blogposts || blog.blogposts | filter: blogpost.publish_date || blogpost.created.date | orderBy :['publish_date','created.date']:true | offset:  curPage * pageSize | limitTo: pageSize"
                              data-postId="{{blogpost._id}}">
 
                             <div class="blog-entry clearfix" data-id="{{blogpost._id}}">
@@ -32,8 +32,8 @@
                                 </h2>
 
                                 <div class="blog-meta">
-                                   <span data-ng-if="blogpost.created.date">
-                                     • {{blogpost.created.date | date: 'fullDate'}}
+                                   <span data-ng-if="blogpost.publish_date || blogpost.created.date">
+                                     • {{blogpost.publish_date || blogpost.created.date | date: 'fullDate'}}
                                     </span>
                                      <span data-ng-if="blogpost.post_author">
                                        Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
@@ -57,7 +57,8 @@
                                 </div>
                                 <a ng-if="isEditing" class="btn btn-warning" type="button" ng-click="changeBlogImage(blogpost)" style="margin-right:10px">
                                         <span class="fa fa-edit"></span>
-                                        <span class="hidden-xs">Change Image</span>
+                                        <span ng-if="blogpost.featured_image" class="hidden-xs">Change Image</span>
+                                        <span ng-if="!blogpost.featured_image"class="hidden-xs">Add Image</span>
                                 </a>
                                 <!-- end .thumb -->
 

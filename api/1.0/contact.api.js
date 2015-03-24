@@ -42,7 +42,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
-        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createContact.bind(this));
+        /*
+         * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
+         */
+        //app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createContact.bind(this));
+        app.post(this.url(''), this.setup.bind(this), this.createContact.bind(this));
         app.put(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.updateContact.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteContact.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listContacts.bind(this)); // for all contacts
@@ -153,7 +157,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
         if (isNew === true) {
             contact.set("accountId", accountId);
-            contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
+            if(this.userId(req)) {
+                contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
+            }
+
             contact.created("date", new Date().getTime());
         }
 
@@ -433,7 +440,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 query.accountId = value.id();
                 query['details.emails.email'] = req.body.details[0].emails[0].email;
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
+                var fromContactEmail = req.body.fromEmail;
                 delete req.body.skipWelcomeEmail;
+                //delete req.body.fromEmail;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
@@ -526,7 +535,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         self.log.debug('sending email to: ',contactEmail);
 
 
-                                                        var fromEmail = component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
+                                                        var fromEmail = fromContactEmail || component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
                                                         var fromName = component.from_name || notificationConfig.WELCOME_FROM_NAME;
                                                         var emailSubject = component.email_subject || notificationConfig.WELCOME_EMAIL_SUBJECT;
                                                         var vars = [];
@@ -552,6 +561,24 @@ _.extend(api.prototype, baseApi.prototype, {
                                 });
                             } else {
                                 self.log.debug('Skipping email.');
+                            }
+                            //create contact_form activity
+                            if(req.body.activity){
+                                var contactActivity = new $$.m.ContactActivity({
+                                    accountId: query.accountId,
+                                    contactId: savedContact.id(),
+                                    activityType: req.body.activity.activityType,
+                                    note: req.body.activity.note,
+                                    start:new Date(),
+                                    extraFields: req.body.activity.contact,
+                                    sessionId: req.body.activity.sessionId
+                                });
+                                contactActivityManager.createActivity(contactActivity, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating subscribe activity: ' + err);
+                                        //if we can't create the activity... that's fine.  We have already created the contact.
+                                    }
+                                });
                             }
 
                             //create contact activity
@@ -797,10 +824,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(req.query.limit) {
                     limit = parseInt(req.query.limit);
                 }
+                var includeDeleted = false;
+                if(req.query.includeDeleted && req.query.includeDeleted === 'true') {
+                    includeDeleted = true;
+                }
 
 
                 contactActivityManager.findActivities(accountId, contactId, activityTypeAry, noteText, detailText,
-                    beforeTimestamp, afterTimestamp, skip, limit, read, function(err, list){
+                    beforeTimestamp, afterTimestamp, skip, limit, read, includeDeleted, function(err, list){
                         self.log.debug('<< ' + method);
                         self.sendResultOrError(resp, err, list, "Error finding activities");
                         self = null;

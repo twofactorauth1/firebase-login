@@ -146,7 +146,8 @@ app.use(express.session({
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
         domain: appConfig.cookie_subdomain
-        } //stay open for 1 day of inactivity across all subdomains
+        }, //stay open for 1 day of inactivity across all subdomains
+    key: appConfig.cookie_name
 }));
 
 //Middle ware to refresh the session cookie expiration on every hit
@@ -216,6 +217,9 @@ var allowCrossDomain = function (req, res, next) {
 log.info('Allowing xd scripting calls from: ' + appConfig.xdhost_whitelist.join());
 app.use(allowCrossDomain);
 
+//prerender?
+//app.use(require('prerender-node').set('prerenderServiceUrl', 'http://localhost:3002/'));
+app.use(require('prerender-node').set('prerenderToken', 'zGq6CesNtm0s9kUTJXhG'));
 
 //-----------------------------------------------------
 //  START LISTENING
@@ -279,6 +283,10 @@ if (appConfig.cluster == true) {
     setUpListener(app);
 }
 
+//-----------------------------------------------------
+//  SETUP API
+//-----------------------------------------------------
+require('./api/api.manager');
 
 //-----------------------------------------------------
 //  SETUP ROUTING
@@ -286,10 +294,7 @@ if (appConfig.cluster == true) {
 require('./routers/router.manager');
 
 
-//-----------------------------------------------------
-//  SETUP API
-//-----------------------------------------------------
-require('./api/api.manager');
+
 
 
 //-----------------------------------------------------

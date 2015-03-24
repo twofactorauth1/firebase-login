@@ -36,7 +36,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/category/*", this.setup.bind(this), this.index.bind(this));
         app.get("/author/*", this.setup.bind(this), this.index.bind(this));
         app.get("/page/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/signup", this.setup.bind(this), this.index.bind(this));
+        app.get("/signup", this.setupForSocialSignup.bind(this), this.index.bind(this));
         app.get("/post", this.setup.bind(this), this.index.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
@@ -54,10 +54,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
 
         app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        app.get("/admin/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin/*", this.isAuth.bind(this), this.rerouteToAngularAdmin.bind(this));
 
         app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        app.get("/admin1/*", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
+        app.get("/admin1/*", this.isAuth.bind(this), this.rerouteToAngularAdmin.bind(this));
 
         app.get("/demo", this.setup.bind(this), this.demo.bind(this));
         app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
@@ -65,6 +65,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
         app.get('/main/:page', this.setup.bind(this), this.serveMainHtml.bind(this));
+        app.get("/*", this.setup.bind(this), this.index.bind(this));
 
         return this;
     },
@@ -81,6 +82,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             //resp.redirect("/home");
             new WebsiteView(req, resp).renderNewIndex(appConfig.mainAccountID);
         }
+        self.log.debug('<< index ... req.session.accountId:' + req.session.accountId);
     },
     indexTempPage: function(req,resp) {
         var self = this
@@ -214,6 +216,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
+    rerouteToAngularAdmin: function(req, res) {
+      var path = req.url;
+      var angularPath = path.slice(6, path.length);
+      res.redirect('/admin/#' + angularPath);
+    },
+
     _showHome: function(req,resp) {
         new HomeView(req,resp).show("home");
     },
@@ -313,4 +321,3 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
 module.exports = new router();
-

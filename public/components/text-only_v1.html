@@ -5,10 +5,16 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
+<style>
+    .text-only-v1 .editable {
+        color:{{component.txtcolor || 'white'}};
+    }
+</style>
 <div ng-class="component.type+'-v'+component.version">
-   <div ng-if = "component.text" class="editable" data-class="text" data-ng-bind-html="component.text | unsafe">
-   </div>
-   <div ng-if = "!component.text" class="editable" data-class="text">Enter your text here
-   </div>
+	<div class="col-xs-12">
+		   <div ng-if="component.text" class="editable" data-class="text" data-ng-bind-html="component.text | unsafe">
+		   </div>
+		   <div ng-if="!component.text" class="editable" data-class="text">Enter your text here
+		   </div>
+	</div>
 </div>

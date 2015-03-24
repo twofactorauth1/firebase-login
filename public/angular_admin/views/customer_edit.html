@@ -1,13 +1,15 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
+<onboarding-popover enabled='showOnboarding' steps='onboardingSteps' step-index='stepIndex'
+on-finish-callback='finishOnboarding'></onboarding-popover>
 <div style="">
   <form name="customerForm" novalidate>
     <div class="pageheader">
       <div class="col-xs-7">
-        <button indigeweb-state-nav="customer" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerAdd'">
+        <button indigeweb-state-nav="customer" id="btn-back-to-contact" class="btn btn-outline pull-left" type="button" ng-show="currentState == 'customerAdd'">
           <span class="fa fa-chevron-left"></span>
           <span class="hidden-xs">Back</span>
         </button>
-        <button indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-success pull-left" type="button" ng-show="currentState == 'customerEdit'">
+        <button indigeweb-state-nav="customerDetail" indigeweb-state-id="{{customerId}}" id="btn-back-to-contact" class="btn btn-outline pull-left" type="button" ng-show="currentState == 'customerEdit'">
           <span class="fa fa-chevron-left"></span>
           <span class="hidden-xs">Back</span>
         </button>
@@ -16,7 +18,7 @@
       </div>
 
       <div class="col-xs-5">
-        <div class="btn btn-success pull-right btn-save-contact"  ng-disabled="customerForm.$invalid" type="button" ng-click="customerSaveFn()">
+        <div class="btn btn-outline pull-right btn-save-contact"  ng-disabled="customerForm.$invalid" type="button" ng-click="customerSaveFn()">
           <span class="visible-xs" ng-hide="saveLoading">
            <i class="fa fa-save"></i>
           </span>
@@ -24,7 +26,7 @@
            <i class="fa fa-spinner fa-spin"></i>
            </span>
           <span class="hidden-xs" ng-hide="saveLoading">
-           <i class="fa fa fa-save"></i> Save 
+           <i class="fa fa fa-save"></i> Save
            </span>
           <span class="hidden-xs"  ng-show="saveLoading">
            Saving
@@ -378,7 +380,7 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs nav-justified">
-      <li class="active"><a href="#rp-page" data-toggle="tab" id="rp-page-tab">Contact Settings</a>
+      <li class="active"><a href="javascript:void(0)" data-toggle="tab" id="rp-page-tab">Contact Settings</a>
       </li>
     </ul>
 

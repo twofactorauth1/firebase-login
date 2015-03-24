@@ -1,5 +1,5 @@
-define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI', 'angularStepper','carousel','ui.sortable'], function(angularAMD) {
-  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI', 'revolunet.stepper', 'ui.sortable']);
+define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resizeHeightDirective', 'angularFileUpload', 'jdfontselect', 'img', 'moment', 'ngTagsInput', 'angularConfig', 'ngload', 'jPushMenu', 'angularSlugifier','blockUI', 'angularStepper','carousel','ui.sortable','blueimp', 'ngInfiniteScroll'], function(angularAMD) {
+  var app = angular.module('indigeweb', ['ui.router', 'ngRoute', 'var', 'angularFileUpload', 'jdFontselect', 'ngTagsInput', 'config', 'slugifier','blockUI', 'revolunet.stepper', 'ui.sortable', 'infinite-scroll']);
   app.constant('jdFontselectConfig', {
     googleApiKey: 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
   });
@@ -137,6 +137,18 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
           controller: 'HomeCtrl',
           controllerUrl: '/angular_admin/controllers/home.js'
         }))
+        .state('schedule', angularAMD.route({
+          url: '/schedule',
+          templateUrl: '/angular_admin/views/schedule.html',
+          controller: 'ScheduleCtrl',
+          controllerUrl: '/angular_admin/controllers/schedule.js'
+        }))
+        .state('interim', angularAMD.route({
+          url: '/almost-there',
+          templateUrl: '/angular_admin/views/interim.html',
+          controller: 'InterimCtrl',
+          controllerUrl: '/angular_admin/controllers/interim.js'
+        }))
         .state('logout', angularAMD.route({
           url: '/logout',
           templateUrl: '/angular_admin/views/logout.html',
@@ -166,12 +178,17 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
       $rootScope.$on('$stateChangeSuccess',
         function(event, toState, toParams, fromState, fromParams) {
           var excludeList = ['accountEdit', 'accountChoosePlan', 'commerceEdit', 'customerAdd', 'customerEdit', 'customerDetail', 'singlePageAnalytics'];
+          var excludeSettings = ['support', 'dashboard', 'marketing','customerDetail','accountEdit'];
           if (excludeList.indexOf(fromState.name) == -1) {
             $rootScope.lastState = {
               state: fromState.name,
               params: fromParams
             };
           }
+          if(excludeSettings.indexOf(toState.name) >= 0) {
+             $('.header-right').hide();
+           }else
+            $('.header-right').show();
 
           // update active tab
           if (includeList.indexOf(toState.name) >= 0) {

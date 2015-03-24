@@ -17,7 +17,7 @@ var mainApp = angular
         'ngTouch',
         'angular-parallax',
         'config',
-        'dm.style',
+        // 'dm.style',
         'coursePreview',
         'duScroll',
         'mrPageEnterAnimate',
@@ -41,9 +41,10 @@ var mainApp = angular
         'ui.sortable'
     ])
     .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+        //$locationProvider.html5Mode(true);
         if(window.history && window.history.pushState){
             $locationProvider.html5Mode(true).hashPrefix('!');
-          }
+        }        
         $routeProvider
             .when('/', {
                 templateUrl: '../views/main.html',
@@ -89,7 +90,15 @@ var mainApp = angular
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
-            .otherwise({redirectTo: '/'});
+            .when('/blog/:postname', {
+                templateUrl: '../views/singlepostpage.html',
+                controller: 'BlogCtrl as blog'
+            })
+            .otherwise( {
+                templateUrl: '../views/main.html',
+                controller: 'LayoutCtrl as layout'
+            });
+            //.otherwise({redirectTo: '/'});
     }])
     .controller('LayoutCtrl', function($scope, parallaxHelper){
         $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);

@@ -123,7 +123,7 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "No Facebook credentials found");
         }
 
-        return this.getProfile(socialId, accessToken, fn);
+        return this.getProfile(accessToken, socialId, fn);
     },
 
 
@@ -175,7 +175,7 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
         var key = 'accounts';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
     },
 
     getPageInfo: function(user, pageId, fn) {
@@ -188,12 +188,12 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
         var key = '';
-        return this._getStreamPart(null, accessToken, pageId, key, fn);
+        return this._getStreamPart(null, accessToken, pageId, key, null, null, null, fn);
     },
 
     getTokenPageInfo: function(accessToken, socialId, pageId, fn) {
         var key = '?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count';
-        return this._getStreamPart(null, accessToken, pageId, key, fn);
+        return this._getStreamPart(null, accessToken, pageId, key, null, null, null, fn);
     },
 
     getPageProfilePic: function(user, pageId, fn) {
@@ -206,7 +206,8 @@ var dao = {
             return fn($$.u.errors._401_INVALID_CREDENTIALS, "User is not linked to facebook");
         }
         var key = 'picture';
-        return this._getStreamPart(null, accessToken, pageId, key, fn);
+        var path = pageId + "/" + key;
+        return fn(null, self._generateUrl(path, accessToken));
     },
 
 
@@ -356,23 +357,23 @@ var dao = {
     //region STREAM
     getUserStream: function (user, socialId, fn) {
         var key = "feed";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
-    getTokenStream: function(accessToken, socialId, fn) {
-        //var key = 'feed?fields=comments,likes';
-        var key = 'feed';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+    getTokenStream: function(accessToken, socialId, since, until, limit, fn) {
+        var key = 'feed?fields=id,from,message,story,story_tags,picture,link,icon,actions,privacy,type,status_type,object_id,created_time,updated_time,likes,comments{id,attachment,comment_count,created_time,like_count,message,user_likes,from{id,name,picture}}';
+        //var key = 'feed';
+        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
-    getLikedPages: function(accessToken, socialId, fn) {
+    getLikedPages: function(accessToken, socialId, since, until, limit, fn) {
         var key = 'likes';
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
-    getTokenAdminPages: function(accessToken, socialId, fn) {
+    getTokenAdminPages: function(accessToken, socialId, since, until, limit, fn) {
         var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count";
-        return this._getStreamPart(null, accessToken, socialId, key, fn);
+        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
     getUserPosts: function (user, socialId, fn) {
@@ -381,29 +382,74 @@ var dao = {
         self.log.info("facebook dao: user >>> ", user);
         self.log.info("facebook dao: socialId >>> ", socialId);
         var key = "posts";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
+    },
+
+    getPostComments: function (accessToken, socialId, postId, fn) {
+        var self = this;
+        self.log.info("facebook dao: getPostComments >>> ");
+        var key = postId + "/comments";
+        var url = this._generateUrl(key, accessToken);
+        self.log.info("facebook dao: url >>> ", url);
+        return this._makeRequest(url, function (err, value) {
+            self.log.info("_getStreamPart: fb value >>> ", value);
+            self.log.info("_getStreamPart: key >>> ", key);
+            if (err) {
+                return fn(err, value);
+            }
+
+            if (value && value.data && value.data.length > 0 && key.length > 0) {
+                var result = [];
+
+                var processPost = function (_post, cb) {
+                    result.push(new Post().convertFromFacebookPost(_post));
+                    cb();
+                };
+
+                async.eachLimit(value.data, 10, processPost, function (cb) {
+                    return fn(null, result);
+                });
+            } else {
+                var thisval = value.data || value;
+                return fn(null, thisval);
+            }
+        });
     },
 
     getTokenPosts: function(accessToken, socialId, fn) {
         var self = this;
         var key = "posts";
-        return self._getStreamPart(null, accessToken, socialId, key, fn);
+        return self._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
     },
 
     getUserStatuses: function (user, socialId, fn) {
         var key = "statuses";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
 
     getUserTagged: function (user, socialId, fn) {
         var key = "tagged";
-        return this._getStreamPart(user, null, socialId, key, fn);
+        return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
-    getTokenSearch: function(accessToken, socialId, searchType, term, fn) {
+    getTokenSearch: function(accessToken, socialId, searchType, term, since, until, limit, fn) {
         var self = this;
-        var url = this.GRAPH_API_URL +'search?q=' + term + '&type=' + searchType + '&access_token=' + accessToken + '&limit=500';
+        var url = this.GRAPH_API_URL +'search?q=' + term + '&type=' + searchType + '&access_token=' + accessToken;
+
+        if(since) {
+            url += '&since=' + since;
+        }
+        if(until) {
+            url+= '&until=' + until;
+        }
+        if(limit) {
+            url += '&limit=' + limit;
+        } else {
+            url += '&limit=500';
+        }
+
+
         return this._makeRequest(url, function (err, value) {
             self.log.info("_getStreamPart: fb value >>> ", value);
             if (err) {
@@ -428,7 +474,7 @@ var dao = {
     },
 
 
-    _getStreamPart: function (user, _accessToken, socialId, key, fn) {
+    _getStreamPart: function (user, _accessToken, socialId, key, since, until, limit, fn) {
         var self = this;
         self.log.info("facebook dao: _getStreamPart >>> " + _accessToken);
         var accessToken = _accessToken;
@@ -443,12 +489,20 @@ var dao = {
         }
 
         var path = socialId + "/" + key;
-        if(path.indexOf("?") === -1) {
-            path = path + "?limit=500";
-        } else {
-            path = path + "&limit=500";
-        }
+
         var url = this._generateUrl(path, accessToken);
+
+        if(since) {
+            url += '&since=' + since;
+        }
+        if(until) {
+            url+= '&until=' + until;
+        }
+        if(limit) {
+            url += '&limit=' + limit;
+        } else {
+            url += '&limit=500';
+        }
 
         self.log.info("_getStreamPart: path >>> ", path);
         self.log.info("_getStreamPart: url >>> ", url);
@@ -779,7 +833,7 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
     },
-    
+
     getAppInsights: function (user, urlOptions, fn) {
         var self = this;
         var myFacebookId = this._getFacebookId(user);
@@ -817,7 +871,58 @@ var dao = {
                 self.log.error('Error sharing post: ' + JSON.stringify(res.error));
                 fn(res.error, null);
             } else {
-                self.log.debug('<< shareLink', res);
+                self.log.debug('<< createPostWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    postCommentWithToken: function(accessToken, socialId, comment, fn) {
+        var self = this;
+        self.log.debug('>> postCommentWithToken');
+
+        var urlOptions = {access_token:accessToken, message:comment};
+
+        FB.api(socialId + '/comments', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< postCommentWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    postLikeWithToken: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> postLikeWithToken');
+
+        var urlOptions = {access_token:accessToken};
+
+        FB.api(socialId + '/likes', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing like: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< postLikeWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    deleteLikeWithToken: function(accessToken, socialId, fn) {
+        var self = this;
+        self.log.debug('>> deleteLikeWithToken');
+
+        var urlOptions = {access_token:accessToken};
+
+        FB.api(socialId + '/likes', 'delete', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing like: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< deleteLikeWithToken', res);
                 fn(null, res.id);
             }
         });
@@ -855,6 +960,7 @@ var dao = {
         });
     },
 
+    //needs permission read_mailbox
     getMessages: function(accessToken, socialId, fn) {
         var self = this;
         self.log.debug('>> getMessages');
@@ -884,7 +990,22 @@ var dao = {
             }
         });
     },
-    
+
+    deletePostWithToken: function(accessToken, socialId, postId, fn) {
+        var self = this;
+        self.log.debug('>> deletePostWithToken');
+        var urlOptions = {access_token: accessToken};
+        FB.api('/' + postId, 'DELETE', urlOptions, function(err, value){
+            if(!res || res.error) {
+                self.log.error('Error deleting post: ' + JSON.stringify(res.error));
+                return fn(res.error, null);
+            } else {
+                self.log.debug('<< deletePostWithToken', res);
+                return fn(null, res);
+            }
+        });
+    },
+
     //region PRIVATE
     _batchRequest: function(batchName, options, fn){
         // default == last 7 days
@@ -1010,6 +1131,7 @@ var dao = {
         var self = this;
         request(url, function (err, resp, body) {
             if (!err) {
+                self.log.debug('>> body ', body);
                 var result = JSON.parse(body);
                 self._isAuthenticationError(result, fn);
             } else {
@@ -1026,4 +1148,3 @@ $$.dao.social = $$.dao.social || {};
 $$.dao.social.FacebookDao = dao;
 
 module.exports = dao;
-

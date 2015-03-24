@@ -380,7 +380,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> saveOrUpdateTmpAccount');
 
         var account = new $$.m.Account(req.body);
-        account.set('subdomain', account.get('subdomain').toLowerCase());
+        var subdomain = account.get('subdomain').toLowerCase();
+        subdomain = subdomain.replace(/([^a-zA-Z0-9_-])+/gi, '');
+        account.set('subdomain', subdomain);
+        self.log.debug('subdomain is now: ' + account.get('subdomain'));
         accountDao.saveOrUpdateTmpAccount(account, function(err, value) {
            if (!err && value != null) {
                cookies.setAccountToken(resp, value.get("token"));

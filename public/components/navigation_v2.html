@@ -2,14 +2,18 @@
     .navigation-v2 .navbar ul.navbar-nav li a {
         color:{{component.txtcolor || 'white'}};
     }
+    .navigation-v2 .navbar-default .navbar-nav > li > a:hover, .navigation-v2 .navbar-default .navbar-nav > li > a:focus{
+        background-color: {{component.nav.hoverbg || 'transparent'}};
+        color: {{component.nav.hover}};
+    }
     .navigation-v2 .navbar-header {
         background: {{component.bg.color}};
     }
     .navbar-collapse {
-        background: {{component.nav.bg}}!important;
+        background: {{component.nav.bg || 'transparent'}}!important;
     }
     .navigation-v2 .navbar ul.navbar-nav li:hover {
-        border-bottom: 4px solid {{component.nav.hover}};
+        border-bottom: 4px solid {{component.nav.hover}};zz
     }
     .navigation-v2 .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor || '#4bb0cb'}};
@@ -29,8 +33,8 @@
                 </button>
                 <a class="navbar-brand" href="/" data-name="{{layout.account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
                     <div class="nav-logo">
-                        <div class="editable" data-class="logo" data-index="{{$index}}" ng-if="component.logo" ng-bind-html="component.logo | unsafe"></div>
-                        <div class="editable" data-class="logo" data-index="{{$index}}" ng-if="!component.logo">
+                        <div class="editable navigation-logo" data-class="logo" data-index="{{$index}}" ng-if="component.logo" ng-bind-html="component.logo | unsafe"></div>
+                        <div class="editable navigation-logo" data-class="logo" data-index="{{$index}}" ng-if="!component.logo">
                             <img data-ng-show="layout.account.business.logo || blog.account.business.logo && !component.logo" ng-src="{{layout.account.business.logo || blog.account.business.logo}}">
                         </div>
                     </div>
@@ -39,7 +43,7 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists || blog.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                         <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
                         <a data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>

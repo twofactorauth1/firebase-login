@@ -24,18 +24,29 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
+
+        app.get(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.getSocialAccount.bind(this));
+        app.get(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.getSocialAccount.bind(this));
+        app.post(this.url('socialaccount'), this.isAuthAndSubscribedApi.bind(this), this.addSocialAccount.bind(this));
+        app.post(this.url(':id/socialaccount'), this.isAuthAndSubscribedApi.bind(this), this.addSocialAccount.bind(this));
         app.delete(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
         app.delete(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
-
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
 
 
         app.get(this.url('facebook/:socialAccountId/posts'), this.isAuthApi.bind(this), this.getFacebookPosts.bind(this));
+        app.get(this.url('facebook/:socialAccountId/postComments/:postId'), this.isAuthApi.bind(this), this.getPostComments.bind(this));
         app.get(this.url('facebook/:socialAccountId/pages'), this.isAuthApi.bind(this), this.getFacebookPages.bind(this));
         app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
         app.get(this.url('facebook/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getFacebookProfile.bind(this));
         app.post(this.url('facebook/:socialAccountId/post'), this.isAuthApi.bind(this), this.createFacebookPost.bind(this));
+        app.delete(this.url('facebook/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteFacebookPost.bind(this));
+        app.post(this.url('facebook/:socialAccountId/post/:postId/comment'), this.isAuthApi.bind(this), this.addPostComment.bind(this));
+        app.post(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.addPostLike.bind(this));
+        app.delete(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.deletePostLike.bind(this));
+
+
 
         /*
          * twitter feed
@@ -47,6 +58,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFollowers.bind(this));
         app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterProfile.bind(this));
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
+        app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
+
+        app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
+        app.get(this.url('google/:socialAccountId/groups'), this.isAuthApi.bind(this), this.getGoogleGroups.bind(this));
+        app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
 
     },
 
@@ -63,15 +79,9 @@ _.extend(api.prototype, baseApi.prototype, {
             id = req.params.id;
         }
         var accountId = parseInt(self.accountId(req));
-        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(res);
-            } else {
-                socialConfigManager.getSocialConfig(accountId, id, function(err, config){
-                    self.log.debug('<< getSocialConfig');
-                    self.sendResultOrError(resp, err, config, "Error retrieving social config");
-                });
-            }
+        socialConfigManager.getSocialConfig(accountId, id, function(err, config){
+            self.log.debug('<< getSocialConfig');
+            self.sendResultOrError(resp, err, config, "Error retrieving social config");
         });
 
     },
@@ -126,6 +136,59 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    addSocialAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addSocialAccount');
+        var id = null;
+        if(req.params.id) {
+            id = req.params.id;
+        }
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var socialAccount = req.body;
+                self.log.debug('socialAccount:', socialAccount);
+                socialConfigManager.addSocialAccount(accountId, socialAccount.type, socialAccount.socialId, socialAccount.accessToken,
+                    socialAccount.refreshToken, socialAccount.expires, socialAccount.username, socialAccount.socialUrl,
+                    socialAccount.scope, socialAccount.accountType, function(err, config){
+                        self.log.debug('<< addSocialAccount');
+                        self.sendResultOrError(resp, err, config, "Error adding social account");
+                    });
+            }
+        });
+    },
+
+    getSocialAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getSocialAccount');
+        var id = null;
+        if(req.params.id) {
+            id = req.params.id;
+        }
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getSocialConfig(accountId, id, function(err, config){
+                    if(err) {
+                        self.log.error('Error getting socialConfig: ' + err);
+                        return self.wrapError(resp, 500, 'Error getting socialConfig', err);
+                    }
+                    var account = _.find(config.get('socialAccounts'), function(_account){
+                        if(_account.id === req.params.socialId) {
+                            return _account;
+                        }
+                    });
+                    self.log.debug('<< getSocialAccount');
+                    self.sendResultOrError(resp, err, account, "Error retrieving social account");
+                });
+            }
+        });
+    },
+
     removeSocialAccount: function(req, resp) {
         var self = this;
         self.log.debug('>> removeSocialAccount');
@@ -141,7 +204,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 socialConfigManager.removeSocialAccount(accountId, id, socialId, function(err, config){
                     self.log.debug('<< removeSocialAccount');
-                    self.sendResultOrError(resp, err, config, "Error removing social account");
+                    if(err) {
+                        return self.wrapError(resp, 500, 'Server Error', err);
+                    } else {
+                        return self.send200(resp);
+                    }
+                    //self.sendResultOrError(resp, err, config, "Error removing social account");
                 });
             }
         });
@@ -150,13 +218,22 @@ _.extend(api.prototype, baseApi.prototype, {
     fetchTrackedObject: function(req, resp) {
         var self = this;
         self.log.debug('>> fetchTrackedObject');
+        var since = req.query.since;
+        var until = req.query.until;
+        var limit = req.query.limit;
+        if(limit) {
+            limit = parseInt(limit);
+        }
+
+        self.log.debug('since: ' + since + ', until: ' + until + ', limit: ' + limit);
+
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
                 var objIndex = parseInt(req.params.index);
                 var accountId = parseInt(self.accountId(req));
-                socialConfigManager.fetchTrackedObject(accountId, objIndex, function(err, feed){
+                socialConfigManager.fetchTrackedObject(accountId, objIndex, since, until, limit, function(err, feed){
                     self.log.debug('<< fetchTrackedObject');
                     self.sendResultOrError(resp, err, feed, "Error fetching tracked objects");
                 });
@@ -204,6 +281,26 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    getPostComments: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPostComments');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookPostComments(accountId, socialAccountId, postId, function(err, comments){
+                    self.log.debug('<< getPostComments');
+                    self.sendResultOrError(resp, err, comments, "Error fetching comments");
+                });
+            }
+        });
+    },
+
     getFacebookProfile: function(req, resp) {
         var self = this;
         self.log.debug('>> getFacebookProfile');
@@ -246,6 +343,87 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    deleteFacebookPost: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteFacebookPost');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.deleteFacebookPost(accountId, socialAccountId, postId, function(err, value){
+                    self.log.debug('<< deleteFacebookPost');
+                    self.sendResultOrError(resp, err, value, "Error deleting post");
+                });
+            }
+        });
+    },
+
+    addPostComment: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addPostComment');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+        var comment = req.body.comment;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.addFacebookComment(accountId, socialAccountId, postId, comment, function(err, value){
+                    self.log.debug('<< addPostComment');
+                    self.sendResultOrError(resp, err, value, "Error adding comment");
+                });
+            }
+        });
+    },
+
+    addPostLike: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addPostLike');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.addFacebookLike(accountId, socialAccountId, postId, function(err, value){
+                    self.log.debug('<< addPostLike');
+                    self.sendResultOrError(resp, err, value, "Error adding like");
+                });
+            }
+        });
+    },
+
+    deletePostLike: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deletePostLike');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.deleteFacebookLike(accountId, socialAccountId, postId, function(err, value){
+                    self.log.debug('<< deletePostLike');
+                    self.sendResultOrError(resp, err, value, "Error deleting like");
+                });
+            }
+        });
     },
 
     getFacebookPosts: function(req, resp) {
@@ -343,8 +521,84 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
-    }
+    },
 
+    deleteTwitterPost: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteTwitterPost');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var postId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.deleteTwitterPost(accountId, socialAccountId, postId, function(err, savedPost){
+                    self.log.debug('<< deleteTwitterPost');
+                    self.sendResultOrError(resp, err, savedPost, "Error deleting twitter post");
+                });
+            }
+        });
+    },
+
+    getGoogleContacts: function(req, res) {
+      var self = this;
+      self.log.debug('>> getGoogleContacts');
+
+      var accountId = parseInt(self.accountId(req));
+      var socialAccountId = req.params.socialAccountId;
+
+      self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+          if (isAllowed !== true) {
+              return self.send403(res);
+          } else {
+              socialConfigManager.getGoogleContacts(accountId, socialAccountId, req.user, function(err, contacts){
+                  self.log.debug('<< getGoogleContacts');
+                  self.sendResultOrError(res, err, contacts, "Error importing google contacts");
+              });
+          }
+      });
+    },
+
+    getGoogleGroups: function(req, res) {
+        var self = this;
+        self.log.debug('>> getGoogleGroups');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getGoogleContactGroups(accountId, socialAccountId, function(err, contacts){
+                    self.log.debug('<< getGoogleGroups');
+                    self.sendResultOrError(res, err, contacts, "Error getting google groups");
+                });
+            }
+        });
+    },
+
+    getLinkedinContacts: function(req, res) {
+      var self = this;
+      self.log.debug('>> getLinkedinContacts');
+
+      var accountId = parseInt(self.accountId(req));
+      var socialAccountId = req.params.socialAccountId;
+
+      self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+          if (isAllowed !== true) {
+              return self.send403(res);
+          } else {
+              socialConfigManager.getLinkedinContacts(accountId, socialAccountId, req.user, function(err, contacts){
+                  self.log.debug('<< getLinkedinContacts');
+                  self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
+              });
+          }
+      });
+    }
 
 });
 

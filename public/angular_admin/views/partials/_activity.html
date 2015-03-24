@@ -211,7 +211,7 @@
                                     viewed {{activity.attributes.page}}
                                     for {{activity.attributes.timespent}}.</p>
                                             <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
-                                                {{activity.customer.details[0].emails[0]}}
+                                                {{activity.customer.details[0].emails[0].email}}
                                                 viewed {{activity.attributes.page}}
                                                 for {{activity.attributes.timespent}}.</p>
                                             <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
@@ -428,7 +428,7 @@
                                                 <span class="label label-default">{{activity.activityType}}</span>
                                             </p>
                                             <p>
-                                                {{activity.customer.first+' '+activity.customer.last || activity.customer.details[0].emails[0]}}
+                                                {{activity.customer.first ? activity.customer.first +' '+activity.customer.last :  activity.customer.details[0].emails[0].email}}
                                                 submitted a form with the message:
                                                 "{{activity.extraFields.message}}".
                                             </p>

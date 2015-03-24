@@ -1,4 +1,15 @@
 .indi-assistant {
+    .getting-started-section {
+        .panel-heading {
+            background-color: #fcb040;
+            .fa {
+                color:#dd6617;
+            }
+            .content h4 {
+                color: #dd6617;
+            }
+        }
+    }
     .template-btns {
         padding: 0!important;
         margin-bottom: 0;
@@ -56,15 +67,8 @@
         .done {
             display: none;
         }
-        li {
-            &:hover {
-                .task-desc {
-                    display: block!important;
-                }
-            }
-        }
         .task-desc {
-            display: none;
+            text-indent: 46px;
         }
         .complete {
             .fa-check-circle-o {
@@ -72,11 +76,11 @@
             }
             h3 {
                 text-decoration: line-through;
-                color: #27ae60;
+                color: #666666;
             }
             .done {
                 line-height: 40px;
-                color: #27ae60;
+                color: #666666;
                 font-size: 20px;
                 font-weight: bold;
                 display: block;

@@ -16,6 +16,8 @@ var Page = require('../../cms/model/page');
 
 
 var cmsManager = require('../../cms/cms_manager');
+var preRenderConfig = require('../../configs/prerender.config');
+var request = require('request');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -47,6 +49,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.get(this.url('page/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
         app.get(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersionsById.bind(this));
+        app.delete(this.url('page/:id/versions/:version'), this.isAuthAndSubscribedApi.bind(this), this.deletePageVersionById.bind(this));
         app.post(this.url('page/:id/revert'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
         app.post(this.url('page/:id/revert/:version'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));
         app.put(this.url('page'), this.isAuthApi.bind(this), this.saveOrUpdatePage.bind(this));
@@ -69,19 +72,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
 
 
-
-        //THEME Updated URLs
-
-        app.get(this.url('theme'), this.isAuthApi.bind(this), this.listThemes.bind(this));
-        app.get(this.url('theme/:id'), this.isAuthApi.bind(this), this.getThemeById.bind(this));
-        app.get(this.url('theme/name/:name'), this.isAuthApi.bind(this), this.getThemeByName.bind(this));
-        app.post(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.createTheme.bind(this));
-        app.post(this.url('theme/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createThemeFromWebsite.bind(this));
-        app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTheme.bind(this));
-        app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTheme.bind(this));
-        app.put(this.url('theme/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTheme.bind(this));
-        app.post(this.url('theme/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTheme.bind(this));
-        app.post(this.url('theme/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTheme.bind(this));
+        // TEMPLATES
+        app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
+        // app.get(this.url('template/:id'), this.isAuthApi.bind(this), this.getTemplateById.bind(this));
+        // app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
+        // app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
+        // app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
+        // app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
+        // app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
+        // app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
+        app.post(this.url('template/:id/website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
+        // app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
 
 
         // COMPONENTS
@@ -384,6 +385,36 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    deletePageVersionById: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deletePageVersionById');
+        var pageId = req.params.id;
+        var version = parseInt(req.params.version);
+        var accountId = parseInt(self.accountId(req));
+
+        if(!pageId || !version) {
+            self.log.error('pageId or version not specified');
+            return self.wrapError(resp, 400, 'Bad Request', 'Both pageId and version are required');
+        }
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.deletePageVersion(pageId, version, function(err, result){
+                    self.log.debug('<< deletePageVersionById');
+                    if(!err) {
+                        result = {success:true};
+                    }
+                    self.sendResultOrError(resp, err, result, "Error Deleting Page Versions");
+                    self = null;
+                    return;
+                });
+            }
+        });
+
+    },
+
     /**
      * This method requires security.  It expects up to two url params: :id, and :version
      * @param req
@@ -406,6 +437,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.revertPage(pageId, version, function(err, page){
                     self.log.debug('<< revertPage');
                     self.sendResultOrError(resp, err, page, "Error reverting page version");
+
                     self = null;
                     return;
                 });
@@ -438,6 +470,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         if(err) {self.log.warn('Error updating screenshot for pageId ' + updatedPage.id() + ': ' + err);}
                         self = null;
                     });
+                    var pageUrl = self._buildPageUrl(req, page.get('handle'));
+                    self._updatePageCache(pageUrl);
                 });
             }
         });
@@ -480,6 +514,8 @@ _.extend(api.prototype, baseApi.prototype, {
                             if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
                             self = null;
                         });
+                        var pageUrl = self._buildPageUrl(req, page.get('handle'));
+                        self._updatePageCache(pageUrl);
                     });
                 } else {
                     self.log.error('Cannot create null page.');
@@ -505,6 +541,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 var pageId = req.params.id;
                 var _page = req.body;
                 var pageObj = new Page(_page);
+                console.dir(pageObj);
+                pageObj.attributes.modified.date = new Date();
                 pageObj.set('screenshot', null);
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
@@ -513,6 +551,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
                         self = null;
                     });
+                    var pageUrl = self._buildPageUrl(req, value.get('handle'));
+                    self._updatePageCache(pageUrl);
                 });
             }
         });
@@ -564,227 +604,241 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getAllPages');
         var websiteId = req.params.websiteId;
         var accountId = parseInt(self.accountId(req));
-
-        cmsManager.getPagesByWebsiteId(websiteId, accountId, function(err, map){
-            self.log.debug('<< getAllPages');
-            self.sendResultOrError(res, err, map, 'Error getting all pages for account');
-            self = null;
-        });
+        if(req.query['limit']) {
+            var skip = parseInt(req.query['skip'] || 0);
+            var limit = parseInt(req.query['limit'] || 0);
+            self.log.debug('>> getAllPages with Limit');
+            cmsManager.getPagesByWebsiteIdWithLimit(websiteId, accountId, skip, limit, function(err, map){
+                self.log.debug('<< getAllPages');
+                self.sendResultOrError(res, err, map, 'Error getting all pages for account');
+                self = null;
+            });
+        } else {
+            self.log.debug('>> getAllPages without Limit');
+            cmsManager.getPagesByWebsiteId(websiteId, accountId, function(err, map){
+                self.log.debug('<< getAllPages');
+                self.sendResultOrError(res, err, map, 'Error getting all pages for account');
+                self = null;
+            });
+        }
+        
 
     },
     //endregion
 
-
-    //region THEME
+    //region TEMPLATES
 
     /*
-     app.get(this.url('theme'), this.isAuthApi, this.listThemes.bind(this));
-     app.get(this.url('theme/:id'), this.isAuthApi, this.getThemeById.bind(this));
-     app.get(this.url('theme/name/:name'), this.isAuthApi, this.getThemeByName.bind(this));
-     app.post(this.url('theme'), this.isAuthApi, this.createTheme.bind(this));
-     app.post(this.url('theme/website/:websiteId'), this.isAuthApi, this.createThemeFromWebsite.bind(this));
-     app.post(this.url('theme/:id'), this.isAuthApi, this.updateTheme.bind(this));
-     app.delete(this.url('theme/:id'), this.isAuthApi, this.deleteTheme.bind(this));
-     app.post(this.url('website/theme/:id'), this.isAuthApi, this.createWebsiteFromTheme.bind(this));
-     app.post(this.url('website/:websiteId/theme/:themeId'), this.isAuthApi, this.setTheme.bind(this));
+     app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
+    app.get(this.url('template/:id'), this.isAuthApi.bind(this), this.getTemplateById.bind(this));
+    app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
+    app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
+    app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
+    app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
+    app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
+    app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
+    app.post(this.url('template/:id/website/:websiteId/page/:handle'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
+    app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
      */
 
-    listThemes: function(req, res) {
+    listTemplates: function(req, res) {
         var self = this;
-        self.log.debug('>> listThemes');
         var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> listTemplates accountId ', accountId);
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                cmsManager.getAllThemes(accountId, function(err, value){
-                    self.log.debug('<< listThemes');
-                    self.sendResultOrError(res, err, value, 'Error retrieving all themes.');
+                cmsManager.getAllTemplates(accountId, function(err, value){
+                    self.log.debug('<< listTemplates');
+                    self.sendResultOrError(res, err, value, 'Error retrieving all templates.');
                 });
             }
         });
 
     },
 
-    getThemeById: function(req, res) {
-        var self = this;
-        self.log.debug('>> getThemeById');
+    // getThemeById: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> getThemeById');
 
-        var themeId = req.params.id;
-        var accountId = parseInt(self.accountId(req));
+    //     var themeId = req.params.id;
+    //     var accountId = parseInt(self.accountId(req));
 
-        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.getThemeById(themeId, function(err, value){
-                    self.log.debug('<< getThemeById');
-                    self.sendResultOrError(res, err, value, 'Error retrieving theme by id.');
-                });
-            }
-        });
-
-
-    },
-
-    getThemeByName: function(req, res) {
-        var self = this;
-        self.log.debug('>> getThemeByName');
-        var themeName = req.params.name;
-        var accountId = parseInt(self.accountId(req));
-        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.getThemeByName(themeName, function(err, value){
-                    self.log.debug('<< getThemeByName');
-                    self.sendResultOrError(res, err, value, 'Error retrieving theme by name.');
-                });
-            }
-        });
-
-    },
-
-    createTheme: function(req, res) {
-        var self = this;
-
-        self.log.debug('>> createTheme');
-        var accountId = parseInt(self.accountId(req));
-        var themeObj = new $$.m.cms.Theme(req.body);
-        themeObj.set('accountId', accountId);
-        themeObj.set('created.by', self.userId(req));
-
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                cmsManager.createTheme(themeObj, function(err, value){
-                    self.log.debug('<< createTheme');
-                    self.sendResultOrError(res, err, value, 'Error creating theme.');
-                });
-            }
-        });
+    //     self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             cmsManager.getThemeById(themeId, function(err, value){
+    //                 self.log.debug('<< getThemeById');
+    //                 self.sendResultOrError(res, err, value, 'Error retrieving theme by id.');
+    //             });
+    //         }
+    //     });
 
 
-    },
+    // },
+
+    // getThemeByName: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> getThemeByName');
+    //     var themeName = req.params.name;
+    //     var accountId = parseInt(self.accountId(req));
+    //     self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             cmsManager.getThemeByName(themeName, function(err, value){
+    //                 self.log.debug('<< getThemeByName');
+    //                 self.sendResultOrError(res, err, value, 'Error retrieving theme by name.');
+    //             });
+    //         }
+    //     });
+
+    // },
+
+    // createTemplate: function(req, res) {
+    //     var self = this;
+
+    //     self.log.debug('>> createTemplate');
+    //     var accountId = parseInt(self.accountId(req));
+    //     var templateObj = new $$.m.cms.Template(req.body);
+    //     templateObj.set('accountId', accountId);
+    //     templateObj.set('created.by', self.userId(req));
+
+    //     self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             cmsManager.createTemplate(templateObj, function(err, value){
+    //                 self.log.debug('<< createTemplate');
+    //                 self.sendResultOrError(res, err, value, 'Error creating template.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
 
     /**
      * This function creates a new theme from an existing website object.
      * @param {websiteId} websiteID in URL
      * @param {theme} theme object in body of POST.  The name field MUST be populated.
      */
-    createThemeFromWebsite: function(req, res) {
+    // createThemeFromWebsite: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> createThemeFromWebsite');
+
+    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var websiteId = req.params.websiteId;
+    //             var accountId = parseInt(self.accountId(req));
+    //             var themeObj = new $$.m.cms.Theme(req.body);
+    //             if(themeObj.get('name') === '') {
+    //                 self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
+    //             }
+    //             themeObj.set('accountId', accountId);
+    //             themeObj.set('created.by', self.userId(req));
+
+    //             cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
+    //                 self.log.debug('<< createThemeFromWebsite');
+    //                 self.sendResultOrError(res, err, value, 'Error creating theme from website.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
+
+
+    // updateTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> updateTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var accountId = parseInt(self.accountId(req));
+    //             var themeObj = new $$.m.cms.Theme(req.body);
+    //             themeObj.set('modified.by', self.userId(req));
+    //             themeObj.set('modified.date', new Date());
+    //             themeObj.set('_id', themeId);
+
+    //             cmsManager.updateTheme(themeObj, function(err, value){
+    //                 self.log.debug('<< updateTheme');
+    //                 self.sendResultOrError(res, err, value, 'Error updating theme.');
+
+    //             });
+    //         }
+    //     });
+
+
+
+    // },
+
+
+    // deleteTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> deleteTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var accountId = parseInt(self.accountId(req));
+
+    //             cmsManager.deleteTheme(themeId, function(err, value){
+    //                 self.log.debug('<< deleteTheme');
+    //                 self.sendResultOrError(res, err, value, 'Error deleting theme.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
+
+    // createWebsiteFromTheme: function(req, res) {
+    //     var self = this;
+
+    //     self.log.debug('>> createWebsiteFromTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.id;
+    //             var accountId = parseInt(self.accountId(req));
+
+    //             cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), null, null, function(err, websiteAndPage){
+    //                 self.log.debug('<< createWebsiteFromTheme');
+    //                 self.sendResultOrError(res, err, websiteAndPage.website, 'Error creating website from theme.');
+    //             });
+    //         }
+    //     });
+
+
+    // },
+
+    createPageFromTemplate: function(req, res) {
         var self = this;
-        self.log.debug('>> createThemeFromWebsite');
-
-        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var websiteId = req.params.websiteId;
-                var accountId = parseInt(self.accountId(req));
-                var themeObj = new $$.m.cms.Theme(req.body);
-                if(themeObj.get('name') === '') {
-                    self.wrapError(res, 400, 'Invalid Parameter', 'Invalid parameter provided for Theme Name');
-                }
-                themeObj.set('accountId', accountId);
-                themeObj.set('created.by', self.userId(req));
-
-                cmsManager.createThemeFromWebsite(themeObj, websiteId, null, function(err, value){
-                    self.log.debug('<< createThemeFromWebsite');
-                    self.sendResultOrError(res, err, value, 'Error creating theme from website.');
-                });
-            }
-        });
-
-
-    },
-
-
-    updateTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> updateTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
-                var accountId = parseInt(self.accountId(req));
-                var themeObj = new $$.m.cms.Theme(req.body);
-                themeObj.set('modified.by', self.userId(req));
-                themeObj.set('modified.date', new Date());
-                themeObj.set('_id', themeId);
-
-                cmsManager.updateTheme(themeObj, function(err, value){
-                    self.log.debug('<< updateTheme');
-                    self.sendResultOrError(res, err, value, 'Error updating theme.');
-
-                });
-            }
-        });
-
-
-
-    },
-
-
-    deleteTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> deleteTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
-                var accountId = parseInt(self.accountId(req));
-
-                cmsManager.deleteTheme(themeId, function(err, value){
-                    self.log.debug('<< deleteTheme');
-                    self.sendResultOrError(res, err, value, 'Error deleting theme.');
-                });
-            }
-        });
-
-
-    },
-
-    createWebsiteFromTheme: function(req, res) {
-        var self = this;
-
-        self.log.debug('>> createWebsiteFromTheme');
+        self.log.debug('>> createPageFromTemplate');
         self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                var themeId = req.params.id;
-                var accountId = parseInt(self.accountId(req));
-
-                cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), null, null, function(err, websiteAndPage){
-                    self.log.debug('<< createWebsiteFromTheme');
-                    self.sendResultOrError(res, err, websiteAndPage.website, 'Error creating website from theme.');
-                });
-            }
-        });
-
-
-    },
-
-    createPageFromTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> createPageFromTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.id;
+                var pageData = req.body;
+                var templateId = req.params.id;
                 var websiteId = req.params.websiteId;
                 var accountId = parseInt(self.accountId(req));
 
-                var handle = req.params.handle;
-                cmsManager.createWebsiteAndPageFromTheme(accountId, themeId, self.userId(req), websiteId, handle, function(err, websiteAndPage){
-                    self.log.debug('<< createWebsiteFromTheme');
-                    self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating website from theme.');
+                var title = pageData.title;
+                var handle = pageData.handle;
+                cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, function(err, websiteAndPage){
+                    self.log.debug('<< createPageFromTemplate');
+                    self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating page from template.');
                     cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
                         if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
                         self = null;
@@ -795,27 +849,27 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    setTheme: function(req, res) {
-        var self = this;
-        self.log.debug('>> setTheme');
-        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(req);
-            } else {
-                var themeId = req.params.themeId;
-                var websiteId = req.params.websiteId;
-                var accountId = parseInt(self.accountId(req));
+    // setTheme: function(req, res) {
+    //     var self = this;
+    //     self.log.debug('>> setTheme');
+    //     self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
+    //         if (isAllowed !== true) {
+    //             return self.send403(req);
+    //         } else {
+    //             var themeId = req.params.themeId;
+    //             var websiteId = req.params.websiteId;
+    //             var accountId = parseInt(self.accountId(req));
 
-                //TODO: validate this method.
-                cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
-                    self.log.debug('<< setTheme');
-                    self.sendResultOrError(res, err, value, 'Error setting theme on account.');
-                });
-            }
-        });
+    //             //TODO: validate this method.
+    //             cmsManager.setThemeForAccount(accountId, themeId, function(err, value){
+    //                 self.log.debug('<< setTheme');
+    //                 self.sendResultOrError(res, err, value, 'Error setting theme on account.');
+    //             });
+    //         }
+    //     });
 
 
-    },
+    // },
 
     //endregion
 
@@ -1106,6 +1160,8 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 blogPost.set('accountId', accountId);
                 blogPost.set('pageId', pageId);
+                blogPost.attributes.modified.date = new Date();
+                blogPost.attributes.created.date = new Date();
 
                 cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
@@ -1172,12 +1228,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('accountId', accountId);
                 blogPost.set('_id', postId);
                 blogPost.set('pageId', pageId);
-
+                blogPost.attributes.modified.date = new Date();
                 console.dir(req.body);
 
                 cmsManager.updateBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< updateBlogPost');
                     self.sendResultOrError(res, err, value, "Error updating Blog Post");
+                    var pageUrl = self._buildPageUrl(req, 'blog/' + value.get('post_url'));
+                    self._updatePageCache(pageUrl);
                     self = null;
                 });
             }
@@ -1219,12 +1277,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var limit = parseInt(req.query['limit'] || 0);//suitable default?
         var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
-
-        cmsManager.listBlogPosts(accountId, limit, function (err, value) {
-            self.log.debug('<< listBlogPosts '+value);
+        if(req.query['limit']) {
+                cmsManager.listBlogPostsWithLimit(accountId, limit, skip, function (err, value) {
+                    self.log.debug('<< listBlogPostsWithLimit '+ value);
+                    self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+                    self = null;
+                });
+        } else{
+            cmsManager.listBlogPosts(accountId, limit, function (err, value) {
+            self.log.debug('<< listBlogPosts '+ value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
         });
+        }
+
     },
 
     /**
@@ -1501,6 +1567,41 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getBlogTitles');
             self.sendResultOrError(resp, err, value, 'Error getting blog titles');
             self = null;
+        });
+    },
+
+    _buildPageUrl: function(req, handle) {
+        var host = req.host;
+        //replace main with www on for main site
+        if(host.indexOf('main.') != -1) {
+            host = host.replace('main.', 'www.');
+        }
+
+        return host + '/page/' + handle;
+    },
+
+    _updatePageCache: function(url) {
+        var self = this;
+        self.log.debug('>> _updatePageCache(' + url + ')');
+        var params = {
+            prerenderToken: preRenderConfig.PRERENDER_TOKEN,
+            url:url
+        };
+
+        var options = {
+            json: true,
+            body: params
+        };
+
+        request.post(preRenderConfig.RECACHE_URL, options, function(err, resp, body){
+
+            if(err) {
+                self.log.error('Error sending recache request: ', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< _updatePageCache', body);
+                return;
+            }
         });
     }
 

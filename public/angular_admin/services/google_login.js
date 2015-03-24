@@ -1,5 +1,5 @@
 define(['app'], function(app) {
-    app.register.service('googleLogin', ['$http', '$rootScope', '$q','ENV' function($http, $rootScope, $q, ENV) {
+    app.register.service('googleLogin', ['$http', '$rootScope', '$q','ENV', function($http, $rootScope, $q, ENV) {
         var clientId = ENV.googleClientId,
             apiKey = ENV.googleServerKey,
             token = "",

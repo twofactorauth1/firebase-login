@@ -75,8 +75,8 @@
                         </li>
                     </ul>
                     <div class="clearfix"></div>
-                    <div class="media" id="assets" style="max-height:{{bodyHeight}};">
-                        <div ng-repeat="asset in assets" class="col-xs-12 col-sm-4" ng-show="assets.length">
+                    <div class="media" id="assets" ng-style="{'max-height':bodyHeight}">
+                        <div ng-repeat="asset in assets | orderBy:'-created.date'" class="col-xs-12 col-sm-4" ng-show="assets.length">
                             <div class="thmb checked">
                                 <div class="ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
@@ -97,14 +97,14 @@
                                         <li class="hidden">
                                             <a href="#"><i class="fa fa-envelope-o"></i> Email</a>
                                         </li>
-                                        <li>
+                                        <li class="hidden">
                                             <a href="#" ng-click="m.editImage(asset)"><i class="fa fa-pencil"></i> Edit</a>
                                         </li>
                                         <li>
                                             <a href="{{asset.url}}" download><i class="fa fa-download"></i> Download</a>
                                         </li>
                                         <li>
-                                            <a href="" ng-click="m.deleteAsset(asset._id)"><i class="fa fa-trash-o"></i> Delete</a>
+                                            <a href="" ng-click="m.deleteAsset(asset)"><i class="fa fa-trash-o"></i> Delete</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -138,7 +138,7 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div class="modal-footer" ng-class="{upload: uploader.queue.length > 0}">
+            <div class="modal-footer media-footer" ng-class="{upload: uploader.queue.length > 0}">
                 <div class="row" ng-if="editingImage">
                     <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
                     <button class="btn btn-primary"><i class="fa fa-history"></i> Restore</button>

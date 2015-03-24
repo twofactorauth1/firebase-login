@@ -72,7 +72,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
-    var maxAttempts = 10;
+    var maxAttempts = 1;
     var attemptNumber = 0;
 
     this.initializeUser = function(user, fn) {
@@ -184,6 +184,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         })
         .error(function (err) {
             console.log('END:userService with ERROR');
+            fn(err);
         });
     };
 

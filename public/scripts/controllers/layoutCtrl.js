@@ -1,10 +1,13 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService',
-  function($scope, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData',
+  function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
+      if(route.indexOf('/') ===0) {
+          route = route.replace('/', '');
+      }
     window.oldScope;
     $scope.$route = $route;
     $scope.$location = $location;
@@ -14,6 +17,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.isPageDirty = false;
     $scope.currentcomponents = [];
     $scope.thumbnailSlider = [];
+    $scope.contactDetails = [];
 
     //displays the year dynamically for the footer
     var d = new Date();
@@ -102,35 +106,51 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       } else {
         // setNavigation(data);
         if ($scope.$location.$$path === '/' || $scope.$location.$$path === '') {
-          route = 'index';
-          route = route.replace('/', '');
-          if (!angular.isDefined(data[route])) {
-            route = 'coming-soon';
-            var pageData = {
-              title: 'Coming Soon',
-              handle: 'coming-soon',
-              mainmenu: false
-            };
-            var websiteId = that.account.website.websiteId;
-            pageService.createPage(websiteId, pageData, function(newpage) {
-              var cmpVersion = 1;
-              var pageId = newpage._id;
-              pageService.addNewComponent(pageId, pageData.title, pageData.handle, cmpVersion, function(data) {
-                window.location.reload();
-              });
-              that.pages = newpage;
-            });
-          }
-          if (angular.isDefined(data[route]))
-            that.pages = data[route];
+            route = 'index';
+            /*
+             * if you just set a variable... why would you need to replace a character that ISN'T IN IT?
+             */
+            route = route.replace('/', '');// <-- why?
+            console.log('setting route to: ' + route + ' and $$path is ' + $scope.$location.$$path);
+            if (!angular.isDefined(data[route])) {
+                route = 'coming-soon';
+                console.log('set route to coming-soon');
+              /*
+               * This is pants-on-head stupid.  Why would you be able to create a page from the front-end?
+               * var pageData = {
+               title: 'Coming Soon',
+               handle: 'coming-soon',
+               mainmenu: false
+               };
+               var websiteId = that.account.website.websiteId;
+               pageService.createPage(websiteId, pageData, function(newpage) {
+               var cmpVersion = 1;
+               var pageId = newpage._id;
+               pageService.addNewComponent(pageId, pageData.title, pageData.handle, cmpVersion, function(data) {
+               window.location.reload();
+               });
+               that.pages = newpage;
+               });
+               */
+                that.pages = data[route];
+            }
+            if (angular.isDefined(data[route])) {
+                that.pages = data[route];
+            } else {
+                console.log('there is no route defined for ' + route);
+            }
+
         } else {
-          route = $scope.$location.$$path.replace('/page/', '');
-          route = route.replace('/', '');
-          that.pages = data[route];
+            route = $scope.$location.$$path.replace('/page/', '');
+            route = route.replace('/', '');
+            console.log('else block route is now ' + route);
+            that.pages = data[route];
         }
+
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function(data) {
             var tmpAccount = data;
+            //$scope.tmpAccount = tmpAccount;
             if (tmpAccount.tempUser) {
               if (tmpAccount.tempUser.email) {
                 $scope.newAccount.email = tmpAccount.tempUser.email;
@@ -179,7 +199,20 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             return '';
           }
         }
-
+        $(document).ready(function() {
+          setTimeout(function() {
+            $scope.$apply(function() {
+              console.log("Page loaded");
+              $scope.isLoaded = true;
+            })
+            var locId = $location.$$hash;
+            if (locId) {
+              var element = document.getElementById(locId);
+              if (element)
+                $document.scrollToElementAnimated(element);
+            }
+          }, 500);
+        })
         var iframe = window.parent.document.getElementById("iframe-website")
         $scope.isAdmin = iframe;
         iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
@@ -199,6 +232,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         /*PostService.getAllPosts(function(posts) {
             that.blogposts = posts;
         });*/
+        
+          
+        
       }
     });
 
@@ -214,13 +250,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
-
+        var total = data.total;
+        var limit = data.limit;
+        var start = data.start;
+        if (data.results)
+          data = data.results;
         if (that.teaserposts) {
           //donothing
         } else {
-          if (route === '/' || route === '') {
-            that.teaserposts = data;
-          }
+          that.teaserposts = data;
         }
 
         that.currentTag, that.currentAuthor, that.currentCat = '';
@@ -260,9 +298,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
           that.latestposts.slice(Math.max(data.length - 3, 1));
         }
 
-        if (route.indexOf('blog') > -1) {
+       // if (route.indexOf('blog') > -1) {
           that.blogposts = data;
-        }
+       // }
 
         //if tagname is present, filter the cached posts with the tagname
         if ($route.current.params.tagname != null) {
@@ -329,11 +367,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     });
 
     $scope.stringifyAddress = function(address) {
-      if (address){
+      if (address) {
         return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
-            return str !== "";
+          return str !== "";
         }).join(", ")
-        }
+      }
     };
 
     $scope.showEdit = function(type) {
@@ -348,13 +386,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.flvVideoUrl = function(iframeUrl, url) {
-        var parsedUrl = urlParser.parse(url);
-        var retUrl = "";
-        if(parsedUrl)
-          retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
-        else
-          retUrl = iframeUrl
-        return $sce.trustAsResourceUrl(retUrl);
+      var parsedUrl = urlParser.parse(url);
+      var retUrl = "";
+      if (parsedUrl)
+        retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
+      else
+        retUrl = iframeUrl
+      return $sce.trustAsResourceUrl(retUrl);
     };
 
     $scope.config = {
@@ -363,7 +401,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       autoHide: true,
       autoPlay: false,
       autoHideTime: 1500,
-      responsive: true,
+      responsive: false,
       stretch: 'fit',
       theme: {
         url: "../../js/libs/videogular-themes-default/videogular.css",
@@ -385,21 +423,29 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     //     // parent.document.getUpdatediFrameRoute($scope.currentLoc);
     // });
 
-   
+
 
     /********** PRODUCT RELATED **********/
     $scope.checkoutModalState = 1;
     $scope.newContact = {
       isAuthenticated: true,
-      details: [
-        {
-          phones: [{type: 'w', default: false, number: ''}],
-          addresses: [{}]
-        }
-      ]
+      details: [{
+        phones: [{
+          type: 'w',
+          default: false,
+          number: ''
+        }],
+        addresses: [{}]
+      }]
     };
 
     $scope.addDetailsToCart = function(product) {
+      // that.products[product.id].clicked = true;
+      var productMatch = _.find(that.products, function(item) {
+        return item._id === product._id
+      });
+      productMatch.clicked = true;
+      console.log('productMatch ', productMatch);
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
       }
@@ -415,8 +461,26 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.cartDetails.push(product);
       }
       $scope.calculateTotalChargesfn();
-
+      console.log('$scope.cartDetails ', $scope.cartDetails);
     };
+
+    $scope.removeFromCart = function(product) {
+      var filtered = _.filter($scope.cartDetails, function(item) {
+        return item._id !== product._id
+      });
+      var productMatch = _.find(that.products, function(item) {
+        return item._id === product._id
+      });
+      productMatch.clicked = false;
+      $scope.cartDetails = filtered;
+    };
+
+    $scope.getUrl = function(value) {
+      if (value && !/http[s]?/.test(value)) {
+        value = 'http://' + value;
+      }
+      return value;
+    }
 
     $scope.calculateTotalChargesfn = function() {
       var subTotal = 0;
@@ -431,7 +495,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     }
 
     $scope.makeCartPayment = function() {
-      var expiry = $('#expiry').val().split("/")
+
+      var expiry = $('#card_expiry').val().split("/")
       var exp_month = expiry[0].trim();
       var exp_year = "";
       if (expiry.length > 1)
@@ -444,9 +509,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         exp_year: exp_year
       };
 
+      if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+        //|| !cc_name
+        console.log('card invalid');
+        //hightlight card in red
+        $scope.checkCardNumber();
+        $scope.checkCardExpiry();
+        $scope.checkCardCvv();
+        return;
+      }
+
       if ($scope.newContact.first !== undefined) {
-        userService.postContact($scope.newContact, function(data, err) {
-        });
+        userService.postContact($scope.newContact, function(data, err) {});
       }
 
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
@@ -458,7 +532,9 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
       PaymentService.getStripeCardToken(cardInput, function(token) {
         PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {
-          $('#cart-checkout-modal').modal('hide');
+          // $('#cart-checkout-modal').modal('hide');
+          //thanks modal
+          //clear form
         });
       });
 
@@ -471,10 +547,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.curPage = 0;
     $scope.pageSize = 10;
     $scope.numberOfPages = function() {
-      if(that.blogposts)
+      if (that.blogposts)
         return Math.ceil(that.blogposts.length / $scope.pageSize);
       else
-         return 0;
+        return 0;
     };
 
     /********** END BLOG PAGE PAGINATION RELATED **********/
@@ -483,52 +559,72 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     /********** MAP RELATED **********/
     angular.extend($scope, {
+      mapLocation: {
+        lat: 51,
+        lng: 0,
+        zoom: 10
+      },
+      defaults: {
+        scrollWheelZoom: false
+      },
+      markers: {
+
+      }
+    });
+
+    $scope.updateContactUsMap = function(component) {
+        var matchingContact = _.find($scope.contactDetails, function(item) {
+          return item.contactId == component._id
+        })
+
+        if (!matchingContact) {
+              $scope.contactDetails.push({
+                contactId: component._id,
+                contactPhone: angular.copy(component.contact.phone),
+                geo_address_string : $scope.stringifyAddress(component.location)
+              });
+              matchingContact = _.find($scope.contactDetails, function(item) {
+                return item.contactId == component._id
+              })   
+        }else
+        {
+          matchingContact.contactPhone = angular.copy(component.contact.phone);
+          matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
+        }
+
+       // $scope.contactPhone = component.contact.phone;
+        //$scope.geo_address_string = $scope.stringifyAddress(component.location);
+        if (matchingContact.geo_address_string == "" && that.account.business.addresses.length) {
+          if (that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
+            matchingContact.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+        }
+        if (!component.contact.phone && that.account.business.phones.length)
+          matchingContact.contactPhone = that.account.business.phones[0].number;
+        if (matchingContact.geo_address_string) {
+          angular.extend($scope, {
             mapLocation: {
-                lat: 51,
-                lng: 0,
-                zoom: 10
-            },
-            defaults: {
-              scrollWheelZoom: false
+              lat: parseFloat(component.location.lat),
+              lng: parseFloat(component.location.lon),
+              zoom: 10
             },
             markers: {
-
+              mainMarker: {
+                lat: parseFloat(component.location.lat),
+                lng: parseFloat(component.location.lon),
+                focus: false,
+                message: matchingContact.geo_address_string,
+                draggable: false
+              }
             }
-      });
-
-      $scope.updateContactUsMap = function(component) {
-            $scope.contactPhone = component.contact.phone;
-            $scope.geo_address_string = $scope.stringifyAddress(component.location);
-            if ($scope.geo_address_string == "" && that.account.business.addresses.length){
-              if(that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
-                $scope.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
-            }
-            if(!component.contact.phone && that.account.business.phones.length)
-              $scope.contactPhone = that.account.business.phones[0].number;
-            if($scope.geo_address_string){
-              analyticsService.getGeoSearchAddress($scope.geo_address_string, function(data) {
-                    if (data.error === undefined) {
-                      angular.extend($scope, {
-                          mapLocation: {
-                              lat: parseFloat(data.lat),
-                              lng: parseFloat(data.lon),
-                              zoom: 10
-                          },
-                          markers: {
-                              mainMarker: {
-                                  lat: parseFloat(data.lat),
-                                  lng: parseFloat(data.lon),
-                                  focus: true,
-                                  message: $scope.geo_address_string,
-                                  draggable: false
-                              }
-                          }
-                    });
-                  }
-              });
-            }
+          });
+          leafletData.getMap('leafletmap').then(function(map) {
+             $timeout(function () {
+                map.invalidateSize();
+              }, 500);
+          });
+        }
       }
-     /********** END MAP RELATED **********/
+      /********** END MAP RELATED **********/
     $scope.sharePost = function(post, type) {
       var url = $location.$$absUrl;
       var postData = {};
@@ -592,180 +688,6 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         });
     }
 
-
-
-    $scope.social_links = [{
-      name: "adn",
-      icon: "adn"
-    }, {
-      name: "bitbucket",
-      icon: "bitbucket"
-    }, {
-      name: "dropbox",
-      icon: "dropbox"
-    }, {
-      name: "facebook",
-      icon: "facebook"
-    }, {
-      name: "flickr",
-      icon: "flickr"
-    }, {
-      name: "foursquare",
-      icon: "foursquare"
-    }, {
-      name: "github",
-      icon: "github"
-    }, {
-      name: "google-plus",
-      icon: "google-plus"
-    }, {
-      name: "microsoft",
-      icon: "windows"
-    }, {
-      name: "openid",
-      icon: "openid"
-    }, {
-      name: "pinterest",
-      icon: "pinterest"
-    }, {
-      name: "reddit",
-      icon: "reddit"
-    }, {
-      name: "soundcloud",
-      icon: "soundcloud"
-    }, {
-      name: "twitter",
-      icon: "twitter"
-    }, {
-      name: "vimeo",
-      icon: "vimeo-square"
-    }, {
-      name: "vk",
-      icon: "vk"
-    }, {
-      name: "yahoo",
-      icon: "yahoo"
-    }]
-
-    $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
-      if (!$scope.social)
-        $scope.social = {};
-      if(nested)
-        $scope.meetTeamIndex = index;
-      else
-        $scope.meetTeamIndex = null;
-      if (update) {
-        $scope.social.selectedLink = link.name;
-        $scope.social.name = link.name;
-        $scope.social.icon = link.icon;
-        $scope.social.url = link.url;
-      } else {
-        $scope.social = {};
-      }
-      $("#social-link-name .error").html("");
-      $("#social-link-name").removeClass('has-error');
-      $("#social-link-url .error").html("");
-      $("#social-link-url").removeClass('has-error');
-      $scope.networks = window.parent.getSocialNetworks(id, nested, index);
-    }
-    $scope.setSelectedLink = function(social_link) {
-      $scope.social.name = social_link.name;
-      $scope.social.icon = social_link.icon;
-    }
-    $scope.saveSocialLink = function(social, id, mode) {
-      var old_value = _.findWhere($scope.networks, {
-        name: $scope.social.selectedLink
-      });
-      var selectedName;
-      switch (mode) {
-        case "add":
-          if (social && social.name) {
-            if (!social.url || social.url == "") {
-              $("#social-link-url .error").html("Link url can not be blank.");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-
-            if (social.url) {
-          var urlRegex = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-          if (urlRegex.test(social.url) == false) {
-        $("#social-link-url .error").html("Link url incorrect format");
-        $("#social-link-url").addClass('has-error');
-        return;
-          }
-        }
-            selectedName = _.findWhere($scope.networks, {
-              name: social.name
-            });
-            if (selectedName) {
-              $("#social-link-name .error").html("Link icon already exists");
-              $("#social-link-name").addClass('has-error');
-              return;
-            }
-            var selectedUrl = _.findWhere($scope.networks, {
-              url: social.url
-            });
-            if (selectedUrl) {
-              $("#social-link-url .error").html("Link url already exists");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-          } else {
-            $("#social-link-url .error").html("Please enter link url.");
-            $("#social-link-url").addClass('has-error');
-            $("#social-link-name .error").html("Please select link icon.");
-            $("#social-link-name").addClass('has-error');
-            return;
-          }
-          $("#social-link-name .error").html("");
-          $("#social-link-name").removeClass('has-error');
-          $("#social-link-url .error").html("");
-          $("#social-link-url").removeClass('has-error');
-          break;
-        case "update":
-          if (social && social.name && social.url) {
-            var networks = angular.copy($scope.networks);
-
-            selectedName = _.findWhere(networks, {
-              name: old_value.name
-            });
-            selectedName.name = social.name;
-            selectedName.url = social.url;
-            selectedName.icon = social.icon;
-
-
-            var existingName = _.where(networks, {
-              name: social.name
-            });
-            var existingUrl = _.where(networks, {
-              url: social.url
-            });
-            if (existingName.length > 1) {
-              $("#social-link-name .error").html("Link icon already exists");
-              $("#social-link-name").addClass('has-error');
-              return;
-            } else if (existingUrl.length > 1) {
-              $("#social-link-url .error").html("Link url already exists");
-              $("#social-link-url").addClass('has-error');
-              return;
-            }
-          }
-          break;
-      }
-      if($scope.meetTeamIndex !== null)
-        window.parent.updateTeamNetworks(old_value, mode, social,$scope.meetTeamIndex);
-      else
-        window.parent.updateSocialNetworks(old_value, mode, social);
-      $scope.social = {};
-      $scope.meetTeamIndex = null;
-      if($("#meetteamSocialModal").length)
-        $("#meetteamSocialModal").modal("hide");
-      if($("#socialComponentModal").length)
-        $("#socialComponentModal").modal("hide");
-      if($("#topbarSocialComponentModal").length)
-        $("#topbarSocialComponentModal").modal("hide");
-      $(".modal-backdrop").remove();
-    };
     $scope.deleteTeamMember = function(componentId, index) {
       window.parent.deleteTeamMember(componentId, index);
     }
@@ -773,17 +695,15 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.addTeamMember = function(componentId, index) {
       // to do: the information should fetch from component model
       var newTeam = {
-        "name" : "<p>First Last</p>",
-        "position" : "<p>Position of Person</p>",
-        "profilepic" : "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
-        "bio" : "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-        "networks": [
-                        {
-                            "name" : "linkedin",
-                            "url" : "http://www.linkedin.com",
-                            "icon" : "linkedin"
-                        }
-                    ]
+        "name": "<p>First Last</p>",
+        "position": "<p>Position of Person</p>",
+        "profilepic": "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
+        "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
+        "networks": [{
+          "name": "linkedin",
+          "url": "http://www.linkedin.com",
+          "icon": "linkedin"
+        }]
       }
       window.parent.addTeamMember(componentId, newTeam, index);
     }
@@ -794,7 +714,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.addFeatureList = function(componentId, index) {
       console.log('adding Feature >>>');
-      window.parent.addNewFeatureList(componentId, index);
+      var newFeature = {
+        "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%23ffffff%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
+        "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
+      };
+      window.parent.addNewFeatureList(componentId, index, newFeature);
     }
 
     window.clickImageButton = function(btn) {
@@ -818,56 +742,77 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.addPricingTableFeature = function(componentId, index, parentIndex) {
       // to do: the information should fetch from component model
-      var newFeature =
-        {
-            title : "<h4>This is the feature title</h4>",
-            subtitle : "<b>This is the feature subtitle</b>",
-        }
+      var newFeature = {
+        title: "<h4>This is the feature title</h4>",
+        subtitle: "<b>This is the feature subtitle</b>",
+      }
       window.parent.addPricingTableFeature(componentId, newFeature, index, parentIndex);
     }
 
     $scope.addPricingTable = function(componentId, index) {
       // to do: the information should fetch from component model
       var newTable = {
-        title : "<h1>This is title</h1>",
-        subtitle : "<h3>This is the subtitle.</h3>",
-        text : 'This is text',
-        price : '$9.99/per month',
-        features: [
-            {
-                title : "<h4>This is the feature title</h4>",
-                subtitle : "<b>This is the feature subtitle</b>",
-            }
-        ],
-        btn : "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
+        title: "<h1>This is title</h1>",
+        subtitle: "<h3>This is the subtitle.</h3>",
+        text: 'This is text',
+        price: '$9.99/per month',
+        features: [{
+          title: "<h4>This is the feature title</h4>",
+          subtitle: "<b>This is the feature subtitle</b>",
+        }],
+        btn: "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
       }
 
       window.parent.addPricingTable(componentId, newTable, index);
     }
 
+    $scope.deleteTestimonial = function(componentId, index) {
+      window.parent.deleteTestimonial(componentId, index);
 
-    function toTitleCase(str)
-    {
-        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
+
+    $scope.addTestimonial = function(componentId, index) {
+      // to do: the information should fetch from component model
+      var newTestimonial = {
+        "img": "",
+        "name": "Name",
+        "site": "Site",
+        "text": "Description"       
+      }
+      window.parent.addTestimonial(componentId, newTestimonial, index);     
+    }
+
+
+    function toTitleCase(str) {
+      return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
     }
 
 
     window.activateAloha = function() {
       //if ($scope.activated == false) {
-        $scope.isEditing = true;
-        CKEDITOR.disableAutoInline = true;
-        var elements = $('.editable');
-        elements.each(function() {
-          if(!$(this).parent().hasClass('edit-wrap')) {
-            var dataClass = $(this).data('class').replace('.item.', ' ');
-            $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
-          }
-         // $scope.activated = true;
-        if(!$(this).hasClass('cke_editable')) {
+      for(name in CKEDITOR.instances)
+        {
+            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.remove(CKEDITOR.instances[name]);
+        }
+      $scope.isEditing = true;
+      CKEDITOR.disableAutoInline = true;
+      var elements = $('.editable');
+      elements.each(function() {
+        if (!$(this).parent().hasClass('edit-wrap')) {
+          var dataClass = $(this).data('class').replace('.item.', ' ');
+          $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+        }
+        // $scope.activated = true;
+        //if (!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
               instanceReady: function(ev) {
-                var editor = ev.editor;
+                var editor = ev.editor;                
+               // CKEDITOR.replace(editor.name);                
                 editor.setReadOnly(false);
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
@@ -878,18 +823,28 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               top: 'editor-toolbar'
             }
           });
-        }
-        });
+        //}
+        
+      });
+      setTimeout(function() {        
+         if($("div.meet-team-height").length)
+         {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").css("min-height", maxTeamHeight);
+          }
+        }, 500)
 
-        //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
+      //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
 
     window.deactivateAloha = function() {
-      for(name in CKEDITOR.instances)
-        {
-            CKEDITOR.instances[name].destroy()
-        }
+      for (name in CKEDITOR.instances) {
+        CKEDITOR.instances[name].destroy()
+      }
       // $('.editable').mahalo();
       // if (aloha.editor && aloha.editor.selection) {
       // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
@@ -931,11 +886,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.deletePost = function(postId, blogpost) {
       PostService.deletePost($scope.currentpage._id, postId, function(data) {
-       if(blogpost)
-       {
-        var index = that.blogposts.indexOf(blogpost);
-        that.blogposts.splice(index, 1);
-       }
+        if (blogpost) {
+          var index = that.blogposts.indexOf(blogpost);
+          that.blogposts.splice(index, 1);
+        }
       });
     };
 
@@ -966,8 +920,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     window.updateWebsite = function(data) {
       $scope.$apply(function() {
-      if(data)
-        that.website = data;
+        if (data)
+          that.website = data;
       });
     };
 
@@ -979,6 +933,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         //         components: data
         //     }
         // });
+        var scroll = $(window).scrollTop();
         $scope.currentpage.components = data;
         for (var i = 0; i < $scope.currentpage.components.length; i++) {
           if ($scope.currentpage.components[i].type == 'navigation') {
@@ -986,41 +941,45 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             body.className = body.className.replace('navbar-v', '');
             body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
           }
-          if ($scope.currentpage.components[i].type == 'contact-us') {
-            $scope.updateContactUsMap($scope.currentpage.components[i]);
-          }
-          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+          if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
             var thumbnailId = $scope.currentpage.components[i]._id;
-           
+
             var matching = _.find($scope.thumbnailSlider, function(item) {
               return item.thumbnailId == thumbnailId
             })
-          
-          if (!matching) {            
-            $scope.thumbnailSlider.push(
-            {
-              thumbnailId : thumbnailId,
-              thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
-            });
-          }
-          else
-           matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
-            
+
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
+              });
+
+            } else
+              matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
         };
+        setTimeout(function() {
+          $(window).scrollTop(scroll);
+        }, 200);
       });
     };
+
     window.updateCustomComponent = function(data, networks) {
+      var scroll = $(window).scrollTop();
+      $scope.dataLoaded = false;
       console.log('updateCustomComponent >>>');
       if (data) {
         $scope.currentpage.components = data;
+        
         setTimeout(function() {
           $scope.$apply(function() {
-              activateAloha();
+            activateAloha();
+            $scope.dataLoaded = true;
           });
         });
       } else {
@@ -1033,28 +992,53 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $scope.networks = networks;
 
       for (var i = 0; i < $scope.currentpage.components.length; i++) {
-          if ($scope.currentpage.components[i].type ==='thumbnail-slider') {
+          if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
             var w = angular.element($window);
             var check_if_mobile = mobilecheck();
             var thumbnailId = $scope.currentpage.components[i]._id;
-           
+
             var matching = _.find($scope.thumbnailSlider, function(item) {
               return item.thumbnailId == thumbnailId
             })
-          
-          if (!matching) {            
-            $scope.thumbnailSlider.push(
-            {
-              thumbnailId : thumbnailId,
-              thumbnailSliderCollection : angular.copy($scope.currentpage.components[i].thumbnailCollection)
-            });
-          } 
-          else
-            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection); 
-           
+
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
+              });
+            } else
+              matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
+      };
+      setTimeout(function() {
+        $(window).scrollTop(scroll);
+          //if($(".slick-slider"))         
+            //$(".slick-slider")[0].slick.refresh();
+      }, 200);
+
+    };
+
+    window.updateContactComponent = function(data, networks) {
+      console.log('updateCustomComponent >>>');
+      if (data) {
+        $scope.currentpage.components = data;
+        setTimeout(function() {
+          $scope.$apply(function() {
+            activateAloha();
+          });
+        });
+      } else {
+        $scope.$apply(function() {
+
+        });
+      }
+      for (var i = 0; i < $scope.currentpage.components.length; i++) {
+        if ($scope.currentpage.components[i].type == 'contact-us') {
+          $scope.updateContactUsMap($scope.currentpage.components[i]);
+        }
       };
     };
 
@@ -1070,8 +1054,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       console.log('$scope.inlineInput ', $scope.inlineInput);
       if ($scope.inlineInput) {
         console.log('inserting html');
-        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
-      } else if($scope.urlInput) {
+        $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+      } else if ($scope.urlInput) {
         $scope.urlInput.val(url);
       }
     };
@@ -1125,13 +1109,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.wait;
 
     $scope.sortableOptions = {
+      parentElement : "body",
       dragStart: function(e, ui) {
         console.log('Start sorting');
         var componentId = e.source.itemScope.modelValue._id;
         e.source.itemScope.modelValue = window.parent.updateComponent(componentId);
         e.source.itemScope.element.addClass(" dragging");
         clearTimeout($scope.wait);
-       // e.source.itemScope.element.parent()[0].style.position = "absolute";
+        // e.source.itemScope.element.parent()[0].style.position = "absolute";
         //e.source.itemScope.element[0].style.position = "relative";
       },
       dragMove: function(e, ui) {
@@ -1139,7 +1124,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       },
       dragEnd: function(e, ui) {
         console.log('sorting end');
-        e.dest.sortableScope.element.removeClass("dragging");        
+        e.dest.sortableScope.element.removeClass("dragging");
         $scope.wait = setTimeout(function() {
           activateAloha();
           $(".ui-sortable").removeClass("active");
@@ -1153,8 +1138,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.planStatus = {};
     $scope.$watch('currentpage.components', function(newValue, oldValue) {
       if (newValue) {
+        $scope.dataLoaded = false;
         $scope.currentcomponents = newValue;
         newValue.forEach(function(value, index) {
+          if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
+            value.bg.img.show = true;
           if (value && value.type === 'payment-form') {
             var productId = value.productId;
             ProductService.getProduct(productId, function(product) {
@@ -1188,20 +1176,18 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             var check_if_mobile = mobilecheck();
             console.log('value ', value);
             var thumbnailId = value._id;
-           
+
             var matching = _.find($scope.thumbnailSlider, function(item) {
               return item.thumbnailId == thumbnailId
             })
-          
-          if (!matching) {            
-            $scope.thumbnailSlider.push(
-            {
-              thumbnailId : thumbnailId,
-              thumbnailSliderCollection : angular.copy(value.thumbnailCollection)
-            });
-          }
-          else
-           matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection); 
+
+            if (!matching) {
+              $scope.thumbnailSlider.push({
+                thumbnailId: thumbnailId,
+                thumbnailSliderCollection: angular.copy(value.thumbnailCollection)
+              });
+            } else
+              matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
             var winWidth = w.width();
             $scope.bindThumbnailSlider(winWidth, check_if_mobile, thumbnailId);
             w.bind('resize', function() {
@@ -1210,9 +1196,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               });
             });
           }
-          if (value &&  value.type == 'contact-us') {
-              $scope.updateContactUsMap(value);
-            }
+          if (value && value.type == 'contact-us') {
+            $scope.updateContactUsMap(value);
+          }
+          $scope.dataLoaded = true;
         });
       }
     });
@@ -1227,13 +1214,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       $scope.imagesPerPage = number_of_arr;
 
       var matching = _.find($scope.thumbnailSlider, function(item) {
-          return item.thumbnailId == thumbnailId
+        return item.thumbnailId == thumbnailId
       })
-          
-      if(matching)
-      {
+
+      if (matching) {
         matching.thumbnailCollection = partition(matching.thumbnailSliderCollection, number_of_arr);
-        if(matching.thumbnailCollection.length > 1)
+        if (matching.thumbnailCollection.length > 1)
           matching.displayThumbnailPaging = true;
         else
           matching.displayThumbnailPaging = false;
@@ -1278,23 +1264,60 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
 
     $scope.createUser = function(user, component) {
       console.log('user', user);
+      $("#user_email_" + component._id + " .error").html("");
+
+
+      $("#user_email_" + component._id + " .error").html("");
+      $("#user_email_" + component._id).removeClass('has-error');
+      $("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+      $("#user_phone_" + component._id + " .error").html("");
+      $("#user_phone_" + component._id).removeClass('has-error');
+      $("#user_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+
       var fingerprint = new Fingerprint().get();
       var sessionId = ipCookie("session_cookie")["id"];
 
       if (!user || !user.email) {
-        $("#user_email .error").html("Email Required");
-        $("#user_email").addClass('has-error');
-        $("#user_email .glyphicon").addClass('glyphicon-remove');
+
+        $("#user_email_" + component._id + " .error").html("Email Required");
+        $("#user_email_" + component._id).addClass('has-error');
+        $("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
         return;
+      }
+
+      var first_name = _.findWhere(component.fields, {
+        name: 'first'
+      });
+      var last_name = _.findWhere(component.fields, {
+        name: 'last'
+      });
+      var phone = _.findWhere(component.fields, {
+        name: 'phone'
+      });
+      if (first_name)
+        user.first = first_name.model;
+      if (last_name)
+        user.last = last_name.model;
+      if (phone)
+        user.phone = phone.model;
+
+      if (user.phone) {
+        var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
+        if (!regex.test(user.phone)) {
+          $("#user_phone_" + component._id + " .error").html("Phone is invalid");
+          $("#user_phone_" + component._id).addClass('has-error');
+          $("#user_phone_" + component._id + " .glyphicon").addClass('glyphicon-remove');
+          return;
+        }
       }
       if (user.email) {
         var regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
         var result = regex.test(user.email);
-        if(!result)
-        {
-          $("#user_email .error").html("Valid Email Required");
-          $("#user_email").addClass('has-error');
-          $("#user_email .glyphicon").addClass('glyphicon-remove');
+        if (!result) {
+
+          $("#user_email_" + component._id + " .error").html("Valid Email Required");
+          $("#user_email_" + component._id).addClass('has-error');
+          $("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
         }
 
@@ -1306,31 +1329,47 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
+          first: user.first,
+          last: user.last,
           details: [{
-            emails: []
+            emails: [],
+            phones: []
           }],
           campaignId: component.campaignId,
-          skipWelcomeEmail: skipWelcomeEmail
+          skipWelcomeEmail: skipWelcomeEmail,
+          fromEmail: component.from_email
         };
         formatted.details[0].emails.push({
           email: user.email
         });
+        if (user.phone) {
+          formatted.details[0].phones.push({
+            number: user.phone,
+            type: 'm'
+          });
+        }
+
         //create contact
         console.log('formatted ', formatted);
         userService.addContact(formatted, function(data, err) {
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
-            $("#user_email .error").html("Email already exists");
-            $("#user_email").addClass('has-error');
-            $("#user_email .glyphicon").addClass('glyphicon-remove');
+
+            $("#user_email_" + component._id + " .error").html("Email already exists");
+            $("#user_email_" + component._id).addClass('has-error');
+            $("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
 
           } else if (data) {
             console.log('email avaliable');
-            $("#user_email .error").html("");
-            $("#user_email").removeClass('has-error').addClass('has-success');
-            $("#user_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+
+            $("#user_email_" + component._id + " .error").html("");
+            $("#user_email_" + component._id).removeClass('has-error').addClass('has-success');
+            $("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             console.log('data ', data);
             user.email = "";
+            component.fields.forEach(function(value) {
+              value.model = null;
+            })
             user.success = true;
 
             var name;
@@ -1341,12 +1380,13 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
               name = 'John Doe';
             }
 
-              var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+            var hash = CryptoJS.HmacSHA256(user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
             console.log('hash ', hash.toString(CryptoJS.enc.Hex));
             //send data to intercom
             $window.intercomSettings = {
               name: user.first + ' ' + user.last,
               email: user.email,
+              phone: user.phone,
               user_hash: hash.toString(CryptoJS.enc.Hex),
               created_at: new Date().getTime(),
               app_id: "b3st2skm"
@@ -1366,17 +1406,49 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //window.location.href = "http://app.indigenous.local:3000/signup";
     };
 
-    $scope.createContactwithFormActivity = function(contact) {
+    $scope.createContactwithFormActivity = function(contact, component) {
       console.log('contact', contact);
+      $("#contact_email_" + component._id + " .error").html("");
+      $("#contact_email_" + component._id).removeClass('has-error');
+      $("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+      $("#contact_phone_" + component._id + " .error").html("");
+      $("#contact_phone_" + component._id).removeClass('has-error');
+      $("#contact_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+
       if (!contact || !contact.email) {
-        $("#contact_email .error").html("Email Required");
-        $("#contact_email").addClass('has-error');
-        $("#contact_email .glyphicon").addClass('glyphicon-remove');
+        $("#contact_email_" + component._id + " .error").html("Email Required");
+        $("#contact_email_" + component._id).addClass('has-error');
+        $("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
         return;
       }
+
+      var first_name = _.findWhere(component.fields, {
+        name: 'first'
+      });
+      var last_name = _.findWhere(component.fields, {
+        name: 'last'
+      });
+      var phone = _.findWhere(component.fields, {
+        name: 'phone'
+      });
+      if (first_name)
+        contact.first_name = first_name.model;
+      if (last_name)
+        contact.last_name = last_name.model;
+      if (phone)
+        contact.phone = phone.model;
+
+      if (contact.phone) {
+        var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
+        if (!regex.test(contact.phone)) {
+          $("#contact_phone_" + component._id + " .error").html("Phone is invalid");
+          $("#contact_phone_" + component._id).addClass('has-error');
+          $("#contact_phone_" + component._id + " .glyphicon").addClass('glyphicon-remove');
+          return;
+        }
+      }
       if (contact.email) {
-        if(contact.full_name)
-        {
+        if (contact.full_name) {
           var full_name = contact.full_name.split(" ")
           contact.first_name = full_name[0];
           contact.last_name = full_name[1];
@@ -1384,52 +1456,55 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         var contact_info = {
           first: contact.first_name,
           last: contact.last_name,
+          fromEmail : component.from_email,
           details: [{
-            emails: []
-          }]
+            emails: [],
+            phones: []
+          }],
+          activity: {
+            activityType: 'CONTACT_FORM',
+            note: "Contact form data.",
+            sessionId: ipCookie("session_cookie")["id"],
+            contact: contact
+          }
         };
 
         contact_info.details[0].emails.push({
           email: contact.email
         });
+        if (contact.phone) {
+          contact_info.details[0].phones.push({
+            number: contact.phone,
+            type: 'm'
+          });
+        }
+
 
         userService.addContact(contact_info, function(data, err) {
           console.log('data ', data);
           if (err && err.code === 409) {
             // $("#input-company-name").val('');
-            $("#contact_email .error").html("Email already exists");
-            $("#contact_email").addClass('has-error');
-            $("#contact_email .glyphicon").addClass('glyphicon-remove');
+            $("#contact_email_" + component._id + " .error").html("Email already exists");
+            $("#contact_email_" + component._id).addClass('has-error');
+            $("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
 
           } else if (data) {
             console.log('email avaliable');
-            $("#contact_email .error").html("");
-            $("#contact_email").removeClass('has-error').addClass('has-success');
-            $("#contact_email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-            //create activity
-            var activity_info = {
-              accountId: data.accountId,
-              contactId: data._id,
-              activityType: 'CONTACT_FORM',
-              note: "Contact form data.",
-              start: new Date(),
-              extraFields: contact,
-              sessionId: ipCookie("session_cookie")["id"]
-            };
-            userService.addContactActivity(activity_info, function(data) {
-              console.log('data ', data);
-              contact.email = '';
-              contact.message = '';
-              contact.full_name = '';
-              contact.first_name = '';
-              contact.last_name = '';
-              contact.success = true;
-              setTimeout(function() {
-                $scope.$apply(function() {
-                  contact.success = false;
-                });
-              }, 3000);
-            });
+            $("#contact_email_" + component._id + " .error").html("");
+            $("#contact_email_" + component._id).removeClass('has-error').addClass('has-success');
+            $("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+
+            contact.email = '';
+            contact.message = '';
+            contact.success = true;
+            component.fields.forEach(function(value) {
+              value.model = null;
+            })
+            setTimeout(function() {
+              $scope.$apply(function() {
+                contact.success = false;
+              });
+            }, 3000);
           }
 
         });
@@ -1443,21 +1518,40 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       //window.location.href = "http://app.indigenous.local:3000/signup";
     };
 
+    $scope.removeAccount= function(type)
+    {
+        $scope.newAccount.businessName = null;
+        $scope.newAccount.profilePhoto = null;
+        $scope.newAccount.tempUserId = null;
+        $scope.newAccount.email = null;
+        $scope.tmpAccount.tempUser = null;
+    }
+
     $scope.makeSocailAccount = function(socialType) {
       if (socialType) {
         window.location.href = "/signup/" + socialType + "?redirectTo=/signup";
         return;
       }
     };
+    if ($scope.$location.$$path === '/signup') {
+      userService.getTmpAccount(function(data) {
+        $scope.tmpAccount = data;
+      });
+    }
 
-    userService.getTmpAccount(function(data) {
-      $scope.tmpAccount = data;
-    });
-
+    $scope.showFooter=function(status)
+    {
+      if(status)
+        $("#footer").show();
+      else
+        $("#footer").hide();
+    }
+    
     $scope.createAccount = function(newAccount) {
       //validate
       //email
       $scope.isFormValid = false;
+      $scope.showFooter(true);
       if (!$scope.newAccount.email) {
         $scope.checkEmailExists(newAccount);
         return;
@@ -1469,7 +1563,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         return;
       }
 
-      //business name
+      //url
       if (!$scope.newAccount.businessName) {
         $scope.checkDomainExists(newAccount);
         return;
@@ -1509,6 +1603,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       }
       //end validate
       $scope.isFormValid = true;
+      $scope.showFooter(false);
       var tmpAccount = $scope.tmpAccount;
       tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
       userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
@@ -1527,19 +1622,23 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             console.info(error);
             $scope.$apply(function() {
               $scope.isFormValid = false;
+              $scope.showFooter(true);
             })
             switch (error.param) {
               case "number":
                 $("#card_number .error").html(error.message);
                 $("#card_number").addClass('has-error');
+                $("#card_number .glyphicon").addClass('glyphicon-remove');
                 break;
               case "exp_year":
                 $("#card_expiry .error").html(error.message);
                 $("#card_expiry").addClass('has-error');
+                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                 break;
               case "cvc":
                 $("#card_cvc .error").html(error.message);
                 $("#card_cvc").addClass('has-error');
+                $("#card_cvc .glyphicon").addClass('glyphicon-remove');
                 break;
             }
           } else {
@@ -1553,22 +1652,22 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
             }
             userService.initializeUser(newUser, function(data) {
               if (data && data.accountUrl) {
-                  /*
-                   * I'm not sure why these lines were added.  The accountUrl is a string.
-                   * It will never have a host attribute.
-                   *
-                   * var currentHost = $.url(window.location.origin).attr('host');
-                   * var futureHost = $.url(data.accountUrl).attr('host');
-                   * if (currentHost.indexOf(futureHost) > -1) {
-                   *      window.location = data.accountUrl;
-                   * } else {
-                   *      window.location = currentHost;
-                   * }
-                   */
-
-                  window.location = data.accountUrl;
+                /*
+                 * I'm not sure why these lines were added.  The accountUrl is a string.
+                 * It will never have a host attribute.
+                 *
+                 * var currentHost = $.url(window.location.origin).attr('host');
+                 * var futureHost = $.url(data.accountUrl).attr('host');
+                 * if (currentHost.indexOf(futureHost) > -1) {
+                 *      window.location = data.accountUrl;
+                 * } else {
+                 *      window.location = currentHost;
+                 * }
+                 */
+                window.location = data.accountUrl;
               } else {
                 $scope.isFormValid = false;
+                $scope.showFooter(true);
               }
             });
           }
@@ -1583,7 +1682,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.checkDomainExists = function(newAccount) {
       console.log('checking to see if the domiain exists ', newAccount.businessName);
       if (!newAccount.businessName) {
-        $("#business-name .error").html("Business Name Required");
+        $("#business-name .error").html("Url Required");
         $("#business-name").addClass('has-error');
         $("#business-name .glyphicon").addClass('glyphicon-remove');
       } else {
@@ -1656,9 +1755,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (!card_number) {
         $("#card_number .error").html("Card Number Required");
         $("#card_number").addClass('has-error');
+        $("#card_number .glyphicon").addClass('glyphicon-remove');
       } else {
         $("#card_number .error").html("");
         $("#card_number").removeClass('has-error').addClass('has-success');
+        $("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
@@ -1684,6 +1785,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
         $("#card_expiry").addClass('has-error');
       } else {
         $("#card_expiry .error").html("");
+        $("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         $("#card_expiry").removeClass('has-error').addClass('has-success');
       }
     };
@@ -1696,9 +1798,11 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
       if (!card_cvc) {
         $("#card_cvc .error").html("CVC Required");
         $("#card_cvc").addClass('has-error');
+        $("#card_cvc .glyphicon").addClass('glyphicon-remove');
       } else {
         $("#card_cvc .error").html("");
         $("#card_cvc").removeClass('has-error').addClass('has-success');
+        $("#card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
@@ -1727,32 +1831,54 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', 'websiteService', 'p
     $scope.DeleteImageFromGallery = function(componentId, index) {
       window.parent.deleteImageFromGallery(componentId, index);
     };
-    $scope.AddImageToGallery = function(componentId) {
-      window.parent.addImageToGallery(componentId);
+    $scope.AddImageToGallery = function(componentId, index) {
+      window.parent.addImageToGallery(componentId, index);
     }
     $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
       var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
-      window.parent.deleteImageFromThumbnail(componentId, index);
+      window.parent.deleteImageFromThumbnail(componentId, imageIndex);
     };
     $scope.addImageToThumbnail = function(componentId) {
       window.parent.addImageToThumbnail(componentId);
     }
 
-$scope.inserted = false;
- if(!$scope.activated)
-  $('body').on("DOMNodeInserted", ".feature-height", function (e)
-  {
-    if(!$scope.inserted)
+
+    $scope.feature_inserted = false;
+    $scope.team_inserted = false;
+    $('body').on("DOMNodeInserted", ".feature-height", function (e)
     {
-      setTimeout(function() {
-      $scope.inserted = true;
-      var maxHeight = Math.max.apply(null, $("div.feature-height").map(function ()
-      {
-          return $(this).height();
-      }).get());
-      $scope.maxHeight = maxHeight + 10 + "px";
-      }, 500)
-   }
-  })
+        setTimeout(function() {
+        if(!$scope.feature_inserted)  
+        {
+          $scope.feature_inserted = true;          
+         if($("div.feature-height").length)
+          {
+            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".feature-height").css("min-height", maxFeatureHeight + 10);
+          }
+        }   
+        }, 1000)
+    })
+    $('body').on("DOMNodeInserted", ".meet-team-height", function (e)
+    {
+        setTimeout(function() {
+        if(!$scope.team_inserted)  
+        {
+         $scope.team_inserted = true;
+         if($("div.meet-team-height").length)
+         {
+            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            {
+                return $(this).height();
+            }).get());
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
+          }
+        }   
+        }, 1000)
+    })
   }
+
 ]);

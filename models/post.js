@@ -54,6 +54,8 @@ var post = $$.m.ModelBase.extend({
 
     },
 
+    publish_date: null,
+
 
     initialize: function(options) {
 
@@ -66,6 +68,7 @@ var post = $$.m.ModelBase.extend({
             type: $$.constants.social.types.FACEBOOK,
             sourceId: post.id,
             postType: post.type
+
         };
 
         if(post.from) {
@@ -77,6 +80,7 @@ var post = $$.m.ModelBase.extend({
 
         if (post.created_time) {
             obj.date = new Date(post.created_time).getTime();
+            obj.pagingId = new Date(post.created_time).getTime() / 1000;
         }
 
         if (post.to && post.to.data && post.to.data.length > 0 && post.to.forEach) {
@@ -89,8 +93,8 @@ var post = $$.m.ModelBase.extend({
             })
         }
 
-        if (post.story) {
-            obj.message = post.story;
+        if (post.story || post.message) {
+            obj.message = post.story || post.message;
         }
         if (post.name) {
             obj.name = post.name;
@@ -112,11 +116,17 @@ var post = $$.m.ModelBase.extend({
             obj.comments = [];
 
             post.comments.data.forEach(function(comment) {
-                obj.comments.push({
+                var comment_obj = {
                     sourceId: comment.from.id,
                     name: comment.from.name,
-                    comment: comment.message
-                })
+                    comment: comment.message,
+                    created: comment.created_time,
+                    like_count: comment.like_count
+                };
+                if(comment.from && comment.from.picture && comment.from.picture.data) {
+                    comment_obj.picture = comment.from.picture.data.url;
+                }
+                obj.comments.push(comment_obj);
             });
         }
 
@@ -157,7 +167,8 @@ var post = $$.m.ModelBase.extend({
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
-            postType: "tweet"
+            postType: "tweet",
+            pagingId: tweet.id_str
         };
 
         if(tweet.user) {

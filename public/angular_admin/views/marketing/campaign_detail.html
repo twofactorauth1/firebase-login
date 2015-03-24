@@ -1,9 +1,9 @@
 <toaster-container toaster-options="{'time-out': 3000, 'close-button':true}"></toaster-container>
-<div class="marketing">
+<div class="marketing campaign-details">
 
     <div class="pageheader">
         <div class="col-xs-8">
-            <button ng-click="$back()" class="btn btn-success pull-left" type="button">
+            <button ng-click="$back()" class="btn btn-outline pull-left" type="button">
                 <span class="fa fa-chevron-left"></span>
                 <span class="hidden-xs">Back</span>
             </button>
@@ -30,8 +30,12 @@
 
                 </ul>
             </div>  -->
-            <button ng-click="$back()" class="btn btn-green pull-right" type="button">
-                <span class="hidden-xs">Start Campaign</span>
+            <button ng-click="saveConnections()" class="btn btn-outline pull-right" type="button">
+                <span class="hidden-xs">Save </span>
+                <span class="fa fa-save"></span>
+            </button>
+            <button ng-click="$back()" class="btn btn-outline pull-right" type="button">
+                <span class="hidden-xs">Start </span>
                 <span class="fa fa-play"></span>
             </button>
         </div>
@@ -40,56 +44,85 @@
 
     <div class="col-xs-12 nopadding header-menu-row">
 
-        <div class="contentpanel" ng-style="styleCampaignDetail()" indigeweb-resize>
+        <div class="contentpanel nopadding" ng-style="styleCampaignDetail()" indigeweb-resize>
             <!-- <div class="col-xs-12" ng-repeat="step in campaign.steps track by $index">
                 <h3>{{step.type}}</h3>
             </div> -->
-            <div class="panel panel-default widgets">
+            <div class="panel panel-default widgets mb0">
                 <div class="panel-body">
-                    <ul>
+                    <div class="window newCampaignWidget" data-type="page">
+                        <span class='fa fa-times-circle deleteWidget'></span>
+                        <span class="fa fa-file-text marketing-icon"></span>
+                        <p>Page</p>
+                    </div>
+                    <div class="window newCampaignWidget" data-type="email">
+                        <span class="fa fa-envelope marketing-icon"></span>
+                        <p>Email</p>
+                    </div>
+                    <div class="window newCampaignWidget" data-type="wait">
+                        <span class="fa fa-clock-o marketing-icon"></span>
+                        <p>Wait</p>
+                    </div>
+                    <div class="window newCampaignWidget" data-type="conditional">
+                        <span class="fa fa-code marketing-icon"></span>
+                        <p>Conditional</p>
+                    </div>
+                    <div class="window newCampaignWidget" data-type="absplit">
+                        <span class="fa fa-code-fork marketing-icon"></span>
+                        <p>A/B Split</p>
+                    </div>
+                    <!-- <ul>
                         <li>
-                            <div class="window" id="newPageWidget" data-type="page">
+                            <div class="window newCampaignWidget" data-type="page">
                                 <span class='fa fa-times-circle deleteWidget'></span>
-                                <span class="fa fa-file-text marketing-icon"></span><span class="label label-primary marketing-label"><strong>Page</strong></span>
+                                <span class="fa fa-file-text marketing-icon"></span>
+                                <p>Page</p>
                             </div>
                         </li>
                         <li>
-                            <div class="window" id="newEmailWidget" data-toggle="modal" data-target="#campaign-add-email">
-                                <span class="fa fa-envelope marketing-icon"></span><span class="label label-primary marketing-label"><strong>Email</strong></span>
+                            <div class="window newCampaignWidget" data-type="email" data-toggle="modal" data-target="#campaign-add-email">
+                                <span class="fa fa-envelope marketing-icon"></span>
+                                <p>Email</p>
                             </div>
                         </li>
                         <li>
-                            <div class="window" id="newWaitWidget">
-                                <span class="fa fa-clock-o marketing-icon"></span><span class="label label-primary marketing-label"><strong>Wait</strong></span>
+                            <div class="window newCampaignWidget" data-type="wait">
+                                <span class="fa fa-clock-o marketing-icon"></span>
+                                <p>Wait</p>
                             </div>
                         </li>
                         <li>
-                            <div class="window" id="newConditionalWidget">
-                                <span class="fa fa-code marketing-icon"></span><span class="label label-primary marketing-label"><strong>Conditional</strong></span>
+                            <div class="window newCampaignWidget" data-type="conditional">
+                                <span class="fa fa-code marketing-icon"></span>
+                                <p>Conditional</p>
                             </div>
                         </li>
                         <li>
-                            <div class="window" id="newABWidget">
-                                <span class="fa fa-code-fork marketing-icon"></span><span class="label label-primary marketing-label"><strong>A/B Split</strong></span>
+                            <div class="window newCampaignWidget" data-type="absplit">
+                                <span class="fa fa-code-fork marketing-icon"></span>
+                                <p>A/B Split</p>
                             </div>
                         </li>
-                    </ul>
-                    <div class="clearfix mb25"></div>
+                    </ul> -->
+                    <div class="clearfix"></div>
                 </div>
             </div>
 
             <div class="clearfix"></div>
 
-            <div class="demo flowchart-demo" id="d" style="margin:0;height: 500px;">
+            <div class="demo flowchart-demo" id="campaign-canvas" style="margin:0;height: 500px;">
+                <div id="lines"></div>
 
-                <div class="window start" id="startWidget">
-                    <span class="fa fa-arrow-right marketing-icon start"></span><span class="label label-primary marketing-label"><strong>Start</strong></span>
-                </div>
-                <div ng-repeat="step in campaign.steps">
-                    <div class="window start" id="{{step._id}}">
-                        <span class='fa fa-times-circle deleteWidget' ng-click="deleteWidget(step._id)"></span>
-                        <span class="fa marketing-icon" ng-class="{'fa-file-text-o':step.type == 'page', 'fa-envelope':step.type == 'email'}"></span>
-                        <span class="label label-primary marketing-label"><strong>{{step.type}}</strong></span>
+                <div ng-repeat="step in campaign.steps track by $index">
+                    <div class="window " id="step-{{step.index}}" data-type="{{step.type}}">
+                        <span class='fa fa-times-circle deleteWidget' ng-click="deleteWidget('step-'+step.index)"></span>
+                        <!-- <span class="fa marketing-icon" ng-class="{'fa-file-text-o':step.type == 'page', 'fa-envelope':step.type == 'email', 'fa-clock-o':step.type == 'wait', 'fa-code':step.type == 'conditional', 'fa-code-fork':step.type == 'absplit'}"></span> -->
+                        <span ng-if="step.type == 'page'" class="marketing-icon fa fa-file-text-o" data-type="page" data-toggle="modal" data-target="#campaign-add-email"></span>
+                        <span ng-if="step.type == 'email'" class="marketing-icon fa fa-envelope" data-type="email"></span>
+                        <span ng-if="step.type == 'wait'" class="marketing-icon fa fa-clock-o" data-type="wait" data-toggle="modal" data-target="#campaign-add-email"></span>
+                        <span ng-if="step.type == 'conditional'" class="marketing-icon fa fa-code" data-type="conditional" data-toggle="modal" data-target="#campaign-add-email"></span>
+                        <span ng-if="step.type == 'absplit'" class="marketing-icon fa fa-code-fork" data-type="absplit" data-toggle="modal" data-target="#campaign-add-email"></span>
+                        <p>{{step.type}}</p>
                     </div>
                 </div>
             </div>

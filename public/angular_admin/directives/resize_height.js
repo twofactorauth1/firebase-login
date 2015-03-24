@@ -28,6 +28,14 @@ define(['angularAMD'], function (angularAMD) {
                     };
                 };
 
+                scope.styleSchedule = function () {
+                    return {
+                        'height': (newValue.h)-65 + 'px',
+                        'width': '100%',
+                        'overflow-y' : 'scroll'
+                    };
+                };
+
                 scope.styleMarketingSection = function () {
                     return {
                         'height': (newValue.h)-109 + 'px',
@@ -103,7 +111,8 @@ define(['angularAMD'], function (angularAMD) {
             }, true);
 
             w.bind('resize', function () {
-                scope.$apply();
+               if(!scope.$$phase)
+                 scope.$apply();
             });
         }
     });

@@ -4,6 +4,7 @@ var blogPostDao = require('./dao/blogpost.dao.js');
 var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
+var templateDao = require('./dao/template.dao.js');
 var urlboxhelper = require('../utils/urlboxhelper');
 var s3dao = require('../dao/integrations/s3.dao');
 var fs = require('fs');
@@ -47,14 +48,14 @@ module.exports = {
         });
     },
 
-    getAllThemes: function(accountId, fn) {
-        log.debug('>> getAllThemes');
-        themeDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Theme, function(err, list){
+    getAllTemplates: function(accountId, fn) {
+        log.debug('>> getAllTemplates');
+        templateDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Template, function(err, list){
             if(err) {
-                log.error('Exception thrown listing themes: ' + err);
+                log.error('Exception thrown listing templates: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< getAllThemes');
+                log.debug('<< getAllTemplates');
                 fn(null, list);
             }
         });
@@ -188,7 +189,7 @@ module.exports = {
             }
         });
 
-        
+
         $.when(p1).done(function(){
             accountDao.getById(accountId, $$.m.Account, function(err, account){
                 if(err) {
@@ -212,32 +213,36 @@ module.exports = {
 
     },
 
-    createWebsiteAndPageFromTheme: function(accountId, themeId, userId, websiteId, pageHandle, fn) {
+    createWebsiteAndPageFromTemplate: function(accountId, templateId, userId, websiteId, pageTitle, pageHandle, fn) {
         log.debug('>> createWebsiteFromTheme');
         if(fn === null) {
             fn = pageHandle;
             pageHandle = null;
         }
         //default to index page if none is specified
-        if(pageHandle === null) {
-            pageHandle = 'index';
-        }
+        var title = pageTitle;
+        // if(pageHandle === null) {
+        //     pageHandle = 'index';
+        //     title = 'Home';
+        // } else {
+        //     title = pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1);
+        // }
 
-        var theme, website, page;
+        var template, website, page;
 
         var p1 = $.Deferred();
-        themeDao.getById(themeId, $$.m.cms.Theme, function(err, _theme) {
+        templateDao.getById(templateId, $$.m.cms.Template, function(err, _template) {
             if (err) {
-                log.error('Exception getting theme: ' + err);
+                log.error('Exception getting template: ' + err);
                 p1.reject();
             } else {
-                log.debug('Got theme.');
-                theme = _theme;
+                log.debug('Got Template.');
+                template = _template;
 
                 if(websiteId === null) {
-                    log.debug('creating website');
+                    log.debug('creating template');
                     //create it
-                    var settings = theme.get('config')['settings'];
+                    var settings = template.get('config')['settings'];
                     website = new $$.m.cms.Website({
                         'accountId': accountId,
                         'settings': settings,
@@ -269,17 +274,22 @@ module.exports = {
         $.when(p1).done(function(){
             //at this point we have the theme and website.
             log.debug('Creating Page');
-            var componentAry = theme.get('config')['components'];
+            var componentAry = template.get('config')['components'];
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
-                'title': pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1),
+                'title': title,
                 'websiteId': websiteId,
                 'components': componentAry,
                 'created': {
                     'by': userId,
                     'date': new Date()
-                }
+                },
+                'modified': {
+                    'by': userId,
+                    'date': new Date()
+                },
+                'latest': true
             });
             cmsDao.saveOrUpdate(page, function(err, savedPage){
                 if(err) {
@@ -303,7 +313,14 @@ module.exports = {
                 return fn(err, null);
             }
             log.debug('creating page screenshot');
-            self.updatePageScreenshot(page.id(), fn);
+            self.updatePageScreenshot(page.id(), function(err, value){
+                if(err) {
+                    log.error('Error updating screenshot: ' + err);
+                } else {
+                    log.debug('updated screenshot: ' + value);
+                }
+            });
+            return fn(null, page);
         });
     },
 
@@ -320,6 +337,9 @@ module.exports = {
         var self = this;
         self.log = log;
         self.log.debug('>> createBlogPost');
+        if (blogPost.featured_image) {
+          blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
+        }
         blogPostDao.createPost(blogPost, function(err, savedPost){
             if(err) {
                 self.log.error('Error creating post: ' + err);
@@ -338,6 +358,7 @@ module.exports = {
                                 return fn(err, null);
                             }
                             var postAry = self._addPostIdToBlogComponentPage(savedPost.id(), blogPage);
+
                             if(postAry === null) {
                                 //return fn('Page does not contain blog component.', null);
                                 //need to create a blog component.
@@ -346,14 +367,14 @@ module.exports = {
                                 });
                                 blogPage.get('components').push(blogComponent);
                                 //asynchrounously create single-post-page if it doesn't exist.
-                                self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
-                                    if(err) {
-                                        self.log.error('Error creating single-post-page: ' + err);
-                                        return;
-                                    }
-                                });
-                            }
 
+                            }
+                            self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating single-post-page: ' + err);
+                                    return;
+                                }
+                            });
                             cmsDao.saveOrUpdate(blogPage, function(err, page){
                                 if(err) {
                                     self.log.error('Error updating page for post: ' + err);
@@ -377,14 +398,14 @@ module.exports = {
                             });
                             page.get('components').push(blogComponent);
                             //asynchrounously create single-post-page if it doesn't exist.
-                            self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
-                                if(err) {
-                                    self.log.error('Error creating single-post-page: ' + err);
-                                    return;
-                                }
-                            });
-                        }
 
+                        }
+                        self._getOrCreateSinglePostPage(accountId, blogPost.get('websiteId'), function(err, value){
+                            if(err) {
+                                self.log.error('Error creating single-post-page: ' + err);
+                                return;
+                            }
+                        });
                         cmsDao.saveOrUpdate(page, function(err, page){
                             if(err) {
                                 self.log.error('Error updating page for post: ' + err);
@@ -520,7 +541,7 @@ module.exports = {
                 "by" : null
             },
             "modified" : {
-                "date" : null,
+                "date" : new Date(),
                 "by" : null
             }
         };
@@ -626,7 +647,7 @@ module.exports = {
                 "by" : null
         },
             "modified" : {
-            "date" : null,
+            "date" : new Date(),
                 "by" : null
         },
             "screenshot" : null
@@ -677,6 +698,9 @@ module.exports = {
 
     updateBlogPost: function(accountId, blogPost, fn) {
         var self = this;
+        if (blogPost.featured_image) {
+          blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
+        }
         console.dir('blogPost '+JSON.stringify(blogPost));
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
@@ -764,6 +788,9 @@ module.exports = {
 
     listBlogPosts: function(accountId, limit, fn) {
         blogPostDao.findManyWithLimit({'accountId':accountId}, limit, $$.m.BlogPost, fn);
+    },
+    listBlogPostsWithLimit: function(accountId, limit, skip, fn) {
+        blogPostDao.findWithFieldsLimitOrderAndTotal({'accountId':accountId}, skip, limit, "modified.date", null, $$.m.BlogPost, -1, fn);
     },
     listBlogPostsByPageId: function(pageId, limit, fn) {
         blogPostDao.findManyWithLimit({'pageId':pageId}, limit, $$.m.BlogPost, fn);
@@ -1252,9 +1279,111 @@ module.exports = {
                 self.log.error('Error getting pages by version: ' + err);
                 return fn(err, null);
             } else {
+                if(version !== 'all' && version !== 'latest') {
+                    var filteredList = [];
+                    _.each(list, function(page){
+                        if(page.get('version') === version) {
+                            filteredList.push(page);
+                        }
+                    });
+                    list = filteredList;
+                }
+
+
+
                 self.log.debug('<< getPageVersions');
                 return fn(null, list);
             }
+        });
+
+    },
+
+    getPreviousVersion: function(pageId, version, fn) {
+        var self = this;
+        if(version >= 0) {
+            self.getPageVersions(pageId, version-1, function(err, page){
+                if(err) {
+                    return fn(err, null);
+                }
+                if(page === null || page.length === 0) {
+                    return self.getPreviousVersion(pageId, version-1, fn);
+                } else {
+                    return fn(null, page[0]);
+                }
+            });
+        } else {
+            fn(null, []);
+        }
+    },
+
+    deletePageVersion: function(pageId, version, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deletePageVersion');
+
+        self.getPageVersions(pageId, version, function(err, page){
+            if(err || page === null || page.length === 0) {
+                self.log.error('Error finding page version: ' + err);
+                return fn(err, null);
+            } else if(page[0].get('latest') !== true || version === 0) {
+                cmsDao.removeById(page[0].id(), $$.m.cms.Page, function(err, result){
+                    if(err) {
+                        self.log.error('Error removing page: ' + err);
+                        return fn(err, null);
+                    } else {
+                        self.log.debug('<< deletePageVersion');
+                        return fn(null, result);
+                    }
+                });
+            } else {
+                //find previous version, set it to be latest, delete this version
+                self.getPreviousVersion(pageId, version, function(err, previousPage){
+                    if(err) {
+                        self.log.error('Error finding previous page version: ' + err);
+                        return fn(err, null);
+                    } else if(previousPage === null || previousPage.length===0) {
+                        //we can just delete it
+                        cmsDao.removeById(page[0].id(), $$.m.cms.Page, function(err, result){
+                            if(err) {
+                                self.log.error('Error removing page: ' + err);
+                                return fn(err, null);
+                            } else {
+                                self.log.debug('<< deletePageVersion');
+                                return fn(null, result);
+                            }
+                        });
+                    } else {
+                        self.log.debug('removing page.');
+                        cmsDao.removeById(page[0].id(), $$.m.cms.Page, function(err, result){
+                            if(err) {
+                                self.log.error('Error removing page: ' + err);
+                                return fn(err, null);
+                            } else {
+                                self.log.debug('promoting page with version ' + previousPage.get('version') + ' to latest.');
+                                previousPage.set('_id', pageId);
+                                previousPage.set('latest', true);
+                                //self.log.debug('about to save ', previousPage);
+                                cmsDao.saveOrUpdate(previousPage, function(err, updatedPage){
+                                    if(err) {
+                                        self.log.error('Error updating new latest page: ' + err);
+                                        return fn(err, null);
+                                    }
+                                    self.log.debug('Updated page.');
+                                    cmsDao.removeById(page[0].id() + '_' + updatedPage.get('version'), $$.m.cms.Page, function(err, result){
+                                        self.log.debug('<< deletePageVersion');
+                                        return fn(null, result);
+                                    });
+
+                                });
+
+                            }
+                        });
+
+
+                    }
+                });
+            }
+
         });
 
     },
@@ -1316,6 +1445,34 @@ module.exports = {
 
                 });
                 fn(null, map);
+            }
+        });
+    },
+
+    getPagesByWebsiteIdWithLimit: function(websiteId, accountId, skip, limit, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPagesByWebsiteIdWithLimit');
+        var query = {
+            accountId: accountId,
+            websiteId: websiteId,
+            latest: true,
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+        };
+        var skip =  skip;
+        var limit = limit;
+        self.log.debug('start query');
+
+        cmsDao.findWithFieldsLimitOrderAndTotal(query, skip, limit, "modified.date", null, $$.m.cms.Page,-1, function(err, list){
+            self.log.debug('end query');
+            if(err) {
+                self.log.error('Error getting pages by websiteId: ' + err);
+                fn(err, null);
+            } else {
+                fn(null, list);
             }
         });
     },
@@ -1600,6 +1757,9 @@ module.exports = {
                 if(err) {
                     log.error('Error generating screenshot: ' + err);
                     return fn(err, null);
+                }
+                if (url.substr(0,5) == 'http:') {
+                  url = url.substr(5, url.length);
                 }
                 page.set('screenshot', url);
                 cmsDao.saveOrUpdate(page, function(err, savedPage){

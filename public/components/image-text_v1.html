@@ -17,8 +17,7 @@
 
     <div class="col-sm-8 col-xs-12" style="padding-left:30px;">
         <div class="image-text-text">
-            <div id="para" class="editable" data-class="text">
-                <convert-html contents="{{component.text}}"></convert-html>
+            <div id="para" class="editable" data-class="text" data-ng-bind-html="component.text | unsafe">
             </div>
         </div>
 

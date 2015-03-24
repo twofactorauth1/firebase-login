@@ -67,6 +67,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     response.files[0].mimeType = fileItem.file.type;
                     $scope.originalAssets.push(response.files[0]);
                     $scope.assets.push(response.files[0]);
+                    response.files[0].checked = true;
+                    $scope.m.singleSelect(response.files[0]);
                 };
 
                 uploader.onErrorItem = function(item, response, status, headers) {
@@ -85,9 +87,19 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
 
                     contentElement.css('visibility', 'hidden');
                     mediaModalElement.on('shown.bs.modal', function(e) {
-                        $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
-                        $(window).trigger("resize")
-                        contentElement.css('visibility', 'visible')
+                        if(e.relatedTarget)
+                        {
+                            $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
+                            $(window).trigger("resize")
+                            contentElement.css('visibility', 'visible')  
+                        }
+                        else if($scope.$parent.showInsert)
+                        {
+                            $scope.showInsert = true;
+                            $(window).trigger("resize")
+                            contentElement.css('visibility', 'visible');
+                        }
+                        
                     });
 
                 });
@@ -126,6 +138,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.m.selectTriggerFn = function (status) {
                     $scope.selectModel.select_all = status;
                     $scope.m.selectAll();
+                    $scope.singleSelected = false;
                 };
 
                 $scope.m.selectAll = function(showType, filterOnly) {
@@ -166,7 +179,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 };
 
                 $scope.m.singleSelect = function(asset) {
-                    $scope.singleSelected = true;
+                    $scope.singleSelected = asset.checked;
                     $timeout(function() {
                         if (!$scope.isSingleSelect) {
                             //$scope.batch.push(asset);
@@ -214,7 +227,10 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                     $scope.selectModel.select_all = allTrue;
                 };
 
-                $scope.m.deleteAsset = function() {
+                $scope.m.deleteAsset = function(asset) {
+                  if (asset) {
+                    $scope.batch.push(asset);
+                  }
                     AssetsService.deleteAssets($scope.batch, function(resp, status) {
                         if ( status === 200 ) {
                           $scope.originalAssets.forEach(function(v, i) {
@@ -253,7 +269,8 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                         $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
                         $scope.type = null;
                     }
-
+                    $scope.m.selectTriggerFn(false);
+                    $scope.singleSelected = false;
                     $("#media-manager-modal").modal('hide');
                 };
             },

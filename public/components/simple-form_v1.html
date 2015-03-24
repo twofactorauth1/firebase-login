@@ -25,18 +25,30 @@
 
                 <div class="clearfix mb15"></div>
 
-                <div id="user_email" class="col-sm-9 form-group">
+                <div id="user_{{field.name}}_{{component._id}}" ng-repeat="field in component.fields" ng-if="field.value" class="col-sm-4 form-group">
                     <div class="left-inner-addon">
-                        <span><i class="fa fa-envelope"></i></span>
-                        <input type="email" ng-model="user.email" placeholder="Email" />
+                        <input  type="text" ng-model="field.model" placeholder="{{field.display}}">
                     </div>
                     <span class="error help-block" />
                 </div>
+                
+                <div class="clearfix mb15"></div>
+                 
+                <div id="user_email_{{component._id}}" class="col-sm-9 form-group">
+                    <div class="left-inner-addon">
+                        <span><i class="fa fa-envelope"></i></span>
+                        <input type="email" ng-model="user.email" placeholder="Email" />
+                </div>
+                    <span class="error help-block" />
+                </div>
+                             
                 <div class="clearfix mb15 visible-xs"></div>
                 <div class="col-sm-3">
                     <div class="clear">
-                        <button class="btn btn-outline pull-right btn-block" ng-disabled="isEditing" ng-click="createUser(user, component)">{{component.submitBtn || "I'm Interested"}} <i class="fa fa-chevron-right"></i>
-                        </button>
+                        <div ng-click="isEditing ? '' : createUser(user, component)" class="btn btn-outline pull-right btn-block btn-editable" role="button">
+                        <div class="editable" data-class="submitBtn" ng-bind-html="(component.submitBtn || 'I\'m Interested') | unsafe"> 
+                        </div>
+                        </div>
                     </div>
                 </div>
 

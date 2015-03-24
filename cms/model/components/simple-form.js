@@ -68,7 +68,25 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            fields : [],
+            fields : [
+                {
+                    "display" : "First Name",
+                    "value" : false,
+                    "name" : "first"
+                },
+                {
+                    "display" : "Last Name",
+                    "value" : false,
+                    "name" : "last"
+                },
+                {
+                    "display" : "Phone Number",
+                    "value" : false,
+                    "name" : "phone"
+                }
+            ],
+
+            from_email: null,
 
             /**
              *

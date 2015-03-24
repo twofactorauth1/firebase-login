@@ -205,7 +205,7 @@
          */
         movePosition: function (event, element, pos, container, containerPositioning, scrollableContainer) {
           var bounds;
-          var useRelative = (containerPositioning === 'relative');
+          var useRelative = true; //(containerPositioning === 'relative');
 
           element.x = event.pageX - pos.offsetX;
           element.y = event.pageY - pos.offsetY;
@@ -221,18 +221,7 @@
               // reset bounds
               bounds.left = 0;
               bounds.top = 0;
-            }
-
-            if (element.x < bounds.left) {
-              element.x = bounds.left;
-            } else if (element.x >= bounds.width + bounds.left - this.offset(element).width) {
-              element.x = bounds.width + bounds.left - this.offset(element).width;
-            }
-            if (element.y < bounds.top) {
-              element.y = bounds.top;
-            } else if (element.y >= bounds.height + bounds.top - this.offset(element).height) {
-              element.y = bounds.height + bounds.top - this.offset(element).height;
-            }
+            }            
           }
 
           element.css({
@@ -776,6 +765,23 @@
 
               targetX = eventObj.pageX - $document[0].documentElement.scrollLeft;
               targetY = eventObj.pageY - ($window.pageYOffset || $document[0].documentElement.scrollTop);
+
+              //Fix to move dragable item over scrolls
+
+              //alert(scope.options["parentElement"])
+              if(scope.options["parentElement"])
+              {
+                var parentElement = $(scope.options["parentElement"]);
+                var top = parentElement.scrollTop();
+                var containerHeight = parentElement.height() + 10;
+                if (targetY > containerHeight) {
+                  parentElement.scrollTop(top + 10);
+                }
+                if (targetY < containerHeight) {
+                  parentElement.scrollTop(top - 10);
+                }
+              }
+              
 
               //IE fixes: hide show element, call element from point twice to return pick correct element.
               dragElement.addClass(sortableConfig.hiddenClass);

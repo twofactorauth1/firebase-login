@@ -185,6 +185,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
     this.pageStart = function(fn) {
         var self = this;
         var startPageTimer = new Date().getTime();
+        parsedEntranceUrl = $.url(window.location.href);
         var parsedUrl = parsedEntranceUrl;
 
         pageProperties = {

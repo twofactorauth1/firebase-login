@@ -7,7 +7,7 @@
 
 //var securityManager = require('../security/securitymanager');
 
-var securityManager = require('../security/sm')(true);
+var securityManager = require('../security/sm')(false);
 var securityConstants = require('../security/utils/security.constants');
 var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
@@ -84,12 +84,13 @@ _.extend(apiBase.prototype, {
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
-                        this.log.warn('Deprecated code reached.');
+                        logger.warn('Deprecated code reached.');
                         req.session.accountId = 0;
                     } else {
                         req.session.accountId = value.id();
                         req.session.subdomain = value.get('subdomain');
                         req.session.domain = value.get('domain');
+                        //logger.debug('setting accountId: ' + req.session.accountId);
                     }
                 }
 
@@ -151,10 +152,10 @@ _.extend(apiBase.prototype, {
                 return next();
             } else {
                 self.sm.verifySubscription(req, function(err, isValid){
-                    if(isValid === true && _.contains(req.session.subprivs, self.base)) {
+                    if(isValid === true && (_.contains(req.session.subprivs, self.base) || _.contains(req.session.subprivs, 'all'))) {
                         return next();
                     } else {
-
+                        logger.debug('subprivs does not contain ' + self.base);
                         var response = {
                             code: 403,
                             status: 'Not Authorized',
