@@ -203,7 +203,9 @@ define([
             if ($scope.fetchedPosts.length > $scope.posts.length) {
               var postLength = parseInt($scope.posts.length) - 1;
               var scrollLimit = parseInt($scope.scrollLimit);
-              $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice(postLength, postLength+scrollLimit));
+              $scope.$apply(function() {
+                $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice(postLength, postLength+scrollLimit));
+              })
             }
           };
         });
