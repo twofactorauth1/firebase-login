@@ -186,8 +186,9 @@ define([
 
           $scope.loadMorePagesFn = function() {
             if ($scope.fetchedPages.length > $scope.pages.length) {
-              $scope.pages = $scope.pages.concat($scope.fetchedPages.slice($scope.pages.length - 1, $scope.scrollLimit));
-              console.info('Fetch pages', $scope.pages.length - 1, $scope.scrollLimit);
+              var pageLength = parseInt($scope.pages.length) - 1;
+              var scrollLimit = parseInt($scope.scrollLimit);
+              $scope.pages = $scope.pages.concat($scope.fetchedPages.slice(pageLength, pageLength+scrollLimit));
             }
           };
         });
@@ -198,8 +199,9 @@ define([
 
           $scope.loadMorePostsFn = function() {
             if ($scope.fetchedPosts.length > $scope.posts.length) {
-              $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice($scope.posts.length - 1, $scope.scrollLimit));
-              console.info('Fetch posts', $scope.posts.length - 1, $scope.scrollLimit);
+              var postLength = parseInt($scope.posts.length) - 1;
+              var scrollLimit = parseInt($scope.scrollLimit);
+              $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice(postLength, postLength+scrollLimit));
             }
           };
         });
