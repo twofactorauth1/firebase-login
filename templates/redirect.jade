@@ -24,7 +24,7 @@ block content
                     p.mt5.mb20(id="redirectMsg")
                     div(id="timerSec")                   
                     p 
-                      h4 Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
+                      h4(id="redirectDesc") Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
     script.
         var next = decodeURIComponent('//#{next}');
         var socialNetwork = decodeURIComponent('#{socialNetwork}');
@@ -34,6 +34,8 @@ block content
             document.getElementById('redirectMsg').innerHTML = "You are about to be redirected to "+ socialNetwork +" for authentication";
         else
             document.getElementById('redirectMsg').innerHTML = "You're about to be redirected in ";
+        if (socialNetwork == 'stripe')
+            document.getElementById('redirectDesc').innerHTML = "Indigenous is asking for permission to use Stripe on your behalf.  This will allow you to use the Indigenous platform to bill your users and collect payments.  This does NOT give Indigenous the permission to charge you for anything and Indigenous will never charge anyone without your explicit permission.";
         var secLeft = 4;
         var intervalFn = function() {
         	secLeft -= 1;
