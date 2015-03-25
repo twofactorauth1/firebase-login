@@ -30,24 +30,48 @@
   <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize  indiscroller indiscroller-update='loadMoreFn' indiscroller-save='saveScrollFn'>
     <div class="pages-section" ng-switch-when="pages">
       <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
-        <div class="panel panel-default row pages-filter">
-          <div class="panel-body">
-            <div class="col-xs-12">
-              <input type="text" placeholder="Search" class="form-control input" ng-model="pageSearch.title" />
-            </div>
-            <!-- <div class="col-xs-6 form-horizontal">
-                            <div class="row">
-                                <select class="form-control chosen-select input" ng-model="sortOrder">
-                                    <option value="" disabled selected>Filter Pages</option>
-                                    <option value="1">A to Z</option>
-                                    <option value="2">Z to A</option>
-                                    <option value="3">Date Added</option>
-                                </select>
+        
+                <div class="panel-body" style="padding: 10px;">
+                  <div class="col-sm-6">
+                      <div class="input-group">
+                            <input data-ng-model="pageFilter.page" placeholder="Search pages" class="form-control input-lg search-pages" type="text">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle input-lg" data-toggle="dropdown" aria-expanded="false"><span ng-show="searchPageType=='title'">By Title</span> <span ng-show="searchPageType=='url'">By Url</span>
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    <li><a ng-click="searchPageType='title';">Search by title</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a ng-click="searchPageType='url';">Search by url</a>
+                                    </li>
+                                </ul>
                             </div>
-                        </div> -->
-          </div>
-          <!-- panel-body -->
-        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mb0">
+                            <select class="form-control chosen-select input-lg" ng-change="setPageSortOrder(pageSortOrder)" ng-model="pageSortOrder">
+                                <option value="" disabled selected>Sort Posts</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                                <option value="4">Date Modified</option>
+                            </select>
+                        </div>
+                    </div>                     
+                
+                <div style="width:100%; text-align:center">
+                    <ul class="pagination hidden-xs letter-list">
+                        <li ng-show="alphaList.length"><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
+                        </li>
+                        <li ng-class="{'disabled': !alphaFilterStatus[alpha]}" ng-repeat="alpha in alphaList">
+                            <a class="btn-letter" ng-click="alphaFilter(alpha)" ng-if="alphaFilterStatus[alpha]" ng-class="{'active': alphaSelected == alpha}">{{alpha}}</a>
+                            <a class="btn-letter" ng-if="!alphaFilterStatus[alpha]" tooltip="No Contact with {{alpha}}">{{alpha}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
       </headroom>
       <div class="row" style="margin-top: 60px;">
         <div class="col-xs-18 col-sm-6 col-md-3">
@@ -65,7 +89,7 @@
             </div>
           </div>
         </div>
-          <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages|filter:pageSearch|orderBy:'modified.date':true track by $index">
+          <div class="col-xs-18 col-sm-6 col-md-3" ng-repeat="page in pages track by $index">
             <a href="/admin#/website-editor?pagehandle={{page.handle}}">
               <div class="thumbnail layered-paper">
                 <h4 class="title">{{page.title || page.handle | characters:24 }}</h4>
@@ -96,24 +120,42 @@
     </div>
     <div class="posts-section" ng-switch-when="posts">
       <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
-        <div class="panel panel-default row posts-filter">
-          <div class="panel-body">
-            <div class="col-xs-12">
-              <input type="text" placeholder="Search" class="form-control input" ng-model="postSearch.post_title" />
-            </div>
-            <!-- <div class="col-xs-6 form-horizontal">
-                            <div class="row">
-                                <select class="form-control chosen-select input" ng-model="sortOrder">
-                                    <option value="" disabled selected>Filter Pages</option>
-                                    <option value="1">A to Z</option>
-                                    <option value="2">Z to A</option>
-                                    <option value="3">Date Added</option>
-                                </select>
+        
+         <div class="panel-body" style="padding: 10px;">
+                    <div class="col-sm-6">
+                      <div class="input-group">
+                          <input data-ng-model="pageFilter.post" placeholder="Search posts" class="form-control input-lg search-posts" type="text">
+                          <div class="input-group-btn">
+                              <button type="button" class="btn btn-default dropdown-toggle input-lg" data-toggle="dropdown" aria-expanded="false"><span ng-show="searchPostType=='title'">By Title</span> <span ng-show="searchPostType=='url'">By Url</span><span ng-show="searchPostType=='author'">By Author</span>
+                                  <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                  <li><a ng-click="searchPostType='title';">Search by title</a>
+                                  </li>
+                                  <li class="divider"></li>
+                                  <li><a ng-click="searchPostType='url';">Search by url</a>
+                                  </li>
+                                  <li class="divider"></li>
+                                  <li><a ng-click="searchPostType='author';">Search by author</a>
+                                  </li>
+                              </ul>
                             </div>
-                        </div> -->
-          </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="mb0">
+                            <select class="form-control chosen-select input-lg" ng-change="setPostSortOrder(postSortOrder)" ng-model="postSortOrder">
+                                <option value="" disabled selected>Sort Posts</option>
+                                <option value="1">A to Z</option>
+                                <option value="2">Z to A</option>
+                                <option value="3">Date Added</option>
+                                <option value="4">Date Modified</option>
+                            </select>
+                        </div>
+                    </div>                    
+                </div>
           <!-- panel-body -->
-        </div>
+        
       </headroom>
       <div class="row" style="margin-top: 60px;">
         <div class="col-xs-12 col-sm-6 col-md-3">
@@ -146,7 +188,7 @@
           </div>
         </div>
         <div indiscroller indiscroller-update='loadMorePostsFn' indiscroller-save='saveScrollFn'>
-        <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts | filter: postSearch| orderBy :'modified.date':true track by $index">
+        <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts track by $index">
           <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
