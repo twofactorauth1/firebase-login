@@ -10,7 +10,8 @@ define(['angularAMD'], function(angularAMD) {
         console.log(scope.indiscrollerUpdate);
         rawElement = elem[0];
         elem.bind('scroll', function() {
-          if ((rawElement.scrollTop + rawElement.offsetHeight + 1000) >= rawElement.scrollHeight) {
+          var scrollGap = scope.$parent.scrollGap || 1000;
+          if ((rawElement.scrollTop + rawElement.offsetHeight + scrollGap) >= rawElement.scrollHeight) {           
             scope.scrollFn();
             scope.savePosFn(rawElement.scrollTop);
           }
