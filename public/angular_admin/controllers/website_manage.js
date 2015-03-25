@@ -207,10 +207,10 @@ define([
         });
 
         $scope.loadMoreFn = function() {
-          if ($scope.activeTab == 'pages') {
+          if ($scope.activeTab == 'pages' && $scope.loadMorePagesFn) {
             return $scope.loadMorePagesFn();
           }
-          if ($scope.activeTab === 'posts') {
+          if ($scope.activeTab === 'posts' && $scope.loadMorePostsFn) {
             return $scope.loadMorePostsFn();
           }
         };

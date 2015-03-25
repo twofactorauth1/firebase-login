@@ -19995,6 +19995,13 @@ div.error label.error:before {
   border: 1px solid #dddddd;
 }
 .website-manage .screenshot-wrap .screenshot {
+  width: 235px;
+  height: 120px;
+  background-size: cover;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+}
+.website-manage .screenshot-wrap .screenshot-page {
   width: 239px;
   background-size: cover;
   margin: 0 auto;
