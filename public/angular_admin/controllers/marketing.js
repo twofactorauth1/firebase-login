@@ -439,6 +439,16 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      * add an admin feed to the social account using the parent access token
      */
 
+    $scope.checkAccountExistFn = function(id) {
+      var status = false;
+      $scope.config.socialAccounts.forEach(function(value, index) {
+        if (value.id == id) {
+          status = true;
+        }
+      });
+      return status;
+    };
+
     $scope.addPageFeed = function(page) {
       var config = $scope.config.socialAccounts;
       var newSocialAccount;
@@ -455,6 +465,9 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       });
     };
 
+    $scope.deleteSocialAccountFn = function(id) {
+      SocialConfigService.deleteSocialConfigEntry(id, function() {});
+    };
     /*
      * @watchCollection - feed
      * watch the feed and after 2sec of waiting on new items set isotope
