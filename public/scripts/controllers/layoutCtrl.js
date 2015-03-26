@@ -27,13 +27,20 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     $scope.sortBlogFn = function(blogpost) {
       return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));            
     };
-
+    
     $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
       if (newValue !== undefined && newValue.length) {
-        newValue.forEach(function(value, index) {
+        newValue.forEach(function(value, index) { 
+        var default_size = 2;
+          that.totalPosts.forEach(function(val)
+          {
+            var count = _.countBy(val.post_tags, function(num){return num == value})["true"]
+            if(count)
+              default_size += count;
+          })
           $scope.tagCloud.push({
             text: value,
-            weight: Math.floor((Math.random() * newValue.length) + 1),
+            weight: default_size,//Math.floor((Math.random() * newValue.length) + 1),
             link: '/tag/' + value
           })
         });
@@ -254,6 +261,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       if (err) {
         console.log('BlogCtrl Error: ' + err);
       } else {
+        that.totalPosts = angular.copy(data);
+
+        
         var total = data.total;
         var limit = data.limit;
         var start = data.start;
