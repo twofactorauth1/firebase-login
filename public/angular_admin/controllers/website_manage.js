@@ -80,6 +80,8 @@ define([
               $scope.pagesOrder = 'modified.date';
               $scope.pagesSortReverse = false;
             }
+            $scope.waitLoading = false;
+            $scope.pages = [];
             $scope.orderByPageFn();
             $scope.loadMorePagesFn(true);
       }
@@ -103,6 +105,7 @@ define([
               $scope.postsOrder = 'modified.date';
               $scope.postsSortReverse = false;
             }
+            $scope.posts = [];
             $scope.orderByPostFn();
             $scope.loadMorePostsFn(true);
       }
@@ -282,6 +285,7 @@ define([
                   elem.handle && elem.handle.toLowerCase().indexOf($scope.pageFilter.page.toLowerCase()) != -1;              
                 });
               }
+            $scope.waitLoading = false;  
             $scope.pages = [];
             $scope.orderByPageFn();
             $scope.loadMorePagesFn(true);
