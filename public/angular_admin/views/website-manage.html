@@ -189,6 +189,7 @@
         </div>
         <div indiscroller indiscroller-update='loadMorePostsFn' indiscroller-save='saveScrollFn'>
         <div class="col-xs-12 col-sm-6 col-md-3" ng-repeat="post in posts track by $index">
+          <a href="/admin#/website-editor?posthandle={{post.post_url}}">
           <!-- <div class="thumbnail box14">
                             <div class="caption">
                                 <a href="#" class="btn btn-green btn-block" role="button"><i class="fa fa-edit"></i> Edit</a>
@@ -229,7 +230,8 @@
             <div class="left-shadow"></div>
             <div class="right-shadow"></div>
           </div>
-        </div>
+        </a>
+       </div>
       </div>
         <div class="pagination pagination-centered website-pagination" ng-if="postPaging.total && postPaging.total > numPerPage">
           <ul class="pagination">
