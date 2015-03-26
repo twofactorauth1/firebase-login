@@ -24,6 +24,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     $scope.currentDate = new Date();
     $scope.copyrightYear = d.getFullYear();
 
+    $scope.sortBlogFn = function(blogpost) {
+      return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));            
+    };
+
     $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
       if (newValue !== undefined && newValue.length) {
         newValue.forEach(function(value, index) {
