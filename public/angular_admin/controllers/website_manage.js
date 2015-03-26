@@ -32,6 +32,7 @@ define([
       $scope.showToaster = false;
       $scope.showOnboarding = false;
       $scope.stepIndex = 0;
+      $scope.waitLoading = false;
       $scope.onboardingSteps = [{
         overlay: false
       }]
@@ -45,7 +46,7 @@ define([
       }];
 
       $scope.scrollInitialLoad = 20;
-      $scope.scrollLimit = 4;
+      $scope.scrollLimit = 3;
       $scope.scrollGap = 1000;      
       $scope.pageFilter = {};
       $scope.pagesOrder = $scope.postsOrder = 'modified.date';
@@ -250,15 +251,20 @@ define([
           $scope.pages = $scope.fetchedPages.slice(0, $scope.scrollInitialLoad);
 
           $scope.loadMorePagesFn = function(reload) {
-            if ($scope.fetchedPages.length > $scope.pages.length) {
-              var pageLength = parseInt($scope.pages.length);
-              var scrollLimit = parseInt($scope.scrollLimit);
-              if(reload)
-                 $scope.pages = $scope.fetchedPages.slice(0, $scope.scrollInitialLoad);
-              else
-              $scope.$apply(function() {
-                $scope.pages = $scope.pages.concat($scope.fetchedPages.slice(pageLength, pageLength+scrollLimit));
-              })              
+            if(!$scope.waitLoading)
+            {
+              $scope.waitLoading = true;
+              if ($scope.fetchedPages.length > $scope.pages.length) {
+                var pageLength = parseInt($scope.pages.length);
+                var scrollLimit = parseInt($scope.scrollLimit);
+                if(reload)
+                   $scope.pages = $scope.fetchedPages.slice(0, $scope.scrollInitialLoad);
+                else
+                $scope.$apply(function() {
+                  $scope.pages = $scope.pages.concat($scope.fetchedPages.slice(pageLength, pageLength+scrollLimit));
+                }) 
+                $scope.waitLoading = false;             
+              }
             }
           };
           
