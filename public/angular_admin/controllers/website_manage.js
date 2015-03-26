@@ -45,8 +45,8 @@ define([
         overlay: false
       }];
 
-      $scope.scrollInitialLoad = 20;
-      $scope.scrollLimit = 3;
+      $scope.scrollInitialLoad = 19;
+      $scope.scrollLimit = 4;
       $scope.scrollGap = 1000;      
       $scope.pageFilter = {};
       $scope.pagesOrder = $scope.postsOrder = 'modified.date';
