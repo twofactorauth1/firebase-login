@@ -30,14 +30,17 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     
     $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
       if (newValue !== undefined && newValue.length) {
+        var tagsArr = [];
+        that.totalPosts.forEach(function(val)
+        {
+          if(val.post_tags)
+            tagsArr.push(val.post_tags);
+        })
         newValue.forEach(function(value, index) { 
-        var default_size = 2;
-          that.totalPosts.forEach(function(val)
-          {
-            var count = _.countBy(val.post_tags, function(num){return num == value})["true"]
-            if(count)
-              default_size += count;
-          })
+         var default_size = 2;
+         var count = _.countBy(_.flatten(tagsArr), function(num){return num == value})["true"];
+          if(count)
+            default_size += count;
           $scope.tagCloud.push({
             text: value,
             weight: default_size,//Math.floor((Math.random() * newValue.length) + 1),
