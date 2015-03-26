@@ -17,7 +17,7 @@ var mainApp = angular
         'ngTouch',
         'angular-parallax',
         'config',
-        // 'dm.style',
+        'dm.style',
         'coursePreview',
         'duScroll',
         'mrPageEnterAnimate',

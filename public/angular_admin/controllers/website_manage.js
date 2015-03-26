@@ -25,13 +25,14 @@ define([
     'WebsiteService',
     'ngProgress',
     'toaster',
-    'blockUI', '$state', 'ToasterService',
-    function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI, $state, ToasterService) {
+    'blockUI', '$state', 'ToasterService','$filter',
+    function($scope, $location, UserService, WebsiteService, ngProgress, toaster, blockUI, $state, ToasterService, $filter) {
       ngProgress.start();
       var account;
       $scope.showToaster = false;
       $scope.showOnboarding = false;
       $scope.stepIndex = 0;
+      $scope.waitLoading = false;
       $scope.onboardingSteps = [{
         overlay: false
       }]
@@ -44,10 +45,71 @@ define([
         overlay: false
       }];
 
-      $scope.scrollInitialLoad = 15;
+      $scope.scrollInitialLoad = 19;
       $scope.scrollLimit = 4;
+      $scope.scrollGap = 1000;      
+      $scope.pageFilter = {};
+      $scope.pagesOrder = $scope.postsOrder = 'modified.date';
+      $scope.pagesSortReverse = $scope.postsSortReverse = true;
+      $scope.searchPageType = $scope.searchPostType = 'title';
 
+      $scope.orderByPageFn = function() {
+        $scope.fetchedPages = $filter('orderBy')($scope.fetchedPages, $scope.pagesOrder, $scope.pagesSortReverse);          
+      };
 
+      $scope.orderByPostFn = function() {
+        $scope.fetchedPosts = $filter('orderBy')($scope.fetchedPosts, $scope.postsOrder, $scope.postsSortReverse);          
+      };
+
+      $scope.setPageSortOrder = function(newValue)
+      {
+         newValue = parseInt(newValue);
+            if (newValue === '') {
+              $scope.pagesOrder = 'modified.date';
+              $scope.pagesSortReverse = true;
+            } else if (newValue == 1) {
+              $scope.pagesOrder = 'title';
+              $scope.pagesSortReverse = false;
+            } else if (newValue == 2) {
+              $scope.pagesOrder = 'title';
+              $scope.pagesSortReverse = true;
+            } else if (newValue == 3) {
+              $scope.pagesOrder = 'created.date';
+              $scope.pagesSortReverse = false;
+            } else if (newValue == 4) {
+              $scope.pagesOrder = 'modified.date';
+              $scope.pagesSortReverse = false;
+            }
+            $scope.waitLoading = false;
+            $scope.pages = [];
+            $scope.orderByPageFn();
+            $scope.loadMorePagesFn(true);
+      }
+
+      $scope.setPostSortOrder = function(newValue)
+      {
+         newValue = parseInt(newValue);
+            if (newValue === '') {
+              $scope.postsOrder = 'modified.date';
+              $scope.postsSortReverse = true;
+            } else if (newValue == 1) {
+              $scope.postsOrder = 'post_title';
+              $scope.postsSortReverse = false;
+            } else if (newValue == 2) {
+              $scope.postsOrder = 'post_title';
+              $scope.postsSortReverse = true;
+            } else if (newValue == 3) {
+              $scope.postsOrder = 'created.date';
+              $scope.postsSortReverse = false;
+            } else if (newValue == 4) {
+              $scope.postsOrder = 'modified.date';
+              $scope.postsSortReverse = false;
+            }
+            $scope.posts = [];
+            $scope.orderByPostFn();
+            $scope.loadMorePostsFn(true);
+      }
+     
 
       $scope.beginOnboarding = function(type) {
 
@@ -126,6 +188,8 @@ define([
         }
       });
 
+     
+
       UserService.getUserPreferences(function(preferences) {
         console.log('getUserPreferences >>> ', preferences);
         $scope.userPreferences = preferences;
@@ -179,38 +243,118 @@ define([
         $scope.account = account;
         WebsiteService.getPages($scope.account.website.websiteId, function(pages) {
           $scope.fetchedPages = [];
+          var pageData = [];
           for (var k in pages) {
-            $scope.fetchedPages.push(pages[k]);
+            pageData.push(pages[k]);
           }
+
+          $scope.originalPages = pageData;
+          $scope.fetchedPages = pageData;
+          $scope.orderByPageFn();
           $scope.pages = $scope.fetchedPages.slice(0, $scope.scrollInitialLoad);
 
-          $scope.loadMorePagesFn = function() {
-            if ($scope.fetchedPages.length > $scope.pages.length) {
-              var pageLength = parseInt($scope.pages.length) - 1;
-              var scrollLimit = parseInt($scope.scrollLimit);
-              $scope.pages = $scope.pages.concat($scope.fetchedPages.slice(pageLength, pageLength+scrollLimit));
+          $scope.loadMorePagesFn = function(reload) {
+            if(!$scope.waitLoading)
+            {
+              $scope.waitLoading = true;
+              if ($scope.fetchedPages.length > $scope.pages.length) {
+                var pageLength = parseInt($scope.pages.length);
+                var scrollLimit = parseInt($scope.scrollLimit);
+                if(reload)
+                   $scope.pages = $scope.fetchedPages.slice(0, $scope.scrollInitialLoad);
+                else
+                $scope.$apply(function() {
+                  $scope.pages = $scope.pages.concat($scope.fetchedPages.slice(pageLength, pageLength+scrollLimit));
+                }) 
+                $scope.waitLoading = false;             
+              }
             }
           };
+          
+          $scope.$watch('pageFilter.page', function(newValue, oldValue) {
+            if(newValue || newValue ==="")
+            {
+              if(newValue == "")
+                $scope.fetchedPages = $scope.originalPages.filter(function(elem) { 
+                  return true
+                })
+              else
+              {
+                $scope.fetchedPages = $scope.originalPages.filter(function(elem) {              
+                  return elem.title && elem.title.toLowerCase().indexOf($scope.pageFilter.page.toLowerCase()) != -1 ||
+                  elem.handle && elem.handle.toLowerCase().indexOf($scope.pageFilter.page.toLowerCase()) != -1;              
+                });
+              }
+            $scope.waitLoading = false;  
+            $scope.pages = [];
+            $scope.orderByPageFn();
+            $scope.loadMorePagesFn(true);
+            }
+          })
+                     
         });
 
         WebsiteService.getPosts(function(posts) {
+          $scope.originalPosts = posts;
           $scope.fetchedPosts = posts;
+          $scope.orderByPostFn();
           $scope.posts = $scope.fetchedPosts.slice(0, $scope.scrollInitialLoad);
 
-          $scope.loadMorePostsFn = function() {
+          $scope.loadMorePostsFn = function(reload) {
             if ($scope.fetchedPosts.length > $scope.posts.length) {
-              var postLength = parseInt($scope.posts.length) - 1;
+              var postLength = parseInt($scope.posts.length);
               var scrollLimit = parseInt($scope.scrollLimit);
-              $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice(postLength, postLength+scrollLimit));
+              if(reload)
+              {
+                $scope.posts = $scope.fetchedPosts.slice(0, $scope.scrollInitialLoad);
+              }
+              else
+                $scope.$apply(function() {
+                  $scope.posts = $scope.posts.concat($scope.fetchedPosts.slice(postLength, postLength+scrollLimit));
+                })
             }
           };
+          $scope.$watch('pageFilter.post', function(newValue, oldValue) {
+            if(newValue || newValue ==="")
+            {
+              if(newValue == "")
+                $scope.fetchedPosts = $scope.originalPosts.filter(function(elem) { 
+                  return true
+                })
+              else
+              {
+                if($scope.searchPageType === 'title')
+                {
+                  $scope.fetchedPosts = $scope.originalPosts.filter(function(elem) {              
+                    return elem.post_title && elem.post_title.toLowerCase().indexOf($scope.pageFilter.post.toLowerCase()) != -1;         
+                  });
+                }
+                else if(searchPageType === 'url')
+                {
+                  $scope.fetchedPosts = $scope.originalPosts.filter(function(elem) {              
+                    return elem.post_url && elem.post_url.toLowerCase().indexOf($scope.pageFilter.post.toLowerCase()) != -1;             
+                  });
+                }
+                else if(searchPageType === 'author')
+                {
+                  $scope.fetchedPosts = $scope.originalPosts.filter(function(elem) {              
+                    return elem.post_author && elem.post_author.toLowerCase().indexOf($scope.pageFilter.post.toLowerCase()) != -1;              
+                  });
+                }
+                
+              }
+            $scope.posts = [];
+            $scope.orderByPostFn();
+            $scope.loadMorePostsFn(true);
+            }
+          })
         });
 
         $scope.loadMoreFn = function() {
-          if ($scope.activeTab == 'pages') {
+          if ($scope.activeTab == 'pages' && $scope.loadMorePagesFn) {
             return $scope.loadMorePagesFn();
           }
-          if ($scope.activeTab === 'posts') {
+          if ($scope.activeTab === 'posts' && $scope.loadMorePostsFn) {
             return $scope.loadMorePostsFn();
           }
         };

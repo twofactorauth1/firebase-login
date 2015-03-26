@@ -219,7 +219,7 @@
                                     <div class="panel-heading">
 
                                         <div class="media">
-                                            <a href="#" class="pull-left">
+                                            <a ui-sref="account" class="pull-left">
                                                 <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                             </a>
                                             <div class="media-body">
@@ -234,7 +234,7 @@
                                     <div class="panel-body">
 
                                         <div class="media">
-                                            <a href="#">
+                                            <a ng-href="{{post.link}}">
                                                 <img alt="" ng-src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
@@ -243,11 +243,11 @@
                                             </div>
                                         </div>
 
-                                        <div class="timeline-btns" ng-show="post.postType !== 'link'">
+                                        <div class="timeline-btns">
                                             <div class="pull-left">
                                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike" ng-click="tempPost2Like(post)"><i class="fa fa-thumbs-up"></i></a>
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post.comments)"><i class="fa fa-comment"></i></a>
-                                                <a href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
+                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
+                                                <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
                                             <div class="pull-right">
                                                 <small class="text-muted">{{post.likes.length || 0}} people like this</small>
@@ -266,7 +266,7 @@
                                     <div class="panel-heading">
 
                                         <div class="media">
-                                            <a href="#" class="pull-left">
+                                            <a ui-sref='account' class="pull-left">
                                                 <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                             </a>
                                             <div class="media-body">
@@ -281,7 +281,7 @@
                                     <div class="panel-body">
 
                                         <div class="media">
-                                            <a href="#">
+                                            <a ng-href='{{post.link}}'>
                                                 <img alt="" ng-src="{{post.picture}}" class="media-object">
                                             </a>
                                             <div class="media-body">
@@ -289,11 +289,11 @@
                                             </div>
                                         </div>
 
-                                        <div class="timeline-btns" ng-show="post.postType !== 'link'">
+                                        <div class="timeline-btns">
                                             <div class="pull-left">
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Like / Unlike"><i class="fa fa-thumbs-up"></i></a>
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment"><i class="fa fa-comment"></i></a>
-                                                <a href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
+                                              <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike" ng-click="tempPost2Like(post)"><i class="fa fa-thumbs-up"></i></a>
+                                              <!-- <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a> -->
+                                                <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
                                             <div class="pull-right hidden">
                                                 <small class="text-muted">{{post.likes.length || 0}} people like this</small>
@@ -485,7 +485,10 @@
                     <div class="col-xs-9 right-panel">
                         <div ng-show="modalfeed == 'facebook'">
                             <ul class="fb-admin-pages">
-                                <li ng-repeat="page in fbAdminPages"><img ng-src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}} <span class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span>
+                                <li ng-repeat="page in fbAdminPages">
+                                  <img ng-src="{{page.picture.data.url}}" class="thumbnail pull-left clearfix"> {{page.name}}
+                                  <span ng-show="checkAccountExistFn(page.socialId)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(page.socialId)"></span>
+                                  <span ng-hide="checkAccountExistFn(page.socialId)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(page)"></span>
                                 </li>
                             </ul>
                         </div>
@@ -549,11 +552,11 @@
                             <div>
                                 <div class="col-xs-9">
                                     <div class="form-group mb0">
-                                        <input type="text" class="form-control" placeholder="Enter Comment...">
+                                        <input type="text" class="form-control" placeholder="Enter Comment..." ng-model='addComment'>
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
-                                    <button class="btn btn-primary btn-block">Comment</button>
+                                    <button class="btn btn-primary btn-block" data-dismiss='modal' ng-class='{"disabled": !addComment}' ng-click='addCommentFn()'>Comment</button>
                                 </div>
                             </div>
                         </div>

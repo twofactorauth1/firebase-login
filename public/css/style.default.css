@@ -19995,6 +19995,13 @@ div.error label.error:before {
   border: 1px solid #dddddd;
 }
 .website-manage .screenshot-wrap .screenshot {
+  width: 235px;
+  height: 120px;
+  background-size: cover;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+}
+.website-manage .screenshot-wrap .screenshot-page {
   width: 239px;
   background-size: cover;
   margin: 0 auto;
@@ -20316,6 +20323,18 @@ div.error label.error:before {
 .website-manage .website-pagination {
   width: 100%;
   float: left;
+}
+.website-manage .pages-section .page-body,
+.website-manage .posts-section .page-body {
+  padding: 0px;
+  margin-top: -5px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.website-manage .pages-section .post-body,
+.website-manage .posts-section .post-body {
+  padding: 10px;
+  margin-top: -15px;
 }
 .iconpicker-popover {
   z-index: 9999!important;

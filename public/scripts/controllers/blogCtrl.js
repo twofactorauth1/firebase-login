@@ -13,6 +13,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             window.history.back();
           };
 
+        
+
         pagesService(function (err, data) {
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);

@@ -1,5 +1,5 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress'], function(app) {
-  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress', 'toasterService'], function(app) {
+  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress','ToasterService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress, ToasterService) {
     ngProgress.start();
 
     /*
@@ -439,6 +439,16 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      * add an admin feed to the social account using the parent access token
      */
 
+    $scope.checkAccountExistFn = function(id) {
+      var status = false;
+      $scope.config.socialAccounts.forEach(function(value, index) {
+        if (value.id == id) {
+          status = true;
+        }
+      });
+      return status;
+    };
+
     $scope.addPageFeed = function(page) {
       var config = $scope.config.socialAccounts;
       var newSocialAccount;
@@ -455,6 +465,9 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       });
     };
 
+    $scope.deleteSocialAccountFn = function(id) {
+      SocialConfigService.deleteSocialConfigEntry(id, function() {});
+    };
     /*
      * @watchCollection - feed
      * watch the feed and after 2sec of waiting on new items set isotope
@@ -489,9 +502,16 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
     $scope.visibleComments = [];
 
-    $scope.updateComments = function(comments) {
-      console.log('comments ', comments);
-      $scope.visibleComments = comments;
+    $scope.addCommentFn = function() {
+      SocialConfigService.addPostComment($scope.addCommentPage.socialAccountId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
+        ToasterService.show('success', 'Comment added', 'Comment added to the post.');
+      });
+    };
+
+    $scope.updateComments = function(page) {
+      $scope.addCommentPage = page;
+      console.log('comments ', page.comments);
+      $scope.visibleComments = page.comments;
     };
 
     /*
