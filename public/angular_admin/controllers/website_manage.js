@@ -747,6 +747,7 @@ define([
             page.title = "";
             page.handle = "";
             $scope.showChangeURL = false;
+            $scope.templateDetails = false;
           });
         } else {
           toaster.pop('error', "Page URL " + page.handle, "Already exists");
