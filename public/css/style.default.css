@@ -20286,8 +20286,8 @@ div.error label.error:before {
 .website-manage .paper-wrap .left-shadow {
   width: 140px;
   height: 140px;
-  bottom: -9px;
-  left: -16px;
+  bottom: -8px;
+  left: -9px;
   position: absolute;
   z-index: 1;
   display: inline-block;
@@ -20303,8 +20303,8 @@ div.error label.error:before {
 .website-manage .paper-wrap .right-shadow {
   width: 140px;
   height: 140px;
-  bottom: -18px;
-  right: -5px;
+  bottom: -17px;
+  right: 0px;
   position: absolute;
   z-index: 1;
   display: inline-block;
