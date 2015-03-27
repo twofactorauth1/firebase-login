@@ -397,11 +397,21 @@ module.exports = {
         log.debug('>> getOrderById');
         dao.getById(orderId, $$.m.Order, function(err, order){
             if(err) {
-                log.error('Error getting order: ' + order);
+                log.error('Error getting order: ' + err);
                 return fn(err, null);
             } else {
-                log.debug('<< getOrderById');
-                return fn(null, order);
+                //also fetch customer
+                contactDao.getById(order.get('customer_id'), $$.m.Contact, function(err, contact){
+                    if(err) {
+                        log.error('Error getting contact: ' + err);
+                        return fn(err, order);
+                    } else {
+                        order.set('customer', contact);
+                        log.debug('<< getOrderById');
+                        return fn(null, order);
+                    }
+                });
+
             }
         });
     },
