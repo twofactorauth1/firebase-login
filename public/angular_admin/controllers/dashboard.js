@@ -257,11 +257,6 @@ define([
             
             $scope.pageviews = currentTotalPageviews;
             $scope.pageviewsData = pageviewsData;            
-           
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, function(data) {
-              $scope.analyticsOverviewConfig = data;
-              $scope.analyticsOverviewConfig.loading = false;
-            });
 
             var pageviewsPreviousData = 0;
             for (var r = 0; r < results[5].result.length; r++) {
@@ -289,6 +284,13 @@ define([
             };
             $scope.sessions = _totalSessions;
             $scope.sessionsData = _sessionsData;
+
+            console.log('$scope.sessionsData ', $scope.sessionsData);
+           
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, function(data) {
+              $scope.analyticsOverviewConfig = data;
+              $scope.analyticsOverviewConfig.loading = false;
+            });
             
             var sessionsPreviousData = 0;
             for (var w = 0; w < results[7].result.length; w++) {
