@@ -301,9 +301,10 @@ define([
             $scope.sessionsPercent = sessionsPercent;
 
             var secsToConv = 0;
-            if (results[9].result && _totalSessions) {
-              secsToConv = (results[9].result / 1000) / _totalSessions;
+            if (results[9].result) {
+              secsToConv = (results[9].result / 1000);
             }
+
             var visitDuration = ChartAnalyticsService.secToTime(secsToConv);
 
             if (results[15].result == null) {
