@@ -58,6 +58,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFollowers.bind(this));
         app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterProfile.bind(this));
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
+        app.post(this.url('twitter/:socialAccountId/post/:postId/reply'), this.isAuthApi.bind(this), this.createTwitterReply.bind(this));
         app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
         app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
@@ -521,6 +522,28 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    createTwitterReply: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterReply');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var post = req.body.post;
+        var tweetId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.replyToTwitterPost(accountId, socialAccountId, tweetId, post, function(err, savedPost){
+                    self.log.debug('<< createTwitterReply');
+                    self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                });
+            }
+        });
+
     },
 
     deleteTwitterPost: function(req, resp) {

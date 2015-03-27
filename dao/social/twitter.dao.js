@@ -413,6 +413,30 @@ var dao = {
         );
     },
 
+    replyToPostWithToken: function(accessToken, accessTokenSecret, status, statusId, fn) {
+        var self = this;
+        self.log.debug('>> replyToPostWithToken');
+
+        twitter.statuses("update", {
+                status: status,
+                in_reply_to_status_id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error updating status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< replyToPostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
     deletePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
         var self = this;
         self.log.debug('>> deletePostWithToken');

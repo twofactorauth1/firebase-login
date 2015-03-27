@@ -655,6 +655,24 @@ module.exports = {
         });
     },
 
+    replyToTwitterPost: function(accountId, socialAccountId, tweetId, post, fn) {
+        var self = this;
+        log.debug('>> replyToTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.replyToPostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, post, tweetId, fn);
+
+        });
+    },
+
     deleteTwitterPost: function(accountId, socialAccountId, postId, fn) {
         var self = this;
         log.debug('>> createTwitterPost');
