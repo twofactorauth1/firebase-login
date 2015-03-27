@@ -18010,7 +18010,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
   color: rgba(255, 255, 255, 0.5);
 }
 .rightpanel .tab-content {
-  background: none;
+  background: #fff!important;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -21615,6 +21615,27 @@ div.error label.error:before {
 }
 #theme-editor .headermenu {
   padding-left: 0;
+}
+.popover-content .btn-default {
+  background: #e4e7ea;
+  color: #636e7b;
+  border-bottom: 4px solid #cccccc;
+}
+.popover-content .btn-default:hover,
+.popover-content .btn-default:focus,
+.popover-content .btn-default:active,
+.popover-content .btn-default.active,
+.popover-content .open .dropdown-toggle.btn-default {
+  background: #e4e7ea;
+  border-color: #ccc;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.popover-content a {
+  margin-left: 10px;
+}
+.popover-content a:first-child {
+  margin-left: none;
 }
 #theme-editor .nav-tabs > li > a {
   padding: 14px 18px;
