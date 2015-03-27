@@ -512,7 +512,11 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.visibleComments = [];
 
     $scope.addCommentFn = function() {
-      SocialConfigService.addPostComment($scope.addCommentPage.socialAccountId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
+      SocialConfigService.addPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
+        $scope.visibleComments.push({picture: $scope.addCommentAdminPage.picture.data.url,
+                                              created: new Date(),
+                                              name: $scope.addCommentAdminPage.name,
+                                              comment: $scope.addComment});
         ToasterService.show('success', 'Comment added', 'Comment added to the post.');
       });
     };
