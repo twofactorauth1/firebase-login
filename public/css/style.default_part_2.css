@@ -2119,7 +2119,7 @@ fieldset[disabled] #contact-edit-container .btn.btn-default-billing.default.acti
 }
 
 .rightpanel .tab-content {
-  background: none;
+  background: #fff!important;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -4870,8 +4870,8 @@ div.error label.error:before {
 .website-manage .paper-wrap .left-shadow {
   width: 140px;
   height: 140px;
-  bottom: -9px;
-  left: -16px;
+  bottom: -8px;
+  left: -9px;
   position: absolute;
   z-index: 1;
   display: inline-block;
@@ -4888,8 +4888,8 @@ div.error label.error:before {
 .website-manage .paper-wrap .right-shadow {
   width: 140px;
   height: 140px;
-  bottom: -18px;
-  right: -5px;
+  bottom: -17px;
+  right: 0px;
   position: absolute;
   z-index: 1;
   display: inline-block;
@@ -4910,20 +4910,6 @@ div.error label.error:before {
 .website-manage .website-pagination {
   width: 100%;
   float: left;
-}
-
-.website-manage .pages-section .page-body,
-.website-manage .posts-section .page-body {
-  padding: 0px;
-  margin-top: -5px;
-  margin-left: -10px;
-  margin-right: -10px;
-}
-
-.website-manage .pages-section .post-body,
-.website-manage .posts-section .post-body {
-  padding: 10px;
-  margin-top: -15px;
 }
 
 .iconpicker-popover {
@@ -6516,6 +6502,31 @@ div.error label.error:before {
 
 #theme-editor .headermenu {
   padding-left: 0;
+}
+
+.popover-content .btn-default {
+  background: #e4e7ea;
+  color: #636e7b;
+  border-bottom: 4px solid #cccccc;
+}
+
+.popover-content .btn-default:hover,
+.popover-content .btn-default:focus,
+.popover-content .btn-default:active,
+.popover-content .btn-default.active,
+.popover-content .open .dropdown-toggle.btn-default {
+  background: #e4e7ea;
+  border-color: #ccc;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.popover-content a {
+  margin-left: 10px;
+}
+
+.popover-content a:first-child {
+  margin-left: none;
 }
 
 #theme-editor .nav-tabs > li > a {

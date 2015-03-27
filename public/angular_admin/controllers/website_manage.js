@@ -80,10 +80,7 @@ define([
               $scope.pagesOrder = 'modified.date';
               $scope.pagesSortReverse = false;
             }
-            $scope.waitLoading = false;
-            $scope.pages = [];
-            $scope.orderByPageFn();
-            $scope.loadMorePagesFn(true);
+            $scope.refreshPages();
       }
 
       $scope.setPostSortOrder = function(newValue)
@@ -105,9 +102,7 @@ define([
               $scope.postsOrder = 'modified.date';
               $scope.postsSortReverse = false;
             }
-            $scope.posts = [];
-            $scope.orderByPostFn();
-            $scope.loadMorePostsFn(true);
+            $scope.refreshPosts();
       }
      
 
@@ -285,10 +280,7 @@ define([
                   elem.handle && elem.handle.toLowerCase().indexOf($scope.pageFilter.page.toLowerCase()) != -1;              
                 });
               }
-            $scope.waitLoading = false;  
-            $scope.pages = [];
-            $scope.orderByPageFn();
-            $scope.loadMorePagesFn(true);
+            $scope.refreshPages();
             }
           })
                      
@@ -343,9 +335,7 @@ define([
                 }
                 
               }
-            $scope.posts = [];
-            $scope.orderByPostFn();
-            $scope.loadMorePostsFn(true);
+            $scope.refreshPosts();
             }
           })
         });
@@ -645,7 +635,9 @@ define([
           };
           if (!hasHandle) {
             WebsiteService.createPageFromTheme($scope.currentTheme._id, $scope.website._id, page_handle, function(data) {
-              $scope.pages.push(data);
+              $scope.fetchedPages.push(data);
+              $scope.originalPages.push(data);
+              $scope.refreshPages();
               toaster.pop('success', "Page created successfully");
             })
           }
@@ -704,8 +696,10 @@ define([
           WebsiteService.createPage(websiteId, pageData, function(newpage) {
             toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
             $('#create-page-modal').modal('hide');
-            validateCreatePage
-            $scope.pages.push(newpage);
+            //validateCreatePage
+            $scope.fetchedPages.push(newpage);
+            $scope.originalPages.push(newpage);
+            $scope.refreshPages();
           });
         } else {
           toaster.pop('error', "Page URL " + page.handle, "Already exists");
@@ -747,10 +741,13 @@ define([
           WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, websiteId, pageData, function(newpage) {
             toaster.pop('success', "Page Created", "The " + newpage.title + " page was created successfully.");
             $('#create-page-modal').modal('hide');
-            $scope.pages.push(newpage);
+            $scope.fetchedPages.push(newpage);
+            $scope.originalPages.push(newpage);
+            $scope.refreshPages();
             page.title = "";
             page.handle = "";
             $scope.showChangeURL = false;
+            $scope.templateDetails = false;
           });
         } else {
           toaster.pop('error', "Page URL " + page.handle, "Already exists");
@@ -799,7 +796,10 @@ define([
         WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
           toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
           $('#create-post-modal').modal('hide');
-          $scope.posts.push(data);
+          //$scope.posts.push(data);
+          $scope.fetchedPosts.push(data);
+          $scope.originalPosts.push(data);
+          $scope.refreshPosts();
         })
 
       };
@@ -838,6 +838,21 @@ define([
           //document.getElementById("iframe-website").contentWindow.updateWebsite($scope.website);
         }
       };
+
+      $scope.refreshPages = function()
+      {
+          $scope.pages = [];
+          $scope.waitLoading = false;
+          $scope.orderByPageFn();
+          $scope.loadMorePagesFn(true);
+      }
+
+      $scope.refreshPosts = function()
+      {    
+          $scope.posts = [];     
+          $scope.orderByPostFn();
+          $scope.loadMorePostsFn(true);
+      }
     }
   ]);
 });
