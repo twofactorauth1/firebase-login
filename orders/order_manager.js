@@ -427,8 +427,26 @@ module.exports = {
                 log.error('Error listing orders: ', err);
                 return fn(err, null);
             } else {
-                log.debug('<< listOrdersByAccount');
-                return fn(null, orders);
+                async.each(orders, function(order, cb){
+                    contactDao.getById(order.get('customer_id'), $$.m.Contact, function(err, contact){
+                        if(err) {
+                            log.error('Error getting contact: ' + err);
+                            cb(err);
+                        } else {
+                            order.set('customer', contact);
+                            cb();
+                        }
+                    });
+                }, function(err){
+                    if(err) {
+                        log.error('Error fetching customers for orders: ' + err);
+                        return fn(err, orders);
+                    } else {
+                        log.debug('<< listOrdersByAccount');
+                        return fn(null, orders);
+                    }
+                });
+
             }
         });
     }
