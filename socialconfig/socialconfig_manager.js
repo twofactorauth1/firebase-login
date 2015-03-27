@@ -673,6 +673,23 @@ module.exports = {
         });
     },
 
+    retweetTwitterPost: function(accountId, socialAccountId, tweetId, fn) {
+        var self = this;
+        log.debug('>> retweetTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.retweetPostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, tweetId, fn);
+        });
+    },
+
     deleteTwitterPost: function(accountId, socialAccountId, postId, fn) {
         var self = this;
         log.debug('>> createTwitterPost');

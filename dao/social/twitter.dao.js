@@ -437,6 +437,29 @@ var dao = {
         );
     },
 
+    retweetPostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> retweetPostWithToken');
+
+        twitter.statuses("retweet", {
+                id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error retweeting status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< retweetPostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
     deletePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
         var self = this;
         self.log.debug('>> deletePostWithToken');
