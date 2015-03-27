@@ -62,6 +62,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('twitter/:socialAccountId/post/:postId/retweet'), this.isAuthApi.bind(this), this.createTwitterRetweet.bind(this));
         app.post(this.url('twitter/:socialAccountId/user/:userId/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
         app.post(this.url('twitter/:socialAccountId/name/:name/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
+        app.get(this.url('twitter/:socialAccountId/dm'), this.isAuthApi.bind(this), this.getTwitterDMs.bind(this));
         app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
         app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
@@ -592,6 +593,30 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    getTwitterDMs: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTwitterDMs');
+        var since = req.query.since;
+        var until = req.query.until;
+        var limit = req.query.limit;
+        if(limit) {
+            limit = parseInt(limit);
+        }
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getTwitterDirectMessages(accountId, socialAccountId, since, until, limit, function(err, msgs){
+                    self.log.debug('<< getTwitterDMs');
+                    self.sendResultOrError(resp, err, msgs, "Error getting twitter dm");
+                });
+            }
+        });
     },
 
     deleteTwitterPost: function(req, resp) {
