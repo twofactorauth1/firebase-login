@@ -60,6 +60,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
         app.post(this.url('twitter/:socialAccountId/post/:postId/reply'), this.isAuthApi.bind(this), this.createTwitterReply.bind(this));
         app.post(this.url('twitter/:socialAccountId/post/:postId/retweet'), this.isAuthApi.bind(this), this.createTwitterRetweet.bind(this));
+        app.post(this.url('twitter/:socialAccountId/user/:userId/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
+        app.post(this.url('twitter/:socialAccountId/name/:name/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
         app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
         app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
@@ -568,6 +570,27 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createTwitterDM: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterDM');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var userId = req.params.userId;
+        var screenName = req.params.name;
+
+        var post = req.body.msg;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.directMessageTwitterUser(accountId, socialAccountId, userId, screenName, post,
+                    function (err, savedPost){
+                        self.log.debug('<< createTwitterDM');
+                        self.sendResultOrError(resp, err, savedPost, "Error creating twitter dm");
+                    });
+            }
+        });
 
     },
 
