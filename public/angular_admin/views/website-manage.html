@@ -29,8 +29,8 @@
   </div>
   <div style="background: #e7e7e7;" id="scrollTop" ng-switch="activeTab" class="contentpanel" ng-style="styleWebsiteManage()" indigeweb-resize  indiscroller indiscroller-update='loadMoreFn' indiscroller-save='saveScrollFn'>
     <div class="pages-section" ng-switch-when="pages">
-      <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px; position:inherit;">
-        
+      <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
+        <div class="panel panel-default">
                 <div class="panel-body page-body">
                   <div class="col-sm-6">
                       <div class="input-group">
@@ -59,8 +59,8 @@
                                 <option value="4">Date Modified</option>
                             </select>
                         </div>
-                    </div>                     
-                
+                    </div>
+                </div>
                 <div style="width:100%; text-align:center">
                     <ul class="pagination hidden-xs letter-list">
                         <li ng-show="alphaList.length"><a class="btn-letter" ng-click="alphaFilter()" ng-class="{'active': alphaSelected == null}">all</a>
@@ -73,7 +73,7 @@
                 </div>
             </div>
       </headroom>
-      <div class="row" style="margin-top: 10px;">
+      <div class="row" style="margin-top: 80px;">
         <div class="col-xs-18 col-sm-6 col-md-3">
           <div class="thumbnail layered-paper">
             <div class="add-wrap">
@@ -119,8 +119,8 @@
       <!-- End row -->
     </div>
     <div class="posts-section" ng-switch-when="posts">
-      <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;position:inherit;">
-        
+      <headroom class="header--fixed" tolerance='0' offset='200' scroller='.contentpanel' classes="{pinned:'slide--reset',unpinned:'slide--up',initial:'slide'}" style="margin-top:46px;">
+        <div class="panel panel-default">
          <div class="panel-body post-body">
                     <div class="col-sm-6">
                       <div class="input-group">
@@ -153,11 +153,11 @@
                             </select>
                         </div>
                     </div>                    
-                </div>
+          </div>
           <!-- panel-body -->
-        
+        </div>
       </headroom>
-      <div class="row" style="margin-top: 10px;">
+      <div class="row" style="margin-top: 80px;">
         <div class="col-xs-12 col-sm-6 col-md-3">
           <div class="paper-wrap">
             <div class="paper">

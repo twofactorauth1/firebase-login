@@ -4912,20 +4912,6 @@ div.error label.error:before {
   float: left;
 }
 
-.website-manage .pages-section .page-body,
-.website-manage .posts-section .page-body {
-  padding: 0px;
-  margin-top: -5px;
-  margin-left: -10px;
-  margin-right: -10px;
-}
-
-.website-manage .pages-section .post-body,
-.website-manage .posts-section .post-body {
-  padding: 10px;
-  margin-top: -15px;
-}
-
 .iconpicker-popover {
   z-index: 9999!important;
 }
