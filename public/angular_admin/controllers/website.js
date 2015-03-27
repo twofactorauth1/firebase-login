@@ -128,7 +128,8 @@ define([
       $scope.isEditing = true;
       $scope.isMobile = false;
       $scope.tabs = {};
-      $scope.addLinkType = 'page';
+      $scope.addLink = false;
+      
       $scope.saveLoading = false;
       $scope.hours = $$.constants.contact.business_hour_times;
       $scope.typefilter = 'all';
@@ -139,7 +140,7 @@ define([
       $scope.status = {
         isopen: false
       };
-
+      
       $scope.spectrum = {
         options: {
           showPalette: true,
@@ -1731,6 +1732,15 @@ define([
           console.log('website.linkLists changed >>> ');
       });
 
+      $scope.initializeLinks = function(status) {
+        $scope.addLink = status;
+        $scope.newLink = {
+          linkUrl: null,
+          linkTitle: null,
+          linkType: null
+        };
+      }
+      
       $scope.setLinkUrl = function() {
         $scope.newLink.linkTitle = $("#linkSection option:selected").html();
       }
@@ -1746,19 +1756,6 @@ define([
           return value.replace("-", " ");
       }
 
-      $scope.initializeLinks = function() {
-        $scope.newLink = {
-          linkUrl: null,
-          linkTitle: null,
-          linkPage: null
-        };
-      }
-
-      $scope.setLinkType = function(lnk) {
-        $scope.addLinkType = lnk;
-        $scope.initializeLinks();
-      }
-
       $scope.deleteLinkFromNav = function(index) {
         $scope.website.linkLists.forEach(function(value) {
             if (value.handle === "head-menu") {
@@ -1772,30 +1769,20 @@ define([
 
 
       $scope.addLinkToNav = function() {
-        var linkTitle = null;
-        var linkUrl = null;
-        if ($scope.newLink && $scope.newLink.linkPage) {
-          $scope.linkPage = _.findWhere(that.allPages, {
-            handle: $scope.newLink.linkPage
-          });
-          linkTitle = $scope.linkPage.title;
-          linkUrl = $scope.newLink.linkPage;
-        } else if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
-          linkTitle = $scope.newLink.linkTitle;
-          linkUrl = $scope.newLink.linkUrl;
-        }
-        if (linkTitle && linkUrl) {
+        
+        if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
           $scope.website.linkLists.forEach(function(value, index) {
             if (value.handle === "head-menu") {
               value.links.push({
-                label: linkTitle,
+                label: $scope.newLink.linkTitle,
                 type: "link",
                 linkTo: {
-                  data: linkUrl,
-                  type: $scope.addLinkType
+                  data: $scope.newLink.linkUrl,
+                  type: $scope.newLink.linkType
                 }
               });
-              $scope.initializeLinks();
+              $scope.initializeLinks(false);
+              
             }
           });
         }
@@ -1850,6 +1837,7 @@ define([
           },
           orderChanged: function(event) {
               console.log('orderChanged');
+              $scope.updateLinkList();
           },
           parentElement : "#component-setting-modal .tab-content",
           scrollableContainer: 'reorderNavBarContainer'

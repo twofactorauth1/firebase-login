@@ -16424,6 +16424,11 @@ span[data-cke-widget-id] {
 .multiple-hours select {
   padding: 4px;
 }
+.container-fluid.add-navlinks {
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */

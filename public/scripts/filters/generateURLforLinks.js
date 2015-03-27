@@ -27,6 +27,9 @@ mainApp.filter('generateURLforLinks', function () {
             case "collection":
                 _url = ""; //Not yet implemented
                 break;
+            case "external":
+                _url = linkToObject.data;
+                break;    
             default:
                 return "#";
                 break;
