@@ -552,17 +552,18 @@
                         </div>
                         <!-- panel-body -->
                         <div class="panel-footer">
-                            <div>
+                          <div class='row'>
+                            <input type="text" class="form-control" placeholder="Enter Comment..." ng-model='addComment'>
+                          </div>
+                            <div class='row'>
+                              <div class='col-xs-1'>
+                                Post As:
+                              </div>
                                 <div class='col-xs-2'>
                                   <img ng-src="{{addCommentAdminPage.picture.data.url}}" class="thumbnail pull-left clearfix"/>
                                 </div>
-                                <div class='col-xs-4'>
+                                <div class='col-xs-6'>
                                   <select class='form-control' ng-model='addCommentAdminPage' ng-options="page.name for page in fbAdminPages"></select>
-                                </div>
-                                <div class="col-xs-3">
-                                    <div class="form-group mb0">
-                                        <input type="text" class="form-control" placeholder="Enter Comment..." ng-model='addComment'>
-                                    </div>
                                 </div>
                                 <div class="col-xs-3">
                                     <button class="btn btn-primary btn-block" ng-class='{"disabled": !addComment}' ng-click='addCommentFn()'>Comment</button>
