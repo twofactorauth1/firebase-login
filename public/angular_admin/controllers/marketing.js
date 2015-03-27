@@ -466,7 +466,16 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     };
 
     $scope.deleteSocialAccountFn = function(id) {
-      SocialConfigService.deleteSocialConfigEntry(id, function() {});
+      SocialConfigService.deleteSocialConfigEntry(id, function() {
+        var index = null;
+        $scope.fbAdminPages.forEach(function(value, index) {
+          if (value.socialId == id) {
+            index = index;
+            $scope.fbAdminPages.splice(index, 1);
+          }
+        });
+        ToasterService.show('warning', 'Social feed removed.');
+      });
     };
     /*
      * @watchCollection - feed

@@ -81,7 +81,7 @@
                     <h3 class="center">Add a Feed to get set up.</h3>
                 </div> -->
             <div class="stream-filter col-xs-3">
-                <button class="btn btn-success btn-block mb15" data-toggle="modal" data-target="#marketing-add-feed">Manage <span ng-hide="!filterOpen">Feeds</span>
+                <button class="btn btn-success btn-block mb15" ng-class='{"disabled": !fbAdminPages.length}' data-toggle="modal" data-target="#marketing-add-feed">Manage <span ng-hide="!filterOpen">Feeds</span>
                 </button>
                 <accordion>
                     <accordion-group is-open="item.open" ng-repeat="type in feedTypes" is-disabled="true">
@@ -470,7 +470,10 @@
                     <h4 class="modal-title">Add Feed</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="col-xs-3 left-panel">
+                    <div class="col-xs-12 left-panel" ng-hide='fbAdminPages.length'>
+                      No account available for removal.
+                    </div>
+                    <div class="col-xs-3 left-panel" ng-show='fbAdminPages.length'>
                         <ul class="integrations" ng-init="modalfeed = 'facebook'">
                             <li ng-click="modalfeed = 'facebook'" ng-class="{active: modalfeed == 'facebook'}"><i class="fa fa-facebook-square"></i> <span class="hidden-xs">Facebook</span>
                             </li>
@@ -482,7 +485,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-xs-9 right-panel">
+                    <div class="col-xs-9 right-panel" ng-show='fbAdminPages.length'>
                         <div ng-show="modalfeed == 'facebook'">
                             <ul class="fb-admin-pages">
                                 <li ng-repeat="page in fbAdminPages">
