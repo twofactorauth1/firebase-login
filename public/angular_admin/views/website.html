@@ -52,6 +52,8 @@
                     Settings
                 </tab-heading>
                 <div ng-if="!single_post" class="rightpanelinner">
+                    <div class="mb10"></div>
+                    <button class="btn btn-block btn-success mb10" data-toggle="modal" data-target="#historical-page-modal"> Historical Pages</button>
                     <div class="form-group">
                         <label>Title:</label>
                         <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
@@ -68,13 +70,8 @@
                         <label>Secure:</label>
                         <input bs-switch ng-model="currentPage.secure" type="checkbox" class="pull-right" ng-change="editPage()">
                     </div>
-                    <div class="mb20"></div>
-                    <button class="btn btn-block btn-success" data-toggle="modal" data-target="#historical-page-modal"> Historical Pages</button>
-                    <div class="mb20"></div>
-                    <div class="well">
-                        <p>Danger Zone</p>
-                        <button class="btn btn-block btn-danger" confirm-click2 data-placement="top" data-ng-disabled="currentPage.handle==='index'" confirm-click2-confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
-                    </div>
+                    <button class="btn btn-block btn-danger mb10" confirm-click2 data-placement="top" data-ng-disabled="currentPage.handle==='index'" confirm-click2-confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+
                 </div>
                 <div ng-if="single_post" class="rightpanelinner">
                     <div class="form-group">
