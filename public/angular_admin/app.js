@@ -203,6 +203,8 @@ define(['angularAMD', 'angularUiRouter', 'angularRoute', 'varMainModule', 'resiz
             else
               $('[href="#/' + $rootScope.lastState.state + '"]', p).parent().removeClass('active');
           }
+          if($('.modal-backdrop').length)
+            $('.modal-backdrop').remove();
         });
     }]);
 
