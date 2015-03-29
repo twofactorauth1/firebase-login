@@ -1,5 +1,5 @@
 define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress', 'toasterService'], function(app) {
-  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress','ToasterService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress, ToasterService) {
+  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', 'ToasterService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress, ToasterService) {
     ngProgress.start();
 
     /*
@@ -512,13 +512,29 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.visibleComments = [];
 
     $scope.addCommentFn = function() {
-      SocialConfigService.addPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
-        $scope.visibleComments.push({picture: $scope.addCommentAdminPage.picture.data.url,
-                                              created: new Date(),
-                                              name: $scope.addCommentAdminPage.name,
-                                              comment: $scope.addComment});
-        ToasterService.show('success', 'Comment added', 'Comment added to the post.');
-      });
+      if ($scope.addCommentAdminPage.type == 'fb' && $scope.addCommentPage.type == 'facebook') {
+        SocialConfigService.addFacebookPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
+          $scope.visibleComments.push({
+            picture: $scope.addCommentAdminPage.picture.data.url,
+            created: new Date(),
+            name: $scope.addCommentAdminPage.name,
+            comment: $scope.addComment
+          });
+          ToasterService.show('success', 'Comment added', 'Comment added to the facebook post.');
+        });
+      } else if ($scope.addCommentAdminPage.type == 'tw' && $scope.addCommentPage.type == 'twitter') {
+        SocialConfigService.addTwitterPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addCommentAdminPage.name, $scope.addComment, function(comment) {
+          $scope.visibleComments.push({
+            picture: $scope.addCommentAdminPage.picture.data.url,
+            created: new Date(),
+            name: $scope.addCommentAdminPage.name,
+            comment: $scope.addComment
+          });
+          ToasterService.show('success', 'Comment added', 'Comment added to the twitter post.');
+        });
+      } else {
+        ToasterService.show('error', 'Type miss match', 'Post type and admin type does not match.');
+      }
     };
 
     $scope.updateComments = function(page) {
