@@ -246,7 +246,7 @@
                                         <div class="timeline-btns">
                                             <div class="pull-left">
                                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike" ng-click="tempPost2Like(post)"><i class="fa fa-thumbs-up"></i></a>
-                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
+                                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post, 'fb')"><i class="fa fa-comment"></i></a>
                                                 <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
                                             <div class="pull-right">
@@ -292,7 +292,7 @@
                                         <div class="timeline-btns">
                                             <div class="pull-left">
                                               <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike" ng-click="tempPost2Like(post)"><i class="fa fa-thumbs-up"></i></a>
-                                              <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
+                                              <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments" ng-click="updateComments(post, 'tw')"><i class="fa fa-comment"></i></a>
                                                 <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-share"></i></a>
                                             </div>
                                             <div class="pull-right hidden">
@@ -560,10 +560,10 @@
                                 Post As:
                               </div>
                                 <div class='col-xs-2'>
-                                  <img ng-src="{{addCommentAdminPage.picture.data.url}}" class="thumbnail pull-left clearfix"/>
+                                  <img ng-src="{{addCommentAdminPage.picture.data.url || addCommentAdminPage.profile_image_url}}" class="thumbnail pull-left clearfix"/>
                                 </div>
                                 <div class='col-xs-6'>
-                                  <select class='form-control' ng-model='addCommentAdminPage' ng-options="page.name for page in fbAdminPages"></select>
+                                  <select class='form-control' ng-model='addCommentAdminPage' ng-options="user.name for user in commentUsers"></select>
                                 </div>
                                 <div class="col-xs-3">
                                     <button class="btn btn-primary btn-block" ng-class='{"disabled": !addComment}' ng-click='addCommentFn()'>Comment</button>

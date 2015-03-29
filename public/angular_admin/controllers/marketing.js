@@ -132,6 +132,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      */
 
     $scope.fbAdminPages = [];
+    $scope.twAdminPages = [];
     $scope.feedLengths = {};
     $scope.feeds = [];
     $scope.feedTypes = [];
@@ -188,6 +189,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           profile.socialId = socialId;
           profile.open = true;
           $scope.feedTypes.push(profile);
+          $scope.twAdminPages.push(profile);
           $scope.filtersValues.forEach(function(value, index) {
             $scope.filters.push(value + socialId);
           });
@@ -409,6 +411,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       SocialConfigService.likeFBPost(page.socialId, $scope.tempPost.sourceId, function(postReturn) {
         var newTempClass = value + ' liked';
         $event.target.setAttribute('class', newTempClass);
+        $scope.tempPost.likes.push({name: page.name, sourceId: page.sourceId});
       });
     };
 
@@ -512,7 +515,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.visibleComments = [];
 
     $scope.addCommentFn = function() {
-      if ($scope.addCommentAdminPage.type == 'fb' && $scope.addCommentPage.type == 'facebook') {
+      if ($scope.commentType == 'fb') {
         SocialConfigService.addFacebookPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
           $scope.visibleComments.push({
             picture: $scope.addCommentAdminPage.picture.data.url,
@@ -522,10 +525,10 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           });
           ToasterService.show('success', 'Comment added', 'Comment added to the facebook post.');
         });
-      } else if ($scope.addCommentAdminPage.type == 'tw' && $scope.addCommentPage.type == 'twitter') {
-        SocialConfigService.addTwitterPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addCommentAdminPage.name, $scope.addComment, function(comment) {
+      } else if ($scope.commentType == 'tw') {
+        SocialConfigService.addTwitterPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addCommentAdminPage.screen_name, $scope.addComment, function(comment) {
           $scope.visibleComments.push({
-            picture: $scope.addCommentAdminPage.picture.data.url,
+            picture: $scope.addCommentAdminPage.profile_image_url,
             created: new Date(),
             name: $scope.addCommentAdminPage.name,
             comment: $scope.addComment
@@ -537,10 +540,22 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       }
     };
 
-    $scope.updateComments = function(page) {
+    $scope.updateComments = function(page, type) {
+      console.log(page);
+      $scope.commentType = type;
+      if (type == 'tw') {
+        $scope.commentUsers = $scope.twAdminPages;
+      }
+      if (type == 'fb') {
+        $scope.commentUsers = $scope.fbAdminPages;
+      }
       $scope.addCommentPage = page;
       console.log('comments ', page.comments);
-      $scope.visibleComments = page.comments;
+      if (page.comments) {
+        $scope.visibleComments = page.comments;
+      } else {
+        $scope.visibleComments = [];
+      }
     };
 
     /*
