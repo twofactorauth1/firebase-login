@@ -288,6 +288,7 @@ define(['app', 'productService', 'paymentService', 'headroom', 'ngHeadroom', 'ng
                 return $(this).height();
             }).get());
             $("div.commerce-item").css("min-height", maxProductHeight + 30);
+            $("div.add-product-item").css("min-height", maxProductHeight);
           }
         }   
         }, 500)
