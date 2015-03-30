@@ -672,6 +672,56 @@
                                 <input id="top-bar-email" class="form-control input-lg" type="text" ng-model="componentEditing.email">
                             </div>
                         </tab>
+                        <tab ng-if="componentEditing.type === 'meet-team'">
+                            <tab-heading>
+                                <span>Meet team options</span>
+                            </tab-heading>
+                            <div class="form-group">
+                                <label for="bg_blur">Show member's image</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide team member's image."><i class="fa fa-info-circle" /></span>
+                                <label class="switch switch-green pull-right">
+                                    <input type="checkbox" class="switch-input" ng-model="componentEditing.teamSettings.profilepic" ng-change="saveComponent()">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="bg_blur">Show member's name</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide team member's name."><i class="fa fa-info-circle" /></span>
+                                <label class="switch switch-green pull-right">
+                                    <input type="checkbox" class="switch-input"  ng-model="componentEditing.teamSettings.name" ng-change="saveComponent()">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="bg_blur">Show member's position</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide team member's position."><i class="fa fa-info-circle" /></span>
+                                <label class="switch switch-green pull-right">
+                                    <input type="checkbox" class="switch-input"  ng-model="componentEditing.teamSettings.position" ng-change="saveComponent()">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="bg_blur">Show member's bio</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide team member's bio."><i class="fa fa-info-circle" /></span>
+                                <label class="switch switch-green pull-right">
+                                    <input type="checkbox" class="switch-input"  ng-model="componentEditing.teamSettings.bio" ng-change="saveComponent()">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="bg_blur">Show member's social</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide team member's social links."><i class="fa fa-info-circle" /></span>
+                                <label class="switch switch-green pull-right">
+                                    <input type="checkbox" class="switch-input"  ng-model="componentEditing.teamSettings.networks" ng-change="saveComponent()">
+                                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                </label>
+                            </div>
+                        </tab>
                     </tabset>
                 </div>
                 <div class="modal-footer">
