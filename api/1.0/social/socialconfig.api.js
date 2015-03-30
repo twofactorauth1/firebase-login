@@ -22,7 +22,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
+
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
 
         app.get(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.getSocialAccount.bind(this));
@@ -31,8 +31,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/socialaccount'), this.isAuthAndSubscribedApi.bind(this), this.addSocialAccount.bind(this));
         app.delete(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
         app.delete(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
+
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
+
+        /*
+         * Tracked accounts
+         */
+        app.get(this.url('trackedAccounts'), this.isAuthAndSubscribedApi.bind(this), this.getTrackedAccounts.bind(this));
+        app.post(this.url('trackedAccounts'), this.isAuthAndSubscribedApi.bind(this), this.addTrackedAccount.bind(this));
+        app.get(this.url('trackedAccount/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTrackedAccount.bind(this));
+        app.post(this.url('trackedAccount/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTrackedAccount.bind(this));
+        app.delete(this.url('trackedAccount/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTrackedAccount.bind(this));
 
 
         app.get(this.url('facebook/:socialAccountId/posts'), this.isAuthApi.bind(this), this.getFacebookPosts.bind(this));
@@ -69,6 +78,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('google/:socialAccountId/groups'), this.isAuthApi.bind(this), this.getGoogleGroups.bind(this));
         app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
 
+
+        /*
+         * Putting this at the end so we don't mess with other api calls.
+         */
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
     },
 
     /**
@@ -241,6 +256,103 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.fetchTrackedObject(accountId, objIndex, since, until, limit, function(err, feed){
                     self.log.debug('<< fetchTrackedObject');
                     self.sendResultOrError(resp, err, feed, "Error fetching tracked objects");
+                });
+            }
+        });
+    },
+
+    /*
+     * Tracked Accounts
+     */
+
+    getTrackedAccounts: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTrackedAccounts');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.getSocialConfigTrackedAccounts(accountId, function(err, trackedAccounts){
+                    self.log.debug('<< getTrackedAccounts');
+                    self.sendResultOrError(resp, err, trackedAccounts, "Error fetching tracked accounts");
+                });
+            }
+        });
+    },
+
+    addTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccount = req.body.trackedAccount;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.addTrackedAccount(accountId, trackedAccount, function(err, socialConfig){
+                    self.log.debug('<< addTrackedAccount');
+                    self.sendResultOrError(resp, err, socialConfig, "Error adding tracked account");
+                });
+            }
+        });
+    },
+
+    getTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccountId = req.params.id;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.getTrackedAccount(accountId, trackedAccountId, function(err, trackedAccount){
+                    self.log.debug('<< getTrackedAccount');
+                    self.sendResultOrError(resp, err, trackedAccount, "Error getting tracked account");
+                });
+            }
+        });
+    },
+
+    updateTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccount = req.body.trackedAccount;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.updateTrackedAccount(accountId, trackedAccount, function(err, config){
+                    self.log.debug('<< updateTrackedAccount');
+                    self.sendResultOrError(resp, err, config, "Error updating tracked account");
+                });
+            }
+        });
+    },
+
+    deleteTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccountId = req.params.id;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.deleteTrackedAccount(accountId, trackedAccountId, function(err, config){
+                    self.log.debug('<< deleteTrackedAccount');
+                    self.sendResultOrError(resp, err, config, "Error deleting tracked account");
                 });
             }
         });

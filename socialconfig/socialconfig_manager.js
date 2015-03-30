@@ -382,6 +382,128 @@ module.exports = {
         });
     },
 
+    getSocialConfigTrackedAccounts: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getSocialConfigTrackedAccounts');
+
+        var query = {accountId: accountId};
+
+        socialconfigDao.findOne(query, $$.m.SocialConfig, function(err, value){
+            if(err) {
+                log.error('Error finding socialconfig: ' + err);
+                return fn(err, null);
+            } if (value === null) {
+                log.debug('Creating new socialconfig.');
+                var socialConfig = new $$.m.SocialConfig({accountId:accountId});
+                self.createSocialConfig(socialConfig, function(err, config){
+                    if(err) {
+                        log.error('Error creating socialconfig: ' + err);
+                        return fn(err, null);
+                    }
+                    return fn(null, config.get('trackedAccounts'));
+                });
+
+            } else {
+                log.debug('<< getSocialConfig');
+                return fn(null, value.get('trackedAccounts'));
+            }
+        });
+    },
+
+    addTrackedAccount: function(accountId, trackedAccount, fn){
+        var self = this;
+        log.debug('>> addTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config){
+            if(err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+            if(!trackedAccount.id) {
+                trackedAccount.id = $$.u.idutils.generateUUID();
+            }
+            var trackedAccounts = config.get('trackedAccounts') || [];
+            trackedAccounts.push(trackedAccount);
+            config.set('trackedAccounts', trackedAccounts);
+
+            return self.updateSocialConfig(config, fn);
+        });
+
+    },
+
+    getTrackedAccount: function(accountId, trackedAccountId, fn) {
+        var self = this;
+        log.debug('>> getTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+
+            var trackedAccounts = config.get('trackedAccounts') || [];
+
+            var trackedAccount = _.find(trackedAccounts, function(account){
+                return account.id === trackedAccountId;
+            });
+
+            return fn(null, trackedAccount);
+
+        });
+    },
+
+    updateTrackedAccount: function(accountId, trackedAccount, fn) {
+        var self = this;
+        log.debug('>> updateTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+            var trackedAccounts = config.get('trackedAccounts') || [];
+
+            var index = 0;
+            var trackedAccount = _.find(trackedAccounts, function(account){
+                if(account.id === trackedAccount.id) {
+                    return true;
+                } else {
+                    index++;
+                    return false;
+                }
+            });
+            trackedAccounts[index] = trackedAccount;
+
+            config.set('trackedAccounts', trackedAccounts);
+            return self.updateSocialConfig(config, fn);
+
+        });
+    },
+
+    deleteTrackedAccount: function(accountId, trackedAccountId, fn) {
+        var self = this;
+        log.debug('>> deleteTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+
+            var trackedAccounts = config.get('trackedAccounts') || [];
+
+            var newTrackedAccounts = [];
+            _.each(trackedAccounts, function(account){
+                if(account.id !== trackedAccountId) {
+                    newTrackedAccounts.push(account);
+                }
+            });
+
+            config.set('trackedAccounts', newTrackedAccounts);
+            return self.updateSocialConfig(config, fn);
+        });
+    },
+
     getFacebookPages: function(accountId, socialAccountId, fn) {
         var self = this;
         log.debug('>> getFacebookPages');

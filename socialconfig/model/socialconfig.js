@@ -30,6 +30,23 @@ var socialconfig = $$.m.ModelBase.extend({
             socialAccounts:[],
 
             /*
+             * {
+             "type" : "tw",
+             "socialId" : "89944378",
+             "accessToken" : "89944378-6oDCsOWOOMna2iRE7BVQWjbx2vcIaK1b3HedHuQw4",
+             "accessTokenSecret" : "ThArhCzbCEq7pHHcMKGXYK8rv11mjtKaQWeXE6DvUmOtJ",
+             "username" : "thekylejmiller",
+             "socialUrl" : null,
+             "scope" : null,
+             "accountType" : "account",
+             "id" : "18329c18-b8d8-453f-b622-6eb2c6acd9f6",
+             "image" : "https://pbs.twimg.com/profile_images/526267788/headshot_normal.jpg",
+             "toggle" : "on" // or "off"
+             }
+             */
+            trackedAccounts:[],
+
+            /*
              * Objects in this array are like the following:
              * {
              *   socialId: uuid, //points to object in socialAccounts
