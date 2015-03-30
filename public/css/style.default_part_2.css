@@ -4905,7 +4905,7 @@ div.error label.error:before {
 .website-manage .pages-section .layered-paper {
   background: #fff;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15), 0 10px 0 -5px #ffffff, 0 10px 1px -4px rgba(0, 0, 0, 0.15), 0 20px 0 -10px #ffffff, 0 20px 1px -9px rgba(0, 0, 0, 0.15);
-  padding: 15px;
+  padding: 17px;
 }
 
 .website-manage .posts-section {
@@ -5026,7 +5026,7 @@ div.error label.error:before {
 .website-manage .posts-section .paper {
   position: relative;
   width: 255px;
-  height: 207px;
+  height: 224px;
   background-color: #fff;
   border: 1px solid #e3e3e3;
   margin: 15px auto;
@@ -5068,6 +5068,10 @@ div.error label.error:before {
 .website-manage .posts-section ul#lines {
   margin-top: 40px;
   padding-left: 0;
+}
+
+.website-manage .posts-section ul#lines li.second {
+  height: 45px;
 }
 
 .website-manage .posts-section ul#lines li {
