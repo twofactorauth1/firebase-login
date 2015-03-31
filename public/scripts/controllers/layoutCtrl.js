@@ -28,27 +28,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));            
     };
     
-    $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
-      if (newValue !== undefined && newValue.length) {
-        var tagsArr = [];
-        that.totalPosts.forEach(function(val)
-        {
-          if(val.post_tags)
-            tagsArr.push(val.post_tags);
-        })
-        newValue.forEach(function(value, index) { 
-         var default_size = 2;
-         var count = _.countBy(_.flatten(tagsArr), function(num){return num == value})["true"];
-          if(count)
-            default_size += count;
-          $scope.tagCloud.push({
-            text: value,
-            weight: default_size,//Math.floor((Math.random() * newValue.length) + 1),
-            link: '/tag/' + value
-          })
-        });
-      }
-    });
 
     //var config = angular.module('config');
     //that.segmentIOWriteKey = ENV.segmentKey;
@@ -218,6 +197,27 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.$apply(function() {
               console.log("Page loaded");
               $scope.isLoaded = true;
+              $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
+              if (newValue !== undefined && newValue.length) {
+                var tagsArr = [];
+                that.totalPosts.forEach(function(val)
+                {
+                  if(val.post_tags)
+                    tagsArr.push(val.post_tags);
+                })
+                newValue.forEach(function(value, index) { 
+                 var default_size = 2;
+                 var count = _.countBy(_.flatten(tagsArr), function(num){return num == value})["true"];
+                  if(count)
+                    default_size += count;
+                  $scope.tagCloud.push({
+                    text: value,
+                    weight: default_size,//Math.floor((Math.random() * newValue.length) + 1),
+                    link: '/tag/' + value
+                  })
+                });
+              }
+            });
             })
             var locId = $location.$$hash;
             if (locId) {

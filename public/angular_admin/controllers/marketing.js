@@ -1,5 +1,5 @@
 define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress', 'toasterService'], function(app) {
-  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress','ToasterService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress, ToasterService) {
+  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', 'ToasterService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress, ToasterService) {
     ngProgress.start();
 
     /*
@@ -132,6 +132,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      */
 
     $scope.fbAdminPages = [];
+    $scope.twAdminPages = [];
     $scope.feedLengths = {};
     $scope.feeds = [];
     $scope.feedTypes = [];
@@ -188,6 +189,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           profile.socialId = socialId;
           profile.open = true;
           $scope.feedTypes.push(profile);
+          $scope.twAdminPages.push(profile);
           $scope.filtersValues.forEach(function(value, index) {
             $scope.filters.push(value + socialId);
           });
@@ -409,6 +411,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       SocialConfigService.likeFBPost(page.socialId, $scope.tempPost.sourceId, function(postReturn) {
         var newTempClass = value + ' liked';
         $event.target.setAttribute('class', newTempClass);
+        $scope.tempPost.likes.push({name: page.name, sourceId: page.sourceId});
       });
     };
 
@@ -512,15 +515,47 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
     $scope.visibleComments = [];
 
     $scope.addCommentFn = function() {
-      SocialConfigService.addPostComment($scope.addCommentPage.socialAccountId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
-        ToasterService.show('success', 'Comment added', 'Comment added to the post.');
-      });
+      if ($scope.commentType == 'fb') {
+        SocialConfigService.addFacebookPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
+          $scope.visibleComments.push({
+            picture: $scope.addCommentAdminPage.picture.data.url,
+            created: new Date(),
+            name: $scope.addCommentAdminPage.name,
+            comment: $scope.addComment
+          });
+          ToasterService.show('success', 'Comment added', 'Comment added to the facebook post.');
+        });
+      } else if ($scope.commentType == 'tw') {
+        SocialConfigService.addTwitterPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addCommentAdminPage.screen_name, $scope.addComment, function(comment) {
+          $scope.visibleComments.push({
+            picture: $scope.addCommentAdminPage.profile_image_url,
+            created: new Date(),
+            name: $scope.addCommentAdminPage.name,
+            comment: $scope.addComment
+          });
+          ToasterService.show('success', 'Comment added', 'Comment added to the twitter post.');
+        });
+      } else {
+        ToasterService.show('error', 'Type miss match', 'Post type and admin type does not match.');
+      }
     };
 
-    $scope.updateComments = function(page) {
+    $scope.updateComments = function(page, type) {
+      console.log(page);
+      $scope.commentType = type;
+      if (type == 'tw') {
+        $scope.commentUsers = $scope.twAdminPages;
+      }
+      if (type == 'fb') {
+        $scope.commentUsers = $scope.fbAdminPages;
+      }
       $scope.addCommentPage = page;
       console.log('comments ', page.comments);
-      $scope.visibleComments = page.comments;
+      if (page.comments) {
+        $scope.visibleComments = page.comments;
+      } else {
+        $scope.visibleComments = [];
+      }
     };
 
     /*
