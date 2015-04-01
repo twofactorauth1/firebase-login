@@ -449,7 +449,14 @@
 			// Overrides default method to handle internal mutability of Image2.
 			// @see CKEDITOR.plugins.widget#addClass
 			addClass: function( className ) {
-				getStyleableElement( this ).addClass( className );
+				if(getStyleableElement( this ).hasClass("img-rounded") || 
+					getStyleableElement( this ).hasClass("img-rounded") || 
+					getStyleableElement( this ).hasClass("img-rounded"))
+					{
+						// do nothing
+					}
+				else
+					getStyleableElement( this ).addClass( className );
 			},
 
 			// Overrides default method to handle internal mutability of Image2.

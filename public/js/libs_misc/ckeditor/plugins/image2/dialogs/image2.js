@@ -556,7 +556,10 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 
 								},
 								commit: function( widget ) {
-									widget.removeClass(selectedImageStyle);
+									widget.removeClass("img-rounded");
+									widget.removeClass("img-thumbnail");
+									widget.removeClass("img-circle");
+
 									widget.addClass(this.getValue());
 								}
 							}
