@@ -825,6 +825,7 @@ _.extend(api.prototype, baseApi.prototype, {
     createPageFromTemplate: function(req, res) {
         var self = this;
         self.log.debug('>> createPageFromTemplate');
+
         self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(req);
@@ -836,7 +837,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 var title = pageData.title;
                 var handle = pageData.handle;
-                cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, function(err, websiteAndPage){
+                var mainmenu = pageData.mainmenu;
+                self.log.debug('>> Page Data: ' + pageData);
+                cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, mainmenu, function(err, websiteAndPage){
                     self.log.debug('<< createPageFromTemplate');
                     self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating page from template.');
                     cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
