@@ -595,6 +595,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         })
 
         if (!matchingContact) {
+
               $scope.contactDetails.push({
                 contactId: component._id,
                 contactPhone: angular.copy(component.contact.phone),
@@ -602,12 +603,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
               });
               matchingContact = _.find($scope.contactDetails, function(item) {
                 return item.contactId == component._id
-              })   
+              });
+
         }else
         {
           matchingContact.contactPhone = angular.copy(component.contact.phone);
           matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
         }
+
 
        // $scope.contactPhone = component.contact.phone;
         //$scope.geo_address_string = $scope.stringifyAddress(component.location);
@@ -617,7 +620,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         }
         if (!component.contact.phone && that.account.business.phones.length)
           matchingContact.contactPhone = that.account.business.phones[0].number;
-        if (matchingContact.geo_address_string) {
+        if (component.location.lat && component.location.lat && matchingContact.geo_address_string) {
           angular.extend($scope, {
             mapLocation: {
               lat: parseFloat(component.location.lat),
@@ -638,6 +641,29 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
              $timeout(function () {
                 map.invalidateSize();
               }, 500);
+          });
+        } else {
+           customerService.getGeoSearchAddress($scope.stringifyAddress(component.location), function(data) {
+            if (data.lat && data.lon) {
+              component.location.lat = data.lat;
+              component.location.lon = data.lon;
+              angular.extend($scope, {
+                  mapLocation: {
+                    lat: parseFloat(component.location.lat),
+                    lng: parseFloat(component.location.lon),
+                    zoom: 10
+                  },
+                  markers: {
+                    mainMarker: {
+                      lat: parseFloat(component.location.lat),
+                      lng: parseFloat(component.location.lon),
+                      focus: false,
+                      message: matchingContact.geo_address_string,
+                      draggable: false
+                    }
+                  }
+              });
+            }
           });
         }
       }
