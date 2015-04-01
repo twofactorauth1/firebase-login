@@ -229,7 +229,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     toaster.pop('success', msg);
             });
         };
-        $scope.refreshPost = function()
+        window.refreshPost = function()
+        {
+            if(!that.tempPost)
+                that.tempPost = angular.copy(that.post);
+            $scope.$apply(function() {
+                $scope.initializePostData();
+            })  
+        }
+        $scope.initializePostData = function()
         {
             var post_content_container = $('.post_content_div');
             if(post_content_container.length > 0)
@@ -250,11 +258,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 that.post.post_excerpt = post_excerpt_container.text();
-            setTimeout(function() {
-              $scope.$apply(function() {
-                activateAloha();
-              });
-            });
+        }
+        $scope.revertComponent = function()
+        {
+            that.post.post_excerpt = that.tempPost.post_excerpt;
+            that.post.featured_image = that.tempPost.featured_image;
+            $scope.initializePostData();
         }
         $scope.changeBlogImage = function(blogpost) {
           window.parent.changeBlogImage(blogpost);

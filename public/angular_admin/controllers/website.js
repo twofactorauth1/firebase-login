@@ -514,8 +514,13 @@ define([
             if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
               $scope.tabs.address = true;
             $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-            var element = angular.element('#component-setting-modal');
-            element.modal('show');
+            if($scope.single_post)
+              $("#iframe-website").contents().find('#component-setting-modal').modal('show');
+            else
+            {
+              var element = angular.element('#component-setting-modal');
+              element.modal('show');
+            }
           });
 
           //add click events for all the copy component buttons
@@ -1376,6 +1381,11 @@ define([
       };
 
       $scope.editComponent = function(componentId) {
+          if($scope.single_post)
+          {
+            iFrame.contentWindow && iFrame.contentWindow.refreshPost && iFrame.contentWindow.refreshPost();            
+            return;
+          } 
         $scope.$apply(function() {
           $scope.componentEditing = _.findWhere($scope.components, {
             _id: componentId
@@ -1405,6 +1415,7 @@ define([
               "name": "phone"
             })
           }
+          
 
         });
         $scope.originalComponent = angular.copy($scope.componentEditing);
