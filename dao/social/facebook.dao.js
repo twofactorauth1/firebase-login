@@ -422,11 +422,22 @@ var dao = {
         return self._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
     },
 
+    getTokenStatuses: function(accessToken, socialId, fn) {
+        var self = this;
+        var key = "statuses";
+        return self._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
+    },
+
     getUserStatuses: function (user, socialId, fn) {
         var key = "statuses";
         return this._getStreamPart(user, null, socialId, key, null, null, null, fn);
     },
 
+    getTokenTagged: function(accessToken, socialId, fn) {
+        var self = this;
+        var key = "tagged";
+        return self._getStreamPart(null, accessToken, socialId, key, null, null, null, fn);
+    },
 
     getUserTagged: function (user, socialId, fn) {
         var key = "tagged";

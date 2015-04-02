@@ -45,6 +45,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         app.get(this.url('facebook/:socialAccountId/posts'), this.isAuthApi.bind(this), this.getFacebookPosts.bind(this));
+        app.get(this.url('facebook/:socialAccountId/statuses'), this.isAuthApi.bind(this), this.getFacebookStatuses.bind(this));
+        app.get(this.url('facebook/:socialAccountId/tagged'), this.isAuthApi.bind(this), this.getFacebookTagged.bind(this));
         app.get(this.url('facebook/:socialAccountId/postComments/:postId'), this.isAuthApi.bind(this), this.getPostComments.bind(this));
         app.get(this.url('facebook/:socialAccountId/pages'), this.isAuthApi.bind(this), this.getFacebookPages.bind(this));
         app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
@@ -561,6 +563,44 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    getFacebookStatuses: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPosts');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookStatuses(accountId, socialAccountId, function(err, posts){
+                    self.log.debug('<< getFacebookPosts');
+                    self.sendResultOrError(resp, err, posts, "Error fetching posts");
+                });
+            }
+        });
+    },
+
+    getFacebookTagged: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPosts');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookTagged(accountId, socialAccountId, function(err, posts){
+                    self.log.debug('<< getFacebookPosts');
+                    self.sendResultOrError(resp, err, posts, "Error fetching posts");
+                });
+            }
+        });
     },
 
     getTwitterFeed: function(req, resp) {

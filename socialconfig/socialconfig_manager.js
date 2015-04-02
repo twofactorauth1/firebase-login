@@ -513,7 +513,7 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccount = config.getSocialAccountById(socialAccountId);
-            if(socialAccount === null) {
+            if(socialAccount === null || socialAccount === undefined) {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
             }
@@ -625,6 +625,42 @@ module.exports = {
             }
 
             return facebookDao.getTokenPosts(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getFacebookStatuses: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookStatuses');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return facebookDao.getTokenStatuses(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getFacebookTagged: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookTagged');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return facebookDao.getTokenTagged(socialAccount.accessToken, socialAccount.socialId, fn);
         });
     },
 
