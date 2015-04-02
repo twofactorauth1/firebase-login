@@ -45,9 +45,6 @@ angular.module('angular-parallax', [
           $scope.parallaxRatio = 0.02;
         var calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
         // horizontal positioning
-        if($window.document.body.scrollTop == 0) 
-            elem.css('background-position', "50% 50%");
-        else
           elem.css('background-position', "50% " + calcValY + "px");
       };
 
@@ -64,11 +61,12 @@ angular.module('angular-parallax', [
     };
 
       // set our initial position - fixes webkit background render bug
-      angular.element($window).bind('load', function(e) {
-        setPosition();
-        $scope.$apply();
-      });
-
+      $(document).ready(function() {
+          setTimeout(function() {
+          setPosition();
+        }, 500)
+      })
+      
       angular.element($window).bind("scroll", setPosition);
       angular.element($window).bind("touchmove", setPosition);
     }  // link function
