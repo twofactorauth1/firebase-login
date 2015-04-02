@@ -1461,6 +1461,7 @@ define([
         }
         $scope.currentPage.components = $scope.components;
         $scope.updateIframeComponents();
+        $scope.activateAloha();
       }
       $scope.saveComponent = function(update) {
 
