@@ -2071,14 +2071,17 @@ define([
       window.updateAdminPageScope = function(page) {
         $scope.singlePost = false;
         console.log("Updating admin scope")
-        $scope.$apply(function() {
+        if(!$scope.$$phase) {
+           $scope.$apply(function() {
            editBlockUI.stop();
            $scope.iframeLoaded = true; 
            $scope.autoSavePage();
-        })       
+        })
+        }
+
         if(page)
         {
-          if (!$scope.currentPage) {
+          if (!$scope.currentPage && !$scope.$$phase) {
             $scope.$apply(function() {
               $scope.currentPage = page;
               //get components from page
