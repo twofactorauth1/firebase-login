@@ -56,19 +56,19 @@
                     <button class="btn btn-block btn-success mb10" data-toggle="modal" data-target="#historical-page-modal"> Historical Pages</button>
                     <div class="form-group">
                         <label>Title:</label>
-                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title" ng-change="editPage()">
+                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title" >
                     </div>
                     <div class="form-group" ng-hide="currentPage.handle == 'index'">
                         <label>URL:</label>
-                        <input id="edit-page-url" class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-change="editPage()">
+                        <input id="edit-page-url" class="form-control input-lg" type="text" ng-model="currentPage.handle">
                     </div>
                     <div class="form-group" ng-hide="currentPage.handle == 'index'">
                         <label>Show:</label>
-                        <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right" ng-change="editPage()">
+                        <input bs-switch ng-model="currentPage.visible.visibility" type="checkbox" class="pull-right">
                     </div>
                     <div class="form-group">
                         <label>Secure:</label>
-                        <input bs-switch ng-model="currentPage.secure" type="checkbox" class="pull-right" ng-change="editPage()">
+                        <input bs-switch ng-model="currentPage.secure" type="checkbox" class="pull-right">
                     </div>
                     <button class="btn btn-block btn-danger mb10" confirm-click2 data-placement="top" data-ng-disabled="currentPage.handle==='index'" confirm-click2-confirm="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
 
