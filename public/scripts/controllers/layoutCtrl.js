@@ -951,7 +951,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       PostService.createPost($scope.currentpage._id, postData, function(data) {});
     };
 
-    $scope.deletePost = function(postId, blogpost) {
+    
+    $scope.deleteBlogPost = function(postId, blogpost) {
       PostService.deletePost($scope.currentpage._id, postId, function(data) {
         if (blogpost) {
           var index = that.blogposts.indexOf(blogpost);
