@@ -10914,6 +10914,11 @@ ul.nav {
   max-height: 70px;
 }
 
+.navigation1 {
+  position: relative;
+  z-index: 5;
+}
+
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -10995,6 +11000,11 @@ ul.nav {
   }
 }
 
+.navigation1 {
+  position: relative;
+  z-index: 5;
+}
+
 /********** Navbar v3 **********/
 
 .navigation-v3 .nav {
@@ -11046,6 +11056,11 @@ ul.nav {
 
 .navigation-v3 .navigation-logo img {
   max-height: 105px;
+}
+
+.navigation1 {
+  position: relative;
+  z-index: 5;
 }
 
 /********** Feature Block **********/
