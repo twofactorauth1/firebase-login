@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// The default plugins included in the basic setup define some buttons that
 	// are not needed in a basic editor. They are removed here.
-	config.removeButtons = 'PasteText,Cut,Copy,Paste,Underline,Strike,Subscript,Superscript,Image,maximize,resize,Format,Indent,HorizontalRule,Outdent,Blockquote,lineheight,BGColor';
+	config.removeButtons = 'PasteText,Cut,Copy,Paste,Underline,Strike,Subscript,Superscript,Image,maximize,resize,Format,Indent,HorizontalRule,Outdent,Blockquote,BGColor';
 
 	// Dialog windows are also simplified.
 	config.removeDialogTabs = '';
@@ -44,12 +44,13 @@ CKEDITOR.editorConfig = function( config ) {
 	config.autoParagraph = false;
 	config.enterMode = CKEDITOR.ENTER_BR;
 	config.shiftEnterMode = CKEDITOR.ENTER_P;
+	//config.line_height="1em;1.1em;1.2em;1.3em;1.4em;1.5em;1.6em;1.7em;1.8em;1.9em;2.0em" ;
 
 	// // ALLOW <i></i>
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'colordialog,colorbutton,pastetext,doksoft_button,lineheight,mediamanager,sharedspace,image2,tooltip';
+	config.extraPlugins = 'colordialog,colorbutton,pastetext,doksoft_button,mediamanager,sharedspace,image2,tooltip,lineheight';
 
 	config.filebrowserBrowseUrl = '';
 
