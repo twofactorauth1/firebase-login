@@ -1769,21 +1769,63 @@ define([
       }
 
       $scope.deleteLinkFromNav = function(index) {
-        $scope.website.linkLists.forEach(function(value) {
-            if (value.handle === "head-menu") {
-              value.links.splice(index,1);
-              setTimeout(function() {
-                $scope.updateLinkList();
-              }, 1000)
-            }
-          });
+        if($scope.componentEditing.customnav)
+        {
+          $scope.componentEditing.linkLists.forEach(function(value) {
+              if (value.handle === "head-menu") {
+                value.links.splice(index,1);
+                setTimeout(function() {
+                  $scope.updateLinkList();
+                }, 1000)
+              }
+            });
+        }
+        else
+        {
+            $scope.website.linkLists.forEach(function(value) {
+              if (value.handle === "head-menu") {
+                value.links.splice(index,1);
+                setTimeout(function() {
+                  $scope.updateLinkList();
+                }, 1000)
+              }
+            });
+        }
       }
 
 
       $scope.addLinkToNav = function() {
         
         if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
-          $scope.website.linkLists.forEach(function(value, index) {
+          if($scope.componentEditing.customnav)
+          {
+            if(!$scope.componentEditing.linkLists)
+            {
+              $scope.componentEditing.linkLists = [];
+                $scope.componentEditing.linkLists.push(
+                {
+                  name : "Head Menu",
+                  handle : "head-menu",
+                  links : []
+                })
+            }
+            $scope.componentEditing.linkLists.forEach(function(value, index) {
+              if (value.handle === "head-menu") {
+                value.links.push({
+                  label: $scope.newLink.linkTitle,
+                  type: "link",
+                  linkTo: {
+                    data: $scope.newLink.linkUrl,
+                    type: $scope.newLink.linkType
+                  }
+                });
+                $scope.initializeLinks(false);
+              }
+            });
+          }
+          else
+          {
+            $scope.website.linkLists.forEach(function(value, index) {
             if (value.handle === "head-menu") {
               value.links.push({
                 label: $scope.newLink.linkTitle,
@@ -1794,9 +1836,10 @@ define([
                 }
               });
               $scope.initializeLinks(false);
-              
             }
           });
+          }
+
         }
         setTimeout(function() {
           $scope.updateLinkList();
@@ -1815,7 +1858,30 @@ define([
             linkLabelsArr.push(linkLabel);
         }
         if (linkLabelsArr.length) {
-          $scope.website.linkLists.forEach(function(value, index) {
+          if($scope.componentEditing.customnav)
+          {
+            $scope.componentEditing.linkLists.forEach(function(value, index) {
+            if (value.handle === "head-menu") {
+              var newLinkListOrder = [];
+              for (var i = 0; i < editedLinksLists.length; i++) {
+                if(value)
+                {
+                  var matchedLinkList = _.findWhere(value.links, {
+                    label: linkLabelsArr[i]
+                  });
+                  newLinkListOrder.push(matchedLinkList);
+                }
+              };
+              if (newLinkListOrder.length) {
+                $scope.componentEditing.linkLists[index].links = newLinkListOrder;
+                $scope.saveCustomComponent();
+              }
+            }
+          });
+          }
+          else
+          {
+            $scope.website.linkLists.forEach(function(value, index) {
             if (value.handle === "head-menu") {
               var newLinkListOrder = [];
               for (var i = 0; i < editedLinksLists.length; i++) {
@@ -1837,6 +1903,8 @@ define([
 
             }
           });
+          }
+
         }
       };
 

@@ -3,7 +3,9 @@ var mainApp = angular.module("mainApp");
 mainApp.filter('generateURLforLinks', function () {
     return function (linkToObject) {
         var _url = "";
-        switch (linkToObject.type) {
+        if(linkToObject)
+        {
+           switch (linkToObject.type) {
             case "page":
                 //if (linkToObject.data != 'blog') {
                     _url = '/page/'+linkToObject.data;
@@ -34,6 +36,8 @@ mainApp.filter('generateURLforLinks', function () {
                 return "#";
                 break;
         }
+        }
+
         //toDo findOut use of isEditor
         /*var isEditor = true;
         if (_url != null && isEditor === true) {

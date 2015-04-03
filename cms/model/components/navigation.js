@@ -83,7 +83,15 @@ var component = $$.m.ModelBase.extend({
                     show: false
                 },
                 color : "#89c4f4"
-            }
+            },
+
+            // Allow user to save custom nav
+
+            customnav: false,
+
+            // Allow user to save custom nav if customnav property is true
+
+            linkLists: null
 
         }
     },
