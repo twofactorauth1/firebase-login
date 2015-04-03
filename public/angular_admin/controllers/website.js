@@ -1354,6 +1354,9 @@ define([
         $(".modal-backdrop").remove();
         $("#component-setting-modal").modal('hide');
         $scope.activateAloha();
+        $scope.$apply(function() {
+          toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+        });
       };
 
       $scope.updateIframeComponents = function(fn) {
