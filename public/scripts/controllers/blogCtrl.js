@@ -241,7 +241,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     }, 500)
             })
         }
-        $scope.initializePostData = function()
+        $scope.initializePostData = function(revert)
         {
             var post_content_container = $('.post_content_div');
             if(post_content_container.length > 0)
@@ -259,12 +259,19 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if(post_category_container.length > 0)
                 that.post.post_category = post_category_container.text();
 
-            var post_excerpt_container = $('.post_excerpt_div');
-            if(post_excerpt_container.length > 0)
-                that.post.post_excerpt = post_excerpt_container.text();
-
-
-            $scope.autoCreateExcerpt(post_excerpt_container, post_content_container)
+            if(revert)
+            {
+                var post_excerpt_container = $('.post_excerpt_div');
+                if(post_excerpt_container.length > 0)
+                    post_excerpt_container.text(that.post.post_excerpt);
+            }
+            else
+            {
+               var post_excerpt_container = $('.post_excerpt_div');
+                if(post_excerpt_container.length > 0)
+                    that.post.post_excerpt = post_excerpt_container.text();
+                $scope.autoCreateExcerpt(post_excerpt_container, post_content_container); 
+            }
         }
 
         $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container)
@@ -280,7 +287,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         {
             that.post.post_excerpt = that.tempPost.post_excerpt;
             that.post.featured_image = that.tempPost.featured_image;
-            $scope.initializePostData();
+            $scope.initializePostData(true);
+
         }
         $scope.changeBlogImage = function(blogpost) {
           window.parent.changeBlogImage(blogpost);
