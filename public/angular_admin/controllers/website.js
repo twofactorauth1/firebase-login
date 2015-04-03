@@ -1908,6 +1908,29 @@ define([
           });
           }
 
+        } else {
+
+          if($scope.componentEditing.customnav)
+          {
+            $scope.website.linkLists.forEach(function(value, index) {
+              if (value.handle === "head-menu") {
+            $scope.componentEditing.linkLists[index].links = [];
+            $scope.saveCustomComponent();
+            }
+            });
+          }
+          else {
+            $scope.website.linkLists.forEach(function(value, index) {
+              if (value.handle === "head-menu") {
+                $scope.website.linkLists[index].links = [];
+                WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                  iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
+                  //toaster.pop('success', "Navigation updated successfully.");
+                });
+              }
+            });
+          }
+
         }
       };
 
