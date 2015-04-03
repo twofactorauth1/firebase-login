@@ -41,8 +41,8 @@ define([
     'CourseService',
     'NavigationService',
     'SweetAlert',
-    'blockUI',
-    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+    'blockUI','$filter',
+    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI, $filter) {
       var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
       ngProgress.start();
       UserService.getUserPreferences(function(preferences) {
@@ -123,6 +123,7 @@ define([
       $scope.secondaryFontStack = '';
       $scope.iframeData = {};
       $scope.allPages = [];
+      $scope.filterdPages = [];
       $scope.backup = {};
       $scope.components = [];
       $scope.isEditing = true;
@@ -1179,6 +1180,7 @@ define([
             arr.push(parsed[x]);
           }
           $scope.allPages = arr;
+          $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
           that.allPages = arr;
           $scope.currentPage = _.findWhere(that.allPages, {
             handle: currentPage

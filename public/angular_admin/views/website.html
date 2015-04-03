@@ -414,7 +414,7 @@
                                                 </select>
                                                 <select ng-if="newLink.linkType=='page'" ng-model="newLink.linkUrl" class="form-control input-lg mb0">
                                                     <option value="" disabled>Select a Page</option>
-                                                    <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
+                                                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
                                                 </select>
                                                 <input class="form-control input-lg" type="text" ng-if="newLink.linkType=='external'" ng-model="newLink.linkUrl" placeholder="Enter External URL">
                                             </div>
@@ -476,7 +476,7 @@
                                                                 </select>
                                                                 <select ng-if="linkType[$index]=='page'" ng-change = "updateLinkList()" ng-model="link.linkTo.data" class="form-control input-lg mb0">
                                                                     <option value="" disabled>Select a Page</option>
-                                                                    <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
+                                                                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                                                 </select>
                                                                 <input class="form-control input-lg" type="text" ng-if="linkType[$index]=='external'" ng-change = "updateLinkList()" ng-model="link.linkTo.data" placeholder="Enter External URL">
                                                             </div>
