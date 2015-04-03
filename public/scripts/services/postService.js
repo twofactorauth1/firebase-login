@@ -109,37 +109,5 @@ mainApp.service('postService', function ($http) {
                 fn(err, null);
             });
     };
-    this.getAuthors = function(fn)
-    {
-        var apiUrl = baseUrl + ['cms', 'blog', 'authors'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-               fn(data);
-        });
-    };
-    this.getTitles = function(fn)
-    {
-        var apiUrl = baseUrl + ['cms', 'blog', 'titles'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-               fn(data);
-        });
-    };
-    this.getCategories = function(fn)
-    {
-        var apiUrl = baseUrl + ['cms', 'blog', 'categories'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-               fn(data);
-        });
-    };
-    this.getTags = function(fn)
-    {
-        var apiUrl = baseUrl + ['cms', 'blog', 'tags'].join('/');
-        $http.get(apiUrl)
-            .success(function (data, status, headers, config) {
-               fn(data);
-        });
-    };
 
 });

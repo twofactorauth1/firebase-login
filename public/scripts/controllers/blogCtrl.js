@@ -72,10 +72,29 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
                     //should be replaced by get tags filter
-                    
+                    that.postTags = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].post_tags) {
+                            var tags = data[i].post_tags;
+                            for (var j = 0; j < tags.length; j++) {
+                                if(that.postTags.indexOf(tags[j]) == -1) {
+                                    that.postTags.push(tags[j]);
+                                }
+                            };
+                        }
+                    };
+
                      //get post cateogires for sidebar
                     //should be replaced by get cateogires filter
-                    
+                    that.categories = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].post_category) {
+                            if(that.categories.indexOf(data[i].post_category) <= -1) {
+                                that.categories.push(data[i].post_category);
+                            }
+                        }
+                    };
+
                      //get latest posts for sidebar
                     //should be replaced by get latest posts filter
                     that.latestposts = [];
@@ -149,14 +168,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 return;
             }
         });
-
-        PostService.getTags(function(data){
-            that.postTags = data;
-        });
-
-        PostService.getCategories(function(data){
-          that.categories = data;
-        })
 
         window.copyPostMode=function(){
             console.log(that.post);
