@@ -70,11 +70,8 @@
                                             <!-- end .thumb -->
 
                                             <div class="entry-excerpt"><p>
-                                                <div ng-if="blog.post.post_excerpt" class="editable post_excerpt_div" data-class="post_excerpt">
+                                                <div class="editable post_excerpt_div" data-class="post_excerpt">
                                                     {{blog.post.post_excerpt }}
-                                                </div>
-                                                <div ng-if="!blog.post.post_excerpt" class="editable post_excerpt_div" data-class="post_excerpt">
-                                                    <span> Enter Post Excerpt</span>
                                                 </div>
                                                 </p></div>                                   
                                             </div>
@@ -150,10 +147,7 @@
                         <!-- end .thumb -->
 
                         <div class="entry-content">
-                            <div ng-if="blog.post.post_content" class="post_content_div editable" ng-bind-html="blog.post.post_content | unsafe" data-class="post_content"></div>
-                            <div class="editable post_content_div" ng-if="!blog.post.post_content" data-class="post_content">
-                                <span class="blog.post_content"> Create you blog post here</span>
-                            </div>
+                            <div class="post_content_div editable" ng-bind-html="blog.post.post_content | unsafe" data-class="post_content"></div>
                         </div>
                     </div>
                     <!-- end .et_pt_blogentry -->

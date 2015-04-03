@@ -233,9 +233,13 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         {
             if(!that.tempPost)
                 that.tempPost = angular.copy(that.post);
-            $scope.$apply(function() {
-                $scope.initializePostData();
-            })  
+                
+                    $scope.$apply(function() {
+                    $scope.initializePostData();
+                    setTimeout(function() {
+                     activateAloha();
+                    }, 500)
+            })
         }
         $scope.initializePostData = function()
         {
@@ -258,7 +262,20 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             var post_excerpt_container = $('.post_excerpt_div');
             if(post_excerpt_container.length > 0)
                 that.post.post_excerpt = post_excerpt_container.text();
+
+
+            $scope.autoCreateExcerpt(post_excerpt_container, post_content_container)
         }
+
+        $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container)
+        {
+            if(post_excerpt_container.length > 0 && post_content_container.length > 0 && post_excerpt_container.text() == "")
+            {                   
+               post_excerpt_container.text(jQuery.trim(post_content_container.text()).substring(0, 300)
+                .split(" ").slice(0, -1).join(" ") + "...");                                  
+            }
+        }
+
         $scope.revertComponent = function()
         {
             that.post.post_excerpt = that.tempPost.post_excerpt;
