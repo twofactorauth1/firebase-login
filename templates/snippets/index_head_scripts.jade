@@ -1,4 +1,3 @@
-script(src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js")
 script(type="text/javascript").
 
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
@@ -21,11 +20,3 @@ script(type="text/javascript").
     }, window.analytics.SNIPPET_VERSION = "2.0.9",
             window.analytics.load('#{segmentIOWriteKey}');
     window.analytics.page('Index', {accountId:#{account._id}});
-
-if account.website.settings.font_family
-    script(type="text/javascript").
-        WebFont.load({
-                          google: {
-                                 families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
-                           }
-               });
