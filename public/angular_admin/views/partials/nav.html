@@ -1,0 +1,191 @@
+<!-- start: SEARCH FORM -->
+<div class="search-form hidden">
+	<a class="s-open" href="#">
+		<i class="ti-search"></i>
+	</a>
+	<form class="navbar-form" role="search">
+		<a class="s-remove" href="#" ng-toggle-class="search-open" target=".navbar-form">
+			<i class="ti-close"></i>
+		</a>
+		<div class="form-group">
+			<input type="text" class="form-control" placeholder="{{ 'sidebar.search.PLACEHOLDER' | translate }}">
+			<button class="btn search-button" type="submit">
+				<i class="ti-search"></i>
+			</button>
+		</div>
+	</form>
+</div>
+<!-- end: SEARCH FORM -->
+<!-- start: MAIN NAVIGATION MENU -->
+<ul class="main-navigation-menu">
+	<li ui-sref-active="active">
+		<a ui-sref="app.dashboard">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-home"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.dashboard.MAIN"> Dashboard </span>
+				</div>
+			</div>
+		</a>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.website')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-desktop"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.website.MAIN"> Website </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.website.pages">
+					<span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.website.posts">
+					<span class="title" translate="sidebar.nav.website.POSTS"> Posts </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.customers')}">
+		<a ui-sref="app.customers">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-user"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.customers.MAIN"> Customers </span>
+				</div>
+			</div>
+		</a>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.commerce')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-shopping-cart"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.commerce.MAIN"> Commerce </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.commerce.products">
+					<span class="title" translate="sidebar.nav.commerce.PRODUCTS"> Products </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.commerce.orders">
+					<span class="title" translate="sidebar.nav.commerce.ORDERS"> Orders </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.marketing')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-announcement"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.marketing.MAIN"> Marketing </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.marketing.socialfeed">
+					<span class="title" translate="sidebar.nav.marketing.SOCIALFEED"> Social Feed </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.marketing.campaigns">
+					<span class="title" translate="sidebar.nav.marketing.CAMPAIGNS"> Campaigns </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.account')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-panel"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.account.MAIN"> Account </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.account.profile">
+					<span class="title" translate="sidebar.nav.account.PROFILE"> Profile </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.account.billing">
+					<span class="title" translate="sidebar.nav.account.BILLING"> Billing </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.account.integrations">
+					<span class="title" translate="sidebar.nav.account.INTEGRATIONS"> Integrations </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ng-class="{'active open':$state.includes('app.support')}">
+		<a href="javascript:void(0)">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-shield"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.support.MAIN"> Support </span><i class="icon-desktop"></i>
+				</div>
+			</div>
+		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.support.gettingstarted">
+					<span class="title" translate="sidebar.nav.support.GETTINGSTARTED"> Getting Started </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.support.helptopics">
+					<span class="title" translate="sidebar.nav.support.HELPTOPICS"> Help Topics </span>
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li ui-sref-active="active">
+		<a ui-sref="logout">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-power-off"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.logout.MAIN"> Logout </span>
+				</div>
+			</div>
+		</a>
+	</li>
+</ul>
+<!-- end: MAIN NAVIGATION MENU -->
+<!-- start: DOCUMENTATION BUTTON -->
+<!-- <div class="wrapper">
+	<a ui-sref="app.documentation" class="button-o">
+		<i class="ti-help"></i>
+		<span translate="sidebar.heading.DOCUMENTATION">Documentation</span>
+	</a>
+</div> -->
+<!-- end: DOCUMENTATION BUTTON -->
