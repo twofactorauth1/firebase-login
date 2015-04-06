@@ -515,7 +515,7 @@ define([
             if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
               $scope.tabs.address = true;
             $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-            if($scope.single_post)
+            if($(e.currentTarget).hasClass("single-post-settings"))
               $("#iframe-website").contents().find('#component-setting-modal').modal('show');
             else
             {
