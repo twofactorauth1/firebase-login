@@ -131,7 +131,7 @@ define(['angularAMD', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'co
                 $scope.typeMimes = {
                   image: ['image/png', 'image/jpeg', 'image/gif'],
                   video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv'],
-                  audio: ['audio/mpeg'],
+                  audio: ['audio/mpeg', 'audio/mp3'],
                   document: ['application/octet-stream', 'application/pdf']
                 };
 
