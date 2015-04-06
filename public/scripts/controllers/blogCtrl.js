@@ -415,4 +415,43 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       blogpost.featured_image = window.parent.postImageUrl;
     }
 
+    $scope.sharePost = function(post, type) {
+      var url = $location.$$absUrl;
+      var postData = {};
+      switch (type) {
+        case "twitter":
+          postData = {
+            status: url
+          }
+          PostService.sharePostOnTwitter(postData, function(data) {
+
+          });
+          break;
+        case "facebook":
+          postData = {
+            url: url,
+            picture: post.featured_image,
+            name: post.post_title,
+            caption: post.post_excerpt,
+            description: post.post_excerpt
+          }
+          PostService.sharePostOnFacebook(postData, function(data) {
+
+          });
+          break;
+        case "linked-in":
+          postData = {
+            url: url,
+            picture: post.featured_image,
+            name: post.post_title,
+            caption: post.post_excerpt,
+            description: post.post_excerpt
+          }
+          PostService.sharePostOnLinkedIn(postData, function(data) {
+
+          });
+          break;
+      }
+    }
+
     }]);
