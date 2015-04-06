@@ -243,6 +243,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         }
         $scope.initializePostData = function(revert)
         {
+            var post_content = angular.copy(that.post.post_content);
             var post_content_container = $('.post_content_div');
             if(post_content_container.length > 0)
                 that.post.post_content = post_content_container.html();
@@ -270,16 +271,16 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                var post_excerpt_container = $('.post_excerpt_div');
                 if(post_excerpt_container.length > 0)
                     that.post.post_excerpt = post_excerpt_container.text();
-                $scope.autoCreateExcerpt(post_excerpt_container, post_content_container); 
+                $scope.autoCreateExcerpt(post_excerpt_container, post_content_container, post_content); 
             }
         }
 
-        $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container)
+        $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container, post_content)
         {
-            if(post_excerpt_container.length > 0 && post_content_container.length > 0 && post_excerpt_container.text() == "")
+            if(post_excerpt_container.length > 0 && post_content_container.length > 0 && post_content !== that.post.post_content && jQuery.trim(post_content_container.text()))
             {                   
                post_excerpt_container.text(jQuery.trim(post_content_container.text()).substring(0, 300)
-                .split(" ").slice(0, -1).join(" ") + "...");                                  
+                 + "...");                                  
             }
         }
 
