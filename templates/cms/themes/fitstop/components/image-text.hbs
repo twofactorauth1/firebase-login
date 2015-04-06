@@ -1,0 +1,57 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+    {{#with component}}
+    <div class="component-header">
+        <div>
+            {{label}}
+        </div>
+
+        <div>
+            {{description}}
+        </div>
+    </div>
+
+    <div class="component-body {{bgcolor}}">
+        <div class="inner-page">
+            <div class="container">
+                <div class="image-text about">
+                    <div class="{{#if url}}col-sm-12{{/if}} col-xs-12 editable">
+                        <h3 class="col-sm-12 about-title" data-class="title">{{title}}</h3>
+                    </div>
+                    {{#if url}}
+                    <div class="pull-{{imagePosition}} col-sm-3 col-xs-12">
+                        <div class="editable about-profile" data-class="url">
+                            <img src="{{url}}" class="img-responsive">
+                        </div>
+                        <p class="center editable" data-class="caption">{{caption}}</p>
+                    </div>
+                    {{/if}}
+                    <div class="{{#if url}}col-sm-9{{/if}} col-xs-12 ">
+                        <div class="mb30"></div>
+                        <div class="editable about-name" data-class="text">{{{text}}}</div>
+                        <div class="btn-wrap">
+                            <button class="btn btn-success btn-block center" href="{{btn.url}}">
+                                <div class="fa fa-envelope"></div>
+                                <div data-class="btn-text" class="editable btn-text">
+                                    {{btn.text}}
+                                </div>
+
+                            </button>
+                        </div>
+                    </div>
+                    <div class="clearfix mb10 visible-xs"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    {{/with}}
+</div>

@@ -1,0 +1,64 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div>
+        <div class="component-body">
+            {{#with component}}
+            <div class="blog-teaser" {{#if anchor}} id="{{anchor}}" {{/if}}>
+                <h3 class="title">
+                    <div class="editable" data-class="title">
+                        {{{title}}}
+                    </div>
+                </h3>
+            {{/with}}
+                <div class="posts row">
+                    {{#each_upto blogposts 3 }}
+                    <div class="col-sm-4">
+                        <div class="single-blog" data-url="{{this.attributes.post_url}}">
+                        {{#if this.attributes.featured-image}}
+                            <div class="featured-image">
+                                <div class="editable" data-class="featured-image">
+                                    <img src="{{this.attributes.featured-image}}"/>
+                                </div>
+                            </div>
+                        {{/if}}
+                            <div class="blog-content">
+                                <h4 class="title">
+                                    <div class="editable" data-class="title">
+                                        {{this.attributes.post_title}}
+                                    </div>
+                                </h4>
+                                <div class="excerpt">
+                                    <div class="editable" data-class="subtitle">
+                                    {{{this.attributes.post_excerpt}}}
+                                    </div>
+                                </div>
+                                <div class="footer">
+                                    <div class="date col-xs-6">
+                                        <span class="fa fa-calendar"></span>
+                                        {{this.attributes.created.date}}
+                                    </div>
+                                    <div class="comments col-xs-6 hidden">
+                                        <span class="fa fa-comments"></span>
+                                        170 Comments
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix mb15 visible-xs"></div>
+                    {{/each_upto}}
+                </div>
+                <div class="clearfix mb30"></div>
+                <div class="col-xs-12 mb15">
+                    <a class="btn btn-success center btn-lg btn-full-blog" href="/page/blog">See Full Blog</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+</div>

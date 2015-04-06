@@ -1,0 +1,82 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<!-- load the jQuery and require.js libraries -->
+<script type="text/javascript" src="/js/libs/requirejs/require.js"></script>
+
+
+<script type="text/javascript">
+    Aloha = {};
+    Aloha.settings = {
+        sidebar: { disabled: true }
+    };
+</script>
+<!-- load the Aloha Editor core and some plugins -->
+ <script src="http://aloha-editor.org/latest/lib/aloha.js"
+        data-aloha-plugins="
+                        common/ui,
+                        common/format,
+                        common/table,
+                        common/list,
+                        common/link,
+                        common/highlighteditables,
+                        common/block,
+                        common/undo,
+                        common/image,
+                        common/contenthandler,
+                        common/paste,
+                        common/characterpicker,
+                        common/commands,
+                        common/align,
+                        common/abbr">
+ </script>
+
+
+<!-- load the Aloha Editor CSS styles -->
+<link href="http://aloha-editor.org/latest/css/aloha.css" rel="stylesheet" type="text/css" />
+
+<!-- make all elements with class="editable" editable with Aloha Editor -->
+<script type="text/javascript">
+    Aloha.ready( function() {
+        var $ = Aloha.jQuery;
+
+        // $('#main-area').on('click','.add-post',function() {
+        //     $('.editable').aloha();
+        // });
+
+        // $(document).on('click', '.blog-title', function(e) {
+        //     e.preventDefault();
+        // });
+
+
+        // $('#main-area').bind('contentchanged', function() {
+        //      alert('main-area changed');
+        //     $('.editable').aloha();
+        // });
+
+        // Aloha.bind('aloha-editable-deactivated', function(){
+        //     var content = Aloha.activeEditable.getContents();
+        //     var contentId = Aloha.activeEditable.obj[0].id;
+        //     var pageId = window.location.pathname;
+
+        //     // textarea handling -- html id is "xy" and will be "xy-aloha" for the aloha editable
+        //     if ( contentId.match(/-aloha$/gi) ) {
+        //         contentId = contentId.replace( /-aloha/gi, '' );
+        //     }
+
+        //     parent.$('#edit-website-wrapper').trigger("websiteedit", {
+        //         content: content,
+        //         contentId: contentId,
+        //         pageId: pageId,
+        //         target: Aloha.activeEditable.obj[0],
+        //         dataClass: Aloha.activeEditable.obj[0].attributes['data-class'].value
+        //     });
+        //     return;
+        // });
+    });
+</script>

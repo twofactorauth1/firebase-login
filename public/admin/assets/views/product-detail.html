@@ -1,0 +1,234 @@
+<div ng-controller="ProductsDetailCtrl">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">{{product.name | uppercase}}</h1>
+                <span class="mainDescription">{{product.description}}</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: YOUR CONTENT HERE -->
+    <div class="container-fluid container-fullw bg-white ng-scope">
+        <div class="row">
+            <div class="col-md-12">
+                <h5 class="over-title margin-bottom-15">Product <span class="text-bold">Details</span></h5>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <a href="#" class="thumbnail" style="  height:230px;width: 230px;margin: 20px auto;">
+                            <img src="assets/images/lion-565820_640.jpg" alt="">
+                        </a>
+                        <div class="row">
+                            <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                            <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                            <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                            <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="panel panel-transparent">
+                            <div class="panel-body">
+                                <form role="form" class="ng-pristine ng-valid">
+                                    <div class="form-group">
+                                        <label>
+                                            Title
+                                        </label>
+                                        <input type="text" placeholder="Title" ng-model="product.name" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-field-select-1">
+                                            Status
+                                        </label>
+                                        <select ng-model="product.status" class="form-control">
+                                            <option value="">Status</option>
+                                            <option value="active">Active</option>
+                                            <option value="backorder">Backorder</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-field-select-1">
+                                            Type
+                                        </label>
+                                        <select ng-model="product.type" class="form-control">
+                                            <option value="">Type</option>
+                                            <option value="physical">Physical</option>
+                                            <option value="digital">Digital</option>
+                                            <option value="subscription">Subscription</option>
+                                            <option value="externalLink">External</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="form-field-select-1">
+                                            Description
+                                        </label>
+                                        <textarea class="form-control autosize area-animated msd-elastic: \n; ng-pristine ng-valid ng-touched" ng-model="product.description" style="overflow: hidden; word-wrap: break-word; resize: vertical; height: 80px;" placeholder="Description"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="panel panel-transparent">
+                            <div class="panel-body">
+                                <form role="form" class="ng-pristine ng-valid">
+                                    <div class="form-group">
+                                        <label>
+                                            SKU
+                                        </label>
+                                        <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Price
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" class="form-control" ng-model="product.price">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Sale Price
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" class="form-control" ng-model="product.price">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Cost
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="text" class="form-control">
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid container-fullw ng-scope">
+        <div class="row">
+            <div class="col-sm-12" ng-if="product.type == 'external'">
+                <div class="panel panel-white">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">External Link</h4>
+                        <!-- <ul class="panel-heading-tabs border-light">
+                            <li>
+                                <div class="pull-right">
+                                    <div class="checkbox">
+                                        <span class="green switch green checked ng-valid ng-click-active" ng-click="switchsetting=!switchsetting" ng-class="{ checked:switchsetting }" ng-model="switchsetting" ng-init="switchsetting = true"><small></small><input type="checkbox" ng-model="switchsetting" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul> -->
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                        </p>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                        <p>
+                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" ng-if="product.type == 'subscription'">
+                <div class="panel panel-white">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Subscriptions</h4>
+                        <!-- <ul class="panel-heading-tabs border-light">
+                            <li>
+                                <div class="pull-right">
+                                    <div class="checkbox">
+                                        <span class="green switch green checked ng-valid ng-click-active" ng-click="switchsetting=!switchsetting" ng-class="{ checked:switchsetting }" ng-model="switchsetting" ng-init="switchsetting = true"><small></small><input type="checkbox" ng-model="switchsetting" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul> -->
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                        </p>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                        <p>
+                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12" ng-if="product.type == 'digital'">
+                <div class="panel panel-white">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Digital File</h4>
+                        <!-- <ul class="panel-heading-tabs border-light">
+                            <li>
+                                <div class="pull-right">
+                                    <div class="checkbox">
+                                        <span class="green switch green checked ng-valid ng-click-active" ng-click="switchsetting=!switchsetting" ng-class="{ checked:switchsetting }" ng-model="switchsetting" ng-init="switchsetting = true"><small></small><input type="checkbox" ng-model="switchsetting" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul> -->
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                        </p>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                        <p>
+                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-white">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Variations</h4>
+                        <ul class="panel-heading-tabs border-light">
+                            <li>
+                                <div class="pull-right">
+                                    <div class="checkbox">
+                                        <span class="green switch green checked ng-valid ng-click-active" ng-click="switchsetting=!switchsetting" ng-class="{ checked:switchsetting }" ng-model="switchsetting" ng-init="switchsetting = true"><small></small><input type="checkbox" ng-model="switchsetting" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-body" ng-if="switchsetting">
+                        <p>
+                            Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+                        </p>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                        </p>
+                        <p>
+                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <!--     <pre>{{product}}</pre> -->
+    <!-- end: YOUR CONTENT HERE -->
+</div>

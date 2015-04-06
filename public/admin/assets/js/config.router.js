@@ -86,15 +86,17 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Products'
-        }
+        },
+        resolve: loadSequence('productsCtrl', 'productService', 'smart-table')
     }).state('app.commerce.productsingle', {
-        url: '/products/:id',
-        templateUrl: "assets/views/product-single.html",
+        url: '/products/:productId',
+        templateUrl: "assets/views/product-detail.html",
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Single Product'
-        }
+        },
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'smart-table')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",

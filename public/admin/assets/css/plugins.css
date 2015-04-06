@@ -692,3 +692,11 @@ canvas[tc-chartjs-line], canvas[tc-chartjs-bar], canvas[tc-chartjs-radar] {
   border: none;
   background: red;
 }
+
+.st-sort-ascent:before{
+    content: '\25B2';
+}
+
+.st-sort-descent:before{
+    content: '\25BC';
+}

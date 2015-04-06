@@ -31,11 +31,13 @@ app.constant('JS_REQUIRES', {
         'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
         'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
         'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
+        'productsCtrl': 'assets/js/controllers/productsCtrl.js',
+        'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
         'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',
         'vAccordionCtrl': 'assets/js/controllers/vAccordionCtrl.js',
         'ckeditorCtrl': 'assets/js/controllers/ckeditorCtrl.js',
         'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
-        'ngTableCtrl': 'assets/js/controllers/ngTableCtrl.js',
+
         'cropCtrl': 'assets/js/controllers/cropCtrl.js',
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',
         'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -53,7 +55,10 @@ app.constant('JS_REQUIRES', {
         'inboxCtrl': 'assets/js/controllers/inboxCtrl.js',
         'xeditableCtrl': 'assets/js/controllers/xeditableCtrl.js',
         'chatCtrl': 'assets/js/controllers/chatCtrl.js',
-        
+
+        //*** Services
+        'productService': 'assets/js/services/product.js',
+
         //*** Filters
         'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js'
     },
@@ -74,8 +79,8 @@ app.constant('JS_REQUIRES', {
         name: 'angular-ladda',
         files: ['../js/libs/angular-ladda/dist/angular-ladda.min.js']
     }, {
-        name: 'ngTable',
-        files: ['../js/libs/ng-table/dist/ng-table.min.js', '../js/libs/ng-table/dist/ng-table.min.css']
+        name: 'smart-table',
+        files: ['../js/libs/angular-smart-table/dist/smart-table.min.js']
     }, {
         name: 'ui.select',
         files: ['../js/libs/angular-ui-select/dist/select.min.js', '../js/libs/angular-ui-select/dist/select.min.css', '../js/libs/select2/dist/css/select2.min.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
