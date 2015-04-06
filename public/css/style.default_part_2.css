@@ -14634,10 +14634,6 @@ div[data-type=blog] .container {
   animation: arrowBounce 2.5s infinite;
 }
 
-div[data-type="coming-soon"] .component-inner {
-  background: rgba(255, 255, 255, 0.9);
-}
-
 .editing .image-wrap:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
   padding-right: 6px;
