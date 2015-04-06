@@ -11905,6 +11905,10 @@ contenthover a {
   display: none;
 }
 
+.editing .testimonials-v1 .testimonial-wrap div.editable:empty:not(:focus):before {
+  content: attr(data-text);
+}
+
 .testimonials-v1 div[data-class="testimonials"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
@@ -11996,6 +12000,10 @@ contenthover a {
 
 .editing .testimonials-v2 .testimonial-wrap .delete-single-testimonial .btn-delete-single-testimonial {
   display: none;
+}
+
+.editing .testimonials-v2 .testimonial-wrap div.editable:empty:not(:focus):before {
+  content: attr(data-text);
 }
 
 .editing .testimonials-v2 .testimonials {

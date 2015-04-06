@@ -843,9 +843,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       // to do: the information should fetch from component model
       var newTestimonial = {
         "img": "",
-        "name": "Name",
-        "site": "Site",
-        "text": "Description"       
+        "name": "",
+        "site": "",
+        "text": ""
       }
       window.parent.addTestimonial(componentId, newTestimonial, index);     
     }

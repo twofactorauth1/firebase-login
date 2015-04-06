@@ -36,6 +36,9 @@
       display: none;
     }
   }
+  div.editable:empty:not(:focus):before{
+        content:attr(data-text)
+    }
 }
 .testimonials-v1 {
   div[data-class="testimonials"] {
