@@ -348,17 +348,7 @@
                                 <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
                                 <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control input-lg mb0">
                                 </select>
-                            </div>
-                            <hr ng-show="componentEditing.type == 'navigation'" />
-                                <div class="form-group" ng-if="componentEditing.type == 'navigation'">
-                                    <label for="component-title">Custom Nav</label>
-                                    <span tooltip-placement="top" tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
-                                     <label class="switch switch-green pull-right">
-                                        <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.customnav" ng-change="saveComponent()">
-                                         <span class="switch-label" data-on="On" data-off="Off"></span>
-                                    <span class="switch-handle"></span>
-                                    </label>
-                                </div>
+                            </div>                            
                             <hr ng-if="componentEditing.type == 'image-text'"></hr>
                             <div class="form-group" ng-if="componentEditing.type == 'image-text'">
                                 <label for="colorpicker">Image Position:</label>
@@ -379,6 +369,17 @@
                             <tab-heading>
                                 <span>Links</span>
                             </tab-heading>
+                            
+                                <div class="form-group">
+                                    <label for="component-title">Custom Nav</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
+                                     <label class="switch switch-green pull-right">
+                                        <input type="checkbox" class="switch-input" checked="" ng-model="componentEditing.customnav" ng-change="saveComponent()">
+                                         <span class="switch-label" data-on="On" data-off="Off"></span>
+                                    <span class="switch-handle"></span>
+                                    </label>
+                            </div>
+                            <hr ng-show="componentEditing.type == 'navigation'" />
                             <div>
                                 <p class="col-xs-9" style="padding-left:0;">Drag and Drop your links to rearrange them.</p>
                                 <a href="" class="col-xs-3" ng-click="initializeLinks(true)" style="text-align: right;padding: 0;"><span class="fa fa-plus"></span> Add Link</a>
