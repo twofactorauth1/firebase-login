@@ -1,5 +1,6 @@
 /********** Single Blog ***********/
 @import "../js/libs/bootstrap-social/bootstrap-social.less";
+
 div[data-type=single-post] .container {
     padding: 0;
     margin: 0;
@@ -62,18 +63,15 @@ div[data-type=single-post] .container {
         padding: 0 5px 7px 4px;
         margin: 0;
     }
-    .single-post-title
-    {
-        padding-bottom: 5px;
-    }
     .single-post-publish-date
     {
         padding: 0px 5px 10px 0px !important;
     }
-    .single-post-author, .single-post-tags, .single-post-content, .single-post-category
+    .single-post-author
     {
         padding-bottom: 10px;
     }
+    
 }
 h2.blog-title {
     padding-bottom: 0px!important;
@@ -115,5 +113,19 @@ div[data-class="blog"] {
         background-color: #efa022!important;
         border-bottom: 5px solid #efa022!important;
         color: #ffffff;
+    }
+}
+.editing{
+    .single-post-title
+    {
+        padding-bottom: 5px;
+    }
+    .single-post-publish-date
+    {
+        padding: 0px 5px 10px 0px !important;
+    }
+    .single-post-author, .single-post-tags, .single-post-content, .single-post-category
+    {
+        padding-bottom: 10px;
     }
 }

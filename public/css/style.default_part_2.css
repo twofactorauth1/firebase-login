@@ -14183,18 +14183,11 @@ div[data-type=single-post] .container {
   margin: 0;
 }
 
-.single-blog .single-post-title {
-  padding-bottom: 5px;
-}
-
 .single-blog .single-post-publish-date {
   padding: 0px 5px 10px 0px !important;
 }
 
-.single-blog .single-post-author,
-.single-blog .single-post-tags,
-.single-blog .single-post-content,
-.single-blog .single-post-category {
+.single-blog .single-post-author {
   padding-bottom: 10px;
 }
 
@@ -14245,6 +14238,21 @@ div[data-class="blog"] .single-blog {
   background-color: #efa022!important;
   border-bottom: 5px solid #efa022!important;
   color: #ffffff;
+}
+
+.editing .single-post-title {
+  padding-bottom: 5px;
+}
+
+.editing .single-post-publish-date {
+  padding: 0px 5px 10px 0px !important;
+}
+
+.editing .single-post-author,
+.editing .single-post-tags,
+.editing .single-post-content,
+.editing .single-post-category {
+  padding-bottom: 10px;
 }
 
 div[data-type=blog] .container {
