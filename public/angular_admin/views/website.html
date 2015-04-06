@@ -744,17 +744,17 @@
                             <div class="form-group">
                                 <label for="top-bar-hours">Business Hours </label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Add business hours to topbar."><i class="fa fa-info-circle" /></span>
-                                <input id="top-bar-hours" class="form-control input-lg" type="text" ng-model="componentEditing.businessHours">
+                                <input id="top-bar-hours" class="form-control input-lg" type="text" ng-blur="saveComponent(true)" ng-model="componentEditing.businessHours">
                             </div>
                             <div class="form-group">
                                 <label for="top-bar-phone">Phone number </label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Add Phone number to topbar."><i class="fa fa-info-circle" /></span>
-                                <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" type="text" ng-model="componentEditing.phone">
+                                <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control input-lg" ng-blur="saveComponent(true)" type="text" ng-model="componentEditing.phone">
                             </div>
                             <div class="form-group">
                                 <label for="top-bar-email">Email </label>
                                 <span tooltip-placement="top" tooltip-html-unsafe="Add Email to topbar."><i class="fa fa-info-circle" /></span>
-                                <input id="top-bar-email" class="form-control input-lg" type="text" ng-model="componentEditing.email">
+                                <input id="top-bar-email" ng-blur="saveComponent(true)" class="form-control input-lg" type="text" ng-model="componentEditing.email">
                             </div>
                         </tab>
                         <tab ng-if="componentEditing.type === 'meet-team'">
