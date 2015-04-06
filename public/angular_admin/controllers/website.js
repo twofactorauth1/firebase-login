@@ -1124,9 +1124,9 @@ define([
               $scope.stopAutoSavePage();
             $scope.redirect = false;  
             if(autoSave)
-              toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+              toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.title + " page was saved successfully.");
             else
-              toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+              toaster.pop('success', "Page Saved", "The " + $scope.currentPage.title + " page was saved successfully.");
             $scope.saveLoading = false;
             iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
 
