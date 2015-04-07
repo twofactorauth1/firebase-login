@@ -503,6 +503,20 @@ define([
           $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
 
           //Disable all links in edit
+
+           $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {         
+            if (!$(this).hasClass("clickable-link")) {   
+              e.preventDefault();    
+              e.stopPropagation();   
+            }    
+          });    
+   
+          $("#iframe-website").contents().find('body').on("contextmenu", ".component a", function(e) {   
+            if (!$(this).hasClass("clickable-link")) {   
+              e.preventDefault();    
+              e.stopPropagation();   
+            }    
+          });
          
           //add click events for all the settings buttons
           $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function(e) {
