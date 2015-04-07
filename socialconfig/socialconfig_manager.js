@@ -560,6 +560,25 @@ module.exports = {
         });
     },
 
+    shareFacebookLink: function(accountId, socialAccountId, url, picture, name, caption, description, fn) {
+        var self = this;
+        log.debug('>> getFacebookProfile');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            facebookDao.shareLinkWithToken(socialAccount.accessToken, socialAccount.socialId, url, picture, name,
+                caption, description, fn);
+        });
+    },
+
     createFacebookPost: function(accountId, socialAccountId, message, url, fn) {
         var self = this;
         log.debug('>> createFacebookPost');

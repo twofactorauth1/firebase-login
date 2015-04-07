@@ -971,6 +971,36 @@ var dao = {
         });
     },
 
+    shareLinkWithToken: function(accessToken, socialId, url, picture, name, caption, description, fn) {
+
+        var self = this;
+        self.log.debug('>> shareLinkWithToken');
+
+        var urlOptions = {access_token: accessToken, link:url};
+        if(picture && picture.length > 0) {
+            urlOptions.picture = picture;
+        }
+        if(name && name.length > 0) {
+            urlOptions.name = name;
+        }
+        if(caption && caption.length > 0) {
+            urlOptions.caption = caption;
+        }
+        if(description && description.length > 0) {
+            urlOptions.description = description;
+        }
+
+        FB.api(socialId + '/feed', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< shareLinkWithToken', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
     //needs permission read_mailbox
     getMessages: function(accessToken, socialId, fn) {
         var self = this;
