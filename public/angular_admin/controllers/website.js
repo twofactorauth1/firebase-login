@@ -981,6 +981,8 @@ define([
         if (page && page.title && page.title != '' && page.handle && page.handle != '') {
           $scope.editPageValidated = true;
         }
+        else 
+          $scope.editPageValidated = false;
       };
 
        $scope.savePostPage = function(msg) {
