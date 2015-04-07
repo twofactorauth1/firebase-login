@@ -34,6 +34,7 @@ define([], function () {
         server_props: {
             USER_ID: "userId",
             ACCOUNT_ID: "accountId",
+            WEBSITE_ID: "websiteId",
             ROUTER: "router",
             ROOT: "root",
             IS_LOGGED_IN: "isLoggedIn"

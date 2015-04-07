@@ -1,5 +1,9 @@
-define(['app', 'constants'], function(app) {
-	app.register.service('ImportContactService', function($http) {
+'use strict';
+/**
+ * service for importing contacts
+ */
+(function(angular) {
+	app.service('ImportContactService', function($http) {
 		var baseUrl = '/api/1.0/';
 		this.importContacts = function(socialType, fn) {
 			var api = "social/";
@@ -41,4 +45,4 @@ define(['app', 'constants'], function(app) {
 			});
 		}
 	});
-});
+})(angular);

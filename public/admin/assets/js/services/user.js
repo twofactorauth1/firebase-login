@@ -1,5 +1,9 @@
-define(['app'], function(app) {
-  app.register.service('UserService', function($http) {
+'use strict';
+/**
+ * service for user
+ */
+(function(angular) {
+  app.service('UserService', function($http) {
     var account, that = this;
     var baseUrl = '/api/1.0/';
 
@@ -184,4 +188,4 @@ define(['app'], function(app) {
     };
 
   });
-});
+})(angular);

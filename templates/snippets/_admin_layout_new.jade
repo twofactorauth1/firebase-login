@@ -55,6 +55,9 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js')
     script(src='../js/libs/angular-translate-storage-local/angular-translate-storage-local.min.js')
     script(src='../js/libs/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js')
+    // Utils
+    script(src='../js/utils/namespaces.js')
+
     // oclazyload
     script(src='../js/libs/oclazyload/dist/ocLazyLoad.min.js')
     // breadcrumb
@@ -65,6 +68,8 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-loading-bar/build/loading-bar.min.js')
     // Angular Scroll
     script(src='../js/libs/angular-scroll/angular-scroll.min.js')
+    // Angular Scrollify
+    script(src='../js/libs/angular-slugify/angular-slugify.js')
     // Scripts
     script(src='assets/js/app.js')
     script(src='assets/js/main.js')
@@ -92,7 +97,11 @@ html(lang='en', data-ng-app='clipApp')
     script(src='assets/js/controllers/bootstrapCtrl.js')
     // Services
     script(src='assets/js/services/product.js')
+    script(src='assets/js/services/website.js')
+    script(src='assets/js/services/user.js')
+    script(src='assets/js/services/customer.js')
+    script(src='assets/js/services/import_contacts.js')
     // Google Apis
     script(src='//maps.googleapis.com/maps/api/js?v=3.exp&libraries=weather,visualization')
 
-
+    include _serverprops

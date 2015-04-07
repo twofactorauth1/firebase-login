@@ -128,7 +128,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
              * if you just set a variable... why would you need to replace a character that ISN'T IN IT?
              */
             route = route.replace('/', '');// <-- why?
-            console.log('setting route to: ' + route + ' and $$path is ' + $scope.$location.$$path);
             if (!angular.isDefined(data[route])) {
                 route = 'coming-soon';
                 console.log('set route to coming-soon');
@@ -219,7 +218,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $(document).ready(function() {
           setTimeout(function() {
             $scope.$apply(function() {
-              console.log("Page loaded");
               $scope.isLoaded = true;
               $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
               if (newValue !== undefined && newValue.length) {

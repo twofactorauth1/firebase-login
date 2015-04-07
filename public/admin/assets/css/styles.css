@@ -41,6 +41,8 @@
 38 - Popovers
 39 - Date Picker
 40 - Getting Started
+41 - Pages
+42 - Posts
 /* ---------------------------------------------------------------------- */
 /*
 
@@ -11610,6 +11612,9 @@ td.small-width {
   height: auto !important;
   min-height: 100% !important;
 }
+.close {
+  font-size: 35px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Maps
 /* ---------------------------------------------------------------------- */
@@ -11981,4 +11986,97 @@ td.small-width {
   margin: 0;
   margin-top: 7px;
   color: #fcb040;
+}
+/* ---------------------------------------------------------------------- */
+/*  Pages
+/* ---------------------------------------------------------------------- */
+.pages-modal .tab-content {
+  max-height: 350px;
+  overflow: auto;
+}
+.pages-modal .tab-content h1 {
+  line-height: 65px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Posts
+/* ---------------------------------------------------------------------- */
+.posts-modal .tab-content {
+  max-height: 350px;
+  overflow: auto;
+}
+.posts-modal .tab-content h1 {
+  line-height: 65px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Tables
+/* ---------------------------------------------------------------------- */
+.tableView {
+  float: right;
+  margin-right: 5px;
+}
+table tbody td .screenshot {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+table tbody td strong {
+  display: none;
+}
+table.grid thead tr {
+  width: 100%;
+}
+table.grid thead th {
+  width: 16.4%;
+  display: inline-block;
+}
+table.grid tbody {
+  margin-top: 10px;
+  display: block;
+}
+table.grid tbody .screenshot {
+  width: 100px;
+  height: 100px;
+  border-radius: 5px;
+}
+table.grid tbody tr {
+  width: 24%;
+  float: left;
+  margin: 5px;
+  background: white!important;
+  height: 235px;
+  border-radius: 5px;
+  border-bottom: 3px solid #eeeeee;
+}
+table.grid tbody td {
+  float: left;
+  width: 100%;
+  border: 0;
+  padding: 2px 15px;
+  display: block!important;
+}
+table.grid tbody td:first-child {
+  padding-top: 15px;
+}
+table.grid tbody td:last-child {
+  padding-bottom: 15px;
+}
+table.grid tbody td strong {
+  width: 90px;
+  display: block;
+  float: left;
+}
+@media (max-width: 767px) {
+  table.grid tbody tr {
+    width: 100%!important;
+  }
+}
+@media (min-width: 768px) {
+  table.grid tbody tr {
+    width: 32%!important;
+  }
+}
+@media (min-width: 992px) {
+  table.grid tbody tr {
+    width: 24%!important;
+  }
 }

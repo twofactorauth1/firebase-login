@@ -31,6 +31,10 @@ app.constant('JS_REQUIRES', {
         'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
         'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
         'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
+        'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
+        'pageDetailCtrl': 'assets/js/controllers/pageDetailCtrl.js',
+        'postsCtrl': 'assets/js/controllers/postsCtrl.js',
+        'customersCtrl': 'assets/js/controllers/customersCtrl.js',
         'productsCtrl': 'assets/js/controllers/productsCtrl.js',
         'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
         'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',
@@ -58,9 +62,16 @@ app.constant('JS_REQUIRES', {
 
         //*** Services
         'productService': 'assets/js/services/product.js',
+        'websiteService': 'assets/js/services/webiste.js',
+        'userService': 'assets/js/services/user.js',
+        'customerService': 'assets/js/services/customer.js',
+        'ImportContactService': 'assets/js/services/import_contacts.js',
 
         //*** Filters
-        'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js'
+        'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
+
+        //*** Utils
+        'namespaces': '../js/utils/namespaces.js',
     },
     //*** angularJS Modules
     modules: [{
@@ -135,5 +146,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'checklist-model',
         files: ['../js/libs/checklist-model/checklist-model.js']
+    }, {
+        name: 'slugifier',
+        files: ['../js/libs/angular-slugify/angular-slugify.js']
     }]
 });

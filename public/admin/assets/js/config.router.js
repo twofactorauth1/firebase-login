@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl'),
+        resolve: loadSequence('modernizr', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -55,15 +55,26 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Pages'
-        }
-    }).state('app.website.posts', {
-        url: '/posts',
-        templateUrl: "assets/views/posts.html",
-        title: 'Posts',
+        },
+        resolve: loadSequence('pagesCtrl', 'userService', 'websiteService')
+    }).state('app.website.pages', {
+        url: '/pages',
+        templateUrl: "assets/views/pages.html",
+        title: 'Pages',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Posts'
-        }
+            label: 'Pages'
+        },
+        resolve: loadSequence('pagesCtrl', 'userService', 'websiteService')
+    }).state('app.website.pages.single', {
+        url: '/:id',
+        templateUrl: "assets/views/page-detail.html",
+        title: 'Page Single',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Single Page'
+        },
+        resolve: loadSequence('pageDetailCtrl', 'websiteService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
@@ -71,7 +82,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Customers'
-        }
+        },
+        resolve: loadSequence('customersCtrl', 'ImportContactService', 'customerService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -87,7 +99,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Products'
         },
-        resolve: loadSequence('productsCtrl', 'productService', 'smart-table')
+        resolve: loadSequence('productsCtrl', 'productService')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
         templateUrl: "assets/views/product-detail.html",
@@ -96,7 +108,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Product'
         },
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'smart-table')
+        resolve: loadSequence('productsDetailCtrl', 'productService')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",

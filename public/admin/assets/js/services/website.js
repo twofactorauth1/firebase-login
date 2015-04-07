@@ -1,5 +1,9 @@
-define(['app'], function (app) {
-	app.register.service('WebsiteService', function ($http) {
+'use strict';
+/**
+ * service for website
+ */
+(function(angular) {
+	app.service('WebsiteService', function ($http) {
 		var baseUrl = '/api/1.0/';
 		this.editPageHandle = null;
 
@@ -79,8 +83,8 @@ define(['app'], function (app) {
             });
 		};
 
-		this.getPages = function (accountId, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
+		this.getPages = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g,''), 'pages'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -97,7 +101,7 @@ define(['app'], function (app) {
                 url: apiUrl,
                 method: 'GET',
                 params: queryParams
-            })			
+            })
 			.success(function (data, status, headers, config) {
 				fn(data);
 			})
@@ -268,9 +272,9 @@ define(['app'], function (app) {
 		};
 
 		//template/:id/website/:websiteId/page/
-		this.createPageFromTemplate = function(templateId, websiteId, pagedata, fn) {
+		this.createPageFromTemplate = function(templateId, pagedata, fn) {
 			var self = this;
-			var apiUrl = baseUrl + ['cms', 'template', templateId, 'website', websiteId, 'page'].join('/');
+			var apiUrl = baseUrl + ['cms', 'template', templateId, 'website', $$.server.websiteId, 'page'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
@@ -403,4 +407,4 @@ define(['app'], function (app) {
 			})
 		};
 	});
-});
+})(angular);

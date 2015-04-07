@@ -1,5 +1,9 @@
-define(['app', 'constants', 'importContactService'], function(app) {
-    app.register.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService',
+'use strict';
+/**
+ * service for customer
+ */
+(function(angular) {
+    app.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService',
         function($http, $cacheFactory, ImportContactService) {
             var baseUrl = '/api/1.0/';
 
@@ -314,4 +318,4 @@ define(['app', 'constants', 'importContactService'], function(app) {
 
         }
     ]);
-});
+})(angular);

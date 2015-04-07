@@ -68,8 +68,10 @@ app.locals.setServerProps = function(serverProps) {
     for (var key in serverProps) {
         var value = serverProps[key];
 
-        if (_.isNaN(parseFloat(value)) == false || value == null || _.isBoolean(value)) {
-            str +=  "window.indigenous.server." + key + "=" + value + ";";
+        if (key === 'websiteId') {
+            str += "window.indigenous.server." + key + "='" + value + "';";
+        } else if (_.isNaN(parseFloat(value)) == false || value == null || _.isBoolean(value)) {
+            str += "window.indigenous.server." + key + "=" + value + ";";
         } else {
             str += "window.indigenous.server." + key + "='" + value + "';";
         }
