@@ -28054,6 +28054,7 @@ div[data-type=blog] .container {
 }
 #sidebar {
   padding: 20px;
+  padding-right: 0px;
 }
 #sidebar .fa {
   background: #47b1cc;
