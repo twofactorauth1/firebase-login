@@ -372,7 +372,7 @@ var dao = {
     },
 
     getTokenAdminPages: function(accessToken, socialId, since, until, limit, fn) {
-        var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count";
+        var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count,access_token";
         return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 

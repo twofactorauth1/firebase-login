@@ -78,6 +78,31 @@ module.exports = {
                 var socialConfig = new $$.m.SocialConfig({accountId:accountId});
                 return self.createSocialConfig(socialConfig, fn);
             } else {
+
+                //add the tracked objects properly
+                _.each(value.get('trackedObjects'), function(obj){
+                    if(value.getTrackedAccountById(obj.socialId)) {
+                        var trackedAccount = value.getTrackedAccountById(obj.socialId);
+                        //make sure the tracked Objects has it
+                        trackedAccount.trackedObjects = trackedAccount.trackedObjects || [];
+                        if(_.contains(trackedAccount.trackedObjects, obj.type)) {
+                            //cool
+                        } else {
+                            trackedAccount.trackedObjects.push(obj.type);
+                        }
+                    } else {
+                        var socialAccount = value.getSocialAccountById(obj.socialId);
+                        socialAccount.trackedObjects = socialAccount.trackedObjects || [];
+                        if(_.contains(socialAccount.trackedObjects, obj.type)) {
+                            //cool
+                        } else {
+                            socialAccount.trackedObjects.push(obj.type);
+                        }
+                        value.get('trackedAccounts').push(socialAccount);
+                    }
+                });
+                //save it async
+                socialconfigDao.saveOrUpdate(value, function(err, value){});
                 log.debug('<< getSocialConfig');
                 return fn(null, value);
             }
