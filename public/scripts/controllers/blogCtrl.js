@@ -39,7 +39,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                       }, 500);
                     })
                     var iframe = window.parent.document.getElementById("iframe-website")
-                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope();
+                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope(that.pages);
                     // console.log("current Page");
                     // console.log($scope.$parent)
             }
@@ -396,7 +396,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       console.log('$scope.inlineInput ', $scope.inlineInput);
       if ($scope.inlineInput) {
         console.log('inserting html');
-        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
+        $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+      } else if ($scope.urlInput) {
+        $scope.urlInput.val(url);
       }
     };
 

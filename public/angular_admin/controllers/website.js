@@ -983,6 +983,114 @@ define([
         }
       };
 
+       $scope.savePostPage = function(msg) {
+          var componentJSON = $scope.blogPage.components;
+          var pageId = $scope.blogPage._id;
+          var componentIdArr = [];
+          //foreach components by class .component
+          var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+          for (var i = 0; i < editedPageComponents.length; i++) {
+            var componentId = editedPageComponents[i].attributes['data-id'].value;
+            componentIdArr.push(componentId);
+            var componentType = editedPageComponents[i].attributes['data-type'].value;
+             if(componentType !== 'single-post')
+             {
+              var matchingComponent = _.findWhere($scope.blogPage.components, {
+                _id: componentId
+              });
+              if(matchingComponent)
+              {
+                //get all the editable variables and replace the ones in view with variables in DB
+              var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
+              if (componentEditable.length >= 1) {
+                for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                  var componentVar = componentEditable[i2].attributes['data-class'].value;
+                  var componentVarContents = componentEditable[i2].innerHTML;
+
+                  //if innerhtml contains a span with the class ng-binding then remove it
+                  var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+
+                  if (span) {
+                    var spanParent = span.parentNode;
+                    var spanInner = span.innerHTML;
+                    if (spanParent.classList.contains('editable')) {
+                      componentVarContents = spanInner;
+                    } else {
+                      spanParent.innerHTML = spanInner;
+                      componentVarContents = spanParent.parentNode.innerHTML;
+                    }
+                  }
+                  //remove "/n"
+                  componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+                  //Hack for link plugin popup functionality
+                  componentVarContents = componentVarContents.replace("data-cke-pa-onclick", "onclick");
+                  var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                  if (regex.test(componentVarContents)) {
+                    var jHtmlObject = $(componentVarContents);
+                    var editor = jQuery("<p>").append(jHtmlObject);
+                    editor.find(".cke_reset").remove();
+                    editor.find(".cke_image_resizer").remove();
+                    var newHtml = editor.html();
+                    componentVarContents = newHtml;
+                  }
+
+
+                  var setterKey, pa;
+                  //if contains an array of variables
+                  if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
+                    //get index in array
+                    if(!$(componentEditable[i2]).parents().hasClass("slick-cloned"))
+                    {
+                      var first = componentVar.split(".")[0];
+                      var second = componentEditable[i2].attributes['data-index'].value;
+                      var third = componentVar.split(".")[2];
+                      matchingComponent[first][second][third] = componentVarContents;
+                    }
+                  }
+                  //if contains an array of array variables
+                  if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                    //get parent index in array
+                    var first = componentVar.split(".")[0];
+                    var second = componentEditable[i2].attributes['parent-data-index'].value;
+                    //get child index in array
+                    var third = componentVar.split(".")[2];
+                    var fourth = componentEditable[i2].attributes['data-index'].value;
+                    var last = componentVar.split(".")[3];
+                    matchingComponent[first][second][third][fourth][last] = componentVarContents;
+                  }
+                  //if needs to traverse a single
+                  if (componentVar.indexOf('-') > 0) {
+                    var first = componentVar.split("-")[0];
+                    var second = componentVar.split("-")[1];
+                    matchingComponent[first][second] = componentVarContents;
+                  }
+                  //simple
+                  if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                    matchingComponent[componentVar] = componentVarContents;
+                  }
+                }
+              }
+              }
+
+            }
+          };
+
+          //sort the components in currentPage to match iframe
+
+          var newComponentOrder = [];
+
+          for (var i = 0; i < componentIdArr.length; i++) {
+            var matchedComponent = _.findWhere($scope.blogPage.components, {
+              _id: componentIdArr[i]
+            });
+            newComponentOrder.push(matchedComponent);
+          };
+
+          $scope.blogPage.components = newComponentOrder;
+          WebsiteService.updatePage($scope.blogPage.websiteId, $scope.blogPage._id, $scope.blogPage, function(data) {
+            iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
+          });
+       }
       //TODO: use scope connection
       $scope.savePage = function(autoSave) {         
         $scope.saveLoading = true;
@@ -996,7 +1104,7 @@ define([
         }
         if ($location.$$search['posthandle']) {
           $scope.single_post = true;
-          iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
+          $scope.savePostPage(msg);
           $scope.isEditing = true;
         } else {
           $scope.validateEditPage($scope.currentPage);
@@ -1007,7 +1115,9 @@ define([
             toaster.pop('error', "Page Title or URL can not be blank.");
             return false;
           } else {
-            for (var i = 0; i < that.allPages.length; i++) {
+            if(that.allPages)
+            {
+              for (var i = 0; i < that.allPages.length; i++) {
               if (that.allPages[i].handle === $scope.currentPage.handle && that.allPages[i]._id != $scope.currentPage._id) {
                 toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
                 $scope.saveLoading = false;
@@ -1015,7 +1125,7 @@ define([
                 return false;
               }
             };
-
+            }
           }
           var componentJSON = $scope.currentPage.components;
           var pageId = $scope.currentPage._id;
@@ -1031,8 +1141,9 @@ define([
             var matchingComponent = _.findWhere($scope.currentPage.components, {
               _id: componentId
             });
-
-            //get all the editable variables and replace the ones in view with variables in DB
+            if(matchingComponent)
+            {
+              //get all the editable variables and replace the ones in view with variables in DB
             var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
             if (componentEditable.length >= 1) {
               for (var i2 = 0; i2 < componentEditable.length; i2++) {
@@ -1102,6 +1213,7 @@ define([
                 }
               }
             }
+          }
 
             $scope.backup = {};
           };
@@ -1511,8 +1623,9 @@ define([
         var matchingComponent = _.findWhere($scope.currentPage.components, {
           _id: componentId
         });
-
-        var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
+        if(matchingComponent)
+        {
+          var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
         if (editedComponent && editedComponent.length > 0) {
           //get all the editable variables and replace the ones in view with variables in DB
           var componentEditable = editedComponent[0].querySelectorAll('.editable');
@@ -1587,6 +1700,8 @@ define([
             }
           }
         }
+        }
+
         return matchingComponent;
       }
 
@@ -2173,6 +2288,10 @@ define([
 
       window.updateAdminPageScope = function(page) {
         $scope.singlePost = false;
+        if ($location.$$search['posthandle']) {
+          console.log("post handle")
+          $scope.blogPage = page;
+        }
         console.log("Updating admin scope")
         if(!$scope.$$phase) {
            $scope.$apply(function() {
@@ -2182,7 +2301,7 @@ define([
         })
         }
 
-        if(page)
+        if(page && !$location.$$search['posthandle'])
         {
           if (!$scope.currentPage && !$scope.$$phase) {
             $scope.$apply(function() {
