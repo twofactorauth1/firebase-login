@@ -464,7 +464,7 @@ module.exports = {
             var trackedAccounts = config.get('trackedAccounts') || [];
 
             var index = 0;
-            var trackedAccount = _.find(trackedAccounts, function(account){
+            var updatedTrackedAccount = _.find(trackedAccounts, function(account){
                 if(account.id === trackedAccount.id) {
                     return true;
                 } else {
@@ -472,7 +472,7 @@ module.exports = {
                     return false;
                 }
             });
-            trackedAccounts[index] = trackedAccount;
+            trackedAccounts[index] = updatedTrackedAccount;
 
             config.set('trackedAccounts', trackedAccounts);
             return self.updateSocialConfig(config, fn);
