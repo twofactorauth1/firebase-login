@@ -998,9 +998,8 @@ define([
               var matchingComponent = _.findWhere($scope.blogPage.components, {
                 _id: componentId
               });
-              if(matchingComponent)
-              {
-                //get all the editable variables and replace the ones in view with variables in DB
+
+              //get all the editable variables and replace the ones in view with variables in DB
               var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
               if (componentEditable.length >= 1) {
                 for (var i2 = 0; i2 < componentEditable.length; i2++) {
@@ -1070,8 +1069,6 @@ define([
                   }
                 }
               }
-              }
-              
             }
           };
 
@@ -1139,9 +1136,8 @@ define([
             var matchingComponent = _.findWhere($scope.currentPage.components, {
               _id: componentId
             });
-            if(matchingComponent)
-            {
-              //get all the editable variables and replace the ones in view with variables in DB
+
+            //get all the editable variables and replace the ones in view with variables in DB
             var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
             if (componentEditable.length >= 1) {
               for (var i2 = 0; i2 < componentEditable.length; i2++) {
@@ -1211,7 +1207,6 @@ define([
                 }
               }
             }
-          }
 
             $scope.backup = {};
           };
@@ -1621,9 +1616,8 @@ define([
         var matchingComponent = _.findWhere($scope.currentPage.components, {
           _id: componentId
         });
-        if(matchingComponent)
-        {
-          var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
+
+        var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
         if (editedComponent && editedComponent.length > 0) {
           //get all the editable variables and replace the ones in view with variables in DB
           var componentEditable = editedComponent[0].querySelectorAll('.editable');
@@ -1698,8 +1692,6 @@ define([
             }
           }
         }
-        }
-        
         return matchingComponent;
       }
 
