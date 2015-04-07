@@ -81,6 +81,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
 
 
+        app.post(this.url('linkedin/:socialAccountId/sharelink'), this.isAuthApi.bind(this), this.shareLinkedinLink.bind(this));
+
         /*
          * Putting this at the end so we don't mess with other api calls.
          */
@@ -871,6 +873,31 @@ _.extend(api.prototype, baseApi.prototype, {
               });
           }
       });
+    },
+
+    shareLinkedinLink: function(req, resp) {
+        var self = this;
+        self.log.debug('>> shareLinkedinLink');
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        var url = req.body.url;
+        var picture = req.body.picture;
+        var name = req.body.name;
+        var caption = req.body.caption;
+        var description = req.body.description;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.shareLinkedinLink(accountId, socialAccountId, url, picture, name, caption,
+                    description, function(err, value){
+                        self.log.debug('<< shareLinkedinLink');
+                        self.sendResultOrError(resp, err, value, "Error creating post");
+                    });
+            }
+        });
     }
 
 });
