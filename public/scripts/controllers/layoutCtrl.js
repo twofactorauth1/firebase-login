@@ -893,7 +893,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         //}
         
       });
-      setTimeout(function() {        
+      
+        setTimeout(function() {        
          if($("div.meet-team-height").length)
          {
             var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
@@ -902,8 +903,19 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }).get());
             $(".meet-team-height").css("min-height", maxTeamHeight);
           }
-        }, 500)
-
+          for (i = 1; i <= 3; i++) { 
+            if($("div.feature-height-"+i).length)
+            {
+              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+              {
+                  return $(this).height();
+              }).get());
+              $("div.feature-height-"+i).css("min-height", maxFeatureHeight);
+            }
+          }
+        }, 200)
+      
+      
       //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
@@ -1913,20 +1925,27 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
     $scope.feature_inserted = false;
     $scope.team_inserted = false;
-    $('body').on("DOMNodeInserted", ".feature-height", function (e)
+
+    $('body').on("DOMNodeInserted", ".feature", function (e)
     {
         setTimeout(function() {
-        if(!$scope.feature_inserted)  
+          var heightToadd = 10;
+        if($scope.isEditing)
+          heightToadd = 20;
+        if(!$scope.feature_inserted)
         {
-          $scope.feature_inserted = true;          
-         if($("div.feature-height").length)
-          {
-            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
+         $scope.feature_inserted = true; 
+         for (i = 1; i <= 3; i++) { 
+            if($("div.feature-height-"+i).length)
             {
-                return $(this).height();
-            }).get());
-            $(".feature-height").css("min-height", maxFeatureHeight + 10);
+              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+              {
+                  return $(this).height();
+              }).get());
+              $("div.feature-height-"+i).css("min-height", maxFeatureHeight + heightToadd);
+            }
           }
+          $scope.feature_inserted = true;
         }   
         }, 1000)
     })

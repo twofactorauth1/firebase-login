@@ -24837,6 +24837,7 @@ div[data-type='campaign'] .inner-page .overlay {
 .editing .features-wrap .feature:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -20px;
 }
 .editing .features-wrap .feature:hover .delete-feature .btn-delete-feature {
   background: rgba(0, 0, 0, 0.5);
@@ -24949,6 +24950,12 @@ div[data-type='campaign'] .inner-page .overlay {
   background-repeat: no-repeat;
   background-position: fixed;
 }
+.feature-list-v2 img {
+  max-width: 100%;
+}
+.editing .features-wrap .feature:hover .add-addtional {
+  bottom: -20px;
+}
 /********** Features list v3 **********/
 .feature-list-v3 .feature-list-title {
   text-align: center;
@@ -24996,6 +25003,12 @@ div[data-type='campaign'] .inner-page .overlay {
   line-height: 14px;
   margin-bottom: 15px;
   font-size: 14px;
+}
+.feature-list-v3 .feature-single img {
+  max-width: 100%;
+}
+.editing .features-wrap .feature:hover .add-addtional {
+  bottom: -20px;
 }
 .feature-list-v4 {
   /* fix firefox responsive images */
@@ -25092,6 +25105,9 @@ div[data-type='campaign'] .inner-page .overlay {
   border: 1px solid #e5e6e1;
   border-bottom: 3px solid #e5e6e1;
   padding: 15px;
+}
+.feature-list-v4 img {
+  max-width: 100%;
 }
 /********** Topbar **********/
 .top-bar-v1 .navbar {
