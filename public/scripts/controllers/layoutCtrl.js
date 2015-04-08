@@ -884,6 +884,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
+                editor.on('blur', function(ev) {
+                  if(ev.editor.getData() == "")
+                  {
+                    ev.editor.container.$.innerHTML = "";
+                  }
+                });
               }
             },
             sharedSpaces: {
