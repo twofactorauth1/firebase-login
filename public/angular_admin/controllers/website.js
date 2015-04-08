@@ -518,6 +518,8 @@ define([
             }    
           });
          
+          // Remove click handler
+          $("#iframe-website").contents().find('body').off("click", ".componentActions .settings, .map-wrap .settings");
           //add click events for all the settings buttons
           $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function(e) {
             if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
@@ -532,6 +534,8 @@ define([
             }
           });
 
+          // Remove click handler
+          $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
           //add click events for all the copy component buttons
           $("#iframe-website").contents().find('body').on("click", ".componentActions .duplicate", function(e) {
             $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
@@ -560,6 +564,8 @@ define([
 
           });
 
+          // Remove click handler
+          $("#iframe-website").contents().find('body').off("click", ".add-component");
           //add click events for all the add component buttons.
           $("#iframe-website").contents().find('body').on("click", ".add-component", function(e) {
             $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
@@ -599,6 +605,7 @@ define([
           });
 
           // Social components
+          $("#iframe-website").contents().find('body').off("click", ".btn-social-link");
           $("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
             $scope.componentEditing = _.findWhere($scope.components, {
               _id: $(e.currentTarget).closest('.component').data('id')
@@ -619,7 +626,7 @@ define([
             
           });
 
-
+          $("#iframe-website").contents().find('body').off("click", ".image-gallery, .image-thumbnail, .meet-team-image");
           //add media modal click events to all images in image gallery
 
           $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {

@@ -862,7 +862,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       //if ($scope.activated == false) {
       for(name in CKEDITOR.instances)
         {
-            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.instances[name].removeAllListeners();
             CKEDITOR.remove(CKEDITOR.instances[name]);
         }
       $scope.isEditing = true;
