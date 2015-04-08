@@ -1465,6 +1465,7 @@ define([
                 $scope.activateAloha();
               }, 1000)
               //$scope.scrollToIframeComponent(newComponent.anchor);
+              $scope.isDirty = true;
             toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
           }
         });
@@ -1486,6 +1487,7 @@ define([
         $(".modal-backdrop").remove();
         $("#component-setting-modal").modal('hide');
         $scope.activateAloha();
+        $scope.isDirty = true;
         $scope.$apply(function() {
           toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
         });

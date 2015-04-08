@@ -1209,6 +1209,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           activateAloha();
           $(".ui-sortable").removeClass("active");
         }, 1500);
+        $scope.isPageDirty = true;
       }
     };
 
