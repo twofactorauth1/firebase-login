@@ -321,6 +321,7 @@ define([
         title: 'Single Post',
         type: 'single-post',
         icon: 'custom single-post',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/single-post.jpg',
         filter: 'blog',
         description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
         enabled: false
