@@ -874,6 +874,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
         }
         // $scope.activated = true;
+        var element = $(this);
         //if (!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
@@ -884,10 +885,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
-                editor.on('blur', function(ev) {
-                  if(ev.editor.getData() == "")
+                editor.on('blur', function(event) {
+                  var ckvalue = this.container.$.textContent;
+                  if(ckvalue == "")
                   {
-                    ev.editor.container.$.innerHTML = "";
+                    this.container.$.innerHTML = "";
                   }
                 });
               }
