@@ -25577,6 +25577,7 @@ div[data-type='campaign'] .inner-page .overlay {
 .navbar-brand {
   max-width: 100%!important;
   margin: 5px auto!important;
+  height: auto;
 }
 .navbar-toggle {
   margin-top: 20px;
@@ -25630,13 +25631,14 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
-  height: 150px;
+  min-height: 150px;
 }
 .navigation-v2 .navbar .navbar-header .navbar-toggle {
   margin-top: 50px;
 }
 .navigation-v2 .navbar .navbar-brand {
   margin: 25px auto!important;
+  height: auto;
 }
 .navigation-v2 .navbar ul.navbar-nav {
   width: 100%;
@@ -25699,6 +25701,7 @@ ul.nav {
 .navigation-v3 .navbar-brand {
   min-width: 200px;
   width: 100%;
+  height: auto;
 }
 .navigation-v3 .navbar-nav {
   width: 100%;
