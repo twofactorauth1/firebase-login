@@ -117,12 +117,15 @@ var post = $$.m.ModelBase.extend({
 
             post.comments.data.forEach(function(comment) {
                 var comment_obj = {
-                    sourceId: comment.from.id,
-                    name: comment.from.name,
+                    
                     comment: comment.message,
                     created: comment.created_time,
                     like_count: comment.like_count
                 };
+                if(comment.from) {
+                    comment_obj.sourceId = comment.from.id;
+                    comment_obj.name = comment.from.name;
+                }
                 if(comment.from && comment.from.picture && comment.from.picture.data) {
                     comment_obj.picture = comment.from.picture.data.url;
                 }
@@ -157,6 +160,9 @@ var post = $$.m.ModelBase.extend({
             }
         }
 
+        if(post.access_token) {
+            obj.page_access_token = post.access_token;
+        }
         this.set(obj);
         return this;
     },

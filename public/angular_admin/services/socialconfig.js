@@ -171,5 +171,21 @@ define(['app'], function(app) {
           fn(data);
         });
     }
+
+    this.addFacebookPostComment = function(socialAccountId, postId, comment, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post', postId, 'comment'].join('/');
+      $http.post(apiUrl, {comment: comment})
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+    this.addTwitterPostComment = function(socialAccountId, postId, username, comment, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'reply'].join('/');
+      $http.post(apiUrl, {post: '@' + username + ' ' + comment})
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
   })
 });

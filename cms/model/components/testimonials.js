@@ -43,16 +43,16 @@ var component = $$.m.ModelBase.extend({
             testimonials : [ 
                 {
                     "img" : "",
-                    "name" : "Name",
-                    "site" : "Site",
-                    "text" : "Description",
+                    "name" : "",
+                    "site" : "",
+                    "text" : "",
                     "active" : false
                 }, 
                 {
                     "img" : "",
-                    "name" : "Name",
-                    "site" : "Site",
-                    "text" : "Description",
+                    "name" : "",
+                    "site" : "",
+                    "text" : "",
                     "active" : false
                 }
             ]

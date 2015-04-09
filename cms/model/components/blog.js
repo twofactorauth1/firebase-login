@@ -72,7 +72,12 @@ var component = $$.m.ModelBase.extend({
                     show: false
                 },
                 color : ""
-            }
+            },
+
+            /**
+             * The default sort order of component
+             */
+            postorder: null
         }
     },
 

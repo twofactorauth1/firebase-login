@@ -185,7 +185,10 @@
                                         <span class="word-wrap"><strong>{{ item.file.name }}</strong></span>
                                     </td>
                                     <td ng-show="uploader.isHTML5" nowrap>
-                                        {{ item.file.size/1024/1024|number:2 }} MB
+                                        <span ng-switch on="(item.file.size == 1024*1024) || (item.file.size > 1024*1024)">
+                                            <span ng-switch-when="true">{{item.file.size / 1024 / 1024 | number:2}} MB</span>
+                                            <span ng-switch-default>{{item.file.size / 1024 | number:2}} KB</span>
+                                        </span>
                                     </td>
                                     <td ng-show="uploader.isHTML5">
                                         <div class="progress" style="margin-bottom: 0;">

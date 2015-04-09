@@ -22,7 +22,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
-        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
+
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createSocialConfig.bind(this));
 
         app.get(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.getSocialAccount.bind(this));
@@ -31,11 +31,22 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/socialaccount'), this.isAuthAndSubscribedApi.bind(this), this.addSocialAccount.bind(this));
         app.delete(this.url('socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
         app.delete(this.url(':id/socialaccount/:socialId'), this.isAuthAndSubscribedApi.bind(this), this.removeSocialAccount.bind(this));
-        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
+
         app.get(this.url('tracked/:index'), this.isAuthAndSubscribedApi.bind(this), this.fetchTrackedObject.bind(this));
+
+        /*
+         * Tracked accounts
+         */
+        app.get(this.url('trackedAccounts'), this.isAuthAndSubscribedApi.bind(this), this.getTrackedAccounts.bind(this));
+        app.post(this.url('trackedAccounts'), this.isAuthAndSubscribedApi.bind(this), this.addTrackedAccount.bind(this));
+        app.get(this.url('trackedAccount/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTrackedAccount.bind(this));
+        app.post(this.url('trackedAccount/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTrackedAccount.bind(this));
+        app.delete(this.url('trackedAccount/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTrackedAccount.bind(this));
 
 
         app.get(this.url('facebook/:socialAccountId/posts'), this.isAuthApi.bind(this), this.getFacebookPosts.bind(this));
+        app.get(this.url('facebook/:socialAccountId/statuses'), this.isAuthApi.bind(this), this.getFacebookStatuses.bind(this));
+        app.get(this.url('facebook/:socialAccountId/tagged'), this.isAuthApi.bind(this), this.getFacebookTagged.bind(this));
         app.get(this.url('facebook/:socialAccountId/postComments/:postId'), this.isAuthApi.bind(this), this.getPostComments.bind(this));
         app.get(this.url('facebook/:socialAccountId/pages'), this.isAuthApi.bind(this), this.getFacebookPages.bind(this));
         app.get(this.url('facebook/:socialAccountId/page/:pageId'), this.isAuthApi.bind(this), this.getFacebookPageInfo.bind(this));
@@ -45,7 +56,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('facebook/:socialAccountId/post/:postId/comment'), this.isAuthApi.bind(this), this.addPostComment.bind(this));
         app.post(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.addPostLike.bind(this));
         app.delete(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.deletePostLike.bind(this));
-
+        app.post(this.url('facebook/:socialAccountId/sharelink'), this.isAuthApi.bind(this), this.shareFacebookLink.bind(this));
 
 
         /*
@@ -58,12 +69,25 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('twitter/:socialAccountId/followers'), this.isAuthApi.bind(this), this.getTwitterFollowers.bind(this));
         app.get(this.url('twitter/:socialAccountId/profile'), this.isAuthApi.bind(this), this.getTwitterProfile.bind(this));
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
+        app.post(this.url('twitter/:socialAccountId/post/:postId/reply'), this.isAuthApi.bind(this), this.createTwitterReply.bind(this));
+        app.post(this.url('twitter/:socialAccountId/post/:postId/retweet'), this.isAuthApi.bind(this), this.createTwitterRetweet.bind(this));
+        app.post(this.url('twitter/:socialAccountId/user/:userId/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
+        app.post(this.url('twitter/:socialAccountId/name/:name/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
+        app.get(this.url('twitter/:socialAccountId/dm'), this.isAuthApi.bind(this), this.getTwitterDMs.bind(this));
         app.delete(this.url('twitter/:socialAccountId/post/:postId'), this.isAuthApi.bind(this), this.deleteTwitterPost.bind(this));
 
         app.get(this.url('google/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getGoogleContacts.bind(this));
         app.get(this.url('google/:socialAccountId/groups'), this.isAuthApi.bind(this), this.getGoogleGroups.bind(this));
         app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
 
+
+        app.post(this.url('linkedin/:socialAccountId/sharelink'), this.isAuthApi.bind(this), this.shareLinkedinLink.bind(this));
+
+        /*
+         * Putting this at the end so we don't mess with other api calls.
+         */
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getSocialConfig.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateSocialConfig.bind(this));
     },
 
     /**
@@ -241,6 +265,103 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /*
+     * Tracked Accounts
+     */
+
+    getTrackedAccounts: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTrackedAccounts');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.getSocialConfigTrackedAccounts(accountId, function(err, trackedAccounts){
+                    self.log.debug('<< getTrackedAccounts');
+                    self.sendResultOrError(resp, err, trackedAccounts, "Error fetching tracked accounts");
+                });
+            }
+        });
+    },
+
+    addTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccount = req.body.trackedAccount;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.addTrackedAccount(accountId, trackedAccount, function(err, socialConfig){
+                    self.log.debug('<< addTrackedAccount');
+                    self.sendResultOrError(resp, err, socialConfig, "Error adding tracked account");
+                });
+            }
+        });
+    },
+
+    getTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccountId = req.params.id;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.getTrackedAccount(accountId, trackedAccountId, function(err, trackedAccount){
+                    self.log.debug('<< getTrackedAccount');
+                    self.sendResultOrError(resp, err, trackedAccount, "Error getting tracked account");
+                });
+            }
+        });
+    },
+
+    updateTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccount = req.body.trackedAccount;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.updateTrackedAccount(accountId, trackedAccount, function(err, config){
+                    self.log.debug('<< updateTrackedAccount');
+                    self.sendResultOrError(resp, err, config, "Error updating tracked account");
+                });
+            }
+        });
+    },
+
+    deleteTrackedAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteTrackedAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var trackedAccountId = req.params.id;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                socialConfigManager.deleteTrackedAccount(accountId, trackedAccountId, function(err, config){
+                    self.log.debug('<< deleteTrackedAccount');
+                    self.sendResultOrError(resp, err, config, "Error deleting tracked account");
+                });
+            }
+        });
+    },
+
     getFacebookPages: function(req, resp) {
         var self = this;
         self.log.debug('>> getFacebookPages');
@@ -250,7 +371,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookPages(accountId, socialAccountId, function(err, pages){
                     self.log.debug('<< getFacebookPages');
@@ -343,6 +464,31 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    shareFacebookLink: function(req, resp) {
+        var self = this;
+        self.log.debug('>> shareFacebookLink');
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        var url = req.body.url;
+        var picture = req.body.picture;
+        var name = req.body.name;
+        var caption = req.body.caption;
+        var description = req.body.description;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.shareFacebookLink(accountId, socialAccountId, url, picture, name, caption,
+                    description, function(err, value){
+                        self.log.debug('<< shareFacebookLink');
+                        self.sendResultOrError(resp, err, value, "Error creating post");
+                    });
+            }
+        });
     },
 
     deleteFacebookPost: function(req, resp) {
@@ -446,6 +592,44 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    getFacebookStatuses: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPosts');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookStatuses(accountId, socialAccountId, function(err, posts){
+                    self.log.debug('<< getFacebookPosts');
+                    self.sendResultOrError(resp, err, posts, "Error fetching posts");
+                });
+            }
+        });
+    },
+
+    getFacebookTagged: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getFacebookPosts');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getFacebookTagged(accountId, socialAccountId, function(err, posts){
+                    self.log.debug('<< getFacebookPosts');
+                    self.sendResultOrError(resp, err, posts, "Error fetching posts");
+                });
+            }
+        });
+    },
+
     getTwitterFeed: function(req, resp) {
         var self = this;
         self.log.debug('>> getTwitterFeed');
@@ -518,6 +702,97 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.createTwitterPost(accountId, socialAccountId, post, function(err, savedPost){
                     self.log.debug('<< createTwitterPost');
                     self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                });
+            }
+        });
+    },
+
+    createTwitterReply: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterReply');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var post = req.body.post;
+        var tweetId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.replyToTwitterPost(accountId, socialAccountId, tweetId, post, function(err, savedPost){
+                    self.log.debug('<< createTwitterReply');
+                    self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                });
+            }
+        });
+
+    },
+
+    createTwitterRetweet: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterRetweet');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var tweetId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.retweetTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
+                    self.log.debug('<< createTwitterRetweet');
+                    self.sendResultOrError(resp, err, savedPost, "Error creating twitter retweet");
+                });
+            }
+        });
+    },
+
+    createTwitterDM: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterDM');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var userId = req.params.userId;
+        var screenName = req.params.name;
+
+        var post = req.body.msg;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.directMessageTwitterUser(accountId, socialAccountId, userId, screenName, post,
+                    function (err, savedPost){
+                        self.log.debug('<< createTwitterDM');
+                        self.sendResultOrError(resp, err, savedPost, "Error creating twitter dm");
+                    });
+            }
+        });
+
+    },
+
+    getTwitterDMs: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTwitterDMs');
+        var since = req.query.since;
+        var until = req.query.until;
+        var limit = req.query.limit;
+        if(limit) {
+            limit = parseInt(limit);
+        }
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.getTwitterDirectMessages(accountId, socialAccountId, since, until, limit, function(err, msgs){
+                    self.log.debug('<< getTwitterDMs');
+                    self.sendResultOrError(resp, err, msgs, "Error getting twitter dm");
                 });
             }
         });
@@ -598,6 +873,31 @@ _.extend(api.prototype, baseApi.prototype, {
               });
           }
       });
+    },
+
+    shareLinkedinLink: function(req, resp) {
+        var self = this;
+        self.log.debug('>> shareLinkedinLink');
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        var url = req.body.url;
+        var picture = req.body.picture;
+        var name = req.body.name;
+        var caption = req.body.caption;
+        var description = req.body.description;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.shareLinkedinLink(accountId, socialAccountId, url, picture, name, caption,
+                    description, function(err, value){
+                        self.log.debug('<< shareLinkedinLink');
+                        self.sendResultOrError(resp, err, value, "Error creating post");
+                    });
+            }
+        });
     }
 
 });

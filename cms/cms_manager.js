@@ -213,7 +213,8 @@ module.exports = {
 
     },
 
-    createWebsiteAndPageFromTemplate: function(accountId, templateId, userId, websiteId, pageTitle, pageHandle, fn) {
+    createWebsiteAndPageFromTemplate: function(accountId, templateId, userId, websiteId, pageTitle, pageHandle, mainMenu, fn) {
+        var self = this;
         log.debug('>> createWebsiteFromTheme');
         if(fn === null) {
             fn = pageHandle;
@@ -221,6 +222,7 @@ module.exports = {
         }
         //default to index page if none is specified
         var title = pageTitle;
+        var mainmenu = mainMenu;
         // if(pageHandle === null) {
         //     pageHandle = 'index';
         //     title = 'Home';
@@ -273,11 +275,13 @@ module.exports = {
 
         $.when(p1).done(function(){
             //at this point we have the theme and website.
+            log.debug('mainmenu ' + mainmenu);
             log.debug('Creating Page');
             var componentAry = template.get('config')['components'];
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
+                'mainmenu': mainmenu,
                 'title': title,
                 'websiteId': websiteId,
                 'components': componentAry,
@@ -291,12 +295,44 @@ module.exports = {
                 },
                 'latest': true
             });
+
+
+
             cmsDao.saveOrUpdate(page, function(err, savedPage){
                 if(err) {
                     log.error('Exception saving new page: ' + err);
                     fn(err, null);
                 } else {
                     log.debug('<< createWebsiteFromTheme');
+                    if (savedPage.get('mainmenu') == true) {
+                    self.getWebsiteLinklistsByHandle(savedPage.get('websiteId'),"head-menu",function(err,list){
+                        if(err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            fn(err, savedPage);
+                        } else {
+                            var link={
+                                label:savedPage.get('title'),
+                                type:"link",
+                                linkTo:{
+                                    type:"page",
+                                    data:savedPage.get('handle')
+                                }
+                            };
+                            list.links.push(link);
+                            self.updateWebsiteLinklists(savedPage.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                if(err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    fn(err, savedPage);
+                                } else {
+                                    self.log.debug('<< createPage');
+                                    fn(null, {'website': website, 'page': savedPage});
+                                }
+                            });
+                        }
+
+                    });
+                }
+                else
                     fn(null, {'website': website, 'page': savedPage});
                 }
             });

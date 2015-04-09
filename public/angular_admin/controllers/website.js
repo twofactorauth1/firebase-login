@@ -41,8 +41,8 @@ define([
     'CourseService',
     'NavigationService',
     'SweetAlert',
-    'blockUI',
-    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI) {
+    'blockUI','$filter',
+    function($scope,$interval, $window, $timeout, $location, WebsiteService, UserService, GeocodeService, toaster, ngProgress, $rootScope, CourseService, NavigationService, SweetAlert, blockUI, $filter) {
       var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
       ngProgress.start();
       UserService.getUserPreferences(function(preferences) {
@@ -123,12 +123,14 @@ define([
       $scope.secondaryFontStack = '';
       $scope.iframeData = {};
       $scope.allPages = [];
+      $scope.filterdPages = [];
       $scope.backup = {};
       $scope.components = [];
       $scope.isEditing = true;
       $scope.isMobile = false;
       $scope.tabs = {};
-      $scope.addLinkType = 'page';
+      $scope.addLink = false;
+      
       $scope.saveLoading = false;
       $scope.hours = $$.constants.contact.business_hour_times;
       $scope.typefilter = 'all';
@@ -139,7 +141,7 @@ define([
       $scope.status = {
         isopen: false
       };
-
+      
       $scope.spectrum = {
         options: {
           showPalette: true,
@@ -319,6 +321,7 @@ define([
         title: 'Single Post',
         type: 'single-post',
         icon: 'custom single-post',
+        preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/single-post.jpg',
         filter: 'blog',
         description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
         enabled: false
@@ -501,22 +504,39 @@ define([
           $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
 
           //Disable all links in edit
-          $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {
-            if (!$(this).hasClass("clickable-link")) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-          });
 
+           $("#iframe-website").contents().find('body').on("click", ".component a", function(e) {         
+            if (!$(this).hasClass("clickable-link")) {   
+              e.preventDefault();    
+              e.stopPropagation();   
+            }    
+          });    
+   
+          $("#iframe-website").contents().find('body').on("contextmenu", ".component a", function(e) {   
+            if (!$(this).hasClass("clickable-link")) {   
+              e.preventDefault();    
+              e.stopPropagation();   
+            }    
+          });
+         
+          // Remove click handler
+          $("#iframe-website").contents().find('body').off("click", ".componentActions .settings, .map-wrap .settings");
           //add click events for all the settings buttons
           $("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function(e) {
             if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
               $scope.tabs.address = true;
             $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-            var element = angular.element('#component-setting-modal');
-            element.modal('show');
+            if($(e.currentTarget).hasClass("single-post-settings"))
+              $("#iframe-website").contents().find('#component-setting-modal').modal('show');
+            else
+            {
+              var element = angular.element('#component-setting-modal');
+              element.modal('show');
+            }
           });
 
+          // Remove click handler
+          $("#iframe-website").contents().find('body').off("click", ".componentActions .duplicate");
           //add click events for all the copy component buttons
           $("#iframe-website").contents().find('body').on("click", ".componentActions .duplicate", function(e) {
             $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
@@ -545,6 +565,8 @@ define([
 
           });
 
+          // Remove click handler
+          $("#iframe-website").contents().find('body').off("click", ".add-component");
           //add click events for all the add component buttons.
           $("#iframe-website").contents().find('body').on("click", ".add-component", function(e) {
             $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;
@@ -584,6 +606,7 @@ define([
           });
 
           // Social components
+          $("#iframe-website").contents().find('body').off("click", ".btn-social-link");
           $("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
             $scope.componentEditing = _.findWhere($scope.components, {
               _id: $(e.currentTarget).closest('.component').data('id')
@@ -604,7 +627,7 @@ define([
             
           });
 
-
+          $("#iframe-website").contents().find('body').off("click", ".image-gallery, .image-thumbnail, .meet-team-image");
           //add media modal click events to all images in image gallery
 
           $("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {
@@ -967,8 +990,118 @@ define([
         if (page && page.title && page.title != '' && page.handle && page.handle != '') {
           $scope.editPageValidated = true;
         }
+        else 
+          $scope.editPageValidated = false;
       };
 
+       $scope.savePostPage = function(msg) {
+          var componentJSON = $scope.blogPage.components;
+          var pageId = $scope.blogPage._id;
+          var componentIdArr = [];
+          //foreach components by class .component
+          var editedPageComponents = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component');
+          for (var i = 0; i < editedPageComponents.length; i++) {
+            var componentId = editedPageComponents[i].attributes['data-id'].value;
+            componentIdArr.push(componentId);
+            var componentType = editedPageComponents[i].attributes['data-type'].value;
+             if(componentType !== 'single-post')
+             {
+              var matchingComponent = _.findWhere($scope.blogPage.components, {
+                _id: componentId
+              });
+              if(matchingComponent)
+              {
+                //get all the editable variables and replace the ones in view with variables in DB
+              var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
+              if (componentEditable.length >= 1) {
+                for (var i2 = 0; i2 < componentEditable.length; i2++) {
+                  var componentVar = componentEditable[i2].attributes['data-class'].value;
+                  var componentVarContents = componentEditable[i2].innerHTML;
+
+                  //if innerhtml contains a span with the class ng-binding then remove it
+                  var span = componentEditable[i2].querySelectorAll('.ng-binding')[0];
+
+                  if (span) {
+                    var spanParent = span.parentNode;
+                    var spanInner = span.innerHTML;
+                    if (spanParent.classList.contains('editable')) {
+                      componentVarContents = spanInner;
+                    } else {
+                      spanParent.innerHTML = spanInner;
+                      componentVarContents = spanParent.parentNode.innerHTML;
+                    }
+                  }
+                  //remove "/n"
+                  componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
+                  //Hack for link plugin popup functionality
+                  componentVarContents = componentVarContents.replace("data-cke-pa-onclick", "onclick");
+                  var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
+                  if (regex.test(componentVarContents)) {
+                    var jHtmlObject = $(componentVarContents);
+                    var editor = jQuery("<p>").append(jHtmlObject);
+                    editor.find(".cke_reset").remove();
+                    editor.find(".cke_image_resizer").remove();
+                    var newHtml = editor.html();
+                    componentVarContents = newHtml;
+                  }
+
+
+                  var setterKey, pa;
+                  //if contains an array of variables
+                  if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && !componentEditable[i2].attributes['parent-data-index']) {
+                    //get index in array
+                    if(!$(componentEditable[i2]).parents().hasClass("slick-cloned"))
+                    {
+                      var first = componentVar.split(".")[0];
+                      var second = componentEditable[i2].attributes['data-index'].value;
+                      var third = componentVar.split(".")[2];
+                      matchingComponent[first][second][third] = componentVarContents;
+                    }
+                  }
+                  //if contains an array of array variables
+                  if (componentVar.indexOf('.item') > 0 && componentEditable[i2].attributes['data-index'] && componentEditable[i2].attributes['parent-data-index']) {
+                    //get parent index in array
+                    var first = componentVar.split(".")[0];
+                    var second = componentEditable[i2].attributes['parent-data-index'].value;
+                    //get child index in array
+                    var third = componentVar.split(".")[2];
+                    var fourth = componentEditable[i2].attributes['data-index'].value;
+                    var last = componentVar.split(".")[3];
+                    matchingComponent[first][second][third][fourth][last] = componentVarContents;
+                  }
+                  //if needs to traverse a single
+                  if (componentVar.indexOf('-') > 0) {
+                    var first = componentVar.split("-")[0];
+                    var second = componentVar.split("-")[1];
+                    matchingComponent[first][second] = componentVarContents;
+                  }
+                  //simple
+                  if (componentVar.indexOf('.item') <= 0 && componentVar.indexOf('-') <= 0) {
+                    matchingComponent[componentVar] = componentVarContents;
+                  }
+                }
+              }
+              }
+
+            }
+          };
+
+          //sort the components in currentPage to match iframe
+
+          var newComponentOrder = [];
+
+          for (var i = 0; i < componentIdArr.length; i++) {
+            var matchedComponent = _.findWhere($scope.blogPage.components, {
+              _id: componentIdArr[i]
+            });
+            newComponentOrder.push(matchedComponent);
+          };
+
+          $scope.blogPage.components = newComponentOrder;
+          WebsiteService.updatePage($scope.blogPage.websiteId, $scope.blogPage._id, $scope.blogPage, function(data) {
+            iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
+          });
+       }
       //TODO: use scope connection
       $scope.savePage = function(autoSave) {         
         $scope.saveLoading = true;
@@ -982,7 +1115,7 @@ define([
         }
         if ($location.$$search['posthandle']) {
           $scope.single_post = true;
-          iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
+          $scope.savePostPage(msg);
           $scope.isEditing = true;
         } else {
           $scope.validateEditPage($scope.currentPage);
@@ -993,7 +1126,9 @@ define([
             toaster.pop('error', "Page Title or URL can not be blank.");
             return false;
           } else {
-            for (var i = 0; i < that.allPages.length; i++) {
+            if(that.allPages)
+            {
+              for (var i = 0; i < that.allPages.length; i++) {
               if (that.allPages[i].handle === $scope.currentPage.handle && that.allPages[i]._id != $scope.currentPage._id) {
                 toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
                 $scope.saveLoading = false;
@@ -1001,7 +1136,7 @@ define([
                 return false;
               }
             };
-
+            }
           }
           var componentJSON = $scope.currentPage.components;
           var pageId = $scope.currentPage._id;
@@ -1017,8 +1152,9 @@ define([
             var matchingComponent = _.findWhere($scope.currentPage.components, {
               _id: componentId
             });
-
-            //get all the editable variables and replace the ones in view with variables in DB
+            if(matchingComponent)
+            {
+              //get all the editable variables and replace the ones in view with variables in DB
             var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
             if (componentEditable.length >= 1) {
               for (var i2 = 0; i2 < componentEditable.length; i2++) {
@@ -1088,6 +1224,7 @@ define([
                 }
               }
             }
+          }
 
             $scope.backup = {};
           };
@@ -1117,9 +1254,9 @@ define([
               $scope.stopAutoSavePage();
             $scope.redirect = false;  
             if(autoSave)
-              toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+              toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.title + " page was saved successfully.");
             else
-              toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+              toaster.pop('success', "Page Saved", "The " + $scope.currentPage.title + " page was saved successfully.");
             $scope.saveLoading = false;
             iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
 
@@ -1173,6 +1310,7 @@ define([
             arr.push(parsed[x]);
           }
           $scope.allPages = arr;
+          $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
           that.allPages = arr;
           $scope.currentPage = _.findWhere(that.allPages, {
             handle: currentPage
@@ -1327,6 +1465,7 @@ define([
                 $scope.activateAloha();
               }, 1000)
               //$scope.scrollToIframeComponent(newComponent.anchor);
+              $scope.isDirty = true;
             toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
           }
         });
@@ -1348,6 +1487,10 @@ define([
         $(".modal-backdrop").remove();
         $("#component-setting-modal").modal('hide');
         $scope.activateAloha();
+        $scope.isDirty = true;
+        $scope.$apply(function() {
+          toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
+        });
       };
 
       $scope.updateIframeComponents = function(fn) {
@@ -1375,6 +1518,11 @@ define([
       };
 
       $scope.editComponent = function(componentId) {
+          if($scope.single_post)
+          {
+            iFrame.contentWindow && iFrame.contentWindow.refreshPost && iFrame.contentWindow.refreshPost();            
+            return;
+          } 
         $scope.$apply(function() {
           $scope.componentEditing = _.findWhere($scope.components, {
             _id: componentId
@@ -1404,6 +1552,7 @@ define([
               "name": "phone"
             })
           }
+          
 
         });
         $scope.originalComponent = angular.copy($scope.componentEditing);
@@ -1449,6 +1598,7 @@ define([
         }
         $scope.currentPage.components = $scope.components;
         $scope.updateIframeComponents();
+        $scope.activateAloha();
       }
       $scope.saveComponent = function(update) {
 
@@ -1486,8 +1636,9 @@ define([
         var matchingComponent = _.findWhere($scope.currentPage.components, {
           _id: componentId
         });
-
-        var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
+        if(matchingComponent)
+        {
+          var editedComponent = iFrame.contentWindow.document.getElementsByTagName("body")[0].querySelectorAll('.component[data-id="' + componentId + '"]');
         if (editedComponent && editedComponent.length > 0) {
           //get all the editable variables and replace the ones in view with variables in DB
           var componentEditable = editedComponent[0].querySelectorAll('.editable');
@@ -1562,6 +1713,8 @@ define([
             }
           }
         }
+        }
+
         return matchingComponent;
       }
 
@@ -1731,6 +1884,15 @@ define([
           console.log('website.linkLists changed >>> ');
       });
 
+      $scope.initializeLinks = function(status) {
+        $scope.addLink = status;
+        $scope.newLink = {
+          linkUrl: null,
+          linkTitle: null,
+          linkType: null
+        };
+      }
+      
       $scope.setLinkUrl = function() {
         $scope.newLink.linkTitle = $("#linkSection option:selected").html();
       }
@@ -1746,58 +1908,78 @@ define([
           return value.replace("-", " ");
       }
 
-      $scope.initializeLinks = function() {
-        $scope.newLink = {
-          linkUrl: null,
-          linkTitle: null,
-          linkPage: null
-        };
-      }
-
-      $scope.setLinkType = function(lnk) {
-        $scope.addLinkType = lnk;
-        $scope.initializeLinks();
-      }
-
       $scope.deleteLinkFromNav = function(index) {
-        $scope.website.linkLists.forEach(function(value) {
-            if (value.handle === "head-menu") {
-              value.links.splice(index,1);
-              setTimeout(function() {
-                $scope.updateLinkList();
-              }, 1000)
-            }
-          });
+        if($scope.componentEditing.customnav)
+        {
+          $scope.componentEditing.linkLists.forEach(function(value) {
+              if (value.handle === "head-menu") {
+                value.links.splice(index,1);
+                setTimeout(function() {
+                  $scope.updateLinkList();
+                }, 1000)
+              }
+            });
+        }
+        else
+        {
+            $scope.website.linkLists.forEach(function(value) {
+              if (value.handle === "head-menu") {
+                value.links.splice(index,1);
+                setTimeout(function() {
+                  $scope.updateLinkList();
+                }, 1000)
+              }
+            });
+        }
       }
 
 
       $scope.addLinkToNav = function() {
-        var linkTitle = null;
-        var linkUrl = null;
-        if ($scope.newLink && $scope.newLink.linkPage) {
-          $scope.linkPage = _.findWhere(that.allPages, {
-            handle: $scope.newLink.linkPage
-          });
-          linkTitle = $scope.linkPage.title;
-          linkUrl = $scope.newLink.linkPage;
-        } else if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
-          linkTitle = $scope.newLink.linkTitle;
-          linkUrl = $scope.newLink.linkUrl;
-        }
-        if (linkTitle && linkUrl) {
-          $scope.website.linkLists.forEach(function(value, index) {
+        
+        if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
+          if($scope.componentEditing.customnav)
+          {
+            if(!$scope.componentEditing.linkLists)
+            {
+              $scope.componentEditing.linkLists = [];
+                $scope.componentEditing.linkLists.push(
+                {
+                  name : "Head Menu",
+                  handle : "head-menu",
+                  links : []
+                })
+            }
+            $scope.componentEditing.linkLists.forEach(function(value, index) {
+              if (value.handle === "head-menu") {
+                value.links.push({
+                  label: $scope.newLink.linkTitle,
+                  type: "link",
+                  linkTo: {
+                    data: $scope.newLink.linkUrl,
+                    type: $scope.newLink.linkType
+                  }
+                });
+                $scope.initializeLinks(false);
+              }
+            });
+          }
+          else
+          {
+            $scope.website.linkLists.forEach(function(value, index) {
             if (value.handle === "head-menu") {
               value.links.push({
-                label: linkTitle,
+                label: $scope.newLink.linkTitle,
                 type: "link",
                 linkTo: {
-                  data: linkUrl,
-                  type: $scope.addLinkType
+                  data: $scope.newLink.linkUrl,
+                  type: $scope.newLink.linkType
                 }
               });
-              $scope.initializeLinks();
+              $scope.initializeLinks(false);
             }
           });
+          }
+
         }
         setTimeout(function() {
           $scope.updateLinkList();
@@ -1816,7 +1998,30 @@ define([
             linkLabelsArr.push(linkLabel);
         }
         if (linkLabelsArr.length) {
-          $scope.website.linkLists.forEach(function(value, index) {
+          if($scope.componentEditing.customnav)
+          {
+            $scope.componentEditing.linkLists.forEach(function(value, index) {
+            if (value.handle === "head-menu") {
+              var newLinkListOrder = [];
+              for (var i = 0; i < editedLinksLists.length; i++) {
+                if(value)
+                {
+                  var matchedLinkList = _.findWhere(value.links, {
+                    label: linkLabelsArr[i]
+                  });
+                  newLinkListOrder.push(matchedLinkList);
+                }
+              };
+              if (newLinkListOrder.length) {
+                $scope.componentEditing.linkLists[index].links = newLinkListOrder;
+                $scope.saveCustomComponent();
+              }
+            }
+          });
+          }
+          else
+          {
+            $scope.website.linkLists.forEach(function(value, index) {
             if (value.handle === "head-menu") {
               var newLinkListOrder = [];
               for (var i = 0; i < editedLinksLists.length; i++) {
@@ -1838,6 +2043,31 @@ define([
 
             }
           });
+          }
+
+        } else {
+
+          if($scope.componentEditing.customnav)
+          {
+            $scope.website.linkLists.forEach(function(value, index) {
+              if (value.handle === "head-menu") {
+            $scope.componentEditing.linkLists[index].links = [];
+            $scope.saveCustomComponent();
+            }
+            });
+          }
+          else {
+            $scope.website.linkLists.forEach(function(value, index) {
+              if (value.handle === "head-menu") {
+                $scope.website.linkLists[index].links = [];
+                WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                  iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
+                  //toaster.pop('success', "Navigation updated successfully.");
+                });
+              }
+            });
+          }
+
         }
       };
 
@@ -1850,6 +2080,7 @@ define([
           },
           orderChanged: function(event) {
               console.log('orderChanged');
+              $scope.updateLinkList();
           },
           parentElement : "#component-setting-modal .tab-content",
           scrollableContainer: 'reorderNavBarContainer'
@@ -2070,15 +2301,22 @@ define([
 
       window.updateAdminPageScope = function(page) {
         $scope.singlePost = false;
+        if ($location.$$search['posthandle']) {
+          console.log("post handle")
+          $scope.blogPage = page;
+        }
         console.log("Updating admin scope")
-        $scope.$apply(function() {
+        if(!$scope.$$phase) {
+           $scope.$apply(function() {
            editBlockUI.stop();
            $scope.iframeLoaded = true; 
            $scope.autoSavePage();
-        })       
-        if(page)
+        })
+        }
+
+        if(page && !$location.$$search['posthandle'])
         {
-          if (!$scope.currentPage) {
+          if (!$scope.currentPage && !$scope.$$phase) {
             $scope.$apply(function() {
               $scope.currentPage = page;
               //get components from page

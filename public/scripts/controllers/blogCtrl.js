@@ -13,6 +13,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             window.history.back();
           };
 
+        
+
         pagesService(function (err, data) {
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
@@ -37,7 +39,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                       }, 500);
                     })
                     var iframe = window.parent.document.getElementById("iframe-website")
-                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope();
+                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope(that.pages);
                     // console.log("current Page");
                     // console.log($scope.$parent)
             }
@@ -227,8 +229,21 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     toaster.pop('success', msg);
             });
         };
-        $scope.refreshPost = function()
+        window.refreshPost = function()
         {
+            if(!that.tempPost)
+                that.tempPost = angular.copy(that.post);
+                
+                    $scope.$apply(function() {
+                    $scope.initializePostData();
+                    setTimeout(function() {
+                     activateAloha();
+                    }, 500)
+            })
+        }
+        $scope.initializePostData = function(revert)
+        {
+            var post_content = angular.copy(that.post.post_content);
             var post_content_container = $('.post_content_div');
             if(post_content_container.length > 0)
                 that.post.post_content = post_content_container.html();
@@ -245,14 +260,36 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if(post_category_container.length > 0)
                 that.post.post_category = post_category_container.text();
 
-            var post_excerpt_container = $('.post_excerpt_div');
-            if(post_excerpt_container.length > 0)
-                that.post.post_excerpt = post_excerpt_container.text();
-            setTimeout(function() {
-              $scope.$apply(function() {
-                activateAloha();
-              });
-            });
+            if(revert)
+            {
+                var post_excerpt_container = $('.post_excerpt_div');
+                if(post_excerpt_container.length > 0)
+                    post_excerpt_container.text(that.post.post_excerpt);
+            }
+            else
+            {
+               var post_excerpt_container = $('.post_excerpt_div');
+                if(post_excerpt_container.length > 0)
+                    that.post.post_excerpt = post_excerpt_container.text();
+                $scope.autoCreateExcerpt(post_excerpt_container, post_content_container, post_content); 
+            }
+        }
+
+        $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container, post_content)
+        {
+            if(post_excerpt_container.length > 0 && post_content_container.length > 0 && post_content !== that.post.post_content && jQuery.trim(post_content_container.text()))
+            {                   
+               post_excerpt_container.text(jQuery.trim(post_content_container.text()).substring(0, 300)
+                 + "...");                                  
+            }
+        }
+
+        $scope.revertComponent = function()
+        {
+            that.post.post_excerpt = that.tempPost.post_excerpt;
+            that.post.featured_image = that.tempPost.featured_image;
+            $scope.initializePostData(true);
+
         }
         $scope.changeBlogImage = function(blogpost) {
           window.parent.changeBlogImage(blogpost);
@@ -302,6 +339,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         for(name in CKEDITOR.instances)
         {
             //CKEDITOR.instances[name].destroy()
+            CKEDITOR.instances[name].removeAllListeners();
             CKEDITOR.remove(CKEDITOR.instances[name]);
         }
         CKEDITOR.disableAutoInline = true;
@@ -359,7 +397,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       console.log('$scope.inlineInput ', $scope.inlineInput);
       if ($scope.inlineInput) {
         console.log('inserting html');
-        $scope.inlineInput.insertHtml( '<img data-cke-saved-src="'+url+'" src="'+url+'"/>' );
+        $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+      } else if ($scope.urlInput) {
+        $scope.urlInput.val(url);
       }
     };
 
@@ -376,6 +416,45 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
     $scope.setPostImage = function(componentId, blogpost) {
       window.parent.setPostImage(componentId);
       blogpost.featured_image = window.parent.postImageUrl;
+    }
+
+    $scope.sharePost = function(post, type) {
+      var url = $location.$$absUrl;
+      var postData = {};
+      switch (type) {
+        case "twitter":
+          postData = {
+            status: url
+          }
+          PostService.sharePostOnTwitter(postData, function(data) {
+
+          });
+          break;
+        case "facebook":
+          postData = {
+            url: url,
+            picture: post.featured_image,
+            name: post.post_title,
+            caption: post.post_excerpt,
+            description: post.post_excerpt
+          }
+          PostService.sharePostOnFacebook(postData, function(data) {
+
+          });
+          break;
+        case "linked-in":
+          postData = {
+            url: url,
+            picture: post.featured_image,
+            name: post.post_title,
+            caption: post.post_excerpt,
+            description: post.post_excerpt
+          }
+          PostService.sharePostOnLinkedIn(postData, function(data) {
+
+          });
+          break;
+      }
     }
 
     }]);

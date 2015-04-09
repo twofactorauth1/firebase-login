@@ -1,5 +1,5 @@
-define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress'], function(app) {
-  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress) {
+define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter', 'socialConfigService', 'underscore', 'constants', 'moment', 'ngOnboarding', 'isotope', 'ngProgress', 'toasterService'], function(app) {
+  app.register.controller('MarketingCtrl', ['$scope', '$location', 'UserService', 'CampaignService', 'SocialService', 'SocialConfigService', '$timeout', '$q', 'ngProgress', 'ToasterService', function($scope, $location, UserService, CampaignService, SocialService, SocialConfigService, $timeout, $q, ngProgress, ToasterService) {
     ngProgress.start();
 
     /*
@@ -132,6 +132,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      */
 
     $scope.fbAdminPages = [];
+    $scope.twAdminPages = [];
     $scope.feedLengths = {};
     $scope.feeds = [];
     $scope.feedTypes = [];
@@ -155,13 +156,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             posts[i].type = 'facebook';
             posts[i].socialAccountId = socialId;
             $scope.fbPostsLength += 1;
-            if (posts[i].hasOwnProperty('from') && posts[i].from.hasOwnProperty('sourceId')){
-              posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
-            } 
-            else if (posts[i].hasOwnProperty('from') && posts[i].from.hasOwnProperty('profile_pic')) {
-              posts[i].from.profile_pic = posts[i].from.profile_pic;
-            }
-            
+            posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
             console.log('posts[i] ', posts[i]);
             $scope.feed.push(posts[i]);
           };
@@ -194,13 +189,12 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           profile.socialId = socialId;
           profile.open = true;
           $scope.feedTypes.push(profile);
+          $scope.twAdminPages.push(profile);
           $scope.filtersValues.forEach(function(value, index) {
             $scope.filters.push(value + socialId);
           });
         },
         fb: function(profile, socialId) {
-          if (angular.isUndefined(profile))
-            profile = {};
           profile.socialId = socialId;
           profile.type = 'facebook';
           profile.open = true;
@@ -235,13 +229,13 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
           console.warn(value.socialId, 'Account mapping missing.');
           return;
         }
-        // promiseProcessor.push([]);
-        promiseSocialId.push(value.socialId);
+
         $scope.feedLengths[value.socialId] = 0;
 
         if (value.type == 'feed') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type === 'pages') {
@@ -258,79 +252,49 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
             }
             promiseProcessor.push([value.type, socialAccountMap[value.socialId], matchingAccount.accountType]);
           }
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type == 'numberFollowers') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
         if (value.type === 'profile') {
           socialPromises.push(SocialConfigService.getTrackedObjectPromise(index, value.socialId));
           promiseProcessor.push([value.type, socialAccountMap[value.socialId]]);
+          promiseSocialId.push(value.socialId);
         }
 
-        if (value.type != 'profile' && value.type != 'numberFollowers' && value.type!= 'pages' && value.type != 'feed') {
-          console.warn('missing value.type ', value.type);
-          socialPromises.push([]);
-        }
-
-        // config.socialAccounts.forEach(function(value, index) {
-        //   if (value.type == 'go') {
-        //     $scope.feedTypes.push('google-plus');
-        //     socialPromises.push(SocialService.getGooglePlusPostsPromise(value.socialId));
-        //     promiseProcessor.push([value.type]);
-        //   }
-        // });
-
-        // if (obj.type === 'likes') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'user') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'mentions') {
-        //   continue;
-        // }
-        //
-        // if (obj.type === 'numberTweets') {
-        //   continue;
-        // }
       });
-      console.log('socialPromises ', socialPromises.length);
-      console.log('promiseProcessor ', promiseProcessor.length);
+
       $q.all(socialPromises)
         .then(function(data) {
-          var counter = 0;
           data.forEach(function(value, index) {
             var logicFn = null;
-            if (!angular.isArray(value)) {
-              if (promiseProcessor[counter].length == 3) {
-                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][
-                  promiseProcessor[counter][1]
-                ][
-                  promiseProcessor[counter][2]
-                ];
-              }
-              if (promiseProcessor[counter].length == 2) {
-                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]][
-                  promiseProcessor[counter][1]
-                ];
-              }
+            if (promiseProcessor[index].length == 3) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
+                promiseProcessor[index][1]
+              ][
+                promiseProcessor[index][2]
+              ];
+            }
+            if (promiseProcessor[index].length == 2) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]][
+                promiseProcessor[index][1]
+              ];
+            }
 
-              if (promiseProcessor[counter].length == 1) {
-                var logicFn = $scope.typeLogic[promiseProcessor[counter][0]];
-              }
+            if (promiseProcessor[index].length == 1) {
+              var logicFn = $scope.typeLogic[promiseProcessor[index][0]];
+            }
 
-              if (logicFn && value.data.length) {
-                logicFn(value.data, promiseSocialId[counter]);
-              } else {
-                console.warn(promiseProcessor[counter]);
-                console.warn('not found', config.trackedObjects[counter], socialAccountMap[config.trackedObjects[counter].socialId], value.data);
-              }
-              counter = counter+1;
+            if (logicFn) {
+              logicFn(value.data, promiseSocialId[index]);
+            } else {
+              console.warn('Logic not found');
+              console.warn(value.data, promiseSocialId[index]);
             }
           });
 
@@ -447,6 +411,7 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
       SocialConfigService.likeFBPost(page.socialId, $scope.tempPost.sourceId, function(postReturn) {
         var newTempClass = value + ' liked';
         $event.target.setAttribute('class', newTempClass);
+        $scope.tempPost.likes.push({name: page.name, sourceId: page.sourceId});
       });
     };
 
@@ -477,22 +442,44 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
      * add an admin feed to the social account using the parent access token
      */
 
+    $scope.checkAccountExistFn = function(id) {
+      var status = false;
+      $scope.config.socialAccounts.forEach(function(value, index) {
+        if (value.id == id) {
+          status = true;
+        }
+      });
+      return status;
+    };
+
     $scope.addPageFeed = function(page) {
       var config = $scope.config.socialAccounts;
       var newSocialAccount;
-      for (var i = 0; i < config.length; i++) {
-        if (config[i].id == page.socialId) {
-          newSocialAccount = config[i];
+      $scope.config.socialAccounts.forEach(function(value, index) {
+        if (value.id == page.socialId) {
+          newSocialAccount = value;
           newSocialAccount.socialId = page.sourceId;
           newSocialAccount.accountType = 'adminpage';
           newSocialAccount.socialUrl = 'https://www.facebook.com/app_scoped_user_id/' + page.sourceId + '/';
         }
-      }
+      });
       SocialConfigService.postSocialAccount(newSocialAccount, function(data) {
         console.log('return ', data);
       });
     };
 
+    $scope.deleteSocialAccountFn = function(id) {
+      SocialConfigService.deleteSocialConfigEntry(id, function() {
+        var index = null;
+        $scope.fbAdminPages.forEach(function(value, index) {
+          if (value.socialId == id) {
+            index = index;
+            $scope.fbAdminPages.splice(index, 1);
+          }
+        });
+        ToasterService.show('warning', 'Social feed removed.');
+      });
+    };
     /*
      * @watchCollection - feed
      * watch the feed and after 2sec of waiting on new items set isotope
@@ -527,9 +514,48 @@ define(['app', 'campaignService', 'userService', 'socialService', 'timeAgoFilter
 
     $scope.visibleComments = [];
 
-    $scope.updateComments = function(comments) {
-      console.log('comments ', comments);
-      $scope.visibleComments = comments;
+    $scope.addCommentFn = function() {
+      if ($scope.commentType == 'fb') {
+        SocialConfigService.addFacebookPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addComment, function(comment) {
+          $scope.visibleComments.push({
+            picture: $scope.addCommentAdminPage.picture.data.url,
+            created: new Date(),
+            name: $scope.addCommentAdminPage.name,
+            comment: $scope.addComment
+          });
+          ToasterService.show('success', 'Comment added', 'Comment added to the facebook post.');
+        });
+      } else if ($scope.commentType == 'tw') {
+        SocialConfigService.addTwitterPostComment($scope.addCommentAdminPage.socialId, $scope.addCommentPage.sourceId, $scope.addCommentAdminPage.screen_name, $scope.addComment, function(comment) {
+          $scope.visibleComments.push({
+            picture: $scope.addCommentAdminPage.profile_image_url,
+            created: new Date(),
+            name: $scope.addCommentAdminPage.name,
+            comment: $scope.addComment
+          });
+          ToasterService.show('success', 'Comment added', 'Comment added to the twitter post.');
+        });
+      } else {
+        ToasterService.show('error', 'Type miss match', 'Post type and admin type does not match.');
+      }
+    };
+
+    $scope.updateComments = function(page, type) {
+      console.log(page);
+      $scope.commentType = type;
+      if (type == 'tw') {
+        $scope.commentUsers = $scope.twAdminPages;
+      }
+      if (type == 'fb') {
+        $scope.commentUsers = $scope.fbAdminPages;
+      }
+      $scope.addCommentPage = page;
+      console.log('comments ', page.comments);
+      if (page.comments) {
+        $scope.visibleComments = page.comments;
+      } else {
+        $scope.visibleComments = [];
+      }
     };
 
     /*

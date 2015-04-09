@@ -11,84 +11,110 @@
 
 <div ng-class="component.type+'-v'+component.version">
     <div id="content-area">
-        <div class="container clearfix row-fluid">
+        <div class="container website clearfix row-fluid">
             <div id="main-area" class="col-xs-12">
-                <section class="entry clearfix" ng-if="isEditing">
-                        <div class="single-blog responsive clearfix"
-                             data-postId="{{blog.post._id}}">
-                            <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
-                                <h2 class="blog-title">
-                                    <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
-                                        <div class="post_title"
-                                             data-ng-if="blog.post.post_title">
-                                            {{blog.post.post_title}}
-                                        </div>
-                                    </a>
-                                </h2>
-
-                                <div class="blog-meta">
-                                   <span data-ng-if="blog.post.publish_date || blog.post.created.date">
-                                     Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'fullDate'}}
-                                    </span>
-                                     <span data-ng-if="blog.post.post_author">
-                                       Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
-                                    </span>
-                                     <span data-ng-if="blog.post.post_category">
-                                      in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
-                                    </span>
+                <div class="modal" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-btns">
+                                    <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
+                                    <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
                                 </div>
+                                <h4 class="modal-title">Single Post Settings</h4>
+                            </div>
+                            <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
+                                
+                                <tabset>    
+                                    <tab>
+                                        <tab-heading>
+                                            <span>Preview</span>
+                                        </tab-heading> 
+                                        <section class="entry clearfix" ng-if="isEditing">
+                                        <div class="single-blog responsive clearfix"
+                                         data-postId="{{blog.post._id}}">
+                                        <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
+                                            <h2 class="blog-title">
+                                                <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
+                                                    <div class="post_title"
+                                                         data-ng-if="blog.post.post_title">
+                                                        {{blog.post.post_title}}
+                                                    </div>
+                                                </a>
+                                            </h2>
 
-                                <ul class="post_tags" data-ng-if="blog.post.post_tags">
-                                    <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
-                                </ul>
+                                            <div class="blog-meta">
+                                               <span data-ng-if="blog.post.publish_date || blog.post.created.date">
+                                                 Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
+                                                </span>
+                                                 <span data-ng-if="blog.post.post_author">
+                                                   Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
+                                                </span>
+                                                 <span data-ng-if="blog.post.post_category">
+                                                  in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
+                                                </span>
+                                            </div>
 
-                                <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                                    <img ng-src="{{blog.post.featured_image}}"/>
-                                </div>
-                                <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
-                                        <span class="fa fa-edit"></span>
-                                        <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
-                                        <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
-                                </a>
-                                <!-- end .thumb -->
+                                            <ul class="post_tags" data-ng-if="blog.post.post_tags">
+                                                <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
+                                            </ul>
 
-                                <div class="entry-excerpt"><p>
-                                    <div ng-if="blog.post.post_excerpt" class="editable post_excerpt_div" data-class="post_excerpt">
-                                        {{blog.post.post_excerpt }}
+                                            <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
+                                                <img ng-src="{{blog.post.featured_image}}"/>
+                                            </div>
+                                            <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
+                                                    <span class="fa fa-edit"></span>
+                                                    <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
+                                                    <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
+                                            </a>
+                                            <!-- end .thumb -->
+
+                                            <div class="entry-excerpt"><p>
+                                                <div class="editable post_excerpt_div" data-class="post_excerpt">
+                                                    {{blog.post.post_excerpt }}
+                                                </div>
+                                                </p></div>                                   
+                                            </div>
+
+                                        <!-- end .et_pt_blogentry -->
+
                                     </div>
-                                    <div ng-if="!blog.post.post_excerpt" class="editable post_excerpt_div" data-class="post_excerpt">
-                                        <span> Enter Post Excerpt</span>
-                                    </div>
-                                    </p></div>
-                                    <a type="button" ng-click="refreshPost()" class="btn btn-orange pull-right"><span>Refresh Post Preview</span></a>
-
-                                   <div class="clearfix"></div>
-                                   <hr></hr>
+                                    <!-- end #et_pt_blog -->
+                            </section>                           
+                                    </tab>  
+                                </tabset>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-group row mb0">
+                                    <button type="button" class="btn btn-orange pull-right" data-dismiss="modal">
+                                        Done
+                                    </button>
+                                    <button type="button" ng-click="revertComponent()" class="btn btn-green pull-right" data-dismiss="modal" style="margin-right:5px;">
+                                        Revert
+                                    </button>
                                 </div>
-
-                            <!-- end .et_pt_blogentry -->
-
+                            </div>
                         </div>
-                        <!-- end #et_pt_blog -->
-                </section>
+                    </div>
+            </div>
                 <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                         <div class="et_pt_blogentry clearfix">
                             <h2 class="et_pt_title">
-                            <div data-class="post_title">
+                            <div class="single-post-title" data-class="post_title">
                                 <div ng-if="blog.post.post_title" class="post_title_div blog_post_title editable" data-class="post_title"><span> {{blog.post.post_title}}</span></div>
-                                <div class="editable post_title_div blog_post_title" ng-if="!blog.post.post_title" data-class="post_title">
+                                <div class="editable post_title_div blog.post_title" ng-if="!blog.post.post_title" data-class="post_title">
                                     <span> Enter Post Title</span>
                                 </div>
                             </div>
                             </h2>
-                            <div class="blog-meta">
+                            <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
-                                    Posted Date: <input ng-if="isEditing" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
+                                    <input ng-if="isEditing" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
                                 </div>
-                                <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'fullDate' }} </span>
+                                <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'MM/dd/yyyy' }} </span>
                             </div>
-                            <div ng-show="blog.post.post_author">
+                            <div class="single-post-author" ng-show="blog.post.post_author">
                                  Posted by
                                  <div ng-if="isEditing" class="post_text_div">
                                     <div  ng-if="isEditing" class="editable blog_post_author" data-class="post_author"><span> {{blog.post.post_author}}</span></div>
@@ -97,7 +123,7 @@
                                 <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
                             </div>
 
-                            <div ng-if="blog.post.post_category">
+                            <div class="single-post-category" ng-if="blog.post.post_category">
                                 in
                                 <div ng-if="isEditing" class="post_text_div">
                                     <div ng-if="isEditing" class="editable blog_post_category" data-class="post_category"><span> {{blog.post.post_category}}</span></div>
@@ -106,7 +132,8 @@
                             </div>
                         </div>
 
-                        <div ng-show="blog.post.post_tags">
+                        <div class="single-post-tags" ng-show="blog.post.post_tags">
+                            <div ng-if="isEditing">ADD TAGS</div>
                             <tags-input ng-if="isEditing" ng-model="blog.post.post_tags"></tags-input>
                             <ul ng-if="!isEditing" class="post_tags">
                                 <li ng-repeat="tag in blog.post.post_tags track by $index">
@@ -120,28 +147,24 @@
                         </div>
                         <!-- end .thumb -->
 
-                       
-                        <div class="entry-content">
-                            <div ng-if="blog.post.post_content" class="post_content_div editable" ng-bind-html="blog.post.post_content | unsafe" data-class="post_content"></div>
-                            <div class="editable post_content_div" ng-if="!blog.post.post_content" data-class="post_content">
-                                <span class="blog_post_content"> Create you blog post here</span>
-                            </div>
+                        <div class="single-post-content" class="entry-content">
+                            <div class="post_content_div editable" ng-bind-html="blog.post.post_content | unsafe" data-class="post_content"></div>
                         </div>
                     </div>
                     <!-- end .et_pt_blogentry -->
                 </article>
                 <!-- .entry -->
-                <section style="padding: 10px;">
-                    <div ng-if="isAdmin">
-                        <h4>Share post via...</h4>
+                <section>
+                    <div ng-if="isEditing">
+                        <h4>SHARE</h4>
                         <div>
-                            <button title="Share on Twitter" ng-click="sharePost(blog.post,'twitter')" class="btn btn-twitter">Twitter</button>
-                            <button title="Share on Facebook" ng-click="sharePost(blog.post,'facebook')" class="btn btn-facebook">Facebook</button>
-                            <button title="Share on LinkedIn" ng-click="sharePost(blog.post,'linked-in')" class="btn btn-linkedin">LinkedIn</button>
+                            <button title="Share on Twitter" ng-click="sharePost(blog.post,'twitter')" class="btn btn-social-icon btn-twitter"><i class="fa fa-twitter"></i></button>
+                            <button title="Share on Facebook" ng-click="sharePost(blog.post,'facebook')" class="btn btn-social-icon btn-facebook"><i class="fa fa-facebook"></i></button>
+                            <button title="Share on LinkedIn" ng-click="sharePost(blog.post,'linked-in')" class="btn btn-social-icon btn-linkedin"><i class="fa fa-linkedin"></i></button>
                         </div>
                     </div>
-                    <div ng-if="!isAdmin">
-                        <h4>Share post via...</h4>
+                    <div ng-if="!isEditing">
+                        <h4>SHARE</h4>
                         <div class="post-social-link">
                             <h2>
                                 <a class="fa fa-facebook-square" href="" social-facebook custom-url="https://indigenous.io/page/blog/so-what-do-you-do"><span class="hide">Share on facebook</span></a>

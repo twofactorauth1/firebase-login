@@ -36,6 +36,11 @@ var component = $$.m.ModelBase.extend({
              */
             type: "blog-teaser",
 
+            /**
+             * The default sort order of component
+             */
+            postorder: null
+
         }
     },
 
