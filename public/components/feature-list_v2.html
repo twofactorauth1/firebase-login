@@ -17,7 +17,7 @@
 
     <div ng-repeat="feature in component.features track by $index" class="features-wrap">
 
-        <div class="feature" ng-class="{'col-sm-3':component.features.length >= 4, 'col-sm-4':component.features.length == 3, 'col-sm-6':component.features.length == 2, 'col-sm-12':component.features.length == 1}">
+        <div class="feature feature-height-{{component.version}}" ng-class="{'col-sm-3':component.features.length >= 4, 'col-sm-4':component.features.length == 3, 'col-sm-6':component.features.length == 2, 'col-sm-12':component.features.length == 1}">
             <div class="feature-single feature-single-0">
                 <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
                     </div>

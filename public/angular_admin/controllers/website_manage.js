@@ -797,6 +797,11 @@ define([
           toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
           $('#create-post-modal').modal('hide');
           //$scope.posts.push(data);
+          
+          postData.post_author = null;
+          postData.post_title = null;
+          postData.post_url = null;
+          $scope.showChangeURL = false;
           $scope.fetchedPosts.push(data);
           $scope.originalPosts.push(data);
           $scope.refreshPosts();

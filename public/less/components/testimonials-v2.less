@@ -35,6 +35,9 @@
       display: none;
     }
   }
+  div.editable:empty:not(:focus):before{
+        content:attr(data-text)
+    }
 }
 .editing .testimonials-v2 .testimonials{        
       padding: 25px;

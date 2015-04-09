@@ -24,31 +24,34 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     $scope.currentDate = new Date();
     $scope.copyrightYear = d.getFullYear();
 
-    $scope.sortBlogFn = function(blogpost) {
-      return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));            
+    $scope.sortBlogFn = function(component) {
+      return function(blogpost) {
+        if(component.postorder)
+        {
+          if (component.postorder == 1 || component.postorder == 2) {
+            return $filter('date')(blogpost.modified.date);
+          } else if (component.postorder == 3 || component.postorder == 4) {
+            return $filter('date')(blogpost.created.date);
+          }
+          else if (component.postorder == 5 || component.postorder == 6) {
+            return blogpost.publish_date ? Date.parse($filter('date')(blogpost.publish_date, "MM/dd/yyyy")) : $filter('date')(blogpost.created.date);
+          }
+        }
+        else
+          return blogpost.publish_date ? Date.parse($filter('date')(blogpost.publish_date, "MM/dd/yyyy")) : $filter('date')(blogpost.created.date);
+      };
     };
     
-    $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
-      if (newValue !== undefined && newValue.length) {
-        var tagsArr = [];
-        that.totalPosts.forEach(function(val)
+    $scope.customSortOrder = function(component) {
+        if (component.postorder == 1 || component.postorder == 3 || component.postorder == 5) {
+          return false;
+        } else if (component.postorder == 2 || component.postorder == 4 || component.postorder == 6) {
+          return true;
+        } else
         {
-          if(val.post_tags)
-            tagsArr.push(val.post_tags);
-        })
-        newValue.forEach(function(value, index) { 
-         var default_size = 2;
-         var count = _.countBy(_.flatten(tagsArr), function(num){return num == value})["true"];
-          if(count)
-            default_size += count;
-          $scope.tagCloud.push({
-            text: value,
-            weight: default_size,//Math.floor((Math.random() * newValue.length) + 1),
-            link: '/tag/' + value
-          })
-        });
-      }
-    });
+          return true;
+        }
+    };
 
     //var config = angular.module('config');
     //that.segmentIOWriteKey = ENV.segmentKey;
@@ -218,6 +221,27 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.$apply(function() {
               console.log("Page loaded");
               $scope.isLoaded = true;
+              $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
+              if (newValue !== undefined && newValue.length) {
+                var tagsArr = [];
+                that.totalPosts.forEach(function(val)
+                {
+                  if(val.post_tags)
+                    tagsArr.push(val.post_tags);
+                })
+                newValue.forEach(function(value, index) { 
+                 var default_size = 2;
+                 var count = _.countBy(_.flatten(tagsArr), function(num){return num == value})["true"];
+                  if(count)
+                    default_size += count;
+                  $scope.tagCloud.push({
+                    text: value,
+                    weight: default_size,//Math.floor((Math.random() * newValue.length) + 1),
+                    link: '/tag/' + value
+                  })
+                });
+              }
+            });
             })
             var locId = $location.$$hash;
             if (locId) {
@@ -595,6 +619,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         })
 
         if (!matchingContact) {
+
               $scope.contactDetails.push({
                 contactId: component._id,
                 contactPhone: angular.copy(component.contact.phone),
@@ -602,12 +627,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
               });
               matchingContact = _.find($scope.contactDetails, function(item) {
                 return item.contactId == component._id
-              })   
+              });
+
         }else
         {
           matchingContact.contactPhone = angular.copy(component.contact.phone);
           matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
         }
+
 
        // $scope.contactPhone = component.contact.phone;
         //$scope.geo_address_string = $scope.stringifyAddress(component.location);
@@ -617,7 +644,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         }
         if (!component.contact.phone && that.account.business.phones.length)
           matchingContact.contactPhone = that.account.business.phones[0].number;
-        if (matchingContact.geo_address_string) {
+        if (component.location.lat && component.location.lat && matchingContact.geo_address_string) {
           angular.extend($scope, {
             mapLocation: {
               lat: parseFloat(component.location.lat),
@@ -638,6 +665,29 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
              $timeout(function () {
                 map.invalidateSize();
               }, 500);
+          });
+        } else {
+           customerService.getGeoSearchAddress($scope.stringifyAddress(component.location), function(data) {
+            if (data.lat && data.lon) {
+              component.location.lat = data.lat;
+              component.location.lon = data.lon;
+              angular.extend($scope, {
+                  mapLocation: {
+                    lat: parseFloat(component.location.lat),
+                    lng: parseFloat(component.location.lon),
+                    zoom: 10
+                  },
+                  markers: {
+                    mainMarker: {
+                      lat: parseFloat(component.location.lat),
+                      lng: parseFloat(component.location.lon),
+                      focus: false,
+                      message: matchingContact.geo_address_string,
+                      draggable: false
+                    }
+                  }
+              });
+            }
           });
         }
       }
@@ -793,9 +843,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       // to do: the information should fetch from component model
       var newTestimonial = {
         "img": "",
-        "name": "Name",
-        "site": "Site",
-        "text": "Description"       
+        "name": "",
+        "site": "",
+        "text": ""
       }
       window.parent.addTestimonial(componentId, newTestimonial, index);     
     }
@@ -812,7 +862,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       //if ($scope.activated == false) {
       for(name in CKEDITOR.instances)
         {
-            //CKEDITOR.instances[name].destroy()
+            CKEDITOR.instances[name].removeAllListeners();
             CKEDITOR.remove(CKEDITOR.instances[name]);
         }
       $scope.isEditing = true;
@@ -824,6 +874,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
         }
         // $scope.activated = true;
+        var element = $(this);
         //if (!$(this).hasClass('cke_editable')) {
           CKEDITOR.inline(this, {
             on: {
@@ -834,6 +885,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 editor.on('change', function() {
                   $scope.isPageDirty = true;
                 });
+                editor.on('blur', function(event) {
+                  var ckvalue = this.container.$.textContent;
+                  if(ckvalue == "")
+                  {
+                    this.container.$.innerHTML = "";
+                  }
+                });
               }
             },
             sharedSpaces: {
@@ -843,17 +901,29 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         //}
         
       });
-      setTimeout(function() {        
+      
+        setTimeout(function() {        
          if($("div.meet-team-height").length)
          {
             var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
             {
                 return $(this).height();
             }).get());
-            $(".meet-team-height").css("min-height", maxTeamHeight);
+            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
           }
-        }, 500)
-
+          for (i = 1; i <= 3; i++) { 
+            if($("div.feature-height-"+i).length)
+            {
+              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+              {
+                  return $(this).height();
+              }).get());
+              $("div.feature-height-"+i).css("min-height", maxFeatureHeight + 20);
+            }
+          }
+        }, 200)
+      
+      
       //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
       //}
     };
@@ -901,7 +971,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       PostService.createPost($scope.currentpage._id, postData, function(data) {});
     };
 
-    $scope.deletePost = function(postId, blogpost) {
+    
+    $scope.deleteBlogPost = function(postId, blogpost) {
       PostService.deletePost($scope.currentpage._id, postId, function(data) {
         if (blogpost) {
           var index = that.blogposts.indexOf(blogpost);
@@ -1146,6 +1217,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           activateAloha();
           $(".ui-sortable").removeClass("active");
         }, 1500);
+        $scope.isPageDirty = true;
       }
     };
 
@@ -1862,38 +1934,49 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
     $scope.feature_inserted = false;
     $scope.team_inserted = false;
-    $('body').on("DOMNodeInserted", ".feature-height", function (e)
+
+    $('body').on("DOMNodeInserted", ".feature", function (e)
     {
         setTimeout(function() {
-        if(!$scope.feature_inserted)  
+          
+        if(!$scope.isEditing)
         {
-          $scope.feature_inserted = true;          
-         if($("div.feature-height").length)
+          if(!$scope.feature_inserted)
           {
-            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height").map(function ()
-            {
-                return $(this).height();
-            }).get());
-            $(".feature-height").css("min-height", maxFeatureHeight + 10);
-          }
-        }   
+           $scope.feature_inserted = true; 
+           for (i = 1; i <= 3; i++) { 
+              if($("div.feature-height-"+i).length)
+              {
+                var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                {
+                    return $(this).height();
+                }).get());
+                $("div.feature-height-"+i).css("min-height", maxFeatureHeight + 10);
+              }
+            }
+            $scope.feature_inserted = true;
+          }  
+        } 
         }, 1000)
     })
     $('body').on("DOMNodeInserted", ".meet-team-height", function (e)
     {
         setTimeout(function() {
-        if(!$scope.team_inserted)  
-        {
-         $scope.team_inserted = true;
-         if($("div.meet-team-height").length)
-         {
-            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+          if(!$scope.isEditing)
+          {
+            if(!$scope.team_inserted)  
             {
-                return $(this).height();
-            }).get());
-            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
-          }
-        }   
+             $scope.team_inserted = true;
+             if($("div.meet-team-height").length)
+             {
+                var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+                {
+                    return $(this).height();
+                }).get());
+                $(".meet-team-height").css("min-height", maxTeamHeight + 10);
+              }
+            } 
+          }  
         }, 1000)
     })
   }

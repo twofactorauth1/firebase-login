@@ -15,19 +15,19 @@
 <div class="row team-member-wrap">
     <div class="col-md-8 col-md-offset-2">
         <div class="col-md-6 text-center team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="member in component.teamMembers">
-            <div class="row">
+            <div ng-if="component.teamSettings.profilepic" class="row">
                 <div class="col-md-12 text-center">
                     <img ng-src="{{member.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}} meet-team-image" data-index="{{$index}}"/>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 text-center para">
-                <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="member.name | unsafe"></div>
-                <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="member.position | unsafe"></div>
-                <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="member.bio | unsafe"></div>
+                <div ng-if="component.teamSettings.name" class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="member.name | unsafe"></div>
+                <div ng-if="component.teamSettings.position" class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="member.position | unsafe"></div>
+                <div ng-if="component.teamSettings.bio" class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="member.bio | unsafe"></div>
                 </div>
             </div>
-            <div class="row social-link {{isEditing ? 'edit-mode' : ''}}">
+            <div ng-if="component.teamSettings.networks" class="row social-link {{isEditing ? 'edit-mode' : ''}}">
                 <ul class="social">
                     <li ng-repeat="network in member.networks">
                         <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
@@ -38,7 +38,7 @@
                     
                 </ul>
                 <div ng-if="isEditing" class="add-addtional-team center">
-                        <a ng-if="isEditing" parent-data-index="{{$parent.$index}}" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
+                        <a ng-if="isEditing" parent-data-index="{{$parent.$index}}" class="clickable-link btn-social-link btn btn-{{network.icon}}"><i class="fa fa-plus"></i></a>
                     </div>
             </div> 
             <div ng-if="isEditing" class="delete-team-member center">

@@ -8,6 +8,7 @@
             .add-addtional {
                 display: block;
                 font-size: 28px;
+                 bottom: -20px;
             }
             border: 4px dashed rgba(0,0,0,0.4);
             .delete-feature {
@@ -81,7 +82,10 @@
         }
     }
     .feature-single {
-        transition: none!important
+        transition: none!important;
+        img {
+            max-width: 100%;
+        }
     }
     div[data-class="feature-list"] {
         background: url('../assets/images/indimain/wave-bg.jpg');

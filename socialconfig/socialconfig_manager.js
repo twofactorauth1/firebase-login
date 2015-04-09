@@ -78,6 +78,31 @@ module.exports = {
                 var socialConfig = new $$.m.SocialConfig({accountId:accountId});
                 return self.createSocialConfig(socialConfig, fn);
             } else {
+
+                //add the tracked objects properly
+                _.each(value.get('trackedObjects'), function(obj){
+                    if(value.getTrackedAccountById(obj.socialId)) {
+                        var trackedAccount = value.getTrackedAccountById(obj.socialId);
+                        //make sure the tracked Objects has it
+                        trackedAccount.trackedObjects = trackedAccount.trackedObjects || [];
+                        if(_.contains(trackedAccount.trackedObjects, obj.type)) {
+                            //cool
+                        } else {
+                            trackedAccount.trackedObjects.push(obj.type);
+                        }
+                    } else {
+                        var socialAccount = value.getSocialAccountById(obj.socialId);
+                        socialAccount.trackedObjects = socialAccount.trackedObjects || [];
+                        if(_.contains(socialAccount.trackedObjects, obj.type)) {
+                            //cool
+                        } else {
+                            socialAccount.trackedObjects.push(obj.type);
+                        }
+                        value.get('trackedAccounts').push(socialAccount);
+                    }
+                });
+                //save it async
+                socialconfigDao.saveOrUpdate(value, function(err, value){});
                 log.debug('<< getSocialConfig');
                 return fn(null, value);
             }
@@ -382,6 +407,128 @@ module.exports = {
         });
     },
 
+    getSocialConfigTrackedAccounts: function(accountId, fn) {
+        var self = this;
+        log.debug('>> getSocialConfigTrackedAccounts');
+
+        var query = {accountId: accountId};
+
+        socialconfigDao.findOne(query, $$.m.SocialConfig, function(err, value){
+            if(err) {
+                log.error('Error finding socialconfig: ' + err);
+                return fn(err, null);
+            } if (value === null) {
+                log.debug('Creating new socialconfig.');
+                var socialConfig = new $$.m.SocialConfig({accountId:accountId});
+                self.createSocialConfig(socialConfig, function(err, config){
+                    if(err) {
+                        log.error('Error creating socialconfig: ' + err);
+                        return fn(err, null);
+                    }
+                    return fn(null, config.get('trackedAccounts'));
+                });
+
+            } else {
+                log.debug('<< getSocialConfig');
+                return fn(null, value.get('trackedAccounts'));
+            }
+        });
+    },
+
+    addTrackedAccount: function(accountId, trackedAccount, fn){
+        var self = this;
+        log.debug('>> addTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config){
+            if(err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+            if(!trackedAccount.id) {
+                trackedAccount.id = $$.u.idutils.generateUUID();
+            }
+            var trackedAccounts = config.get('trackedAccounts') || [];
+            trackedAccounts.push(trackedAccount);
+            config.set('trackedAccounts', trackedAccounts);
+
+            return self.updateSocialConfig(config, fn);
+        });
+
+    },
+
+    getTrackedAccount: function(accountId, trackedAccountId, fn) {
+        var self = this;
+        log.debug('>> getTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+
+            var trackedAccounts = config.get('trackedAccounts') || [];
+
+            var trackedAccount = _.find(trackedAccounts, function(account){
+                return account.id === trackedAccountId;
+            });
+
+            return fn(null, trackedAccount);
+
+        });
+    },
+
+    updateTrackedAccount: function(accountId, trackedAccount, fn) {
+        var self = this;
+        log.debug('>> updateTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+            var trackedAccounts = config.get('trackedAccounts') || [];
+
+            var index = 0;
+            var updatedTrackedAccount = _.find(trackedAccounts, function(account){
+                if(account.id === trackedAccount.id) {
+                    return true;
+                } else {
+                    index++;
+                    return false;
+                }
+            });
+            trackedAccounts[index] = updatedTrackedAccount;
+
+            config.set('trackedAccounts', trackedAccounts);
+            return self.updateSocialConfig(config, fn);
+
+        });
+    },
+
+    deleteTrackedAccount: function(accountId, trackedAccountId, fn) {
+        var self = this;
+        log.debug('>> deleteTrackedAccount');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting socialconfig: ' + err);
+                return fn(err, null);
+            }
+
+            var trackedAccounts = config.get('trackedAccounts') || [];
+
+            var newTrackedAccounts = [];
+            _.each(trackedAccounts, function(account){
+                if(account.id !== trackedAccountId) {
+                    newTrackedAccounts.push(account);
+                }
+            });
+
+            config.set('trackedAccounts', newTrackedAccounts);
+            return self.updateSocialConfig(config, fn);
+        });
+    },
+
     getFacebookPages: function(accountId, socialAccountId, fn) {
         var self = this;
         log.debug('>> getFacebookPages');
@@ -391,7 +538,7 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccount = config.getSocialAccountById(socialAccountId);
-            if(socialAccount === null) {
+            if(socialAccount === null || socialAccount === undefined) {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
             }
@@ -435,6 +582,44 @@ module.exports = {
                 return fn('Invalid social accountId', null);
             }
             facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    shareFacebookLink: function(accountId, socialAccountId, url, picture, name, caption, description, fn) {
+        var self = this;
+        log.debug('>> getFacebookProfile');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            facebookDao.shareLinkWithToken(socialAccount.accessToken, socialAccount.socialId, url, picture, name,
+                caption, description, fn);
+        });
+    },
+
+    shareLinkedinLink: function(accountId, socialAccountId, url, picture, name, caption, description, fn) {
+        var self = this;
+        log.debug('>> getFacebookProfile');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            linkedinDao.shareLinkWithToken(socialAccount.accessToken, socialAccount.socialId, url, picture, name,
+                caption, description, fn);
         });
     },
 
@@ -503,6 +688,42 @@ module.exports = {
             }
 
             return facebookDao.getTokenPosts(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getFacebookStatuses: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookStatuses');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return facebookDao.getTokenStatuses(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    getFacebookTagged: function(accountId, socialAccountId, fn) {
+        var self = this;
+        log.debug('>> getFacebookTagged');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return facebookDao.getTokenTagged(socialAccount.accessToken, socialAccount.socialId, fn);
         });
     },
 
@@ -652,6 +873,78 @@ module.exports = {
             }
 
             return twitterDao.postWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, post, fn);
+        });
+    },
+
+    replyToTwitterPost: function(accountId, socialAccountId, tweetId, post, fn) {
+        var self = this;
+        log.debug('>> replyToTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.replyToPostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, post, tweetId, fn);
+
+        });
+    },
+
+    retweetTwitterPost: function(accountId, socialAccountId, tweetId, fn) {
+        var self = this;
+        log.debug('>> retweetTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.retweetPostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, tweetId, fn);
+        });
+    },
+
+    directMessageTwitterUser: function(accountId, socialAccountId, userId, screenName, msg, fn) {
+        var self = this;
+        log.debug('>> directMessageTwitterUser');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+
+            return twitterDao.directMessageTwitterUserWithToken(socialAccount.accessToken,
+                socialAccount.accessTokenSecret, userId, screenName, msg, fn);
+        });
+    },
+
+    getTwitterDirectMessages: function(accountId, socialAccountId, since, until, limit, fn) {
+        var self = this;
+        log.debug('>> getTwitterDirectMessages');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.getDirectMessages(socialAccount.accessToken, socialAccount.accessTokenSecret,
+                socialAccount.socialId, since, until, limit, fn);
         });
     },
 

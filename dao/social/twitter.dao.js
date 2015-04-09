@@ -413,6 +413,82 @@ var dao = {
         );
     },
 
+    replyToPostWithToken: function(accessToken, accessTokenSecret, status, statusId, fn) {
+        var self = this;
+        self.log.debug('>> replyToPostWithToken');
+
+        twitter.statuses("update", {
+                status: status,
+                in_reply_to_status_id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error updating status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< replyToPostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
+    retweetPostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> retweetPostWithToken');
+
+        twitter.statuses("retweet", {
+                id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error retweeting status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< retweetPostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
+    directMessageTwitterUserWithToken: function(accessToken, accessTokenSecret, userId, screenName, msg, fn) {
+        var self = this;
+        self.log.debug('>> directMessageTwitterUserWithToken');
+
+        var params = {text: msg};
+        if(userId) {
+            params.user_id = userId;
+        }
+        if(screenName) {
+            params.screen_name = screenName;
+        }
+        self.log.debug('sending params: ', params);
+        twitter.direct_messages("new", params,
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error creating DM: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< directMessageTwitterUserWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
     deletePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
         var self = this;
         self.log.debug('>> deletePostWithToken');

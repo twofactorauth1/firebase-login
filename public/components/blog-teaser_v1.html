@@ -13,14 +13,14 @@
 
     <div class="posts">
 
-        <div class="row" ng-repeat="blogpost in layout.teaserposts| orderBy : sortBlogFn:true| limitTo: 3">
+        <div class="row" ng-repeat="blogpost in layout.teaserposts | orderBy : sortBlogFn(component):customSortOrder(component) | limitTo: 3">
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-12">
                         <h4>
                             <strong>
                                 <a data-ng-href="/blog/{{blogpost['post_url']}}">
-                                    <div class="editable" data-class="title">
+                                    <div class="editable" data-class="post_title">
                                         {{blogpost.post_title}}
                                     </div>
                                 </a>
@@ -39,7 +39,7 @@
                     <div ng-class="{'col-xs-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}">
                         <p>
                             <div class="excerpt">
-                                <div class="editable" data-class="subtitle">
+                                <div class="editable" data-class="post_excerpt">
                                     {{blogpost.post_excerpt}}
                                 </div>
                             </div>
