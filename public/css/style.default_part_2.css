@@ -11489,7 +11489,7 @@ ul.nav {
 }
 
 .navigation-v3 .navbar li {
-  height: 125px;
+  min-height: 125px;
 }
 
 .navigation-v3 .navbar .nav > li > a {
