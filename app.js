@@ -53,7 +53,7 @@ var express = require('express')
 //---------------------------------------------------------
 _ = require('underscore');
 moment = require('moment');
-requirejs('utils/commonutils');
+require('./utils/commonutils');
 require('./utils/errors');
 require('./utils/jsvalidate');
 
