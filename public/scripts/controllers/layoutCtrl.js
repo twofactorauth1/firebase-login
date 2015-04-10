@@ -1302,7 +1302,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           if (value && value.type == 'contact-us') {
             $scope.updateContactUsMap(value);
           }
-          if (value && value.type == 'contact-us' == 'masthead') {
+          if (value && value.type  == 'masthead') {
             if (index != 0 && $scope.currentpage.components[index-1].type == "navigation")
               $scope.allowUndernav = true;
             else
