@@ -23,7 +23,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     var d = new Date();
     $scope.currentDate = new Date();
     $scope.copyrightYear = d.getFullYear();
-
+    $scope.allowUndernav = false;
     $scope.sortBlogFn = function(component) {
       return function(blogpost) {
         if(component.postorder)
@@ -1050,6 +1050,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             var winWidth = w.width();
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
+          if ($scope.currentpage.components[i].type == 'masthead') {
+            if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+              $scope.allowUndernav = true;
+            else
+              $scope.allowUndernav = false;
+          }
         };
         setTimeout(function() {
           $(window).scrollTop(scroll);
@@ -1218,6 +1224,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           $(".ui-sortable").removeClass("active");
         }, 1500);
         $scope.isPageDirty = true;
+        for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          if ($scope.currentpage.components[i].type == 'masthead') {
+            if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+              $scope.allowUndernav = true;
+            else
+              $scope.allowUndernav = false;
+          }
+        };
       }
     };
 
@@ -1287,6 +1301,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           }
           if (value && value.type == 'contact-us') {
             $scope.updateContactUsMap(value);
+          }
+          if (value && value.type == 'contact-us' == 'masthead') {
+            if (index != 0 && $scope.currentpage.components[index-1].type == "navigation")
+              $scope.allowUndernav = true;
+            else
+              $scope.allowUndernav = false;
           }
           $scope.dataLoaded = true;
         });
