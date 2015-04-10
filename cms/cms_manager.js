@@ -1729,8 +1729,8 @@ module.exports = {
                 serverUrl +='/page/' + pageHandle;
             }
             var options = {
-                width: 1280,
-                height: 1024,
+                width: 300,
+                height: 200,
                 full_page: true,
                 delay: 3500,
                 force: true
