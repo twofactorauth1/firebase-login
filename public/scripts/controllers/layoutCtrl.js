@@ -34,11 +34,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             return $filter('date')(blogpost.created.date);
           }
           else if (component.postorder == 5 || component.postorder == 6) {
-            return blogpost.publish_date ? Date.parse($filter('date')(blogpost.publish_date, "MM/dd/yyyy")) : $filter('date')(blogpost.created.date);
+            return Date.parse($filter('date')(blogpost.publish_date||blogpost.created.date,"MM/dd/yyyy"));                       
           }
         }
         else
-          return blogpost.publish_date ? Date.parse($filter('date')(blogpost.publish_date, "MM/dd/yyyy")) : $filter('date')(blogpost.created.date);
+          return Date.parse($filter('date')(blogpost.publish_date||blogpost.created.date,"MM/dd/yyyy"));            
       };
     };
     
