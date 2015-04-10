@@ -16943,6 +16943,83 @@ fieldset[disabled] .btn-yelp.active {
   color: #ce2200;
   background-color: #ffffff;
 }
+.btn-vimeo-square {
+  color: #ffffff;
+  background-color: #1ab7ea;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-vimeo-square:hover,
+.btn-vimeo-square:focus,
+.btn-vimeo-square:active,
+.btn-vimeo-square.active,
+.open .dropdown-toggle.btn-vimeo-square {
+  color: #ffffff;
+  background-color: #129cc9;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-vimeo-square:active,
+.btn-vimeo-square.active,
+.open .dropdown-toggle.btn-vimeo-square {
+  background-image: none;
+}
+.btn-vimeo-square.disabled,
+.btn-vimeo-square[disabled],
+fieldset[disabled] .btn-vimeo-square,
+.btn-vimeo-square.disabled:hover,
+.btn-vimeo-square[disabled]:hover,
+fieldset[disabled] .btn-vimeo-square:hover,
+.btn-vimeo-square.disabled:focus,
+.btn-vimeo-square[disabled]:focus,
+fieldset[disabled] .btn-vimeo-square:focus,
+.btn-vimeo-square.disabled:active,
+.btn-vimeo-square[disabled]:active,
+fieldset[disabled] .btn-vimeo-square:active,
+.btn-vimeo-square.disabled.active,
+.btn-vimeo-square[disabled].active,
+fieldset[disabled] .btn-vimeo-square.active {
+  background-color: #1ab7ea;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-vimeo-square .badge {
+  color: #1ab7ea;
+  background-color: #ffffff;
+}
+.btn-vimeo-square:hover,
+.btn-vimeo-square:focus,
+.btn-vimeo-square:active,
+.btn-vimeo-square.active,
+.open .dropdown-toggle.btn-vimeo-square {
+  color: #ffffff;
+  background-color: #129cc9;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-vimeo-square:active,
+.btn-vimeo-square.active,
+.open .dropdown-toggle.btn-vimeo-square {
+  background-image: none;
+}
+.btn-vimeo-square.disabled,
+.btn-vimeo-square[disabled],
+fieldset[disabled] .btn-vimeo-square,
+.btn-vimeo-square.disabled:hover,
+.btn-vimeo-square[disabled]:hover,
+fieldset[disabled] .btn-vimeo-square:hover,
+.btn-vimeo-square.disabled:focus,
+.btn-vimeo-square[disabled]:focus,
+fieldset[disabled] .btn-vimeo-square:focus,
+.btn-vimeo-square.disabled:active,
+.btn-vimeo-square[disabled]:active,
+fieldset[disabled] .btn-vimeo-square:active,
+.btn-vimeo-square.disabled.active,
+.btn-vimeo-square[disabled].active,
+fieldset[disabled] .btn-vimeo-square.active {
+  background-color: #1ab7ea;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-vimeo-square .badge {
+  color: #1ab7ea;
+  background-color: #ffffff;
+}
 /* ------------------------------------------------------------
 	Site Map Styles
 ------------------------------------------------------------ */
