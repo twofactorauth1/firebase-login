@@ -905,20 +905,24 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         setTimeout(function() {        
          if($("div.meet-team-height").length)
          {
-            var maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
+            $scope.maxTeamHeight = Math.max.apply(null, $("div.meet-team-height").map(function ()
             {
                 return $(this).height();
             }).get());
-            $(".meet-team-height").css("min-height", maxTeamHeight + 10);
+            if($scope.finalTeamHeight != $scope.maxTeamHeight)
+              $(".meet-team-height").css("min-height", $scope.maxTeamHeight + 10);
+            $scope.finalTeamHeight  = $(".meet-team-height").height();
           }
           for (i = 1; i <= 3; i++) { 
             if($("div.feature-height-"+i).length)
             {
-              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
-              {
-                  return $(this).height();
-              }).get());
-              $("div.feature-height-"+i).css("min-height", maxFeatureHeight + 20);
+               $scope.maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                {
+                    return $(this).height();
+                }).get());
+               if($scope.finalFeatureHeight != $scope.maxFeatureHeight)
+                $("div.feature-height-"+i).css("min-height", $scope.maxFeatureHeight + 20);
+                $scope.finalFeatureHeight = $("div.feature-height-"+i).height();
             }
           }
         }, 200)
