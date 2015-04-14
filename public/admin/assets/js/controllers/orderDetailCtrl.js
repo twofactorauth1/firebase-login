@@ -241,5 +241,50 @@
             $scope.order.status = newStatus;
         };
 
+        /*
+         * @refundOrder
+         * refund the order
+         */
+
+        $scope.refundOrder = function() {
+            console.log('refund order');
+        };
+
+        /*
+         * @duplicateOrder
+         * duplicate the order
+         */
+
+        $scope.duplicateOrder = function() {
+            console.log('duplicate order');
+        };
+
+        /*
+         * @sendEmail
+         * re-send a variety of emails
+         */
+
+        $scope.sendEmail = function(type) {
+            console.log('sending email type: ', type);
+            if (type == 'new-order') {}
+            if (type == 'cancelled-order') {}
+            if (type == 'processing-order') {}
+            if (type == 'completed-order') {}
+            if (type == 'customer-invoice') {}
+        };
+
+        /*
+         * @print
+         * print a variety of things
+         */
+
+        $scope.print = function(type) {
+            console.log('printing type: ', type);
+            if (type == 'invoice') {}
+            if (type == 'packing-slip') {}
+        };
+
+
+
     }]);
 })(angular);

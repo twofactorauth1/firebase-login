@@ -121,7 +121,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: '<div ui-view class="fade-in-up"></div>',
         title: 'Commerce',
         ncyBreadcrumb: {
-            label: 'Commerce'
+            label: 'Commerce',
+            skip: true
         }
     }).state('app.commerce.products', {
         url: '/products',
@@ -165,7 +166,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: '<div ui-view class="fade-in-up"></div>',
         title: 'Marketing',
         ncyBreadcrumb: {
-            label: 'Marketing'
+            label: 'Marketing',
+            skip: true
         }
     }).state('app.marketing.socialfeed', {
         url: '/social-feed',
@@ -189,7 +191,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: '<div ui-view class="fade-in-up"></div>',
         title: 'Account',
         ncyBreadcrumb: {
-            label: 'Account'
+            label: 'Account',
+            skip: true
         }
     }).state('app.account.profile', {
         url: '/profile',
@@ -214,7 +217,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Integrations'
-        }
+        },
+        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie')
     }).state('app.support', {
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',
