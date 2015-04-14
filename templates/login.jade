@@ -7,72 +7,63 @@
 extends snippets/_layout
 
 block content
-    section
-        .signinpanel
-            if account
+    .row
+      .main-login.col-xs-10.col-xs-offset-1.col-sm-8.col-sm-offset-2.col-md-4.col-md-offset-4
+        .logo.margin-top-30
+          if account
                 if account.business.logo
                     img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
                 else
                     h1.center.company-title #{account.company.name}
-            else
-                span.logo
 
-            form(role="form", action="/login" method="post")
+        // start: LOGIN BOX
+        .box-login
+          form.form-login(action="/login" method="post")
+            fieldset
+              legend
+                | Sign in to your account
+              p
+                | Please enter your name and password to log in or use social network.
+              .row.social.btn-toolbar.margin-bottom-15.center
+                a.btn.btn-large.btn-default(href="/login/facebook")
+                    i.fa.fa-facebook
 
-                div.welcome-text
-                    h4.nomargin Sign In
-                    p.mt5.mb20 Login to access your account&period;
+                a.btn.btn-large.btn-default(href="/login/twitter")
+                    i.fa.fa-twitter
 
-                .row.social.btn-toolbar
-                    a.btn.btn-large.btn-default(href="/login/facebook")
-                        i.fa.fa-facebook
+                a.btn.btn-large.btn-default(href="/login/google")
+                    i.fa.fa-google-plus
 
-                    a.btn.btn-large.btn-default(href="/login/twitter")
-                        i.fa.fa-twitter
-
-                    a.btn.btn-large.btn-default(href="/login/google")
-                        i.fa.fa-google-plus
-
-                    a.btn.btn-large.btn-default(href="/login/linkedin")
-                        i.fa.fa-linkedin
-
-                .input-group
-                  span.input-group-addon
-                    i.fa.fa-user
-                  input.form-control.uname.input-lg(type='text', name='username', placeholder='Username')
-
-                .input-group
-                  span.input-group-addon
-                    i.fa.fa-lock
-                  input.form-control.pword.input-lg(type='password', name='password', placeholder='Password')
-
-                a(href='/forgotpassword')
-                    small Forgot Your Password&quest;
-                a(href='/signup', class='pull-right')
-                    small Need an Account&quest; 
-                    strong Sign Up
-
-                button.btn.btn-success.btn-block.btn-lg(type="submit", value="Login" , onClick="login(this)") Sign In
-
-                div.checkbox
-                    label
-                        input(type="checkbox" name="rememberme" id="rememberme")
-                        | Remember me on this computer
-
-                unless account
-                    strong
-                        | Not a member&quest;
-                        a(href='/signup')  Sign Up
-        script.
-          $(window).load(function() {
-              $('#status').delay(350).fadeOut();
-              $('#preloader').delay(500).fadeOut(function(){
-                $('body').delay(350).css({'overflow':'visible'});
-              });
-            });
-            function login(obj)
-            {
-                 $(obj).text('Loading...');
-                 $(obj).attr('disabled', 'true'); 
-                 obj.form.submit();
-            }
+                a.btn.btn-large.btn-default(href="/login/linkedin")
+                    i.fa.fa-linkedin
+              .form-group
+                span.input-icon
+                  input.form-control(type="text", name="username", placeholder="Username")
+                  i.fa.fa-user
+              .form-group.form-actions
+                span.input-icon
+                  input.form-control.password(type="password", name="password", placeholder="Password")
+                  i.fa.fa-lock
+                  a.forgot(href="/forgotpassword")
+                    | I forgot my password
+              .form-actions
+                .checkbox.clip-check.check-primary
+                  input#rememberme(type="checkbox" name="rememberme")
+                  label(for="remember")
+                    | Keep me signed in
+                button.btn.btn-primary.btn-o.btn-wide.pull-right(type="submit", value="Login" , onClick="login(this)")
+                  | Login 
+                  i.fa.fa-arrow-circle-right
+              .new-account
+                | Don"t have an account yet? 
+                a(href="/signup")
+                  | Create an account
+          // start: COPYRIGHT
+          .copyright
+            | &#169;
+            span.current-year
+            span.text-bold.text-uppercase  Indigenous Software, Inc.
+            | .
+            span All rights reserved
+          // end: COPYRIGHT
+        // end: LOGIN BOX

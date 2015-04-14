@@ -1,0 +1,168 @@
+<div ng-controller="siteAnalyticsCtrl" class="site-analytics">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.website.ANALYTICS">{{ mainTitle }}</h1>
+                <span class="mainDescription">View all the statistics of your website</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: YOUR CONTENT HERE -->
+    <div class="container-fluid container-fullw bg-white ng-scope">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 col-sm-offset-9">
+                <div class="input-group">
+                    <label class="sr-only">Date Range</label>
+                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                    <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate" options="pickerOptions" />
+                    <span class="input-group-addon" onClick="$('.deshboard-date-picker').click();"><i class="fa fa-chevron-down fa-fw"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-white margin-top-15" id="overview" ng-class="{'load1 csspinner': !analyticsOverviewConfig.options}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Visitor <span class="text-bold">Overview</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="overview" ng-init="overview=false" class="panel-wrapper">
+                    <div class="panel-body">
+                        <div class="height-370">
+                            <highchart config="analyticsOverviewConfig" id="analytics-overview-chart"></highchart>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-4 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{visitors || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': visitorsPercent > 0, 'fa-caret-down text-red': visitorsPercent < 0}"></i><strong class="text-muted">{{visitorsPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Visitors
+                            </div>
+                            <div class="col-xs-4 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{sessions || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': sessionsPercent > 0, 'fa-caret-down text-red': sessionsPercent < 0}"></i><strong class="text-muted">{{sessionsPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Visits
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <div class="rate">
+                                    <span class="value">{{pageviews || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': pageviewsPercent > 0, 'fa-caret-down text-red': pageviewsPercent < 0}"></i><strong class="text-muted">{{pageviewsPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Page Views
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="panel panel-white no-radius" id="locations" ng-class="{'load1 csspinner': !locationData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Visitor <span class="text-bold">Locations</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="locations" ng-init="locations=false" class="panel-wrapper">
+                    <div class="panel-body height-380">
+                        <div id="visitor_locations" ng-if="locationData"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <div class="rate">
+                                    <span class="value">{{locationData.length || '--'}}</span>
+                                </div>
+                                States
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="panel panel-white no-radius" id="interactions" ng-class="{'load1 csspinner': !timeonSiteConfig.options}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Content <span class="text-bold">Interactions</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="interactions" ng-init="interactions=false">
+                    <div class="panel-body">
+                        <div class="height-350">
+                            <highchart config="timeonSiteConfig" id="timeonSiteConfig"></highchart>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-6 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{visitDuration || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': visitDurationPercent > 0, 'fa-caret-down text-red': visitDurationPercent < 0}"></i><strong class="text-muted">{{visitDurationPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Average Time On Site
+                            </div>
+                            <div class="col-xs-6 text-center">
+                                <div class="rate">
+                                    <span class="value">{{bounces || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': bouncesPercent > 0, 'fa-caret-down text-red': bouncesPercent < 0}"></i><strong class="text-muted">{{bouncesPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Bounce Rate
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
+        <div class="panel-heading border-light">
+            <h4 class="panel-title text-primary">Page <span class="text-bold">Analytics</span></h4>
+            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+        </div>
+        <div class="panel-wrapper" collapse="pageanalytics" ng-init="pageanalytics=false">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover margin-bottom-0">
+                        <thead>
+                            <tr>
+                                <th>Page</th>
+                                <th ng-click="changeSorting('pageviews')" class="center">Pageviews</th>
+                                <th ng-click="changeSorting('uniquePageviews')" class="center">Unique Pageviews</th>
+                                <th ng-click="changeSorting('avgTime')" class="center">Avg. Time on Page</th>
+                                <!-- <th ng-click="changeSorting('entrances')">Entrances</th>
+                                                <th ng-click="changeSorting('bounceRate')">Bounce Rate</th>
+                                                <th ng-click="changeSorting('exitRate')">Exit</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
+                                <td>
+                                    {{topPage.page}}
+                                    <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>
+                                </td>
+                                <td class="center">{{topPage.pageviews}}</td>
+                                <td class="center">{{topPage.uniquePageviews}}</td>
+                                <td class="center">{{topPage.avgTime | secTotime}}</td>
+                                <!-- <td>{{topPage.entrances}}</td>
+                                                <td>{{topPage.bounceRate | formatPercentage}}</td>
+                                                <td>{{topPage.exitRate | formatPercentage}}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: YOUR CONTENT HERE -->
+</div>

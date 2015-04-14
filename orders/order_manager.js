@@ -185,19 +185,34 @@ module.exports = {
 
 
     completeOrder: function(accountId, orderId, note, userId, fn) {
-        log.debug('>> completeOrder');
+        log.debug('>> completeOrder ');
+        log.debug('>> note ', note);
         var query = {
             _id: orderId,
-            accountId: accountId
+            account_id: accountId
         };
         dao.findOne(query, $$.m.Order, function(err, order){
+            log.debug('retrieved order >>> ', order);
             if(err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
             }
-            order.set('note', order.get('note') + '\n' + note);
+
+            var notes = [];
+            if (order.get('notes')) {
+                notes = order.get('notes');
+            }
+            if (note) {
+                var noteObj = {
+                    note: note,
+                    user_id: userId,
+                    date: new Date()
+                };
+                notes.push(noteObj);
+            }
+            order.set('notes', notes);
             order.set('completed_at', new Date());
-            order.set('status', order.status.COMPLETED);
+            order.set('status', $$.m.Order.status.COMPLETED);
             var modified = {
                 date: new Date(),
                 by: userId
@@ -390,6 +405,49 @@ module.exports = {
                 return fn(null, updatedOrder);
             });
         });
+    },
+
+    addOrderNote: function(accountId, orderId, note, userId, fn) {
+        log.debug('>> addOrderNote ');
+        var query = {
+            _id: orderId,
+            account_id: accountId
+        };
+        dao.findOne(query, $$.m.Order, function(err, order){
+            if(err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            }
+
+            var notes = [];
+            if (order.get('notes')) {
+                notes = order.get('notes');
+            }
+            if (note) {
+                var noteObj = {
+                    note: note,
+                    user_id: userId,
+                    date: new Date()
+                };
+                notes.push(noteObj);
+            }
+            order.set('notes', notes);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            order.set('modified', modified);
+            dao.saveOrUpdate(order, function(err, updatedOrder){
+                if(err) {
+                    log.error('Error updating order: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< addOrderNote');
+                return fn(null, updatedOrder);
+            });
+
+        });
+
     },
 
     getOrderById: function(orderId, fn) {
