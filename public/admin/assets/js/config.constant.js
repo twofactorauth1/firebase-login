@@ -146,6 +146,7 @@ app.constant('JS_REQUIRES', {
         'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',
         'ordersCtrl': 'assets/js/controllers/ordersCtrl.js',
         'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
+        'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
         'chartsCtrl': 'assets/js/controllers/chartsCtrl.js',
         'calendarCtrl': 'assets/js/controllers/calendarCtrl.js',
         'nestableCtrl': 'assets/js/controllers/nestableCtrl.js',

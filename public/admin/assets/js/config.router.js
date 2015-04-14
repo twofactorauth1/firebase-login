@@ -214,7 +214,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Integrations'
-        }
+        },
+        resolve: loadSequence('integrationsCtrl', 'socialConfigService')
     }).state('app.support', {
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',
