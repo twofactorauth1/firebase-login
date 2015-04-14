@@ -80,7 +80,11 @@ var socialconfig = $$.m.ModelBase.extend({
         return accounts;
     },
 
-
+    getTrackedAccountById: function(id) {
+        var account = null;
+        account = _.find(this.attributes.trackedAccounts, function(_account){return _account.id === id});
+        return account;
+    },
 
 
     initialize: function(options) {
