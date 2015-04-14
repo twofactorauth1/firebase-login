@@ -489,6 +489,7 @@ div[data-type='campaign'] .inner-page .overlay {
 .editing .features-wrap .feature:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -20px;
 }
 .editing .features-wrap .feature:hover .delete-feature .btn-delete-feature {
   background: rgba(0, 0, 0, 0.5);
@@ -552,7 +553,10 @@ div[data-type='campaign'] .inner-page .overlay {
   font-size: 14px;
 }
 .feature-list-v1 .feature-single {
-  transition: none !important;
+  transition: none!important;
+}
+.feature-list-v1 .feature-single img {
+  max-width: 100%;
 }
 .feature-list-v1 div[data-class="feature-list"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
@@ -601,6 +605,12 @@ div[data-type='campaign'] .inner-page .overlay {
   background-repeat: no-repeat;
   background-position: fixed;
 }
+.feature-list-v2 img {
+  max-width: 100%;
+}
+.editing .features-wrap .feature:hover .add-addtional {
+  bottom: -20px;
+}
 /********** Features list v3 **********/
 .feature-list-v3 .feature-list-title {
   text-align: center;
@@ -648,6 +658,12 @@ div[data-type='campaign'] .inner-page .overlay {
   line-height: 14px;
   margin-bottom: 15px;
   font-size: 14px;
+}
+.feature-list-v3 .feature-single img {
+  max-width: 100%;
+}
+.editing .features-wrap .feature:hover .add-addtional {
+  bottom: -20px;
 }
 .feature-list-v4 {
   /* fix firefox responsive images */
@@ -745,6 +761,9 @@ div[data-type='campaign'] .inner-page .overlay {
   border-bottom: 3px solid #e5e6e1;
   padding: 15px;
 }
+.feature-list-v4 img {
+  max-width: 100%;
+}
 /********** Topbar **********/
 .top-bar-v1 .navbar {
   min-height: 50px;
@@ -825,6 +844,7 @@ div[data-type='campaign'] .inner-page .overlay {
 .navbar-brand {
   max-width: 100%!important;
   margin: 5px auto!important;
+  height: auto;
 }
 .navbar-toggle {
   margin-top: 20px;
@@ -878,13 +898,14 @@ ul.nav {
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
-  height: 150px;
+  min-height: 150px;
 }
 .navigation-v2 .navbar .navbar-header .navbar-toggle {
   margin-top: 50px;
 }
 .navigation-v2 .navbar .navbar-brand {
   margin: 25px auto!important;
+  height: auto;
 }
 .navigation-v2 .navbar ul.navbar-nav {
   width: 100%;
@@ -947,6 +968,7 @@ ul.nav {
 .navigation-v3 .navbar-brand {
   min-width: 200px;
   width: 100%;
+  height: auto;
 }
 .navigation-v3 .navbar-nav {
   width: 100%;
@@ -963,7 +985,7 @@ ul.nav {
   border-radius: 0px;
 }
 .navigation-v3 .navbar li {
-  height: 125px;
+  min-height: 125px;
 }
 .navigation-v3 .navbar .nav > li > a {
   float: none;
@@ -1681,6 +1703,9 @@ contenthover a {
 .editing .testimonials-v1 .testimonial-wrap .delete-single-testimonial .btn-delete-single-testimonial {
   display: none;
 }
+.editing .testimonials-v1 .testimonial-wrap div.editable:empty:not(:focus):before {
+  content: attr(data-text);
+}
 .testimonials-v1 div[data-class="testimonials"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
@@ -1755,6 +1780,9 @@ contenthover a {
 }
 .editing .testimonials-v2 .testimonial-wrap .delete-single-testimonial .btn-delete-single-testimonial {
   display: none;
+}
+.editing .testimonials-v2 .testimonial-wrap div.editable:empty:not(:focus):before {
+  content: attr(data-text);
 }
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
@@ -2648,6 +2676,9 @@ div[data-type=single-post] .container {
   display: inline-block;
   padding-left: 5px;
 }
+.single-post-v1 .btn-social-icon {
+  border-radius: 50% !important;
+}
 .single-blog .blog-meta {
   margin-top: 15px;
   margin-bottom: 30px;
@@ -2675,6 +2706,12 @@ div[data-type=single-post] .container {
   font-style: italic;
   padding: 0 5px 7px 4px;
   margin: 0;
+}
+.single-blog .single-post-publish-date {
+  padding: 0px 5px 10px 0px !important;
+}
+.single-blog .single-post-author {
+  padding-bottom: 10px;
 }
 h2.blog-title {
   padding-bottom: 0px!important;
@@ -2715,6 +2752,18 @@ div[data-class="blog"] .single-blog {
   border-bottom: 5px solid #efa022!important;
   color: #ffffff;
 }
+.editing .single-post-title {
+  padding-bottom: 5px;
+}
+.editing .single-post-publish-date {
+  padding: 0px 5px 10px 0px !important;
+}
+.editing .single-post-author,
+.editing .single-post-tags,
+.editing .single-post-content,
+.editing .single-post-category {
+  padding-bottom: 10px;
+}
 div[data-type=blog] .container {
   width: auto;
   padding: 0;
@@ -2739,6 +2788,7 @@ div[data-type=blog] .container {
 }
 #sidebar {
   padding: 20px;
+  padding-right: 0px;
 }
 #sidebar .fa {
   background: #47b1cc;
@@ -3031,9 +3081,6 @@ div[data-type=blog] .container {
   -moz-animation: arrowBounce 2.5s infinite;
   -ms-animation: arrowBounce 2.5s infinite;
   animation: arrowBounce 2.5s infinite;
-}
-div[data-type="coming-soon"] .component-inner {
-  background: rgba(255, 255, 255, 0.9);
 }
 .editing .image-wrap:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
