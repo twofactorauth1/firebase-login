@@ -526,78 +526,78 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         });
 
         $scope.updateContactUsMap = function(component) {
-                var matchingContact = _.find($scope.contactDetails, function(item) {
+            var matchingContact = _.find($scope.contactDetails, function(item) {
+                return item.contactId == component._id
+            })
+
+            if (!matchingContact) {
+
+                $scope.contactDetails.push({
+                    contactId: component._id,
+                    contactPhone: angular.copy(component.contact.phone),
+                    geo_address_string: $scope.stringifyAddress(component.location)
+                });
+                matchingContact = _.find($scope.contactDetails, function(item) {
                     return item.contactId == component._id
-                })
+                });
 
-                if (!matchingContact) {
+            } else {
+                matchingContact.contactPhone = angular.copy(component.contact.phone);
+                matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
+            }
 
-                    $scope.contactDetails.push({
-                        contactId: component._id,
-                        contactPhone: angular.copy(component.contact.phone),
-                        geo_address_string: $scope.stringifyAddress(component.location)
-                    });
-                    matchingContact = _.find($scope.contactDetails, function(item) {
-                        return item.contactId == component._id
-                    });
-
-                } else {
-                    matchingContact.contactPhone = angular.copy(component.contact.phone);
-                    matchingContact.geo_address_string = $scope.stringifyAddress(component.location);
-                }
-
-                if (matchingContact.geo_address_string == "" && that.account.business.addresses.length) {
-                    if (that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
-                        matchingContact.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
-                }
-                if (!component.contact.phone && that.account.business.phones.length)
-                    matchingContact.contactPhone = that.account.business.phones[0].number;
-                if (component.location.lat && component.location.lat && matchingContact.geo_address_string) {
-                    angular.extend($scope, {
-                        mapLocation: {
+            if (matchingContact.geo_address_string == "" && that.account.business.addresses.length) {
+                if (that.account.business.addresses[0].address || that.account.business.addresses[0].address2)
+                    matchingContact.geo_address_string = $scope.stringifyAddress(that.account.business.addresses[0]);
+            }
+            if (!component.contact.phone && that.account.business.phones.length)
+                matchingContact.contactPhone = that.account.business.phones[0].number;
+            if (component.location.lat && component.location.lat && matchingContact.geo_address_string) {
+                angular.extend($scope, {
+                    mapLocation: {
+                        lat: parseFloat(component.location.lat),
+                        lng: parseFloat(component.location.lon),
+                        zoom: 10
+                    },
+                    markers: {
+                        mainMarker: {
                             lat: parseFloat(component.location.lat),
                             lng: parseFloat(component.location.lon),
-                            zoom: 10
-                        },
-                        markers: {
-                            mainMarker: {
+                            focus: false,
+                            message: matchingContact.geo_address_string,
+                            draggable: false
+                        }
+                    }
+                });
+                leafletData.getMap('leafletmap').then(function(map) {
+                    $timeout(function() {
+                        map.invalidateSize();
+                    }, 500);
+                });
+            } else {
+                customerService.getGeoSearchAddress($scope.stringifyAddress(component.location), function(data) {
+                    if (data.lat && data.lon) {
+                        component.location.lat = data.lat;
+                        component.location.lon = data.lon;
+                        angular.extend($scope, {
+                            mapLocation: {
                                 lat: parseFloat(component.location.lat),
                                 lng: parseFloat(component.location.lon),
-                                focus: false,
-                                message: matchingContact.geo_address_string,
-                                draggable: false
-                            }
-                        }
-                    });
-                    leafletData.getMap('leafletmap').then(function(map) {
-                        $timeout(function() {
-                            map.invalidateSize();
-                        }, 500);
-                    });
-                } else {
-                    customerService.getGeoSearchAddress($scope.stringifyAddress(component.location), function(data) {
-                        if (data.lat && data.lon) {
-                            component.location.lat = data.lat;
-                            component.location.lon = data.lon;
-                            angular.extend($scope, {
-                                mapLocation: {
+                                zoom: 10
+                            },
+                            markers: {
+                                mainMarker: {
                                     lat: parseFloat(component.location.lat),
                                     lng: parseFloat(component.location.lon),
-                                    zoom: 10
-                                },
-                                markers: {
-                                    mainMarker: {
-                                        lat: parseFloat(component.location.lat),
-                                        lng: parseFloat(component.location.lon),
-                                        focus: false,
-                                        message: matchingContact.geo_address_string,
-                                        draggable: false
-                                    }
+                                    focus: false,
+                                    message: matchingContact.geo_address_string,
+                                    draggable: false
                                 }
-                            });
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
+                });
+            }
         };
         /********** END MAP RELATED **********/
         $scope.sharePost = function(post, type) {

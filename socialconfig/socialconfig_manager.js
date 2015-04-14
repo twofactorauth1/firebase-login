@@ -78,6 +78,31 @@ module.exports = {
                 var socialConfig = new $$.m.SocialConfig({accountId:accountId});
                 return self.createSocialConfig(socialConfig, fn);
             } else {
+
+                //add the tracked objects properly
+                _.each(value.get('trackedObjects'), function(obj){
+                    if(value.getTrackedAccountById(obj.socialId)) {
+                        var trackedAccount = value.getTrackedAccountById(obj.socialId);
+                        //make sure the tracked Objects has it
+                        trackedAccount.trackedObjects = trackedAccount.trackedObjects || [];
+                        if(_.contains(trackedAccount.trackedObjects, obj.type)) {
+                            //cool
+                        } else {
+                            trackedAccount.trackedObjects.push(obj.type);
+                        }
+                    } else {
+                        var socialAccount = value.getSocialAccountById(obj.socialId);
+                        socialAccount.trackedObjects = socialAccount.trackedObjects || [];
+                        if(_.contains(socialAccount.trackedObjects, obj.type)) {
+                            //cool
+                        } else {
+                            socialAccount.trackedObjects.push(obj.type);
+                        }
+                        value.get('trackedAccounts').push(socialAccount);
+                    }
+                });
+                //save it async
+                socialconfigDao.saveOrUpdate(value, function(err, value){});
                 log.debug('<< getSocialConfig');
                 return fn(null, value);
             }
@@ -464,7 +489,7 @@ module.exports = {
             var trackedAccounts = config.get('trackedAccounts') || [];
 
             var index = 0;
-            var trackedAccount = _.find(trackedAccounts, function(account){
+            var updatedTrackedAccount = _.find(trackedAccounts, function(account){
                 if(account.id === trackedAccount.id) {
                     return true;
                 } else {
@@ -472,7 +497,7 @@ module.exports = {
                     return false;
                 }
             });
-            trackedAccounts[index] = trackedAccount;
+            trackedAccounts[index] = updatedTrackedAccount;
 
             config.set('trackedAccounts', trackedAccounts);
             return self.updateSocialConfig(config, fn);
@@ -557,6 +582,44 @@ module.exports = {
                 return fn('Invalid social accountId', null);
             }
             facebookDao.getProfile(socialAccount.accessToken, socialAccount.socialId, fn);
+        });
+    },
+
+    shareFacebookLink: function(accountId, socialAccountId, url, picture, name, caption, description, fn) {
+        var self = this;
+        log.debug('>> getFacebookProfile');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            facebookDao.shareLinkWithToken(socialAccount.accessToken, socialAccount.socialId, url, picture, name,
+                caption, description, fn);
+        });
+    },
+
+    shareLinkedinLink: function(accountId, socialAccountId, url, picture, name, caption, description, fn) {
+        var self = this;
+        log.debug('>> getFacebookProfile');
+
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            linkedinDao.shareLinkWithToken(socialAccount.accessToken, socialAccount.socialId, url, picture, name,
+                caption, description, fn);
         });
     },
 

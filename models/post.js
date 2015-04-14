@@ -160,6 +160,9 @@ var post = $$.m.ModelBase.extend({
             }
         }
 
+        if(post.access_token) {
+            obj.page_access_token = post.access_token;
+        }
         this.set(obj);
         return this;
     },
