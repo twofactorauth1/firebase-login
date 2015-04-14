@@ -372,7 +372,7 @@ var dao = {
     },
 
     getTokenAdminPages: function(accessToken, socialId, since, until, limit, fn) {
-        var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count";
+        var key = "accounts?fields=id,about,country_page_likes,cover,description,likes,link,name,picture,talking_about_count,website,new_like_count,unread_message_count,unread_notif_count,unseen_message_count,access_token";
         return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
@@ -966,6 +966,36 @@ var dao = {
                 fn(res.error, null);
             } else {
                 self.log.debug('<< shareLink', res);
+                fn(null, res.id);
+            }
+        });
+    },
+
+    shareLinkWithToken: function(accessToken, socialId, url, picture, name, caption, description, fn) {
+
+        var self = this;
+        self.log.debug('>> shareLinkWithToken');
+
+        var urlOptions = {access_token: accessToken, link:url};
+        if(picture && picture.length > 0) {
+            urlOptions.picture = picture;
+        }
+        if(name && name.length > 0) {
+            urlOptions.name = name;
+        }
+        if(caption && caption.length > 0) {
+            urlOptions.caption = caption;
+        }
+        if(description && description.length > 0) {
+            urlOptions.description = description;
+        }
+
+        FB.api(socialId + '/feed', 'post', urlOptions, function(res){
+            if(!res || res.error) {
+                self.log.error('Error sharing post: ' + JSON.stringify(res.error));
+                fn(res.error, null);
+            } else {
+                self.log.debug('<< shareLinkWithToken', res);
                 fn(null, res.id);
             }
         });

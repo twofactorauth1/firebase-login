@@ -531,7 +531,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
             if (isAllowed !== true || !_.contains(req.user.getAllAccountIds(), self.accountId(req)) || !_.contains(req.user.getPermissionsForAccount(accountId), 'admin')) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 userManager.getUserAccounts(accountId, function(err, userAry){
                     if(err) {

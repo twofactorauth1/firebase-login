@@ -16,7 +16,7 @@
                             <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
                                 <span class="fa fa-{{network.icon}}"></span>
                             </a>
-                            <a ng-if="isEditing" href="#" data-index="{{$index}}" parent-data-index="{{$parent.$parent.$index}}" class="clickable-link btn-social-link"><span class="fa fa-{{network.icon}}"></span></a>
+                            <a ng-if="isEditing" href="#" data-index="{{$index}}" parent-data-index="{{$parent.$parent.$index}}" class="clickable-link btn-social-link btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
                         </li>
                     </ul>
                    <div ng-if="isEditing" class="add-addtional-team center">

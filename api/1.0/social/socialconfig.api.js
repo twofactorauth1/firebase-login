@@ -56,7 +56,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('facebook/:socialAccountId/post/:postId/comment'), this.isAuthApi.bind(this), this.addPostComment.bind(this));
         app.post(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.addPostLike.bind(this));
         app.delete(this.url('facebook/:socialAccountId/post/:postId/like'), this.isAuthApi.bind(this), this.deletePostLike.bind(this));
-
+        app.post(this.url('facebook/:socialAccountId/sharelink'), this.isAuthApi.bind(this), this.shareFacebookLink.bind(this));
 
 
         /*
@@ -80,6 +80,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('google/:socialAccountId/groups'), this.isAuthApi.bind(this), this.getGoogleGroups.bind(this));
         app.get(this.url('linkedin/:socialAccountId/importcontacts'), this.isAuthApi.bind(this), this.getLinkedinContacts.bind(this));
 
+
+        app.post(this.url('linkedin/:socialAccountId/sharelink'), this.isAuthApi.bind(this), this.shareLinkedinLink.bind(this));
 
         /*
          * Putting this at the end so we don't mess with other api calls.
@@ -464,6 +466,31 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    shareFacebookLink: function(req, resp) {
+        var self = this;
+        self.log.debug('>> shareFacebookLink');
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        var url = req.body.url;
+        var picture = req.body.picture;
+        var name = req.body.name;
+        var caption = req.body.caption;
+        var description = req.body.description;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.shareFacebookLink(accountId, socialAccountId, url, picture, name, caption,
+                    description, function(err, value){
+                        self.log.debug('<< shareFacebookLink');
+                        self.sendResultOrError(resp, err, value, "Error creating post");
+                    });
+            }
+        });
+    },
+
     deleteFacebookPost: function(req, resp) {
         var self = this;
         self.log.debug('>> deleteFacebookPost');
@@ -846,6 +873,31 @@ _.extend(api.prototype, baseApi.prototype, {
               });
           }
       });
+    },
+
+    shareLinkedinLink: function(req, resp) {
+        var self = this;
+        self.log.debug('>> shareLinkedinLink');
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+
+        var url = req.body.url;
+        var picture = req.body.picture;
+        var name = req.body.name;
+        var caption = req.body.caption;
+        var description = req.body.description;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.shareLinkedinLink(accountId, socialAccountId, url, picture, name, caption,
+                    description, function(err, value){
+                        self.log.debug('<< shareLinkedinLink');
+                        self.sendResultOrError(resp, err, value, "Error creating post");
+                    });
+            }
+        });
     }
 
 });
