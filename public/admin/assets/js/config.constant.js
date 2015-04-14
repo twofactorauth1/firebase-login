@@ -81,6 +81,102 @@ app.constant('contactConstant', {
     }
 });
 
+app.constant('userConstant', {
+    credential_types: {
+        LOCAL: "lo",
+        FACEBOOK: "fb",
+        TWITTER: "tw",
+        LINKEDIN: "li",
+        GOOGLE: "go",
+        FULL_CONTACT: "fc",
+    },
+
+    detail_types: {
+        LOCAL: "lo",
+        FACEBOOK: "fb",
+        TWITTER: "tw",
+        LINKEDIN: "li",
+        GOOGLE: "go",
+        FULL_CONTACT: "fc",
+    },
+
+    contact_types: {
+        CUSTOMER: "cu",
+        COLLEAGUE: "co",
+        FRIEND: "fr",
+        MEMBER: "mb",
+        FAMILY: "fa",
+        ADMIN: "ad",
+        LEAD: 'ld',
+        OTHER: "ot",
+
+        dp: [{
+            label: "Customer",
+            data: "cu"
+        }, {
+            label: "Colleague",
+            data: "co"
+        }, {
+            label: "Friend",
+            data: "fr"
+        }, {
+            label: "Member",
+            data: "mb"
+        }, {
+            label: "Family",
+            data: "fa"
+        }, {
+            label: "Admin",
+            data: "ad"
+        }, {
+            label: 'Lead',
+            data: 'ld'
+        }, {
+            label: "Other",
+            data: "ot"
+        }]
+    },
+
+    phone_types: {
+        MOBILE: "m",
+        HOME: "h",
+        WORK: "w",
+
+        dp: [{
+            label: "mobile",
+            data: "m"
+        }, {
+            label: "home",
+            data: "h"
+        }, {
+            label: "work",
+            data: "w"
+        }]
+    },
+
+    device_types: {
+        scale: "2net_scale",
+        HOME: "h",
+        WORK: "w",
+
+        dp: [{
+            label: "2net_scale",
+            data: "2net_scale"
+        }, {
+            label: "home",
+            data: "h"
+        }, {
+            label: "work",
+            data: "w"
+        }]
+    },
+
+    activity_types: {
+        PHONE: "p",
+        EMAIL: "e"
+    }
+});
+
 app.constant('ENV', {
     name: 'development',
     stripeKey: 'pk_test_EuZhZHVourE3RaRxELJaYEya',
@@ -120,6 +216,7 @@ app.constant('JS_REQUIRES', {
         'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js'],
         'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
         'uuid': '../js/libs_misc/uuid.js',
+        'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
 
         //*** Controllers
         'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',

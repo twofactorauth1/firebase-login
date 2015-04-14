@@ -17,28 +17,28 @@
                 <div class="social-icons">
                     <ul>
                         <li class="social-twitter" tooltip="Twitter" tooltip-placement="top">
-                            <a target="_blank" href="#">
+                            <a href="#" ng-click="socailRedirect('Twitter');">
                                             Twitter
                                         </a>
                         </li>
                         <li class="social-facebook" tooltip="Facebook" tooltip-placement="top">
-                            <a target="_blank" href="#">
+                            <a ng-click="socailRedirect('Facebook');" href="#">
                                             Facebook
                                         </a>
                         </li>
                         <li class="social-google" tooltip="Google" tooltip-placement="top">
-                            <a target="_blank" href="#">
+                            <a ng-click="socailRedirect('Google');" href="#">
                                             Google+
                                         </a>
                         </li>
                         <li class="social-linkedin" tooltip="LinkedIn" tooltip-placement="top">
-                            <a target="_blank" href="#">
+                            <a ng-click="socailRedirect('LinkedIn');" href="#">
                                             LinkedIn
                                         </a>
                         </li>
-                        <li class="social-youtube" tooltip="YouTube" tooltip-placement="top">
-                            <a target="_blank" href="#">
-                                            YouTube
+                        <li class="social-stripe" tooltip="Stripe" tooltip-placement="top">
+                            <a href="/redirect/?next={{currentHost}}/stripe/connect&socialNetwork=stripe">
+                                            Stripe
                                         </a>
                         </li>
                     </ul>
@@ -46,33 +46,33 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12">
-        <div class="col-sm-6 col-md-4 col-lg-3" ng-repeat="sa in socialAccounts| filter: socialFilter">
-            <div class="thumbnail">
-                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
-                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
-                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.LINKEDIN">
-                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/twit-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.TWITTER">
-                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" alt="..." ng-show="sa.type==credentialTypes.STRIPE">
-                <div class="caption">
-                    <h3 ng-show="sa.type==credentialTypes.FACEBOOK">Facebook</h3>
-                    <h3 ng-show="sa.type==credentialTypes.GOOGLE">Google +</h3>
-                    <h3 ng-show="sa.type==credentialTypes.LINKEDIN">Linkedin</h3>
-                    <h3 ng-show="sa.type==credentialTypes.TWITTER">Twitter</h3>
-                    <h3 ng-show="sa.type==credentialTypes.STRIPE">Stripe</h3>
-                    <div class="connected">
-                        <span>You are logged in as:</span>
-                        <div class="clearfix margin-bottom-5"></div>
-                        <img ng-src="{{sa.image}}" class="img-circle" />
-                        <span>{{sa.username}}</span>
-                    </div>
-                    <div class="btn-group btn-group-justified margin-top-5">
-                        <div class="btn-group">
-                            <button class="btn btn-danger btn-block btn-o btn-disconnect-{{sa.id}}" role="button" confirm-click2-confirm="deleteSocialFn(sa.id)" confirm-click2 confirm-click2-placement="top" confirm-click2-btn-ok-label="'Disconnect'">
-                                <span class="fa fa-trash-o"></span>Disconnect</button>
+    <div class="col-sm-12 row">
+        <div class="col-sm-6 col-md-4 col-lg-3 margin-top-15" ng-repeat="sa in socialAccounts| filter: socialFilter">
+            <div class="thumbnail padding-10">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.LINKEDIN">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/twit-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.TWITTER">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/stripe-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.STRIPE">
+                <div class="caption no-padding">
+                    <fieldset class="margin-bottom-0 padding-10">
+                        <legend>
+                            Connected As
+                        </legend>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img ng-src="{{sa.image}}" class="img-circle" width="35" />
+                                <span class="text-bold margin-left-5">{{sa.username}}</span>
+                                <div class="btn-group btn-group-justified margin-top-10">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="disconnectSocial(sa.id)">
+                                            <span>Disconnect</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
+                    </fieldset>
                 </div>
             </div>
         </div>
