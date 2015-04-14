@@ -3,7 +3,7 @@
  * service for website
  */
 (function(angular) {
-	app.service('WebsiteService', function ($http) {
+	app.service('WebsiteService', function($http) {
 		var baseUrl = '/api/1.0/';
 		this.editPageHandle = null;
 
@@ -15,8 +15,8 @@
 	      this.editPageHandle = handle;
 	    };
 
-		this.getWebsite = function (websiteID, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId].join('/');
+		this.getWebsite = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);

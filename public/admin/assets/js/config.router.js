@@ -25,13 +25,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     // APPLICATION ROUTES
     // -----------------------------------
     // For any unmatched url, redirect to /app/dashboard
-    $urlRouterProvider.otherwise("/app/dashboard");
+    $urlRouterProvider.otherwise("/dashboard");
     //
     // Set up the states
     $stateProvider.state('app', {
-        url: "/app",
+        url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -46,8 +46,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: '<div ui-view class="fade-in-up"></div>',
         title: 'Website',
         ncyBreadcrumb: {
-            label: 'Website'
+            label: 'Website',
+            skip: true
         }
+    }).state('app.website.analytics', {
+        url: '/site-analytics',
+        templateUrl: "assets/views/site-analytics.html",
+        title: 'Site Analytics',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Site Analytics'
+        },
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "assets/views/pages.html",
@@ -56,25 +66,36 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Pages'
         },
-        resolve: loadSequence('pagesCtrl', 'userService', 'websiteService')
-    }).state('app.website.pages', {
-        url: '/pages',
-        templateUrl: "assets/views/pages.html",
-        title: 'Pages',
+        resolve: loadSequence('pagesCtrl', 'userService')
+    }).state('app.website.posts', {
+        url: '/posts',
+        templateUrl: "assets/views/posts.html",
+        title: 'Posts',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Pages'
+            label: 'Posts'
         },
-        resolve: loadSequence('pagesCtrl', 'userService', 'websiteService')
-    }).state('app.website.pages.single', {
-        url: '/:id',
-        templateUrl: "assets/views/page-detail.html",
+        resolve: loadSequence('postsCtrl', 'userService')
+    }).state('app.website.singlepage', {
+        url: '/pages/:id',
+        templateUrl: "assets/views/editor.html",
         title: 'Page Single',
         icon: 'ti-layout-media-left-alt',
+        controller: 'EditorCtrl',
         ncyBreadcrumb: {
-            label: 'Single Page'
+            label: '{{breadcrumbTitle}}',
+            parent: 'app.website.pages'
         },
-        resolve: loadSequence('pageDetailCtrl', 'websiteService')
+        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable')
+    }).state('app.website.singlepost', {
+        url: '/posts/:id',
+        templateUrl: "assets/views/editor.html",
+        title: 'Post Single',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Single Post'
+        },
+        resolve: loadSequence('editorCtrl', 'userService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
@@ -84,6 +105,17 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Customers'
         },
         resolve: loadSequence('customersCtrl', 'ImportContactService', 'customerService')
+    }).state('app.singleCustomer', {
+        url: '/customers/:contactId',
+        templateUrl: "assets/views/customer-detail.html",
+        title: 'Single Customer',
+        icon: 'ti-layout-media-left-alt',
+        controller: 'CustomerDetailCtrl',
+        ncyBreadcrumb: {
+            label: '{{customer.first}} {{customer.last}}',
+            parent: 'app.customers'
+        },
+        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -109,14 +141,25 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Product'
         },
         resolve: loadSequence('productsDetailCtrl', 'productService')
-    }).state('app.commerce.orders', {
+    }).state('app.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",
         title: 'Orders',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Orders'
-        }
+        },
+        resolve: loadSequence('ordersCtrl', 'orderService')
+    }).state('app.commerce.orderdetail', {
+        url: '/orders/:orderId',
+        templateUrl: "assets/views/order-detail.html",
+        title: 'Order Detail',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: '{{order._id}}',
+            parent: 'app.orders'
+        },
+        resolve: loadSequence('orderDetailCtrl', 'orderService', 'customerService', 'userService')
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -131,7 +174,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Social Feed'
-        }
+        },
+        resolve: loadSequence('socialFeedCtrl', 'socialConfigService')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "assets/views/campaigns.html",

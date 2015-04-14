@@ -1,0 +1,53 @@
+<div ng-controller="EditorCtrl" class="page-detail">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">{{ currentPage.title || single_post.post_title || 'Title'}}</h1>
+                <span class="mainDescription">There are currently {{currentPage.components.length}} components.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0">
+                    <div class="panel-body">
+                        <div class="col-md-7 col-md-offset-5 col-sm-8 col-sm-offset-4 col-xs-12">
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ currentPage.title" target="_blank">
+                                    <span>View Page</span>
+                                </button>
+                                <div class="visible-xs margin-bottom-15"></div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-help-alt btn-o">
+                                    <span>Page Info</span>
+                                </button>
+                                <div class="visible-xs margin-bottom-15"></div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-announcement btn-o">
+                                    <span>SEO</span>
+                                </button>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layers-alt btn-o">
+                                    <span>Dupicate</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!iframeHeight">
+        <div class="load1 csspinner bg-white" ct-fullheight ct-fullheight-exclusion="header, footer, #page-title, #page-actions"></div>
+    </div>
+    <iframe id="iframe-website" name="iframe-website" src="" ng-style="{'height':iframeHeight || '0px'}"></iframe>
+    <div data-ng-include=" 'assets/views/partials/component-settings-modal.html' "></div>
+    <div data-ng-include=" 'assets/views/partials/add-component-modal.html' "></div>
+</div>

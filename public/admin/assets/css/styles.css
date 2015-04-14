@@ -66,7 +66,7 @@ body {
   direction: ltr;
   overflow-x: hidden;
   height: 100%;
-  font-family: "Raleway", sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 13px;
   padding: 0;
   margin: 0;
@@ -395,7 +395,6 @@ h5.over-title {
   margin-top: -6px;
 }
 .navbar .navbar-header .menu-toggler {
-  margin-right: 60px;
   padding: 0 15px;
   font-size: 17px;
   color: #c8c7cc;
@@ -422,7 +421,7 @@ h5.over-title {
   border-top: none;
   background: #ffffff;
   padding-left: 15px !important;
-  padding-right: 15px !important;
+  padding-right: 15px;
   position: relative;
 }
 @media (min-width: 768px) {
@@ -2262,6 +2261,9 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 .margin-bottom-30 {
   margin-bottom: 30px !important;
 }
+.margin-top-neg-5 {
+  margin-top: -5px !important;
+}
 .margin-top-0 {
   margin-top: 0px !important;
 }
@@ -2378,6 +2380,30 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 }
 .height-350 {
   height: 350px !important;
+}
+.height-360 {
+  height: 360px !important;
+}
+.height-370 {
+  height: 370px !important;
+}
+.height-380 {
+  height: 380px !important;
+}
+.height-390 {
+  height: 390px !important;
+}
+.height-400 {
+  height: 400px !important;
+}
+.height-410 {
+  height: 410px !important;
+}
+.height-420 {
+  height: 420px !important;
+}
+.height-430 {
+  height: 430px !important;
 }
 .width-200 {
   width: 200px !important;
@@ -11614,6 +11640,7 @@ td.small-width {
 }
 .close {
   font-size: 35px;
+  margin-left: 10px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Maps
@@ -11987,6 +12014,21 @@ td.small-width {
   margin-top: 7px;
   color: #fcb040;
 }
+.dropdown-menu > li > span {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+.dropdown-menu > li > span:focus,
+.dropdown-menu > li > span:hover {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
 /* ---------------------------------------------------------------------- */
 /*  Pages
 /* ---------------------------------------------------------------------- */
@@ -11996,6 +12038,51 @@ td.small-width {
 }
 .pages-modal .tab-content h1 {
   line-height: 65px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Page Detail
+/* ---------------------------------------------------------------------- */
+.page-detail {
+  margin: 0 -15px !important;
+}
+.page-detail #iframe-website {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+/* ---------------------------------------------------------------------- */
+/*  Customer Detail
+/* ---------------------------------------------------------------------- */
+.customer-detail .no-location {
+  line-height: 155px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Order Detail
+/* ---------------------------------------------------------------------- */
+.order-detail .dropdown-menu {
+  max-height: 200px;
+  overflow: auto;
+}
+.order-detail .order-notes {
+  padding: 0;
+  margin-bottom: 0;
+}
+.order-detail .order-notes li {
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 10px;
+}
+.order-detail .order-notes li:last-child {
+  border-bottom: none;
+}
+/* ---------------------------------------------------------------------- */
+/*  Site Analytics
+/* ---------------------------------------------------------------------- */
+.site-analytics .rate strong {
+  font-size: 18px;
+}
+.site-analytics .rate .value {
+  margin-right: 10px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Posts
@@ -12043,7 +12130,6 @@ table.grid tbody tr {
   float: left;
   margin: 5px;
   background: white!important;
-  height: 235px;
   border-radius: 5px;
   border-bottom: 3px solid #eeeeee;
 }
@@ -12079,4 +12165,33 @@ table.grid tbody td strong {
   table.grid tbody tr {
     width: 24%!important;
   }
+}
+.as-sortable-drag {
+  opacity: .8;
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  background: #f6f6f6!important;
+  color: #6a6a6a;
+  text-align: left;
+}
+.as-sortable-drag h4 {
+  margin-left: 0;
+}
+#reorderNavBarContainer .as-sortable-placeholder {
+  background: #eeeeee;
+  border: 1px dashed #c2c2c2!important;
+  margin-bottom: 10px;
+}
+#reorderNavBarContainer ul {
+  list-style: none;
+  padding-left: 0;
+  text-transform: capitalize;
+}
+#reorderNavBarContainer ul li,
+#reorderNavBarContainer ul .as-sortable-item {
+  position: relative;
+  border: 1px solid #cccccc!important;
+  border-radius: 5px;
+  background: #f6f6f6!important;
+  color: #6a6a6a;
 }

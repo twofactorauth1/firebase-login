@@ -82,7 +82,15 @@ var order = $$.m.ModelBase.extend({
                 "state" : "CA"
                 */
             },
-            "note" : "",
+            "notes" : [
+                /*
+                {
+                    "note" : "Order status changed from processing to completed",
+                    "user_id" : 1,
+                    "date" : ISODate("2015-04-13T12:02:18.055Z")
+                }
+                */
+            ],
             created: {
                 date: new Date(),
                 by: null

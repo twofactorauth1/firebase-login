@@ -1,5 +1,9 @@
-define(['app', 'keenService'], function(app) {
-    app.register.service('ChartAnalyticsService', ['keenService', function(keenService) {
+'use strict';
+/**
+ * service for chart analytics
+ */
+(function(angular) {
+    app.service('ChartAnalyticsService', ['KeenService', function(KeenService) {
 
         //common functions
 
@@ -225,63 +229,6 @@ define(['app', 'keenService'], function(app) {
             return strOutput || false;
         };
 
-        // $scope.toUTC = function(str) {
-        //     return Date.UTC(str.substring(0, 4), str.substring(4, 6) - 1, str.substring(6, 8));
-        // };
-
-        // $scope.countDuplicates = function(array_elements) {
-        //     array_elements.sort();
-        //     var duplicates = [];
-        //     var current = null;
-        //     var cnt = 0;
-        //     for (var i = 0; i < array_elements.length; i++) {
-        //         var subObj = {};
-        //         if (array_elements[i] != current) {
-        //             if (cnt > 0) {
-        //                 subObj.depth = current;
-        //                 subObj.count = cnt;
-        //                 duplicates.push(subObj);
-        //             }
-        //             current = array_elements[i];
-        //             cnt = 1;
-        //         } else {
-        //             cnt++;
-        //         }
-        //     }
-
-        //     //fill in blank numbers and anything > 20 add together
-        //     var over20count = 0;
-        //     duplicates = _.sortBy( duplicates, 'depth' );
-
-        //     for (var k = 0; k < 20; k++) {
-        //         var subObj = {};
-
-        //         if (duplicates[k]){
-
-
-        //             // if(array_elements.indexOf(duplicates[k].depth) === -1 && duplicates[k].depth < 20) {
-        //             //     subObj.depth = k+1;
-        //             //     subObj.count = 0;
-        //             //     duplicates.push(subObj);
-        //             // } else if (duplicates[k].depth >= 20) {
-        //             //     over20count += duplicates[k].count;
-        //             //     duplicates.splice(k,1);
-        //             // }
-        //         }
-        //     };
-
-        //     if (over20count > 0) {
-        //         var subObj = {};
-        //         subObj.depth = 20;
-        //         subObj.count = over20count;
-        //         duplicates.push(subObj);
-        //     }
-
-        //     duplicates = _.sortBy( duplicates, 'depth' );
-
-        //     return duplicates;
-        // };
-
         //local variables
         var client;
         /*
@@ -456,11 +403,6 @@ define(['app', 'keenService'], function(app) {
             queryData.bouncesReport = new Keen.Query("count_unique", {
                 eventCollection: "session_data",
                 targetProperty: "session_id",
-                filters: [{
-                    "property_name": "page_length",
-                    "operator": "eq",
-                    "property_value": 1
-                }],
                 timeframe: {
                     "start": date.startDate,
                     "end": date.endDate
@@ -470,17 +412,17 @@ define(['app', 'keenService'], function(app) {
                     "property_name": "referrer.domain",
                     "operator": "eq",
                     "property_value": hostname
+                },
+                {
+                    "property_name": "page_length",
+                    "operator": "eq",
+                    "property_value": 1
                 }]
             });
 
             queryData.bouncesPreviousReport = new Keen.Query("count_unique", {
                 eventCollection: "session_data",
                 targetProperty: "session_id",
-                filters: [{
-                    "property_name": "page_length",
-                    "operator": "eq",
-                    "property_value": 1
-                }],
                 timeframe: {
                     "start": date.startDate,
                     "end": date.endDate
@@ -489,6 +431,11 @@ define(['app', 'keenService'], function(app) {
                     "property_name": "referrer.domain",
                     "operator": "eq",
                     "property_value": hostname
+                },
+                {
+                    "property_name": "page_length",
+                    "operator": "eq",
+                    "property_value": 1
                 }]
             });
 
@@ -574,12 +521,13 @@ define(['app', 'keenService'], function(app) {
         this.runReports = function(date, account, fn) {
 
             var self = this;
-            var hostname = window.location.hostname;
+            var hostname = 'indigenous.io';
+            //window.location.hostname
             if(account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
             }
             
-            keenService.keenClient(function(client) {
+            KeenService.keenClient(function(client) {
                 var queryData = self.queryReports(date, hostname);
                 client.run([
                     queryData.visitorLocations,
@@ -608,7 +556,8 @@ define(['app', 'keenService'], function(app) {
         this.runPagedReports = function(date, account, fn) {
             var self = this;
             var filters = [];
-            var hostname = window.location.hostname;
+            var hostname = 'www.indigenous.io';
+            //window.location.hostname
             if(account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
             }
@@ -662,7 +611,7 @@ define(['app', 'keenService'], function(app) {
                 filters: filters
             };
 
-            keenService.multiAnalysis(params2, function(multidata) {
+            KeenService.multiAnalysis(params2, function(multidata) {
                 var formattedTopPages = [];
                 var pagedformattedTopPages;
 
@@ -756,7 +705,7 @@ define(['app', 'keenService'], function(app) {
                     },
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                     title: {
-                        text: ''
+                        text: null
                     },
                     subtitle: {
                         text: ''
@@ -816,7 +765,8 @@ define(['app', 'keenService'], function(app) {
             var timeonSiteConfig = {
                 options: {
                     chart: {
-                        spacing: [25, 25, 25, 25]
+                        spacing: [25, 25, 25, 25],
+                        height: 360
                     },
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                     title: {
@@ -961,163 +911,12 @@ define(['app', 'keenService'], function(app) {
 
         this.visitorLocations = function(locationData, highchartsData) {
 
-            var data = [{
-                "value": 438,
-                "code": "NJ"
-            }, {
-                "value": 387.35,
-                "code": "RI"
-            }, {
-                "value": 312.68,
-                "code": "MA"
-            }, {
-                "value": 271.4,
-                "code": "CT"
-            }, {
-                "value": 209.23,
-                "code": "MD"
-            }, {
-                "value": 195.18,
-                "code": "NY"
-            }, {
-                "value": 154.87,
-                "code": "DE"
-            }, {
-                "value": 114.43,
-                "code": "FL"
-            }, {
-                "value": 107.05,
-                "code": "OH"
-            }, {
-                "value": 105.8,
-                "code": "PA"
-            }, {
-                "value": 86.27,
-                "code": "IL"
-            }, {
-                "value": 83.85,
-                "code": "CA"
-            }, {
-                "value": 72.83,
-                "code": "HI"
-            }, {
-                "value": 69.03,
-                "code": "VA"
-            }, {
-                "value": 67.55,
-                "code": "MI"
-            }, {
-                "value": 65.46,
-                "code": "IN"
-            }, {
-                "value": 63.8,
-                "code": "NC"
-            }, {
-                "value": 54.59,
-                "code": "GA"
-            }, {
-                "value": 53.29,
-                "code": "TN"
-            }, {
-                "value": 53.2,
-                "code": "NH"
-            }, {
-                "value": 51.45,
-                "code": "SC"
-            }, {
-                "value": 39.61,
-                "code": "LA"
-            }, {
-                "value": 39.28,
-                "code": "KY"
-            }, {
-                "value": 38.13,
-                "code": "WI"
-            }, {
-                "value": 34.2,
-                "code": "WA"
-            }, {
-                "value": 33.84,
-                "code": "AL"
-            }, {
-                "value": 31.36,
-                "code": "MO"
-            }, {
-                "value": 30.75,
-                "code": "TX"
-            }, {
-                "value": 29,
-                "code": "WV"
-            }, {
-                "value": 25.41,
-                "code": "VT"
-            }, {
-                "value": 23.86,
-                "code": "MN"
-            }, {
-                "value": 23.42,
-                "code": "MS"
-            }, {
-                "value": 20.22,
-                "code": "IA"
-            }, {
-                "value": 19.82,
-                "code": "AR"
-            }, {
-                "value": 19.4,
-                "code": "OK"
-            }, {
-                "value": 17.43,
-                "code": "AZ"
-            }, {
-                "value": 16.01,
-                "code": "CO"
-            }, {
-                "value": 15.95,
-                "code": "ME"
-            }, {
-                "value": 13.76,
-                "code": "OR"
-            }, {
-                "value": 12.69,
-                "code": "KS"
-            }, {
-                "value": 10.5,
-                "code": "UT"
-            }, {
-                "value": 8.6,
-                "code": "NE"
-            }, {
-                "value": 7.03,
-                "code": "NV"
-            }, {
-                "value": 6.04,
-                "code": "ID"
-            }, {
-                "value": 5.79,
-                "code": "NM"
-            }, {
-                "value": 3.84,
-                "code": "SD"
-            }, {
-                "value": 3.59,
-                "code": "ND"
-            }, {
-                "value": 2.39,
-                "code": "MT"
-            }, {
-                "value": 1.96,
-                "code": "WY"
-            }, {
-                "value": 0.42,
-                "code": "AK"
-            }];
-
             if($("#visitor_locations").length)
             {
                 var chart1 = new Highcharts.Map({
                 chart: {
-                    renderTo: 'visitor_locations'
+                    renderTo: 'visitor_locations',
+                    height: 360,
                 },
 
                 title: {
@@ -1173,4 +972,4 @@ define(['app', 'keenService'], function(app) {
         };
 
     }]);
-});
+})(angular);

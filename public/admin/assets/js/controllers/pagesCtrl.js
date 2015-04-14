@@ -122,7 +122,7 @@
         };
 
         $scope.viewSingle = function(page) {
-            window.location = '/admin/#/app/website/pages/' + page._id;
+            window.location = '/admin/#/website/pages/?pagehandle=' + page.handle;
         };
 
     }]);

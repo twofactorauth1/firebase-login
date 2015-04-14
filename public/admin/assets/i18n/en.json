@@ -58,6 +58,7 @@
             },
             "website": {
                 "MAIN": "Website",
+                "ANALYTICS": "Site Analytics",
                 "PAGES": "Pages",
                 "POSTS": "Posts"
             },

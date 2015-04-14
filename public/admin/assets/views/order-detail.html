@@ -1,0 +1,447 @@
+<div ng-controller="OrderDetailCtrl" class="order-detail">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">Order #: {{ order._id }}</h1>
+                <span class="mainDescription">This order is currently <span class="label label-default">{{order.status}}</span></span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <div class="container-fluid container-fullw bg-white margin-bottom-15">
+        <div class="btn-group" dropdown is-open="status.isopen">
+        	<button type="button" class="btn btn-wide btn-info btn-wide btn-o">
+                Duplicate
+            </button>
+            <button type="button" class="btn btn-wide btn-info btn-wide btn-o">
+                Refund
+            </button>
+            <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                Actions <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="#">Action</a>
+                </li>
+                <li>
+                    <a href="#">Another action</a>
+                </li>
+                <li>
+                    <a href="#">Something else here</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#">Separated link</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- start: YOUR CONTENT HERE -->
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-white" id="orderDetails">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title">Order <span class="text-bold">Details</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-body" collapse="orderDetails" ng-init="orderDetails=false">
+                    <div class="form-group">
+                        <label>
+                            Order Date
+                        </label>
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyy" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+										<button type="button" class="btn btn-default" ng-click="open($event)">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button> </span></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderStatus">
+                            Order Status
+                        </label>
+                        <select id="orderStatus" class="cs-select cs-skin-elastic" ng-model="newStatus" ng-change="statusUpdated()">
+                            <option value="pending_payment">Pending Payment</option>
+                            <option value="processing">Processing</option>
+                            <option value="on_hold">On Hold</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="refunded">Refunded</option>
+                            <option value="failed">Falied</option>
+                        </select>
+                    </div>
+                    <div class="form-group typeahead">
+                        <label for="form-field-select-1">
+                            Customer
+                        </label>
+                        <input type="text" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
+                    </div>
+                    <div class="form-group row margin-bottom-0">
+                        <div class="col-sm-6 col-xs-12">
+                            <fieldset class="padding-15 margin-bottom-0">
+                                <legend>
+                                    Billing Details <span class="fa" ng-init="billingEdit = false" ng-click="billingEdit = !billingEdit" ng-class="{'fa-edit': !billingEdit, 'fa-times': billingEdit}"></span>
+                                </legend>
+                                <div class="row margin-top-5" ng-if="billingEdit">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <button class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-first-name">
+                                            First
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-first-name" placeholder="First" ng-model="order.billing_address.first_name">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-last-name">
+                                            Last
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-last-name" placeholder="Last" ng-model="order.billing_address.last_name">
+                                    </div>
+                                    <div class="form-group col-sm-12">
+                                        <label for="billing-company">
+                                            Company
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-company" placeholder="Company" ng-model="order.billing_address.company">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-address-1">
+                                            Address 1
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-address-1" placeholder="Address 1" ng-model="order.billing_address.address_1">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-address-2">
+                                            Address 2
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-address-2" placeholder="Address 2" ng-model="order.billing_address.address_2">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-city">
+                                            City
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-city" placeholder="City" ng-model="order.billing_address.city">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-postcode">
+                                            Postcode
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-postcode" placeholder="Postcode" ng-model="order.billing_address.postcode">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-state">
+                                            State
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-state" placeholder="State" ng-model="order.billing_address.state">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-country">
+                                            Country
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-country" placeholder="Country" ng-model="order.billing_address.country">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-email">
+                                            Email
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-email" placeholder="Email" ng-model="order.billing_address.email">
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label for="billing-phone">
+                                            Phone
+                                        </label>
+                                        <input type="text" class="form-control" id="billing-phone" placeholder="Phone" ng-model="order.billing_address.phone">
+                                    </div>
+                                </div>
+                                <div class="margin-top-5" ng-if="!billingEdit">
+                                    <address>
+                                        <strong>{{order.billing_address.company}}</strong>
+                                        <br> {{order.billing_address.address_1}}, {{order.billing_address.address_2}}
+                                        <br> {{order.billing_address.city}}, {{order.billing_address.state}} {{order.billing_address.postcode}}
+                                        <br>
+                                        <span class="fa fa-phone"></span> {{order.billing_address.phone}}
+                                    </address>
+                                    <address class="margin-bottom-0">
+                                        <strong>{{order.billing_address.first_name}} {{order.billing_address.last_name}}</strong>
+                                        <br>
+                                        <span class="fa fa-envelope-o"></span>
+                                        <a href="mailto:#{{order.billing_address.email}}">
+											{{order.billing_address.email}}
+										</a>
+                                    </address>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col-sm-6 col-xs-12">
+                            <fieldset class="padding-15 margin-bottom-0">
+                                <legend>
+                                    Shipping Details <span class="fa" ng-init="shippingEdit = false" ng-click="shippingEdit = !shippingEdit" ng-class="{'fa-edit': !shippingEdit, 'fa-times': shippingEdit}"></span>
+                                </legend>
+                                <div class="row margin-top-5" ng-if="shippingEdit">
+                                    <div class="form-group col-sm-12">
+                                        <div class="checkbox clip-check check-primary col-sm-6 col-xs-12">
+                                            <input type="checkbox" id="sameAsBilling" ng-model="sameAsBilling">
+                                            <label for="sameAsBilling" class="text-bold">
+                                                Same As Billing
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-6 col-xs-12 padding-left-0 margin-bottom-15">
+                                            <button class="btn btn-info btn-o btn-wide pull-left" ng-click="customerSync('shipping')" ng-if="selectedCustomer">Customer Sync</button>
+                                        </div>
+                                    </div>
+                                    <div ng-if="!sameAsBilling">
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-first-name">
+                                                First
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-first-name" placeholder="First" ng-model="order.shipping_address.first_name">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-last-name">
+                                                Last
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-last-name" placeholder="Last" ng-model="order.shipping_address.last_name">
+                                        </div>
+                                        <div class="form-group col-sm-12">
+                                            <label for="shipping-company">
+                                                Company
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-company" placeholder="Company" ng-model="order.shipping_address.company">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-email">
+                                                Email
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-email" placeholder="Email" ng-model="order.shipping_address.email">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-phone">
+                                                Phone
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" ng-model="order.shipping_address.phone">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-address-1">
+                                                Address 1
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-address-1" placeholder="Address 1" ng-model="order.shipping_address.address_1">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-address-2">
+                                                Address 2
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-address-2" placeholder="Address 2" ng-model="order.shipping_address.address_2">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-city">
+                                                City
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-city" placeholder="City" ng-model="order.shipping_address.city">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-postcode">
+                                                Postcode
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-postcode" placeholder="Postcode" ng-model="order.shipping_address.postcode">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-state">
+                                                State
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-state" placeholder="State" ng-model="order.shipping_address.state">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-country">
+                                                Country
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-country" placeholder="Country" ng-model="order.shipping_address.country">
+                                        </div>
+                                    </div>
+                                    <div ng-if="sameAsBilling">
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-first-name">
+                                                First
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-first-name" placeholder="First" disabled="true" ng-model="order.billing_address.first_name">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-last-name">
+                                                Last
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-last-name" placeholder="Last" disabled="true" ng-model="order.billing_address.last_name">
+                                        </div>
+                                        <div class="form-group col-sm-12">
+                                            <label for="shipping-company">
+                                                Company
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-company" placeholder="Company" disabled="true" ng-model="order.billing_address.company">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-email">
+                                                Email
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-email" placeholder="Email" disabled="true" ng-model="order.billing_address.email">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-phone">
+                                                Phone
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" disabled="true" ng-model="order.billing_address.phone">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-address-1">
+                                                Address 1
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-address-1" placeholder="Address 1" disabled="true" ng-model="order.billing_address.address_1">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-address-2">
+                                                Address 2
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-address-2" placeholder="Address 2" disabled="true" ng-model="order.billing_address.address_2">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-city">
+                                                City
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-city" placeholder="City" disabled="true" ng-model="order.billing_address.city">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-postcode">
+                                                Postcode
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-postcode" placeholder="Postcode" disabled="true" ng-model="order.billing_address.postcode">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-state">
+                                                State
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-state" placeholder="State" disabled="true" ng-model="order.billing_address.state">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="shipping-country">
+                                                Country
+                                            </label>
+                                            <input type="text" class="form-control" id="shipping-country" placeholder="Country" disabled="true" ng-model="order.billing_address.country">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="margin-top-5" ng-if="!shippingEdit">
+                                    <address>
+                                        <strong>{{order.shipping_address.company}}</strong>
+                                        <br> {{order.shipping_address.address_1}}, {{order.shipping_address.address_2}}
+                                        <br> {{order.shipping_address.city}}, {{order.shipping_address.state}} {{order.shipping_address.postcode}}
+                                        <br>
+                                        <span class="fa fa-phone"></span> {{order.shipping_address.phone}}
+                                    </address>
+                                    <address class="margin-bottom-0">
+                                        <strong>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</strong>
+                                        <br>
+                                        <span class="fa fa-envelope-o"></span>
+                                        <a href="mailto:#{{order.shipping_address.email}}">
+                                            {{order.shipping_address.email}}
+                                        </a>
+                                    </address>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-white" id="orderItems">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title">Order <span class="text-bold">Items</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="orderItems" ng-init="orderItems=false">
+                    <div class="panel-body no-padding">
+                        <table st-table="displayedItems" class="table table-hover margin-bottom-0">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Item</th>
+                                    <th class="center">Cost</th>
+                                    <th class="center">Qty</th>
+                                    <th class="center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in order.line_items">
+                                    <td width="40">
+                                        <img src="{{item.product.icon}}" width="32" class="img-circle">
+                                    </td>
+                                    <td>
+                                        {{item.product.name}}
+                                    </td>
+                                    <td class="center">
+                                        <span>{{item.subtotal | currency}}</span>
+                                    </td>
+                                    <td class="center">
+                                        {{item.quantity}}
+                                    </td>
+                                    <td class="center">
+                                        {{item.total | currency}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                            <div class="panel panel-default panel-transparent">
+                                <div class="panel-body">
+                                	<p><span class="text-bold">Discount:</span> <span class="pull-right">$0.00</span></p>
+                                	<p><span class="text-bold">Shipping:</span> <span class="pull-right">$0.00</span></p>
+                                	<p><span class="text-bold">Total:</span> <span class="pull-right">$0.00</span></p>
+                                	<p class="text-danger"><span class="text-bold">Refunded:</span> <span class="pull-right">-$0.00</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer  border-light">
+                        Panel Footer
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-white" id="orderNotes">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title">Order <span class="text-bold">Notes</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="orderNotes" ng-init="orderNotes=false">
+                    <div class="panel-body no-padding">
+                        <ul class="order-notes height-330 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                            <li ng-repeat="note in order.notes" class="row">
+                                <div class="col-xs-2">
+                                    <img src="{{note.user.photo ? note.user.photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                                </div>
+                                <div class="col-xs-10">
+                                    <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
+                                    <span>{{note.note}}</span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <label for="newNote"> New Note </label>
+                        <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
+                        <button type="button" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
+                            <span>Add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: YOUR CONTENT HERE -->
+</div>
+<script type="text/ng-template" id="customTemplate.html">
+    <a>
+        <img ng-src="{{match.model.photo ? match.model.photo : '/admin/assets/images/default-user.png'}}" width="35">
+        <span bind-html-unsafe="match.model.first+' '+match.model.last | typeaheadHighlight:query"></span>
+    </a>
+</script>

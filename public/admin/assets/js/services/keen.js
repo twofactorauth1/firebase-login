@@ -1,5 +1,9 @@
-define(['app'], function(app) {
-    app.register.service('keenService', ['$http','ENV', function($http,ENV) {
+'use strict';
+/**
+ * service for keen
+ */
+(function(angular) {
+    app.service('KeenService', ['$http','ENV', function($http,ENV) {
         var baseUrl = 'https://api.keen.io/3.0/projects/';
         var readKey = ENV.keenReadKey;
         var writeKey = ENV.keenWriteKey;
@@ -46,4 +50,4 @@ define(['app'], function(app) {
         };
 
     }]);
-});
+})(angular);

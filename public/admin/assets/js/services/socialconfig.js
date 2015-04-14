@@ -1,5 +1,10 @@
-define(['app'], function(app) {
-  app.register.service('SocialConfigService', function($http) {
+'use strict';
+/**
+ * service for social config
+ */
+(function(angular) {
+  app.service('SocialConfigService', function($http) {
+    console.log('SocialConfigService >>>');
     var baseUrl = '/api/1.0/';
     this.getAllSocialConfig = function(fn) {
       var apiUrl = baseUrl + ['social', 'socialconfig'].join('/');
@@ -188,4 +193,4 @@ define(['app'], function(app) {
       });
     };
   })
-});
+})(angular);

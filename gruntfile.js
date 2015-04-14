@@ -96,6 +96,7 @@ module.exports = function(grunt) {
                     // '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
                     // '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ],
                     // '../indigeweb/public/css/angular-admin.css': [ 'public/less/angular-admin.less' ]
+                    '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
                     '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
                 }
             }
@@ -103,7 +104,7 @@ module.exports = function(grunt) {
 
         csssplit: {
             split_style: {
-              src: ['../indigeweb/public/css/style.default.css'],
+              src: ['../indigeweb/public/css/styles.css'],
               dest: '../indigeweb/public/css'
             }
         },
@@ -119,34 +120,13 @@ module.exports = function(grunt) {
                 }]*/
                 files: [
                     {
-                        'public/css/global_o.min.css': ['public/css/global_o.css']
+                        'public/admin/assets/css/styles.min.css': ['public/admin/assets/css/styles.css']
                     },
                     {
-                        'public/css/style.default_o.min.css': ['public/css/style.default_o.css']
+                        'public/admin/assets/css/plugins.min.css': ['public/admin/assets/css/plugins.css']
                     },
                     {
-                        'public/css/pages.min.css': ['public/css/pages.css']
-                    },
-                    {
-                        'public/css/style.inverse.min.css': ['public/css/style.inverse.css']
-                    },
-                    {
-                        'public/css/style.default.min.css': ['public/css/style.default.css']
-                    },
-                    {
-                        'public/css/site.min.css': ['public/css/site.css']
-                    },
-                    {
-                        'public/css/angular-admin.min.css': ['public/css/angular-admin.css']
-                    },
-                    {
-                        'public/css/pages.min.css': ['public/css/pages.css']
-                    },
-                    {
-                        'public/css/style.default_part_2.min.css': ['public/css/style.default_part_2.css']
-                    },
-                    {
-                        'public/css/style.default_part_1.min.css': ['public/css/style.default_part_1.css']
+                        'public/css/styles.min.css': ['public/css/styles.css']
                     }
                 ]
             }

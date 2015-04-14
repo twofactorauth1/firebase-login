@@ -3,8 +3,8 @@
  * service for customer
  */
 (function(angular) {
-    app.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService',
-        function($http, $cacheFactory, ImportContactService) {
+    app.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService', 'contactConstant',
+        function($http, $cacheFactory, ImportContactService, contactConstant) {
             var baseUrl = '/api/1.0/';
 
             this.getCache = function() {
@@ -144,7 +144,7 @@
             };
 
             this.contactLabel = function(contact) {
-                var contactTypes = $$.constants.contact.contact_types.dp;
+                var contactTypes = contactConstant.contact_types.dp;
                 var type = _.find(contactTypes, function(type) {
                     return type.data === contact.type;
                 });
@@ -287,7 +287,7 @@
             };
 
             this.getActivityTypes = function(fn) {
-                var activityTypes = $$.constants.contact.customer_activity_types.dp;
+                var activityTypes = contactConstant.customer_activity_types.dp;
                 fn(activityTypes);
             };
 

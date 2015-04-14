@@ -2,8 +2,8 @@
 /**
  * Clip-Two Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', 'cfpLoadingBar',
-function ($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, cfpLoadingBar) {
+app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', 'cfpLoadingBar', 'UserService',
+function ($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, cfpLoadingBar, UserService) {
 
     // Loading bar transition
     // -----------------------------------
@@ -15,7 +15,6 @@ function ($rootScope, $scope, $state, $translate, $localStorage, $window, $docum
 
     });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-
         //stop loading bar on stateChangeSuccess
         event.targetScope.$watch("$viewContentLoaded", function () {
 
@@ -141,4 +140,11 @@ function ($rootScope, $scope, $state, $translate, $localStorage, $window, $docum
     $win.on('resize', function () {
         $scope.$apply();
     });
+
+    // Top Bar User
+    // -----------------------------------
+    UserService.getUser(function(user) {
+        $scope.currentUser = user;
+    });
+
 }]);

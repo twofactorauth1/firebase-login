@@ -1,6 +1,6 @@
 <div ng-controller="PagesCtrl" class="pages">
     <!-- start: PAGE TITLE -->
-    <section id="page-title">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.website.PAGES">{{ mainTitle }}</h1>
@@ -12,87 +12,98 @@
     <!-- end: PAGE TITLE -->
     <!-- start: CONTENT -->
     <div st-table="displayedPages" st-safe-src="pages">
-        <div class="col-sm-12">
-            <div class="panel panel-transparent row margin-bottom-0">
-                <div class="panel-body">
-                    <form role="form" class="ng-pristine ng-valid row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <div class="col-xs-9">
-                                    <span class="input-icon">
-	                                    <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
-	                                    <i class="ti-search"></i>
-	                                </span>
+        <div class="container-fluid container-fullw bg-white ng-scope padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-7 col-sm-9">
+                                            <span class="input-icon">
+        	                                    <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+        	                                    <i class="ti-search"></i>
+        	                                </span>
+                                        </div>
+                                        <div class="col-xs-5 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3">
-                                    <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
-                                        <span>Filter</span>
-                                    </button>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group margin-bottom-0 pull-right">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openPageModal()">
+                                            <span>New Page</span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group margin-bottom-0 pull-left">
+                                        <div class="btn-group tableView">
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-group  pull-right">
-                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openPageModal()">
-                                    <span>New Page</span>
-                                </button>
-                            </div>
-                            <div class="form-group">
-                            	<div class="btn-group tableView">
-								    <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-								    <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
-								</div>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <table class="table table-striped table-hover" ng-class="{'grid': tableView == 'grid'}">
-            <thead>
-                <tr>
-                    <th class="center">Screenshot</th>
-                    <th st-sort="title">Title</th>
-                    <th st-sort="handle">Handle</th>
-                    <th class="hidden-xs" st-sort="components">Components</th>
-                    <th class="hidden-xs" st-sort="getters.created">Created</th>
-                    <th class="hidden-xs" st-sort="getters.modified">Modified</th>
-                </tr>
-                <tr ng-if="showFilter">
-                    <th></th>
-                    <th>
-                        <input st-search="title" placeholder="Title" class="form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="components" placeholder="Type" class="form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="created" placeholder="Created" class="form-control" type="search" />
-                    </th>
-                    <th>
-                        <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="page in displayedPages" ng-click="viewSingle(page)">
-                    <td class="center">
-                        <img src="{{page.screenshot}}" class="img-thumbnail screenshot" alt="image">
-                    </td>
-                    <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
-                    <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
-                    <td class="hidden-xs"><strong>Components: </strong> {{page.components.length}}</td>
-                    <td class="hidden-xs"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
-                    <td class="hidden-xs"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+	        <div class="panel panel-transparent row margin-bottom-0">
+	            <div class="panel-body">
+			        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedPages">
+			            <thead>
+			                <tr>
+			                    <th class="center">Screenshot</th>
+			                    <th st-sort="title">Title</th>
+			                    <th class="hidden-xs" st-sort="handle">Handle</th>
+			                    <th class="hidden-xs" st-sort="components" ng-class="{'center': tableView != 'grid'}">Components</th>
+			                    <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
+			                    <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+			                </tr>
+			                <tr ng-if="showFilter">
+			                    <th></th>
+			                    <th>
+			                        <input st-search="title" placeholder="Title" class="form-control" type="search" />
+			                    </th>
+			                    <th class="hidden-xs">
+			                        <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
+			                    </th>
+			                    <th class="hidden-xs">
+			                        <input st-search="components" placeholder="Type" class="form-control" type="search" />
+			                    </th>
+			                    <th class="hidden-xs">
+			                        <input st-search="created" placeholder="Created" class="form-control" type="search" />
+			                    </th>
+			                    <th class="hidden-xs">
+			                        <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
+			                    </th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <tr ng-repeat="page in displayedPages" ng-click="viewSingle(page)">
+			                    <td class="center">
+			                        <img src="{{ page.screenshot ? page.screenshot : '/admin/assets/images/default-page.jpg' }}" class="img-thumbnail screenshot" alt="image">
+			                    </td>
+			                    <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
+			                    <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
+			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" ><strong>Components: </strong> {{page.components.length}}</td>
+			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
+			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
+			                </tr>
+			            </tbody>
+			        </table>
+			        <div class="load1 csspinner height-400" ng-show="!displayedPages"></div>
+			    </div>
+			</div>
+		</div>
     </div>
     <!-- end: CONTENT -->
-
     <!-- start: NEW PAGE MODAL -->
     <script type="text/ng-template" id="new-page-modal">
         <div class="modal-header">
@@ -103,125 +114,125 @@
             <h3 class="modal-title">New Page</h3>
         </div>
         <div class="modal-body pages-modal" ng-class="{'no-padding': !templateDetails}">
-    	    <tabset class="tabbable tabs-left margin-bottom-0" ng-hide="templateDetails">
-				<tab>
-					<tab-heading>
-						All
-					</tab-heading>
-					<div ng-repeat="template in templates | orderBy:'title'">
-	                    <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
-	                        <div class="col-xs-3">
-	                            <div class="img-wrap">
-	                                <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-	                            </div>
-	                        </div>
-	                        <div class="col-xs-8">
-	                            <h4>{{template.name}}</h4>
-	                            <p>{{template.description}}</p>
-	                        </div>
-	                        <div class="col-xs-1">
-	                            <h1>
+            <tabset class="tabbable tabs-left margin-bottom-0" ng-hide="templateDetails">
+                <tab>
+                    <tab-heading>
+                        All
+                    </tab-heading>
+                    <div ng-repeat="template in templates | orderBy:'title'">
+                        <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="img-wrap">
+                                    <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-xs-12">
+                                <h4>{{template.name}}</h4>
+                                <p>{{template.description}}</p>
+                            </div>
+                            <div class="col-sm-1 hidden-xs">
+                                <h1>
 			                    	<span class="fa fa-chevron-right"></span>
 			                  	</h1>
-	                        </div>
-	                    </div>
-	                    <div class="clearfix"></div>
-	                    <hr>
-	                </div>
-				</tab>
-				<tab>
-					<tab-heading>
-						Home
-					</tab-heading>
-					<div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter == 'home'">
-	                    <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
-	                        <div class="col-xs-3">
-	                            <div class="img-wrap">
-	                                <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-	                            </div>
-	                        </div>
-	                        <div class="col-xs-8">
-	                            <h4>{{template.name}}</h4>
-	                            <p>{{template.description}}</p>
-	                        </div>
-	                        <div class="col-xs-1">
-	                            <h1>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                    </div>
+                </tab>
+                <tab>
+                    <tab-heading>
+                        Home
+                    </tab-heading>
+                    <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter == 'home'">
+                        <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="img-wrap">
+                                    <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-xs-12">
+                                <h4>{{template.name}}</h4>
+                                <p>{{template.description}}</p>
+                            </div>
+                            <div class="col-sm-1 hidden-xs">
+                                <h1>
 			                    	<span class="fa fa-chevron-right"></span>
 			                  	</h1>
-	                        </div>
-	                    </div>
-	                    <div class="clearfix"></div>
-	                    <hr>
-	                </div>
-				</tab>
-				<tab>
-					<tab-heading>
-						Coming Soon
-					</tab-heading>
-					<div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter == 'coming-soon'">
-	                    <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
-	                        <div class="col-xs-3">
-	                            <div class="img-wrap">
-	                                <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-	                            </div>
-	                        </div>
-	                        <div class="col-xs-8">
-	                            <h4>{{template.name}}</h4>
-	                            <p>{{template.description}}</p>
-	                        </div>
-	                        <div class="col-xs-1">
-	                            <h1>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                    </div>
+                </tab>
+                <tab>
+                    <tab-heading>
+                        Coming Soon
+                    </tab-heading>
+                    <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter == 'coming-soon'">
+                        <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
+                            <div class="col-sm-3 col-xs-12">
+                                <div class="img-wrap">
+                                    <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-xs-12">
+                                <h4>{{template.name}}</h4>
+                                <p>{{template.description}}</p>
+                            </div>
+                            <div class="col-xs-1 hidden-xs">
+                                <h1>
 			                    	<span class="fa fa-chevron-right"></span>
 			                  	</h1>
-	                        </div>
-	                    </div>
-	                    <div class="clearfix"></div>
-	                    <hr>
-	                </div>
-				</tab>
-			</tabset>
-	        <div class="template-details" ng-show="templateDetails">
-	                <div class="col-xs-5">
-	                    <p>Template Selected</p>
-	                    <h4>{{selectedTemplate.name}}</h4>
-	                    <img src="{{selectedTemplate.previewUrl}}" class="img-thumbnail margin-bottom-10">
-	                </div>
-	                <div class="col-xs-7">
-	                    <div class="form-group" ng-class="{ 'has-error': titleError}">
-	                        <label for="new-page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
-	                        <input id="new-page-title" class="form-control input-lg" type="text" ng-model="createpage.title" ng-change="validateCreatePage(createpage)">
-	                    </div>
-	                    <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
-	                    	<slug from="createpage.title" to="createpage.handle"></slug>
-	                        <label for="new-page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
-	                        <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="validateCreatePage(createpage)">
-	                    </div>
-	                    <p ng-show="createpage.title">Page Url will be
-	                        <strong>/{{createpage.title | slugify}}</strong>
-	                        <span class="links cl-effect-1">
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                    </div>
+                </tab>
+            </tabset>
+            <div class="template-details" ng-show="templateDetails">
+                <div class="col-xs-5">
+                    <p>Template Selected</p>
+                    <h4>{{selectedTemplate.name}}</h4>
+                    <img src="{{selectedTemplate.previewUrl}}" class="img-thumbnail margin-bottom-10">
+                </div>
+                <div class="col-xs-7">
+                    <div class="form-group" ng-class="{ 'has-error': titleError}">
+                        <label for="new-page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
+                        <input id="new-page-title" class="form-control input-lg" type="text" ng-model="createpage.title" ng-change="validateCreatePage(createpage)">
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
+                        <slug from="createpage.title" to="createpage.handle"></slug>
+                        <label for="new-page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
+                        <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="validateCreatePage(createpage)">
+                    </div>
+                    <p ng-show="createpage.title">Page Url will be
+                        <strong>/{{createpage.title | slugify}}</strong>
+                        <span class="links cl-effect-1">
 								<a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
 							</span>
-							<span class="links cl-effect-1">
+                        <span class="links cl-effect-1">
 	                        	<a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
 	                        </span>
-	                    </p>
-	                    <div class="clearfix mb15"></div>
-	                    <div class="form-group">
-	                        <div class="checkbox clip-check check-info checkbox-inline">
-								<input type="checkbox" id="checkbox10" ng-model="createpage.mainmenu" checked>
-								<label for="checkbox10">
-									Add to Main Menu?
-								</label>
-							</div>
-	                    </div>
-	                </div>
-
-	        </div>
-	    </div>
-	    <div class="clearfix"></div>
-	        <div class="modal-footer" ng-show="templateDetails">
-	            <button class="btn btn-primary" ng-click="createPageFromTemplate(createpage, $event)">Add Page</button>
-	        </div>
+                    </p>
+                    <div class="clearfix mb15"></div>
+                    <div class="form-group">
+                        <div class="checkbox clip-check check-info checkbox-inline">
+                            <input type="checkbox" id="checkbox10" ng-model="createpage.mainmenu" checked>
+                            <label for="checkbox10">
+                                Add to Main Menu?
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-footer" ng-show="templateDetails">
+            <button class="btn btn-warning btn-o pull-left" ng-click="templateDetails = false">Back</button>
+            <button class="btn btn-primary btn-o" ng-click="createPageFromTemplate(createpage, $event)">Add Page</button>
+        </div>
     </script>
     <!-- end:  NEW PAGE MODAL -->
 </div>

@@ -30,6 +30,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelOrder.bind(this));
         app.post(this.url(':id/refund'), this.isAuthAndSubscribedApi.bind(this), this.refundOrder.bind(this));
         app.post(this.url(':id/hold'), this.isAuthAndSubscribedApi.bind(this), this.holdOrder.bind(this));
+
+        app.post(this.url(':id/note'), this.isAuthAndSubscribedApi.bind(this), this.addOrderNote.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -172,6 +174,28 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    addOrderNote: function(req, res) {
+        var self = this;
+        self.log.debug('>> addOrderNote');
+        var accountId = parseInt(self.accountId(req));
+        var orderId = req.params.id;
+        var note = req.body.note;
+        var userId = self.userId(req);
+
+        self.checkPermission(req, self.sc.privs.MODIFY_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.addOrderNote(accountId, orderId, note, userId, function(err, order){
+                    self.log.debug('<< addOrderNote');
+                    self.sendResultOrError(res, err, order, 'Error adding order note');
+                });
+            }
+        });
+
+
     }
 });
 

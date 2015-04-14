@@ -122,7 +122,7 @@
         };
 
         $scope.viewSingle = function(post) {
-            window.location = '/admin/#/app/website/posts/' + post._id;
+            window.location = '/admin/#/app/website/posts/?posthandle=' + post.post_url;
         };
 
     }]);

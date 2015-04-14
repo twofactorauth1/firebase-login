@@ -29,10 +29,16 @@ html(lang='en', data-ng-app='clipApp')
     // Animate Css
     link(rel='stylesheet', href='../js/libs/animate.css/animate.min.css')
     // Clip-Two CSS
-    link(rel='stylesheet', href='assets/css/styles.css')
-    link(rel='stylesheet', href='assets/css/plugins.css')
+    link(rel='stylesheet', href='assets/css/styles.min.css')
+    link(rel='stylesheet', href='assets/css/plugins.min.css')
     // Clip-Two Theme
     link(rel='stylesheet', data-ng-href='assets/css/themes/{{ app.layout.theme }}.css')
+    // DateRangePicker
+    link(rel='stylesheet', href='../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css')
+    //Spectrum Color DateRangePicker
+    link(rel='stylesheet', href='../js/libs/spectrum/spectrum.css')
+    //NG Sortable
+    link(rel='stylesheet', href='/js/libs/ng-sortable/dist/ng-sortable.min.css')
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
     // jQuery
@@ -55,9 +61,9 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js')
     script(src='../js/libs/angular-translate-storage-local/angular-translate-storage-local.min.js')
     script(src='../js/libs/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js')
+    //NG Sortable
     // Utils
     script(src='../js/utils/namespaces.js')
-
     // oclazyload
     script(src='../js/libs/oclazyload/dist/ocLazyLoad.min.js')
     // breadcrumb
@@ -70,6 +76,10 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-scroll/angular-scroll.min.js')
     // Angular Scrollify
     script(src='../js/libs/angular-slugify/angular-slugify.js')
+    // Underscore
+    script(src='../js/libs/underscore/underscore-min.js')
+    //config
+    script(src="../js/scripts/config.js")
     // Scripts
     script(src='assets/js/app.js')
     script(src='assets/js/main.js')
@@ -92,6 +102,7 @@ html(lang='en', data-ng-app='clipApp')
     script(src='assets/js/directives/sparkline.js')
     script(src='assets/js/directives/touchspin.js')
     script(src='assets/js/directives/file-upload.js')
+    script(src='assets/js/directives/activity.js')
     // Controllers
     script(src='assets/js/controllers/mainCtrl.js')
     script(src='assets/js/controllers/bootstrapCtrl.js')
@@ -101,7 +112,13 @@ html(lang='en', data-ng-app='clipApp')
     script(src='assets/js/services/user.js')
     script(src='assets/js/services/customer.js')
     script(src='assets/js/services/import_contacts.js')
+    script(src='assets/js/services/chart_analytics.js')
+    script(src='assets/js/services/keen.js')
+    script(src='assets/js/services/common.js')
+    script(src='assets/js/services/order.js')
     // Google Apis
     script(src='//maps.googleapis.com/maps/api/js?v=3.exp&libraries=weather,visualization')
+    // Keen Library
+    script(src='../js/libs_misc/keenLibrary.js')
 
     include _serverprops

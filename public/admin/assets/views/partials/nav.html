@@ -43,6 +43,11 @@
 		</a>
 		<ul class="sub-menu">
 			<li ui-sref-active="active">
+				<a ui-sref="app.website.analytics">
+					<span class="title" translate="sidebar.nav.website.ANALYTICS"> Analytics </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
 				<a ui-sref="app.website.pages">
 					<span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
 				</a>
@@ -84,7 +89,7 @@
 				</a>
 			</li>
 			<li ui-sref-active="active">
-				<a ui-sref="app.commerce.orders">
+				<a ui-sref="app.orders">
 					<span class="title" translate="sidebar.nav.commerce.ORDERS"> Orders </span>
 				</a>
 			</li>
@@ -168,7 +173,7 @@
 		</ul>
 	</li>
 	<li ui-sref-active="active">
-		<a ui-sref="logout">
+		<a href="/logout">
 			<div class="item-content">
 				<div class="item-media">
 					<i class="ti-power-off"></i>

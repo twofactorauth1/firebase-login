@@ -19,14 +19,20 @@
             }
         };
 
+        $scope.column = {"photo":true,"name":true,"category":true,"email":true,"address":true,"social":true,"created":true,"modified":true};
+
         $scope.contactLabel = function(customer) {
             return CustomerService.contactLabel(customer);
         };
 
         $scope.checkBestEmail = function(contact) {
-            var returnVal = CustomerService.checkBestEmail(contact);
-            this.email = contact.email;
-            return returnVal;
+            // var returnVal = CustomerService.checkBestEmail(contact);
+            // this.email = contact.email;
+            // return returnVal;
+        };
+
+        $scope.preventClick = function(event) {
+            event.stopPropagation();
         };
 
         $scope.openCustomerModal = function(size) {
@@ -43,7 +49,7 @@
         };
 
         $scope.viewSingle = function(customer) {
-            window.location = '/admin/#/app/customers/' + customer._id;
+            window.location = '/admin/#/customers/' + customer._id;
         };
 
     }]);

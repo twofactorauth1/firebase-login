@@ -39,7 +39,7 @@
         };
 
         $scope.viewSingleProduct = function(product) {
-            window.location = '/admin/#/app/commerce/products/'+product._id;
+            window.location = '/admin/#/commerce/products/'+product._id;
         };
 
     }]);
