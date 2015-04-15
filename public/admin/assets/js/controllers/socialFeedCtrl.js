@@ -793,6 +793,10 @@
         };
 
         $scope.updateFeedListFn = function() {
+            console.log('updateFeedListFn >>>');
+            // console.log('$scope.config.socialAccounts >>> ', $scope.config.socialAccounts);
+            // console.log('$scope.config.trackedAccounts >>> ', $scope.config.trackedAccounts);
+            // console.log('$scope.feedTypes >>> ', $scope.feedTypes);
             if ($scope.config.socialAccounts && $scope.config.trackedAccounts && $scope.feedTypes.length) {
                 $scope.config.trackedAccounts.forEach(function(trackedAccount, trackedIndex) {
                     var feed = _.find($scope.feedList, function(feed) {
@@ -850,11 +854,17 @@
         };
 
         $scope.$watch('config.trackedAccounts', function(newValue, oldValue) {
-            $scope.updateFeedListFn();
+            if ($scope.config.trackedAccounts && $scope.config.trackedAccounts.length > 0 && $scope.feedTypes && $scope.feedTypes.length > 0) {
+                console.log('watch:$scope.config.trackedAccounts ', $scope.config.trackedAccounts);
+                $scope.updateFeedListFn();
+            }
         }, true);
 
         $scope.$watch('feedTypes', function(newValue, oldValue) {
-            $scope.updateFeedListFn();
+            if ($scope.config.trackedAccounts && $scope.config.trackedAccounts.length > 0 && $scope.feedTypes && $scope.feedTypes.length > 0) {
+                console.log('watch:$scope.feedTypes ', $scope.feedTypes);
+                $scope.updateFeedListFn();
+            }
         }, true);
 
     }]);
