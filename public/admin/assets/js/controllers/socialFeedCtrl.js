@@ -178,15 +178,16 @@
                     });
                 },
                 fb: function(profile, socialId) {
-                    profile.socialId = socialId;
-                    profile.type = 'fb';
-                    profile.open = true;
-                    $scope.fbProfiles.push(profile);
-                    $scope.feedTypes.push(profile);
                     var toggle = false;
                     $scope.config.trackedAccounts.forEach(function(value, index) {
                         if (value.id == socialId) {
                             toggle = value.toggle;
+                            profile.socialId = socialId;
+                            profile.accountType = value.accountType;
+                            profile.type = 'fb';
+                            profile.open = true;
+                            $scope.fbProfiles.push(profile);
+                            $scope.feedTypes.push(profile);
                         }
                     });
                     $scope.filtersValues.forEach(function(value, index) {
@@ -311,14 +312,39 @@
                     var firstFifty = $scope.feed.slice(1, $scope.itemsDisplayedInList);
 
                     $scope.displayedFeed = firstFifty;
-                    $scope.feedTypes.forEach(function(profile, index) {
-                        profile.admins = [];
-                        $scope.fbAdminPages.forEach(function(admin, index) {
-                            if (admin.socialId == profile.socialId) {
-                                profile.admins.push(admin);
+
+                    //get the list of tracked accounts type: facebook & accountType: account
+                    $scope.config.socialAccounts.forEach(function(account, index) {
+                        if (account.type == 'fb') {
+
+                            //check to see if parent is tracked
+                            $scope.config.trackedAccounts.forEach(function(tracked, index) {
+                                if (account.socialId == tracked.socialId) {
+                                    account.active = true;
+                                }
+                            });
+                            //get a list of fbadminpages and see if they are children of the parent account
+                            account.admins = [];
+                            $scope.fbAdminPages.forEach(function(admin, index) {
+                                //check to see if admins are tracked
+                                $scope.config.trackedAccounts.forEach(function(tracked, index) {
+                                    if (admin.sourceId == tracked.socialId) {
+                                        admin.active = true;
+                                    }
+                                });
+                                account.admins.push(admin);
+                            });
+                            //get the profile information and add to account
+                            $scope.feedTypes.forEach(function(profile, index) {
+                                if (profile.accountType == 'account' && profile.id == account.socialId) {
+                                    account.profile = profile;
+                                }
+                            });
+                            //push into feed tree
+                            if (account.accountType == 'account') {
+                                $scope.feedTree.push(account);
                             }
-                        });
-                        $scope.feedTree.push(profile);
+                        }
                     });
 
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
@@ -476,10 +502,9 @@
 
 
         $scope.checkAccountExistFn = function(id) {
-            console.log(id);
             var status = false;
             $scope.config.trackedAccounts.forEach(function(value, index) {
-                if (value.parentSocialAccount == id || value.socialId == id) {
+                if (value.id == id || value.socialId == id) {
                     status = true;
                 }
             });
@@ -534,20 +559,20 @@
             SocialConfigService.addTrackedAccount(newSocialAccount, function(data) {
                 $scope.config = data;
                 $scope.config.trackedObjects.forEach(function(value, index) {
-                    if (value.socialId == page.sourceId) {
+                    if (value.socialId == obj.sourceId) {
                         SocialConfigService.getTrackedObject(index, value.socialId, function(tracked) {
-                            if (page.type == 'facebook') {
+                            if (obj.type == 'facebook') {
                                 $scope.typeLogic.feed.fb(tracked, value.socialId);
                             }
 
-                            if (page.type == 'twitter') {
+                            if (obj.type == 'twitter') {
                                 $scope.typeLogic.feed.tw(tracked, value.socialId);
                             }
                         });
                     }
                 });
-                $scope.filterFeedActualFn(page);
-                ToasterService.show('success', 'Feed Added');
+                $scope.filterFeedActualFn(obj);
+                toaster.pop('success', 'Feed Added');
             });
         };
 
@@ -651,7 +676,6 @@
 
         $scope.updateComments = function(page) {
             $scope.addCommentPage = page;
-            console.log('comments ', page.comments);
             $scope.visibleComments = page.comments;
         };
 
@@ -793,7 +817,6 @@
         };
 
         $scope.updateFeedListFn = function() {
-            console.log('updateFeedListFn >>>');
             // console.log('$scope.config.socialAccounts >>> ', $scope.config.socialAccounts);
             // console.log('$scope.config.trackedAccounts >>> ', $scope.config.trackedAccounts);
             // console.log('$scope.feedTypes >>> ', $scope.feedTypes);
@@ -834,7 +857,6 @@
                         var socialProfile = _.find($scope.feedTypes, function(profile) {
                             return profile.id == socialAccount.socialId;
                         });
-                        console.log(socialProfile);
                         if (socialProfile) {
                             insertDict.type = socialProfile.type;
                             if (socialProfile.picture) {
@@ -847,7 +869,6 @@
                     }
                     $scope.feedList.push(insertDict);
                 });
-                console.log('feedList >>>', $scope.feedList);
             } else {
                 console.error('No profile found', $scope.feedTypes);
             }
@@ -855,14 +876,12 @@
 
         $scope.$watch('config.trackedAccounts', function(newValue, oldValue) {
             if ($scope.config.trackedAccounts && $scope.config.trackedAccounts.length > 0 && $scope.feedTypes && $scope.feedTypes.length > 0) {
-                console.log('watch:$scope.config.trackedAccounts ', $scope.config.trackedAccounts);
                 $scope.updateFeedListFn();
             }
         }, true);
 
         $scope.$watch('feedTypes', function(newValue, oldValue) {
             if ($scope.config.trackedAccounts && $scope.config.trackedAccounts.length > 0 && $scope.feedTypes && $scope.feedTypes.length > 0) {
-                console.log('watch:$scope.feedTypes ', $scope.feedTypes);
                 $scope.updateFeedListFn();
             }
         }, true);
