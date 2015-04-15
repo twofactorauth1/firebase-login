@@ -268,7 +268,7 @@ module.exports = {
                         trackedAccounts.splice(index, 1);
                     }
                 });
-                var trackedAccount = _.extend({toggle: false, parentSocialAccount:creds.id}, creds, {id:$$.u.idutils.generateUniqueAlphaNumeric()});
+                var trackedAccount = _.extend({toggle: true, parentSocialAccount:creds.id}, creds, {id:$$.u.idutils.generateUniqueAlphaNumeric()});
                 trackedAccounts.push(trackedAccount);
 
                 if (updatedCred == false) {

@@ -12223,7 +12223,17 @@ table.grid tbody td strong {
 .manage-feed .fb-admin-pages li .fa:hover {
   color: #eeeeee;
 }
+.manage-feed .fb-admin-pages li .parentaccount {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
 .manage-feed .fb-admin-pages li .subaccounts li {
   border-bottom: 1px solid #eeeeee;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.manage-feed .fb-admin-pages li .subaccounts li:last-child {
+  border-bottom: none;
+  margin-bottom: 0px;
 }

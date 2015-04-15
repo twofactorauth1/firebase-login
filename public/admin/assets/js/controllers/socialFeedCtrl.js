@@ -473,8 +473,11 @@
 
         $scope.checkAccountExistFn = function(admin) {
             var status = false;
+            console.log('admin ', admin);
             $scope.config.trackedAccounts.forEach(function(value, index) {
-                if (value.id == admin.id && value.toggle) {
+                console.log('value.socialId ', value.socialId);
+                console.log('value.toggle ', value.toggle);
+                if (value.socialId == admin && value.toggle) {
                     status = true;
                 }
             });
@@ -676,9 +679,9 @@
                 }
             });
 
-            $('.stream').isotope({
-                itemSelector: '.item'
-            });
+            // $('.stream').isotope({
+            //     itemSelector: '.item'
+            // });
 
             var split = value;
             split.forEach(function(v, i) {
