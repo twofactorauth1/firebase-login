@@ -349,8 +349,36 @@
 
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
                     $scope.isLoaded = true;
+
+                    //$scope.altFetchProfileFn();
+                    $scope.altFetchPageFn();
                 });
         });
+
+        $scope.altFetchProfileFn = function() {
+            $scope.config.socialAccounts.forEach(function(socialAccount, socialAccountIndex) {
+                if (socialAccount.type == 'fb' && socialAccount.accountType == 'account') {
+                    SocialConfigService.getFBProfile(socialAccount.id, function(profile) {
+                        console.log(profile);
+                    });
+                }
+                if (socialAccount.type == 'tw' && socialAccount.accountType == 'account') {
+                    SocialConfigService.getTwitterProfile(socialAccount.id, function(profile) {
+                        console.log(profile);
+                    });
+                }
+            });
+        };
+
+        $scope.altFetchPageFn = function() {
+            $scope.config.socialAccounts.forEach(function(socialAccount, socialAccountIndex) {
+                if (socialAccount.type == 'fb' && socialAccount.accountType == 'account') {
+                    SocialConfigService.getFBPages(socialAccount.id, function(pages) {
+                        console.log(pages);
+                    });
+                }
+            });
+        };
 
         /*
          * @getTrackedObjects
