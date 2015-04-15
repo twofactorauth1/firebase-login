@@ -348,6 +348,7 @@
                         }
                     });
 
+
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
                     $scope.isLoaded = true;
 
