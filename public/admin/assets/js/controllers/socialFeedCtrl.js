@@ -559,20 +559,20 @@
             SocialConfigService.addTrackedAccount(newSocialAccount, function(data) {
                 $scope.config = data;
                 $scope.config.trackedObjects.forEach(function(value, index) {
-                    if (value.socialId == page.sourceId) {
+                    if (value.socialId == obj.sourceId) {
                         SocialConfigService.getTrackedObject(index, value.socialId, function(tracked) {
-                            if (page.type == 'facebook') {
+                            if (obj.type == 'facebook') {
                                 $scope.typeLogic.feed.fb(tracked, value.socialId);
                             }
 
-                            if (page.type == 'twitter') {
+                            if (obj.type == 'twitter') {
                                 $scope.typeLogic.feed.tw(tracked, value.socialId);
                             }
                         });
                     }
                 });
-                $scope.filterFeedActualFn(page);
-                ToasterService.show('success', 'Feed Added');
+                $scope.filterFeedActualFn(obj);
+                toaster.pop('success', 'Feed Added');
             });
         };
 
