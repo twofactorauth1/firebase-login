@@ -46,7 +46,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-xs-12 col-sm-4" ng-repeat="post in displayedFeed track by $index">
-                <div ng-if="post.type == 'facebook'">
+                <div ng-if="post.type == 'fb'">
                     <div class="panel panel-white facebook">
                         <div class="panel-heading border-light">
                             <i class="fa fa-facebook pull-left"></i>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-if="post.type == 'twitter' && post.postType == 'tweet'">
+                <div ng-if="post.type == 'tw' && post.postType == 'tweet'">
                     <div class="panel panel-white">
                         <div class="post-top-bar twitter">
                             <i class="fa fa-twitter pull-left"></i>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-if="post.type == 'twitter' && post.postType == 'follower'">
+                <div ng-if="post.type == 'tw' && post.postType == 'follower'">
                     <div class="panel panel-white">
                         <div class="post-top-bar twitter">
                             <i class="fa fa-twitter pull-left"></i>
