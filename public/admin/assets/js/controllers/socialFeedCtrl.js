@@ -314,7 +314,6 @@
                     $scope.displayedFeed = firstFifty;
 
                     $scope.updateFeedTree();
-
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
                     $scope.isLoaded = true;
 
@@ -325,6 +324,16 @@
                     if ($scope.fbAdminPages) {
                         $scope.altFetchPageFn();
                     }
+
+                    $scope.feedTypes.forEach(function(profile, index) {
+                        profile.admins = [];
+                        $scope.fbAdminPages.forEach(function(admin, index) {
+                            if (admin.socialId == profile.socialId) {
+                                profile.admins.push(admin);
+                            }
+                        });
+                        $scope.feedTree.push(profile);
+                    });
                 });
         });
 
