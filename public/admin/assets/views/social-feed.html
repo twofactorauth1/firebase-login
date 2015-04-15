@@ -267,15 +267,15 @@
                 <ul class="fb-admin-pages">
                     <li ng-repeat="profile in feedTree | filter: {'facebook': profile.type}">
                         <div class="parentaccount">
-                            <img ng-src="{{profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.name}}
-                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(profile)"></span>
-                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(profile, true)"></span>
+                            <img ng-src="{{profile.profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.profile.name}}
+                            <span ng-show="profile.active" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(profile)"></span>
+                            <span ng-hide="profile.active" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(profile, true)"></span>
                         </div>
                         <ul ng-show='profile.admins.length' class="subaccounts">
                             <li ng-repeat='admin in profile.admins'>
                                 <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-0" width="50"> {{admin.name}}
-                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(admin)"></span>
-                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(admin, false)"></span>
+                                <span ng-show="admin.active" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(admin)"></span>
+                                <span ng-hide="admin.active" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(admin, false)"></span>
                             </li>
                         </ul>
                     </li>
