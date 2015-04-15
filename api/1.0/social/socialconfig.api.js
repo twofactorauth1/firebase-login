@@ -436,7 +436,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 socialConfigManager.getFacebookProfile(accountId, socialAccountId, function(err, profile){
                     self.log.debug('<< getFacebookProfile');
-                    self.sendResultOrError(resp, err, page, "Error fetching page");
+                    self.sendResultOrError(resp, err, profile, "Error fetching page");
                 });
             }
         });
