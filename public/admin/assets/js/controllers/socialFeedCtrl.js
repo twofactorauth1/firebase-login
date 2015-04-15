@@ -25,7 +25,8 @@
         $scope.stepIndex = 0;
         $scope.onboardingSteps = [{
             overlay: false
-        }]
+        }];
+
         $scope.beginOnboarding = function(type) {
 
         };
@@ -317,8 +318,51 @@
 
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
                     $scope.isLoaded = true;
+
+                    if ($scope.feedTypes) {
+                        $scope.altFetchProfileFn();
+                    }
+
+                    if ($scope.fbAdminPages) {
+                        $scope.altFetchPageFn();
+                    }
+
+                    $scope.feedTypes.forEach(function(profile, index) {
+                        profile.admins = [];
+                        $scope.fbAdminPages.forEach(function(admin, index) {
+                            if (admin.socialId == profile.socialId) {
+                                profile.admins.push(admin);
+                            }
+                        });
+                        $scope.feedTree.push(profile);
+                    });
                 });
         });
+
+        $scope.altFetchProfileFn = function() {
+            $scope.config.socialAccounts.forEach(function(socialAccount, socialAccountIndex) {
+                if (socialAccount.type == 'fb' && socialAccount.accountType == 'account') {
+                    SocialConfigService.getFBProfile(socialAccount.id, function(profile) {
+                        $scope.typeLogic.profile.fb(profile, socialAccount.socialId);
+                    });
+                }
+                if (socialAccount.type == 'tw' && socialAccount.accountType == 'account') {
+                    SocialConfigService.getTwitterProfile(socialAccount.id, function(profile) {
+                        $scope.typeLogic.profile.tw(profile, socialAccount.socialId);
+                    });
+                }
+            });
+        };
+
+        $scope.altFetchPageFn = function() {
+            $scope.config.socialAccounts.forEach(function(socialAccount, socialAccountIndex) {
+                if (socialAccount.type == 'fb' && socialAccount.accountType == 'account') {
+                    SocialConfigService.getFBPages(socialAccount.id, function(pages) {
+                        $scope.typeLogic.pages.fb.account(pages, socialAccount.socialId);
+                    });
+                }
+            });
+        };
 
         /*
          * @getTrackedObjects
