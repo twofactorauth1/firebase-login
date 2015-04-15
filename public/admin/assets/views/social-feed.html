@@ -1,4 +1,4 @@
-<div ng-controller="SocialFeedCtrl">
+<div ng-controller="SocialFeedCtrl" class="social-feed">
     <!-- start: PAGE TITLE -->
     <section id="page-title">
         <div class="row">
@@ -253,13 +253,46 @@
 <script type="text/ng-template" id="manage-feed-modal">
     <div class="modal-header">
         <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Add Feed</h4>
+        <h4 class="modal-title">Manage Feeds</h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body manage-feed no-padding">
         <div class="col-xs-12 left-panel" ng-hide='feedTree.length'>
             No account available for removal.
         </div>
-        <div class="col-xs-3 left-panel" ng-show='feedTree.length'>
+        <tabset class="tabbable tabs-left margin-bottom-0">
+            <tab>
+                <tab-heading>
+                    Facebook
+                </tab-heading>
+                <ul class="fb-admin-pages">
+                    <li ng-repeat="profile in feedTree | filter: {'facebook': profile.type}">
+                        <div class="parentaccount">
+                            <img ng-src="{{profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.name}}
+                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(profile)"></span>
+                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(profile, true)"></span>
+                        </div>
+                        <ul ng-show='profile.admins.length' class="subaccounts">
+                            <li ng-repeat='admin in profile.admins'>
+                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{admin.name}}
+                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(admin)"></span>
+                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(admin, false)"></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Tab 2
+                </tab-heading>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Tab 3
+                </tab-heading>
+            </tab>
+        </tabset>
+        <div class="col-xs-3 left-panel hidden" ng-show='feedTree.length'>
             <ul class="integrations" ng-init="modalfeed = 'facebook'">
                 <li ng-click="modalfeed = 'facebook'" ng-class="{active: modalfeed == 'facebook'}"><i class="fa fa-facebook-square"></i>
                     <span class="hidden-xs">Facebook</span>
@@ -275,7 +308,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-xs-9 right-panel" ng-show='feedTree.length'>
+        <div class="col-xs-9 right-panel hidden" ng-show='feedTree.length'>
             <div ng-show="modalfeed == 'facebook'">
                 <ul class="fb-admin-pages">
                     <li ng-repeat="profile in feedTree">

@@ -71,9 +71,7 @@
     };
 
     this.getFBPagesPromise = function(socialAccountId, fn) {
-      console.log('socialAccountId >>> ', socialAccountId);
       var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
-      console.log('apiUrl >>> ', apiUrl);
       return $http.get(apiUrl);
     };
 

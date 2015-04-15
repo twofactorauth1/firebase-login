@@ -12202,3 +12202,28 @@ table.grid tbody td strong {
   margin: 0 auto 15px;
   display: block;
 }
+/* ---------------------------------------------------------------------- */
+/*  Social Feed
+/* ---------------------------------------------------------------------- */
+.manage-feed .fb-admin-pages {
+  margin: 0;
+  padding: 0;
+}
+.manage-feed .fb-admin-pages li {
+  line-height: 50px;
+  text-indent: 10px;
+  display: block;
+  float: left;
+  width: 100%;
+}
+.manage-feed .fb-admin-pages li .fa {
+  line-height: 50px;
+  font-size: 18px;
+}
+.manage-feed .fb-admin-pages li .fa:hover {
+  color: #eeeeee;
+}
+.manage-feed .fb-admin-pages li .subaccounts li {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 5px;
+}
