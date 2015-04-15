@@ -582,17 +582,15 @@
          */
 
         $scope.deleteSocialAccountFn = function(admin) {
+            console.log('admin ', admin);
             var tracked = null;
-            if (admin.type == 'adminpage') {
-                tracked = _.find($scope.config.trackedAccounts, function(obj) {
-                    return admin.id == obj.parentSocialAccount
-                });
-            } else {
-                tracked = _.find($scope.config.trackedAccounts, function(obj) {
-                    return admin.socialId == obj.id
-                });
-            }
+            tracked = _.find($scope.config.trackedAccounts, function(obj) {
+                return admin.sourceId == obj.socialId
+            });
+            console.log('tracked: ', tracked);
+            console.log('before >>> ', $scope.config);
             SocialConfigService.deleteTrackedAccount(tracked.id, function(data) {
+                console.log('after >>> ', data);
                 $scope.config = data;
                 var index = null;
                 $scope.fbAdminPages.forEach(function(value, index) {
@@ -606,7 +604,7 @@
                     }
                 });
                 $scope.filterFeedActualFn(admin);
-                ToasterService.show('warning', 'Social feed removed.');
+                toaster.pop('warning', 'Social feed removed.');
             });
         };
         /*
@@ -708,7 +706,7 @@
             var isChecked = false;
 
             $scope.config.trackedAccounts.forEach(function(account, index) {
-                if (account.socialId == type.socialId) {
+                if (account.socialId == type.sourceId) {
                     if (account.toggle) {
                         $scope.config.trackedAccounts[index].toggle = false;
                         isChecked = false;
