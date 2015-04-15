@@ -19,6 +19,17 @@
 
         // };
 
+        $scope.openModal = function(modal) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: modal,
+                scope: $scope
+            });
+        };
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
+
         $scope.feed = [];
         $scope.displayedFeed = [];
 
@@ -228,10 +239,10 @@
                             }
                         }
                         if (matchingAccount.accountType == 'account') {
-                            socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
+                            socialPromises.push(SocialConfigService.getFBPagesPromise(trackedAccountMap[value.socialId].parentSocialAccount));
                         }
                         if (matchingAccount.accountType == 'adminpage') {
-                            socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
+                            //socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
                         }
                         promiseProcessor.push([value.type, trackedAccountMap[value.socialId].type, matchingAccount.accountType]);
                     }
@@ -359,6 +370,7 @@
         };
 
         $scope.showPostModal = function(post) {
+            $scope.openModal('like-unlike-modal');
             $scope.tempPost = post;
             $scope.tempFBAdminPages = $scope.fbProfiles.concat($scope.fbAdminPages);
             for (var i = 0; i < $scope.tempFBAdminPages.length; i++) {
@@ -509,7 +521,6 @@
                 // $scope.feedTypes.push(page);
                 SocialConfigService.getAllSocialConfig(function(config) {
                     $scope.config = config;
-                    console.log($scope.config.trackedObjects, page);
                     $scope.config.trackedObjects.forEach(function(value, index) {
                         if (value.socialId == page.sourceId) {
                             SocialConfigService.getTrackedObject(index, value.socialId, function(tracked) {

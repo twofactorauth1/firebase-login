@@ -41,7 +41,9 @@ var socialconfig = $$.m.ModelBase.extend({
              "accountType" : "account",
              "id" : "18329c18-b8d8-453f-b622-6eb2c6acd9f6",
              "image" : "https://pbs.twimg.com/profile_images/526267788/headshot_normal.jpg",
-             "toggle" : "on" // or "off"
+             "toggle" : "on" // or "off",
+             "parentSocialAccount" : "uuid-of-parent-in-social-accounts"
+
              }
              */
             trackedAccounts:[],
@@ -71,6 +73,10 @@ var socialconfig = $$.m.ModelBase.extend({
     getSocialAccountById: function(id) {
         var account = null;
         account = _.find(this.attributes.socialAccounts, function(_account){return _account.id === id});
+        if(!account) {
+            //look for the trackedAccount as a fallback
+            account = _.find(this.attributes.trackedAccounts, function(_account){return _account.id === id});
+        }
         return account;
     },
 
@@ -85,6 +91,7 @@ var socialconfig = $$.m.ModelBase.extend({
         account = _.find(this.attributes.trackedAccounts, function(_account){return _account.id === id});
         return account;
     },
+
 
 
     initialize: function(options) {

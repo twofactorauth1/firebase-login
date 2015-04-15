@@ -1,6 +1,5 @@
 'use strict';
 app.directive('indigewebSkeuocard', 'PaymentService', 'UserService', 'skeuocard', function() {
-    function(PaymentService, UserService) {
         return {
             require: [],
             restrict: 'C',
@@ -214,6 +213,5 @@ app.directive('indigewebSkeuocard', 'PaymentService', 'UserService', 'skeuocard'
                     }
                 };
             }
-        };
-    }
+        }
 });

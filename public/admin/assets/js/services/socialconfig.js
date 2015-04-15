@@ -4,7 +4,6 @@
  */
 (function(angular) {
   app.service('SocialConfigService', function($http) {
-    console.log('SocialConfigService >>>');
     var baseUrl = '/api/1.0/';
     this.getAllSocialConfig = function(fn) {
       var apiUrl = baseUrl + ['social', 'socialconfig'].join('/');
@@ -44,6 +43,14 @@
         fn(data);
       });
 
+    };
+
+    this.unlikeFBPost = function(socialAccountId, postId, fn) {
+      //facebook/:socialAccountId/post/:postId/like
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post', postId, 'like'].join('/');
+      $http.delete(apiUrl).success(function(data, status, headers, config) {
+        fn(data);
+      });
     };
 
     this.deleteSocialConfigEntry = function(id, fn) {
@@ -188,6 +195,30 @@
     this.addTwitterPostComment = function(socialAccountId, postId, username, comment, fn) {
       var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'reply'].join('/');
       $http.post(apiUrl, {post: '@' + username + ' ' + comment})
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+    this.addTrackedAccount = function(account, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'trackedAccounts'].join('/');
+      $http.post(apiUrl, {trackedAccount: account})
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+    this.updateTrackedAccount = function(account, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'trackedAccount', account.id].join('/');
+      $http.post(apiUrl, {trackedAccount: account})
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+    this.deleteTrackedAccount = function(id, fn) {
+      var apiUrl = baseUrl + ['social', 'socialconfig', 'trackedAccount', id].join('/');
+      $http.delete(apiUrl)
       .success(function(data, status, headers, config) {
         fn(data);
       });

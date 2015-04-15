@@ -1,4 +1,4 @@
-<div ng-controller="SocialFeedCtrl">
+<div ng-controller="SocialFeedCtrl" class="social-feed">
     <!-- start: PAGE TITLE -->
     <section id="page-title">
         <div class="row">
@@ -79,7 +79,7 @@
                         <div class="panel-footer border-light">
                             <div class="timeline-btns">
                                 <div class="pull-left">
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" data-toggle="modal" data-target="#marketing-like-unlike" ng-click="showPostModal(post)"><i class="fa fa-thumbs-up"></i></a>
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showPostModal(post)"><i class="fa fa-thumbs-up"></i></a>
                                     <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments-fb" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
                                     <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-link"></i></a>
                                 </div>
@@ -179,9 +179,9 @@
             </div>
         </div>
         <div class="stream-filter col-xs-3">
-                <button type="button" class="btn btn-info btn-o btn-block btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openModal('manage-feeds')">
-                    <span>Manage Feeds</span>
-                </button>
+            <button type="button" class="btn btn-info btn-o btn-block btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openModal('manage-feed-modal')">
+                <span>Manage Feeds</span>
+            </button>
             </button>
             <accordion>
                 <accordion-group is-open="item.open" is-disabled="true" class="hidden">
@@ -250,3 +250,191 @@
     </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>
+<script type="text/ng-template" id="manage-feed-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Manage Feeds</h4>
+    </div>
+    <div class="modal-body manage-feed no-padding">
+        <div class="col-xs-12 left-panel" ng-hide='feedTree.length'>
+            No account available for removal.
+        </div>
+        <tabset class="tabbable tabs-left margin-bottom-0">
+            <tab>
+                <tab-heading>
+                    Facebook
+                </tab-heading>
+                <ul class="fb-admin-pages">
+                    <li ng-repeat="profile in feedTree | filter: {'facebook': profile.type}">
+                        <div class="parentaccount">
+                            <img ng-src="{{profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.name}}
+                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(profile)"></span>
+                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(profile, true)"></span>
+                        </div>
+                        <ul ng-show='profile.admins.length' class="subaccounts">
+                            <li ng-repeat='admin in profile.admins'>
+                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{admin.name}}
+                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(admin)"></span>
+                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(admin, false)"></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Tab 2
+                </tab-heading>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Tab 3
+                </tab-heading>
+            </tab>
+        </tabset>
+        <div class="col-xs-3 left-panel hidden" ng-show='feedTree.length'>
+            <ul class="integrations" ng-init="modalfeed = 'facebook'">
+                <li ng-click="modalfeed = 'facebook'" ng-class="{active: modalfeed == 'facebook'}"><i class="fa fa-facebook-square"></i>
+                    <span class="hidden-xs">Facebook</span>
+                </li>
+                <li ng-click="modalfeed = 'linkedin'" ng-class="{active: modalfeed == 'linkedin'}" class="hidden"><i class="fa fa-linkedin-square"></i>
+                    <span class="hidden-xs">LinkedIn</span>
+                </li>
+                <li ng-click="modalfeed = 'google-plus'" ng-class="{active: modalfeed == 'google-plus'}" class="hidden"><i class="fa fa-google-plus-square"></i>
+                    <span class="hidden-xs">Google Plus</span>
+                </li>
+                <li ng-click="modalfeed = 'twitter'" ng-class="{active: modalfeed == 'twitter'}" class="hidden"><i class="fa fa-twitter-square"></i>
+                    <span class="hidden-xs">Twitter</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-9 right-panel hidden" ng-show='feedTree.length'>
+            <div ng-show="modalfeed == 'facebook'">
+                <ul class="fb-admin-pages">
+                    <li ng-repeat="profile in feedTree">
+                        <div class="parentaccount">
+                            <img ng-src="{{profile.picture.data.url}}" class="thumbnail pull-left clearfix"> {{profile.name}}
+                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(profile)"></span>
+                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(profile, true)"></span>
+                        </div>
+                        <ul ng-show='profile.admins.length' class="subaccounts">
+                            <li ng-repeat='admin in profile.admins'>
+                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix"> {{admin.name}}
+                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(admin)"></span>
+                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(admin, false)"></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div ng-show="modalfeed == 'twitter'">Twitter</div>
+            <div ng-show="modalfeed == 'google-plus'">Google Plus</div>
+            <div ng-show="modalfeed == 'linkedin'">LinkedIn</div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addFeedFn()"><i class="fa fa-plus" /> Add</button>
+                </div> -->
+</script>
+<script type="text/ng-template" id="like-unlike-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Manage Likes</h4>
+    </div>
+    <div class="modal-body nopadding">
+        <ul class="fb-admin-pages mb0">
+            <li ng-repeat="page in tempFBAdminPages" ng-show="checkAccountExistFn(page.socialId)">
+                <div class="account-avatar">
+                    <img ng-src="{{page.picture.data.url}}" class="img-circle pull-left clearfix"> {{page.name}}
+                    <span class="fa fa-{{type.type}}"></span>
+                    <span ng-hide='page.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
+                    <span ng-show='page.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(page, $event)"></span>
+                </div>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</script>
+<script type="text/ng-template" id="twitter-comments-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Message</h4>
+    </div>
+    <div class="modal-body nopadding">
+        <div class="panel panel-default panel-alt widget-messaging mb0">
+            <!-- panel-body -->
+            <div class="panel-footer">
+                <div class=' mb15'>
+                    <img alt="" ng-src="{{addCommentPage.from.profile_pic}}" class="media-object"> {{addCommentPage.from.name}}
+                </div>
+                <div class=' mb15'>
+                    <textarea class="form-control" placeholder="Enter Message..." ng-model='addComment'></textarea>
+                </div>
+                <div class='row'>
+                    <div class='col-xs-3'>
+                        <span class="pull-left">Post As:</span>
+                        <img ng-src="{{addCommentAdminPage.profile_image_url}}" class="thumbnail pull-left clearfix mb0" ng-show='addCommentAdminPage.profile_image_url' />
+                    </div>
+                    <div class='col-xs-6'>
+                        <select class='form-control mb0' ng-model='twitterCommentProfile' ng-change='setAddCommentAdminPageFn(twitterCommentProfile)'>
+                            <option value="" ng-if="false"></option>
+                            <option ng-repeat="type in feedTypes" ng-show='type.type=="twitter"' value="{{type.socialId}}">{{type.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addComment}' data-dismiss='modal' ng-click='addTwCommentFn(addComment)'>Comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</script>
+<script type="text/ng-template" id="facebook-comments-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Comments <span ng-if="visibleComments.length">({{visibleComments.length}})</span></h4>
+    </div>
+    <div class="modal-body nopadding">
+        <div class="panel panel-default panel-alt widget-messaging mb0">
+            <div class="panel-body">
+                <ul>
+                    <li ng-repeat="comment in visibleComments">
+                        <img ng-src="{{comment.picture}}" class="img-thumbnail pull-left">
+                        <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
+                        <h4 class="sender">{{comment.name}}</h4>
+                        <small>{{comment.comment}}</small>
+                    </li>
+                    <li ng-if="!visibleComments">
+                        <div class="mb30"></div>
+                        <h4 class="center"><span class="fa fa-comments"></span> No Comments</h4>
+                        <div class="mb30"></div>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <!-- panel-body -->
+            <div class="panel-footer">
+                <div class=' mb15'>
+                    <textarea class="form-control" placeholder="Enter Comment..." ng-model='addComment'></textarea>
+                </div>
+                <div class='row'>
+                    <div class='col-xs-3'>
+                        <span class="pull-left">Post As:</span>
+                        <img ng-src="{{addCommentAdminPage.picture.data.url}}" class="thumbnail pull-left clearfix mb0" />
+                    </div>
+                    <div class='col-xs-6'>
+                        <select class='form-control mb0' ng-model='addCommentAdminPage' ng-options="page.name for page in fbAdminPages">
+                            <option value="" ng-if="false"></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addComment}' ng-click='addFbCommentFn(addComment)'>Comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</script>
