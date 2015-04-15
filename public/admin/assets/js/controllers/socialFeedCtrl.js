@@ -324,8 +324,13 @@
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
                     $scope.isLoaded = true;
 
-                    //$scope.altFetchProfileFn();
-                    $scope.altFetchPageFn();
+                    if ($scope.feedTypes) {
+                        $scope.altFetchProfileFn();
+                    }
+
+                    if ($scope.fbAdminPages) {
+                        $scope.altFetchPageFn();
+                    }
                 });
         });
 
@@ -333,12 +338,12 @@
             $scope.config.socialAccounts.forEach(function(socialAccount, socialAccountIndex) {
                 if (socialAccount.type == 'fb' && socialAccount.accountType == 'account') {
                     SocialConfigService.getFBProfile(socialAccount.id, function(profile) {
-                        console.log(profile);
+                        $scope.typeLogic.profile.fb(profile, socialAccount.socialId);
                     });
                 }
                 if (socialAccount.type == 'tw' && socialAccount.accountType == 'account') {
                     SocialConfigService.getTwitterProfile(socialAccount.id, function(profile) {
-                        console.log(profile);
+                        $scope.typeLogic.profile.tw(profile, socialAccount.socialId);
                     });
                 }
             });
@@ -348,7 +353,7 @@
             $scope.config.socialAccounts.forEach(function(socialAccount, socialAccountIndex) {
                 if (socialAccount.type == 'fb' && socialAccount.accountType == 'account') {
                     SocialConfigService.getFBPages(socialAccount.id, function(pages) {
-                        console.log(pages);
+                        $scope.typeLogic.pages.fb.account(pages, socialAccount.socialId);
                     });
                 }
             });
