@@ -3,7 +3,7 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, WebsiteService, UserService, SocialConfigService) {
+    app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
 
         $scope.openModal = function(modal) {
             $scope.modalInstance = $modal.open({
@@ -165,7 +165,7 @@
                     profile.socialId = socialId;
                     profile.open = true;
                     $scope.feedTypes.push(profile);
-                    toggle = false;
+                    var toggle = false;
                     $scope.config.trackedAccounts.forEach(function(value, index) {
                         if (value.id == socialId) {
                             toggle = value.toggle;
@@ -183,7 +183,7 @@
                     profile.open = true;
                     $scope.fbProfiles.push(profile);
                     $scope.feedTypes.push(profile);
-                    toggle = false;
+                    var toggle = false;
                     $scope.config.trackedAccounts.forEach(function(value, index) {
                         if (value.id == socialId) {
                             toggle = value.toggle;
@@ -298,10 +298,10 @@
                         }
 
                         setTimeout(function() {
-                            $('.stream').isotope({
-                                itemSelector: '.item',
-                                filter: filters
-                            });
+                            // $('.stream').isotope({
+                            //     itemSelector: '.item',
+                            //     filter: filters
+                            // });
                         }, 500);
                     });
 
@@ -698,9 +698,9 @@
                 }
             });
 
-            $('.stream').isotope({
-                itemSelector: '.item'
-            });
+            // $('.stream').isotope({
+            //     itemSelector: '.item'
+            // });
 
             if (Array.isArray(value)) {
                 var split = value;
@@ -728,9 +728,9 @@
                 //can be anything, just not any of the current filters
                 filters = 'no-accounts'
             }
-            $('.stream').isotope({
-                filter: filters
-            });
+            // $('.stream').isotope({
+            //     filter: filters
+            // });
         };
 
         $scope.filterFeed = function(type, $event) {
