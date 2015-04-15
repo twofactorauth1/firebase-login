@@ -25,7 +25,8 @@
         $scope.stepIndex = 0;
         $scope.onboardingSteps = [{
             overlay: false
-        }]
+        }];
+
         $scope.beginOnboarding = function(type) {
 
         };
