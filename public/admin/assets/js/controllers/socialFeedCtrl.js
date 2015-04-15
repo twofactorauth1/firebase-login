@@ -313,39 +313,7 @@
 
                     $scope.displayedFeed = firstFifty;
 
-                    //get the list of tracked accounts type: facebook & accountType: account
-                    $scope.config.socialAccounts.forEach(function(account, index) {
-                        if (account.type == 'fb') {
-
-                            //check to see if parent is tracked
-                            $scope.config.trackedAccounts.forEach(function(tracked, index) {
-                                if (account.socialId == tracked.socialId) {
-                                    account.active = true;
-                                }
-                            });
-                            //get a list of fbadminpages and see if they are children of the parent account
-                            account.admins = [];
-                            $scope.fbAdminPages.forEach(function(admin, index) {
-                                //check to see if admins are tracked
-                                $scope.config.trackedAccounts.forEach(function(tracked, index) {
-                                    if (admin.sourceId == tracked.socialId) {
-                                        admin.active = true;
-                                    }
-                                });
-                                account.admins.push(admin);
-                            });
-                            //get the profile information and add to account
-                            $scope.feedTypes.forEach(function(profile, index) {
-                                if (profile.accountType == 'account' && profile.id == account.socialId) {
-                                    account.profile = profile;
-                                }
-                            });
-                            //push into feed tree
-                            if (account.accountType == 'account') {
-                                $scope.feedTree.push(account);
-                            }
-                        }
-                    });
+                    $scope.updateFeedTree();
 
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
                     $scope.isLoaded = true;
@@ -367,6 +335,43 @@
             }
 
             return trackedObjects;
+        };
+
+        $scope.updateFeedTree = function() {
+            $scope.feedTree = [];
+            //get the list of tracked accounts type: facebook & accountType: account
+            $scope.config.socialAccounts.forEach(function(account, index) {
+                if (account.type == 'fb') {
+
+                    //check to see if parent is tracked
+                    $scope.config.trackedAccounts.forEach(function(tracked, index) {
+                        if (account.socialId == tracked.socialId) {
+                            account.active = true;
+                        }
+                    });
+                    //get a list of fbadminpages and see if they are children of the parent account
+                    account.admins = [];
+                    $scope.fbAdminPages.forEach(function(admin, index) {
+                        //check to see if admins are tracked
+                        $scope.config.trackedAccounts.forEach(function(tracked, index) {
+                            if (admin.sourceId == tracked.socialId) {
+                                admin.active = true;
+                            }
+                        });
+                        account.admins.push(admin);
+                    });
+                    //get the profile information and add to account
+                    $scope.feedTypes.forEach(function(profile, index) {
+                        if (profile.accountType == 'account' && profile.id == account.socialId) {
+                            account.profile = profile;
+                        }
+                    });
+                    //push into feed tree
+                    if (account.accountType == 'account') {
+                        $scope.feedTree.push(account);
+                    }
+                }
+            });
         };
 
         /*
@@ -558,6 +563,8 @@
             }
             SocialConfigService.addTrackedAccount(newSocialAccount, function(data) {
                 $scope.config = data;
+                $scope.updateFeedTree();
+
                 $scope.config.trackedObjects.forEach(function(value, index) {
                     if (value.socialId == obj.sourceId) {
                         SocialConfigService.getTrackedObject(index, value.socialId, function(tracked) {
@@ -582,17 +589,15 @@
          */
 
         $scope.deleteSocialAccountFn = function(admin) {
+            console.log('admin ', admin);
             var tracked = null;
-            if (admin.type == 'adminpage') {
-                tracked = _.find($scope.config.trackedAccounts, function(obj) {
-                    return admin.id == obj.parentSocialAccount
-                });
-            } else {
-                tracked = _.find($scope.config.trackedAccounts, function(obj) {
-                    return admin.socialId == obj.id
-                });
-            }
+            tracked = _.find($scope.config.trackedAccounts, function(obj) {
+                return admin.sourceId == obj.socialId
+            });
+            console.log('tracked: ', tracked);
+            console.log('before >>> ', $scope.config);
             SocialConfigService.deleteTrackedAccount(tracked.id, function(data) {
+                console.log('after >>> ', data);
                 $scope.config = data;
                 var index = null;
                 $scope.fbAdminPages.forEach(function(value, index) {
@@ -606,7 +611,7 @@
                     }
                 });
                 $scope.filterFeedActualFn(admin);
-                ToasterService.show('warning', 'Social feed removed.');
+                toaster.pop('warning', 'Social feed removed.');
             });
         };
         /*
@@ -708,7 +713,7 @@
             var isChecked = false;
 
             $scope.config.trackedAccounts.forEach(function(account, index) {
-                if (account.socialId == type.socialId) {
+                if (account.socialId == type.sourceId) {
                     if (account.toggle) {
                         $scope.config.trackedAccounts[index].toggle = false;
                         isChecked = false;

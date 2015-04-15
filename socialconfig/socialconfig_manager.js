@@ -582,7 +582,7 @@ module.exports = {
 
             var trackedObjects = config.get('trackedObjects');
             var updatedTrackedObjects = _.filter(trackedObjects, function(_obj){
-               return _obj.socialId === trackedAccountId;
+               return _obj.socialId != trackedAccountId;
             });
             config.set('trackedObjects', updatedTrackedObjects);
 
