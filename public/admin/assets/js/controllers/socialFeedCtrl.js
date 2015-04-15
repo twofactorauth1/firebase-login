@@ -5,20 +5,6 @@
 (function(angular) {
     app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, WebsiteService, UserService, SocialConfigService) {
 
-        /*
-         * @beginOnboarding
-         * begin the onboarding process if this is the users first time
-         */
-
-        // $scope.showOnboarding = false;
-        // $scope.stepIndex = 0;
-        // $scope.onboardingSteps = [{
-        //     overlay: false
-        // }]
-        // $scope.beginOnboarding = function(type) {
-
-        // };
-
         $scope.openModal = function(modal) {
             $scope.modalInstance = $modal.open({
                 templateUrl: modal,
@@ -28,6 +14,20 @@
 
         $scope.closeModal = function() {
             $scope.modalInstance.close();
+        };
+
+        /*
+         * @beginOnboarding
+         * begin the onboarding process if this is the users first time
+         */
+
+        $scope.showOnboarding = false;
+        $scope.stepIndex = 0;
+        $scope.onboardingSteps = [{
+            overlay: false
+        }]
+        $scope.beginOnboarding = function(type) {
+
         };
 
         $scope.feed = [];
@@ -66,9 +66,9 @@
          * determine if onboarding params are in the url
          */
 
-        // if ($location.$$search.onboarding) {
-        //     $scope.beginOnboarding($location.$$search.onboarding);
-        // }
+        if ($location.$$search.onboarding) {
+            $scope.beginOnboarding($location.$$search.onboarding);
+        }
 
 
         /*
@@ -106,6 +106,7 @@
          * get the social config for this account and pull the social feeds/info
          */
 
+        $scope.config = {};
         $scope.fbAdminPages = [];
         $scope.feedLengths = {};
         $scope.feeds = [];
@@ -114,13 +115,14 @@
         $scope.filtersValues = [".posts-", ".link-", ".status-", ".video-", ".photo-", ".tweet-", ".follower-"];
         $scope.fbPostsLength = 0;
         $scope.fbProfiles = [];
+        $scope.feedList = [];
 
         $scope.typeLogic = {
             feed: {
                 tw: function(tweets, socialId) {
                     $scope.feedLengths[socialId] = tweets.length;
                     for (var i = 0; i < tweets.length; i++) {
-                        tweets[i].type = 'twitter';
+                        tweets[i].type = 'tw';
                         tweets[i].socialAccountId = socialId;
                         $scope.feed.push(tweets[i]);
                     };
@@ -128,7 +130,7 @@
                 fb: function(posts, socialId) {
                     $scope.feedLengths[socialId] = posts.length;
                     for (var i = 0; i < posts.length; i++) {
-                        posts[i].type = 'facebook';
+                        posts[i].type = 'fb';
                         posts[i].socialAccountId = socialId;
                         $scope.fbPostsLength += 1;
                         posts[i].from.profile_pic = 'https://graph.facebook.com/' + posts[i].from.sourceId + '/picture?width=32&height=32';
@@ -150,7 +152,7 @@
                 tw: function(followers, socialId) {
                     $scope.feedLengths[socialId] = followers.length;
                     for (var i = 0; i < followers.length; i++) {
-                        followers[i].type = 'twitter';
+                        followers[i].type = 'tw';
                         followers[i].socialId = socialId;
                         followers[i].socialAccountId = socialId;
                         $scope.feed.push(followers[i]);
@@ -159,7 +161,7 @@
             },
             profile: {
                 tw: function(profile, socialId) {
-                    profile.type = 'twitter';
+                    profile.type = 'tw';
                     profile.socialId = socialId;
                     profile.open = true;
                     $scope.feedTypes.push(profile);
@@ -169,7 +171,6 @@
                             toggle = value.toggle;
                         }
                     });
-                    console.log(toggle);
                     $scope.filtersValues.forEach(function(value, index) {
                         if (toggle) {
                             $scope.filters.push(value + socialId);
@@ -178,11 +179,11 @@
                 },
                 fb: function(profile, socialId) {
                     profile.socialId = socialId;
-                    profile.type = 'facebook';
+                    profile.type = 'fb';
                     profile.open = true;
                     $scope.fbProfiles.push(profile);
                     $scope.feedTypes.push(profile);
-                    var toggle = false;
+                    toggle = false;
                     $scope.config.trackedAccounts.forEach(function(value, index) {
                         if (value.id == socialId) {
                             toggle = value.toggle;
@@ -197,7 +198,7 @@
             },
             go: function(posts) {
                 for (var i = 0; i < posts.length; i++) {
-                    posts[i].type = 'google-plus';
+                    posts[i].type = 'go';
                     $scope.feed.push(posts[i]);
                 };
             }
@@ -239,10 +240,10 @@
                             }
                         }
                         if (matchingAccount.accountType == 'account') {
-                            socialPromises.push(SocialConfigService.getFBPagesPromise(trackedAccountMap[value.socialId].parentSocialAccount));
+                            socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
                         }
                         if (matchingAccount.accountType == 'adminpage') {
-                            //socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
+                            socialPromises.push(SocialConfigService.getFBPagesPromise(value.socialId));
                         }
                         promiseProcessor.push([value.type, trackedAccountMap[value.socialId].type, matchingAccount.accountType]);
                     }
@@ -297,10 +298,10 @@
                         }
 
                         setTimeout(function() {
-                            // $('.stream').isotope({
-                            //     itemSelector: '.item',
-                            //     filter: filters
-                            // });
+                            $('.stream').isotope({
+                                itemSelector: '.item',
+                                filter: filters
+                            });
                         }, 500);
                     });
 
@@ -310,7 +311,6 @@
                     var firstFifty = $scope.feed.slice(1, $scope.itemsDisplayedInList);
 
                     $scope.displayedFeed = firstFifty;
-
                     $scope.feedTypes.forEach(function(profile, index) {
                         profile.admins = [];
                         $scope.fbAdminPages.forEach(function(admin, index) {
@@ -322,7 +322,6 @@
                     });
 
                     $scope.addCommentAdminPage = $scope.fbAdminPages[0];
-
                     $scope.isLoaded = true;
                 });
         });
@@ -370,7 +369,6 @@
         };
 
         $scope.showPostModal = function(post) {
-            $scope.openModal('like-unlike-modal');
             $scope.tempPost = post;
             $scope.tempFBAdminPages = $scope.fbProfiles.concat($scope.fbAdminPages);
             for (var i = 0; i < $scope.tempFBAdminPages.length; i++) {
@@ -410,7 +408,10 @@
             // var value = $event.target.attributes.class.value;
             // var tempClass = value.replace('fa-thumbs-up', 'fa-spinner fa-spin');
             // $event.target.setAttribute('class', tempClass);
-            SocialConfigService.likeFBPost(page.id, $scope.tempPost.sourceId, function(postReturn) {
+            var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                return tracked.socialId == page.socialId;
+            });
+            SocialConfigService.likeFBPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
                 // var newTempClass = value + ' liked';
                 // $event.target.setAttribute('class', newTempClass);
                 if ($scope.tempPost.likes) {
@@ -438,7 +439,10 @@
          */
 
         $scope.removeLikeFBPost = function(page, $event) {
-            SocialConfigService.unlikeFBPost(page.id, $scope.tempPost.sourceId, function(postReturn) {
+            var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                return tracked.socialId == page.socialId;
+            });
+            SocialConfigService.unlikeFBPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
                 $scope.tempPost.likes.forEach(function(value, index) {
                     if (value.sourceId == page.sourceId) {
                         $scope.tempPost.likes.splice(index, 1);
@@ -471,10 +475,11 @@
          */
 
 
-        $scope.checkAccountExistFn = function(admin) {
+        $scope.checkAccountExistFn = function(id) {
+            console.log(id);
             var status = false;
             $scope.config.trackedAccounts.forEach(function(value, index) {
-                if (value.id == admin.id && value.toggle) {
+                if (value.parentSocialAccount == id || value.socialId == id) {
                     status = true;
                 }
             });
@@ -504,36 +509,42 @@
          * add an admin feed to the social account using the parent access token
          */
 
-        $scope.addPageFeed = function(page) {
+        $scope.addPageFeed = function(obj, parent) {
             var newSocialAccount = {};
-            $scope.config.trackedAccounts.forEach(function(value, index) {
-                if (value.id == page.socialId) {
-                    newSocialAccount = value;
-                    newSocialAccount.socialId = page.sourceId;
-                    newSocialAccount.accountType = 'adminpage';
-                    newSocialAccount.socialUrl = 'https://www.facebook.com/app_scoped_user_id/' + page.sourceId + '/';
-                    newSocialAccount.parentSocialAccount = value.parentSocialAccount;
-                    newSocialAccount.accessToken = page.page_access_token;
-                    newSocialAccount.toggle = true;
-                }
-            });
+            if (parent) {
+                var socialAccount = _.find($scope.config.socialAccounts, function(socialAccount) {
+                    return socialAccount.socialId == obj.id;
+                });
+                newSocialAccount = socialAccount;
+                newSocialAccount.toggle = true;
+                newSocialAccount.parentSocialAccount = socialAccount.id;
+            } else {
+                var trackedAccount = _.find($scope.config.trackedAccounts, function(trackedAccount) {
+                    return trackedAccount.id == obj.socialId;
+                });
+                newSocialAccount = trackedAccount;
+                newSocialAccount.name = obj.name;
+                newSocialAccount.socialId = obj.sourceId;
+                newSocialAccount.accountType = 'adminpage';
+                newSocialAccount.socialUrl = 'https://www.facebook.com/app_scoped_user_id/' + obj.sourceId + '/';
+                newSocialAccount.parentSocialAccount = trackedAccount.parentSocialAccount;
+                newSocialAccount.accessToken = obj.page_access_token;
+                newSocialAccount.toggle = true;
+            }
             SocialConfigService.addTrackedAccount(newSocialAccount, function(data) {
-                // $scope.feedTypes.push(page);
-                SocialConfigService.getAllSocialConfig(function(config) {
-                    $scope.config = config;
-                    $scope.config.trackedObjects.forEach(function(value, index) {
-                        if (value.socialId == page.sourceId) {
-                            SocialConfigService.getTrackedObject(index, value.socialId, function(tracked) {
-                                if (page.type == 'facebook') {
-                                    $scope.typeLogic.feed.fb(tracked, value.socialId);
-                                }
+                $scope.config = data;
+                $scope.config.trackedObjects.forEach(function(value, index) {
+                    if (value.socialId == page.sourceId) {
+                        SocialConfigService.getTrackedObject(index, value.socialId, function(tracked) {
+                            if (page.type == 'facebook') {
+                                $scope.typeLogic.feed.fb(tracked, value.socialId);
+                            }
 
-                                if (page.type == 'twitter') {
-                                    $scope.typeLogic.feed.tw(tracked, value.socialId);
-                                }
-                            });
-                        }
-                    });
+                            if (page.type == 'twitter') {
+                                $scope.typeLogic.feed.tw(tracked, value.socialId);
+                            }
+                        });
+                    }
                 });
                 $scope.filterFeedActualFn(page);
                 ToasterService.show('success', 'Feed Added');
@@ -546,7 +557,18 @@
          */
 
         $scope.deleteSocialAccountFn = function(admin) {
-            SocialConfigService.deleteTrackedAccount(admin.id, function() {
+            var tracked = null;
+            if (admin.type == 'adminpage') {
+                tracked = _.find($scope.config.trackedAccounts, function(obj) {
+                    return admin.id == obj.parentSocialAccount
+                });
+            } else {
+                tracked = _.find($scope.config.trackedAccounts, function(obj) {
+                    return admin.socialId == obj.id
+                });
+            }
+            SocialConfigService.deleteTrackedAccount(tracked.id, function(data) {
+                $scope.config = data;
                 var index = null;
                 $scope.fbAdminPages.forEach(function(value, index) {
                     if (value.socialId == admin.socialId) {
@@ -638,11 +660,11 @@
          * filter the feed when the checkboxes are check on the left panel
          */
 
-        $scope.checkTrackedToggleFn = function(socialId) {
+        $scope.checkTrackedToggleFn = function(id) {
             var status = false;
 
             $scope.config.trackedAccounts.forEach(function(value, index) {
-                if (value.id == socialId && value.toggle == true) {
+                if (value.id == id && value.toggle == true) {
                     status = true;
                 }
             });
@@ -655,14 +677,14 @@
 
             if (value.length == 0) {
                 $scope.filtersValues.forEach(function(filterType, index) {
-                    value.push(filterType + type.socialId);
+                    value.push(filterType + type.id);
                 });
             }
 
             var isChecked = false;
 
             $scope.config.trackedAccounts.forEach(function(account, index) {
-                if (account.id == type.socialId) {
+                if (account.socialId == type.socialId) {
                     if (account.toggle) {
                         $scope.config.trackedAccounts[index].toggle = false;
                         isChecked = false;
@@ -671,7 +693,7 @@
                         isChecked = true;
                     }
                     SocialConfigService.updateTrackedAccount($scope.config.trackedAccounts[index], function(data) {
-                        console.log(data)
+                        $scope.config = data;
                     });
                 }
             });
@@ -680,7 +702,12 @@
                 itemSelector: '.item'
             });
 
-            var split = value;
+            if (Array.isArray(value)) {
+                var split = value;
+            } else {
+                var split = value.split(',');
+            }
+
             split.forEach(function(v, i) {
                 v = v.trim();
 
@@ -764,6 +791,71 @@
         $scope.formatDate = function(date) {
             return moment(date).format('MMMM D, YYYY [at] h:mm a');
         };
+
+        $scope.updateFeedListFn = function() {
+            if ($scope.config.socialAccounts && $scope.config.trackedAccounts && $scope.feedTypes.length) {
+                $scope.config.trackedAccounts.forEach(function(trackedAccount, trackedIndex) {
+                    var feed = _.find($scope.feedList, function(feed) {
+                        return feed.socialId == trackedAccount.socialId;
+                    });
+                    if (feed) {
+                        return;
+                    }
+                    var insertDict = trackedAccount;
+                    if (trackedAccount.type == 'adminpage') {
+                        var socialPage = _.find($scope.fbAdminPages, function(page) {
+                            return page.sourceId == trackedAccount.socialId;
+                        });
+                        var socialAccount = _.find($scope.config.socialAccounts, function(account) {
+                            return account.id == trackedAccount.parentSocialAccount;
+                        });
+                        var socialProfile = _.find($scope.feedTypes, function(profile) {
+                            return profile.id == socialAccount.socialId;
+                        });
+                        if (socialPage) {
+                            insertDict.name = socialPage.name;
+                        }
+                        if (socialProfile) {
+                            insertDict.type = socialProfile.type;
+                            if (socialProfile.picture) {
+                                insertDict.image = socialProfile.picture.data.url;
+                            } else {
+                                insertDict.image = socialProfile.profile_image_url;
+                            }
+                        }
+                    } else {
+                        var socialAccount = _.find($scope.config.socialAccounts, function(account) {
+                            return account.id == trackedAccount.parentSocialAccount;
+                        });
+                        var socialProfile = _.find($scope.feedTypes, function(profile) {
+                            return profile.id == socialAccount.socialId;
+                        });
+                        console.log(socialProfile);
+                        if (socialProfile) {
+                            insertDict.type = socialProfile.type;
+                            if (socialProfile.picture) {
+                                insertDict.image = socialProfile.picture.data.url;
+                            } else {
+                                insertDict.image = socialProfile.profile_image_url;
+                            }
+                            insertDict.name = socialProfile.name;
+                        }
+                    }
+                    $scope.feedList.push(insertDict);
+                });
+                console.log('feedList >>>', $scope.feedList);
+            } else {
+                console.error('No profile found', $scope.feedTypes);
+            }
+        };
+
+        $scope.$watch('config.trackedAccounts', function(newValue, oldValue) {
+            $scope.updateFeedListFn();
+        }, true);
+
+        $scope.$watch('feedTypes', function(newValue, oldValue) {
+            $scope.updateFeedListFn();
+        }, true);
 
     }]);
 })(angular);

@@ -1,6 +1,6 @@
 <div ng-controller="SocialFeedCtrl" class="social-feed">
     <!-- start: PAGE TITLE -->
-    <section id="page-title">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.marketing.SOCIALFEED">{{ mainTitle }}</h1>
@@ -268,14 +268,14 @@
                     <li ng-repeat="profile in feedTree | filter: {'facebook': profile.type}">
                         <div class="parentaccount">
                             <img ng-src="{{profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.name}}
-                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(profile)"></span>
-                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(profile, true)"></span>
+                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(profile)"></span>
+                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(profile, true)"></span>
                         </div>
                         <ul ng-show='profile.admins.length' class="subaccounts">
                             <li ng-repeat='admin in profile.admins'>
-                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{admin.name}}
-                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(admin)"></span>
-                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(admin, false)"></span>
+                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-0" width="50"> {{admin.name}}
+                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(admin)"></span>
+                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(admin, false)"></span>
                             </li>
                         </ul>
                     </li>
@@ -283,54 +283,10 @@
             </tab>
             <tab>
                 <tab-heading>
-                    Tab 2
-                </tab-heading>
-            </tab>
-            <tab>
-                <tab-heading>
-                    Tab 3
+                    Twitter
                 </tab-heading>
             </tab>
         </tabset>
-        <div class="col-xs-3 left-panel hidden" ng-show='feedTree.length'>
-            <ul class="integrations" ng-init="modalfeed = 'facebook'">
-                <li ng-click="modalfeed = 'facebook'" ng-class="{active: modalfeed == 'facebook'}"><i class="fa fa-facebook-square"></i>
-                    <span class="hidden-xs">Facebook</span>
-                </li>
-                <li ng-click="modalfeed = 'linkedin'" ng-class="{active: modalfeed == 'linkedin'}" class="hidden"><i class="fa fa-linkedin-square"></i>
-                    <span class="hidden-xs">LinkedIn</span>
-                </li>
-                <li ng-click="modalfeed = 'google-plus'" ng-class="{active: modalfeed == 'google-plus'}" class="hidden"><i class="fa fa-google-plus-square"></i>
-                    <span class="hidden-xs">Google Plus</span>
-                </li>
-                <li ng-click="modalfeed = 'twitter'" ng-class="{active: modalfeed == 'twitter'}" class="hidden"><i class="fa fa-twitter-square"></i>
-                    <span class="hidden-xs">Twitter</span>
-                </li>
-            </ul>
-        </div>
-        <div class="col-xs-9 right-panel hidden" ng-show='feedTree.length'>
-            <div ng-show="modalfeed == 'facebook'">
-                <ul class="fb-admin-pages">
-                    <li ng-repeat="profile in feedTree">
-                        <div class="parentaccount">
-                            <img ng-src="{{profile.picture.data.url}}" class="thumbnail pull-left clearfix"> {{profile.name}}
-                            <span ng-show="checkAccountExistFn(profile.id)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(profile)"></span>
-                            <span ng-hide="checkAccountExistFn(profile.id)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(profile, true)"></span>
-                        </div>
-                        <ul ng-show='profile.admins.length' class="subaccounts">
-                            <li ng-repeat='admin in profile.admins'>
-                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix"> {{admin.name}}
-                                <span ng-show="checkAccountExistFn(admin.socialId)" class="fa fa-minus-square pull-right" ng-click="deleteSocialAccountFn(admin)"></span>
-                                <span ng-hide="checkAccountExistFn(admin.socialId)" class="fa fa-plus-square pull-right" ng-click="addPageFeed(admin, false)"></span>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div ng-show="modalfeed == 'twitter'">Twitter</div>
-            <div ng-show="modalfeed == 'google-plus'">Google Plus</div>
-            <div ng-show="modalfeed == 'linkedin'">LinkedIn</div>
-        </div>
         <div class="clearfix"></div>
     </div>
     <!-- <div class="modal-footer">
