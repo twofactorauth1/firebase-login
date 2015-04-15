@@ -334,6 +334,7 @@
                         });
                         $scope.feedTree.push(profile);
                     });
+
                 });
         });
 
