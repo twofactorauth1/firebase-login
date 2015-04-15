@@ -142,6 +142,7 @@
             pages: {
                 fb: {
                     account: function(fbAdminPages, socialId) {
+                        $scope.fbAdminPages = [];
                         for (var k = 0; k < fbAdminPages.length; k++) {
                             fbAdminPages[k].socialId = socialId;
                             $scope.fbAdminPages.push(fbAdminPages[k]);
@@ -326,16 +327,6 @@
                     if ($scope.fbAdminPages) {
                         $scope.altFetchPageFn();
                     }
-
-                    $scope.feedTypes.forEach(function(profile, index) {
-                        profile.admins = [];
-                        $scope.fbAdminPages.forEach(function(admin, index) {
-                            if (admin.socialId == profile.socialId) {
-                                profile.admins.push(admin);
-                            }
-                        });
-                        $scope.feedTree.push(profile);
-                    });
                 });
         });
 
@@ -608,6 +599,8 @@
             SocialConfigService.addTrackedAccount(newSocialAccount, function(data) {
                 $scope.config = data;
                 $scope.updateFeedTree();
+                $scope.altFetchProfileFn();
+                $scope.altFetchPageFn();
 
                 $scope.config.trackedObjects.forEach(function(value, index) {
                     if (value.socialId == obj.sourceId) {
@@ -638,11 +631,12 @@
             tracked = _.find($scope.config.trackedAccounts, function(obj) {
                 return admin.sourceId == obj.socialId
             });
-            console.log('tracked: ', tracked);
-            console.log('before >>> ', $scope.config);
             SocialConfigService.deleteTrackedAccount(tracked.id, function(data) {
-                console.log('after >>> ', data);
                 $scope.config = data;
+                $scope.updateFeedTree();
+                $scope.altFetchProfileFn();
+                $scope.altFetchPageFn();
+
                 var index = null;
                 $scope.fbAdminPages.forEach(function(value, index) {
                     if (value.socialId == admin.socialId) {
