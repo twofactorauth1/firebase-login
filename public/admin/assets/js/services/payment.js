@@ -1,5 +1,9 @@
-define(['app', 'stripe', 'toasterService'], function(app) {
-    app.register.service('PaymentService', ['$http', 'ToasterService','ENV',
+'use strict';
+/**
+ * service for payment
+ */
+(function(angular) {
+    app.service('PaymentService', ['$http', 'ToasterService','ENV',
         function($http, ToasterService, ENV) {
             var baseUrl = '/api/1.0/';
             Stripe.setPublishableKey(ENV.stripeKey);
@@ -211,4 +215,4 @@ define(['app', 'stripe', 'toasterService'], function(app) {
 
         }
     ]);
-});
+})(angular);

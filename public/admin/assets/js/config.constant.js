@@ -204,6 +204,8 @@ app.constant('JS_REQUIRES', {
         'spin': '../js/libs/spin.js/spin.js',
         'underscore': '../js/libs/underscore/underscore-min.js',
 
+        'stripe': 'https://js.stripe.com/v2/?tmp',
+
         //*** jQuery Plugins
         'perfect-scrollbar-plugin': ['../js/libs/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js', '../js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css'],
         'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
@@ -225,6 +227,7 @@ app.constant('JS_REQUIRES', {
         'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
         'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
         'editorCtrl': 'assets/js/controllers/editorCtrl.js',
+        'billingCtrl': 'assets/js/controllers/billingCtrl.js',
         'postsCtrl': 'assets/js/controllers/postsCtrl.js',
         'socialFeedCtrl': 'assets/js/controllers/socialFeedCtrl.js',
         'customersCtrl': 'assets/js/controllers/customersCtrl.js',
@@ -259,6 +262,8 @@ app.constant('JS_REQUIRES', {
 
         //*** Services
         'productService': 'assets/js/services/product.js',
+        'paymentService': 'assets/js/services/product.js',
+        'toasterService': 'assets/js/services/toaster.js',
         'websiteService': 'assets/js/services/webiste.js',
         'userService': 'assets/js/services/user.js',
         'customerService': 'assets/js/services/customer.js',

@@ -209,7 +209,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Billing'
-        }
+        },
+        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'angular-cookie')
     }).state('app.account.integrations', {
         url: '/integrations',
         templateUrl: "assets/views/integrations.html",

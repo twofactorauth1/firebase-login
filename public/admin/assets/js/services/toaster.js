@@ -1,5 +1,9 @@
-define(['app', 'toaster'], function(app) {
-  app.register.service('ToasterService', ['toaster', function(toaster) {
+'use strict';
+/**
+ * service for toaster
+ */
+(function(angular) {
+  app.service('ToasterService', ['toaster', function(toaster) {
     var queue = [];
 
     var htmlQueue = [];
@@ -31,4 +35,4 @@ define(['app', 'toaster'], function(app) {
     };
 
   }]);
-});
+})(angular);

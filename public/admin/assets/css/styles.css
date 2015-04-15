@@ -12195,3 +12195,10 @@ table.grid tbody td strong {
   background: #f6f6f6!important;
   color: #6a6a6a;
 }
+/* ---------------------------------------------------------------------- */
+/*  Billing
+/* ---------------------------------------------------------------------- */
+.view-transaction-modal .paid {
+  margin: 0 auto 15px;
+  display: block;
+}
