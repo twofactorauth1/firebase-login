@@ -41,7 +41,7 @@
           $scope.secondaryFontStack = $scope.website.settings.font_family_2;
         });
 
-        $scope.closeModal = function() {
+        $scope.closeModal = function() {            
             $scope.modalInstance.close();
         };
 
@@ -488,7 +488,8 @@
                         e.stopPropagation();
                     }
                 });
-
+                //remove click handler before binding click
+                angular.element("#iframe-website").contents().find('body').off("click", ".componentActions .settings, .map-wrap .settings");
                 //add click events for all the settings buttons
                 angular.element("#iframe-website").contents().find('body').on("click", ".componentActions .settings, .map-wrap .settings", function(e) {
                     if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
@@ -524,7 +525,8 @@
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
 
                 });
-
+                //remove click handler before binding click
+                angular.element("#iframe-website").contents().find('body').off("click", ".add-component");
                 //add click events for all the add component buttons.
                 angular.element("#iframe-website").contents().find('body').on("click", ".add-component", function(e) {
                     $scope.editComponentIndex = e.currentTarget.attributes['data-index'].value;

@@ -40,9 +40,9 @@
       //facebook/:socialAccountId/post/:postId/like
       var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post', postId, 'like'].join('/');
       console.log('api url ', apiUrl);
-      $http.post(apiUrl).success(function(data, status, headers, config) {
-        fn(data);
-      });
+      // $http.post(apiUrl).success(function(data, status, headers, config) {
+      //   fn(data);
+      // });
 
     };
 
