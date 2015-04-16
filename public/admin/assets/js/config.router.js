@@ -95,7 +95,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Post'
         },
-        resolve: loadSequence('editorCtrl', 'userService')
+        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
