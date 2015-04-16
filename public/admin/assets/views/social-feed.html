@@ -1,0 +1,397 @@
+<div ng-controller="SocialFeedCtrl" class="social-feed" ng-init="getSocialConfig()">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.marketing.SOCIALFEED">{{ mainTitle }}</h1>
+                <span class="mainDescription">View and Manage all social feeds.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: YOUR CONTENT HERE -->
+    <div class="row margin-top-15">
+        <div class="col-sm-9">
+            <div class="submit-post-form col-xs-12">
+                <div class="panel panel-dark panel-alt timeline-post">
+                    <div class="panel-body">
+                        <textarea placeholder="Write something..." class="form-control" id="postContent" ng-model="postContent"></textarea>
+                    </div>
+                    <!-- panel-body -->
+                    <div class="panel-footer">
+                        <div class="pull-left">
+                            <div class="form-horizontal" style="margin-left: 20px;">
+                                <div class="form-group margin-bottom-0">
+                                    <label for="post-to" class="pull-left control-label" style="padding: 0;margin-right: 10px;font-size: 14px;">Post To: </label>
+                                    <div class="pull-left">
+                                        <select class="form-control mb0 input-sm" ng-model="selectedType" ng-change="postToChange(selectedType)">
+                                            <option ng-repeat="type in trackedAccounts" value="{{type}}">{{type.type}} {{type.name || type.profile.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <div class="post-options pull-left">
+                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Schedule"><i class="fa fa-map-marker"></i></a>
+                                <a href="" tooltip-placement="top" tooltip-html-unsafe="Location"><i class="fa fa-calendar"></i></a>
+                            </div>
+                            <button ng-class="{'disabled': !postContent.length}" class="btn btn-green" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><i class="fa fa-spinner fa-spin" ng-show="postingToSocial"></i> Submit Post</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!-- panel-footer -->
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-xs-12 col-sm-4" ng-repeat="post in displayFeed | orderBy: 'date':true track by $index">
+                <div ng-if="post.type == 'fb'">
+                    <div class="panel panel-white facebook">
+                        <div class="panel-heading border-light">
+                            <i class="fa fa-facebook pull-left"></i>
+                            <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+                        </div>
+                        <!-- panel-heading -->
+                        <div class="panel-body">
+                            <div class="panel-profile">
+                                <div class="media">
+                                    <a ui-sref="account" class="pull-left">
+                                        <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
+                                    </a>
+                                    <div class="media-body">
+                                        <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
+                                        <small class="text-muted">{{formatDate(post.date)}}</small>
+                                    </div>
+                                </div>
+                                <!-- media -->
+                            </div>
+                            <div class="media">
+                                <a ng-href="{{post.link}}">
+                                    <img alt="" ng-src="{{post.picture}}" class="media-object">
+                                </a>
+                                <div class="media-body">
+                                    <p class="center">{{post.message}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="panel-footer border-light">
+                            <div class="timeline-btns">
+                                <div class="pull-left">
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showPostModal(post)"><i class="fa fa-thumbs-up"></i></a>
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments-fb" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
+                                    <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-link"></i></a>
+                                </div>
+                                <div class="pull-right">
+                                    <small class="text-muted"><span class="fa fa-thumbs-o-up"></span> {{post.likes.length || 0}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="post.type == 'tw' && post.postType == 'tweet'">
+                    <div class="panel panel-white">
+                        <div class="post-top-bar twitter">
+                            <i class="fa fa-twitter pull-left"></i>
+                            <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+                        </div>
+                        <div class="panel-heading">
+                            <div class="media">
+                                <a ui-sref='account' class="pull-left">
+                                    <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
+                                    <small class="text-muted">{{formatDate(post.date)}}</small>
+                                </div>
+                            </div>
+                            <!-- media -->
+                        </div>
+                        <!-- panel-heading -->
+                        <div class="panel-body">
+                            <div class="media">
+                                <a ng-href='{{post.link}}'>
+                                    <img alt="" ng-src="{{post.picture}}" class="media-object">
+                                </a>
+                                <div class="media-body">
+                                    <p class="center">{{post.message}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="post-bottom-bar">
+                            <div class="timeline-btns">
+                                <div class="pull-left">
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click=""><i class="fa fa-reply"></i></a>
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click=""><i class="fa fa-retweet"></i></a>
+                                    <a tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank" data-toggle="modal" data-target="#marketing-comments-tw" ng-click="updateComments(post)"><i class="fa fa-envelope"></i></a>
+                                </div>
+                                <div class="pull-right">
+                                    <small class="text-muted"><span class="fa fa-retweet"></span> {{post.likes.length || 0}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="post.type == 'tw' && post.postType == 'follower'">
+                    <div class="panel panel-white">
+                        <div class="post-top-bar twitter">
+                            <i class="fa fa-twitter pull-left"></i>
+                            <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+                        </div>
+                        <!-- <div class="panel-heading">
+                                                    <div class="media">
+                                                        <a ui-sref='account' class="pull-left">
+                                                            <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
+                                                        </a>
+                                                        <div class="media-body">
+                                                            <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
+                                                            <small class="text-muted">{{formatDate(post.date)}}</small>
+                                                        </div>
+                                                    </div>
+
+                                                </div> -->
+                        <!-- panel-heading -->
+                        <div class="panel-body">
+                            <div class="media">
+                                <img class="img-thumbnail img-circle center" style="height: 100px;width:100px;display: block;" ng-src="{{post.from.profileimg}}">
+                                <div class="media-body">
+                                    <p class="center">{{post.from.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="post-bottom-bar">
+                            <div class="timeline-btns">
+                                <div class="pull-left">
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click=""><i class="fa fa-reply"></i></a>
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click=""><i class="fa fa-retweet"></i></a>
+                                    <a ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank"><i class="fa fa-envelope"></i></a>
+                                </div>
+                                <div class="pull-right">
+                                    <small class="text-muted"><span class="fa fa-retweet"></span> {{post.likes.length || 0}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="stream-filter col-xs-3">
+            <button type="button" class="btn btn-info btn-o btn-block btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openModal('manage-feed-modal')">
+                <span>Manage Feeds</span>
+            </button>
+            <accordion>
+                <accordion-group is-open="item.open" is-disabled="true" class="hidden">
+                    <accordion-heading>
+                        <div class="pull-left filter-details">
+                            <h4>All Networks</h4>
+                            <div class="checkbox clip-check check-primary checkbox-inline">
+                                <input type="checkbox" id="allnetworks" ng-click="filterFeed(type, $event)" ng-checked="type.open">
+                                <label for="allnetworks"></label>
+                            </div>
+                        </div>
+                    </accordion-heading>
+                </accordion-group>
+                <accordion-group is-open="item.open" ng-repeat="type in trackedAccounts track by $index" is-disabled="true">
+                    <accordion-heading>
+                        <div class="feedTypeDetail">
+                            <div class="filter-avatar">
+                                <span class="fa fa-{{type.type}}"></span>
+                                <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https}}" class="avatar pull-left" />
+                            </div>
+                            <div class="pull-left filter-details">
+                                <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
+                                <p>{{type.type}} ({{feedLengths[type.socialId]}})</p>
+                            </div>
+                            <!-- <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'facebook'" data-value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}"></span>
+                                    <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'twitter'" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></span> -->
+                            <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'twitter' || type.type == 'tw'">
+                                <input type="checkbox" id="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}">
+                                <label for="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></label>
+                            </div>
+                            <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'facebook' || type.type == 'fb'">
+                                <div class="checkbox clip-check check-primary">
+                                    <input type="checkbox" id="checkbox1" ng-checked="type.toggle">
+                                    <label for="checkbox1" ng-click="filterFeed(type)"></label>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </accordion-heading>
+                    <div class="col-xs-12" ng-if="type.type == 'twitter'">
+                        <input type="checkbox" name="tweets" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}">
+                        <label for="tweets">Tweets</label>
+                        <span class="pull-right label label-primary"></span>
+                        <hr></hr>
+                    </div>
+                    <div class="col-xs-12" ng-if="type.type == 'twitter'">
+                        <input type="checkbox" name="followers" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".follower-{{type.socialId}}">
+                        <label for="followers">Followers</label>
+                        <span class="pull-right label label-primary"></span>
+                        <hr></hr>
+                    </div>
+                    <div class="col-xs-12" ng-if="type.type == 'facebook'">
+                        <input type="checkbox" name="posts" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}">
+                        <label for="posts">Posts</label>
+                        <span class="pull-right label label-primary">{{fbPostsLength}}</span>
+                        <hr></hr>
+                    </div>
+                </accordion-group>
+            </accordion>
+            <div ng-if="isLoaded && feedTypes.length <= 0" class="empty">
+                <h4 class="center">No Feeds added..</h4>
+            </div>
+            <div ng-if="!isLoaded && feedTypes.length <= 0" class="empty">
+                <h4 class="center"><span class="fa fa-spinner fa-spin"></span> Loading Feeds...</h4>
+            </div>
+            <!-- <pre>{{filters}}</pre> -->
+        </div>
+    </div>
+    <!-- end: YOUR CONTENT HERE -->
+</div>
+<script type="text/ng-template" id="manage-feed-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Manage Feeds</h4>
+    </div>
+    <div class="modal-body manage-feed no-padding">
+        <div class="col-xs-12 left-panel" ng-hide='socialAccounts.length'>
+            No account available for removal.
+        </div>
+        <tabset class="tabbable tabs-left margin-bottom-0">
+            <tab>
+                <tab-heading>
+                    Facebook
+                </tab-heading>
+                <ul class="fb-admin-pages">
+                    <li ng-repeat="profile in socialAccounts | filter: {'facebook': profile.type}">
+                        <div class="parentaccount">
+                            <img ng-src="{{profile.profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.profile.name}}
+                            <span ng-show="profile.tracked" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(profile.profile)"></span>
+                            <span ng-hide="profile.tracked" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(profile.profile, true)"></span>
+                        </div>
+                        <ul ng-show='profile.admins.length' class="subaccounts">
+                            <li ng-repeat='admin in profile.admins'>
+                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-0" width="50"> {{admin.name}}
+                                <span ng-show="admin.tracked" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(admin)"></span>
+                                <span ng-hide="admin.tracked" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(admin, false)"></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Twitter
+                </tab-heading>
+            </tab>
+        </tabset>
+        <div class="clearfix"></div>
+    </div>
+    <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addFeedFn()"><i class="fa fa-plus" /> Add</button>
+                </div> -->
+</script>
+<script type="text/ng-template" id="like-unlike-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Manage Likes</h4>
+    </div>
+    <div class="modal-body nopadding">
+        <ul class="fb-admin-pages mb0">
+            <li ng-repeat="page in tempFBAdminPages" ng-show="checkAccountExistFn(page.socialId)">
+                <div class="account-avatar">
+                    <img ng-src="{{page.picture.data.url}}" class="img-circle pull-left clearfix"> {{page.name}}
+                    <span class="fa fa-{{type.type}}"></span>
+                    <span ng-hide='page.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
+                    <span ng-show='page.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(page, $event)"></span>
+                </div>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+</script>
+<script type="text/ng-template" id="twitter-comments-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Message</h4>
+    </div>
+    <div class="modal-body nopadding">
+        <div class="panel panel-default panel-alt widget-messaging mb0">
+            <!-- panel-body -->
+            <div class="panel-footer">
+                <div class=' mb15'>
+                    <img alt="" ng-src="{{addCommentPage.from.profile_pic}}" class="media-object"> {{addCommentPage.from.name}}
+                </div>
+                <div class=' mb15'>
+                    <textarea class="form-control" placeholder="Enter Message..." ng-model='addComment'></textarea>
+                </div>
+                <div class='row'>
+                    <div class='col-xs-3'>
+                        <span class="pull-left">Post As:</span>
+                        <img ng-src="{{addCommentAdminPage.profile_image_url}}" class="thumbnail pull-left clearfix mb0" ng-show='addCommentAdminPage.profile_image_url' />
+                    </div>
+                    <div class='col-xs-6'>
+                        <select class='form-control mb0' ng-model='twitterCommentProfile' ng-change='setAddCommentAdminPageFn(twitterCommentProfile)'>
+                            <option value="" ng-if="false"></option>
+                            <option ng-repeat="type in feedTypes" ng-show='type.type=="twitter"' value="{{type.socialId}}">{{type.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addComment}' data-dismiss='modal' ng-click='addTwCommentFn(addComment)'>Comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</script>
+<script type="text/ng-template" id="facebook-comments-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Comments <span ng-if="visibleComments.length">({{visibleComments.length}})</span></h4>
+    </div>
+    <div class="modal-body nopadding">
+        <div class="panel panel-default panel-alt widget-messaging mb0">
+            <div class="panel-body">
+                <ul>
+                    <li ng-repeat="comment in visibleComments">
+                        <img ng-src="{{comment.picture}}" class="img-thumbnail pull-left">
+                        <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
+                        <h4 class="sender">{{comment.name}}</h4>
+                        <small>{{comment.comment}}</small>
+                    </li>
+                    <li ng-if="!visibleComments">
+                        <div class="mb30"></div>
+                        <h4 class="center"><span class="fa fa-comments"></span> No Comments</h4>
+                        <div class="mb30"></div>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <!-- panel-body -->
+            <div class="panel-footer">
+                <div class=' mb15'>
+                    <textarea class="form-control" placeholder="Enter Comment..." ng-model='addComment'></textarea>
+                </div>
+                <div class='row'>
+                    <div class='col-xs-3'>
+                        <span class="pull-left">Post As:</span>
+                        <img ng-src="{{addCommentAdminPage.picture.data.url}}" class="thumbnail pull-left clearfix mb0" />
+                    </div>
+                    <div class='col-xs-6'>
+                        <select class='form-control mb0' ng-model='addCommentAdminPage' ng-options="page.name for page in fbAdminPages">
+                            <option value="" ng-if="false"></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addComment}' ng-click='addFbCommentFn(addComment)'>Comment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</script>

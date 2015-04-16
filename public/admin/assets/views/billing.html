@@ -1,0 +1,331 @@
+<div ng-controller="BillingCtrl" class="billing">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.account.BILLING">{{ mainTitle }}</h1>
+                <span class="mainDescription">View and Manage all your blog posts</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: YOUR CONTENT HERE -->
+    <div class="container-fluid container-fullw bg-white">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-agenda" ng-click="openModal('plan-change-modal')">
+                        <span>Change Plan</span>
+                    </button>
+                    <div class="margin-bottom-15 visible-xs"></div>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-receipt" ng-click="openModal('bill-summary-modal')">
+                        <span>Bill Summary</span>
+                    </button>
+                    <div class="margin-bottom-15 visible-xs"></div>
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-credit-card" ng-click="openModal('change-card-modal')">
+                        <span>Payment Method</span>
+                    </button>
+                    <div class="margin-bottom-15 visible-xs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-transparent">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Current Plan
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="pricing-table pricing-blue">
+                    <ul class="plan plan2">
+                        <li class="plan-name">
+                            All Inclusive
+                        </li>
+                        <li class="plan-price">
+                            <h3> $49 <span class="price-cents">95</span><span class="price-month">/month</span></h3>
+                        </li>
+                        <li>
+                            <strong>Customer</strong> Relationship Manager
+                        </li>
+                        <li>
+                            <strong>Product & Order</strong> Manager
+                        </li>
+                        <li>
+                            <strong>Social</strong> Manager
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="panel panel-transparent">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Invoices
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover margin-bottom-30">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <!--<th>Card</th>-->
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="invoice in pagedInvoices">
+                            <td>{{$index + 1}}</td>
+                            <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
+                            <td>${{(invoice.total/100).toFixed( 2 )}}</td>
+                            <!--<td>Visa - 8943</td>-->
+                            <td ng-show="invoice.paid">PAID</td>
+                            <td ng-hide="invoice.paid">NOT PAID</td>
+                            <td class="table-action">
+                                <a href="" ng-click="changeInvoice(invoice); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
+                                            </a>
+                            </td>
+                        </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- end: YOUR CONTENT HERE -->
+    <script type="text/ng-template" id="view-transaction-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h3 class="modal-title">Transaction #{{selectedInvoice.id}}</h3>
+        </div>
+        <div class="modal-body view-transaction-modal">
+            <img src="../admin/assets/images/paid-in-full.png" class="center paid" width="100" />
+            <h4>Pay To:
+                        <span class="pull-right">Indigenous Software Inc.</span>
+                    </h4>
+            <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
+            <h4>Date:
+                        <span class="pull-right">{{selectedInvoice.date * 1000 | date : 'longDate'}}</span>
+                    </h4>
+            <h4>Period:
+                        <span class="pull-right">{{selectedInvoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{plusOneMonth(selectedInvoice.lines.data[0].period.start * 1000)}}</span>
+                    </h4>
+            <h4>Amount Paid:
+                        <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>
+                    </h4>
+        </div>
+    </script>
+    <script type="text/ng-template" id="bill-summary-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-tsitle" id="myModalLabel">Bill Summary</h4>
+        </div>
+        <div ng-if="!upcomingInvoice" class="modal-body">
+            No upcoming invoices found
+        </div>
+        <div ng-if="upcomingInvoice" class="modal-body">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="mb40"></div>
+                    <h4 class="center">Amount Due</h4>
+                    <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
+                </div>
+                <div class="col-xs-6">
+                    <h4>Current Payment:</h4>
+                    <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
+                    <!--<h4>Last Payment:</h4>-->
+                    <!--<span>recieved 01AUG14</span>-->
+                </div>
+                <div class="col-xs-6">
+                    {{subscription.plan.name}} Plan
+                </div>
+            </div>
+            <div class="mb30"></div>
+            <div class="table-responsive summary">
+                <table class="table mb30">
+                    <thead>
+                        <tr class="info">
+                            <th>Item</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in upcomingInvoice.lines.data">
+                            <td>{{item.plan.statement_description}}</td>
+                            <td>${{(item.amount/100).toFixed( 2 )}}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="pull-right">
+                                            <h4>Sub-Total</h4>
+                                        </span>
+                            </td>
+                            <td>
+                                <h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4>
+                            </td>
+                        </tr>
+                        <!--<tr>-->
+                        <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
+                        <!--<td><h4>3.86</h4></td>-->
+                        <!--</tr>-->
+                        <tr>
+                            <td>
+                                <span class="pull-right">
+                                            <h4>TOTAL</h4>
+                                        </span>
+                            </td>
+                            <td>
+                                <h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="plan-change-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Plan Change</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-6" ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': subscription.plan.id != plan.id , 'selected': subscription.plan.id == plan.id  }">
+                    <div class="well well-calm mb0">
+                        <h4 class="center">{{plan.name}}</h4>
+                        <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+                        <h5 class="center">+ <i class="fa fa-usd fa-1"></i>{{planStatus[plan.id].signup_fee}}(One Time Fee)</h5>
+                        <div class="mb30"></div>
+                        <div class="col-xs-12 mb15">
+                            <a type="button" class="btn btn-success btn-block center" ng-if="subscription.plan.id != plan.id" ng-click="switchSubscriptionPlanFn(plan.id)" ng-class="{'disabled': plan.id==subscription.plan.id}">Choose</a>
+                            <a type="button" class="btn btn-green btn-block center active" ng-if="subscription.plan.id == plan.id">Selected</a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="margin-top:0;">
+            <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="savePlanFn(subscription.plan.id)" ng-if="selectPlanView=='plan'">
+                <span class="fa fa-save"> </span> Select Plan</a>
+            <a href="#" type="button" class="btn btn-primary" id="" data-dismiss="modal" ng-click="chooseFirstTime(subscription.plan.id)" ng-if="selectPlanView=='card'" ng-disabled="!subscriptionSelected">
+                <span class="fa fa-save"> </span> Select Plan -></a>
+        </div>
+    </script>
+    <script type="text/ng-template" id="change-card-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Change Payment Method</h4>
+        </div>
+        <div style="padding:10px;">
+            <div class="mb20"></div>
+            <div class="card-wrapper-change"></div>
+            <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
+            <!-- <div class="mb40">
+                        <div class="card-wrapper"></div>
+                    </div>
+                    <div class="active">
+                        <form name="card-details" action="">
+                            <div>
+                                <div id="card_number" class="form-group small-6 columns col-sm-6">
+                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                                <div class="visible-xs mb20"></div>
+                                <div id="card_name" class="form-group small-6 columns col-sm-6">
+                                    <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div>
+                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
+                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
+                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                    <div id="coupon-name" class="form-group col-xs-12">
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
+                        <span class="error" />
+                    </div>
+                    <div class="clearfix"></div>
+                    <div id="coupon-name" class="form-group col-xs-12">
+                        <a type="button" class="btn btn-primary btn-lg btn-block center" ng-click="updateStripeIdFn()"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Add Card</a>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="mb10"></div> -->
+        </div>
+    </script>
+    <script type="text/ng-template" id="pay-bill-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">×</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">Verify Payment</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row mb20">
+                <div class="col-xs-6">
+                    <div class="mb30"></div>
+                    <h4 class="center">Amount Due</h4>
+                    <h1 class="center total">$99.98</h1>
+                </div>
+                <div class="col-xs-6">
+                    <h4>Current Payment:</h4>
+                    <span>due 01SEP14</span>
+                    <h4>Period:</h4>
+                    <span>01AUG14 - 31AUG14</span>
+                </div>
+            </div>
+            <hr></hr>
+            <h4>Pay To:
+                        <span class="pull-right">Indigenous Software Inc.</span>
+                    </h4>
+            <h4 class="pull-left">Payment Method:</h4>
+            <span class="pull-right">
+                        <select class="form-control">
+                            <option>Visa xxxx-xxxx-xxxx-2345 06/15</option>
+                            <option>Mastercard xxxx-xxxx-xxxx-9894 09/15</option>
+                            <option>Paypal mypaypalemail@gmail.com</option>
+                        </select>
+                    </span>
+            <div class="clearfix"></div>
+            <!-- <h4>Date: <span class="pull-right">Monday, September 1st, 2014</span></h4> -->
+            <!-- <h4>Amount: <span class="pull-right">$99.98</span></h4> -->
+        </div>
+        <div class="modal-footer">
+            <label class="col-xs-9">Please verify the information above and click "Submit" to authorize us to complete your payment.</label>
+            <button type="button" class="btn btn-success btn-lg btn-pay-bill" id="" data-dismiss="modal">
+                <span class="fa fa-lock"></span>Submit</button>
+        </div>
+    </script>
+</div>

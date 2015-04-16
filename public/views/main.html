@@ -7,10 +7,10 @@
     <!-- This div will handle all toolbars. -->
 </div>
 <div ng-show="isEditing">
-    <div id="editor-toolbar"></div>
+    <div id="editor-toolbar" ng-class="{'fullyLocaded': isLoaded}"></div>
 </div>
 <div ng-show="isEditing ? true : isLoaded">
-    <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
+    <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents">
     <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
         <div class="componentActions" as-sortable-item-handle>
             <span  class="reorder fa fa-arrows"><p>Reorder</p></span>
@@ -21,7 +21,7 @@
         </div>
         <div ng-include="'/components/component-wrap.html'"></div>
         <div ng-class="{'zee-blur': !component.visibility}"></div>
-        <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing">
+        <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing" ng-if="component.type != 'footer'">
             <a href="">
             <i class="fa fa-plus"></i>
             <p>Add New</p>

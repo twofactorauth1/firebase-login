@@ -68,6 +68,7 @@ _.extend(baseView.prototype, {
 
         if (options.account != null) {
             data.serverProps[$$.constants.server_props.ACCOUNT_ID] = options.account._id;
+            data.serverProps[$$.constants.server_props.WEBSITE_ID] = options.account.website.websiteId;
         } else if(options.accountId != null) {
             data.serverProps[$$.constants.server_props.ACCOUNT_ID] = options.accountId;
         }

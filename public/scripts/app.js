@@ -23,7 +23,6 @@ var mainApp = angular
         'mrPageEnterAnimate',
         'angularMoment',
         'mgo-angular-wizard',
-        'iso.directives',
         'timer',
         'ui',
         'ui.bootstrap',

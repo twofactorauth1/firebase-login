@@ -92,13 +92,16 @@ module.exports = {
                         }
                     } else {
                         var socialAccount = value.getSocialAccountById(obj.socialId);
-                        socialAccount.trackedObjects = socialAccount.trackedObjects || [];
-                        if(_.contains(socialAccount.trackedObjects, obj.type)) {
-                            //cool
-                        } else {
-                            socialAccount.trackedObjects.push(obj.type);
+                        if(socialAccount) {
+                            socialAccount.trackedObjects = socialAccount.trackedObjects || [];
+                            if(_.contains(socialAccount.trackedObjects, obj.type)) {
+                                //cool
+                            } else {
+                                socialAccount.trackedObjects.push(obj.type);
+                            }
+                            value.get('trackedAccounts').push(socialAccount);
                         }
-                        value.get('trackedAccounts').push(socialAccount);
+
                     }
                 });
                 //save it async
@@ -161,25 +164,40 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccounts = config.get('socialAccounts');
-
+            var parentId = socialId;
             var updatedSocialAccounts = _.filter(socialAccounts, function(_account){
                 return _account.id !== socialId;
             });
             config.set('socialAccounts', updatedSocialAccounts);
 
+            var trackedAccounts = config.get('trackedAccounts');
+            var removedTrackedAccounts = [];
+            var updatedTrackedAccounts = _.filter(trackedAccounts, function(_obj) {
+                if(_obj && _obj.parentSocialAccount === parentId) {
+                    removedTrackedAccounts.push(_obj.id);
+                    return false;
+                }
+                return true;
+            });
+            config.set('trackedAccounts', updatedTrackedAccounts);
+
             var trackedObjects = config.get('trackedObjects');
             var updatedTrackedObjects = _.filter(trackedObjects, function(_obj){
-                return _obj.socialId !== socialId;
+                if(_.contains(removedTrackedAccounts, _obj.socialId)) {
+                    return false;
+                }
+                return true;
+                //return _obj.socialId !== socialId || _obj.parentSocialAccount != parentId;
             });
             config.set('trackedObjects', updatedTrackedObjects);
 
-
+            log.debug('Before call to save, ', config);
             socialconfigDao.saveOrUpdate(config, function(err, value){
                 if(err) {
                     log.error('Error updating socialconfig: ' + err);
                     fn(err, null);
                 } else {
-                    log.debug('<< updateSocialConfig');
+                    log.debug('<< removeSocialAccount', value);
                     fn(null, value);
                 }
             });
@@ -220,7 +238,7 @@ module.exports = {
                 }
                 creds = value;
                 var socialAccounts = config.get('socialAccounts');
-
+                var trackedAccounts = config.get('trackedAccounts');
                 var updatedCred = false;
                 socialAccounts.forEach(function(value, index) {
                     if (value.type == socialType && value.socialId == socialId) {
@@ -244,48 +262,121 @@ module.exports = {
                         updatedCred = true;
                     }
                 });
-                if (updatedCred == false) {
-                    socialAccounts.push(creds);
-                    /*
-                     * Add default tracked objects
-                     */
-                    var trackedObjects = config.get('trackedObjects');
-                    if(creds.type === $$.constants.social.types.FACEBOOK) {
-                        _.each(self.defaultFacebookTrackedObjects, function(type){
-                            var obj = {
-                                socialId: creds.id,
-                                type: type
-                            }
-                            trackedObjects.push(obj);
-                        });
-                    } else if(creds.type === $$.constants.social.types.TWITTER) {
-                        _.each(self.defaultTwitterTrackedObjects, function(type){
-                            var obj = {
-                                socialId: creds.id,
-                                type: type
-                            }
-                            trackedObjects.push(obj);
-                        });
-                    }
-                    config.set('trackedObjects', trackedObjects);
-                }
-                config.set('socialAccounts', socialAccounts);
 
-                socialconfigDao.saveOrUpdate(config, function(err, value){
-                    if(err) {
-                        log.error('Error saving social config: ' + err);
-                        return fn(err, null);
-                    } else {
-                        log.debug('<< addSocialAccount');
-                        return fn(null, value);
+                trackedAccounts.forEach(function(value, index) {
+                    if (value.type == socialType && value.socialId == socialId) {
+                        trackedAccounts.splice(index, 1);
                     }
-
                 });
+                var trackedAccount = _.extend({toggle: true, parentSocialAccount:creds.id}, creds, {id:$$.u.idutils.generateUniqueAlphaNumeric()});
+                trackedAccounts.push(trackedAccount);
+
+                if(updatedCred === false && creds.type === $$.constants.social.types.FACEBOOK) {
+                    //look for and add admin pages
+                    facebookDao.getTokenAdminPages(creds.accessToken, creds.socialId, null, null, null, function(err, pages){
+                        var trackedObjects = config.get('trackedObjects');
+                        if(err) {
+                            log.warn('Error adding admin pages: ' + err);
+
+                        } else {
+                            _.each(pages, function(page){
+                                var trackedAccountPage = _.extend({toggle: false, parentSocialAccount:creds.id}, creds, {
+                                    id:$$.u.idutils.generateUniqueAlphaNumeric(),
+                                    accessToken: page.get('page_access_token'),
+                                    name: page.get('name'),
+                                    socialId: page.get('sourceId'),
+                                    socialUrl: page.get('link'),
+                                    accountType: 'adminpage'});
+                                if(page && page.get('picture') && page.get('picture'.data)) {
+                                    trackedAccountPage.image = page.get('picture').data.url;
+                                }
+                                trackedAccounts.push(trackedAccountPage);
+                                _.each(self.defaultFacebookTrackedObjects, function(type){
+                                    var obj = {
+                                        socialId: trackedAccountPage.id,
+                                        type: type
+                                    }
+                                    trackedObjects.push(obj);
+                                });
+                            });
+                        }
+                        socialAccounts.push(creds);
+                        /*
+                         * Add default tracked objects
+                         */
+
+                        if(creds.type === $$.constants.social.types.FACEBOOK) {
+                            _.each(self.defaultFacebookTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        } else if(creds.type === $$.constants.social.types.TWITTER) {
+                            _.each(self.defaultTwitterTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        }
+                        config.set('trackedObjects', trackedObjects);
+                        config.set('socialAccounts', socialAccounts);
+
+                        socialconfigDao.saveOrUpdate(config, function(err, value){
+                            if(err) {
+                                log.error('Error saving social config: ' + err);
+                                return fn(err, null);
+                            } else {
+                                log.debug('<< addSocialAccount');
+                                return fn(null, value);
+                            }
+
+                        });
+                    });
+                } else {
+                    if (updatedCred == false) {
+                        socialAccounts.push(creds);
+                        /*
+                         * Add default tracked objects
+                         */
+                        var trackedObjects = config.get('trackedObjects');
+                        if(creds.type === $$.constants.social.types.FACEBOOK) {
+                            _.each(self.defaultFacebookTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        } else if(creds.type === $$.constants.social.types.TWITTER) {
+                            _.each(self.defaultTwitterTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        }
+                        config.set('trackedObjects', trackedObjects);
+                    }
+                    config.set('socialAccounts', socialAccounts);
+
+                    socialconfigDao.saveOrUpdate(config, function(err, value){
+                        if(err) {
+                            log.error('Error saving social config: ' + err);
+                            return fn(err, null);
+                        } else {
+                            log.debug('<< addSocialAccount');
+                            return fn(null, value);
+                        }
+
+                    });
+                }
             });
-
-
         });
-
     },
 
     _addProfilPicToCreds: function(creds, fn) {
@@ -395,9 +486,9 @@ module.exports = {
             var trackedObject = config.get('trackedObjects')[objIndex];
             var socialAccount = config.getSocialAccountById(trackedObject.socialId);
 
-            if(socialAccount && socialAccount.type === 'tw') {
+            if(socialAccount && (socialAccount.type === 'tw' || socialAccount.type === 'twitter')) {
                 return self._handleTwitterTrackedObject(socialAccount, trackedObject, since, until, limit, fn);
-            } else if (socialAccount && socialAccount.type === 'fb'){
+            } else if (socialAccount && (socialAccount.type === 'fb' || socialAccount.type === 'facebook')){
                 return self._handleFacebookTrackedObject(socialAccount, trackedObject, since, until, limit, fn);
             } else {
                 return fn(null, null);
@@ -444,11 +535,37 @@ module.exports = {
                 log.error('Error getting socialconfig: ' + err);
                 return fn(err, null);
             }
-            if(!trackedAccount.id) {
-                trackedAccount.id = $$.u.idutils.generateUUID();
+            if(!trackedAccount.parentSocialAccount || !config.getSocialAccountById(trackedAccount.parentSocialAccount)) {
+                log.error('Could not match parentSocialAccount [' + trackedAccount.parentSocialAccount + ']');
+                return fn('TrackedAccount did not have valid parentSocialAccountField', null);
             }
+            //if(!trackedAccount.id) {
+                trackedAccount.id = $$.u.idutils.generateUniqueAlphaNumeric();
+            //}
             var trackedAccounts = config.get('trackedAccounts') || [];
             trackedAccounts.push(trackedAccount);
+            /*
+             * Add default tracked objects
+             */
+            var trackedObjects = config.get('trackedObjects');
+            if(trackedAccount.type === $$.constants.social.types.FACEBOOK || trackedAccount.type === 'facebook') {
+                _.each(self.defaultFacebookTrackedObjects, function(type){
+                    var obj = {
+                        socialId: trackedAccount.id,
+                        type: type
+                    }
+                    trackedObjects.push(obj);
+                });
+            } else if(trackedAccount.type === $$.constants.social.types.TWITTER || trackedAccount.type === 'twitter') {
+                _.each(self.defaultTwitterTrackedObjects, function(type){
+                    var obj = {
+                        socialId: trackedAccount.id,
+                        type: type
+                    }
+                    trackedObjects.push(obj);
+                });
+            }
+            config.set('trackedObjects', trackedObjects);
             config.set('trackedAccounts', trackedAccounts);
 
             return self.updateSocialConfig(config, fn);
@@ -497,7 +614,7 @@ module.exports = {
                     return false;
                 }
             });
-            trackedAccounts[index] = updatedTrackedAccount;
+            trackedAccounts[index] = trackedAccount;
 
             config.set('trackedAccounts', trackedAccounts);
             return self.updateSocialConfig(config, fn);
@@ -507,7 +624,7 @@ module.exports = {
 
     deleteTrackedAccount: function(accountId, trackedAccountId, fn) {
         var self = this;
-        log.debug('>> deleteTrackedAccount');
+        log.debug('>> deleteTrackedAccount ');
 
         self.getSocialConfig(accountId, null, function(err, config) {
             if (err) {
@@ -519,12 +636,19 @@ module.exports = {
 
             var newTrackedAccounts = [];
             _.each(trackedAccounts, function(account){
-                if(account.id !== trackedAccountId) {
+                if(account.id != trackedAccountId) {
                     newTrackedAccounts.push(account);
                 }
             });
 
             config.set('trackedAccounts', newTrackedAccounts);
+
+            var trackedObjects = config.get('trackedObjects');
+            var updatedTrackedObjects = _.filter(trackedObjects, function(_obj){
+               return _obj.socialId != trackedAccountId;
+            });
+            config.set('trackedObjects', updatedTrackedObjects);
+
             return self.updateSocialConfig(config, fn);
         });
     },
