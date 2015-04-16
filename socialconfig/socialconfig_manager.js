@@ -271,48 +271,112 @@ module.exports = {
                 var trackedAccount = _.extend({toggle: true, parentSocialAccount:creds.id}, creds, {id:$$.u.idutils.generateUniqueAlphaNumeric()});
                 trackedAccounts.push(trackedAccount);
 
-                if (updatedCred == false) {
-                    socialAccounts.push(creds);
-                    /*
-                     * Add default tracked objects
-                     */
-                    var trackedObjects = config.get('trackedObjects');
-                    if(creds.type === $$.constants.social.types.FACEBOOK) {
-                        _.each(self.defaultFacebookTrackedObjects, function(type){
-                            var obj = {
-                                socialId: trackedAccount.id,
-                                type: type
+                if(updatedCred === false && creds.type === $$.constants.social.types.FACEBOOK) {
+                    //look for and add admin pages
+                    facebookDao.getTokenAdminPages(creds.accessToken, creds.socialId, null, null, null, function(err, pages){
+                        var trackedObjects = config.get('trackedObjects');
+                        if(err) {
+                            log.warn('Error adding admin pages: ' + err);
+
+                        } else {
+                            _.each(pages, function(page){
+                                var trackedAccountPage = _.extend({toggle: false, parentSocialAccount:creds.id}, creds, {
+                                    id:$$.u.idutils.generateUniqueAlphaNumeric(),
+                                    accessToken: page.get('page_access_token'),
+                                    name: page.get('name'),
+                                    socialId: page.get('sourceId'),
+                                    socialUrl: page.get('link'),
+                                    accountType: 'adminpage'});
+                                if(page && page.get('picture') && page.get('picture'.data)) {
+                                    trackedAccountPage.image = page.get('picture').data.url;
+                                }
+                                trackedAccounts.push(trackedAccountPage);
+                                _.each(self.defaultFacebookTrackedObjects, function(type){
+                                    var obj = {
+                                        socialId: trackedAccountPage.id,
+                                        type: type
+                                    }
+                                    trackedObjects.push(obj);
+                                });
+                            });
+                        }
+                        socialAccounts.push(creds);
+                        /*
+                         * Add default tracked objects
+                         */
+
+                        if(creds.type === $$.constants.social.types.FACEBOOK) {
+                            _.each(self.defaultFacebookTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        } else if(creds.type === $$.constants.social.types.TWITTER) {
+                            _.each(self.defaultTwitterTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        }
+                        config.set('trackedObjects', trackedObjects);
+                        config.set('socialAccounts', socialAccounts);
+
+                        socialconfigDao.saveOrUpdate(config, function(err, value){
+                            if(err) {
+                                log.error('Error saving social config: ' + err);
+                                return fn(err, null);
+                            } else {
+                                log.debug('<< addSocialAccount');
+                                return fn(null, value);
                             }
-                            trackedObjects.push(obj);
+
                         });
-                    } else if(creds.type === $$.constants.social.types.TWITTER) {
-                        _.each(self.defaultTwitterTrackedObjects, function(type){
-                            var obj = {
-                                socialId: trackedAccount.id,
-                                type: type
-                            }
-                            trackedObjects.push(obj);
-                        });
+                    });
+                } else {
+                    if (updatedCred == false) {
+                        socialAccounts.push(creds);
+                        /*
+                         * Add default tracked objects
+                         */
+                        var trackedObjects = config.get('trackedObjects');
+                        if(creds.type === $$.constants.social.types.FACEBOOK) {
+                            _.each(self.defaultFacebookTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        } else if(creds.type === $$.constants.social.types.TWITTER) {
+                            _.each(self.defaultTwitterTrackedObjects, function(type){
+                                var obj = {
+                                    socialId: trackedAccount.id,
+                                    type: type
+                                }
+                                trackedObjects.push(obj);
+                            });
+                        }
+                        config.set('trackedObjects', trackedObjects);
                     }
-                    config.set('trackedObjects', trackedObjects);
+                    config.set('socialAccounts', socialAccounts);
+
+                    socialconfigDao.saveOrUpdate(config, function(err, value){
+                        if(err) {
+                            log.error('Error saving social config: ' + err);
+                            return fn(err, null);
+                        } else {
+                            log.debug('<< addSocialAccount');
+                            return fn(null, value);
+                        }
+
+                    });
                 }
-                config.set('socialAccounts', socialAccounts);
-
-                socialconfigDao.saveOrUpdate(config, function(err, value){
-                    if(err) {
-                        log.error('Error saving social config: ' + err);
-                        return fn(err, null);
-                    } else {
-                        log.debug('<< addSocialAccount');
-                        return fn(null, value);
-                    }
-
-                });
             });
-
-
         });
-
     },
 
     _addProfilPicToCreds: function(creds, fn) {
