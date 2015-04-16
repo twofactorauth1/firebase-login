@@ -12205,6 +12205,9 @@ table.grid tbody td strong {
 /* ---------------------------------------------------------------------- */
 /*  Social Feed
 /* ---------------------------------------------------------------------- */
+.social-feed #postContent {
+  color: black;
+}
 .manage-feed .fb-admin-pages {
   margin: 0;
   padding: 0;
