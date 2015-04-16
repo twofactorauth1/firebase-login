@@ -80,7 +80,7 @@
                             <div class="timeline-btns">
                                 <div class="pull-left">
                                     <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showLikeModal(post)"><i class="fa fa-thumbs-up"></i></a>
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments-fb" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" ng-click="showCommentModal(post)"><i class="fa fa-comment"></i></a>
                                     <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-link"></i></a>
                                 </div>
                                 <div class="pull-right">
@@ -294,7 +294,7 @@
         <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Manage Likes</h4>
     </div>
-    <div class="modal-body manage-feed nopadding">
+    <div class="modal-body manage-feed nopadding bg-white">
         <ul class="fb-admin-pages">
             <li ng-repeat="account in tempSocialAccounts | filter: {'facebook': profile.type}">
                 <div class="parentaccount">
@@ -360,27 +360,27 @@
         <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Comments <span ng-if="visibleComments.length">({{visibleComments.length}})</span></h4>
     </div>
-    <div class="modal-body nopadding">
-        <div class="panel panel-default panel-alt widget-messaging mb0">
+    <div class="modal-body no-padding bg-white">
+        <div class="panel panel-transparent margin-bottom-0">
             <div class="panel-body">
                 <ul>
-                    <li ng-repeat="comment in visibleComments">
+                    <li ng-repeat="comment in tempPost.comments">
                         <img ng-src="{{comment.picture}}" class="img-thumbnail pull-left">
                         <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
                         <h4 class="sender">{{comment.name}}</h4>
                         <small>{{comment.comment}}</small>
                     </li>
-                    <li ng-if="!visibleComments">
-                        <div class="mb30"></div>
+                    <li ng-if="!tempPost.comments">
+                        <div class="margin-bottom-30"></div>
                         <h4 class="center"><span class="fa fa-comments"></span> No Comments</h4>
-                        <div class="mb30"></div>
+                        <div class="margin-bottom-30"></div>
                     </li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
             <!-- panel-body -->
             <div class="panel-footer">
-                <div class=' mb15'>
+                <div class='margin-bottom-0'>
                     <textarea class="form-control" placeholder="Enter Comment..." ng-model='addComment'></textarea>
                 </div>
                 <div class='row'>

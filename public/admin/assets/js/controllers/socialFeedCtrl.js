@@ -262,7 +262,7 @@
         };
 
         /*
-         * @showPostModal
+         * @showLikeModal
          * -
          */
 
@@ -279,6 +279,17 @@
                     admins[j].liked = $scope.checkLikeExistFn(admins[j], 'admin');
                 };
             };
+        };
+
+        /*
+         * @showCommentModal
+         * -
+         */
+
+        $scope.showCommentModal = function(post) {
+            $scope.tempPost = post;
+            console.log('post ', post);
+            $scope.openModal('facebook-comments-modal');
         };
 
         /*
@@ -311,6 +322,76 @@
             }
 
             return status;
+        };
+
+        /*
+         * @likeFBPost
+         * like a post on facebook
+         */
+
+        $scope.likeFBPost = function(page, $event) {
+            console.log('page ', page);
+            if (page.sourceId) {
+                var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                    return tracked.socialId == page.sourceId;
+                });
+            } else {
+                var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                    return tracked.socialId == page.socialId;
+                });
+            }
+            console.log('trackedAccount ', trackedAccount);
+            // SocialConfigService.likeFBPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
+            //     console.log('postReturn ', postReturn);
+
+            //     if ($scope.tempPost.likes) {
+            //         $scope.tempPost.likes.push({
+            //             sourceId: page.sourceId,
+            //             name: page.name
+            //         });
+            //     } else {
+            //         $scope.tempPost.likes = [{
+            //             sourceId: page.sourceId,
+            //             name: page.name
+            //         }];
+            //     }
+            //     $scope.tempSocialAccounts = angular.copy($scope.socialAccounts);
+            //     for (var i = 0; i < $scope.tempSocialAccounts.length; i++) {
+            //         $scope.tempSocialAccounts[i].liked = $scope.checkLikeExistFn($scope.tempSocialAccounts[i], 'account');
+            //         var admins = $scope.tempSocialAccounts[i].admins;
+            //         for (var j = 0; j < admins.length; j++) {
+            //             admins[j].liked = $scope.checkLikeExistFn(admins[j], 'admin');
+            //         };
+            //     };
+            //     toaster.pop('success', 'liked post');
+            // });
+        };
+
+        /*
+         * @removelikeFBPost
+         * remove a like post on facebook
+         */
+
+        $scope.removeLikeFBPost = function(page, $event) {
+            var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                return tracked.socialId == page.socialId;
+            });
+            SocialConfigService.unlikeFBPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
+                $scope.tempPost.likes.forEach(function(value, index) {
+                    if (value.sourceId == page.sourceId) {
+                        $scope.tempPost.likes.splice(index, 1);
+                    }
+                });
+                $scope.tempSocialAccounts = angular.copy($scope.socialAccounts);
+                for (var i = 0; i < $scope.tempSocialAccounts.length; i++) {
+                    $scope.tempSocialAccounts[i].liked = $scope.checkLikeExistFn($scope.tempSocialAccounts[i], 'account');
+                    var admins = $scope.tempSocialAccounts[i].admins;
+                    for (var j = 0; j < admins.length; j++) {
+                        admins[j].liked = $scope.checkLikeExistFn(admins[j], 'admin');
+                    };
+                };
+                toaster.pop('warning', 'unliked post.');
+            });
         };
 
 
