@@ -218,6 +218,7 @@
 
     this.deleteTrackedAccount = function(id, fn) {
       var apiUrl = baseUrl + ['social', 'socialconfig', 'trackedAccount', id].join('/');
+      console.log('api URL ', apiUrl);
       $http.delete(apiUrl)
       .success(function(data, status, headers, config) {
         fn(data);

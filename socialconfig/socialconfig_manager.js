@@ -560,7 +560,7 @@ module.exports = {
 
     deleteTrackedAccount: function(accountId, trackedAccountId, fn) {
         var self = this;
-        log.debug('>> deleteTrackedAccount');
+        log.debug('>> deleteTrackedAccount ');
 
         self.getSocialConfig(accountId, null, function(err, config) {
             if (err) {
@@ -572,11 +572,10 @@ module.exports = {
 
             var newTrackedAccounts = [];
             _.each(trackedAccounts, function(account){
-                if(account.id !== trackedAccountId) {
+                if(account.id != trackedAccountId) {
                     newTrackedAccounts.push(account);
                 }
             });
-
 
             config.set('trackedAccounts', newTrackedAccounts);
 
