@@ -19,6 +19,7 @@
         $scope.socialAccounts = [];
         $scope.trackedAccounts = [];
         $scope.feed = [];
+        $scope.feedLengths = {};
 
         $scope.getSocialConfig = function() {
             SocialConfigService.getAllSocialConfig(function(config) {
@@ -97,6 +98,7 @@
                     $scope.trackedAccounts.push(trackedAccount);
                 }
                 SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
+                    $scope.feedLengths[trackedAccount.id] = posts.length;
                     posts.forEach(function(post) {
                         post.trackedId = trackedAccount.id;
                         $scope.feed.push(post);

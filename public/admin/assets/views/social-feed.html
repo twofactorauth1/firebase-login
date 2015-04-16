@@ -33,7 +33,7 @@
                             </div>
                         </div>
                         <div class="pull-right">
-                            <div class="post-options pull-left">
+                            <div class="post-options pull-left hidden">
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Schedule"><i class="fa fa-map-marker"></i></a>
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Location"><i class="fa fa-calendar"></i></a>
                             </div>
@@ -203,7 +203,7 @@
                             </div>
                             <div class="pull-left filter-details">
                                 <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
-                                <p>{{type.type}} ({{feedLengths[type.socialId]}})</p>
+                                <p>{{type.type}} ({{feedLengths[type.id]}})</p>
                             </div>
                             <!-- <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'facebook'" data-value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}"></span>
                                     <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'twitter'" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></span> -->
@@ -281,11 +281,6 @@
                         </ul>
                     </li>
                 </ul>
-            </tab>
-            <tab>
-                <tab-heading>
-                    Twitter
-                </tab-heading>
             </tab>
         </tabset>
         <div class="clearfix"></div>
