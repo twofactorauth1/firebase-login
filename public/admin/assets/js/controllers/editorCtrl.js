@@ -563,7 +563,7 @@
                         }, 1000)
                     }
                 });
-
+                angular.element("#iframe-website").contents().find('body').off("click", ".btn-social-link");
                 // Social components
                 angular.element("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
                     $scope.componentEditing = _.findWhere($scope.components, {
@@ -585,7 +585,8 @@
 
                 });
 
-
+                // remove click handler
+                angular.element("#iframe-website").contents().find('body').off("click", ".image-gallery, .image-thumbnail, .meet-team-image");
                 //add media modal click events to all images in image gallery
 
                 angular.element("#iframe-website").contents().find('body').on("click", ".image-gallery, .image-thumbnail, .meet-team-image", function(e) {
@@ -1942,6 +1943,7 @@
 
         window.clickImageButton = function() {
             $scope.insertMediaImage = true;
+            //$scope.openModal('mediamodal');
             angular.element("#media-manager-modal").modal('show');
             $scope.showInsert = true;
         }
