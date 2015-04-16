@@ -194,7 +194,7 @@
                         </div>
                     </accordion-heading>
                 </accordion-group>
-                <accordion-group is-open="item.open" ng-repeat="type in trackedAccounts track by $index" is-disabled="true">
+                <accordion-group is-open="item.open" ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true">
                     <accordion-heading>
                         <div class="feedTypeDetail">
                             <div class="filter-avatar">
@@ -205,15 +205,13 @@
                                 <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
                                 <p>{{type.type}} ({{feedLengths[type.id]}})</p>
                             </div>
-                            <!-- <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'facebook'" data-value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}, .photo-{{type.socialId}}"></span>
-                                    <span class="pull-right filter-checkbox fa" ng-click="filterFeed(type, $event)" ng-class="{'fa-check-square-o': type.open, 'fa-square-o': !type.open}" ng-if="type.type == 'twitter'" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></span> -->
                             <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'twitter' || type.type == 'tw'">
                                 <input type="checkbox" id="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}">
                                 <label for="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></label>
                             </div>
                             <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'facebook' || type.type == 'fb'">
                                 <div class="checkbox clip-check check-primary">
-                                    <input type="checkbox" id="checkbox1" ng-checked="type.toggle">
+                                    <input type="checkbox" id="checkbox1" ng-checked="type.checked">
                                     <label for="checkbox1" ng-click="filterFeed(type)"></label>
                                 </div>
                             </div>
@@ -257,7 +255,7 @@
         <h4 class="modal-title">Manage Feeds</h4>
     </div>
     <div class="modal-body manage-feed no-padding">
-        <div class="col-xs-12 left-panel" ng-hide='socialAccounts.length'>
+        <div class="col-xs-12 left-panel" ng-hide='trackedAccounts.length'>
             No account available for removal.
         </div>
         <tabset class="tabbable tabs-left margin-bottom-0">
@@ -266,19 +264,12 @@
                     Facebook
                 </tab-heading>
                 <ul class="fb-admin-pages">
-                    <li ng-repeat="profile in socialAccounts | filter: {'facebook': profile.type}">
+                    <li ng-repeat="account in trackedAccounts | filter: {'facebook': profile.type}">
                         <div class="parentaccount">
-                            <img ng-src="{{profile.profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{profile.profile.name}}
-                            <span ng-show="profile.tracked" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(profile.profile)"></span>
-                            <span ng-hide="profile.tracked" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(profile.profile, true)"></span>
+                            <img ng-src="{{account.profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{account.profile.name}}
+                            <span ng-show="account.toggle" class="fa fa-minus-square pull-right text-danger" ng-click="removePageFeed(account)"></span>
+                            <span ng-hide="account.toggle" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(account)"></span>
                         </div>
-                        <ul ng-show='profile.admins.length' class="subaccounts">
-                            <li ng-repeat='admin in profile.admins'>
-                                <img ng-src="{{admin.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-0" width="50"> {{admin.name}}
-                                <span ng-show="admin.tracked" class="fa fa-minus-square pull-right text-danger" ng-click="deleteSocialAccountFn(admin)"></span>
-                                <span ng-hide="admin.tracked" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(admin, false)"></span>
-                            </li>
-                        </ul>
                     </li>
                 </ul>
             </tab>
@@ -296,25 +287,15 @@
     </div>
     <div class="modal-body manage-feed nopadding bg-white">
         <ul class="fb-admin-pages">
-            <li ng-repeat="account in tempSocialAccounts | filter: {'facebook': profile.type}">
+            <li ng-repeat="account in tempTrackedAccounts | filter: {'facebook': profile.type}">
                 <div class="parentaccount">
                     <div class="account-avatar">
                         <img ng-src="{{account.profile.picture.data.url}}" class="img-circle pull-left clearfix"> {{account.profile.name}}
                         <span class="fa fa-{{account.type}}"></span>
-                        <span ng-hide='account.profile.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(account, $event)"></span>
-                        <span ng-show='account.profile.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(account, $event)"></span>
+                        <span ng-hide='account.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(account)"></span>
+                        <span ng-show='account.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(account)"></span>
                     </div>
                 </div>
-                <ul ng-show='account.admins.length' class="subaccounts">
-                    <li ng-repeat='admin in account.admins'>
-                        <div class="account-avatar">
-                            <img ng-src="{{admin.picture.data.url}}" class="img-circle pull-left clearfix"> {{admin.name}} {{admin.liked}}
-                            <span class="fa fa-{{admin.type}}"></span>
-                            <span ng-hide='admin.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(admin, $event)"></span>
-                            <span ng-show='admin.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(admin, $event)"></span>
-                        </div>
-                    </li>
-                </ul>
             </li>
         </ul>
         <div class="clearfix"></div>

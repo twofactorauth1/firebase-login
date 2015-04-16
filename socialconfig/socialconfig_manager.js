@@ -900,6 +900,7 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccount = config.getSocialAccountById(socialAccountId);
+            log.debug('>> socialAccount ', socialAccount.accessToken);
             if (socialAccount === null) {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
