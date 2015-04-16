@@ -177,7 +177,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Social Feed'
         },
-        resolve: loadSequence('socialFeedCtrl', 'socialConfigService')
+        resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "assets/views/campaigns.html",

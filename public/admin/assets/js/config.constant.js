@@ -372,5 +372,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'ui.sortable',
         files: ['../js/libs/ng-sortable/dist/ng-sortable.min.js']
+    }, {
+        name: 'wu.masonry',
+        files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
     }]
 });
