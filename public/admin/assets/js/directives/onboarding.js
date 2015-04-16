@@ -2,7 +2,7 @@
 /**
  * A directive used for "setting up onboarding".
  */
-app.directive('indigOnboarding', function($location) {
+app.directive('indigOnboarding', function($location, UserService) {
   return {
     restrict: 'E',
     template: '<onboarding-popover enabled="onboardingEnabled" steps="onboardingSteps" on-finish-callback="onboardingFinishFn" step-index="onboardingIndex"></onboarding-popover>',
@@ -12,6 +12,9 @@ app.directive('indigOnboarding', function($location) {
       }];
     },
     link: function(scope, elem, attrs) {
+      UserService.getUserPreferences(function(preferences) {
+        $scope.userPreferences = preferences;
+      });
       scope.onboardingEnabled = false;
       scope.onboardingSteps = [{
         overlay: false
@@ -48,7 +51,10 @@ app.directive('indigOnboarding', function($location) {
       }
 
       scope.onboardingFinishFn = function() {
-        scope.onboardingEnabled = false;
+        $scope.userPreferences.tasks[scope.obType] = true;
+        UserService.updateUserPreferences($scope.userPreferences, false, function() {
+          scope.onboardingEnabled = false;
+        });
       };
     }
   };
