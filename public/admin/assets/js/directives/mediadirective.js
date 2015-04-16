@@ -2,7 +2,7 @@
 /**
  * Media Modal Directive
  */
-app.directive('mediaModal', ['$http', '$timeout', 'angularFileUpload', 'assetsService', 'timeAgoFilter', 'confirmClick2', 'toasterService', 'truncateDirective', function(FileUploader, AssetsService, $http, $timeout, ToasterService) {
+app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', function($http, $timeout, FileUploader, AssetsService, ToasterService) {
     return {
         require: [],
         restrict: 'C',
