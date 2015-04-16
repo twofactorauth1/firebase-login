@@ -79,7 +79,7 @@
                         <div class="panel-footer border-light">
                             <div class="timeline-btns">
                                 <div class="pull-left">
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showPostModal(post)"><i class="fa fa-thumbs-up"></i></a>
+                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showLikeModal(post)"><i class="fa fa-thumbs-up"></i></a>
                                     <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" data-toggle="modal" data-target="#marketing-comments-fb" ng-click="updateComments(post)"><i class="fa fa-comment"></i></a>
                                     <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-link"></i></a>
                                 </div>
@@ -294,15 +294,27 @@
         <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
         <h4 class="modal-title">Manage Likes</h4>
     </div>
-    <div class="modal-body nopadding">
-        <ul class="fb-admin-pages mb0">
-            <li ng-repeat="page in tempFBAdminPages" ng-show="checkAccountExistFn(page.socialId)">
-                <div class="account-avatar">
-                    <img ng-src="{{page.picture.data.url}}" class="img-circle pull-left clearfix"> {{page.name}}
-                    <span class="fa fa-{{type.type}}"></span>
-                    <span ng-hide='page.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(page, $event)"></span>
-                    <span ng-show='page.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(page, $event)"></span>
+    <div class="modal-body manage-feed nopadding">
+        <ul class="fb-admin-pages">
+            <li ng-repeat="account in tempSocialAccounts | filter: {'facebook': profile.type}">
+                <div class="parentaccount">
+                    <div class="account-avatar">
+                        <img ng-src="{{account.profile.picture.data.url}}" class="img-circle pull-left clearfix"> {{account.profile.name}}
+                        <span class="fa fa-{{account.type}}"></span>
+                        <span ng-hide='account.profile.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(account, $event)"></span>
+                        <span ng-show='account.profile.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(account, $event)"></span>
+                    </div>
                 </div>
+                <ul ng-show='account.admins.length' class="subaccounts">
+                    <li ng-repeat='admin in account.admins'>
+                        <div class="account-avatar">
+                            <img ng-src="{{admin.picture.data.url}}" class="img-circle pull-left clearfix"> {{admin.name}} {{admin.liked}}
+                            <span class="fa fa-{{admin.type}}"></span>
+                            <span ng-hide='admin.liked' class="fa fa-thumbs-up pull-right" ng-click="likeFBPost(admin, $event)"></span>
+                            <span ng-show='admin.liked' class="fa fa-thumbs-down pull-right" ng-click="removeLikeFBPost(admin, $event)"></span>
+                        </div>
+                    </li>
+                </ul>
             </li>
         </ul>
         <div class="clearfix"></div>

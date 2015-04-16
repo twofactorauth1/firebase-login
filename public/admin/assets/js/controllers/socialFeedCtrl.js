@@ -261,6 +261,58 @@
             $scope.selectedSocial = parsed;
         };
 
+        /*
+         * @showPostModal
+         * -
+         */
+
+        $scope.showLikeModal = function(post) {
+            $scope.tempPost = post;
+            console.log('post ', post);
+            $scope.openModal('like-unlike-modal');
+            $scope.tempSocialAccounts = angular.copy($scope.socialAccounts);
+            for (var i = 0; i < $scope.tempSocialAccounts.length; i++) {
+                $scope.tempSocialAccounts[i].liked = $scope.checkLikeExistFn($scope.tempSocialAccounts[i], 'account');
+                var admins = $scope.tempSocialAccounts[i].admins;
+                for (var j = 0; j < admins.length; j++) {
+                    console.log('$scope.checkLikeExistFn ', $scope.checkLikeExistFn(admins[j], 'admin'));
+                    admins[j].liked = $scope.checkLikeExistFn(admins[j], 'admin');
+                };
+            };
+        };
+
+        /*
+         * @checkLikeExistFn
+         * -
+         */
+
+        $scope.checkLikeExistFn = function(adminPage, type) {
+            var status = false;
+            if ($scope.tempPost == undefined) {
+                return status;
+            }
+            if ($scope.tempPost.likes == undefined) {
+                return status;
+            }
+
+            //console.log($scope.tempPost.likes);
+
+            if (type == 'account') {
+                //console.log('account ', adminPage);
+            }
+
+            if (type == 'admin') {
+                $scope.tempPost.likes.forEach(function(like, index) {
+                    if (adminPage.sourceId == like.sourceId) {
+                        console.log(adminPage.sourceId, like.sourceId);
+                        status = true;
+                    }
+                });
+            }
+
+            return status;
+        };
+
 
     }]);
 })(angular);
