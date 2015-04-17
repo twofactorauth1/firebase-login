@@ -13,7 +13,7 @@ app.directive('indigOnboarding', function($location, UserService) {
     },
     link: function(scope, elem, attrs) {
       UserService.getUserPreferences(function(preferences) {
-        $scope.userPreferences = preferences;
+        scope.userPreferences = preferences;
       });
       scope.onboardingEnabled = false;
       scope.onboardingSteps = [{
@@ -123,8 +123,8 @@ app.directive('indigOnboarding', function($location, UserService) {
       }
 
       scope.onboardingFinishFn = function() {
-        $scope.userPreferences.tasks[scope.obType] = true;
-        UserService.updateUserPreferences($scope.userPreferences, false, function() {
+        scope.userPreferences.tasks[scope.obType] = true;
+        UserService.updateUserPreferences(scope.userPreferences, false, function() {
           scope.onboardingEnabled = false;
         });
       };
