@@ -11,7 +11,7 @@ app.directive('indigOnboarding', function($location, UserService) {
         overlay: false
       }];
     },
-    link: function($scope, scope, elem, attrs) {
+    link: function(scope, elem, attrs) {
       UserService.getUserPreferences(function(preferences) {
         scope.userPreferences = preferences;
       });
@@ -123,6 +123,7 @@ app.directive('indigOnboarding', function($location, UserService) {
       }
 
       scope.onboardingFinishFn = function() {
+        console.log('Onboarding finished >>>');
         scope.userPreferences.tasks[scope.obType] = true;
         UserService.updateUserPreferences(scope.userPreferences, false, function() {
           scope.onboardingEnabled = false;
