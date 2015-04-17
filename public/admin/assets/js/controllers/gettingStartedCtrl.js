@@ -12,37 +12,55 @@
       state: 'app.account'
     }, {
       header: "Basic Account Information",
-      content: "Enter the basic information about your business like your address and logo."
+      content: "Enter the basic information about your business like your address and logo.",
+      taskKey: 'profile-personal',
+      state: 'app.account.profile'
     }, {
       header: "Select A Theme",
       content: "Select a theme for your front facing website where your customers can visit."
     }, {
       header: "Edit the Homepage",
-      content: "Lets make the home page according to your taste."
+      content: "Lets make the home page according to your taste.",
+      taskKey: 'single-page',
+      state: 'app.website.pages'
     }, {
       header: "Create First BlogPost",
-      content: "Keep everyone up to date and informed with a regular blog."
+      content: "Keep everyone up to date and informed with a regular blog.",
+      taskKey: 'single-post',
+      state: 'app.website.posts'
     }, {
       header: "Connect Social Accounts",
-      content: "Connect your social account so you can import contacts and create marketing campaigns."
+      content: "Connect your social account so you can import contacts and create marketing campaigns.",
+      taskKey: 'integrations',
+      state: 'app.account.integrations'
     }, {
       header: "Add Social Feed",
-      content: "Add social feeds of your friends."
+      content: "Add social feeds of your friends.",
+      taskKey: 'social-feed',
+      state: 'app.marketing.socialfeed'
     }, {
       header: "Import/Create Contacts",
-      content: "Import your contact from your various accounts or create them."
+      content: "Import your contact from your various accounts or create them.",
+      taskKey: 'customers',
+      state: 'app.customers'
     }, {
       header: "Add New Contact",
-      content: "Add a new contact."
+      content: "Add a new contact.",
+      taskKey: 'single-customer',
+      state: 'app.customers'
     }, {
       header: "Create First Campaign",
       content: "Create your first campaign to start getting vistors."
     }, {
       header: "Import/Create Products",
-      content: "Import or create new products to start selling and creating revenue."
+      content: "Import or create new products to start selling and creating revenue.",
+      taskKey: 'commerce',
+      state: 'app.commerce'
     }, {
       header: "Discover the Dashboard",
-      content: "Now evetything is set up, its time to start trakcing."
+      content: "Now evetything is set up, its time to start trakcing.",
+      taskKey: 'dashboard',
+      state: 'app.dashboard'
     }];
 
     $scope.startOnboardFn = function(pane) {
