@@ -114,7 +114,7 @@ app.directive('indigOnboarding', function($location, UserService) {
       };
 
       if ($location.$$search['onboarding']) {
-        scope.obType = $location.$$search['onboarding'];
+        scope.obType = $location.$$search['onboarding'].trim();
         if (scope.obType in scope.onboardingStepMap) {
           console.info('Found onboarding steps >>>', scope.onboardingStepMap[scope.obType]);
           scope.onboardingSteps = scope.onboardingStepMap[scope.obType];
