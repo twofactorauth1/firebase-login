@@ -2672,6 +2672,7 @@ a.text-light:hover {
 }
 .center {
   text-align: center;
+  margin: 0 auto;
 }
 .text-left {
   text-align: left;
@@ -2874,6 +2875,24 @@ a.text-light:hover {
 }
 .no-wrap {
   white-space: nowrap;
+}
+.pre {
+  white-space: pre;
+  /* CSS 2.0 */
+  white-space: pre-wrap;
+  /* CSS 2.1 */
+  white-space: pre-line;
+  /* CSS 3.0 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla */
+  white-space: -hp-pre-wrap;
+  /* HP Printers */
+  word-wrap: break-word;
+  /* IE 5+ */
 }
 /* ---------------------------------------------------------------------- */
 /* Dropdown Menu
@@ -12454,6 +12473,35 @@ fieldset[disabled] .btn-vimeo-square.active {
 .social-feed #postContent {
   color: black;
 }
+.social-feed .masonry-brick .panel-heading {
+  color: white;
+  min-height: 35px;
+  padding: 10px;
+}
+.social-feed .masonry-brick .panel-heading .fa-facebook,
+.social-feed .masonry-brick .panel-heading .fa-twitter,
+.social-feed .masonry-brick .panel-heading .fa-google-plus {
+  font-size: 18px;
+}
+.social-feed .masonry-brick .panel-footer {
+  padding: 8px;
+  min-height: 35px;
+}
+.social-feed .masonry-brick .facebook .panel-heading {
+  background: #3b5998;
+}
+.social-feed .feeds {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.social-feed .feeds li {
+  border-bottom: 1px solid #eee;
+  padding-top: 5px;
+}
+.social-feed .feeds li:last-child {
+  border-bottom: none;
+}
 .manage-feed .fb-admin-pages {
   margin: 0;
   padding: 0;
@@ -12485,6 +12533,16 @@ fieldset[disabled] .btn-vimeo-square.active {
 .manage-feed .fb-admin-pages li .subaccounts li:last-child {
   border-bottom: none;
   margin-bottom: 0px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Customers
+/* ---------------------------------------------------------------------- */
+.customers .social {
+  list-style-type: none;
+  margin-bottom: 0;
+}
+.customers .column-width {
+  width: 12.5%;
 }
 .filemanager-options {
   list-style: none;
