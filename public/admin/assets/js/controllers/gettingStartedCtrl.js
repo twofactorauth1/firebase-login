@@ -88,9 +88,8 @@
     }];
 
     $scope.startOnboardFn = function(pane) {
-      console.log(pane);
       var url = $state.href(pane.state, {}, {
-        absolute: true
+        absolute: false
       });
       url += '?onboarding=' + pane.taskKey;
       window.location = url;
