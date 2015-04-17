@@ -75,6 +75,9 @@
                             });
                         });
 
+                        setTimeout(function() {
+                            $scope.isLoaded = true;
+                        }, 1500);
                         $scope.displayFeed = $scope.feed;
                     }
                 }
@@ -88,17 +91,15 @@
          */
 
         $scope.filterFeed = function(type) {
-            var updatedTrackedAccount = _.find($scope.config.trackedAccounts, function(trackedAccount) {
+            var updatedTrackedAccount = _.find($scope.trackedAccounts, function(trackedAccount) {
                 return trackedAccount.id == type.id;
             });
-            if (type.checked) {
-                updatedTrackedAccount.checked = false;
+            if (!type.checked) {
                 var newDisplayFeed = _.filter($scope.displayFeed, function(post) {
                     return post.trackedId != updatedTrackedAccount.id;
                 });
                 $scope.displayFeed = newDisplayFeed;
             } else {
-                updatedTrackedAccount.checked = true;
                 var newDisplayFeed = _.filter($scope.feed, function(post) {
                     return post.trackedId == updatedTrackedAccount.id;
                 });
@@ -162,6 +163,13 @@
         $scope.postContent = null;
 
         $scope.postToSocial = function(socialAccountId, post, type) {
+            console.log('postContent >>> ', $scope.postContent);
+            if (!$scope.postContent) {
+                console.log('post content is empty');
+                $scope.noContent = true;
+                $scope.noPostTo = true;
+                return false;
+            }
             //show spinner
             $scope.postingToSocial = true;
             if (type == 'fb') {
@@ -169,6 +177,17 @@
             }
             if (type == 'tw') {
                 $scope.handleTwitterPost(socialAccountId, post);
+            }
+        };
+
+        /*
+         * @postContentChange
+         * -
+         */
+
+        $scope.postContentChange = function() {
+            if ($scope.postContent) {
+                $scope.noContent = false;
             }
         };
 
@@ -214,6 +233,7 @@
 
         $scope.postToChange = function(type) {
             var parsed = JSON.parse(type);
+            $scope.noPostTo = false;
             $scope.selectedSocial = parsed;
         };
 

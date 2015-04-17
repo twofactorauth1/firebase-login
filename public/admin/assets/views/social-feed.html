@@ -14,30 +14,39 @@
     <div class="row margin-top-15">
         <div class="col-sm-9">
             <div class="submit-post-form col-xs-12">
-                <div class="panel panel-blue">
+                <div class="panel panel-white">
                     <div class="panel-body">
-                        <textarea placeholder="Write something..." class="form-control" id="postContent" ng-model="postContent"></textarea>
+                        <div class="form-group margin-bottom-0" ng-class="{'has-error': noContent}">
+                            <textarea placeholder="Write something..." class="form-control" ng-model="postContent" rows="4" ng-change="postContentChange()"></textarea>
+                            <span class="help-block margin-bottom-0" ng-show="noContent"><span class="symbol required"></span> <span class="text-bold">Error:</span> Post Content Needed</span>
+                        </div>
                     </div>
                     <!-- panel-body -->
                     <div class="panel-footer padding-10">
-                        <div class="pull-left">
-                            <div class="form-horizontal" style="margin-left: 20px;">
-                                <div class="form-group margin-bottom-0">
-                                    <label for="post-to" class="pull-left control-label" style="padding: 0;margin-right: 10px;font-size: 14px;  line-height: 30px;">Post To: </label>
-                                    <div class="pull-left">
-                                        <select class="form-control mb0 input-sm" ng-model="selectedType" ng-change="postToChange(selectedType)">
-                                            <option ng-repeat="type in trackedAccounts" value="{{type}}">{{type.type}} {{type.name || type.profile.name}}</option>
-                                        </select>
-                                    </div>
+                        <div class="col-sm-4">
+                            <div class="form-horizontal">
+                                <div class="form-group margin-bottom-0" ng-class="{'has-error': noPostTo}">
+                                    <ui-select ng-model="person.selected" theme="bootstrap">
+                                        <ui-select-match placeholder="Select a Social Profile">
+                                            <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span>
+                                            <small ng-bind-html="$select.selected.name || $select.selected.profile.name"></small>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="type in trackedAccounts">
+                                            <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span>
+                                            <small ng-bind-html="type.name || type.profile.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="help-block margin-bottom-0" ng-show="noPostTo"><span class="symbol required"></span> <span class="text-bold">Error:</span> No Social Profile Selected</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="pull-right">
+                        <div class="col-sm-8 padding-right-5">
                             <div class="post-options pull-left hidden">
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Schedule"><i class="fa fa-map-marker"></i></a>
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Location"><i class="fa fa-calendar"></i></a>
                             </div>
-                            <button ng-class="{'disabled': !postContent.length}" class="btn btn-grey btn-o" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><i class="fa fa-spinner fa-spin" ng-show="postingToSocial"></i> Submit Post</button>
+                            <button class="btn btn-green pull-right" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><span><span ng-show="postingToSocial"><i class="fa fa-spinner fa-spin"></i> Submitting </span><span ng-show="!postingToSocial">Submit Post</span></span>
+                            </button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -177,6 +186,27 @@
                     </div>
                 </div>
             </div>
+            <div ng-show="feed.length <= 0 && isLoaded">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-times fa-2x"></span> <br> No Posts Availiable</h4>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="displayFeed.length <= 0 && feed.length > 0 && isLoaded">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-times fa-2x"></span> <br> No Filters Checked</h4>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!isLoaded && feed.length <= 0">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-spinner fa-spin"></span> <br> Loading Feeds...</h4>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="stream-filter col-xs-3 row">
             <div class="panel panel-white" id="panel2">
@@ -186,45 +216,43 @@
                         <li>
                             <div class="pull-right">
                                 <button type="button" class="btn btn-primary" ng-click="openModal('manage-feed-modal')">
-                                        <span>Manage</span>
-                                    </button>
+                                    <span>Manage</span>
+                                </button>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="panel-body">
-                    <div is-disabled="true" class="hidden">
-                        <div class="pull-left filter-details">
-                            <h4>All Networks</h4>
-                            <div class="checkbox clip-check check-primary checkbox-inline">
-                                <input type="checkbox" id="allnetworks" ng-click="filterFeed(type, $event)" ng-checked="type.open">
-                                <label for="allnetworks"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true">
-                        <div class="feedTypeDetail">
-                            <div class="filter-avatar pull-left padding-right-5">
-                                <span class="fa fa-{{type.type}}"></span>
-                                <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https}}" class="avatar pull-left" />
-                            </div>
+                    <ul class="feeds">
+                        <li class="hidden">
                             <div class="pull-left filter-details">
-                                <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
-                                <p>{{type.type}} ({{feedLengths[type.id]}})</p>
-                            </div>
-                            <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'twitter' || type.type == 'tw'">
-                                <input type="checkbox" id="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}">
-                                <label for="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></label>
-                            </div>
-                            <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'facebook' || type.type == 'fb'">
-                                <div class="checkbox clip-check check-primary padding-right-0">
-                                    <input type="checkbox" id="checkbox1" ng-checked="type.checked">
-                                    <label for="checkbox1" ng-click="filterFeed(type)" class="margin-right-0"></label>
+                                <h4>All Networks</h4>
+                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                    <input type="checkbox" id="allnetworks" ng-click="filterFeed(type, $event)" ng-checked="type.open">
+                                    <label for="allnetworks"></label>
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
+                        </li>
+                        <li ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true">
+                            <div class="feedTypeDetail">
+                                <div class="filter-avatar pull-left padding-right-5">
+                                    <span class="fa fa-{{type.type}}"></span>
+                                    <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https}}" class="avatar pull-left" />
+                                </div>
+                                <div class="pull-left filter-details">
+                                    <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
+                                    <p><span class="fa" ng-class="{'fa-facebook-square': type.type == 'fb'}"></span> ({{feedLengths[type.id]}})</p>
+                                </div>
+                                <div class="ckbox ckbox-default pull-right">
+                                    <div class="checkbox clip-check check-primary padding-right-0">
+                                        <input type="checkbox" id="checkbox-{{type.id}}" ng-model="type.checked" ng-click="filterFeed(type)">
+                                        <label for="checkbox-{{type.id}}" class="margin-right-0"></label>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

@@ -6,14 +6,10 @@
     #postContent {
         color: black;
     }
-    .feedTypeDetail {
-        border-bottom: 1px solid #eee;
-        padding-top: 5px;
-    }
     .submit-post-form {
         .panel-footer {
             label {
-                color: #fff;
+                // color: #fff;
             }
         }
     }
@@ -33,6 +29,18 @@
         .facebook {
             .panel-heading {
                 background: @facebook;
+            }
+        }
+    }
+    .feeds {
+        list-style-type: none;
+        padding-left: 0;
+        margin-bottom: 0;
+        li {
+            border-bottom: 1px solid #eee;
+            padding-top: 5px;
+            &:last-child {
+                border-bottom: none;
             }
         }
     }

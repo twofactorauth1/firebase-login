@@ -12227,13 +12227,6 @@ table.grid tbody td strong {
 .social-feed #postContent {
   color: black;
 }
-.social-feed .feedTypeDetail {
-  border-bottom: 1px solid #eee;
-  padding-top: 5px;
-}
-.social-feed .submit-post-form .panel-footer label {
-  color: #fff;
-}
 .social-feed .masonry-brick .panel-heading {
   color: white;
   min-height: 35px;
@@ -12250,6 +12243,18 @@ table.grid tbody td strong {
 }
 .social-feed .masonry-brick .facebook .panel-heading {
   background: #3b5998;
+}
+.social-feed .feeds {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+.social-feed .feeds li {
+  border-bottom: 1px solid #eee;
+  padding-top: 5px;
+}
+.social-feed .feeds li:last-child {
+  border-bottom: none;
 }
 .manage-feed .fb-admin-pages {
   margin: 0;
