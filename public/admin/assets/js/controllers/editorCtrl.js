@@ -917,23 +917,43 @@
 
         $scope.cancelPage = function() {
             // $scope.components = that.originalCurrentPageComponents;
-            $scope.changesConfirmed = true;
             $scope.isDirty = false;
-            var pageId = $scope.currentPage._id;
-            //$scope.deactivateAloha && $scope.deactivateAloha();
-            $scope.deactivateAloha();
-            WebsiteService.getPageComponents(pageId, function(components) {
-                $scope.components = components;
-
-                $scope.updateIframeComponents && $scope.updateIframeComponents();
-                $scope.isEditing = false;
-                $scope.componentEditing = null;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerEditModeOff && iFrame.contentWindow.triggerEditModeOff();
-
-                window.history.back();
-            });
-
-
+            var isDirty = false;
+            var iFrame = document.getElementById("iframe-website");
+            if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
+                var isDirty = iFrame.contentWindow.checkOrSetPageDirty() || $scope.isDirty;
+            }
+            iFrame.contentWindow.checkOrSetPageDirty(true);
+            var redirectUrl = "/website/pages"
+            if (isDirty) {
+                event.preventDefault();
+                SweetAlert.swal({
+                        title: "Are you sure?",
+                        text: "You have unsaved data that will be lost",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes, save changes!",
+                        cancelButtonText: "No, do not save changes!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                            $scope.redirect = true;
+                            $scope.savePage();
+                        } else {
+                            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                        }
+                        $location.path(redirectUrl);
+                    });
+            }
+            else
+            {
+                $location.path(redirectUrl);
+            }
+            
             //TODO Only use on single post
             // iFrame && iFrame.contentWindow && iFrame.contentWindow.updatePostMode && iFrame.contentWindow.updatePostMode();
 
@@ -982,24 +1002,26 @@
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
                 $scope.isEditing = true;
             } else {
-                $scope.validateEditPage($scope.currentPage);
-                console.log('$scope.editPageValidated ', $scope.editPageValidated);
+                // $scope.validateEditPage($scope.currentPage);
+                // console.log('$scope.editPageValidated ', $scope.editPageValidated);
 
-                if (!$scope.editPageValidated) {
-                    $scope.saveLoading = false;
-                    toaster.pop('error', "Page Title or URL can not be blank.");
-                    return false;
-                } else {
-                    for (var i = 0; i < that.allPages.length; i++) {
-                        if (that.allPages[i].handle === $scope.currentPage.handle && that.allPages[i]._id != $scope.currentPage._id) {
-                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                            $scope.saveLoading = false;
-                            angular.element('#edit-page-url').parents('div.form-group').addClass('has-error');
-                            return false;
-                        }
-                    };
-
-                }
+                // if (!$scope.editPageValidated) {
+                //     $scope.saveLoading = false;
+                //     toaster.pop('error', "Page Title or URL can not be blank.");
+                //     return false;
+                // } else {
+                //     if(that.allPages)
+                //     {
+                //         for (var i = 0; i < that.allPages.length; i++) {
+                //             if (that.allPages[i].handle === $scope.currentPage.handle && that.allPages[i]._id != $scope.currentPage._id) {
+                //                 toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                //                 $scope.saveLoading = false;
+                //                 angular.element('#edit-page-url').parents('div.form-group').addClass('has-error');
+                //                 return false;
+                //             }
+                //         };
+                //     }
+                // }
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
 
@@ -1711,7 +1733,13 @@
                         if (isConfirm) {
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $scope.redirect = true;
-                            $scope.savePage();
+                            var pageId = $scope.currentPage._id;
+                            WebsiteService.getPageComponents(pageId, function(components) {
+                                $scope.components = components;
+                                $scope.currentPage.components = components;
+                                $scope.savePage();
+                            });
+                            
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
                         }
