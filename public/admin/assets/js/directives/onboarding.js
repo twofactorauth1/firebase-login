@@ -11,7 +11,7 @@ app.directive('indigOnboarding', function($location, UserService) {
         overlay: false
       }];
     },
-    link: function(scope, elem, attrs) {
+    link: function($scope, scope, elem, attrs) {
       UserService.getUserPreferences(function(preferences) {
         scope.userPreferences = preferences;
       });

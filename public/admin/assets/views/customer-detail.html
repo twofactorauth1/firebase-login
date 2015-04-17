@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">{{ fullName || 'No Customer Name'}} </h1>
-                <span class="mainDescription">{{ customer.type }}</span>
+                <span class="mainDescription">{{ contactLabel(customer) }}</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -26,41 +26,39 @@
                                         <div class="center">
                                             <h4>{{customer.first}} {{customer.last}}</h4>
                                             <div class="user-image">
-                                                <img src="{{ customer.photo ? customer.photo : '/admin/assets/images/default-user.png' }}" alt="" class="thumbnail img-circle">
+                                                <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
                                             </div>
                                             <hr>
                                             <div class="social-icons block">
                                                 <ul>
-                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips" ng-if="checkTwitterId(customer)">
                                                         <a href="#" target="_blank">
                                                         Twitter
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips" ng-if="checkFacebookId(customer)">
                                                         <a href="#" target="_blank">
                                                         Facebook
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips" ng-if="checkGoogleId(customer)">
                                                         <a href="#" target="_blank">
                                                         Google+
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips" ng-if="checkLinkedInId(customer)">
                                                         <a href="#" target="_blank">
                                                         LinkedIn
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                                                        <a href="#" target="_blank">
-                                                        Github
-                                                    </a>
                                                     </li>
                                                 </ul>
                                             </div>
                                             <hr>
                                         </div>
-                                        <div class="map">
+                                        <div class="map margin-bottom-15">
+                                            <span class="text-bold">Location</span>
+                                            <hr class="margin-top-5">
                                             <map zoom="10" center="{{location.lat}}, {{location.lng}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
                                                 <marker position="{{location.lat}}, {{location.lng}}"></marker>
                                             </map>
@@ -75,29 +73,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>url</td>
-                                                    <td>
-                                                        <a href="#">
-                                                    {{userInfo.url}}
-                                                </a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>email:</td>
+                                                <tr ng-repeat="email in customer.details[0].emails">
+                                                    <td>email {{$index + 1}}:</td>
                                                     <td>
                                                         <a href>
-                                                    {{userInfo.email}}
+                                                    {{email.email}}
                                                 </a></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>phone:</td>
-                                                    <td>{{userInfo.phone}}</td>
+                                                <tr ng-repeat="phone in customer.details[0].phones">
+                                                    <td>phone {{$index + 1}}:</td>
+                                                    <td>{{phone.number}}</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>skye</td>
+                                                <tr ng-repeat="address in customer.details[0].addresses">
+                                                    <td>address {{$index + 1}}:</td>
                                                     <td>
                                                         <a href>
-                                                    {{userInfo.skype}}
+                                                    {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
                                                 </a></td>
                                                 </tr>
                                             </tbody>
@@ -110,48 +101,27 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Position</td>
-                                                    <td>UI Designer</td>
+                                                    <td>Status</td>
+                                                    <td><span class="label label-sm label-info">{{ contactLabel(customer) }}</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Page Views</td>
+                                                    <td>18</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Page View</td>
+                                                    <td><a href="">/hello-there</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Avg. Time on Site</td>
+                                                    <td>1:21</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Last Logged In</td>
                                                     <td>56 min</td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Position</td>
-                                                    <td>Senior Marketing Manager</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Supervisor</td>
-                                                    <td>
-                                                        <a href="#">
-                                                    Kenneth Ross
-                                                </a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Status</td>
-                                                    <td><span class="label label-sm label-info">Administrator</span></td>
-                                                </tr>
                                             </tbody>
                                         </table>
-                                        <table class="table table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3">Additional information</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Groups</td>
-                                                    <td>New company web site development, HR Management</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="text-right">
-                                            <a class="btn btn-primary btn-o btn-wide" href="#" ng-click="editActive = true">
-                                            Edit Account
-                                        </a>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-8">

@@ -15,9 +15,10 @@
             $scope.posts = postsArr;
         });
 
-        WebsiteService.getTemplates(function(templates) {
-            $scope.templates = templates;
-        });
+        //get website
+        WebsiteService.getWebsite(function(website) {
+            $scope.website = website;
+        })
 
         $scope.getters = {
             created: function (value) {
@@ -28,41 +29,40 @@
             }
         };
 
-        $scope.setTemplateDetails = function(templateDetails) {
-            $scope.templateDetails = true;
-            $scope.selectedTemplate = templateDetails;
-        };
-
-        $scope.$watch('createpost.title', function(newValue, oldValue) {
+       
+        $scope.$watch('post.post_title', function(newValue, oldValue) {
             if (newValue) {
-                $scope.createpost.handle = $filter('slugify')(newValue);
+                $scope.post.post_url = $filter('slugify')(newValue);
             }
         });
 
-        $scope.$watch('createpost.handle', function(newValue, oldValue) {
+        $scope.$watch('post.post_url', function(newValue, oldValue) {
             if (newValue) {
-                $scope.createpost.handle = $filter('slugify')(newValue);
+                $scope.post.post_url = $filter('slugify')(newValue);
             }
         });
 
-        $scope.validateCreatePost = function(post) {
-            $scope.createPostValidated = false;
-            if (post) {
-                if (post.handle == '') {
-                    $scope.handleError = true;
-                } else {
-                    $scope.handleError = false;
-                }
-                if (post.title == '') {
-                    $scope.titleError = true;
-                } else {
-                    $scope.titleError = false;
-                }
-                if (post && post.title && post.title != '' && post.handle && post.handle != '') {
-                    $scope.createPostValidated = true;
-                }
+        $scope.createPostValidated = false;
+          $scope.validateCreatePost = function(post) {
+            if (!post.post_title || post.post_title == '') {
+              $scope.postTitleError = true
+            } else {
+              $scope.postTitleError = false
             }
-        };
+            if (!post.post_author || post.post_author == '') {
+              $scope.postAuthorError = true
+            } else {
+              $scope.postAuthorError = false
+            }
+            if (!post.post_url || post.post_url == '') {
+              $scope.postUrlError = true
+            } else {
+              $scope.postUrlError = false
+            }
+            if (post && post.post_title && post.post_title != '' && post.post_author && post.post_author != '' && post.post_url && post.post_url != '') {
+              $scope.createPostValidated = true;
+            }
+          };
 
         $scope.openPostModal = function(size) {
             $scope.modalInstance = $modal.open({
@@ -75,6 +75,22 @@
 
         $scope.cancel = function() {
             $scope.modalInstance.close();
+        };
+
+        $scope.createPost = function(postData) {
+            $scope.validateCreatePost(postData);
+            console.log('$scope.createPostValidated ', $scope.createPostValidated);
+            if (!$scope.createPostValidated) {
+              return false;
+            }
+
+            postData.websiteId = $scope.website._id;
+            WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
+              toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
+              
+              $scope.cancel();
+              $scope.posts.unshift(data);
+            })
         };
 
         $scope.createPostFromTemplate = function(post, $event) {
