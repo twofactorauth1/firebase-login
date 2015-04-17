@@ -16,9 +16,6 @@
       taskKey: 'profile-personal',
       state: 'app.account.profile'
     }, {
-      header: "Select A Theme",
-      content: "Select a theme for your front facing website where your customers can visit."
-    }, {
       header: "Edit the Homepage",
       content: "Lets make the home page according to your taste.",
       taskKey: 'single-page',
@@ -49,9 +46,6 @@
       taskKey: 'single-customer',
       state: 'app.customers'
     }, {
-      header: "Create First Campaign",
-      content: "Create your first campaign to start getting vistors."
-    }, {
       header: "Import/Create Products",
       content: "Import or create new products to start selling and creating revenue.",
       taskKey: 'commerce',
@@ -77,7 +71,7 @@
 
 app.controller('ChartCtrl3', ["$scope", 'UserService', function($scope, UserService) {
   UserService.getUserPreferences(function(preferences) {
-    var totalTasks = Object.keys(preferences.tasks).length;
+    var totalTasks = 15;
     var completedTasks = 0;
     for (var task in preferences.tasks) {
       if (preferences.tasks[task]) {
