@@ -119,7 +119,7 @@
                     <tab-heading>
                         All
                     </tab-heading>
-                    <div ng-repeat="template in templates | orderBy:'title'">
+                    <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter != 'coming-soon'">
                         <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
                             <div class="col-sm-3 col-xs-12">
                                 <div class="img-wrap">
@@ -165,7 +165,7 @@
                         <hr>
                     </div>
                 </tab>
-                <tab>
+                <tab class="hidden">
                     <tab-heading>
                         Coming Soon
                     </tab-heading>

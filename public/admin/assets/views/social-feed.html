@@ -14,30 +14,41 @@
     <div class="row margin-top-15">
         <div class="col-sm-9">
             <div class="submit-post-form col-xs-12">
-                <div class="panel panel-dark panel-alt timeline-post">
+                <div class="panel panel-white">
                     <div class="panel-body">
-                        <textarea placeholder="Write something..." class="form-control" id="postContent" ng-model="postContent"></textarea>
+                        <div class="form-group margin-bottom-0" ng-class="{'has-error': noContent || duplicatePostError}">
+                            <textarea placeholder="Write something..." class="form-control" ng-model="postContent" rows="4" ng-change="postContentChange()"></textarea>
+                            <span class="help-block margin-bottom-0" ng-show="noContent"><span class="symbol required"></span> <span class="text-bold">Error:</span> Post Content Needed</span>
+                            <span class="help-block margin-bottom-0" ng-show="duplicatePostError"><span class="symbol required"></span> <span class="text-bold">Error:</span> Duplicate Post Status</span>
+
+                        </div>
                     </div>
                     <!-- panel-body -->
-                    <div class="panel-footer">
-                        <div class="pull-left">
-                            <div class="form-horizontal" style="margin-left: 20px;">
-                                <div class="form-group margin-bottom-0">
-                                    <label for="post-to" class="pull-left control-label" style="padding: 0;margin-right: 10px;font-size: 14px;">Post To: </label>
-                                    <div class="pull-left">
-                                        <select class="form-control mb0 input-sm" ng-model="selectedType" ng-change="postToChange(selectedType)">
-                                            <option ng-repeat="type in trackedAccounts" value="{{type}}">{{type.type}} {{type.name || type.profile.name}}</option>
-                                        </select>
-                                    </div>
+                    <div class="panel-footer padding-10">
+                        <div class="col-sm-4">
+                            <div class="form-horizontal">
+                                <div class="form-group margin-bottom-0" ng-class="{'has-error': noPostTo}">
+                                    <ui-select ng-model="selectedSocial" on-select="postToChange($select.selected)" theme="bootstrap">
+                                        <ui-select-match placeholder="Select a Social Profile">
+                                            <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span>
+                                            <small ng-bind-html="$select.selected.name || $select.selected.profile.name"></small>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="type in trackedAccounts">
+                                            <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span>
+                                            <small ng-bind-html="type.name || type.profile.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="help-block margin-bottom-0" ng-show="noPostTo"><span class="symbol required"></span> <span class="text-bold">Error:</span> No Social Profile Selected</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="pull-right">
+                        <div class="col-sm-8 padding-right-5">
                             <div class="post-options pull-left hidden">
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Schedule"><i class="fa fa-map-marker"></i></a>
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Location"><i class="fa fa-calendar"></i></a>
                             </div>
-                            <button ng-class="{'disabled': !postContent.length}" class="btn btn-green" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><i class="fa fa-spinner fa-spin" ng-show="postingToSocial"></i> Submit Post</button>
+                            <button class="btn btn-green pull-right" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><span><span ng-show="postingToSocial"><i class="fa fa-spinner fa-spin"></i> Submitting </span><span ng-show="!postingToSocial">Submit Post</span></span>
+                            </button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -45,18 +56,59 @@
                 </div>
             </div>
             <div class="clearfix"></div>
-            <div class="col-xs-12 col-sm-4" ng-repeat="post in displayFeed | orderBy: 'date':true track by $index">
-                <div ng-if="post.type == 'fb'">
-                    <div class="panel panel-white facebook">
-                        <div class="panel-heading border-light">
-                            <i class="fa fa-facebook pull-left"></i>
-                            <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+            <div masonry load-images="false" masonry-options="{columnWidth: '.masonry-brick'}" class="margin-bottom-15">
+                <div class="col-xs-12 col-sm-6 col-md-4 masonry-brick" ng-repeat="post in displayFeed | orderBy: 'date':true track by $index">
+                    <div ng-if="post.type == 'fb'">
+                        <div class="panel panel-white facebook">
+                            <div class="panel-heading border-light">
+                                <i class="fa fa-facebook pull-left"></i>
+                                <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+                            </div>
+                            <!-- panel-heading -->
+                            <div class="panel-body">
+                                <div class="panel-profile">
+                                    <div class="media">
+                                        <a ui-sref="account" class="pull-left">
+                                            <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object img-circle">
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="text-primary" slide-toggle="#slide-{{$index}}">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
+                                            <small class="text-muted">{{formatDate(post.date)}}</small>
+                                        </div>
+                                    </div>
+                                    <!-- media -->
+                                </div>
+                                <div class="media margin-top-0">
+                                    <a ng-href="{{post.link}}">
+                                        <img alt="" ng-src="{{post.picture}}" class="media-object center padding-10">
+                                    </a>
+                                    <div id="slide-{{$index}}"  class="media-body pre slideable">
+                                        <p class="center" style="max-width: 210px" ng-bind-html="post.message | linky"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="panel-footer border-light">
+                                <div class="timeline-btns">
+                                    <div class="pull-left">
+                                        <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showLikeModal(post)" class="padding-5 text-muted"><i class="fa fa-thumbs-up"></i> {{post.likes.length || 0}}</a>
+                                        <a href="" tooltip-placement="top" tooltip-html-unsafe="Comment" ng-click="showCommentModal(post)" class="padding-5 text-muted"><i class="fa fa-comment"></i> {{post.comments.length || 0}}</a>
+                                        <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank" class="padding-5 text-muted"><i class="fa fa-link"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
                         </div>
-                        <!-- panel-heading -->
-                        <div class="panel-body">
-                            <div class="panel-profile">
+                    </div>
+                    <div ng-if="post.type == 'tw' && post.postType == 'tweet'">
+                        <div class="panel panel-white">
+                            <div class="post-top-bar twitter">
+                                <i class="fa fa-twitter pull-left"></i>
+                                <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+                            </div>
+                            <div class="panel-heading">
                                 <div class="media">
-                                    <a ui-sref="account" class="pull-left">
+                                    <a ui-sref='account' class="pull-left">
                                         <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
                                     </a>
                                     <div class="media-body">
@@ -66,81 +118,39 @@
                                 </div>
                                 <!-- media -->
                             </div>
-                            <div class="media">
-                                <a ng-href="{{post.link}}">
-                                    <img alt="" ng-src="{{post.picture}}" class="media-object">
-                                </a>
-                                <div class="media-body">
-                                    <p class="center">{{post.message}}</p>
+                            <!-- panel-heading -->
+                            <div class="panel-body">
+                                <div class="media">
+                                    <a ng-href='{{post.link}}'>
+                                        <img alt="" ng-src="{{post.picture}}" class="media-object">
+                                    </a>
+                                    <div class="media-body">
+                                        <p class="center">{{post.message}}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="panel-footer border-light">
-                            <div class="timeline-btns">
-                                <div class="pull-left">
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showLikeModal(post)"><i class="fa fa-thumbs-up"></i></a>
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Add Comment" ng-click="showCommentModal(post)"><i class="fa fa-comment"></i></a>
-                                    <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank"><i class="fa fa-link"></i></a>
-                                </div>
-                                <div class="pull-right">
-                                    <small class="text-muted"><span class="fa fa-thumbs-o-up"></span> {{post.likes.length || 0}}</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div ng-if="post.type == 'tw' && post.postType == 'tweet'">
-                    <div class="panel panel-white">
-                        <div class="post-top-bar twitter">
-                            <i class="fa fa-twitter pull-left"></i>
-                            <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
-                        </div>
-                        <div class="panel-heading">
-                            <div class="media">
-                                <a ui-sref='account' class="pull-left">
-                                    <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
-                                    <small class="text-muted">{{formatDate(post.date)}}</small>
-                                </div>
-                            </div>
-                            <!-- media -->
-                        </div>
-                        <!-- panel-heading -->
-                        <div class="panel-body">
-                            <div class="media">
-                                <a ng-href='{{post.link}}'>
-                                    <img alt="" ng-src="{{post.picture}}" class="media-object">
-                                </a>
-                                <div class="media-body">
-                                    <p class="center">{{post.message}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="post-bottom-bar">
-                            <div class="timeline-btns">
-                                <div class="pull-left">
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click=""><i class="fa fa-reply"></i></a>
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click=""><i class="fa fa-retweet"></i></a>
-                                    <a tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank" data-toggle="modal" data-target="#marketing-comments-tw" ng-click="updateComments(post)"><i class="fa fa-envelope"></i></a>
-                                </div>
-                                <div class="pull-right">
-                                    <small class="text-muted"><span class="fa fa-retweet"></span> {{post.likes.length || 0}}</small>
+                            <div class="clearfix"></div>
+                            <div class="post-bottom-bar">
+                                <div class="timeline-btns">
+                                    <div class="pull-left">
+                                        <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click=""><i class="fa fa-reply"></i></a>
+                                        <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click=""><i class="fa fa-retweet"></i></a>
+                                        <a tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank" data-toggle="modal" data-target="#marketing-comments-tw" ng-click="updateComments(post)"><i class="fa fa-envelope"></i></a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <small class="text-muted"><span class="fa fa-retweet"></span> {{post.likes.length || 0}}</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div ng-if="post.type == 'tw' && post.postType == 'follower'">
-                    <div class="panel panel-white">
-                        <div class="post-top-bar twitter">
-                            <i class="fa fa-twitter pull-left"></i>
-                            <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
-                        </div>
-                        <!-- <div class="panel-heading">
+                    <div ng-if="post.type == 'tw' && post.postType == 'follower'">
+                        <div class="panel panel-white">
+                            <div class="post-top-bar twitter">
+                                <i class="fa fa-twitter pull-left"></i>
+                                <span class="pull-right"><span class="fa fa-clock-o"></span> {{post.date | timeAgoFilter}}</span>
+                            </div>
+                            <!-- <div class="panel-heading">
                                                     <div class="media">
                                                         <a ui-sref='account' class="pull-left">
                                                             <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object">
@@ -152,102 +162,112 @@
                                                     </div>
 
                                                 </div> -->
-                        <!-- panel-heading -->
-                        <div class="panel-body">
-                            <div class="media">
-                                <img class="img-thumbnail img-circle center" style="height: 100px;width:100px;display: block;" ng-src="{{post.from.profileimg}}">
-                                <div class="media-body">
-                                    <p class="center">{{post.from.name}}</p>
+                            <!-- panel-heading -->
+                            <div class="panel-body">
+                                <div class="media">
+                                    <img class="img-thumbnail img-circle center" style="height: 100px;width:100px;display: block;" ng-src="{{post.from.profileimg}}">
+                                    <div class="media-body">
+                                        <p class="center">{{post.from.name}}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="post-bottom-bar">
-                            <div class="timeline-btns">
-                                <div class="pull-left">
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click=""><i class="fa fa-reply"></i></a>
-                                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click=""><i class="fa fa-retweet"></i></a>
-                                    <a ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank"><i class="fa fa-envelope"></i></a>
-                                </div>
-                                <div class="pull-right">
-                                    <small class="text-muted"><span class="fa fa-retweet"></span> {{post.likes.length || 0}}</small>
+                            <div class="clearfix"></div>
+                            <div class="post-bottom-bar">
+                                <div class="timeline-btns">
+                                    <div class="pull-left">
+                                        <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click=""><i class="fa fa-reply"></i></a>
+                                        <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click=""><i class="fa fa-retweet"></i></a>
+                                        <a ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank"><i class="fa fa-envelope"></i></a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <small class="text-muted"><span class="fa fa-retweet"></span> {{post.likes.length || 0}}</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div ng-show="feed.length <= 0 && isLoaded">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-times fa-2x"></span> <br> No Posts Availiable</h4>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="displayFeed.length <= 0 && feed.length > 0 && isLoaded">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-times fa-2x"></span> <br> No Filters Checked</h4>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="!isLoaded && feed.length <= 0">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-spinner fa-spin"></span> <br> Loading Feeds...</h4>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="stream-filter col-xs-3">
-            <button type="button" class="btn btn-info btn-o btn-block btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openModal('manage-feed-modal')">
-                <span>Manage Feeds</span>
-            </button>
-            <accordion>
-                <accordion-group is-open="item.open" is-disabled="true" class="hidden">
-                    <accordion-heading>
-                        <div class="pull-left filter-details">
-                            <h4>All Networks</h4>
-                            <div class="checkbox clip-check check-primary checkbox-inline">
-                                <input type="checkbox" id="allnetworks" ng-click="filterFeed(type, $event)" ng-checked="type.open">
-                                <label for="allnetworks"></label>
+        <div class="stream-filter col-sm-3">
+            <div class="panel panel-white row">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Feeds</h4>
+                    <ul class="panel-heading-tabs border-light">
+                        <li>
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-primary" ng-click="openModal('manage-feed-modal')">
+                                    <span>Manage</span>
+                                </button>
                             </div>
-                        </div>
-                    </accordion-heading>
-                </accordion-group>
-                <accordion-group is-open="item.open" ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true">
-                    <accordion-heading>
-                        <div class="feedTypeDetail">
-                            <div class="filter-avatar">
-                                <span class="fa fa-{{type.type}}"></span>
-                                <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https}}" class="avatar pull-left" />
-                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <ul class="feeds">
+                        <li class="hidden">
                             <div class="pull-left filter-details">
-                                <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
-                                <p>{{type.type}} ({{feedLengths[type.id]}})</p>
-                            </div>
-                            <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'twitter' || type.type == 'tw'">
-                                <input type="checkbox" id="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}">
-                                <label for="checkboxDefault-{{type.socialId}}" ng-checked="checkTrackedToggleFn(type.socialId)" ng-click="filterFeed(type, $event)" data-value=".tweet-{{type.socialId}}, .follower-{{type.socialId}}"></label>
-                            </div>
-                            <div class="ckbox ckbox-default pull-right" ng-if="type.type == 'facebook' || type.type == 'fb'">
-                                <div class="checkbox clip-check check-primary">
-                                    <input type="checkbox" id="checkbox1" ng-checked="type.checked">
-                                    <label for="checkbox1" ng-click="filterFeed(type)"></label>
+                                <h4>All Networks</h4>
+                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                    <input type="checkbox" id="allnetworks" ng-click="filterFeed(type, $event)" ng-checked="type.open">
+                                    <label for="allnetworks"></label>
                                 </div>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </accordion-heading>
-                    <div class="col-xs-12" ng-if="type.type == 'twitter'">
-                        <input type="checkbox" name="tweets" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".tweet-{{type.socialId}}">
-                        <label for="tweets">Tweets</label>
-                        <span class="pull-right label label-primary"></span>
-                        <hr></hr>
-                    </div>
-                    <div class="col-xs-12" ng-if="type.type == 'twitter'">
-                        <input type="checkbox" name="followers" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".follower-{{type.socialId}}">
-                        <label for="followers">Followers</label>
-                        <span class="pull-right label label-primary"></span>
-                        <hr></hr>
-                    </div>
-                    <div class="col-xs-12" ng-if="type.type == 'facebook'">
-                        <input type="checkbox" name="posts" class="ng-pristine ng-untouched ng-valid" ng-click="filterFeed(type.type, $event)" value=".posts-{{type.socialId}}, .link-{{type.socialId}}, .status-{{type.socialId}}, .video-{{type.socialId}}">
-                        <label for="posts">Posts</label>
-                        <span class="pull-right label label-primary">{{fbPostsLength}}</span>
-                        <hr></hr>
-                    </div>
-                </accordion-group>
-            </accordion>
-            <div ng-if="isLoaded && feedTypes.length <= 0" class="empty">
-                <h4 class="center">No Feeds added..</h4>
+                        </li>
+                        <li ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true">
+                            <div class="feedTypeDetail">
+                                <div class="filter-avatar pull-left padding-right-5">
+                                    <span class="fa fa-{{type.type}}"></span>
+                                    <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https || type.image}}" class="avatar pull-left" width="50" />
+                                </div>
+                                <div class="pull-left filter-details">
+                                    <h4>{{type.profile.name || type.username | limitTo: 12 }}</h4>
+                                    <p><span class="fa" ng-class="{'fa-facebook-square': type.type == 'fb', 'fa-twitter-square': type.type == 'tw'}"></span> ({{feedLengths[type.id] || 0}})</p>
+                                </div>
+                                <div class="ckbox ckbox-default pull-right">
+                                    <div class="checkbox clip-check check-primary padding-right-0">
+                                        <input type="checkbox" id="checkbox-{{type.id}}" ng-model="type.checked" ng-click="filterFeed(type)">
+                                        <label for="checkbox-{{type.id}}" class="margin-right-0"></label>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div ng-if="!isLoaded && feedTypes.length <= 0" class="empty">
-                <h4 class="center"><span class="fa fa-spinner fa-spin"></span> Loading Feeds...</h4>
-            </div>
-            <!-- <pre>{{filters}}</pre> -->
         </div>
+        <div ng-if="isLoaded && feedTypes.length <= 0" class="empty">
+            <h4 class="center">No Feeds added..</h4>
+        </div>
+        <div ng-if="!isLoaded && feedTypes.length <= 0" class="empty">
+            <h4 class="center"><span class="fa fa-spinner fa-spin"></span> Loading Feeds...</h4>
+        </div>
+        <!-- <pre>{{filters}}</pre> -->
     </div>
-    <!-- end: YOUR CONTENT HERE -->
+</div>
+<!-- end: YOUR CONTENT HERE -->
 </div>
 <script type="text/ng-template" id="manage-feed-modal">
     <div class="modal-header">
@@ -287,7 +307,7 @@
     </div>
     <div class="modal-body manage-feed nopadding bg-white">
         <ul class="fb-admin-pages">
-            <li ng-repeat="account in tempTrackedAccounts | filter: {'facebook': profile.type}">
+            <li ng-repeat="account in tempTrackedAccounts | filter: {'facebook': profile.type, 'adminpage': profile.accountType}">
                 <div class="parentaccount">
                     <div class="account-avatar">
                         <img ng-src="{{account.profile.picture.data.url}}" class="img-circle pull-left clearfix"> {{account.profile.name}}
