@@ -1,0 +1,42 @@
+<script type="text/ng-template" id="page-settings-modal.html">
+<!-- Page Settings Modal -->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Page Settings</h4>
+    </div>
+    <div class="modal-body no-padding" style="max-height:500px;height:100%;overflow:auto">
+            <tabset>
+                <tab>
+                    <tab-heading>
+                        Settings
+                    </tab-heading>
+                    <div>
+                        <div class="mb10"></div>
+                        <button class="btn btn-block btn-success mb10 hidden" data-toggle="modal" data-target="#historical-page-modal"> Historical Pages</button>
+                        <div class="form-group">
+                            <label>Title:</label>
+                            <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title" >
+                        </div>
+                        <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                            <label>URL:</label>
+                            <input id="edit-page-url" class="form-control input-lg" type="text" ng-model="currentPage.handle">
+                        </div>
+                        <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                            <label>Show:</label>
+                            <switch ng-model="currentPage.visible.visibility" class="pull-right"></switch>
+                        </div>
+                        <div class="form-group">
+                            <label>Secure:</label>
+                            <switch ng-model="currentPage.secure" class="pull-right"></switch>
+                        </div>
+                        <button class="btn btn-block btn-danger mb10" data-ng-disabled="currentPage.handle==='index'" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                    </div>
+                </tab>
+            </tabset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+                Done
+            </button>
+    </div>
+</script>
