@@ -16,9 +16,11 @@
             <div class="submit-post-form col-xs-12">
                 <div class="panel panel-white">
                     <div class="panel-body">
-                        <div class="form-group margin-bottom-0" ng-class="{'has-error': noContent}">
+                        <div class="form-group margin-bottom-0" ng-class="{'has-error': noContent || duplicatePostError}">
                             <textarea placeholder="Write something..." class="form-control" ng-model="postContent" rows="4" ng-change="postContentChange()"></textarea>
                             <span class="help-block margin-bottom-0" ng-show="noContent"><span class="symbol required"></span> <span class="text-bold">Error:</span> Post Content Needed</span>
+                            <span class="help-block margin-bottom-0" ng-show="duplicatePostError"><span class="symbol required"></span> <span class="text-bold">Error:</span> Duplicate Post Status</span>
+
                         </div>
                     </div>
                     <!-- panel-body -->
@@ -26,7 +28,7 @@
                         <div class="col-sm-4">
                             <div class="form-horizontal">
                                 <div class="form-group margin-bottom-0" ng-class="{'has-error': noPostTo}">
-                                    <ui-select ng-model="person.selected" theme="bootstrap">
+                                    <ui-select ng-model="selectedSocial" on-select="postToChange($select.selected)" theme="bootstrap">
                                         <ui-select-match placeholder="Select a Social Profile">
                                             <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span>
                                             <small ng-bind-html="$select.selected.name || $select.selected.profile.name"></small>
@@ -70,7 +72,7 @@
                                             <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object img-circle">
                                         </a>
                                         <div class="media-body">
-                                            <h4 class="text-primary">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
+                                            <h4 class="text-primary" slide-toggle="#slide-{{$index}}">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
                                             <small class="text-muted">{{formatDate(post.date)}}</small>
                                         </div>
                                     </div>
@@ -80,7 +82,7 @@
                                     <a ng-href="{{post.link}}">
                                         <img alt="" ng-src="{{post.picture}}" class="media-object center padding-10">
                                     </a>
-                                    <div class="media-body pre">
+                                    <div id="slide-{{$index}}"  class="media-body pre slideable">
                                         <p class="center" style="max-width: 210px" ng-bind-html="post.message | linky"></p>
                                     </div>
                                 </div>
@@ -208,8 +210,8 @@
                 </div>
             </div>
         </div>
-        <div class="stream-filter col-xs-3 row">
-            <div class="panel panel-white" id="panel2">
+        <div class="stream-filter col-sm-3">
+            <div class="panel panel-white row">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">Feeds</h4>
                     <ul class="panel-heading-tabs border-light">
@@ -237,11 +239,11 @@
                             <div class="feedTypeDetail">
                                 <div class="filter-avatar pull-left padding-right-5">
                                     <span class="fa fa-{{type.type}}"></span>
-                                    <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https}}" class="avatar pull-left" />
+                                    <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https || type.image}}" class="avatar pull-left" width="50" />
                                 </div>
                                 <div class="pull-left filter-details">
-                                    <h4>{{type.profile.name | limitTo: 16 }} {{type.profile.name.length < 16 ? '' : '...'}}</h4>
-                                    <p><span class="fa" ng-class="{'fa-facebook-square': type.type == 'fb'}"></span> ({{feedLengths[type.id]}})</p>
+                                    <h4>{{type.profile.name || type.username | limitTo: 12 }}</h4>
+                                    <p><span class="fa" ng-class="{'fa-facebook-square': type.type == 'fb', 'fa-twitter-square': type.type == 'tw'}"></span> ({{feedLengths[type.id] || 0}})</p>
                                 </div>
                                 <div class="ckbox ckbox-default pull-right">
                                     <div class="checkbox clip-check check-primary padding-right-0">
@@ -305,7 +307,7 @@
     </div>
     <div class="modal-body manage-feed nopadding bg-white">
         <ul class="fb-admin-pages">
-            <li ng-repeat="account in tempTrackedAccounts | filter: {'facebook': profile.type}">
+            <li ng-repeat="account in tempTrackedAccounts | filter: {'facebook': profile.type, 'adminpage': profile.accountType}">
                 <div class="parentaccount">
                     <div class="account-avatar">
                         <img ng-src="{{account.profile.picture.data.url}}" class="img-circle pull-left clearfix"> {{account.profile.name}}

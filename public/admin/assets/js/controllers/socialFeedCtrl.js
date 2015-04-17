@@ -51,21 +51,30 @@
             $scope.config = config;
 
             _.each(config.trackedAccounts, function(trackedAccount) {
-                if (trackedAccount.type == 'fb') {
-                    if (trackedAccount.accountType == 'account') {
+
+                //get profile/page info
+                if (trackedAccount.accountType == 'account') {
+                    if (trackedAccount.type == 'fb') {
                         SocialConfigService.getFBProfile(trackedAccount.id, function(profile) {
                             trackedAccount.profile = profile;
                         });
                     }
-                    if (trackedAccount.accountType == 'adminpage') {
+                }
+                if (trackedAccount.accountType == 'adminpage') {
+                    if (trackedAccount.type == 'fb') {
                         SocialConfigService.getFBPageInfo(trackedAccount.id, trackedAccount.socialId, function(profile) {
                             trackedAccount.profile = profile;
                         });
                     }
-                    trackedAccount.checked = true;
-                    $scope.trackedAccounts.push(trackedAccount);
+                }
 
-                    if (trackedAccount.toggle) {
+                //toggle checked and push to trackedAccount
+                trackedAccount.checked = true;
+                $scope.trackedAccounts.push(trackedAccount);
+
+                //get feed items
+                if (trackedAccount.toggle) {
+                    if (trackedAccount.type == 'fb') {
                         SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
                             $scope.feedLengths[trackedAccount.id] = posts.length;
                             _.each(posts, function(post) {
@@ -74,14 +83,15 @@
                                 $scope.feed.push(post);
                             });
                         });
-
-                        setTimeout(function() {
-                            $scope.isLoaded = true;
-                        }, 1500);
-                        $scope.displayFeed = $scope.feed;
                     }
                 }
             });
+            //wait a few seconds to ensure everything is loaded
+            setTimeout(function() {
+                $scope.isLoaded = true;
+            }, 1500);
+            //push the feed into the display
+            $scope.displayFeed = $scope.feed;
 
         };
 
@@ -163,13 +173,18 @@
         $scope.postContent = null;
 
         $scope.postToSocial = function(socialAccountId, post, type) {
-            console.log('postContent >>> ', $scope.postContent);
+            console.log('postTo >>> ', $scope.postTo);
             if (!$scope.postContent) {
                 console.log('post content is empty');
                 $scope.noContent = true;
+                return false;
+            }
+            if (!$scope.selectedSocial) {
+                console.log('post content is empty');
                 $scope.noPostTo = true;
                 return false;
             }
+
             //show spinner
             $scope.postingToSocial = true;
             if (type == 'fb') {
@@ -198,6 +213,13 @@
 
         $scope.handleFBPost = function(socialAccountId, post) {
             SocialConfigService.postFBPost(socialAccountId, post, function(data) {
+                console.log('post return data ', data);
+                if (data.error) {
+                    $scope.postingToSocial = false;
+                    $scope.duplicatePostError = true;
+                    return false;
+                }
+
                 $scope.afterPosting();
             });
         };
@@ -219,11 +241,12 @@
          */
 
         $scope.afterPosting = function() {
+            //clear duplicate post error
+            $scope.duplicatePostError = false;
             //clear spinner
             $scope.postingToSocial = false;
             //clear form
             $scope.postContent = null;
-            document.getElementById('postContent').value = "";
         };
 
         /*
@@ -232,9 +255,9 @@
          */
 
         $scope.postToChange = function(type) {
-            var parsed = JSON.parse(type);
+            console.log('type ', type);
             $scope.noPostTo = false;
-            $scope.selectedSocial = parsed;
+            $scope.selectedSocial = type;
         };
 
         /*
