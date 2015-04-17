@@ -82,6 +82,25 @@ app.constant('contactConstant', {
 });
 
 app.constant('userConstant', {
+
+    social_types: {
+        LOCAL: "lo",
+        FACEBOOK: "fb",
+        TWITTER: "tw",
+        LINKEDIN: "li",
+        GOOGLE: "go",
+        FULL_CONTACT: "fc",
+
+        dp: [
+            {label:"Local", data:"lo"},
+            {label:"Facebook", data:"fb"},
+            {label:"Twitter", data:"tw"},
+            {label:"LinkedIn", data:"li"},
+            {label:"Google+", data:"go"}
+            //{label:"Full Contacnt", data:"fc"}
+        ]
+    },
+
     credential_types: {
         LOCAL: "lo",
         FACEBOOK: "fb",
@@ -380,5 +399,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'wu.masonry',
         files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
+    }, {
+        name: 'ngTextTruncate',
+        files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
     }]
 });

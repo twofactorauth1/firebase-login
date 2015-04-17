@@ -3,8 +3,8 @@
  * service for customer
  */
 (function(angular) {
-    app.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService', 'contactConstant',
-        function($http, $cacheFactory, ImportContactService, contactConstant) {
+    app.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant',
+        function($http, $cacheFactory, ImportContactService, contactConstant, userConstant) {
             var baseUrl = '/api/1.0/';
 
             this.getCache = function() {
@@ -144,7 +144,7 @@
             };
 
             this.contactLabel = function(contact) {
-                var contactTypes = contactConstant.contact_types.dp;
+                var contactTypes = userConstant.contact_types.dp;
                 var type = _.find(contactTypes, function(type) {
                     return type.data === contact.type;
                 });
@@ -155,16 +155,16 @@
                 if (contact.details && contact.details.length > 0) {
                     //see if we have a google contact, that's the best source of email
                     var details = _.findWhere(contact.details, {
-                        type: $$.constants.social.types.GOOGLE
+                        type: userConstant.social_types.GOOGLE
                     });
                     if (details && details.emails.length > 0) {
                         contact.email = details.emails[0].email;
-                        return true;
+                        return contact.email;
                     }
                     var details = contact.details[0];
                     if (details && details.emails && details.emails.length > 0) {
                         contact.email = details.emails[0].email;
-                        return true;
+                        return contact.email;
                     }
                     return false;
                 }
@@ -173,7 +173,7 @@
             this.checkFacebookId = function(contact) {
                 if (contact.details && contact.details.length > 0) {
                     var details = _.findWhere(contact.details, {
-                        type: $$.constants.social.types.FACEBOOK
+                        type: userConstant.social_types.FACEBOOK
                     });
                     if (details && details !== null) {
                         contact.facebookId = details.socialId;
@@ -186,7 +186,7 @@
             this.checkTwitterId = function(contact) {
                 if (contact.details && contact.details.length > 0) {
                     var details = _.findWhere(contact.details, {
-                        type: $$.constants.social.types.TWITTER
+                        type: userConstant.social_types.TWITTER
                     });
                     if (details) {
                         contact.twitterId = details.socialId;
@@ -199,7 +199,7 @@
             this.checkLinkedInId = function(contact) {
                 if (contact.details && contact.details.length > 0) {
                     var details = _.findWhere(contact.details, {
-                        type: $$.constants.social.types.LINKEDIN
+                        type: userConstant.social_types.LINKEDIN
                     });
                     if (details) {
                         if (details.websites !== null && details.websites.length > 0) {
@@ -229,7 +229,7 @@
                             address_str = _address.lat.concat(",", _address.lon);
                         }
                         contact.address = encodeURIComponent(address_str);
-                        return true;
+                        return contact.address;
                     }
                 }
                 return false;
@@ -296,21 +296,21 @@
             //region IMPORT
 
             this.importFacebookFriends = function(fn) {
-                ImportContactService.importContacts($$.constants.social.types.FACEBOOK, fn, function(data, success) {
+                ImportContactService.importContacts(userConstant.social_types.FACEBOOK, fn, function(data, success) {
                     fn(data, success);
                 });
             };
 
 
             this.importLinkedInConnections = function(fn) {
-                ImportContactService.importContacts($$.constants.social.types.LINKEDIN, fn, function(data, success) {
+                ImportContactService.importContacts(userConstant.social_types.LINKEDIN, fn, function(data, success) {
                     fn(data, success);
                 });
             };
 
 
             this.importGmailContacts = function(fn) {
-                ImportContactService.importContacts($$.constants.social.types.GOOGLE, fn, function(data, success) {
+                ImportContactService.importContacts(userConstant.social_types.GOOGLE, fn, function(data, success) {
                     fn(data, success);
                 });
             };

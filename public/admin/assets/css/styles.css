@@ -12288,6 +12288,16 @@ table.grid tbody td strong {
   border-bottom: none;
   margin-bottom: 0px;
 }
+/* ---------------------------------------------------------------------- */
+/*  Customers
+/* ---------------------------------------------------------------------- */
+.customers .social {
+  list-style-type: none;
+  margin-bottom: 0;
+}
+.customers .column-width {
+  width: 12.5%;
+}
 .filemanager-options {
   list-style: none;
   margin: 0;

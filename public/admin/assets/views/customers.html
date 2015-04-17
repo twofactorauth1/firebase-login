@@ -18,7 +18,7 @@
                     <div class="panel panel-transparent row margin-bottom-0">
                         <div class="panel-body">
                             <form role="form" class="ng-pristine ng-valid row">
-                                <div class="col-xs-6">
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="col-xs-9 padding-left-0">
                                             <span class="input-icon">
@@ -33,7 +33,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-6">
+                                <div class="col-sm-6">
                                     <div class="form-group margin-bottom-0 pull-right">
                                         <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openCustomerModal()">
                                             <span>New Customer</span>
@@ -98,17 +98,18 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid'}" ng-show="displayedCustomers">
+                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCustomers">
                         <thead>
                             <tr>
-                                <th class="center" ng-show="column.photo">Photo</th>
-                                <th st-sort="name" ng-show="column.name">Name</th>
-                                <th st-sort="handle" ng-show="column.category">Category</th>
-                                <th class="hidden-xs" st-sort="email" ng-show="column.email">Email</th>
-                                <th class="hidden-xs" st-sort="address" ng-show="column.address">Address</th>
-                                <th class="hidden-xs" st-sort="social" ng-show="column.social">Social</th>
-                                <th class="hidden-xs" st-sort="getters.created" ng-show="column.created">Created</th>
-                                <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th>
+                                <th class="center" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                <th st-sort="name" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Name</th>
+                                <th st-sort="handle" ng-show="column.category" ng-class="{'column-width': tableView == 'grid'}">Category</th>
+                                <th class="hidden-xs" st-sort="email" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
+                                <th class="hidden-xs" st-sort="address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
+                                <th class="hidden-xs center" st-sort="phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
+                                <th class="hidden-xs" st-sort="social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
+                                <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter">
                                 <th ng-show="column.photo"></th>
@@ -124,29 +125,47 @@
                                 <th ng-show="column.address">
                                     <input st-search="address" placeholder="Address" class="form-control" type="search" />
                                 </th>
+                                <th ng-show="column.phone">
+                                    <input st-search="phone" placeholder="Phone" class="form-control" type="search" />
+                                </th>
                                 <th ng-show="column.social">
                                     <input st-search="social" placeholder="Social" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.created">
                                     <input st-search="created" placeholder="Created" class="form-control" type="search" />
                                 </th>
-                                <th ng-show="column.modified">
+                                <!-- <th ng-show="column.modified">
                                     <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
-                                </th>
+                                </th> -->
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
                                 <td class="center" ng-show="column.photo">
-                                    <img src="{{ customer.photo ? customer.photo : '/admin/assets/images/default-user.png' }}" class="img-thumbnail screenshot" alt="image">
+                                    <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td ng-show="column.name"><strong>Name: </strong>{{customer.first}} {{customer.last}}</td>
-                                <td ng-show="column.category" class="hidden-xs"><strong>Category: </strong>{{customer.type}}</td>
-                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> customer.email[0]</td>
-                                <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong> {{customer.address}}</td>
-                                <td ng-show="column.social" class="hidden-xs"><strong>Social: </strong> {{customer.social}}</td>
-                                <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{customer.created.date | date:'MMM d yy'}}</td>
-                                <td ng-show="column.modified" class="hidden-xs"><strong>Modified: </strong>{{customer.modified.date | date:'MMM d yy'}}</td>
+                                <td ng-show="column.name"><strong>Name: </strong> <span ng-text-truncate="customer.first+' '+customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first && !customer.last">--</span></td>
+                                <td ng-show="column.category"><strong>Category: </strong>{{contactLabel(customer) || '--'}}</td>
+                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.bestEmail"><a href="mailto:{{customer.bestEmail}}"><span ng-text-truncate="customer.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                                    </span><span ng-if="!customer.bestEmail">--</span></td>
+                                <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
+                                    <span ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state" ng-text-truncate="customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
+                                    <span ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
+                                    <span ng-if="!customer.details[0].addresses[0]">--</span>
+                                </td>
+                                <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> {{customer.details[0].phones[0].number || '--'}}</td>
+                                <td ng-show="column.social" class="hidden-xs"><strong>Social: </strong>
+                                    <ul class="social">
+                                        <li ng-if="checkFacebookId(customer)"><i class="fa fa-facebook-square"></i>
+                                        </li>
+                                        <li ng-if="checkTwitterId(customer)"><i class="fa fa-twitter-square"></i>
+                                        </li>
+                                        <li ng-if="checkLinkedInId(customer)"><i class="fa fa-linkedin-square"></i>
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{customer.created.date | date:'MMM d yy' || '--'}}</td>
+                                <!-- <td ng-show="column.modified" class="hidden-xs"><strong>Modified: </strong>{{customer.modified.date | date:'MMM d yy'}}</td> -->
                             </tr>
                         </tbody>
                     </table>
