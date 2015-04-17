@@ -55,6 +55,36 @@
       content: "Now evetything is set up, its time to start trakcing.",
       taskKey: 'dashboard',
       state: 'app.dashboard'
+    }, {
+      header: 'View pages',
+      content: 'See all pages',
+      taskKey: 'pages',
+      state: 'app.website.pages'
+    }, {
+      header: 'View posts',
+      content: 'See all posts',
+      taskKey: 'posts',
+      state: 'app.website.posts'
+    }, {
+      header: 'Add product',
+      content: 'Add a product',
+      taskKey: 'single-product',
+      state: 'app.commerce'
+    }, {
+      header: 'Add business info',
+      content: 'Add business info',
+      taskKey: 'profile-business',
+      state: 'app.account'
+    }, {
+      header: 'Add billing info',
+      content: 'Add billing info',
+      taskKey: 'billing',
+      state: 'app.account.billing'
+    }, {
+      header: 'Analytics',
+      content: 'Check site status',
+      taskKey: 'site-analytics',
+      state: 'app.dashboard'
     }];
 
     $scope.startOnboardFn = function(pane) {
