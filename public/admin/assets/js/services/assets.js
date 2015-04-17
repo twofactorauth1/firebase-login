@@ -1,5 +1,5 @@
-define(['app'], function (app) {
-    app.register.service('AssetsService', function ($http) {
+(function(angular) {
+    app.service('AssetsService',['$http', function ($http) {
         var baseUrl = '/api/1.0/';
         this.getAssetsByAccount = function (fn) {
             var apiUrl = baseUrl + ['assets'].join('/');
@@ -25,5 +25,5 @@ define(['app'], function (app) {
                     fn(data, status);
                 });
         };
-    });
-});
+    }]);
+})(angular);

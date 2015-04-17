@@ -2,7 +2,7 @@
 /**
  * A directive used for "setting up onboarding".
  */
-app.directive('indigOnboarding', function($location) {
+app.directive('indigOnboarding', function($location, UserService) {
   return {
     restrict: 'E',
     template: '<onboarding-popover enabled="onboardingEnabled" steps="onboardingSteps" on-finish-callback="onboardingFinishFn" step-index="onboardingIndex"></onboarding-popover>',
@@ -12,6 +12,9 @@ app.directive('indigOnboarding', function($location) {
       }];
     },
     link: function(scope, elem, attrs) {
+      UserService.getUserPreferences(function(preferences) {
+        $scope.userPreferences = preferences;
+      });
       scope.onboardingEnabled = false;
       scope.onboardingSteps = [{
         overlay: false
@@ -20,21 +23,93 @@ app.directive('indigOnboarding', function($location) {
       scope.onboardingStepMap = {
         pages: [{
           overlay: true,
-          title: 'Task: Edit home page',
+          title: 'Task: Add pages',
           description: "Find the home page in the list to edit.",
           position: 'centered'
-        }, {
-          position: 'bottom',
-          overlay: false,
-          title: 'Task: Click edit',
-          width: 400,
-          description: "Once you find the page click the edit button in the tile."
-        }, {
-          position: 'bottom',
-          overlay: false,
-          title: 'Task: Save edit',
-          width: 400,
-          description: 'After all your editing is done click save in top right of the view and your are done.'
+        }],
+        'single-page': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        posts: [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'single-post': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        commerce: [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'single-product': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'social-feed': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        customers: [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'single-customer': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'profile-business': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'profile-personal': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        billing: [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        integrations: [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        dashboard: [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
+        }],
+        'site-analytics': [{
+          overlay: true,
+          title: 'Task: Add pages',
+          description: "Find the home page in the list to edit.",
+          position: 'centered'
         }]
       };
 
@@ -48,7 +123,10 @@ app.directive('indigOnboarding', function($location) {
       }
 
       scope.onboardingFinishFn = function() {
-        scope.onboardingEnabled = false;
+        $scope.userPreferences.tasks[scope.obType] = true;
+        UserService.updateUserPreferences($scope.userPreferences, false, function() {
+          scope.onboardingEnabled = false;
+        });
       };
     }
   };

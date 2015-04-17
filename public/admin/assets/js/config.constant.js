@@ -215,6 +215,7 @@ app.constant('JS_REQUIRES', {
         'ckeditor-plugin': '../js/libs/ckeditor/ckeditor.js',
         'jquery-nestable-plugin': ['../js/libs/jquery-nestable/jquery.nestable.js'],
         'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
+        'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
         'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js'],
         'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
         'uuid': '../js/libs_misc/uuid.js',
@@ -273,6 +274,7 @@ app.constant('JS_REQUIRES', {
         'commonService': 'assets/js/services/common.js',
         'socialConfigService': 'assets/js/services/socialconfig.js',
         'orderService': 'assets/js/services/order.js',
+        'assetsService': 'assets/js/services/assets.js',
 
         //*** Filters
         'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
@@ -280,6 +282,9 @@ app.constant('JS_REQUIRES', {
         'formatText': 'assets/js/filters/formatText.js',
         'offset': 'assets/js/filters/offset.js',
         'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
+
+        //*** Directives
+        'mediaModal': 'assets/js/directives/mediadirective.js',
 
         //*** Utils
         'namespaces': '../js/utils/namespaces.js',
