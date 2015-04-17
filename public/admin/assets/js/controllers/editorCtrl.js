@@ -579,7 +579,8 @@
                         network = editIndex ? $scope.componentEditing.networks[editIndex] : null;
 
                     var update = editIndex ? true : false;
-                    angular.element("#socialComponentModal").modal('show');
+                    $scope.openModal('social-links-modal');
+                   // angular.element("#socialComponentModal").modal('show');
 
                     $scope.setSelectedSocialLink(network, $scope.componentEditing._id, update, nested, parent_index);
 
@@ -719,8 +720,7 @@
                 $scope.updateSocialNetworks(old_value, mode, social);
             $scope.social = {};
             $scope.meetTeamIndex = null;
-            if (angular.element("#socialComponentModal").length)
-                angular.element("#socialComponentModal").modal("hide");
+            $scope.closeModal();
         };
 
         $scope.setSelectedLink = function(social_link) {
