@@ -2672,6 +2672,7 @@ a.text-light:hover {
 }
 .center {
   text-align: center;
+  margin: 0 auto;
 }
 .text-left {
   text-align: left;
@@ -2874,6 +2875,24 @@ a.text-light:hover {
 }
 .no-wrap {
   white-space: nowrap;
+}
+.pre {
+  white-space: pre;
+  /* CSS 2.0 */
+  white-space: pre-wrap;
+  /* CSS 2.1 */
+  white-space: pre-line;
+  /* CSS 3.0 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla */
+  white-space: -hp-pre-wrap;
+  /* HP Printers */
+  word-wrap: break-word;
+  /* IE 5+ */
 }
 /* ---------------------------------------------------------------------- */
 /* Dropdown Menu
@@ -12207,6 +12226,30 @@ table.grid tbody td strong {
 /* ---------------------------------------------------------------------- */
 .social-feed #postContent {
   color: black;
+}
+.social-feed .feedTypeDetail {
+  border-bottom: 1px solid #eee;
+  padding-top: 5px;
+}
+.social-feed .submit-post-form .panel-footer label {
+  color: #fff;
+}
+.social-feed .masonry-brick .panel-heading {
+  color: white;
+  min-height: 35px;
+  padding: 10px;
+}
+.social-feed .masonry-brick .panel-heading .fa-facebook,
+.social-feed .masonry-brick .panel-heading .fa-twitter,
+.social-feed .masonry-brick .panel-heading .fa-google-plus {
+  font-size: 18px;
+}
+.social-feed .masonry-brick .panel-footer {
+  padding: 8px;
+  min-height: 35px;
+}
+.social-feed .masonry-brick .facebook .panel-heading {
+  background: #3b5998;
 }
 .manage-feed .fb-admin-pages {
   margin: 0;

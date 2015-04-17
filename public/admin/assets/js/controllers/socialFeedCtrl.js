@@ -70,6 +70,7 @@
                             $scope.feedLengths[trackedAccount.id] = posts.length;
                             _.each(posts, function(post) {
                                 post.trackedId = trackedAccount.id;
+                                post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
                                 $scope.feed.push(post);
                             });
                         });

@@ -1,6 +1,7 @@
 /* ---------------------------------------------------------------------- */
 /*  Utilities
 /* ---------------------------------------------------------------------- */
+
 .no-padding {
     padding: 0 !important;
 }
@@ -53,7 +54,8 @@
     border: 1px solid @border-default;
 }
 
-.panel-white .border-light, .partition-white .border-light {
+.panel-white .border-light,
+.partition-white .border-light {
     border-color: rgba(0, 0, 0, 0.07) !important;
 }
 
@@ -61,7 +63,8 @@
     border-color: rgba(0, 0, 0, 0.2);
 }
 
-.panel-white .border-dark, .partition-white .border-dark {
+.panel-white .border-dark,
+.partition-white .border-dark {
     border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
@@ -606,8 +609,7 @@ h1.text-extra-large {
 }
 
 a.text-white {
-    color: rgba(255,255,255, 0.6) !important;
-
+    color: rgba(255, 255, 255, 0.6) !important;
     &:hover {
         color: @white !important;
     }
@@ -635,6 +637,7 @@ a.text-light:hover {
 /* ---------------------------------------------------------------------- */
 /*  Background Colors
 /* ---------------------------------------------------------------------- */
+
 .no-bg {
     background: none !important;
 }
@@ -853,6 +856,7 @@ a.text-light:hover {
 
 .center {
     text-align: center;
+    margin: 0 auto;
 }
 
 .text-left {
@@ -886,18 +890,15 @@ a.text-light:hover {
         font-size: 30px;
         font-weight: 600;
     }
-
     i {
         vertical-align: middle;
         padding-bottom: 15px;
     }
-
     .percentage {
         vertical-align: middle;
         font-size: 15px;
         padding-bottom: 15px;
     }
-
     img {
         display: block;
         position: relative;
@@ -909,13 +910,11 @@ a.text-light:hover {
     display: block;
     position: absolute;
     z-index: 101;
-    background-image: linear-gradient(rgba(0,0,0,0) 0px, rgba(0,0,0,1) 100%);
+    background-image: linear-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 1) 100%);
     opacity: 1;
-
     &.fullwidth {
         width: 100%;
     }
-
     .overlayer-wrapper {
         display: block;
         position: relative;
@@ -943,7 +942,6 @@ a.text-light:hover {
     transition: all .25s linear;
     white-space: nowrap;
     line-height: 21px;
-
     &:before {
         content: "";
         border-style: solid;
@@ -954,16 +952,13 @@ a.text-light:hover {
         top: 0;
         transition: all .25s linear;
     }
-
     &:hover {
         background-color: #8B91A0;
         color: #FFFFFF;
     }
-
     &:hover:before {
         border-color: transparent #8B91A0 transparent transparent;
     }
-
     &:after {
         background: none repeat scroll 0 0 #FFFFFF;
         border-radius: 50% 50% 50% 50%;
@@ -984,12 +979,10 @@ a.text-light:hover {
     position: absolute;
     top: 25px;
     z-index: 10000;
-
     .toolbar & {
         top: 60px;
         right: 20px;
     }
-
     .tooltip-notification-arrow {
         border-width: 0 5px 5px;
         left: 80%;
@@ -1002,7 +995,6 @@ a.text-light:hover {
         position: absolute;
         width: 0;
     }
-
     .tooltip-notification-inner {
         background-color: #292B2E;
         border-radius: 4px;
@@ -1012,13 +1004,11 @@ a.text-light:hover {
         text-align: center;
         text-decoration: none;
         line-height: normal;
-
         .message {
             color: #BFC0C1;
             font-size: 11px;
             margin-top: -4px;
         }
-
         > div {
             width: 100px;
         }
@@ -1090,4 +1080,30 @@ a.text-light:hover {
 
 .no-wrap {
     white-space: nowrap;
+}
+
+.pre {
+    white-space: pre;
+    /* CSS 2.0 */
+    
+    white-space: pre-wrap;
+    /* CSS 2.1 */
+    
+    white-space: pre-line;
+    /* CSS 3.0 */
+    
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    
+    white-space: -moz-pre-wrap;
+    /* Mozilla */
+    
+    white-space: -hp-pre-wrap;
+    /* HP Printers */
+    
+    word-wrap: break-word;
+    /* IE 5+ */
 }
