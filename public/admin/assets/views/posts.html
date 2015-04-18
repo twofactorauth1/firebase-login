@@ -11,7 +11,7 @@
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: CONTENT -->
-    <div st-table="displayedposts" st-safe-src="posts">
+    <div st-table="displayedPosts" st-safe-src="posts">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">
@@ -85,7 +85,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="post in displayedposts" ng-click="viewSingle(post)">
+                            <tr ng-repeat="post in displayedPosts" ng-click="viewSingle(post)">
                                 <td class="center">
                                     <img src="{{ post.featured_image ? post.featured_image : '/admin/assets/images/default-media.jpg' }}" class="img-thumbnail screenshot" alt="image">
                                 </td>

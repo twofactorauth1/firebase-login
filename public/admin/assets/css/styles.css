@@ -11635,10 +11635,10 @@ td.small-width {
   opacity: 0.4;
 }
 .modal-backdrop {
-  z-index: 9998 !important;
+  z-index: 9997 !important;
 }
 .modal {
-  z-index: 9999 !important;
+  z-index: 9998 !important;
 }
 .modal-content {
   background: #e8e8e8;

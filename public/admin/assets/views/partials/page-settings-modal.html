@@ -29,13 +29,16 @@
                             <label>Secure:</label>
                             <switch ng-model="currentPage.secure" class="pull-right"></switch>
                         </div>
+                        <div class="well">
+                        <p>Danger Zone</p>
                         <button class="btn btn-block btn-danger mb10" data-ng-disabled="currentPage.handle==='index'" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                        </div>
                     </div>
                 </tab>
             </tabset>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+            <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                 Done
             </button>
     </div>

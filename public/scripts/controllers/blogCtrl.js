@@ -180,12 +180,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         }
 
         window.deletePost = function(post_data, toaster) {
-            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            var pageId = post_data.pageId;            
             PostService.deletePost(pageId, post_data._id, function(data) {
-                toaster.pop('success', "Post deleted successfully");
-                $location.path("/admin#/website");
+                window.parent.window.showToaster(false, true, msg, "Post deleted successfully", true);                                                                                      
             });
         };
+
 
          window.savePostMode=function(toaster, msg){
 
@@ -224,9 +224,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             PostService.updatePost(pageId, post_data._id,post_data,function(data){
                 console.log(data);
                 console.log(msg);
-                window.parent.window.setLoading(false);
-                if(toaster)
-                    toaster.pop('success', msg);
+                window.parent.window.showToaster(false, true, msg);                
             });
         };
         window.refreshPost = function()
@@ -241,6 +239,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     }, 500)
             })
         }
+
         $scope.initializePostData = function(revert)
         {
             var post_content = angular.copy(that.post.post_content);
@@ -384,6 +383,13 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
       // }
       // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
     };
+
+    window.checkOrSetPageDirty = function(status) {
+      if (status)
+        $scope.isPageDirty = false;
+      else
+        return $scope.isPageDirty;
+    }
 
     window.addCKEditorImageInput = function(url) {
       console.log('addCKEditorImageInput ', url);
