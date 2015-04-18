@@ -11,7 +11,7 @@ app.directive('indigOnboarding', function($location, UserService) {
         overlay: false
       }];
     },
-    link: function($scope, scope, elem, attrs) {
+    link: function(scope, elem, attrs) {
       UserService.getUserPreferences(function(preferences) {
         scope.userPreferences = preferences;
       });
@@ -23,98 +23,98 @@ app.directive('indigOnboarding', function($location, UserService) {
       scope.onboardingStepMap = {
         pages: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Visit page list',
+          description: "This view provides you with listing of all the system pages.",
           position: 'centered'
         }],
         'single-page': [{
           overlay: true,
           title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          description: "Add a page here for your site.",
           position: 'centered'
         }],
         posts: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Post list',
+          description: "Here you can see all the posts on your system.",
           position: 'centered'
         }],
         'single-post': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add Posts',
+          description: "Add a post here for your site.",
           position: 'centered'
         }],
         commerce: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: List products',
+          description: "Here you see listing of all products.",
           position: 'centered'
         }],
         'single-product': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add Products',
+          description: "Here you can add a product for your business.",
           position: 'centered'
         }],
         'social-feed': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add feed',
+          description: "See your social presence.",
           position: 'centered'
         }],
         customers: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: List customers',
+          description: "See your business contacts here.",
           position: 'centered'
         }],
         'single-customer': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add contacts',
+          description: "Add a contact here.",
           position: 'centered'
         }],
         'profile-business': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add business info',
+          description: "Here you can add info about your business.",
           position: 'centered'
         }],
         'profile-personal': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add personal info',
+          description: "Here you can add your personal info.",
           position: 'centered'
         }],
         billing: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add billing info',
+          description: "Here you can add your social accounts.",
           position: 'centered'
         }],
         integrations: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Add social accounts',
+          description: "Here you can add your social accounts.",
           position: 'centered'
         }],
         dashboard: [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Dashboard',
+          description: "Here you can see your site's progress.",
           position: 'centered'
         }],
         'site-analytics': [{
           overlay: true,
-          title: 'Task: Add pages',
-          description: "Find the home page in the list to edit.",
+          title: 'Task: Analytics',
+          description: "Hee whats happening on your site.",
           position: 'centered'
         }]
       };
 
       if ($location.$$search['onboarding']) {
-        scope.obType = $location.$$search['onboarding'];
+        scope.obType = $location.$$search['onboarding'].trim();
         if (scope.obType in scope.onboardingStepMap) {
           console.info('Found onboarding steps >>>', scope.onboardingStepMap[scope.obType]);
           scope.onboardingSteps = scope.onboardingStepMap[scope.obType];
@@ -123,6 +123,7 @@ app.directive('indigOnboarding', function($location, UserService) {
       }
 
       scope.onboardingFinishFn = function() {
+        console.log('Onboarding finished >>>');
         scope.userPreferences.tasks[scope.obType] = true;
         UserService.updateUserPreferences(scope.userPreferences, false, function() {
           scope.onboardingEnabled = false;
