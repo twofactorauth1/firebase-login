@@ -15,19 +15,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-transparent row margin-bottom-0">
                     <div class="panel-body">
-                        <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ currentPage.title" target="_blank">
-                                    <span>View Page</span>
-                                </button>
-                                <div class="visible-xs margin-bottom-15"></div>
-                            </div>
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-help-alt btn-o">
-                                    <span>Page Info</span>
-                                </button>
-                                <div class="visible-xs margin-bottom-15"></div>
-                            </div>
+                        <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12 hidden">
                             <div class="col-sm-3 col-xs-6 center">
                                 <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-announcement btn-o">
                                     <span>SEO</span>
@@ -39,8 +27,13 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row" style="margin:10px;"></div>
                         <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12" style>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ currentPage.title }}" target="_blank">
+                                    <span>View Page</span>
+                                </button>
+                                <div class="visible-xs margin-bottom-15"></div>
+                            </div>
                             <div class="col-sm-3 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
                                     <span>Save</span>
