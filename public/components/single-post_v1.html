@@ -13,7 +13,7 @@
     <div id="content-area">
         <div class="container website clearfix row-fluid">
             <div id="main-area" class="col-xs-12">
-                <div class="modal" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal" style="z-index: 9999;" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -86,9 +86,9 @@
                             </div>
                             <div class="modal-footer">
                                 <div class="form-group row mb0">
-                                    <button type="button" class="btn btn-orange pull-right" data-dismiss="modal">
+                                    <button type="button" class="btn btn-info btn-wide btn-o" data-dismiss="modal">
                                         Done
-                                    </button>
+                                     </button>
                                     <button type="button" ng-click="revertComponent()" class="btn btn-green pull-right" data-dismiss="modal" style="margin-right:5px;">
                                         Revert
                                     </button>
@@ -96,7 +96,81 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                 <script type="text/ng-template" id="single-post-settings-modal">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="cancel()">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h3 class="modal-title">Single Post Settings</h3>
+                </div>
+        <div class="modal-body">                                
+            <tabset>    
+                <tab>
+                    <tab-heading>
+                        <span>Preview</span>
+                    </tab-heading> 
+                    <section class="entry clearfix" ng-if="isEditing">
+                    <div class="single-blog responsive clearfix"
+                     data-postId="{{blog.post._id}}">
+                    <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
+                        <h2 class="blog-title">
+                            <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
+                                <div class="post_title"
+                                     data-ng-if="blog.post.post_title">
+                                    {{blog.post.post_title}}
+                                </div>
+                            </a>
+                        </h2>
+
+                        <div class="blog-meta">
+                           <span data-ng-if="blog.post.publish_date || blog.post.created.date">
+                             Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
+                            </span>
+                             <span data-ng-if="blog.post.post_author">
+                               Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
+                            </span>
+                             <span data-ng-if="blog.post.post_category">
+                              in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
+                            </span>
+                        </div>
+
+                        <ul class="post_tags" data-ng-if="blog.post.post_tags">
+                            <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
+                        </ul>
+
+                        <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
+                            <img ng-src="{{blog.post.featured_image}}"/>
+                        </div>
+                        <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
+                                <span class="fa fa-edit"></span>
+                                <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
+                                <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
+                        </a>
+                        <!-- end .thumb -->
+
+                        <div class="entry-excerpt"><p>
+                            <div class="editable post_excerpt_div" data-class="post_excerpt">
+                                {{blog.post.post_excerpt }}
+                            </div>
+                            </p></div>                                   
+                        </div>
+
+                    <!-- end .et_pt_blogentry -->
+
+                </div>
+                <!-- end #et_pt_blog -->
+                </section>                           
+                </tab>  
+            </tabset>
+        </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-o" ng-click="createPost(post, $event)">Add Post</button>
             </div>
+        </script>
+
                 <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                         <div class="et_pt_blogentry clearfix">

@@ -18,13 +18,13 @@
                         <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
                             <div class="col-sm-3 col-xs-6 center">
                                 <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ currentPage.title" target="_blank">
-                                    <span>View Page</span>
+                                    <span>{{single_post ? 'View Post' :  'View Page'}}</span>
                                 </button>
                                 <div class="visible-xs margin-bottom-15"></div>
                             </div>
                             <div class="col-sm-3 col-xs-6 center">
                                 <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-help-alt btn-o">
-                                    <span>Page Info</span>
+                                    <span>{{single_post ? 'Post Info' :  'Page Info'}}</span>
                                 </button>
                                 <div class="visible-xs margin-bottom-15"></div>
                             </div>
@@ -47,8 +47,8 @@
                                 </button>
                             </div>
                             <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openModal('page-settings-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
-                                    <span>Page Settings</span>
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
+                                    <span>{{single_post ? 'Post Settings' :  'Page Settings'}}</span>
                                 </button>
                             </div>
                             <div class="col-sm-3 col-xs-6 center">
@@ -70,6 +70,7 @@
     <div data-ng-include=" 'assets/views/partials/add-component-modal.html' "></div>
     <div data-ng-include=" 'assets/views/partials/social-links-modal.html' "></div>
     <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
+    <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div>
     <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
                 <i class="fa fa fa-image"></i>
                 <span class="hidden-xs">Media</span>

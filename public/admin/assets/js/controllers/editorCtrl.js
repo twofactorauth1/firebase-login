@@ -53,6 +53,13 @@
             });
         };
 
+        $scope.openSettingsModal = function() {
+            if($scope.single_post)
+                $scope.openModal("post-settings-modal")
+            else
+                $scope.openModal("page-settings-modal")
+        };
+
         $scope.beginOnboarding = function(type) {
 
             $scope.obType = type;
@@ -495,7 +502,14 @@
                     if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
                         $scope.tabs.address = true;
                     $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                    $scope.openModal('component-settings-modal');
+                     if($(e.currentTarget).hasClass("single-post-settings"))
+                        $("#iframe-website").contents().find('#component-setting-modal').modal('show');
+                    //iFrame.co .openModal('single-post-settings-modal');
+                    else
+                    {
+                       $scope.openModal('component-settings-modal');
+                    }
+                   
                 });
 
                 //add click events for all the copy component buttons
@@ -615,13 +629,16 @@
 
         $scope.resizeIframe = function() {
             var iframe = document.getElementById("iframe-website");
-            var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
-            setTimeout(function() {
-                $scope.$apply(function() {
-                    $scope.iframeHeight = iframeDoc.body.scrollHeight + "px";
-                });
-            }, 1000);
+            if(iframe)
+            {
+                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $scope.iframeHeight = iframeDoc.body.scrollHeight + "px";
+                    });
+                }, 1000);
+            }            
         };
 
         var w = angular.element(window);
@@ -923,8 +940,8 @@
             if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
                 var isDirty = iFrame.contentWindow.checkOrSetPageDirty() || $scope.isDirty;
             }
-            iFrame.contentWindow.checkOrSetPageDirty(true);
-            var redirectUrl = "/website/pages"
+            iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty && iFrame.contentWindow.checkOrSetPageDirty(true);
+            var redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
             if (isDirty) {
                 event.preventDefault();
                 SweetAlert.swal({
@@ -1001,7 +1018,7 @@
             }
             if ($location.$$search['posthandle']) {
                 $scope.single_post = true;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);                
                 $scope.isEditing = true;
             } else {
                 $scope.validateEditPage($scope.currentPage);
@@ -1630,8 +1647,29 @@
 
         //delete post
         $scope.deletePost = function(post_data) {
-            angular.element(".menutoggle-right").click();
-            iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this page",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete post!",
+                cancelButtonText: "No, do not delete post!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function(isConfirm) {
+                if (isConfirm) {
+                    SweetAlert.swal("Saved!", "Post is deleted.", "success");
+                    $scope.closeModal();                    
+                    iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);                    
+                }
+                else
+                {
+                    SweetAlert.swal("Cancelled", "Post not deleted.", "error");
+                }
+            });
+            
         };
 
         //selected component when choosing from modal
@@ -2210,11 +2248,23 @@
 
         window.checkIfSinglePost = function(post) {
             if (post)
+            {
                 $scope.singlePost = true;
+                if (iFrame.contentWindow.copyPostMode) {
+                    iFrame.contentWindow.copyPostMode();
+                    $scope.post_data = post;
+                }
+            }
         }
 
-        window.setLoading = function(value) {
+        window.showToaster = function(value, toast, msg, redirect) {
             $scope.saveLoading = value;
+            if(toast)
+                $scope.$apply(function() {
+                    toaster.pop('success', msg);
+                    if(redirect)
+                        $location.path("/website/posts"); 
+                })
         }
 
         window.deletePricingTable = function(componentId, index) {
