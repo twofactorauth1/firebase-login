@@ -2,7 +2,7 @@
 /**
  * A directive used for "setting up onboarding".
  */
-app.directive('indigOnboarding', function($location, UserService, toaster) {
+app.directive('indigOnboarding', function($location, $sce, UserService, toaster) {
     return {
         restrict: 'E',
         template: '<onboarding-popover enabled="onboardingEnabled" steps="onboardingSteps" on-finish-callback="onboardingFinishFn" step-index="onboardingIndex"></onboarding-popover>',
@@ -62,9 +62,7 @@ app.directive('indigOnboarding', function($location, UserService, toaster) {
                     title: 'Task: Add feed',
                     description: "See your social presence.",
                     position: 'centered',
-                    showCloseButton: true,
-                    extendedTimeOut: 0,
-                    timeOut: 0
+                    showCloseButton: true
                 }],
                 customers: [{
                     overlay: true,
@@ -88,7 +86,8 @@ app.directive('indigOnboarding', function($location, UserService, toaster) {
                     overlay: true,
                     title: 'Task: Add personal info',
                     description: "Here you can add your personal info.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 billing: [{
                     overlay: true,
@@ -128,23 +127,21 @@ app.directive('indigOnboarding', function($location, UserService, toaster) {
             });
 
             scope.onboardingFinishFn = function() {
-                console.log('Onboarding finished >>>');
                 scope.userPreferences.tasks[scope.obType] = true;
                 UserService.updateUserPreferences(scope.userPreferences, false, function() {
                     scope.onboardingEnabled = false;
 
                     //get next task
-                    console.log('scope.userPreferences ', scope.userPreferences);
                     var nextTasks = [];
                     _.each(scope.userPreferences.tasks, function(val, key) {
                         if (val == false) {
                             nextTasks.push(scope.onboardingStepMap[key]);
                         }
                     });
-                    console.log('nextTask >>> ', nextTasks);
+
                     if (nextTasks.length > 0) {
                         //success message
-                        toaster.pop('success', 'Complete. Next is <button class="btn btn-primary">' + nextTasks[0][0].title + '</button>');
+                        toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="'+nextTasks[0][0].link+'">' + nextTasks[0][0].title + '</a>', 15000, 'trustedHtml');
                     } else {
                         toaster.pop('success', 'Task Complete. No more tasks to complete.')
                     }
