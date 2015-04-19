@@ -1,7 +1,6 @@
 <div ng-controller="ProductsCtrl">
-
     <!-- start: PAGE TITLE -->
-    <section id="page-title">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.commerce.PRODUCTS">{{ mainTitle }}</h1>
@@ -11,46 +10,55 @@
         </div>
     </section>
     <!-- end: PAGE TITLE -->
-
     <!-- start: CONTENT -->
     <div st-table="displayedProducts" st-safe-src="products">
-        <div class="col-sm-12">
-            <div class="panel panel-transparent row margin-bottom-0">
-                <div class="panel-body">
-                    <form role="form" class="ng-pristine ng-valid row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <div class="col-xs-9">
-                                    <span class="input-icon">
-                                    <input type="text" st-search placeholder="Search by name, type, tag..." id="form-field-14" class="form-control">
-                                    <i class="ti-search"></i>
-                                </span>
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-8 col-sm-9">
+                                            <span class="input-icon">
+                                            <input type="text" st-search placeholder="Search by name, type, tag..." id="form-field-14" class="form-control">
+                                            <i class="ti-search"></i>
+                                        </span>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3">
-                                    <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
-                                        <span>Filter</span>
-                                    </button>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-0">
+                                    <div class="col-xs-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-import ng-click-active" ng-click="openImportModal()">
+                                            <span>Import</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active">
+                                            <span>Export</span>
+                                        </button>
+                                    </div>
+                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                    <div class="col-xs-6 col-xs-offset-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openProductModal()">
+                                            <span>New</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="form-group  pull-right">
-                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-import ng-click-active" ng-click="openImportModal()">
-                                    <span>Import Products</span>
-                                </button>
-                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-export ng-click-active">
-                                    <span>Export Products</span>
-                                </button>
-                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openProductModal()">
-                                    <span>New Product</span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <table class="table table-striped table-hover">
+        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}">
             <thead>
                 <tr>
                     <th class="center">Image</th>
@@ -91,7 +99,6 @@
         </table>
     </div>
     <!-- end: CONTENT -->
-
     <!-- start: NEW PRODUCT MODAL -->
     <script type="text/ng-template" id="new-product-modal">
         <div class="modal-header">
@@ -127,8 +134,7 @@
             <button class="btn btn-primary" ng-click="addProduct()">Add</button>
         </div>
     </script>
-     <!-- end:  NEW PRODUCT MODAL -->
-
+    <!-- end:  NEW PRODUCT MODAL -->
     <!-- start: IMPORT PRODUCT MODAL -->
     <script type="text/ng-template" id="import-product-modal">
         <div class="modal-header">
@@ -145,5 +151,4 @@
         </div>
     </script>
     <!-- end: IMPORT PRODUCT MODAL -->
-
 </div>

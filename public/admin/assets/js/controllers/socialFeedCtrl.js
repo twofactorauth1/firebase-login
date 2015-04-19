@@ -280,8 +280,75 @@
          */
 
         $scope.showCommentModal = function(post) {
+            _.each(post.comments, function(comment) {
+                comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
+            });
             $scope.tempPost = post;
+            $scope.visibleComments = post.comments;
+            $scope.updateComments(post, 'fb');
             $scope.openModal('facebook-comments-modal');
+        };
+
+        /*
+         * @addCommentFn
+         * -
+         */
+
+        $scope.visibleComments = [];
+
+        $scope.addCommentinModal = '';
+
+        $scope.addCommentFn = function() {
+            if ($scope.commentType == 'fb') {
+                SocialConfigService.addFacebookPostComment($scope.selectedSocial.parentSocialAccount, $scope.addCommentPage.sourceId, $scope.addCommentinModal, function(comment) {
+                    var tempDate = new Date();
+                    tempDate.setHours ( tempDate.getHours() + 7 );
+                    $scope.visibleComments.unshift({
+                        picture: $scope.selectedSocial.profile.picture.data.url,
+                        created: $filter('date')(tempDate , 'yyyy-MM-ddTHH:mm:ss')+'+0000',
+                        name: $scope.selectedSocial.profile.name,
+                        comment: $scope.addCommentinModal
+                    });
+                    $scope.addCommentinModal = '';
+                    toaster.pop('success', 'Comment added', 'Comment added to the facebook post.');
+                });
+            } else if ($scope.commentType == 'tw') {
+                SocialConfigService.addTwitterPostComment($scope.selectedSocial.socialId, $scope.addCommentPage.sourceId, $scope.selectedSocial.screen_name, $scope.addCommentinModal, function(comment) {
+                    $scope.visibleComments.unshift({
+                        picture: $scope.selectedSocial.profile_image_url,
+                        created: new Date(),
+                        name: $scope.selectedSocial.name,
+                        comment: $scope.addCommentinModal
+                    });
+                    $scope.addCommentinModal = '';
+                    toaster.pop('success', 'Comment added', 'Comment added to the twitter post.');
+                });
+            } else {
+                toaster.pop('error', 'Type miss match', 'Post type and admin type does not match.');
+            }
+        };
+
+         /*
+         * @updateComments
+         * update the visible comments to display in the comment modal
+         */
+
+        $scope.updateComments = function(page, type) {
+            console.log(page);
+            $scope.commentType = type;
+            if (type == 'tw') {
+                $scope.commentUsers = $scope.twAdminPages;
+            }
+            if (type == 'fb') {
+                $scope.commentUsers = $scope.fbAdminPages;
+            }
+            $scope.addCommentPage = page;
+            console.log('comments ', page.comments);
+            if (page.comments) {
+                $scope.visibleComments = page.comments;
+            } else {
+                $scope.visibleComments = [];
+            }
         };
 
         /*

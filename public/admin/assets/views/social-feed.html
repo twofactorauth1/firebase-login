@@ -20,7 +20,6 @@
                             <textarea placeholder="Write something..." class="form-control" ng-model="postContent" rows="4" ng-change="postContentChange()"></textarea>
                             <span class="help-block margin-bottom-0" ng-show="noContent"><span class="symbol required"></span> <span class="text-bold">Error:</span> Post Content Needed</span>
                             <span class="help-block margin-bottom-0" ng-show="duplicatePostError"><span class="symbol required"></span> <span class="text-bold">Error:</span> Duplicate Post Status</span>
-
                         </div>
                     </div>
                     <!-- panel-body -->
@@ -80,9 +79,9 @@
                                 </div>
                                 <div class="media margin-top-0">
                                     <a ng-href="{{post.link}}">
-                                        <img alt="" ng-src="{{post.picture}}" class="media-object center padding-10">
+                                        <img alt="" ng-if="post.picture" ng-src="{{post.picture}}" class="media-object center padding-10">
                                     </a>
-                                    <div id="slide-{{$index}}"  class="media-body pre slideable">
+                                    <div id="slide-{{$index}}" class="media-body pre slideable">
                                         <p class="center" style="max-width: 210px" ng-bind-html="post.message | linky"></p>
                                     </div>
                                 </div>
@@ -284,7 +283,7 @@
                     Facebook
                 </tab-heading>
                 <ul class="fb-admin-pages">
-                    <li ng-repeat="account in trackedAccounts | filter: {'facebook': profile.type}">
+                    <li ng-repeat="account in trackedAccounts | filter: {'type': 'fb'}">
                         <div class="parentaccount">
                             <img ng-src="{{account.profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{account.profile.name}}
                             <span ng-show="account.toggle" class="fa fa-minus-square pull-right text-danger" ng-click="removePageFeed(account)"></span>
@@ -307,7 +306,7 @@
     </div>
     <div class="modal-body manage-feed nopadding bg-white">
         <ul class="fb-admin-pages">
-            <li ng-repeat="account in tempTrackedAccounts | filter: {'facebook': profile.type, 'adminpage': profile.accountType}">
+            <li ng-repeat="account in tempTrackedAccounts | filter: {'type': 'fb', 'accountType':'adminpage'}">
                 <div class="parentaccount">
                     <div class="account-avatar">
                         <img ng-src="{{account.profile.picture.data.url}}" class="img-circle pull-left clearfix"> {{account.profile.name}}
@@ -362,40 +361,43 @@
         <h4 class="modal-title">Comments <span ng-if="visibleComments.length">({{visibleComments.length}})</span></h4>
     </div>
     <div class="modal-body no-padding bg-white">
-        <div class="panel panel-transparent margin-bottom-0">
-            <div class="panel-body">
-                <ul>
-                    <li ng-repeat="comment in tempPost.comments">
-                        <img ng-src="{{comment.picture}}" class="img-thumbnail pull-left">
+        <div class="panel panel-white margin-bottom-0">
+            <div class="panel-body no-padding">
+                <ul class="comments" ng-if="tempPost.comments">
+                    <li ng-repeat="comment in visibleComments | orderBy:'created':true track by $index">
+                        <img ng-src="{{comment.picture}}" class="img-circle margin-right-15 pull-left" width="32">
                         <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
                         <h4 class="sender">{{comment.name}}</h4>
                         <small>{{comment.comment}}</small>
                     </li>
-                    <li ng-if="!tempPost.comments">
-                        <div class="margin-bottom-30"></div>
-                        <h4 class="center"><span class="fa fa-comments"></span> No Comments</h4>
-                        <div class="margin-bottom-30"></div>
-                    </li>
                 </ul>
+                <div ng-if="!tempPost.comments">
+                    <div class="margin-bottom-30"></div>
+                    <h4 class="center"><span class="fa fa-comments"></span> No Comments</h4>
+                    <div class="margin-bottom-30"></div>
+                </div>
                 <div class="clearfix"></div>
             </div>
             <!-- panel-body -->
             <div class="panel-footer">
-                <div class='margin-bottom-0'>
-                    <textarea class="form-control" placeholder="Enter Comment..." ng-model='addComment'></textarea>
+                <div class='margin-bottom-15'>
+                    <textarea class="form-control" placeholder="Enter Comment..." ng-model='$parent.addCommentinModal'></textarea>
                 </div>
                 <div class='row'>
-                    <div class='col-xs-3'>
-                        <span class="pull-left">Post As:</span>
-                        <img ng-src="{{addCommentAdminPage.picture.data.url}}" class="thumbnail pull-left clearfix mb0" />
-                    </div>
-                    <div class='col-xs-6'>
-                        <select class='form-control mb0' ng-model='addCommentAdminPage' ng-options="page.name for page in fbAdminPages">
-                            <option value="" ng-if="false"></option>
-                        </select>
+                    <div class='col-xs-9'>
+                        <ui-select ng-model="addCommentAdminPage" on-select="postToChange($select.selected)" theme="bootstrap">
+                            <ui-select-match placeholder="Post As...">
+                                <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span>
+                                <small ng-bind-html="$select.selected.name || $select.selected.profile.name"></small>
+                            </ui-select-match>
+                            <ui-select-choices repeat="type in trackedAccounts | filter: {'type': 'fb'}">
+                                <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span>
+                                <small ng-bind-html="type.name || type.profile.name | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
                     </div>
                     <div class="col-xs-3">
-                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addComment}' ng-click='addFbCommentFn(addComment)'>Comment</button>
+                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addCommentinModal}' ng-click='addCommentFn(addCommentinModal)'>Comment</button>
                     </div>
                 </div>
             </div>

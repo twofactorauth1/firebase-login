@@ -46,6 +46,23 @@
     }
 }
 
+.comments {
+    padding: 15px;
+    max-height: 350px;
+    height: 100%;
+    overflow: auto;
+    margin-bottom: 0;
+    li {
+        list-style-type: none;
+        padding: 10px 0;
+        border-bottom: 1px solid #e7e7e7;
+        &:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+}
+
 .manage-feed {
     .fb-admin-pages {
         margin: 0;

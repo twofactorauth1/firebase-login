@@ -194,13 +194,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Account',
             skip: true
         }
-    }).state('app.account.profile', {
-        url: '/profile',
-        templateUrl: "assets/views/profile.html",
-        title: 'Profile',
+    }).state('app.account.profilebusiness', {
+        url: '/profile-business',
+        templateUrl: "assets/views/profile-business.html",
+        title: 'Profile Business',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Profile'
+            label: 'Profile Business'
         }
     }).state('app.account.billing', {
         url: '/billing',

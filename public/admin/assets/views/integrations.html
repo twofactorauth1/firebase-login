@@ -15,6 +15,7 @@
         <div class="panel panel-transparent margin-bottom-0">
             <div class="panel-body no-padding">
                 <div class="social-icons">
+                    <label>Choose a Social Network</label>
                     <ul>
                         <li class="social-twitter" tooltip="Twitter" tooltip-placement="top">
                             <a href="#" ng-click="socailRedirect('Twitter');">
@@ -46,9 +47,9 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 row">
+    <div class="col-sm-12 row margin-bottom-15">
         <div class="col-sm-6 col-md-4 col-lg-3 margin-top-15" ng-repeat="sa in socialAccounts| filter: socialFilter">
-            <div class="thumbnail padding-10">
+            <div class="thumbnail padding-10  margin-bottom-0">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/linkedin-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.LINKEDIN">
@@ -62,7 +63,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <img ng-src="{{sa.image}}" class="img-circle" width="35" />
-                                <span class="text-bold margin-left-5">{{sa.username}}</span>
+                                <span class="text-bold margin-left-5">{{sa.username || sa.profile.name}}</span>
                                 <div class="btn-group btn-group-justified margin-top-10">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="disconnectSocial(sa.id)">
