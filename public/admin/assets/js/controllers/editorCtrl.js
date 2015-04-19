@@ -6,13 +6,7 @@
     app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant) {
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
-        // UserService.getUserPreferences(function(preferences) {
-        //     $scope.userPreferences = preferences;
-        //     if ($scope.showOnboarding = false && $scope.userPreferences.tasks.edit_home == undefined || $scope.userPreferences.tasks.edit_home == false) {
-        //         $scope.finishOnboarding();
-        //     }
-        // });
-        $scope.showOnboarding = false;
+
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
         var stopInterval;
@@ -23,96 +17,93 @@
             overlay: false
         }];
 
+        /*
+         * @getUrl
+         * get the url for the view page/post button
+         */
+
         $scope.getUrl = function(handle) {
-            return 'http://'+window.location.host+'/'+handle;
+            return 'http://' + window.location.host + '/' + handle;
         };
 
-        //get website
+        /*
+         * @getWebsite
+         * - get website obj, settings, and website variables
+         */
+
         WebsiteService.getWebsite(function(website) {
 
-          $scope.website = website;
-          $scope.website.settings = $scope.website.settings || {};
+            $scope.website = website;
+            $scope.website.settings = $scope.website.settings || {};
 
-          $scope.primaryColor = $scope.website.settings.primary_color;
-          $scope.secondaryColor = $scope.website.settings.secondary_color;
-          $scope.primaryHighlight = $scope.website.settings.primary_highlight;
-          $scope.primaryTextColor = $scope.website.settings.primary_text_color;
-          $scope.primaryFontFamily = $scope.website.settings.font_family;
-          $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
-          $scope.googleFontFamily = $scope.website.settings.google_font_family;
+            $scope.primaryColor = $scope.website.settings.primary_color;
+            $scope.secondaryColor = $scope.website.settings.secondary_color;
+            $scope.primaryHighlight = $scope.website.settings.primary_highlight;
+            $scope.primaryTextColor = $scope.website.settings.primary_text_color;
+            $scope.primaryFontFamily = $scope.website.settings.font_family;
+            $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
+            $scope.googleFontFamily = $scope.website.settings.google_font_family;
 
-          $scope.primaryFontStack = $scope.website.settings.font_family;
-          $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+            $scope.primaryFontStack = $scope.website.settings.font_family;
+            $scope.secondaryFontStack = $scope.website.settings.font_family_2;
         });
 
-        $scope.closeModal = function() {            
+        /*
+         * @closeModal
+         * -
+         */
+
+        $scope.closeModal = function() {
             $scope.modalInstance.close();
         };
 
+        /*
+         * @openModal
+         * -
+         */
+
         $scope.openModal = function(modal) {
-            console.log('open settings modal >>> ');
             $scope.modalInstance = $modal.open({
-                templateUrl: modal+'.html',
+                templateUrl: modal + '.html',
                 scope: $scope
             });
         };
 
+        /*
+         * @openSettingsModal
+         * -
+         */
+
         $scope.openSettingsModal = function() {
-            if($scope.single_post)
+            if ($scope.single_post)
                 $scope.openModal("post-settings-modal")
             else
                 $scope.openModal("page-settings-modal")
         };
 
-        $scope.beginOnboarding = function(type) {
-
-            $scope.obType = type;
-            if (type == 'edit-home') {
-                $scope.stepIndex = 0
-                $scope.activeTab = 'pages';
-                $scope.onboardingSteps = [{
-                    overlay: true,
-                    title: 'Task: Edit home page',
-                    description: "Find the home page in the list to edit.",
-                    position: 'centered'
-                }, {
-                    position: 'bottom',
-                    overlay: false,
-                    title: 'Task: Click edit',
-                    width: 400,
-                    description: "Once you find the page click the edit button in the tile."
-                }, {
-                    position: 'bottom',
-                    overlay: false,
-                    title: 'Task: Save edit',
-                    width: 400,
-                    description: 'After all your editing is done click save in top right of the view and your are done.'
-                }];
-            }
-        };
-
-        $scope.finishOnboarding = function() {
-            $scope.userPreferences.tasks.edit_home = true;
-            UserService.updateUserPreferences($scope.userPreferences, false, function() {});
-        };
-
-        if ($location.$$search['onboarding']) {
-            $scope.beginOnboarding($location.$$search['onboarding']);
-        }
+        /*
+         * @location:pagehandle
+         * - get the pagehandle and replace iframe src
+         */
 
         if ($location.$$search['pagehandle']) {
             document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
         }
+
+        /*
+         * @location:posthandle
+         * - get the posthandle and replace iframe src
+         */
 
         if ($location.$$search['posthandle']) {
             $scope.single_post = true;
             document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
         }
 
-        // NavigationService.updateNavigation();
-        $scope.$back = function() {
-            window.history.back();
-        };
+        /*
+         * @window:scroll
+         * - when the window is scrolled in the admin, ud
+         */
 
         angular.element(window).scroll(function() {
             var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
@@ -128,8 +119,12 @@
                 });
             }
         });
-        // var editBlockUI = blockUI.instances.get('editBlockUI');
-        // editBlockUI.start("Initializing Edit Mode");
+
+        /*
+         * @globalvariables
+         * -
+         */
+
         var iFrame = document.getElementById("iframe-website");
         var subdomainCharLimit = 4;
         $scope.primaryFontStack = '';
@@ -147,13 +142,29 @@
         $scope.saveLoading = false;
         $scope.hours = hoursConstant;
         $scope.typefilter = 'all';
+
+        /*
+         * @components.sort
+         * -
+         */
+
         $scope.components.sort(function(a, b) {
             return a.i > b.i;
         });
 
+        /*
+         * @status
+         * -
+         */
+
         $scope.status = {
             isopen: false
         };
+
+        /*
+         * @spectrum
+         * - variables for the spectrum color picker in the settings modal
+         */
 
         $scope.spectrum = {
             options: {
@@ -182,7 +193,11 @@
             }
         }
 
-        //an array of component types and icons for the add component modal
+        /*
+         * @componentTypes
+         * - an array of component types and icons for the add component modal
+         */
+
         $scope.componentTypes = [{
             title: 'Blog',
             type: 'blog',
@@ -355,6 +370,11 @@
             enabled: true
         }];
 
+        /*
+         * @componentLabel, enabledComponentTypes
+         * -
+         */
+
         var componentLabel,
             enabledComponentTypes = _.where($scope.componentTypes, {
                 enabled: true
@@ -393,64 +413,16 @@
             $scope.typefilter = label;
         };
 
-        /*****
-            {
-                title: 'Customer SignUp',
-                type: 'customer-signup',
-                icon: 'fa fa-male',
-                enabled: false
-            },
-            {
-                title: 'Customer Login',
-                type: 'customer-login',
-                icon: 'fa fa-sign-in',
-                enabled: false
-            },
-            {
-                title: 'Customer Forgot Password',
-                type: 'customer-forgot-password',
-                icon: 'fa fa-lock',
-                enabled: false
-            },
-            {
-                title: 'Customer Account',
-                type: 'customer-account',
-                icon: 'fa fa-user',
-                enabled: false
-            },
-            {
-                title: 'Logo List',
-                type: 'logo-list',
-                icon: 'custom logo-list',
-                enabled: false
-            },
-            {
-                title: 'Image Slider',
-                type: 'image-slider',
-                icon: 'custom image-slider',
-                enabled: false
-            },
-            {
-                title: 'Campaign',
-                type: 'campaign',
-                icon: 'fa fa-bullhorn',
-                enabled: false
-            },
-            {
-                title: 'Footer',
-                type: 'footer',
-                icon: 'custom footer',
-                enabled: false
-            }
-        *****/
+        /*
+         * @iframe.onload
+         * -
+         */
+
         $scope.activated = false;
         document.getElementById("iframe-website").onload = function() {
 
             $scope.updatePage($location.$$search['pagehandle'], true);
-            //$scope.bindEvents();
-            // var iframe = document.getElementById("iframe-website");
-            // var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            // // to do need to check when iframe content is loaded properly
+            //TODO: need to check when iframe content is loaded properly
             if ($scope.isEditing) {
                 if (angular.element("#iframe-website").contents().find("body").length) {
                     setTimeout(function() {
@@ -463,6 +435,12 @@
             }
 
         }
+
+        /*
+         * @removeImage
+         * -
+         */
+
         $scope.removeImage = function(remove) {
             if ($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img) {
                 if (($scope.componentEditing.bg.img.show == false && remove == true) || remove == false) {
@@ -475,6 +453,12 @@
 
             }
         }
+
+        /*
+         * @bindEvents
+         * -
+         */
+
         $scope.bindEvents = function() {
             var iframe = document.getElementById("iframe-website");
             if (!iframe)
@@ -506,14 +490,12 @@
                     if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
                         $scope.tabs.address = true;
                     $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                     if($(e.currentTarget).hasClass("single-post-settings"))
+                    if ($(e.currentTarget).hasClass("single-post-settings"))
                         $("#iframe-website").contents().find('#component-setting-modal').modal('show');
                     //iFrame.co .openModal('single-post-settings-modal');
-                    else
-                    {
-                       $scope.openModal('component-settings-modal');
+                    else {
+                        $scope.openModal('component-settings-modal');
                     }
-                   
                 });
 
                 //add click events for all the copy component buttons
@@ -598,7 +580,7 @@
 
                     var update = editIndex ? true : false;
                     $scope.openModal('social-links-modal');
-                   // angular.element("#socialComponentModal").modal('show');
+                    // angular.element("#socialComponentModal").modal('show');
 
                     $scope.setSelectedSocialLink(network, $scope.componentEditing._id, update, nested, parent_index);
 
@@ -631,10 +613,20 @@
             }
         };
 
+        /*
+         * @resizeIframe
+         * -
+         */
+
+        var w = angular.element(window);
+
+        w.bind('resize', function() {
+            $scope.resizeIframe();
+        });
+
         $scope.resizeIframe = function() {
             var iframe = document.getElementById("iframe-website");
-            if(iframe)
-            {
+            if (iframe) {
                 var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                 var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
@@ -642,14 +634,13 @@
                         $scope.iframeHeight = iframeDoc.body.scrollHeight + "px";
                     });
                 }, 1000);
-            }            
+            }
         };
 
-        var w = angular.element(window);
-
-        w.bind('resize', function () {
-            $scope.resizeIframe();
-        });
+        /*
+         * @saveSocialLink
+         * -
+         */
 
         $scope.saveSocialLink = function(social, id, mode) {
             angular.element("#social-link-name .error").html("");
@@ -744,11 +735,22 @@
             $scope.closeModal();
         };
 
+        /*
+         * @setSelectedLink
+         * -
+         */
+
         $scope.setSelectedLink = function(social_link) {
             $scope.social.name = social_link.name;
             $scope.social.icon = social_link.icon;
             $scope.social.url = social_link.url;
         }
+
+        /*
+         * @setSelectedSocialLink
+         * -
+         */
+
         $scope.setSelectedSocialLink = function(link, id, update, nested, index) {
             if (!$scope.social)
                 $scope.social = {};
@@ -772,6 +774,12 @@
                 $scope.networks = $scope.getSocialNetworks(nested, index);
             });
         }
+
+        /*
+         * @social_links
+         * -
+         */
+
         $scope.social_links = [{
                 name: "adn",
                 icon: "adn",
@@ -898,12 +906,12 @@
                 tooltip: "Yelp",
                 url: "http://www.yelp.com"
             }
+        ];
 
-        ]
-        $scope.toggled = function(open) {
-
-            //console.log('Dropdown is now: ', open);
-        };
+        /*
+         * @toggleDropdown
+         * -
+         */
 
         $scope.toggleDropdown = function($event) {
             $event.preventDefault();
@@ -911,11 +919,10 @@
             $scope.status.isopen = !$scope.status.isopen;
         };
 
-        $scope.resfeshIframe = function() {
-            console.log('refresh iframe');
-            // document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
-            // $scope.components = $scope.currentPage.components;
-        };
+        /*
+         * @editPage
+         * -
+         */
 
         $scope.editPage = function() {
             $scope.isEditing = true;
@@ -930,14 +937,14 @@
             }
             $scope.activateAloha();
             $scope.backup['website'] = angular.copy($scope['website']);
-            // UserService.getUserPreferences(function(preferences) {
-            //     preferences.lastPageHandle = $scope.pageSelected;
-            //     UserService.updateUserPreferences(preferences, false, function() {});
-            // });
         };
 
+        /*
+         * @cancelPage
+         * -
+         */
+
         $scope.cancelPage = function() {
-            // $scope.components = that.originalCurrentPageComponents;
             $scope.isDirty = false;
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
@@ -968,24 +975,17 @@
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
                         }
                         $location.path(redirectUrl);
-                });
-            }
-            else
-            {
+                    });
+            } else {
                 $location.path(redirectUrl);
             }
-            
-            //TODO Only use on single post
-            // iFrame && iFrame.contentWindow && iFrame.contentWindow.updatePostMode && iFrame.contentWindow.updatePostMode();
 
-            // $scope['website'] = angular.copy($scope.backup['website']);
-            // $scope.backup = {};
-            // $scope.primaryFontStack = $scope.website.settings.font_family;
-            // $scope.secondaryFontStack = $scope.website.settings.font_family_2;
-            // iFrame && iFrame.contentWindow && iFrame.contentWindow.triggerFontUpdate && iFrame.contentWindow.triggerFontUpdate($scope.website.settings.font_family)
         };
 
-
+        /*
+         * @validateEditPage
+         * -
+         */
 
         $scope.editPageValidated = false;
 
@@ -1009,7 +1009,11 @@
             }
         };
 
-        //TODO: use scope connection
+        /*
+         * @savePage
+         * -
+         */
+
         $scope.savePage = function(autoSave) {
             $scope.saveLoading = true;
             $scope.isDirty = false;
@@ -1022,7 +1026,7 @@
             }
             if ($location.$$search['posthandle']) {
                 $scope.single_post = true;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);                
+                iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
                 $scope.isEditing = true;
             } else {
                 $scope.validateEditPage($scope.currentPage);
@@ -1135,7 +1139,7 @@
 
                 $scope.currentPage.components = newComponentOrder;
 
-                WebsiteService.getSinglePage($scope.currentPage.websiteId,$scope.currentPage.handle, function(data) {
+                WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
                     //TODO: Make this check on change of page title or url in the page settings modal
                     // if(data && data._id)
                     // {
@@ -1161,21 +1165,25 @@
                         iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
 
                     });
-                //$scope.deactivateAloha();
-                var data = {
-                    _id: $scope.website._id,
-                    accountId: $scope.website.accountId,
-                    settings: $scope.website.settings
-                };
-                //website service - save page data
-                WebsiteService.updateWebsite(data, function(data) {
-                    console.log('updated website settings', data);
-                }); 
+                    //$scope.deactivateAloha();
+                    var data = {
+                        _id: $scope.website._id,
+                        accountId: $scope.website.accountId,
+                        settings: $scope.website.settings
+                    };
+                    //website service - save page data
+                    WebsiteService.updateWebsite(data, function(data) {
+                        console.log('updated website settings', data);
+                    });
                 })
-                
-            }
 
+            }
         };
+
+        /*
+         * @updatePage
+         * -
+         */
 
         $scope.updatePage = function(handle, editing) {
             if (!angular.isDefined(editing))
@@ -1245,6 +1253,11 @@
             });
         };
 
+        /*
+         * @addTeamMember
+         * -
+         */
+
         $scope.addTeamMember = function(team) {
             if (team && team.name) {
                 $scope.componentEditing.teamMembers.push({
@@ -1255,7 +1268,12 @@
                 });
                 $scope.saveComponent();
             }
-        }
+        };
+
+        /*
+         * @addFeatureList
+         * -
+         */
 
         $scope.addFeatureList = function() {
             $scope.componentEditing.features.push({
@@ -1263,15 +1281,12 @@
                 "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
             });
             $scope.saveComponent();
-        }
+        };
 
-        //            $scope.addTeamMember = function () {
-        //                $scope.componentEditing.features.push({
-        //                    "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
-        //                    "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-        //                });
-        //                $scope.saveComponent();
-        //            }
+        /*
+         * @stringifyAddress
+         * -
+         */
 
         $scope.stringifyAddress = function(address) {
             if (address) {
@@ -1281,10 +1296,12 @@
             }
         };
 
+        /*
+         * @updateContactUsAddress
+         * -
+         */
+
         $scope.updateContactUsAddress = function(location) {
-            // console.log('updateContactUsAddress >>> ');
-            // console.log('location: ', $scope.componentEditing.location);
-            // console.log('$scope.stringifyAddress ', $scope.stringifyAddress($scope.componentEditing.location));
 
             if ($scope.componentEditing.location.city) {
                 angular.element('#location-city').parents('.form-group').find('.error').html('');
@@ -1303,9 +1320,6 @@
             }
 
             GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function(data) {
-                // console.log('getGeoSearchAddress data >>> ');
-                // console.log('lat: ', data.lat);
-                // console.log('lon: ', data.lon);
                 if (data.lat && data.lon) {
                     $scope.componentEditing.location.lat = data.lat;
                     $scope.componentEditing.location.lon = data.lon;
@@ -1313,16 +1327,23 @@
                 }
             });
 
-            // if ($scope.componentEditing.location.city && $scope.componentEditing.location.state) {
-            //   $scope.saveContactComponent();
-            // }
-        }
+        };
+
+        /*
+         * @saveContactComponent
+         * -
+         */
 
         $scope.saveContactComponent = function() {
             var currentComponentId = $scope.componentEditing._id;
             $scope.updateSingleComponent(currentComponentId);
             iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
-        }
+        };
+
+        /*
+         * @addComponent
+         * -
+         */
 
         $scope.addComponent = function(addedType) {
             //$scope.deactivateAloha();
@@ -1373,10 +1394,14 @@
             });
         };
 
+        /*
+         * @deleteComponent
+         * -
+         */
+
         $scope.deleteComponent = function(componentId) {
             var pageId = $scope.currentPage._id;
             var deletedType;
-            //$scope.deactivateAloha();
             for (var i = 0; i < $scope.components.length; i++) {
                 if ($scope.components[i]._id == componentId) {
                     deletedType = $scope.components[i].type;
@@ -1393,29 +1418,50 @@
             });
         };
 
+        /*
+         * @updateIframeComponents
+         * -
+         */
+
         $scope.updateIframeComponents = function(fn) {
-            //document.getElementById("iframe-website").contentWindow.updateComponents($scope.components);
             iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
             if (fn) {
                 fn();
             }
         };
 
+        /*
+         * @scrollToIframeComponent
+         * -
+         */
+
         $scope.scrollToIframeComponent = function(section) {
-            //document.getElementById("iframe-website").contentWindow.scrollTo(section);
             iFrame && iFrame.contentWindow && iFrame.contentWindow.scrollTo && iFrame.contentWindow.scrollTo(section)
         };
 
+        /*
+         * @activateAloha
+         * -
+         */
+
         $scope.activateAloha = function() {
-            //document.getElementById("iframe-website").contentWindow.activateAloha();
             $scope.bindEvents();
             iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
         };
 
+        /*
+         * @deactivateAloha
+         * -
+         */
+
         $scope.deactivateAloha = function() {
-            //document.getElementById("iframe-website").contentWindow.deactivateAloha();
             iFrame && iFrame.contentWindow && iFrame.contentWindow.deactivateAloha && iFrame.contentWindow.deactivateAloha()
         };
+
+        /*
+         * @editComponent
+         * -
+         */
 
         $scope.editComponent = function(componentId) {
             if ($scope.single_post) {
@@ -1455,11 +1501,6 @@
 
             });
             $scope.originalComponent = angular.copy($scope.componentEditing);
-            //open right sidebar and component tab
-            // document.body.className += ' leftpanel-collapsed rightmenu-open';
-            // var nodes = document.body.querySelectorAll('.rightpanel-website .nav-tabs li a');
-            // var last = nodes[nodes.length - 1];
-            // angular.element(last).triggerHandler('click');
 
             if ($scope.componentEditing) {
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
@@ -1488,6 +1529,12 @@
                 }
             });
         };
+
+        /*
+         * @revertComponent
+         * -
+         */
+
         $scope.revertComponent = function() {
             var componentId = $scope.componentEditing._id;
             for (var i = 0; i < $scope.components.length; i++) {
@@ -1498,7 +1545,13 @@
             $scope.currentPage.components = $scope.components;
             $scope.updateIframeComponents();
             $scope.activateAloha();
-        }
+        };
+
+        /*
+         * @saveComponent
+         * -
+         */
+
         $scope.saveComponent = function(update) {
 
             var componentId = $scope.componentEditing._id;
@@ -1518,16 +1571,12 @@
             setTimeout(function() {
                 $scope.activateAloha();
             }, 500)
-
-            //update the scope as the temppage until save
-
-            // var pageId = $scope.currentPage._id;
-            // WebsiteService.updateComponent(pageId, $scope.componentEditing._id, $scope.componentEditing, function(data) {
-            //     toaster.pop('success', "Component Saved", "The component was saved successfully.");
-            //     $scope.updateIframeComponents();
-            // });
         };
 
+        /*
+         * @updateSingleComponent
+         * -
+         */
 
         $scope.updateSingleComponent = function(componentId) {
             //update single component
@@ -1611,80 +1660,97 @@
                 }
             }
             return matchingComponent;
-        }
+        };
+
+        /*
+         * @saveCustomComponent
+         * -
+         */
 
         $scope.saveCustomComponent = function(networks) {
             iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
         };
 
-        //delete page
-        $scope.deletePage = function() {
-        SweetAlert.swal({
-                title: "Are you sure?",
-                text: "Do you want to delete this page",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete page!",
-                cancelButtonText: "No, do not delete page!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function(isConfirm) {
-                if (isConfirm) {
-                    SweetAlert.swal("Saved!", "Page is deleted.", "success");
-                    var pageId = $scope.currentPage._id;
-                    var websiteId = $scope.currentPage.websiteId;
-                    var title = $scope.currentPage.title;
+        /*
+         * @deletePage
+         * -
+         */
 
-                    WebsiteService.deletePage(pageId, websiteId, title, function(data) {
-                        toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
-                        $scope.closeModal();
-                        $location.path("/website/pages");
-                    });
-                }
-                else
-                {
-                    SweetAlert.swal("Cancelled", "Page not deleted.", "error");
-                }
-            });
+        $scope.deletePage = function() {
+            SweetAlert.swal({
+                    title: "Are you sure?",
+                    text: "Do you want to delete this page",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete page!",
+                    cancelButtonText: "No, do not delete page!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        SweetAlert.swal("Saved!", "Page is deleted.", "success");
+                        var pageId = $scope.currentPage._id;
+                        var websiteId = $scope.currentPage.websiteId;
+                        var title = $scope.currentPage.title;
+
+                        WebsiteService.deletePage(pageId, websiteId, title, function(data) {
+                            toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
+                            $scope.closeModal();
+                            $location.path("/website/pages");
+                        });
+                    } else {
+                        SweetAlert.swal("Cancelled", "Page not deleted.", "error");
+                    }
+                });
         };
 
-        //delete post
+        /*
+         * @deletePost
+         * -
+         */
+
         $scope.deletePost = function(post_data) {
             SweetAlert.swal({
-                title: "Are you sure?",
-                text: "Do you want to delete this page",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete post!",
-                cancelButtonText: "No, do not delete post!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function(isConfirm) {
-                if (isConfirm) {
-                    SweetAlert.swal("Saved!", "Post is deleted.", "success");
-                    $scope.closeModal();                    
-                    iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);                    
-                }
-                else
-                {
-                    SweetAlert.swal("Cancelled", "Post not deleted.", "error");
-                }
-            });
-            
+                    title: "Are you sure?",
+                    text: "Do you want to delete this page",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete post!",
+                    cancelButtonText: "No, do not delete post!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        SweetAlert.swal("Saved!", "Post is deleted.", "success");
+                        $scope.closeModal();
+                        iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
+                    } else {
+                        SweetAlert.swal("Cancelled", "Post not deleted.", "error");
+                    }
+                });
+
         };
 
-        //selected component when choosing from modal
+        /*
+         * @deletePost
+         * - selected component when choosing from modal
+         */
+
         $scope.selectComponent = function(type) {
             if (type.enabled) {
                 $scope.selectedComponent = type;
             }
         };
 
-        //insertmedia into various components
+        /*
+         * @insertMedia
+         * - insertmedia into various components
+         */
+
         $scope.insertMedia = function(asset) {
             if ($scope.imageChange) {
                 $scope.imageChange = false;
@@ -1750,7 +1816,11 @@
             $scope.updateIframeComponents();
         };
 
-        //when changing the subdomain associated with the account, check to make sure it exisits
+        /*
+         * @checkIfSubdomaddCKEditorImageInputainExists
+         * - when changing the subdomain associated with the account, check to make sure it exisits
+         */
+
         $scope.checkIfSubdomaddCKEditorImageInputainExists = function() {
             var parent_div = angular.element('div.form-group.subdomain');
             UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function(result) {
@@ -1767,9 +1837,14 @@
             });
         };
 
+        /*
+         * @locationChangeStart
+         * - Before user leaves editor, ask if they want to save changes
+         */
+
         $scope.changesConfirmed = false;
         $scope.isDirty = false;
-        //Before user leaves editor, ask if they want to save changes      
+
         var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
@@ -1800,7 +1875,7 @@
                                 $scope.currentPage.components = components;
                                 $scope.savePage();
                             });
-                            
+
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
                         }
@@ -1817,11 +1892,10 @@
 
         });
 
-        //Add Link to navigation
-
-        $scope.$watch('website.linkLists', function(newValue, oldValue) {
-            console.log('website.linkLists changed >>> ');
-        });
+        /*
+         * @initializeLinks
+         * -
+         */
 
         $scope.initializeLinks = function(status) {
             $scope.addLink = status;
@@ -1830,11 +1904,21 @@
                 linkTitle: null,
                 linkType: null
             };
-        }
+        };
+
+        /*
+         * @setLinkUrl
+         * -
+         */
 
         $scope.setLinkUrl = function() {
             $scope.newLink.linkTitle = angular.element("#linkSection option:selected").html();
-        }
+        };
+
+        /*
+         * @setLinkTitle
+         * -
+         */
 
         $scope.setLinkTitle = function(value, index, newLink) {
             var newArray = _.first(angular.copy($scope.currentPage.components), [index + 1]);
@@ -1845,7 +1929,12 @@
                 return value.replace("-", " ") + "-" + (hash.length - 1);
             else
                 return value.replace("-", " ");
-        }
+        };
+
+        /*
+         * @deleteLinkFromNav
+         * -
+         */
 
         $scope.deleteLinkFromNav = function(index) {
             if ($scope.componentEditing.customnav) {
@@ -1867,8 +1956,12 @@
                     }
                 });
             }
-        }
+        };
 
+        /*
+         * @addLinkToNav
+         * -
+         */
 
         $scope.addLinkToNav = function() {
 
@@ -1915,9 +2008,13 @@
             setTimeout(function() {
                 $scope.updateLinkList();
             }, 1000)
-        }
+        };
 
-        //when the navigation is reordered, update the linklist in the website object
+        /*
+         * @updateLinkList
+         * - when the navigation is reordered, update the linklist in the website object
+         */
+
         $scope.updateLinkList = function(index) {
             var linkLabelsArr = [];
             var editedLinksLists = angular.element('.head-menu-links');
@@ -1995,6 +2092,11 @@
             }
         };
 
+        /*
+         * @sortableOptions
+         * -
+         */
+
         $scope.sortableOptions = {
             dragMove: function(event) {
                 console.log('dragMove >>>');
@@ -2010,120 +2112,10 @@
             scrollableContainer: 'reorderNavBarContainer'
         };
 
-        /********** LISTENERS ***********/
-
-        window.deleteFeatureList = function(componentId, index) {
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            $scope.updateSingleComponent(componentId);
-            $scope.componentEditing.features.splice(index, 1);
-            $scope.saveCustomComponent();
-        }
-
-        window.addNewFeatureList = function(componentId, index, newFeature) {
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            $scope.updateSingleComponent(componentId);
-            $scope.componentEditing.features.splice(index + 1, 0, newFeature)
-            $scope.saveCustomComponent();
-        }
-
-        window.clickImageButton = function() {
-            $scope.insertMediaImage = true;
-            //$scope.openModal('mediamodal');
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.changeBlogImage = function(blog) {
-            $scope.changeblobImage = true;
-            $scope.blog_post = blog;
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.setPostImage = function(componentId) {
-            $scope.postImage = true;
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.addImageToGallery = function(componentId, index) {
-            $scope.imgGallery = true;
-            $scope.imgGalleryIndex = index;
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.deleteImageFromGallery = function(componentId, index) {
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            $scope.updateSingleComponent(componentId);
-            $scope.componentEditing.images.splice(index, 1);
-            $scope.saveCustomComponent();
-        }
-
-        window.addImageToThumbnail = function(componentId) {
-            $scope.imgThumbnail = true;
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.deleteImageFromThumbnail = function(componentId, index) {
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            $scope.updateSingleComponent(componentId);
-            $scope.componentEditing.thumbnailCollection.splice(index, 1);
-            $scope.saveCustomComponent();
-        }
-
-        window.changeProfilePhoto = function(componentId, customer) {
-            $scope.profilepic = true;
-            $scope.customerAccount = customer;
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.changeLogoImage = function(componentId) {
-            $scope.logoImage = true;
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            angular.element("#media-manager-modal").modal('show');
-            $scope.showInsert = true;
-        }
-
-        window.getPostImageUrl = function() {
-            return $scope.postImageUrl;
-        }
-
-        window.deleteTeamMember = function(componentId, index) {
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            $scope.updateSingleComponent(componentId);
-            $scope.componentEditing.teamMembers.splice(index, 1);
-            $scope.saveCustomComponent();
-        }
-
-        window.deleteTestimonial = function(componentId, index) {
-            $scope.componentEditing = _.findWhere($scope.components, {
-                _id: componentId
-            });
-            $scope.updateSingleComponent(componentId);
-            $scope.componentEditing.testimonials.splice(index, 1);
-            $scope.saveCustomComponent();
-        }
+                /*
+         * @updateSocialNetworks
+         * -
+         */
 
         $scope.updateSocialNetworks = function(old_value, mode, new_value) {
             var selectedName;
@@ -2160,7 +2152,12 @@
                     }
                     break;
             }
-        }
+        };
+
+        /*
+         * @updateTeamNetworks
+         * -
+         */
 
         $scope.updateTeamNetworks = function(old_value, mode, new_value, parent_index) {
             var selectedName;
@@ -2199,14 +2196,24 @@
                     }
                     break;
             }
-        }
+        };
+
+        /*
+         * @getSocialNetworks
+         * -
+         */
 
         $scope.getSocialNetworks = function(nested, parent_index) {
             if (nested)
                 return $scope.componentEditing.teamMembers[parent_index].networks;
             else
                 return $scope.componentEditing.networks;
-        }
+        };
+
+        /*
+         * @autoSavePage
+         * -
+         */
 
         $scope.autoSavePage = function() {
             $scope.stopAutoSavePage();
@@ -2216,6 +2223,11 @@
             }, $scope.timeInterval);
         };
 
+        /*
+         * @stopAutoSavePage
+         * -
+         */
+
         $scope.stopAutoSavePage = function() {
             if (angular.isDefined(stopInterval)) {
                 $interval.cancel(stopInterval);
@@ -2223,6 +2235,197 @@
                 console.log("Cancel interval");
             }
         };
+
+
+        /********** LISTENERS ***********/
+
+        /*
+         * @deleteFeatureList
+         * -
+         */
+
+        window.deleteFeatureList = function(componentId, index) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            $scope.updateSingleComponent(componentId);
+            $scope.componentEditing.features.splice(index, 1);
+            $scope.saveCustomComponent();
+        };
+
+        /*
+         * @addNewFeatureList
+         * -
+         */
+
+        window.addNewFeatureList = function(componentId, index, newFeature) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            $scope.updateSingleComponent(componentId);
+            $scope.componentEditing.features.splice(index + 1, 0, newFeature)
+            $scope.saveCustomComponent();
+        };
+
+        /*
+         * @clickImageButton
+         * -
+         */
+
+        window.clickImageButton = function() {
+            $scope.insertMediaImage = true;
+            //$scope.openModal('mediamodal');
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @changeBlogImage
+         * -
+         */
+
+        window.changeBlogImage = function(blog) {
+            $scope.changeblobImage = true;
+            $scope.blog_post = blog;
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @setPostImage
+         * -
+         */
+
+        window.setPostImage = function(componentId) {
+            $scope.postImage = true;
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @addImageToGallery
+         * -
+         */
+
+        window.addImageToGallery = function(componentId, index) {
+            $scope.imgGallery = true;
+            $scope.imgGalleryIndex = index;
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @deleteImageFromGallery
+         * -
+         */
+
+        window.deleteImageFromGallery = function(componentId, index) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            $scope.updateSingleComponent(componentId);
+            $scope.componentEditing.images.splice(index, 1);
+            $scope.saveCustomComponent();
+        };
+
+        /*
+         * @addImageToThumbnail
+         * -
+         */
+
+        window.addImageToThumbnail = function(componentId) {
+            $scope.imgThumbnail = true;
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @deleteImageFromThumbnail
+         * -
+         */
+
+        window.deleteImageFromThumbnail = function(componentId, index) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            $scope.updateSingleComponent(componentId);
+            $scope.componentEditing.thumbnailCollection.splice(index, 1);
+            $scope.saveCustomComponent();
+        };
+
+        /*
+         * @changeProfilePhoto
+         * -
+         */
+
+        window.changeProfilePhoto = function(componentId, customer) {
+            $scope.profilepic = true;
+            $scope.customerAccount = customer;
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @changeLogoImage
+         * -
+         */
+
+        window.changeLogoImage = function(componentId) {
+            $scope.logoImage = true;
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            angular.element("#media-manager-modal").modal('show');
+            $scope.showInsert = true;
+        };
+
+        /*
+         * @getPostImageUrl
+         * -
+         */
+
+        window.getPostImageUrl = function() {
+            return $scope.postImageUrl;
+        };
+
+        /*
+         * @deleteTeamMember
+         * -
+         */
+
+        window.deleteTeamMember = function(componentId, index) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            $scope.updateSingleComponent(componentId);
+            $scope.componentEditing.teamMembers.splice(index, 1);
+            $scope.saveCustomComponent();
+        };
+
+        /*
+         * @deleteTestimonial
+         * -
+         */
+
+        window.deleteTestimonial = function(componentId, index) {
+            $scope.componentEditing = _.findWhere($scope.components, {
+                _id: componentId
+            });
+            $scope.updateSingleComponent(componentId);
+            $scope.componentEditing.testimonials.splice(index, 1);
+            $scope.saveCustomComponent();
+        };
+
+        /*
+         * @updateAdminPageScope
+         * -
+         */
 
         window.updateAdminPageScope = function(page) {
             $scope.singlePost = false;
@@ -2249,7 +2452,12 @@
                     })
                 }
             }
-        }
+        };
+
+        /*
+         * @checkIfSinglePost
+         * -
+         */
 
         window.checkIfSinglePost = function(post) {
             if (post)
@@ -2260,7 +2468,12 @@
                     $scope.post_data = post;
                 }
             }
-        }
+        };
+
+        /*
+         * @showToaster
+         * -
+         */
 
         window.showToaster = function(value, toast, msg, redirect) {
             $scope.saveLoading = value;
@@ -2270,7 +2483,12 @@
                     if(redirect)
                         $location.path("/website/posts"); 
                 })
-        }
+        };
+
+        /*
+         * @deletePricingTable
+         * -
+         */
 
         window.deletePricingTable = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
@@ -2279,7 +2497,12 @@
             $scope.updateSingleComponent(componentId);
             $scope.componentEditing.tables.splice(index, 1);
             $scope.saveCustomComponent();
-        }
+        };
+
+        /*
+         * @addPricingTable
+         * -
+         */
 
         window.addPricingTable = function(componentId, newTable, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
@@ -2288,7 +2511,12 @@
             $scope.updateSingleComponent(componentId);
             $scope.componentEditing.tables.splice(index + 1, 0, newTable);
             $scope.saveCustomComponent();
-        }
+        };
+
+        /*
+         * @deletePricingTableFeature
+         * -
+         */
 
         window.deletePricingTableFeature = function(componentId, index, parentIndex) {
             $scope.componentEditing = _.findWhere($scope.components, {
@@ -2297,7 +2525,12 @@
             $scope.updateSingleComponent(componentId);
             $scope.componentEditing.tables[parentIndex].features.splice(index, 1);
             $scope.saveCustomComponent();
-        }
+        };
+
+        /*
+         * @addPricingTableFeature
+         * -
+         */
 
         window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
             $scope.componentEditing = _.findWhere($scope.components, {
@@ -2306,7 +2539,13 @@
             $scope.updateSingleComponent(componentId);
             $scope.componentEditing.tables[parentIndex].features.splice(index + 1, 0, newTable);
             $scope.saveCustomComponent();
-        }
+        };
+
+        /*
+         * @addTeamMember
+         * -
+         */
+
         window.addTeamMember = function(componentId, newTeam, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
@@ -2314,7 +2553,13 @@
             $scope.updateSingleComponent(componentId);
             $scope.componentEditing.teamMembers.splice(index + 1, 0, newTeam);
             $scope.saveCustomComponent();
-        }
+        };
+
+        /*
+         * @addTestimonial
+         * -
+         */
+
         window.addTestimonial = function(componentId, newTestimonial, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
@@ -2322,7 +2567,13 @@
             $scope.updateSingleComponent(componentId);
             $scope.componentEditing.testimonials.splice(index + 1, 0, newTestimonial);
             $scope.saveCustomComponent();
-        }
+        };
+
+        /*
+         * @updateComponent
+         * -
+         */
+
         window.updateComponent = function(componentId) {
             //update single component
             return $scope.updateSingleComponent(componentId);

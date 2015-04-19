@@ -32,7 +32,7 @@
                                             <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span>
                                             <small ng-bind-html="$select.selected.name || $select.selected.profile.name"></small>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="type in trackedAccounts">
+                                        <ui-select-choices repeat="type in trackedAccounts | filter: {'type': 'fb'}">
                                             <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span>
                                             <small ng-bind-html="type.name || type.profile.name | highlight: $select.search"></small>
                                         </ui-select-choices>
