@@ -25,62 +25,72 @@ app.directive('indigOnboarding', function($location, $sce, UserService, toaster)
                     overlay: true,
                     title: 'Task: Visit page list',
                     description: "This view provides you with listing of all the system pages.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'single-page': [{
                     overlay: true,
                     title: 'Task: Add pages',
                     description: "Add a page here for your site.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 posts: [{
                     overlay: true,
                     title: 'Task: Post list',
                     description: "Here you can see all the posts on your system.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'single-post': [{
                     overlay: true,
                     title: 'Task: Add Posts',
                     description: "Add a post here for your site.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 commerce: [{
                     overlay: true,
                     title: 'Task: List products',
                     description: "Here you see listing of all products.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'single-product': [{
                     overlay: true,
                     title: 'Task: Add Products',
                     description: "Here you can add a product for your business.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'social-feed': [{
                     overlay: true,
                     title: 'Task: Add feed',
                     description: "See your social presence.",
                     position: 'centered',
-                    showCloseButton: true
+                    showCloseButton: true,
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 customers: [{
                     overlay: true,
                     title: 'Task: List customers',
                     description: "See your business contacts here.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'single-customer': [{
                     overlay: true,
                     title: 'Task: Add contacts',
                     description: "Add a contact here.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'profile-business': [{
                     overlay: true,
                     title: 'Task: Add business info',
                     description: "Here you can add info about your business.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'profile-personal': [{
                     overlay: true,
@@ -93,25 +103,29 @@ app.directive('indigOnboarding', function($location, $sce, UserService, toaster)
                     overlay: true,
                     title: 'Task: Add billing info',
                     description: "Here you can add your social accounts.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 integrations: [{
                     overlay: true,
                     title: 'Task: Add social accounts',
                     description: "Here you can add your social accounts.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 dashboard: [{
                     overlay: true,
                     title: 'Task: Dashboard',
                     description: "Here you can see your site's progress.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }],
                 'site-analytics': [{
                     overlay: true,
                     title: 'Task: Analytics',
                     description: "Hee whats happening on your site.",
-                    position: 'centered'
+                    position: 'centered',
+                    link: '/admin/#/account/profile?onboarding=profile-personal'
                 }]
             };
 
