@@ -5,6 +5,28 @@
 (function(angular) {
     app.controller('CustomerDetailCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", function($scope, $modal, $timeout, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService) {
 
+
+        /*
+         * @openModal
+         * -
+         */
+
+        $scope.openModal = function(modal) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: modal,
+                scope: $scope
+            });
+        };
+
+        /*
+         * @closeModal
+         * -
+         */
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
+
         $scope.ip_geo_address = '';
         $scope.location = {};
         $scope.loadingMap = true;

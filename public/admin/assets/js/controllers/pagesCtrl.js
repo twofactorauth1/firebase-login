@@ -9,6 +9,11 @@
             var pagesArr = [];
             for (var key in pages) {
                 if (pages.hasOwnProperty(key)) {
+                    if (pages[key].components) {
+                        pages[key].components = pages[key].components.length;
+                    } else {
+                        pages[key].components = 0;
+                    }
                     pagesArr.push(pages[key]);
                 }
             }
@@ -20,6 +25,9 @@
         });
 
         $scope.getters = {
+            components: function (value) {
+                return value.length;
+            },
             created: function (value) {
                 return value.created.date;
             },

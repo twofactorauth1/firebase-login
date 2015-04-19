@@ -22,7 +22,7 @@
                                     <div class="form-group">
                                         <div class="col-xs-8 padding-left-0">
                                             <span class="input-icon">
-                                        <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                        <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
                                         <i class="ti-search"></i>
                                     </span>
                                         </div>
@@ -118,22 +118,22 @@
                                     <input st-search="name" placeholder="Name" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.category">
-                                    <input st-search="category" placeholder="Category" class="form-control" type="search" />
+                                    <!-- <input st-search="category" placeholder="Category" class="form-control" type="search" /> -->
                                 </th>
                                 <th ng-show="column.email">
                                     <input st-search="email" placeholder="Email" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.address">
-                                    <input st-search="address" placeholder="Address" class="form-control" type="search" />
+                                    <input st-search="{{customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state}}" placeholder="Address" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.phone">
-                                    <input st-search="phone" placeholder="Phone" class="form-control" type="search" />
+                                    <input st-search="{{customer.details[0].phones[0].number}}" placeholder="Phone" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.social">
-                                    <input st-search="social" placeholder="Social" class="form-control" type="search" />
+                                    <!-- <input st-search="social" placeholder="Social" class="form-control" type="search" /> -->
                                 </th>
                                 <th ng-show="column.created">
-                                    <input st-search="created" placeholder="Created" class="form-control" type="search" />
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
                                 </th>
                                 <!-- <th ng-show="column.modified">
                                     <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
