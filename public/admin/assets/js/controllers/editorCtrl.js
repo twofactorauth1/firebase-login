@@ -12,11 +12,6 @@
         var stopInterval;
         $scope.breadcrumbTitle = $location.$$search['pagehandle'] || $location.$$search['posthandle'];
 
-        $scope.stepIndex = 0;
-        $scope.onboardingSteps = [{
-            overlay: false
-        }];
-
         /*
          * @getUrl
          * get the url for the view page/post button
