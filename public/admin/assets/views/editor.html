@@ -15,19 +15,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-transparent row margin-bottom-0">
                     <div class="panel-body">
-                        <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ currentPage.title" target="_blank">
-                                    <span>{{single_post ? 'View Post' :  'View Page'}}</span>
-                                </button>
-                                <div class="visible-xs margin-bottom-15"></div>
-                            </div>
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-help-alt btn-o">
-                                    <span>{{single_post ? 'Post Info' :  'Page Info'}}</span>
-                                </button>
-                                <div class="visible-xs margin-bottom-15"></div>
-                            </div>
+                        <!-- <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
                             <div class="col-sm-3 col-xs-6 center">
                                 <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-announcement btn-o">
                                     <span>SEO</span>
@@ -38,22 +26,23 @@
                                     <span>Dupicate</span>
                                 </button>
                             </div>
-                        </div>
-                        <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12" style>
+                        </div> -->
+                        <div class="col-sm-9 col-sm-offset-3 col-md-7 col-md-offset-5">
                             <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ currentPage.title }}" target="_blank">
-                                    <span>View Page</span>
-                                </button>
-                                <div class="visible-xs margin-bottom-15"></div>
-                            </div>
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
-                                    <span>Save</span>
-                                </button>
+                                <a type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(currentPage.handle) }}" target="_blank">
+                                    <span>{{single_post ? 'View Post' :  'View Page'}}</span>
+                                </a>
+                                <div class="visible-xs margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-3 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
                                     <span>{{single_post ? 'Post Settings' :  'Page Settings'}}</span>
+                                </button>
+                                <div class="visible-xs margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
+                                    <span>Save</span>
                                 </button>
                             </div>
                             <div class="col-sm-3 col-xs-6 center">
@@ -77,10 +66,8 @@
     <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
     <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div>
     <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
-                <i class="fa fa fa-image"></i>
-                <span class="hidden-xs">Media</span>
+        <i class="fa fa fa-image"></i>
+        <span class="hidden-xs">Media</span>
     </a>
     <div id="model_container"></div>
 </div>
-          
-
