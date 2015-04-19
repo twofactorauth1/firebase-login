@@ -75,12 +75,12 @@
 			                        <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
 			                    </th>
 			                    <th class="hidden-xs">
-			                        <input st-search="components" placeholder="Type" class="form-control" type="search" />
+			                        <input st-search="components" placeholder="Components" class="form-control" type="search" />
 			                    </th>
-			                    <th class="hidden-xs">
+			                    <th class="hidden">
 			                        <input st-search="created" placeholder="Created" class="form-control" type="search" />
 			                    </th>
-			                    <th class="hidden-xs">
+			                    <th class="hidden">
 			                        <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
 			                    </th>
 			                </tr>
@@ -92,7 +92,7 @@
 			                    </td>
 			                    <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
 			                    <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
-			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" ><strong>Components: </strong> {{page.components.length}}</td>
+			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" ><strong>Components: </strong> {{page.components}}</td>
 			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
 			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
 			                </tr>

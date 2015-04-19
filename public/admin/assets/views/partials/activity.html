@@ -303,13 +303,20 @@
         <div class="panel-heading border-bottom">
             <h4 class="panel-title">Activities</h4>
             <div class="panel-tools">
-                <button type="button" class="btn btn-primary btn-o margin-top-neg-5" data-toggle="modal" data-target="#addActivityModal">
+                <button type="button" class="btn btn-primary btn-o margin-top-neg-5" ng-click="openModal('addActivityModal')">
                     Add Activity
                 </button>
             </div>
         </div>
         <div class="panel-body">
-            <ul class="timeline-xs margin-top-15 margin-bottom-15">
+            <div ng-if="!activities.length">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                    </div>
+                </div>
+            </div>
+            <ul class="timeline-xs margin-top-15 margin-bottom-15" ng-if="activities.length">
                 <li class="timeline-item success" ng-repeat="activity in activities">
                     <div class="margin-left-15">
                         <div class="text-muted text-small">
@@ -326,7 +333,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="addActivityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+<script type="text/ng-template" id="addActivityModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -352,5 +360,5 @@
             </div>
         </div>
     </div>
-</div>
+</script>
 <!-- end: ACTIVITY -->

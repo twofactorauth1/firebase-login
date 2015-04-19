@@ -142,7 +142,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Product'
         },
         resolve: loadSequence('productsDetailCtrl', 'productService')
-    }).state('app.orders', {
+    }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",
         title: 'Orders',
@@ -201,6 +201,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Profile Business'
+        }
+    }).state('app.account.profilepersonal', {
+        url: '/profile-personal',
+        templateUrl: "assets/views/profile-personal.html",
+        title: 'Profile Personal',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Profile Personal'
         }
     }).state('app.account.billing', {
         url: '/billing',
