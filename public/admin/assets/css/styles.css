@@ -12058,6 +12058,11 @@ td.small-width {
 .pages-modal .tab-content h1 {
   line-height: 65px;
 }
+.pages-modal .tab-content .template-select {
+  border-bottom: 1px solid #eee;
+  margin: 20px 0;
+  padding-bottom: 20px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Page Detail
 /* ---------------------------------------------------------------------- */
@@ -12501,6 +12506,22 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .social-feed .feeds li:last-child {
   border-bottom: none;
+}
+.comments {
+  padding: 15px;
+  max-height: 350px;
+  height: 100%;
+  overflow: auto;
+  margin-bottom: 0;
+}
+.comments li {
+  list-style-type: none;
+  padding: 10px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+.comments li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 .manage-feed .fb-admin-pages {
   margin: 0;

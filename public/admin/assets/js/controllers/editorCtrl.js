@@ -23,6 +23,10 @@
             overlay: false
         }];
 
+        $scope.getUrl = function(handle) {
+            return 'http://'+window.location.host+'/'+handle;
+        };
+
         //get website
         WebsiteService.getWebsite(function(website) {
 
@@ -1132,14 +1136,15 @@
                 $scope.currentPage.components = newComponentOrder;
 
                 WebsiteService.getSinglePage($scope.currentPage.websiteId,$scope.currentPage.handle, function(data) {
-                    if(data && data._id)
-                    {
-                        if(data._id !== $scope.currentPage._id)
-                        {
-                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                            return false;
-                        }
-                    }
+                    //TODO: Make this check on change of page title or url in the page settings modal
+                    // if(data && data._id)
+                    // {
+                    //     if(data._id !== $scope.currentPage._id)
+                    //     {
+                    //         toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                    //         return false;
+                    //     }
+                    // }
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         $scope.isEditing = true;
                         WebsiteService.setEditedPageHandle($scope.currentPage.handle);
