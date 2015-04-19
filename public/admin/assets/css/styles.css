@@ -12750,7 +12750,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 .modal-footer.media-footer {
   position: absolute;
   width: 100%;
-  bottom: 0;
+  bottom: -10;
 }
 #media-manager-modal .imgedit-wrap {
   padding: 25px;
