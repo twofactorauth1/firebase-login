@@ -2764,6 +2764,53 @@ div[data-class="blog"] .single-blog {
 .editing .single-post-category {
   padding-bottom: 10px;
 }
+.modal-backdrop {
+  z-index: 99998 !important;
+}
+.modal {
+  z-index: 99999 !important;
+}
+.modal-footer,
+.modal-header {
+  border-color: #b5b5b5;
+}
+#component-setting-modal {
+  top: 10%;
+}
+#component-setting-modal .nav.nav-tabs {
+  margin-top: 0px !important;
+  background-color: #e8e8e8;
+}
+#component-setting-modal .blog-entry {
+  margin: 10px;
+}
+#component-setting-modal .modal {
+  z-index: 9998 !important;
+}
+#component-setting-modal .modal-content {
+  box-shadow: none;
+  background-color: #e8e8e8;
+}
+#component-setting-modal .modal-body {
+  background-color: #fff;
+}
+#component-setting-modal .modal-footer,
+#component-setting-modal .modal-header {
+  border-color: #b5b5b5;
+}
+#component-setting-modal .modal-dialog {
+  min-height: 100% !important;
+  bottom: 0;
+  height: auto !important;
+}
+#component-setting-modal .modal-dialog .modal-content {
+  height: auto !important;
+  min-height: 100% !important;
+}
+#component-setting-modal .close {
+  font-size: 35px;
+  margin-left: 10px;
+}
 div[data-type=blog] .container {
   width: auto;
   padding: 0;

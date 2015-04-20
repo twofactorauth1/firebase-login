@@ -19,7 +19,16 @@
          */
 
         SocialConfigService.getAllSocialConfig(function(data) {
-            console.log('data >>> ', data);
+
+            _.each(data.socialAccounts, function(socialAccount) {
+                //get profile/page info
+                if (socialAccount.type == 'fb') {
+                    SocialConfigService.getFBProfile(socialAccount.id, function(profile) {
+                        socialAccount.profile = profile;
+                    });
+                }
+            });
+
             $scope.socialAccounts = data.socialAccounts;
         });
 

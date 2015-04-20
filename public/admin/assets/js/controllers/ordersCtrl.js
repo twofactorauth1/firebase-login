@@ -7,6 +7,13 @@
 
         OrderService.getOrders(function(orders){
             console.log('orders >>> ', orders);
+            _.each(orders, function(order) {
+            	if (order.line_items) {
+	            	order.line_items = order.line_items.length;
+	            } else {
+	            	order.line_items = 0;
+	            }
+            });
             $scope.orders = orders;
         });
 

@@ -85,7 +85,7 @@
 		</li>
 		<!-- end: MESSAGES DROPDOWN -->
 		<!-- start: ACTIVITIES DROPDOWN -->
-		<li class="dropdown" dropdown on-toggle="toggled(open)">
+		<li class="dropdown hidden" dropdown on-toggle="toggled(open)">
 			<a href class="dropdown-toggle" dropdown-toggle>
 				<i class="ti-check-box"></i> <span translate="topbar.activities.MAIN">ACTIVITIES</span>
 			</a>
@@ -115,7 +115,7 @@
 		</li>
 		<!-- end: ACTIVITIES DROPDOWN -->
 		<!-- start: LANGUAGE SWITCHER -->
-		<li class="dropdown" dropdown on-toggle="toggled(open)">
+		<li class="dropdown hidden" dropdown on-toggle="toggled(open)">
 			<a href class="dropdown-toggle" dropdown-toggle>
 				<i class="ti-world"></i> {{language.selected}}
 			</a>
@@ -135,7 +135,7 @@
 			</a>
 			<ul class="dropdown-menu dropdown-dark">
 				<li>
-					<a ui-sref="app.pages.user" translate="topbar.user.PROFILE">
+					<a ui-sref="app.account.profilepersonal" translate="topbar.user.PROFILE">
 						My Profile
 					</a>
 				</li>

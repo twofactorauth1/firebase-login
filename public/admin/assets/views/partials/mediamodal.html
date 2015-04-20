@@ -18,7 +18,7 @@
                 <div class="row filemanager {{showType}}" ng-if="!editingImage">
                     <ul class="filemanager-options">
                         <li class="checked">
-                            <div class="ckbox ckbox-default">
+                            <div class="checkbox clip-check check-primary ckbox ckbox-default">
                                 <input type="checkbox"
                                        id="selectall"
                                        ng-model="selectModel.select_all"
@@ -79,7 +79,7 @@
                     <div class="media" id="assets" ng-style="{'max-height':bodyHeight}">
                         <div ng-repeat="asset in assets | orderBy:'-created.date'" class="col-xs-12 col-sm-4" ng-show="assets.length">
                             <div class="thmb checked">
-                                <div class="ckbox ckbox-default" style="display: block;">
+                                <div class="checkbox clip-check check-primary ckbox ckbox-default" style="display: block;">
                                     <input type="checkbox"
                                            id="{{asset._id}}"
                                            name="{{asset._id}}"

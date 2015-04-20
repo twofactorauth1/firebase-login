@@ -16,9 +16,6 @@
       taskKey: 'profile-personal',
       state: 'app.account.profile'
     }, {
-      header: "Select A Theme",
-      content: "Select a theme for your front facing website where your customers can visit."
-    }, {
       header: "Edit the Homepage",
       content: "Lets make the home page according to your taste.",
       taskKey: 'single-page',
@@ -49,9 +46,6 @@
       taskKey: 'single-customer',
       state: 'app.customers'
     }, {
-      header: "Create First Campaign",
-      content: "Create your first campaign to start getting vistors."
-    }, {
       header: "Import/Create Products",
       content: "Import or create new products to start selling and creating revenue.",
       taskKey: 'commerce',
@@ -61,12 +55,41 @@
       content: "Now evetything is set up, its time to start trakcing.",
       taskKey: 'dashboard',
       state: 'app.dashboard'
+    }, {
+      header: 'View pages',
+      content: 'See all pages',
+      taskKey: 'pages',
+      state: 'app.website.pages'
+    }, {
+      header: 'View posts',
+      content: 'See all posts',
+      taskKey: 'posts',
+      state: 'app.website.posts'
+    }, {
+      header: 'Add product',
+      content: 'Add a product',
+      taskKey: 'single-product',
+      state: 'app.commerce'
+    }, {
+      header: 'Add business info',
+      content: 'Add business info',
+      taskKey: 'profile-business',
+      state: 'app.account'
+    }, {
+      header: 'Add billing info',
+      content: 'Add billing info',
+      taskKey: 'billing',
+      state: 'app.account.billing'
+    }, {
+      header: 'Analytics',
+      content: 'Check site status',
+      taskKey: 'site-analytics',
+      state: 'app.dashboard'
     }];
 
     $scope.startOnboardFn = function(pane) {
-      console.log(pane);
       var url = $state.href(pane.state, {}, {
-        absolute: true
+        absolute: false
       });
       url += '?onboarding=' + pane.taskKey;
       window.location = url;
@@ -77,7 +100,7 @@
 
 app.controller('ChartCtrl3', ["$scope", 'UserService', function($scope, UserService) {
   UserService.getUserPreferences(function(preferences) {
-    var totalTasks = Object.keys(preferences.tasks).length;
+    var totalTasks = 15;
     var completedTasks = 0;
     for (var task in preferences.tasks) {
       if (preferences.tasks[task]) {

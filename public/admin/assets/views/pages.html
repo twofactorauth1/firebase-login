@@ -75,12 +75,12 @@
 			                        <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
 			                    </th>
 			                    <th class="hidden-xs">
-			                        <input st-search="components" placeholder="Type" class="form-control" type="search" />
+			                        <input st-search="components" placeholder="Components" class="form-control" type="search" />
 			                    </th>
-			                    <th class="hidden-xs">
+			                    <th class="hidden">
 			                        <input st-search="created" placeholder="Created" class="form-control" type="search" />
 			                    </th>
-			                    <th class="hidden-xs">
+			                    <th class="hidden">
 			                        <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
 			                    </th>
 			                </tr>
@@ -92,7 +92,7 @@
 			                    </td>
 			                    <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
 			                    <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
-			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" ><strong>Components: </strong> {{page.components.length}}</td>
+			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" ><strong>Components: </strong> {{page.components}}</td>
 			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
 			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
 			                </tr>
@@ -113,13 +113,13 @@
             </button>
             <h3 class="modal-title">New Page</h3>
         </div>
-        <div class="modal-body pages-modal" ng-class="{'no-padding': !templateDetails}">
+        <div class="modal-body pages-modal bg-white" ng-class="{'no-padding': !templateDetails}">
             <tabset class="tabbable tabs-left margin-bottom-0" ng-hide="templateDetails">
                 <tab>
                     <tab-heading>
                         All
                     </tab-heading>
-                    <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter != 'coming-soon'">
+                    <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter != 'coming-soon'" class="template-select">
                         <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
                             <div class="col-sm-3 col-xs-12">
                                 <div class="img-wrap">
@@ -137,7 +137,6 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        <hr>
                     </div>
                 </tab>
                 <tab>
@@ -162,7 +161,6 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        <hr>
                     </div>
                 </tab>
                 <tab class="hidden">
@@ -187,7 +185,6 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        <hr>
                     </div>
                 </tab>
             </tabset>
@@ -227,6 +224,7 @@
                     </div>
                 </div>
             </div>
+            <div class="clearfix"></div>
         </div>
         <div class="clearfix"></div>
         <div class="modal-footer" ng-show="templateDetails">

@@ -11635,10 +11635,10 @@ td.small-width {
   opacity: 0.4;
 }
 .modal-backdrop {
-  z-index: 9998 !important;
+  z-index: 9997 !important;
 }
 .modal {
-  z-index: 9999 !important;
+  z-index: 9998 !important;
 }
 .modal-content {
   background: #e8e8e8;
@@ -12057,6 +12057,11 @@ td.small-width {
 }
 .pages-modal .tab-content h1 {
   line-height: 65px;
+}
+.pages-modal .tab-content .template-select {
+  border-bottom: 1px solid #eee;
+  margin: 20px 0;
+  padding-bottom: 20px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Page Detail
@@ -12502,6 +12507,22 @@ fieldset[disabled] .btn-vimeo-square.active {
 .social-feed .feeds li:last-child {
   border-bottom: none;
 }
+.comments {
+  padding: 15px;
+  max-height: 350px;
+  height: 100%;
+  overflow: auto;
+  margin-bottom: 0;
+}
+.comments li {
+  list-style-type: none;
+  padding: 10px 0;
+  border-bottom: 1px solid #e7e7e7;
+}
+.comments li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
 .manage-feed .fb-admin-pages {
   margin: 0;
   padding: 0;
@@ -12544,6 +12565,12 @@ fieldset[disabled] .btn-vimeo-square.active {
 .customers .column-width {
   width: 12.5%;
 }
+/* ---------------------------------------------------------------------- */
+/*  Orders
+/* ---------------------------------------------------------------------- */
+.orders .column-width {
+  width: 16.66666666666667%;
+}
 .filemanager-options {
   list-style: none;
   margin: 0;
@@ -12557,7 +12584,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .filemanager-options li {
   display: inline-block;
-  padding: 12px 15px;
+  padding: 3px 15px;
   border-right: 1px solid #eee;
   font-size: 12px;
   color: #666;
@@ -12620,7 +12647,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .filemanager .ckbox {
   position: absolute;
-  top: 15px;
+  top: 4px;
   left: 15px;
   display: none;
 }
@@ -12723,7 +12750,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 .modal-footer.media-footer {
   position: absolute;
   width: 100%;
-  bottom: 0;
+  bottom: -10;
 }
 #media-manager-modal .imgedit-wrap {
   padding: 25px;
