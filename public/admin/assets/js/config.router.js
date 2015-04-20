@@ -115,7 +115,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{customer.first}} {{customer.last}}',
             parent: 'app.customers'
         },
-        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset')
+        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset','assetsService', 'bootstrap', 'toasterService','ui.select')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
