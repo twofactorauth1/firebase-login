@@ -32,6 +32,19 @@ a:focus, a:active {
 h1, h2, h3, h4, h5 {
     // font-family:'LatoRegular', 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, sans-serif;
 }
+
+.clearfix {
+    *zoom: 1;
+    &:before,&:after {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+    &:after {
+        clear: both;
+    }
+}
+
 .headerbg {
     background: #272727;
     height: 63px;
