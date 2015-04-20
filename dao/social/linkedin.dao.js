@@ -17,6 +17,7 @@ var async = require('async');
 var querystring = require('querystring');
 var awsConfig = require('../../configs/aws.config.js');
 var s3Dao = require('../../dao/integrations/s3.dao');
+var fs = require('fs');
 
 var dao = {
 
@@ -678,45 +679,54 @@ var dao = {
             //filter out any bogus values that LinkedIn returns
             var _connections = _.filter(value.values, Boolean);
 
-            var updateContactFromConnection = function(contact, connection) {
+            var updateContactFromConnection = function(contact, connection, cb) {
                 var location= null;
                 if(connection) {                   
-                   if(connection.pictureUrl)
-                   {
-                     var file = {};
-                    file.name = new Date().getTime() + '.png';
-                    file.type = 'image/png';                    
-                    file.path = photo;    
-                    //var ssURL = urlboxhelper.getUrl(serverUrl, options);
-                    var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
-                    var accountId = accountId;
-                    var directory = "acct_indigenous";
-                    if (accountId > 0) {
-                        directory = "acct_" + accountId;
-                    } 
-                    s3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
-                        if (err) {
-                            log.error('Error uploading to s3: ' + err);
-                        } else {
-                           connection.pictureUrl = 'http://' + bucket + '.s3.amazonaws.com/' + directory + '/' + file.name;
-                        }
-                    })  
+                    if(connection.pictureUrl) {
+                        var name =new Date().getTime() + '.png';
+                        var tempFile = {
+                            name: name,
+                            type: 'image/png',
+                            path: 'tmp/' + name
+                        };
+                        var tempFileName = tempFile.path;
+                        self._download(connection.pictureUrl, tempFile, function(){
+                            var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
+                            var accountId = accountId;
+                            var directory = "acct_indigenous";
+                            if (accountId > 0) {
+                                directory = "acct_" + accountId;
+                            }
+                            s3Dao.uploadToS3(bucket, directory, tempFile, true, function (err, value) {
+                                if (err) {
+                                    log.error('Error uploading to s3: ' + err);
+                                } else {
+                                    connection.pictureUrl = '//' + bucket + '.s3.amazonaws.com/' + directory + '/' + tempFile.name;
+                                }
+                                if (connection.location && connection.location.name) {
+                                    location = connection.location.name;
+                                }
+                                contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
 
-                   }
+                                var websites = [];
+                                if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                                    websites.push(connection.publicProfielUrl);
+                                }
+                                if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                                    websites.push(connection.siteStandardProfileRequest.url);
+                                }
+
+                                //Update contact details
+                                contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+
+                                cb();
+                            });
+                        });
+
+
+                    }
                     
-                    if (connection.location && connection.location.name) { location = connection.location.name; }
-                    contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
 
-                    var websites = [];
-                    if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
-                        websites.push(connection.publicProfielUrl);
-                    }
-                    if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
-                        websites.push(connection.siteStandardProfileRequest.url);
-                    }
-
-                    //Update contact details
-                    contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
                 }
 
             };
@@ -749,15 +759,17 @@ var dao = {
                                             //remove the contact from the items array so we don't process again
                                             items = _.without(items, connection);
 
-                                            updateContactFromConnection(contact, connection);
-
-                                            contactDao.saveOrUpdateContact(contact, function(err, value) {
-                                                if (err) {
-                                                    self.log.error("An error occurred updating contact during LinkedIn import", err);
-                                                }
-                                                totalImported++;
-                                                cb();
+                                            updateContactFromConnection(contact, connection, function(){
+                                                contactDao.saveOrUpdateContact(contact, function(err, value) {
+                                                    if (err) {
+                                                        self.log.error("An error occurred updating contact during LinkedIn import", err);
+                                                    }
+                                                    totalImported++;
+                                                    cb();
+                                                });
                                             });
+
+
                                         } else {
                                             self.log.warn('Could not find connection for contact.');
                                             cb();
@@ -783,14 +795,16 @@ var dao = {
                                         });
 
                                         contact.createdBy(user.id(), socialType, linkedInId);
-                                        updateContactFromConnection(contact, connection);
-                                        contactDao.saveOrMerge(contact, function(err, value) {
-                                            if (err) {
-                                                self.log.error("An error occurred saving contact during LinkedIn import", err);
-                                            }
-                                            totalImported++;
-                                            cb();
+                                        updateContactFromConnection(contact, connection, function(){
+                                            contactDao.saveOrMerge(contact, function(err, value) {
+                                                if (err) {
+                                                    self.log.error("An error occurred saving contact during LinkedIn import", err);
+                                                }
+                                                totalImported++;
+                                                cb();
+                                            });
                                         });
+
 
                                     }, function(err) {
                                         callback(err);
@@ -829,6 +843,21 @@ var dao = {
                     });
                 }
             })(_connections, 1);
+        });
+    },
+
+    _download: function(uri, file, callback){
+        var self = this;
+        self.log.debug('calling download.  Saving to: ' + file.path);
+        request.head(uri, function(err, res, body){
+            file.type = res.headers['content-type'];
+            file.size = res.headers['content-length'];
+            if(err) {
+                self.log.error('err getting the head for ' + uri);
+            }
+            request(uri).on('error', function(err) {
+                self.log.error('error downloading file: ' + err);
+            }).pipe(fs.createWriteStream(file.path)).on('close', callback);
         });
     }
 };
