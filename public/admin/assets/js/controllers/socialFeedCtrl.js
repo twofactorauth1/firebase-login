@@ -381,9 +381,12 @@
          */
 
         $scope.likeFBPost = function(page) {
+            console.log('likeFBPost >>> ', page);
             var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
                 return tracked.id == page.id;
             });
+            console.log('trackedAccount >>> ', trackedAccount);
+            console.log('$scope.tempPost.sourceId >>> ', $scope.tempPost.sourceId);
             SocialConfigService.likeFBPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
                 console.log('postReturn ', postReturn);
 

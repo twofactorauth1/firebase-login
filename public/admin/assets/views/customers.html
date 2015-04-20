@@ -1,4 +1,4 @@
-<div ng-controller="CustomersCtrl" class="customers">
+<div class="customers" ng-controller="CustomersCtrl">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -20,13 +20,13 @@
                             <form role="form" class="ng-pristine ng-valid row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <div class="col-xs-8 padding-left-0">
+                                        <div class="col-xs-8 col-md-9 padding-left-0">
                                             <span class="input-icon">
                                         <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
                                         <i class="ti-search"></i>
                                     </span>
                                         </div>
-                                        <div class="col-xs-4 padding-right-0">
+                                        <div class="col-xs-4 col-md-3 padding-right-0">
                                             <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
                                                 <span>Filter</span>
                                             </button>
@@ -36,11 +36,11 @@
                                 <div class="visible-xs clearfix margin-bottom-15"></div>
                                 <div class="col-sm-6">
                                     <div class="form-group margin-bottom-0 pull-right">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openCustomerModal()">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-customer-modal')">
                                             <span>New Customer</span>
                                         </button>
                                     </div>
-                                    <div class="button-group pull-right margin-right-5">
+                                    <div class="button-group pull-right margin-right-5 hidden">
                                         <span class="dropdown" dropdown on-toggle="toggled(open)">
                                         <p class="margin-bottom-0">
                                         <button type="button" class="btn btn-wide btn-info btn-o dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -176,21 +176,7 @@
         </div>
     </div>
     <!-- end: CONTENT -->
-    <!-- start: NEW PAGE MODAL -->
-    <script type="text/ng-template" id="new-customer-modal">
-        <div class="modal-header">
-            <button type="button" class="close" ng-click="cancel()">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <h3 class="modal-title">New customer</h3>
-        </div>
-        <div class="modal-body customer-modal" ng-class="{'no-padding': !templateDetails}">
-        </div>
-        <div class="clearfix"></div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="">Add Customer</button>
-        </div>
-    </script>
-    <!-- end:  NEW PAGE MODAL -->
+    <!-- start: NEW CUSTOMER MODAL -->
+    <div data-ng-include=" 'assets/views/partials/new-customer-modal.html' "></div>
+    <!-- end:  NEW CUSTOMER MODAL -->
 </div>

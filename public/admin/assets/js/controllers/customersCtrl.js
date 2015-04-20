@@ -3,7 +3,7 @@
  * controller for customers
  */
 (function(angular) {
-    app.controller('CustomersCtrl', ["$scope", "toaster", "$modal", "$filter", "CustomerService", function($scope, toaster, $modal, $filter, CustomerService) {
+    app.controller('CustomersCtrl', ["$scope", "toaster", "$filter", "$modal", "CustomerService", function($scope, toaster, $filter, $modal, CustomerService) {
 
         CustomerService.getCustomers(function(customers) {
             console.log('customers >>> ', customers);
@@ -21,6 +21,21 @@
             modified: function(value) {
                 return value.modified.date;
             }
+        };
+
+        $scope.openModal = function(template) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: template,
+                scope: $scope
+            });
+        };
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
+
+        $scope.preventClick = function(event) {
+            event.stopPropagation();
         };
 
         $scope.column = {
@@ -70,26 +85,22 @@
             return returnVal;
         };
 
-        $scope.preventClick = function(event) {
-            event.stopPropagation();
-        };
-
-        $scope.openCustomerModal = function(size) {
-            $scope.modalInstance = $modal.open({
-                templateUrl: 'new-customer-modal',
-                controller: 'CustomerCtrl',
-                size: size,
-                scope: $scope
-            });
-        };
-
-        $scope.cancel = function() {
-            $scope.modalInstance.close();
-        };
-
         $scope.viewSingle = function(customer) {
             window.location = '/admin/#/customers/' + customer._id;
         };
+
+        $scope.customer = {};
+        $scope.customer.tags = {};
+        $scope.customerTags = [
+           {label: "Customer", data: "cu"},
+           {label: "Colleague", data: "co"},
+           {label: "Friend", data: "fr"},
+           {label: "Member", data: "mb"},
+           {label: "Family", data: "fa"},
+           {label: "Admin", data: "ad"},
+           {label: 'Lead', data: 'ld'},
+           {label: "Other", data: "ot"}
+        ];
 
     }]);
 })(angular);

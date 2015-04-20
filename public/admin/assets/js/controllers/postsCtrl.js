@@ -67,7 +67,6 @@
         $scope.openPostModal = function(size) {
             $scope.modalInstance = $modal.open({
                 templateUrl: 'new-post-modal',
-                controller: 'PostsCtrl',
                 size: size,
                 scope: $scope
             });

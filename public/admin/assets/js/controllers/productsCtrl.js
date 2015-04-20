@@ -12,7 +12,6 @@
         $scope.openProductModal = function(size) {
             $scope.modalInstance = $modal.open({
                 templateUrl: 'new-product-modal',
-                controller: 'ProductsCtrl',
                 size: size,
                 scope: $scope
             });
@@ -21,7 +20,6 @@
         $scope.openImportModal = function(size) {
             $scope.modalInstance = $modal.open({
                 templateUrl: 'import-product-modal',
-                controller: 'ProductsCtrl',
                 size: size,
                 scope: $scope
             });
