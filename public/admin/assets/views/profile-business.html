@@ -8,9 +8,6 @@
         <div ncy-breadcrumb></div>
     </div>
 </section>
-<!-- end: PAGE TITLE -->
-<!-- start: YOUR CONTENT HERE -->
-<!-- start: USER TABSET -->
 <tabset class="tabbable">
     <!-- start: TAB OVERVIEW -->
     <tab heading="Profile">
@@ -18,8 +15,8 @@
             <div class="col-md-4">
                 <div class="user-left">
                     <div class="center">
-                        <h4>{{user.firstName}} {{user.lastName}}</h4>
-                        <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+                        <h4>{{account.business.name}}</h4>
+                        <div>
                             <div class="user-image">
                                 <div class="thumbnail">
                                     <img ng-src="{{account.business.logo}}" err-src="assets/images/default-user.png" alt="">
@@ -27,36 +24,26 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="social-icons block">
+                        <div class="social-icons hidden">
                             <ul>
                                 <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                                    <a href="#" target="_blank">
-														Twitter
-													</a>
+                                    <a href="#" target="_blank"> Twitter </a>
                                 </li>
                                 <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                                    <a href="#" target="_blank">
-														Facebook
-													</a>
+                                    <a href="#" target="_blank"> Facebook </a>
                                 </li>
                                 <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                                    <a href="#" target="_blank">
-														Google+
-													</a>
+                                    <a href="#" target="_blank"> Google+ </a>
                                 </li>
                                 <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                                    <a href="#" target="_blank">
-														LinkedIn
-													</a>
+                                    <a href="#" target="_blank"> LinkedIn </a>
                                 </li>
                                 <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                                    <a href="#" target="_blank">
-														Github
-													</a>
+                                    <a href="#" target="_blank"> Github </a>
                                 </li>
                             </ul>
+                            <hr>
                         </div>
-                        <hr>
                     </div>
                     <table class="table table-condensed">
                         <thead>
@@ -66,61 +53,22 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>url</td>
-                                <td>
-                                    <a href="#">
-													{{user.url}}
-												</a></td>
-                            </tr>
-                            <tr>
                                 <td>email:</td>
                                 <td>
                                     <a href>
-													{{user.email}}
-												</a></td>
+                                                    {{user.email}}
+                                                </a></td>
                             </tr>
                             <tr>
                                 <td>phone:</td>
                                 <td>{{user.phone}}</td>
                             </tr>
                             <tr>
-                                <td>skye</td>
+                                <td>address</td>
                                 <td>
                                     <a href>
-													{{user.skype}}
-												</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th colspan="3">General information</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Position</td>
-                                <td>UI Designer</td>
-                            </tr>
-                            <tr>
-                                <td>Last Logged In</td>
-                                <td>56 min</td>
-                            </tr>
-                            <tr>
-                                <td>Position</td>
-                                <td>Senior Marketing Manager</td>
-                            </tr>
-                            <tr>
-                                <td>Supervisor</td>
-                                <td>
-                                    <a href="#">
-													Kenneth Ross
-												</a></td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
-                                <td><span class="label label-sm label-info">Administrator</span></td>
+                                                    {{user.skype}}
+                                                </a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -132,8 +80,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Groups</td>
-                                <td>New company web site development, HR Management</td>
+                                <td>Description</td>
+                                <td>{{account.business.description}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -156,6 +104,9 @@
     <!-- end: TAB OVERVIEW -->
     <!-- start: TAB EDIT ACCOUNT -->
     <tab heading="Edit Account" active="editActive">
+        <div class="col-xs-12">
+            <button class="btn btn-info btn-o pull-right" ng-click="profileSaveFn()">Save</button>
+        </div>
         <form action="#" role="form" id="form">
             <fieldset>
                 <legend>
@@ -163,81 +114,49 @@
                 </legend>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">
-                                First Name
-                            </label>
-                            <input type="text" placeholder="Enter your first name" class="form-control" name="firstname" ng-model="user.first">
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Last Name
-                            </label>
-                            <input type="text" placeholder="Enter your last name" class="form-control" name="lastname" ng-model="user.last">
-                        </div>
-                        <div class="form-group" ng-repeat="email in account.business.emails">
+                        <div>
                             <label class="control-label">
                                 Email Address
                             </label>
-                            <span class="input-icon input-icon-right">
-                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="account.business.emails[$index].email">
-                                <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
-                                <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                            </span>                                              
+                            <div class="form-group" ng-repeat="email in account.business.emails">
+                                <span class="input-icon input-icon-right">
+                                    <input type="email" placeholder="email address" class="form-control" name="email" ng-model="account.business.emails[$index].email">
+                                    <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
+                                    <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                </span>
+                            </div>
                         </div>
-                       <div class="form-group" ng-repeat="phone in account.business.phones">
+                        <div>
                             <label class="control-label">
                                 Phone Number
                             </label>
-                            <span class="input-icon input-icon-right">
-                                <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
-                                <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
-                                <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
-                            </span>                                                
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="control-label">
-                                Url
-                            </label>
-                            <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="user.url">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="block">
-                                Gender
-                            </label>
-                            <div class="clip-radio radio-primary">
-                                <input type="radio" id="us-female" name="gender" value="female" ng-model="user.gender">
-                                <label for="us-female">
-                                    Female
-                                </label>
-                                <input type="radio" id="us-male" name="gender" value="male" ng-model="user.gender">
-                                <label for="us-male">
-                                    Male
-                                </label>
+                            <div class="form-group" ng-repeat="phone in account.business.phones">
+                                <span class="input-icon input-icon-right">
+                                    <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
+                                    <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
+                                    <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
+                                </span>
                             </div>
                         </div>
                         <div ng-repeat="address in account.business.addresses">
                             <div class="row">
                                 <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Address Line 1
-                                            </label>
-                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
-                                        </div>
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Address Line 1
+                                        </label>
+                                        <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                    </div>
                                 </div>
                                 <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Address Line 2
-                                            </label>
-                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
-                                        </div>
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Address Line 2
+                                        </label>
+                                        <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                    </div>
                                 </div>
-                            </div>    
+                            </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -274,32 +193,48 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="row">
-                                <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right"  ng-click="accountAddAddressFn()">Add more address</div>
+                            <div>
+                                <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddAddressFn()">Add more address</div>
                                 <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
-                                </div>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                Image Upload
-                            </label>
-                            <div flow-init flow-object="obj.flow">
-                                <div class="user-image">
-                                    <div class="thumbnail margin-bottom-5">       
-                                        <img src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
-                                    </div>
-                                </div>
-                                <div class="user-image-buttons-edit">
-                                    <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
-                                    <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
-                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <fieldset>
+                            <legend>
+                                Logo Upload
+                            </legend>
+                            <div class="form-group center">
+                                <div>
+                                    <div class="user-image">
+                                        <div class="thumbnail margin-bottom-5">
+                                            <img src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
+                                        </div>
+                                    </div>
+                                    <div class="user-image-buttons-edit">
+                                        <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
+                                        <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <label class="control-label">
+                                Business Name
+                            </label>
+                            <input type="text" placeholder="Business Name" class="form-control" name="businessname" ng-model="account.business.name">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                Description
+                            </label>
+                            <textarea placeholder="Description" class="form-control" name="businessdescription" ng-model="account.business.description"></textarea>
+                        </div>
                     </div>
                 </div>
+                </div>
             </fieldset>
-            <fieldset>
+            <fieldset class="hidden">
                 <legend>
                     Additional Info
                 </legend>
@@ -310,24 +245,24 @@
                                 Twitter
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="user.twitter">
-												<i class="fa fa-twitter"></i> </span>
+                                                <input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="user.twitter">
+                                                <i class="fa fa-twitter"></i> </span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Facebook
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="user.facebook">
-												<i class="fa fa-facebook"></i> </span>
+                                                <input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="user.facebook">
+                                                <i class="fa fa-facebook"></i> </span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Google Plus
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="user.google">
-												<i class="fa fa-google-plus"></i> </span>
+                                                <input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="user.google">
+                                                <i class="fa fa-google-plus"></i> </span>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -336,24 +271,24 @@
                                 Github
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Github" name="github" ng-model="user.github">
-												<i class="fa fa-github"></i> </span>
+                                                <input class="form-control" type="text" placeholder="Github" name="github" ng-model="user.github">
+                                                <i class="fa fa-github"></i> </span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Linkedin
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="user.linkedin">
-												<i class="fa fa-linkedin"></i> </span>
+                                                <input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="user.linkedin">
+                                                <i class="fa fa-linkedin"></i> </span>
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Skype
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="user.skype">
-												<i class="fa fa-skype"></i> </span>
+                                                <input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="user.skype">
+                                                <i class="fa fa-skype"></i> </span>
                         </div>
                     </div>
                 </div>
@@ -363,78 +298,4 @@
     <!-- end: TAB EDIT ACCOUNT -->
 </tabset>
 <div id="model_container"></div>
-<!-- end: USER TABSET -->
-<!-- <div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Business Info</h3>
-    </div>
-    <div class="profile panel-body">
-        <div class="col-xs-12">
-            <img ng-src="{{account.business.logo}}" class="thumbnail thumb-lg media-object" data-img-src="" data-img-loaded="false" onerror="this.src='/assets/icons/blank-user.jpg'" style="border:none;">
-            <div class="clear"></div>
-        </div>
-        <div class="col-xs-12">
-            <div class="col-xs-12">
-                <div class="mb20"></div>
-                <h3 class="profile-name"></h3>
-                <div class="mb20"></div>
-            </div>
-        </div>
-        <div class="clearfix mb20"></div>
-        <div class="col-xs-12" style="padding: 0 15px;">
-            <ul class="social-list right row">
-                <li class="col-xs-12">
-                    <div class="col-xs-2">
-                        <p>
-                            <strong>Name:</strong>
-                        </p>
-                    </div>
-                    <div class="col-xs-8">
-                        <p>{{account.business.name}}</p>
-                    </div>
-                    <div class="col-xs-2"></div>
-                </li>
-                <li class="col-xs-12">
-                    <div class="col-xs-2">
-                        <p>
-                            <strong>Size:</strong>
-                        </p>
-                    </div>
-                    <div class="col-xs-8">
-                        <p ng-show="account.business.size==1">Single</p>
-                        <p ng-show="account.business.size==2">Small</p>
-                        <p ng-show="account.business.size==3">medium</p>
-                        <p ng-show="account.business.size==4">Large</p>
-                        <p ng-show="account.business.size==5">Enterprise</p>
-                    </div>
-                    <div class="col-xs-2"></div>
-                </li>
-                <li class="col-xs-12">
-                    <div class="col-xs-2">
-                        <p>
-                            <strong>Description:</strong>
-                        </p>
-                    </div>
-                    <div class="col-xs-8">
-                        <p>{{account.business.description}}</p>
-                    </div>
-                    <div class="col-xs-2"></div>
-                </li>
-                <li class="col-xs-12">
-                    <div class="col-xs-2">
-                        <p>
-                            <strong>Cateogry:</strong>
-                        </p>
-                    </div>
-                    <div class="col-xs-8">
-                        <p>{{account.business.category}}</p>
-                    </div>
-                    <div class="col-xs-2"></div>
-                </li>
-            </ul>
-            <div class="mb20"></div>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-</div> -->
 <!-- end: YOUR CONTENT HERE -->
