@@ -24,6 +24,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
 
+        $scope.parentScope = $window.parent;
+
         $scope.sortBlogFn = function(component) {
             return function(blogpost) {
                 if (component.postorder) {

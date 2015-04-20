@@ -4,6 +4,8 @@
  */
 (function(angular) {
     app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant) {
+        console.log('$location ', $location);
+
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
 
@@ -92,6 +94,7 @@
          */
 
         if ($location.$$search['posthandle']) {
+            console.log('post handle >>>', $location.$$search['posthandle']);
             $scope.single_post = true;
             document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
         }
@@ -194,179 +197,177 @@
          * - an array of component types and icons for the add component modal
          */
 
-        $scope.componentTypes = [
-            {
-                title: 'Blog',
-                type: 'blog',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-                filter: 'blog',
-                description: 'Use this component for your main blog pages which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
-                enabled: true
-            }, {
-                title: 'Blog Teaser',
-                type: 'blog-teaser',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
-                filter: 'blog',
-                description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to you full blog page.',
-                enabled: true
-            }, {
-                title: 'Masthead',
-                type: 'masthead',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
-                filter: 'misc',
-                description: 'Introduce your business with this component on the top of your home page.',
-                enabled: true
-            }, {
-                title: 'Feature List',
-                type: 'feature-list',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
-                filter: 'features',
-                description: 'Showcase what your business offers with a feature list.',
-                enabled: true
-            }, {
-                title: 'Contact Us',
-                type: 'contact-us',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
-                filter: 'contact',
-                description: 'Let your visitors where your located, how to contact you, and what your business hours are.',
-                enabled: true
-            }, {
-                title: 'Coming Soon',
-                type: 'coming-soon',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
-                filter: 'misc',
-                description: 'Even if your site isn\'t ready you can use this component to let your visitors know you will be availiable soon.',
-                enabled: true
-            }, {
-                title: 'Feature block',
-                type: 'feature-block',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
-                filter: 'features',
-                description: 'Use this component to show one important feature or maybe a quote.',
-                enabled: true
-            }, {
-                title: 'Image Gallery',
-                type: 'image-gallery',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
-                filter: 'images',
-                description: 'Display your images in this image gallery component with fullscreen large view.',
-                enabled: true
-            }, {
-                title: 'Image Text',
-                version: 1,
-                type: 'image-text',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
-                filter: 'images',
-                description: 'Show an image next to a block of text on the right or the left.',
-                enabled: true
-            }, {
-                title: 'Meet Team',
-                type: 'meet-team',
-                icon: 'fa fa-users',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/meet-team.png',
-                filter: 'team',
-                description: 'Let your visitors know about the team behind your business. Show profile image, position, bio, and social links for each member.',
-                enabled: true
-            }, {
-                title: 'Navigation 1',
-                type: 'navigation',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
-                filter: 'navigation',
-                description: 'A simple navigation bar with the logo on the left and nav links on the right. Perfect for horizontal logos.',
-                version: 1,
-                enabled: true
-            }, {
-                title: 'Navigation 2',
-                type: 'navigation',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
-                filter: 'navigation',
-                description: 'If your logo is horizontal or square, this navigation will showcase your logo perfectly with addtional space for more links.',
-                version: 2,
-                enabled: true
-            }, {
-                title: 'Navigation 3',
-                type: 'navigation',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
-                filter: 'navigation',
-                description: 'This navigation features a large block navigation links for a modern feel.',
-                version: 3,
-                enabled: true
-            }, {
-                title: 'Products',
-                type: 'products',
-                icon: 'fa fa-money',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/products.png',
-                filter: 'products',
-                description: 'Use this as the main products page to start selling. It comes together with a cart and checkout built in.',
-                enabled: true
-            }, {
-                title: 'Pricing Tables',
-                type: 'pricing-tables',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
-                filter: 'products',
-                description: 'Subscription product types with multiple options are best when shown in a pricing table to help the visitor decide which one is best for them.',
-                enabled: true
-            }, {
-                title: 'Simple form',
-                type: 'simple-form',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/simple-form.jpg',
-                filter: 'forms',
-                description: 'Automatically create contacts in the backend when a visitor submits this form. Add first name, last name, email, or phone number fields.',
-                enabled: true
-            }, {
-                title: 'Single Post',
-                type: 'single-post',
-                icon: 'custom single-post',
-                filter: 'blog',
-                description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
-                enabled: false
-            }, {
-                title: 'Social',
-                type: 'social-link',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
-                filter: 'social',
-                description: 'Let your visitors know where else to find you on your social networks. Choose from 18 different networks.',
-                enabled: true
-            }, {
-                title: 'Video',
-                type: 'video',
-                icon: 'fa fa-video',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/video.png',
-                filter: 'video',
-                description: 'Showcase a video from Youtube, Vimeo, or an uploaded one. You can simply add the url your video is currently located.',
-                enabled: true
-            }, {
-                title: 'Text Block',
-                type: 'text-only',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
-                filter: 'text',
-                description: 'A full width component for a large volume of text. You can also add images within the text.',
-                enabled: true
-            }, {
-                title: 'Thumbnail Slider',
-                type: 'thumbnail-slider',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
-                filter: 'images',
-                description: 'Perfect for sponsor or client logos you have worked with in the past. Works best with logos that have a transparent background. ',
-                enabled: true
-            }, {
-                title: 'Top Bar',
-                type: 'top-bar',
-                icon: 'fa fa-info',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/top-bar.png',
-                filter: 'contact',
-                description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
-                enabled: true
-            }, {
-                title: 'Testimonials',
-                type: 'testimonials',
-                icon: 'fa fa-info',
-                preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/testimonials.png',
-                filter: 'text',
-                description: 'A component to showcase your testimonials.',
-                enabled: true
-            }
-        ];
+        $scope.componentTypes = [{
+            title: 'Blog',
+            type: 'blog',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+            filter: 'blog',
+            description: 'Use this component for your main blog pages which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
+            enabled: true
+        }, {
+            title: 'Blog Teaser',
+            type: 'blog-teaser',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
+            filter: 'blog',
+            description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to you full blog page.',
+            enabled: true
+        }, {
+            title: 'Masthead',
+            type: 'masthead',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
+            filter: 'misc',
+            description: 'Introduce your business with this component on the top of your home page.',
+            enabled: true
+        }, {
+            title: 'Feature List',
+            type: 'feature-list',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
+            filter: 'features',
+            description: 'Showcase what your business offers with a feature list.',
+            enabled: true
+        }, {
+            title: 'Contact Us',
+            type: 'contact-us',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
+            filter: 'contact',
+            description: 'Let your visitors where your located, how to contact you, and what your business hours are.',
+            enabled: true
+        }, {
+            title: 'Coming Soon',
+            type: 'coming-soon',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
+            filter: 'misc',
+            description: 'Even if your site isn\'t ready you can use this component to let your visitors know you will be availiable soon.',
+            enabled: true
+        }, {
+            title: 'Feature block',
+            type: 'feature-block',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
+            filter: 'features',
+            description: 'Use this component to show one important feature or maybe a quote.',
+            enabled: true
+        }, {
+            title: 'Image Gallery',
+            type: 'image-gallery',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
+            filter: 'images',
+            description: 'Display your images in this image gallery component with fullscreen large view.',
+            enabled: true
+        }, {
+            title: 'Image Text',
+            version: 1,
+            type: 'image-text',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
+            filter: 'images',
+            description: 'Show an image next to a block of text on the right or the left.',
+            enabled: true
+        }, {
+            title: 'Meet Team',
+            type: 'meet-team',
+            icon: 'fa fa-users',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/meet-team.png',
+            filter: 'team',
+            description: 'Let your visitors know about the team behind your business. Show profile image, position, bio, and social links for each member.',
+            enabled: true
+        }, {
+            title: 'Navigation 1',
+            type: 'navigation',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+            filter: 'navigation',
+            description: 'A simple navigation bar with the logo on the left and nav links on the right. Perfect for horizontal logos.',
+            version: 1,
+            enabled: true
+        }, {
+            title: 'Navigation 2',
+            type: 'navigation',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
+            filter: 'navigation',
+            description: 'If your logo is horizontal or square, this navigation will showcase your logo perfectly with addtional space for more links.',
+            version: 2,
+            enabled: true
+        }, {
+            title: 'Navigation 3',
+            type: 'navigation',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
+            filter: 'navigation',
+            description: 'This navigation features a large block navigation links for a modern feel.',
+            version: 3,
+            enabled: true
+        }, {
+            title: 'Products',
+            type: 'products',
+            icon: 'fa fa-money',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/products.png',
+            filter: 'products',
+            description: 'Use this as the main products page to start selling. It comes together with a cart and checkout built in.',
+            enabled: true
+        }, {
+            title: 'Pricing Tables',
+            type: 'pricing-tables',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
+            filter: 'products',
+            description: 'Subscription product types with multiple options are best when shown in a pricing table to help the visitor decide which one is best for them.',
+            enabled: true
+        }, {
+            title: 'Simple form',
+            type: 'simple-form',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/simple-form.jpg',
+            filter: 'forms',
+            description: 'Automatically create contacts in the backend when a visitor submits this form. Add first name, last name, email, or phone number fields.',
+            enabled: true
+        }, {
+            title: 'Single Post',
+            type: 'single-post',
+            icon: 'custom single-post',
+            filter: 'blog',
+            description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
+            enabled: false
+        }, {
+            title: 'Social',
+            type: 'social-link',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
+            filter: 'social',
+            description: 'Let your visitors know where else to find you on your social networks. Choose from 18 different networks.',
+            enabled: true
+        }, {
+            title: 'Video',
+            type: 'video',
+            icon: 'fa fa-video',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/video.png',
+            filter: 'video',
+            description: 'Showcase a video from Youtube, Vimeo, or an uploaded one. You can simply add the url your video is currently located.',
+            enabled: true
+        }, {
+            title: 'Text Block',
+            type: 'text-only',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
+            filter: 'text',
+            description: 'A full width component for a large volume of text. You can also add images within the text.',
+            enabled: true
+        }, {
+            title: 'Thumbnail Slider',
+            type: 'thumbnail-slider',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
+            filter: 'images',
+            description: 'Perfect for sponsor or client logos you have worked with in the past. Works best with logos that have a transparent background. ',
+            enabled: true
+        }, {
+            title: 'Top Bar',
+            type: 'top-bar',
+            icon: 'fa fa-info',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/top-bar.png',
+            filter: 'contact',
+            description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
+            enabled: true
+        }, {
+            title: 'Testimonials',
+            type: 'testimonials',
+            icon: 'fa fa-info',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/testimonials.png',
+            filter: 'text',
+            description: 'A component to showcase your testimonials.',
+            enabled: true
+        }];
 
         /*
          * @componentLabel, enabledComponentTypes
@@ -419,6 +420,8 @@
 
         $scope.activated = false;
         document.getElementById("iframe-website").onload = function() {
+
+            $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
 
             $scope.updatePage($location.$$search['pagehandle'], true);
             //TODO: need to check when iframe content is loaded properly
@@ -778,134 +781,132 @@
          * -
          */
 
-        $scope.social_links = [
-            {
-                name: "adn",
-                icon: "adn",
-                tooltip: "Adn",
-                url: "http://www.adn.com"
-            }, {
-                name: "bitbucket",
-                icon: "bitbucket",
-                tooltip: "BitBucket",
-                url: "https://bitbucket.org"
-            }, {
-                name: "dropbox",
-                icon: "dropbox",
-                tooltip: "Dropbox",
-                url: "https://www.dropbox.com"
-            }, {
-                name: "facebook",
-                icon: "facebook",
-                tooltip: "Facebook",
-                url: "https://www.facebook.com"
-            }, {
-                name: "flickr",
-                icon: "flickr",
-                tooltip: "Flickr",
-                url: "https://www.flickr.com"
-            }, {
-                name: "foursquare",
-                icon: "foursquare",
-                tooltip: "Four Square",
-                url: "https://foursquare.com"
-            }, {
-                name: "github",
-                icon: "github",
-                tooltip: "Github",
-                url: "https://github.com"
-            }, {
-                name: "google-plus",
-                icon: "google-plus",
-                tooltip: "Google Plus",
-                url: "https://www.gmail.com"
-            }, {
-                name: "instagram",
-                icon: "instagram",
-                tooltip: "Instagram",
-                url: "https://instagram.com"
-            }, {
-                name: "linkedin",
-                icon: "linkedin",
-                tooltip: "Linkedin",
-                url: "https://www.linkedin.com"
-            }, {
-                name: "microsoft",
-                icon: "windows",
-                tooltip: "Microsoft",
-                url: "http://www.microsoft.com"
-            }, {
-                name: "openid",
-                icon: "openid",
-                tooltip: "Open Id",
-                url: "http://openid.com"
-            }, {
-                name: "pinterest",
-                icon: "pinterest",
-                tooltip: "Pinterest",
-                url: "https://www.pinterest.com"
-            }, {
-                name: "reddit",
-                icon: "reddit",
-                tooltip: "Reddit",
-                url: "http://www.reddit.com"
-            }, {
-                name: "comment-o",
-                icon: "comment-o",
-                tooltip: "Snapchat",
-                url: "https://www.snapchat.com"
-            }, {
-                name: "soundcloud",
-                icon: "soundcloud",
-                tooltip: "Sound Cloud",
-                url: "https://soundcloud.com"
-            }, {
-                name: "tumblr",
-                icon: "tumblr",
-                tooltip: "Tumblr",
-                url: "https://www.tumblr.com"
-            }, {
-                name: "twitter",
-                icon: "twitter",
-                tooltip: "Twitter",
-                url: "https://twitter.com"
-            }, {
-                name: "vimeo",
-                icon: "vimeo-square",
-                tooltip: "Vimeo",
-                url: "https://vimeo.com"
-            }, {
-                name: "vine",
-                icon: "vine",
-                tooltip: "Vine",
-                url: "http://www.vinemarket.com"
-            }, {
-                name: "vk",
-                icon: "vk",
-                tooltip: "Vk",
-                url: "http://vk.com"
-            }, {
-                name: "desktop",
-                icon: "desktop",
-                tooltip: "Website",
-                url: "http://www.website.com"
-            }, {
-                name: "yahoo",
-                icon: "yahoo",
-                tooltip: "Yahoo",
-                url: "https://yahoo.com"
-            }, {
-                name: "youtube",
-                icon: "youtube",
-                tooltip: "Youtube",
-                url: "https://www.youtube.com"
-            }, {
-                name: "yelp",
-                icon: "yelp",
-                tooltip: "Yelp",
-                url: "http://www.yelp.com"
-            }
-        ];
+        $scope.social_links = [{
+            name: "adn",
+            icon: "adn",
+            tooltip: "Adn",
+            url: "http://www.adn.com"
+        }, {
+            name: "bitbucket",
+            icon: "bitbucket",
+            tooltip: "BitBucket",
+            url: "https://bitbucket.org"
+        }, {
+            name: "dropbox",
+            icon: "dropbox",
+            tooltip: "Dropbox",
+            url: "https://www.dropbox.com"
+        }, {
+            name: "facebook",
+            icon: "facebook",
+            tooltip: "Facebook",
+            url: "https://www.facebook.com"
+        }, {
+            name: "flickr",
+            icon: "flickr",
+            tooltip: "Flickr",
+            url: "https://www.flickr.com"
+        }, {
+            name: "foursquare",
+            icon: "foursquare",
+            tooltip: "Four Square",
+            url: "https://foursquare.com"
+        }, {
+            name: "github",
+            icon: "github",
+            tooltip: "Github",
+            url: "https://github.com"
+        }, {
+            name: "google-plus",
+            icon: "google-plus",
+            tooltip: "Google Plus",
+            url: "https://www.gmail.com"
+        }, {
+            name: "instagram",
+            icon: "instagram",
+            tooltip: "Instagram",
+            url: "https://instagram.com"
+        }, {
+            name: "linkedin",
+            icon: "linkedin",
+            tooltip: "Linkedin",
+            url: "https://www.linkedin.com"
+        }, {
+            name: "microsoft",
+            icon: "windows",
+            tooltip: "Microsoft",
+            url: "http://www.microsoft.com"
+        }, {
+            name: "openid",
+            icon: "openid",
+            tooltip: "Open Id",
+            url: "http://openid.com"
+        }, {
+            name: "pinterest",
+            icon: "pinterest",
+            tooltip: "Pinterest",
+            url: "https://www.pinterest.com"
+        }, {
+            name: "reddit",
+            icon: "reddit",
+            tooltip: "Reddit",
+            url: "http://www.reddit.com"
+        }, {
+            name: "comment-o",
+            icon: "comment-o",
+            tooltip: "Snapchat",
+            url: "https://www.snapchat.com"
+        }, {
+            name: "soundcloud",
+            icon: "soundcloud",
+            tooltip: "Sound Cloud",
+            url: "https://soundcloud.com"
+        }, {
+            name: "tumblr",
+            icon: "tumblr",
+            tooltip: "Tumblr",
+            url: "https://www.tumblr.com"
+        }, {
+            name: "twitter",
+            icon: "twitter",
+            tooltip: "Twitter",
+            url: "https://twitter.com"
+        }, {
+            name: "vimeo",
+            icon: "vimeo-square",
+            tooltip: "Vimeo",
+            url: "https://vimeo.com"
+        }, {
+            name: "vine",
+            icon: "vine",
+            tooltip: "Vine",
+            url: "http://www.vinemarket.com"
+        }, {
+            name: "vk",
+            icon: "vk",
+            tooltip: "Vk",
+            url: "http://vk.com"
+        }, {
+            name: "desktop",
+            icon: "desktop",
+            tooltip: "Website",
+            url: "http://www.website.com"
+        }, {
+            name: "yahoo",
+            icon: "yahoo",
+            tooltip: "Yahoo",
+            url: "https://yahoo.com"
+        }, {
+            name: "youtube",
+            icon: "youtube",
+            tooltip: "Youtube",
+            url: "https://www.youtube.com"
+        }, {
+            name: "yelp",
+            icon: "yelp",
+            tooltip: "Yelp",
+            url: "http://www.yelp.com"
+        }];
 
         /*
          * @toggleDropdown
@@ -2086,7 +2087,7 @@
             scrollableContainer: 'reorderNavBarContainer'
         };
 
-                /*
+        /*
          * @updateSocialNetworks
          * -
          */
@@ -2431,8 +2432,7 @@
          */
 
         window.checkIfSinglePost = function(post) {
-            if (post)
-            {
+            if (post) {
                 $scope.singlePost = true;
                 if (iFrame.contentWindow.copyPostMode) {
                     iFrame.contentWindow.copyPostMode();
@@ -2448,11 +2448,11 @@
 
         window.showToaster = function(value, toast, msg, redirect) {
             $scope.saveLoading = value;
-            if(toast)
+            if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
-                    if(redirect)
-                        $location.path("/website/posts"); 
+                    if (redirect)
+                        $location.path("/website/posts");
                 })
         };
 

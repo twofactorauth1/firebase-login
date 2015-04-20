@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter','postService', 'websiteService', 'accountService',
-    function ($scope, postsService, pagesService, $location, $route, $routeParams, $filter,PostService, websiteService, accountService) {
+mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$location', '$route', '$routeParams', '$filter', 'postService', 'websiteService', 'accountService', '$window',
+    function($scope, postsService, pagesService, $location, $route, $routeParams, $filter, PostService, websiteService, accountService, $window) {
 
         var account, pages, website, route, postTags, currentTag, categories, currentCat, authors, currentAuthor, latestposts, that = this;
         var post = {};
@@ -9,101 +9,103 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
         route = $location.$$path;
 
+        $scope.testing = 'hello';
+
         $scope.$back = function() {
             window.history.back();
-          };
+        };
 
-        
+        $scope.parentScope = parent.angular.element('#iframe-website').scope();
 
-        pagesService(function (err, data) {
+        pagesService(function(err, data) {
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:pageService Error: ' + err);
             } else {
-                    if (route.indexOf("blog/") > -1) {
-                        route = 'single-post';
-                    }
-                    if (route.indexOf("post/") > -1) {
-                        route = 'single-post';
-                    }
-                    if (route === 'blog' || route === '/blog' || route.indexOf("tag/") > -1 || route.indexOf("category/") > -1 || route.indexOf("author/") > -1) {
-                        route = 'blog';
-                    }
-                    that.pages = data[route];
-                    $(document).ready(function() {
-                      setTimeout(function() {
+                if (route.indexOf("blog/") > -1) {
+                    route = 'single-post';
+                }
+                if (route.indexOf("post/") > -1) {
+                    route = 'single-post';
+                }
+                if (route === 'blog' || route === '/blog' || route.indexOf("tag/") > -1 || route.indexOf("category/") > -1 || route.indexOf("author/") > -1) {
+                    route = 'blog';
+                }
+                that.pages = data[route];
+                $(document).ready(function() {
+                    setTimeout(function() {
                         $scope.$apply(function() {
-                          console.log("Page loaded");
-                          $scope.isLoaded = true;
+                            console.log("Page loaded");
+                            $scope.isLoaded = true;
                         })
-                        
-                      }, 500);
-                    })
-                    var iframe = window.parent.document.getElementById("iframe-website")
-                    iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope(that.pages);
-                    // console.log("current Page");
-                    // console.log($scope.$parent)
+
+                    }, 500);
+                })
+                var iframe = window.parent.document.getElementById("iframe-website")
+                iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope(that.pages);
+                // console.log("current Page");
+                // console.log($scope.$parent)
             }
         });
 
         accountService(function(err, data) {
-          if (err) {
-            console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
-          } else {
-            that.account = data;
+            if (err) {
+                console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
+            } else {
+                that.account = data;
 
-            //Include Layout For Theme
-            that.themeUrl = 'components/layout/layout_indimain.html';
+                //Include Layout For Theme
+                that.themeUrl = 'components/layout/layout_indimain.html';
 
-          }
+            }
         });
 
         websiteService(function(err, data) {
-          if (err) {
-            console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
-          } else {
-            that.website = data;
-          }
+            if (err) {
+                console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
+            } else {
+                that.website = data;
+            }
         });
 
-        postsService(function(err, data){
-            if(err) {
+        postsService(function(err, data) {
+            if (err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
-                    //should be replaced by get tags filter
-                    that.postTags = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].post_tags) {
-                            var tags = data[i].post_tags;
-                            for (var j = 0; j < tags.length; j++) {
-                                if(that.postTags.indexOf(tags[j]) == -1) {
-                                    that.postTags.push(tags[j]);
-                                }
-                            };
-                        }
-                    };
-
-                     //get post cateogires for sidebar
-                    //should be replaced by get cateogires filter
-                    that.categories = [];
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].post_category) {
-                            if(that.categories.indexOf(data[i].post_category) <= -1) {
-                                that.categories.push(data[i].post_category);
+                //should be replaced by get tags filter
+                that.postTags = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].post_tags) {
+                        var tags = data[i].post_tags;
+                        for (var j = 0; j < tags.length; j++) {
+                            if (that.postTags.indexOf(tags[j]) == -1) {
+                                that.postTags.push(tags[j]);
                             }
+                        };
+                    }
+                };
+
+                //get post cateogires for sidebar
+                //should be replaced by get cateogires filter
+                that.categories = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].post_category) {
+                        if (that.categories.indexOf(data[i].post_category) <= -1) {
+                            that.categories.push(data[i].post_category);
                         }
-                    };
+                    }
+                };
 
-                     //get latest posts for sidebar
-                    //should be replaced by get latest posts filter
-                    that.latestposts = [];
-                    for (var i = 0; i < data.length; i++) {
-                        that.latestposts.push(data[i]);
-                    };
-                    that.latestposts.slice(Math.max(data.length - 3, 1));
+                //get latest posts for sidebar
+                //should be replaced by get latest posts filter
+                that.latestposts = [];
+                for (var i = 0; i < data.length; i++) {
+                    that.latestposts.push(data[i]);
+                };
+                that.latestposts.slice(Math.max(data.length - 3, 1));
 
-                if (route.indexOf('blog') > -1)  {
+                if (route.indexOf('blog') > -1) {
                     that.blogposts = data;
                 }
 
@@ -169,298 +171,287 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         });
 
-        window.copyPostMode=function(){
+        window.copyPostMode = function() {
             console.log(that.post);
-            that.tempPost=angular.copy(that.post);
+            that.tempPost = angular.copy(that.post);
         };
 
-        window.getPostData = function()
-        {
+        window.getPostData = function() {
             return that.post;
         }
 
         window.deletePost = function(post_data, toaster) {
-            var pageId = post_data.pageId;            
+            var pageId = post_data.pageId;
             PostService.deletePost(pageId, post_data._id, function(data) {
-                window.parent.window.showToaster(false, true, msg, "Post deleted successfully", true);                                                                                      
+                window.parent.window.showToaster(false, true, msg, "Post deleted successfully", true);
             });
         };
 
 
-         window.savePostMode=function(toaster, msg){
+        window.savePostMode = function(toaster, msg) {
 
-            var post_data =  angular.copy(that.post);
-            post_data.post_tags.forEach(function(v,i) {
-                if(v.text)
+            var post_data = angular.copy(that.post);
+            post_data.post_tags.forEach(function(v, i) {
+                if (v.text)
                     post_data.post_tags[i] = v.text;
             });
             var post_content_container = $('.post_content_div');
-            if(post_content_container.length > 0)
+            if (post_content_container.length > 0)
                 post_data.post_content = post_content_container.html();
 
             var post_title_container = $('.blog_post_title');
-            if(post_title_container.length > 0)
+            if (post_title_container.length > 0)
                 post_data.post_title = post_title_container.text().trim();
 
             var post_author_container = $('.blog_post_author');
-            if(post_author_container.length > 0)
+            if (post_author_container.length > 0)
                 post_data.post_author = post_author_container.text().trim();
 
             var post_category_container = $('.blog_post_category');
-            if(post_category_container.length > 0)
+            if (post_category_container.length > 0)
                 post_data.post_category = post_category_container.text().trim();
 
 
             var post_excerpt_container = $('.post_excerpt_div');
-            if(post_excerpt_container.length > 0)
+            if (post_excerpt_container.length > 0)
                 post_data.post_excerpt = post_excerpt_container.text();
 
             var postImageUrl = window.parent.getPostImageUrl();
-            if(postImageUrl)
-            {
+            if (postImageUrl) {
                 post_data.featured_image = postImageUrl;
             }
             var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
-            PostService.updatePost(pageId, post_data._id,post_data,function(data){
+            PostService.updatePost(pageId, post_data._id, post_data, function(data) {
                 console.log(data);
                 console.log(msg);
-                window.parent.window.showToaster(false, true, msg);                
+                window.parent.window.showToaster(false, true, msg);
             });
         };
-        window.refreshPost = function()
-        {
-            if(!that.tempPost)
+        window.refreshPost = function() {
+            if (!that.tempPost)
                 that.tempPost = angular.copy(that.post);
-                
-                    $scope.$apply(function() {
-                    $scope.initializePostData();
-                    setTimeout(function() {
-                     activateAloha();
-                    }, 500)
+
+            $scope.$apply(function() {
+                $scope.initializePostData();
+                setTimeout(function() {
+                    activateAloha();
+                }, 500)
             })
         }
 
-        $scope.initializePostData = function(revert)
-        {
+        $scope.initializePostData = function(revert) {
             var post_content = angular.copy(that.post.post_content);
             var post_content_container = $('.post_content_div');
-            if(post_content_container.length > 0)
+            if (post_content_container.length > 0)
                 that.post.post_content = post_content_container.html();
 
             var post_title_container = $('.blog_post_title');
-            if(post_title_container.length > 0)
+            if (post_title_container.length > 0)
                 that.post.post_title = post_title_container.text();
 
             var post_author_container = $('.blog_post_author');
-            if(post_author_container.length > 0)
+            if (post_author_container.length > 0)
                 that.post.post_author = post_author_container.text();
 
             var post_category_container = $('.blog_post_category');
-            if(post_category_container.length > 0)
+            if (post_category_container.length > 0)
                 that.post.post_category = post_category_container.text();
 
-            if(revert)
-            {
+            if (revert) {
                 var post_excerpt_container = $('.post_excerpt_div');
-                if(post_excerpt_container.length > 0)
+                if (post_excerpt_container.length > 0)
                     post_excerpt_container.text(that.post.post_excerpt);
-            }
-            else
-            {
-               var post_excerpt_container = $('.post_excerpt_div');
-                if(post_excerpt_container.length > 0)
+            } else {
+                var post_excerpt_container = $('.post_excerpt_div');
+                if (post_excerpt_container.length > 0)
                     that.post.post_excerpt = post_excerpt_container.text();
-                $scope.autoCreateExcerpt(post_excerpt_container, post_content_container, post_content); 
+                $scope.autoCreateExcerpt(post_excerpt_container, post_content_container, post_content);
             }
         }
 
-        $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container, post_content)
-        {
-            if(post_excerpt_container.length > 0 && post_content_container.length > 0 && post_content !== that.post.post_content && jQuery.trim(post_content_container.text()))
-            {                   
-               post_excerpt_container.text(jQuery.trim(post_content_container.text()).substring(0, 300)
-                 + "...");                                  
+        $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container, post_content) {
+            if (post_excerpt_container.length > 0 && post_content_container.length > 0 && post_content !== that.post.post_content && jQuery.trim(post_content_container.text())) {
+                post_excerpt_container.text(jQuery.trim(post_content_container.text()).substring(0, 300) + "...");
             }
         }
 
-        $scope.revertComponent = function()
-        {
+        $scope.revertComponent = function() {
             that.post.post_excerpt = that.tempPost.post_excerpt;
             that.post.featured_image = that.tempPost.featured_image;
             $scope.initializePostData(true);
 
         }
         $scope.changeBlogImage = function(blogpost) {
-          window.parent.changeBlogImage(blogpost);
+            window.parent.changeBlogImage(blogpost);
         }
 
         window.setBlogImage = function(url) {
-           $scope.$apply(function() {
-            that.post.featured_image = url;
-          })
+            $scope.$apply(function() {
+                that.post.featured_image = url;
+            })
         }
 
         window.updatePostMode = function() {
             console.log('post cancel');
             console.log(that.post);
             console.log(that.tempPost);
-            that.post=that.tempPost;
-            $scope.$$phase||$scope.$digest();
+            that.post = that.tempPost;
+            $scope.$$phase || $scope.$digest();
 
         };
 
-         window.triggerEditMode = function() {
-          console.log('edit mode engaged');
-          var body = document.getElementsByTagName('body')[0];
-          var hasClass = body.classList.contains('editing');
-          if (hasClass === false) {
-            body.className += ' editing';
-          }
+        $scope..triggerEditMode = function() {
+            console.log('edit mode engaged');
+            var body = document.getElementsByTagName('body')[0];
+            var hasClass = body.classList.contains('editing');
+            if (hasClass === false) {
+                body.className += ' editing';
+            };
 
-          // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-          // if (toolbar.classList.contains('editing') === false) {
-          //     toolbar.className += ' editing';
-          // }
-          $scope.isEditing = true;
+            // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
+            // if (toolbar.classList.contains('editing') === false) {
+            //     toolbar.className += ' editing';
+            // }
+            $scope.isEditing = true;
 
-          $scope.$digest();
+            $scope.$digest();
         };
 
 
-    function toTitleCase(str)
-    {
-        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-    }
-
-    window.activateAloha = function() {
-      //if ($scope.activated == false) {
-        $scope.isEditing = true;
-        for(name in CKEDITOR.instances)
-        {
-            //CKEDITOR.instances[name].destroy()
-            CKEDITOR.instances[name].removeAllListeners();
-            CKEDITOR.remove(CKEDITOR.instances[name]);
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
         }
-        CKEDITOR.disableAutoInline = true;
-        var elements = $('.editable');
-        elements.each(function() {
-          if(!$(this).parent().hasClass('edit-wrap')) {
-            var dataClass = $(this).data('class').replace('.item.', ' ');
-            $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">'+toTitleCase(dataClass)+'</span>');
-          }
-         // $scope.activated = true;
-        //if(!$(this).hasClass('cke_editable')) {
-          CKEDITOR.inline(this, {
-            on: {
-              instanceReady: function(ev) {
-                var editor = ev.editor;                
-                editor.setReadOnly(false);
-                editor.on('change', function() {
-                  $scope.isPageDirty = true;
-                });
-              }
-            },
-            sharedSpaces: {
-              top: 'editor-toolbar'
+
+        window.activateAloha = function() {
+            //if ($scope.activated == false) {
+            $scope.isEditing = true;
+            for (name in CKEDITOR.instances) {
+                //CKEDITOR.instances[name].destroy()
+                CKEDITOR.instances[name].removeAllListeners();
+                CKEDITOR.remove(CKEDITOR.instances[name]);
             }
-          });
-        //}
-        });
+            CKEDITOR.disableAutoInline = true;
+            var elements = $('.editable');
+            elements.each(function() {
+                if (!$(this).parent().hasClass('edit-wrap')) {
+                    var dataClass = $(this).data('class').replace('.item.', ' ');
+                    $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+                }
+                // $scope.activated = true;
+                //if(!$(this).hasClass('cke_editable')) {
+                CKEDITOR.inline(this, {
+                    on: {
+                        instanceReady: function(ev) {
+                            var editor = ev.editor;
+                            editor.setReadOnly(false);
+                            editor.on('change', function() {
+                                $scope.isPageDirty = true;
+                            });
+                        }
+                    },
+                    sharedSpaces: {
+                        top: 'editor-toolbar'
+                    }
+                });
+                //}
+            });
 
-        //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-      //}
-    };
+            //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
+            //}
+        };
 
-    window.deactivateAloha = function() {
-      for(name in CKEDITOR.instances)
-        {
-            CKEDITOR.instances[name].destroy()
+        window.deactivateAloha = function() {
+            for (name in CKEDITOR.instances) {
+                CKEDITOR.instances[name].destroy()
+            }
+            // $('.editable').mahalo();
+            // if (aloha.editor && aloha.editor.selection) {
+            // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
+            // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
+            // }
+            // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
+        };
+
+        window.checkOrSetPageDirty = function(status) {
+            if (status)
+                $scope.isPageDirty = false;
+            else
+                return $scope.isPageDirty;
         }
-      // $('.editable').mahalo();
-      // if (aloha.editor && aloha.editor.selection) {
-      // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
-      // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
-      // }
-      // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
-    };
 
-    window.checkOrSetPageDirty = function(status) {
-      if (status)
-        $scope.isPageDirty = false;
-      else
-        return $scope.isPageDirty;
+        window.addCKEditorImageInput = function(url) {
+            console.log('addCKEditorImageInput ', url);
+            if ($scope.urlInput) {
+                $scope.urlInput.val(url);
+            }
+        };
+
+        window.addCKEditorImage = function(url) {
+            console.log('addCKEditorImage ', url);
+            console.log('$scope.inlineInput ', $scope.inlineInput);
+            if ($scope.inlineInput) {
+                console.log('inserting html');
+                $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+            } else if ($scope.urlInput) {
+                $scope.urlInput.val(url);
+            }
+        };
+
+        window.clickImageButton = function(btn) {
+            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
+            window.parent.clickImageButton();
+        }
+
+        window.clickandInsertImageButton = function(editor) {
+            $scope.inlineInput = editor;
+            window.parent.clickImageButton();
+        }
+
+        $scope.setPostImage = function(componentId, blogpost) {
+            window.parent.setPostImage(componentId);
+            blogpost.featured_image = window.parent.postImageUrl;
+        }
+
+        $scope.sharePost = function(post, type) {
+            var url = $location.$$absUrl;
+            var postData = {};
+            switch (type) {
+                case "twitter":
+                    postData = {
+                        status: url
+                    }
+                    PostService.sharePostOnTwitter(postData, function(data) {
+
+                    });
+                    break;
+                case "facebook":
+                    postData = {
+                        url: url,
+                        picture: post.featured_image,
+                        name: post.post_title,
+                        caption: post.post_excerpt,
+                        description: post.post_excerpt
+                    }
+                    PostService.sharePostOnFacebook(postData, function(data) {
+
+                    });
+                    break;
+                case "linked-in":
+                    postData = {
+                        url: url,
+                        picture: post.featured_image,
+                        name: post.post_title,
+                        caption: post.post_excerpt,
+                        description: post.post_excerpt
+                    }
+                    PostService.sharePostOnLinkedIn(postData, function(data) {
+
+                    });
+                    break;
+            }
+        }
+
     }
-
-    window.addCKEditorImageInput = function(url) {
-      console.log('addCKEditorImageInput ', url);
-      if ($scope.urlInput) {
-        $scope.urlInput.val(url);
-      }
-    };
-
-    window.addCKEditorImage = function(url) {
-      console.log('addCKEditorImage ', url);
-      console.log('$scope.inlineInput ', $scope.inlineInput);
-      if ($scope.inlineInput) {
-        console.log('inserting html');
-        $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
-      } else if ($scope.urlInput) {
-        $scope.urlInput.val(url);
-      }
-    };
-
-    window.clickImageButton = function(btn) {
-      $scope.urlInput = $(btn).closest('td').prev('td').find('input');
-      window.parent.clickImageButton();
-    }
-
-    window.clickandInsertImageButton = function(editor) {
-      $scope.inlineInput = editor;
-      window.parent.clickImageButton();
-    }
-
-    $scope.setPostImage = function(componentId, blogpost) {
-      window.parent.setPostImage(componentId);
-      blogpost.featured_image = window.parent.postImageUrl;
-    }
-
-    $scope.sharePost = function(post, type) {
-      var url = $location.$$absUrl;
-      var postData = {};
-      switch (type) {
-        case "twitter":
-          postData = {
-            status: url
-          }
-          PostService.sharePostOnTwitter(postData, function(data) {
-
-          });
-          break;
-        case "facebook":
-          postData = {
-            url: url,
-            picture: post.featured_image,
-            name: post.post_title,
-            caption: post.post_excerpt,
-            description: post.post_excerpt
-          }
-          PostService.sharePostOnFacebook(postData, function(data) {
-
-          });
-          break;
-        case "linked-in":
-          postData = {
-            url: url,
-            picture: post.featured_image,
-            name: post.post_title,
-            caption: post.post_excerpt,
-            description: post.post_excerpt
-          }
-          PostService.sharePostOnLinkedIn(postData, function(data) {
-
-          });
-          break;
-      }
-    }
-
-    }]);
+]);
