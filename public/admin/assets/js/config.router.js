@@ -150,7 +150,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Orders'
         },
-        resolve: loadSequence('ordersCtrl', 'orderService')
+        resolve: loadSequence('ordersCtrl', 'orderService', 'customerService', 'ui.select', 'dateRangePicker')
     }).state('app.commerce.orderdetail', {
         url: '/orders/:orderId',
         templateUrl: "assets/views/order-detail.html",

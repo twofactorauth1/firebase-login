@@ -99,9 +99,9 @@ var mainApp = angular
             });
             //.otherwise({redirectTo: '/'});
     }])
-    .controller('LayoutCtrl', function($scope, parallaxHelper){
-        $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
-    })
+    // .controller('LayoutCtrl', function($scope, parallaxHelper){
+    //     $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
+    // })
     .run(function( $rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
         var runningInterval;

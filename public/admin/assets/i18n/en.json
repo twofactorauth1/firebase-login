@@ -78,7 +78,7 @@
             "account": {
                 "MAIN": "Account",
                 "PROFILE": "Profile",
-                "PROFILEBUSINESS": "Profile Business",
+                "PROFILEBUSINESS": "Business Profile",
                 "BILLING": "Billing",
                 "INTEGRATIONS": "Integrations"
             },

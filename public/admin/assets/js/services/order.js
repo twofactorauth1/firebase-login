@@ -22,6 +22,21 @@
                 });
         };
 
+        this.createOrder = function(order, fn) {
+            var apiUrl = baseUrl;
+            $http({
+                    url: apiUrl,
+                    method: "POST",
+                    data: order
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                })
+                .error(function(error) {
+                    console.error('OrderService: createOrder error >>> ', error);
+                });
+        };
+
         this.completeOrder = function(orderId, note, fn) {
             var apiUrl = baseUrl + [orderId, 'complete'].join('/');
             $http({

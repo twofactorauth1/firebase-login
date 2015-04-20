@@ -12571,6 +12571,10 @@ fieldset[disabled] .btn-vimeo-square.active {
 .orders .column-width {
   width: 16.66666666666667%;
 }
+.dropdown-menu {
+  max-height: 200px;
+  overflow: auto;
+}
 .filemanager-options {
   list-style: none;
   margin: 0;
