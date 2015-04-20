@@ -8,8 +8,7 @@
 var baseApi = require('../base.api');
 var orderManager = require('../../orders/order_manager');
 var appConfig = require('../../configs/app.config');
-//TODO: refactor getAccessToken into base.api
-var paymentsAPI = require('./integrations/payments.api');
+
 
 
 var api = function () {
@@ -146,7 +145,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var userId = self.userId(req);
                 var amount = req.body.amount;
                 var reason = req.body.reason;
-                var accessToken = paymentsAPI._getAccessToken(req);
+                var accessToken = self.getAccessToken(req);
                 orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
                     self.log.debug('<< refundOrder');
                     self.sendResultOrError(res, err, order, 'Error refunding order');
