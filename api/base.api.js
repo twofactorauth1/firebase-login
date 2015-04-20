@@ -369,6 +369,26 @@ _.extend(apiBase.prototype, {
                 self.send403(res);
             }
         });
+    },
+
+    getAccessToken: function(req) {
+
+        var token = null;
+        if(req.session.stripeAccessToken) {
+            token = req.session.stripeAccessToken;
+        } else if(req.user && req.user.get('credentials')){
+            var credentials = req.user.get('credentials');
+            for(var i=0; i<credentials.length; i++) {
+                var cred = credentials[i];
+                if(cred.socialId === 'stripe') {
+                    req.session.stripeAccessToken = cred.accessToken;
+                    return cred.accessToken;
+                }
+            }
+        }
+        //if the token is still null here, we need to connect with stripe still
+
+        return token;
     }
 
 });

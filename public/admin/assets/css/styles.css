@@ -12588,7 +12588,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .filemanager-options li {
   display: inline-block;
-  padding: 12px 15px;
+  padding: 3px 15px;
   border-right: 1px solid #eee;
   font-size: 12px;
   color: #666;
@@ -12651,7 +12651,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .filemanager .ckbox {
   position: absolute;
-  top: 15px;
+  top: 4px;
   left: 15px;
   display: none;
 }
