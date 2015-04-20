@@ -115,7 +115,7 @@
                             <tr ng-if="showFilter">
                                 <th ng-show="column.photo"></th>
                                 <th ng-show="column.name">
-                                    <input st-search="name" placeholder="Name" class="form-control" type="search" />
+                                    <input st-search="{{first + last}}" placeholder="Name" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.category">
                                     <!-- <input st-search="category" placeholder="Category" class="form-control" type="search" /> -->
@@ -124,10 +124,10 @@
                                     <input st-search="email" placeholder="Email" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.address">
-                                    <input st-search="{{customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state}}" placeholder="Address" class="form-control" type="search" />
+                                    <input st-search="{{details[0].addresses[0].city + details[0].addresses[0].state}}" placeholder="Address" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.phone">
-                                    <input st-search="{{customer.details[0].phones[0].number}}" placeholder="Phone" class="form-control" type="search" />
+                                    <input st-search="{{details[0].phones[0].number}}" placeholder="Phone" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.social">
                                     <!-- <input st-search="social" placeholder="Social" class="form-control" type="search" /> -->
