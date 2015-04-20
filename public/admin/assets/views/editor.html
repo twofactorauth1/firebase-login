@@ -1,4 +1,4 @@
-<div class="page-detail">
+<div class="page-detail" ng-controller="EditorCtrl">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -60,14 +60,15 @@
         <div class="load1 csspinner bg-white" ct-fullheight ct-fullheight-exclusion="header, footer, #page-title, #page-actions"></div>
     </div>
     <iframe id="iframe-website" name="iframe-website" src="" ng-style="{'height':iframeHeight || '0px'}"></iframe>
-    <div data-ng-include=" 'assets/views/partials/component-settings-modal.html' "></div>
-    <div data-ng-include=" 'assets/views/partials/add-component-modal.html' "></div>
-    <div data-ng-include=" 'assets/views/partials/social-links-modal.html' "></div>
-    <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
-    <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div> 
     <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
         <i class="fa fa fa-image"></i>
         <span class="hidden-xs">Media</span>
     </a>
     <div id="model_container"></div>
 </div>
+
+<div data-ng-include=" 'assets/views/partials/component-settings-modal.html' "></div>
+    <div data-ng-include=" 'assets/views/partials/add-component-modal.html' "></div>
+    <div data-ng-include=" 'assets/views/partials/social-links-modal.html' "></div>
+    <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
+    <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div> 
