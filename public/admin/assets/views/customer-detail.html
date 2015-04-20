@@ -211,7 +211,7 @@
                                                 <label class="block">
                                                     Tags
                                                 </label>
-                                                <ui-select multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled" style="width: 300px;">
+                                                <ui-select multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled" >
                                                 <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
                                                 <ui-select-choices repeat="tag in customerTags | filter:$select.search">
                                                   {{tag.label}}
