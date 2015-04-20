@@ -1,0 +1,42 @@
+<script type="text/ng-template" id="import-customer-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">Import Customers</h3>
+    </div>
+    <div class="modal-body bg-white">
+        <div class="row choose-import" data-import-section="choose">
+            <p class="center"><b>Choose one of the import options from below:</b>
+            </p>
+            <div class="clearfix mb30"></div>
+            <div class="social-icons center margin-top-30 margin-bottom-30">
+                <ul>
+                    <li class="social-twitter hidden" tooltip="Twitter" tooltip-placement="top">
+                        <a target="_blank" href="#"> Twitter </a>
+                    </li>
+                    <li class="social-facebook hidden" tooltip="Facebook" tooltip-placement="top">
+                        <a target="_blank" href="#" data-import-source="facebook" ng-click="importFacebookFriends()"> Facebook </a>
+                    </li>
+                    <li class="social-google" tooltip="Google" tooltip-placement="top">
+                        <a target="_blank" href="#" data-import-source="googleplus" ng-click="importGmailContacts()"> Google+ </a>
+                    </li>
+                    <li class="social-linkedin" tooltip="LinkedIn" tooltip-placement="top" data-import-source="linkedin" ng-click="importLinkedInConnections()">
+                        <a target="_blank" href="#"> LinkedIn </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clearfix mb30"></div>
+        </div>
+        <div class="row import-success hidden" data-import-section="success">
+            <span class="fa fa-check"></span>
+            <div class="clearfix mb15"></div>
+            <h3> Successfully Imported Contacts </h3>
+            <div class="clearfix mb15"></div>
+            <button class="btn btn-primary btn-lg">View Imported Contacts</button>
+            <button class="btn btn-primary btn-lg">Fix Duplicate Contacts</button>
+            <div class="clearfix mb30"></div>
+        </div>
+    </div>
+</script>

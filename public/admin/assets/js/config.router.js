@@ -104,7 +104,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Customers'
         },
-        resolve: loadSequence('customersCtrl', 'ImportContactService', 'customerService', 'ui.select')
+        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'ui.select')
     }).state('app.singleCustomer', {
         url: '/customers/:contactId',
         templateUrl: "assets/views/customer-detail.html",

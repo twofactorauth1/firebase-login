@@ -3,7 +3,7 @@
  * controller for customers
  */
 (function(angular) {
-    app.controller('CustomersCtrl', ["$scope", "toaster", "$filter", "$modal", "CustomerService", function($scope, toaster, $filter, $modal, CustomerService) {
+    app.controller('CustomersCtrl', ["$scope", "toaster", "$filter", "$modal", "CustomerService", "SocialConfigService", "userConstant", function($scope, toaster, $filter, $modal, CustomerService, SocialConfigService, userConstant) {
 
         CustomerService.getCustomers(function(customers) {
             console.log('customers >>> ', customers);
@@ -162,6 +162,58 @@
                 }
             }
         }, true);
+
+        SocialConfigService.getAllSocialConfig(function(data) {
+            $scope.socialAccounts = data.socialAccounts;
+        });
+
+        $scope.importFacebookFriends = function() {
+            CustomerService.importFacebookFriends(function(data, success) {
+                if (success) {
+                    $('#import-contacts-modal').modal('hide');
+                    ToasterService.show('success', "Contacts being imported.");
+                } else
+                    $window.location.href = "/socialconfig/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
+            });
+        };
+
+        $scope.importLinkedInConnections = function() {
+            var foundSocialId = false;
+            $scope.socialAccounts.forEach(function(value, index) {
+                if (value.type == userConstant.social_types.LINKEDIN) {
+                    foundSocialId = true;
+                    $scope.closeModal();
+                    toaster.pop('success', "Contacts import initiated.");
+                    SocialConfigService.importLinkedinContact(value.id, function(data) {
+                        $scope.closeModal();
+                        toaster.pop('success', "Contacts import complete.");
+                    });
+                }
+            });
+            if (foundSocialId == false) {
+                $scope.closeModal();
+                toaster.pop('warning', "No linkedin account integrated.");
+            }
+        };
+
+        $scope.importGmailContacts = function() {
+            var foundSocialId = false;
+            $scope.socialAccounts.forEach(function(value, index) {
+                if (value.type == userConstant.social_types.GOOGLE) {
+                    foundSocialId = true;
+                    $scope.closeModal();
+                    toaster.pop('success', "Contacts import initiated.");
+                    SocialConfigService.importGoogleContact(value.id, function(data) {
+                        $scope.closeModal();
+                        toaster.pop('success', "Contacts import complete.");
+                    });
+                }
+            });
+            if (foundSocialId == false) {
+                $scope.closeModal();
+                toaster.pop('warning', "No google account integrated.");
+            }
+        };
 
     }]);
 })(angular);

@@ -187,12 +187,20 @@
                                                 <label class="control-label">
                                                     Email Address
                                                 </label>
+                                                {{customer.details[0].emails.length }}
+                                                <div class="form-group" ng-if="!customer.details[0].emails">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                    </span>
+                                                </div>
                                                 <div class="form-group" ng-repeat="email in customer.details[0].emails">
                                                     <span class="input-icon input-icon-right">
-                                                    <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                                    <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
-                                                    <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                                                </span>
+                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div>

@@ -112,24 +112,23 @@
             }).join(",")
         };
 
-        $scope.refreshMap = function()
-        {
+        $scope.refreshMap = function() {
             if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
-                    $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
-                    $scope.city = $scope.customer.details[0].addresses[0].city;
-                    $scope.loadingMap = false;
-                }
-                if ($scope.ip_geo_address) {
-                    CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
-                        if (data.error === undefined) {
-                            $scope.location.lat = parseFloat(data.lat);
-                            $scope.location.lng = parseFloat(data.lon);
-                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                            $scope.loadingMap = false;
-                        } else
-                            $scope.loadingMap = false;
-                    });
+                $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
+                $scope.city = $scope.customer.details[0].addresses[0].city;
+                $scope.loadingMap = false;
+            }
+            if ($scope.ip_geo_address) {
+                CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                    if (data.error === undefined) {
+                        $scope.location.lat = parseFloat(data.lat);
+                        $scope.location.lng = parseFloat(data.lon);
+                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                        $scope.loadingMap = false;
+                    } else
+                        $scope.loadingMap = false;
+                });
             }
         }
 
@@ -467,7 +466,7 @@
             });
         };
         $scope.removeEmail = function(index) {
-          $scope.customer.details[0].emails.splice(index, 1);
+            $scope.customer.details[0].emails.splice(index, 1);
         };
 
         $scope.showAddEmail = function(email) {
@@ -482,7 +481,7 @@
             });
         };
         $scope.removePhone = function(index) {
-          $scope.customer.details[0].phones.splice(index, 1);
+            $scope.customer.details[0].phones.splice(index, 1);
         };
 
         $scope.showAddPhone = function(phone) {
@@ -490,8 +489,8 @@
         };
 
         // Add/Remove phone numbers
-       $scope.removeAddress = function(index) {
-          $scope.customer.details[0].addresses.splice(index, 1);
+        $scope.removeAddress = function(index) {
+            $scope.customer.details[0].addresses.splice(index, 1);
         };
 
         $scope.showAddAddress = function(address) {
@@ -517,44 +516,58 @@
             //$scope.customerAddressWatchFn($scope.customer.details[0].addresses.length - 1);
         };
 
-        $scope.setDefaults = function()
-        {
-            if($scope.customer.details.length)
-            {
-                if(!$scope.customer.details[0].emails.length)
+        $scope.setDefaults = function() {
+            if ($scope.customer.details.length) {
+                if (!$scope.customer.details[0].emails.length)
                     $scope.customerAddEmailFn();
-                if(!$scope.customer.details[0].phones.length)
+                if (!$scope.customer.details[0].phones.length)
                     $scope.addCustomerContactFn();
-                if(!$scope.customer.details[0].addresses.length)
+                if (!$scope.customer.details[0].addresses.length)
                     $scope.customerAddAddressFn();
             }
         }
-        if(!$scope.customer.tags)
+        if (!$scope.customer.tags)
             $scope.customer.tags = {};
-        $scope.customerTags = [
-            {label: "Customer", data: "cu"},
-            {label: "Colleague", data: "co"},
-            {label: "Friend", data: "fr"},
-            {label: "Member", data: "mb"},
-            {label: "Family", data: "fa"},
-            {label: "Admin", data: "ad"},
-            {label: 'Lead', data: 'ld'},
-            {label: "Other", data: "ot"}
-        ];
+        $scope.customerTags = [{
+            label: "Customer",
+            data: "cu"
+        }, {
+            label: "Colleague",
+            data: "co"
+        }, {
+            label: "Friend",
+            data: "fr"
+        }, {
+            label: "Member",
+            data: "mb"
+        }, {
+            label: "Family",
+            data: "fa"
+        }, {
+            label: "Admin",
+            data: "ad"
+        }, {
+            label: 'Lead',
+            data: 'ld'
+        }, {
+            label: "Other",
+            data: "ot"
+        }];
 
-        $scope.displayCustomerTags = function()            
-            {
+        $scope.displayCustomerTags = function() {
             var tags = "";
-            if($scope.customer.tags && $scope.customer.tags.length)
-            {
-               $scope.customer.tags.forEach(function(value, index) {
-                if(index == 0)
-                    tags = value.label;
-                else
-                    tags = tags.concat(", ", value.label);
-            }) 
+            if ($scope.customer.tags && $scope.customer.tags.length) {
+                $scope.customer.tags.forEach(function(value, index) {
+                    if (index == 0) {
+                        tags = value.label;
+                    } else {
+                        if (tags) {
+                            tags = tags.concat(", ", value.label);
+                        }
+                    }
+                });
             }
             return tags;
-        }
+        };
     }]);
 })(angular);
