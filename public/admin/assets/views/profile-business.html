@@ -18,7 +18,7 @@
             <div class="col-md-4">
                 <div class="user-left">
                     <div class="center">
-                        <h4>{{userInfo.firstName}} {{userInfo.lastName}}</h4>
+                        <h4>{{user.firstName}} {{user.lastName}}</h4>
                         <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
                             <div class="user-image">
                                 <div class="thumbnail">
@@ -69,25 +69,25 @@
                                 <td>url</td>
                                 <td>
                                     <a href="#">
-													{{userInfo.url}}
+													{{user.url}}
 												</a></td>
                             </tr>
                             <tr>
                                 <td>email:</td>
                                 <td>
                                     <a href>
-													{{userInfo.email}}
+													{{user.email}}
 												</a></td>
                             </tr>
                             <tr>
                                 <td>phone:</td>
-                                <td>{{userInfo.phone}}</td>
+                                <td>{{user.phone}}</td>
                             </tr>
                             <tr>
                                 <td>skye</td>
                                 <td>
                                     <a href>
-													{{userInfo.skype}}
+													{{user.skype}}
 												</a></td>
                             </tr>
                         </tbody>
@@ -167,31 +167,40 @@
                             <label class="control-label">
                                 First Name
                             </label>
-                            <input type="text" placeholder="Enter your first name" class="form-control" name="firstname" ng-model="userInfo.firstName">
+                            <input type="text" placeholder="Enter your first name" class="form-control" name="firstname" ng-model="user.first">
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Last Name
                             </label>
-                            <input type="text" placeholder="Enter your last name" class="form-control" name="lastname" ng-model="userInfo.lastName">
+                            <input type="text" placeholder="Enter your last name" class="form-control" name="lastname" ng-model="user.last">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-repeat="email in account.business.emails">
                             <label class="control-label">
                                 Email Address
                             </label>
-                            <input type="email" placeholder="email address" class="form-control" name="email" ng-model="userInfo.email">
+                            <span class="input-icon input-icon-right">
+                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="account.business.emails[$index].email">
+                                <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
+                                <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                            </span>                                              
                         </div>
-                        <div class="form-group">
+                       <div class="form-group" ng-repeat="phone in account.business.phones">
                             <label class="control-label">
-                                Phone
+                                Phone Number
                             </label>
-                            <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="userInfo.phone">
+                            <span class="input-icon input-icon-right">
+                                <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
+                                <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
+                                <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
+                            </span>                                                
                         </div>
+                        
                         <div class="form-group">
                             <label class="control-label">
                                 Url
                             </label>
-                            <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="userInfo.url">
+                            <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="user.url">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -200,33 +209,75 @@
                                 Gender
                             </label>
                             <div class="clip-radio radio-primary">
-                                <input type="radio" id="us-female" name="gender" value="female" ng-model="userInfo.gender">
+                                <input type="radio" id="us-female" name="gender" value="female" ng-model="user.gender">
                                 <label for="us-female">
                                     Female
                                 </label>
-                                <input type="radio" id="us-male" name="gender" value="male" ng-model="userInfo.gender">
+                                <input type="radio" id="us-male" name="gender" value="male" ng-model="user.gender">
                                 <label for="us-male">
                                     Male
                                 </label>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">
-                                        Zip Code
-                                    </label>
-                                    <input class="form-control" placeholder="enter a zip code" type="text" name="zipcode" ng-model="userInfo.zipCode">
+                        <div ng-repeat="address in account.business.addresses">
+                            <div class="row">
+                                <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Address Line 1
+                                            </label>
+                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                        </div>
+                                </div>
+                                <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Address Line 2
+                                            </label>
+                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                        </div>
+                                </div>
+                            </div>    
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            City
+                                        </label>
+                                        <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            State
+                                        </label>
+                                        <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label class="control-label">
-                                        City
-                                    </label>
-                                    <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="userInfo.city">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Country
+                                        </label>
+                                        <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            Zip Code
+                                        </label>
+                                        <input class="form-control" placeholder="enter your zip code" type="text" name="zip" ng-model="address.zip">
+                                    </div>
                                 </div>
                             </div>
+                             <div class="row">
+                                <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right"  ng-click="accountAddAddressFn()">Add more address</div>
+                                <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
+                                </div>
                         </div>
                         <div class="form-group">
                             <label>
@@ -234,22 +285,17 @@
                             </label>
                             <div flow-init flow-object="obj.flow">
                                 <div class="user-image">
-                                    <div class="thumbnail margin-bottom-5">
-                                        <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
-                                        <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
-                                        <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
+                                    <div class="thumbnail margin-bottom-5">       
+                                        <img src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
                                     </div>
                                 </div>
-                                <div class="user-image-buttons-edit" ng-if="obj.flow.files.length">
-                                    <span class="btn btn-primary" flow-btn><i class="fa fa-pencil"></i></span>
-                                    <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i></span>
-                                </div>
-                                <div class="user-image-buttons-edit" ng-if="!obj.flow.files.length">
-                                    <span class="btn btn-primary" flow-btn><i class="fa fa-pencil"></i></span>
-                                    <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i> </span>
+                                <div class="user-image-buttons-edit">
+                                    <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
+                                    <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </fieldset>
@@ -264,7 +310,7 @@
                                 Twitter
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="userInfo.twitter">
+												<input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="user.twitter">
 												<i class="fa fa-twitter"></i> </span>
                         </div>
                         <div class="form-group">
@@ -272,7 +318,7 @@
                                 Facebook
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="userInfo.facebook">
+												<input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="user.facebook">
 												<i class="fa fa-facebook"></i> </span>
                         </div>
                         <div class="form-group">
@@ -280,7 +326,7 @@
                                 Google Plus
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="userInfo.google">
+												<input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="user.google">
 												<i class="fa fa-google-plus"></i> </span>
                         </div>
                     </div>
@@ -290,7 +336,7 @@
                                 Github
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Github" name="github" ng-model="userInfo.github">
+												<input class="form-control" type="text" placeholder="Github" name="github" ng-model="user.github">
 												<i class="fa fa-github"></i> </span>
                         </div>
                         <div class="form-group">
@@ -298,7 +344,7 @@
                                 Linkedin
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="userInfo.linkedin">
+												<input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="user.linkedin">
 												<i class="fa fa-linkedin"></i> </span>
                         </div>
                         <div class="form-group">
@@ -306,7 +352,7 @@
                                 Skype
                             </label>
                             <span class="input-icon">
-												<input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="userInfo.skype">
+												<input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="user.skype">
 												<i class="fa fa-skype"></i> </span>
                         </div>
                     </div>
@@ -316,6 +362,7 @@
     </tab>
     <!-- end: TAB EDIT ACCOUNT -->
 </tabset>
+<div id="model_container"></div>
 <!-- end: USER TABSET -->
 <!-- <div class="panel panel-default">
     <div class="panel-heading">

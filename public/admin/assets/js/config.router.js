@@ -198,14 +198,16 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/profile-business.html",
         title: 'Profile Business',
         icon: 'ti-layout-media-left-alt',
+        controller: 'ProfileBusinessCtrl',
         ncyBreadcrumb: {
             label: 'Profile Business'
-        }
+        },
+        resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService', 'bootstrap')
     }).state('app.account.profilepersonal', {
         url: '/profile-personal',
         templateUrl: "assets/views/profile-personal.html",
         title: 'Profile Personal',
-        icon: 'ti-layout-media-left-alt',
+        icon: 'ti-layout-media-left-alt',        
         ncyBreadcrumb: {
             label: 'Profile Personal'
         }

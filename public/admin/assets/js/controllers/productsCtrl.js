@@ -31,7 +31,7 @@
 
         $scope.addProduct = function() {
             ProductService.postProduct($scope.newProduct, function(product) {
-                $scope.products.unshift(product);
+                $scope.displayedProducts.unshift(product);
                 $scope.modalInstance.close();
             });
         };
