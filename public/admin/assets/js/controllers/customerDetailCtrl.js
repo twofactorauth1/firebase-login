@@ -531,16 +531,30 @@
         }
         if(!$scope.customer.tags)
             $scope.customer.tags = {};
-        $scope.cusomerTags = [
-                {label: "Customer", data: "cu"},
-                {label: "Colleague", data: "co"},
-                {label: "Friend", data: "fr"},
-                {label: "Member", data: "mb"},
-                {label: "Family", data: "fa"},
-                {label: "Admin", data: "ad"},
-                {label: 'Lead', data: 'ld'},
-                {label: "Other", data: "ot"}
-            ];
+        $scope.customerTags = [
+            {label: "Customer", data: "cu"},
+            {label: "Colleague", data: "co"},
+            {label: "Friend", data: "fr"},
+            {label: "Member", data: "mb"},
+            {label: "Family", data: "fa"},
+            {label: "Admin", data: "ad"},
+            {label: 'Lead', data: 'ld'},
+            {label: "Other", data: "ot"}
+        ];
 
+        $scope.displayCustomerTags = function()            
+            {
+            var tags = "";
+            if($scope.customer.tags)
+            {
+               $scope.customer.tags.forEach(function(value, index) {
+                if(index == 0)
+                    tags = value.label;
+                else
+                    tags = tags.concat(", ", value.label);
+            }) 
+            }
+            return tags;
+        }
     }]);
 })(angular);
