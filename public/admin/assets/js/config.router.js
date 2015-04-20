@@ -81,7 +81,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/editor.html",
         title: 'Page Single',
         icon: 'ti-layout-media-left-alt',
-        controller: 'EditorCtrl',
         ncyBreadcrumb: {
             label: '{{breadcrumbTitle}}',
             parent: 'app.website.pages'
@@ -92,7 +91,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/editor.html",
         title: 'Post Single',
         icon: 'ti-layout-media-left-alt',
-        controller: 'EditorCtrl',
         ncyBreadcrumb: {
             label: 'Single Post',
             parent: 'app.website.posts'
