@@ -39,6 +39,8 @@ var contact = $$.m.ModelBase.extend({
       type: "c", //contact_types
       stripeId: "", //stripe ID if available
       isAuthenticated: false, //flag to check if contact is authenticated
+      gender: null,
+      tags: null,
       _v: "0.1",
 
       created: {

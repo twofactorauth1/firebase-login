@@ -4,23 +4,46 @@
  */
 (function(angular) {
     app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant) {
+        console.log('$location ', $location);
+
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
 
+        /*
+         * @globalvariables
+         * -
+         */
+
+        var iFrame = document.getElementById("iframe-website");
+        var subdomainCharLimit = 4;
+        $scope.primaryFontStack = '';
+        $scope.secondaryFontStack = '';
+        $scope.iframeData = {};
+        $scope.allPages = [];
+        $scope.filterdPages = [];
+        $scope.backup = {};
+        $scope.components = [];
+        $scope.isEditing = true;
+        $scope.isMobile = false;
+        $scope.tabs = {};
+        $scope.addLink = false;
+
+        $scope.saveLoading = false;
+        $scope.hours = hoursConstant;
+        $scope.typefilter = 'all';
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
         var stopInterval;
         $scope.breadcrumbTitle = $location.$$search['pagehandle'] || $location.$$search['posthandle'];
 
         /*
-         * @getUrl
-         * get the url for the view page/post button
+         * @location:pagehandle
+         * - get the pagehandle and replace iframe src
          */
 
-        $scope.getUrl = function(handle) {
-            console.log('get url ', handle);
-            return 'http://' + window.location.host + '/' + handle;
-        };
+        if ($location.$$search['pagehandle']) {
+            document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
+        }
 
         /*
          * @getWebsite
@@ -43,6 +66,26 @@
             $scope.primaryFontStack = $scope.website.settings.font_family;
             $scope.secondaryFontStack = $scope.website.settings.font_family_2;
         });
+
+        /*
+         * @location:posthandle
+         * - get the posthandle and replace iframe src
+         */
+
+        if ($location.$$search['posthandle']) {
+            console.log('post handle >>>', $location.$$search['posthandle']);
+            $scope.single_post = true;
+            document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
+        }
+
+        /*
+         * @getUrl
+         * get the url for the view page/post button
+         */
+
+        $scope.getUrl = function(handle) {
+            return 'http://' + window.location.host + '/' + handle;
+        };
 
         /*
          * @closeModal
@@ -78,25 +121,6 @@
         };
 
         /*
-         * @location:pagehandle
-         * - get the pagehandle and replace iframe src
-         */
-
-        if ($location.$$search['pagehandle']) {
-            document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
-        }
-
-        /*
-         * @location:posthandle
-         * - get the posthandle and replace iframe src
-         */
-
-        if ($location.$$search['posthandle']) {
-            $scope.single_post = true;
-            document.getElementById("iframe-website").setAttribute("src", '/page/blog/' + $location.$$search['posthandle'] + '?editor=true');
-        }
-
-        /*
          * @window:scroll
          * - when the window is scrolled in the admin, ud
          */
@@ -116,28 +140,6 @@
             }
         });
 
-        /*
-         * @globalvariables
-         * -
-         */
-
-        var iFrame = document.getElementById("iframe-website");
-        var subdomainCharLimit = 4;
-        $scope.primaryFontStack = '';
-        $scope.secondaryFontStack = '';
-        $scope.iframeData = {};
-        $scope.allPages = [];
-        $scope.filterdPages = [];
-        $scope.backup = {};
-        $scope.components = [];
-        $scope.isEditing = true;
-        $scope.isMobile = false;
-        $scope.tabs = {};
-        $scope.addLink = false;
-
-        $scope.saveLoading = false;
-        $scope.hours = hoursConstant;
-        $scope.typefilter = 'all';
 
         /*
          * @components.sort
@@ -418,20 +420,9 @@
          */
 
         $scope.activated = false;
-        document.getElementById("iframe-website").onload = function() {
-
-            $scope.updatePage($location.$$search['pagehandle'], true);
-            //TODO: need to check when iframe content is loaded properly
-            if ($scope.isEditing) {
-                if (angular.element("#iframe-website").contents().find("body").length) {
-                    setTimeout(function() {
-                        $scope.editPage();
-                        if ($location.$$search.onboarding) {
-                            $scope.showOnboarding = true;
-                        }
-                    }, 1000)
-                }
-            }
+        $scope.afteriframeLoaded = function() {
+            $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
+            $scope.editPage();
         };
 
         /*
@@ -515,10 +506,10 @@
                     $scope.components = $scope.currentPage.components;
                     $scope.updateIframeComponents();
                     if (newComponent.type === 'contact-us')
-                        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
+                        $scope.childScope.updateContactComponent($scope.currentPage.components);
                     //TODO: get updateIframeComponents callback
                     setTimeout(function() {
-                        $scope.activateAloha();
+                        $scope.activateCKEditor();
                     }, 1000)
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
 
@@ -557,7 +548,7 @@
                     if (!$scope.activated) {
                         $scope.activated = true;
                         setTimeout(function() {
-                            iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha();
+                            $scope.childScope.activateCKEditor();
                         }, 1000)
                     }
                 });
@@ -629,7 +620,7 @@
                 var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.iframeHeight = iframeDoc.body.scrollHeight + "px";
+                        $scope.iframeHeight = (iframeDoc.body.scrollHeight + 20) + "px";
                     });
                 }, 1000);
             }
@@ -925,16 +916,12 @@
 
         $scope.editPage = function() {
             $scope.isEditing = true;
-
-            var iframe = document.getElementById("iframe-website");
-            if (iframe.contentWindow.triggerEditMode)
-                iframe.contentWindow.triggerEditMode();
-
-            if (iframe.contentWindow.copyPostMode) {
-                iframe.contentWindow.copyPostMode();
-                $scope.post_data = iframe.contentWindow.getPostData();
+            $scope.childScope.triggerEditMode();
+            if ($scope.single_post) {
+                $scope.childScope.copyPostMode();
+                $scope.post_data = $scope.childScope.getPostData();
             }
-            $scope.activateAloha();
+            $scope.activateCKEditor();
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
@@ -947,10 +934,10 @@
             $scope.isDirty = false;
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
-            if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
-                var isDirty = iFrame.contentWindow.checkOrSetPageDirty() || $scope.isDirty;
+            if ($scope.childScope.checkOrSetPageDirty) {
+                var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
             }
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty && iFrame.contentWindow.checkOrSetPageDirty(true);
+            $scope.childScope.checkOrSetPageDirty(true);
             var redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
             if (isDirty) {
                 event.preventDefault();
@@ -1019,12 +1006,12 @@
             if (autoSave)
                 msg = "Auto Saved";
             var iFrame = document.getElementById("iframe-website");
-            if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
-                iFrame.contentWindow.checkOrSetPageDirty(true);
+            if ($scope.childScope.checkOrSetPageDirty) {
+                $scope.childScope.checkOrSetPageDirty(true);
             }
             if ($location.$$search['posthandle']) {
                 $scope.single_post = true;
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.savePostMode && iFrame.contentWindow.savePostMode(toaster, msg);
+                $scope.childScope.savePostMode(toaster, msg);
                 $scope.isEditing = true;
             } else {
                 $scope.validateEditPage($scope.currentPage);
@@ -1159,10 +1146,9 @@
                         else
                             toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.saveLoading = false;
-                        iFrame && iFrame.contentWindow && iFrame.contentWindow.saveBlobData && iFrame.contentWindow.saveBlobData(iFrame.contentWindow);
+                        $scope.childScope.saveBlogData(iFrame.contentWindow);
 
                     });
-                    //$scope.deactivateAloha();
                     var data = {
                         _id: $scope.website._id,
                         accountId: $scope.website.accountId,
@@ -1175,7 +1161,7 @@
 
         /*
          * @updatePage
-         * -
+         * - update the current page to a different one
          */
 
         $scope.updatePage = function(handle, editing) {
@@ -1321,7 +1307,7 @@
         $scope.saveContactComponent = function() {
             var currentComponentId = $scope.componentEditing._id;
             $scope.updateSingleComponent(currentComponentId);
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
+            $scope.childScope.updateContactComponent($scope.currentPage.components);
         };
 
         /*
@@ -1330,7 +1316,6 @@
          */
 
         $scope.addComponent = function(addedType) {
-            //$scope.deactivateAloha();
             var pageId = $scope.currentPage._id;
             if (addedType.type === 'footer') {
                 var footerType = _.findWhere($scope.currentPage.components, {
@@ -1366,10 +1351,10 @@
                     $scope.updateIframeComponents();
                     // Update contact component
                     if (addedType.type === 'contact-us')
-                        iFrame && iFrame.contentWindow && iFrame.contentWindow.updateContactComponent && iFrame.contentWindow.updateContactComponent($scope.currentPage.components);
+                        $scope.childScope.updateContactComponent($scope.currentPage.components);
                     //TODO: get updateIframeComponents callback
                     setTimeout(function() {
-                            $scope.activateAloha();
+                            $scope.activateCKEditor();
                         }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
@@ -1395,7 +1380,7 @@
             }
             $scope.updateIframeComponents();
             $scope.componentEditing = null;
-            $scope.activateAloha();
+            $scope.activateCKEditor();
             $scope.resizeIframe();
             $scope.$apply(function() {
                 toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
@@ -1408,7 +1393,7 @@
          */
 
         $scope.updateIframeComponents = function(fn) {
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.updateComponents && iFrame.contentWindow.updateComponents($scope.components);
+            $scope.childScope.updateComponents($scope.components);
             if (fn) {
                 fn();
             }
@@ -1424,22 +1409,22 @@
         };
 
         /*
-         * @activateAloha
+         * @activateCKEditor
          * -
          */
 
-        $scope.activateAloha = function() {
+        $scope.activateCKEditor = function() {
             $scope.bindEvents();
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.activateAloha && iFrame.contentWindow.activateAloha()
+            $scope.childScope.activateCKEditor()
         };
 
         /*
-         * @deactivateAloha
+         * @deactivateCKEditor
          * -
          */
 
-        $scope.deactivateAloha = function() {
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.deactivateAloha && iFrame.contentWindow.deactivateAloha()
+        $scope.deactivateCKEditor = function() {
+            $scope.childScope.deactivateCKEditor()
         };
 
         /*
@@ -1449,7 +1434,7 @@
 
         $scope.editComponent = function(componentId) {
             if ($scope.single_post) {
-                iFrame.contentWindow && iFrame.contentWindow.refreshPost && iFrame.contentWindow.refreshPost();
+                $scope.childScope.refreshPost();
                 return;
             }
             $scope.$apply(function() {
@@ -1528,7 +1513,7 @@
             }
             $scope.currentPage.components = $scope.components;
             $scope.updateIframeComponents();
-            $scope.activateAloha();
+            $scope.activateCKEditor();
         };
 
         /*
@@ -1553,7 +1538,7 @@
             $scope.isEditing = true;
             $scope.isDirty = true;
             setTimeout(function() {
-                $scope.activateAloha();
+                $scope.activateCKEditor();
             }, 500)
         };
 
@@ -1711,7 +1696,7 @@
                     if (isConfirm) {
                         SweetAlert.swal("Saved!", "Post is deleted.", "success");
                         $scope.closeModal();
-                        iFrame && iFrame.contentWindow.deletePost && iFrame.contentWindow.deletePost(post_data, toaster);
+                        $scope.childScope.deletePost(post_data, toaster);
                     } else {
                         SweetAlert.swal("Cancelled", "Post not deleted.", "error");
                     }
@@ -1767,8 +1752,7 @@
                 return;
             } else if ($scope.insertMediaImage) {
                 $scope.insertMediaImage = false;
-                var iFrame = document.getElementById("iframe-website");
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.addCKEditorImage && iFrame.contentWindow.addCKEditorImage(asset.url);
+                $scope.childScope.addCKEditorImage(asset.url);
                 return;
             } else if ($scope.logoImage && $scope.componentEditing) {
                 $scope.logoImage = false;
@@ -1777,7 +1761,7 @@
                 $scope.changeblobImage = false;
                 $scope.blog_post.featured_image = asset.url;
                 var iFrame = document.getElementById("iframe-website");
-                iFrame && iFrame.contentWindow && iFrame.contentWindow.setBlogImage && iFrame.contentWindow.setBlogImage(asset.url);
+                $scope.childScope.setBlogImage(asset.url);
                 iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
                 return;
             } else if ($scope.imgGallery && $scope.componentEditing) {
@@ -1830,8 +1814,8 @@
         var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
-            if (iFrame && iFrame.contentWindow && iFrame.contentWindow.checkOrSetPageDirty) {
-                var isDirty = iFrame.contentWindow.checkOrSetPageDirty() || $scope.isDirty;
+            if ($scope.childScope.checkOrSetPageDirty) {
+                var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
             }
 
             if (isDirty && !$scope.changesConfirmed) {
@@ -2040,7 +2024,7 @@
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
                                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                    iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
+                                    $scope.childScope.updateWebsite($scope.website);
                                     //toaster.pop('success', "Navigation updated successfully.");
                                 });
                             }
@@ -2063,7 +2047,7 @@
                         if (value.handle === "head-menu") {
                             $scope.website.linkLists[index].links = [];
                             WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                iFrame && iFrame.contentWindow.updateWebsite && iFrame.contentWindow.updateWebsite($scope.website);
+                                $scope.childScope.updateWebsite($scope.website);
                                 //toaster.pop('success', "Navigation updated successfully.");
                             });
                         }
@@ -2086,7 +2070,7 @@
             scrollableContainer: 'reorderNavBarContainer'
         };
 
-                /*
+        /*
          * @updateSocialNetworks
          * -
          */
@@ -2216,7 +2200,7 @@
          * -
          */
 
-        window.deleteFeatureList = function(componentId, index) {
+        $scope.deleteFeatureList = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2230,7 +2214,7 @@
          * -
          */
 
-        window.addNewFeatureList = function(componentId, index, newFeature) {
+        $scope.addNewFeatureList = function(componentId, index, newFeature) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2244,7 +2228,7 @@
          * -
          */
 
-        window.clickImageButton = function() {
+        $scope.clickImageButton = function() {
             $scope.insertMediaImage = true;
             //$scope.openModal('mediamodal');
             angular.element("#media-manager-modal").modal('show');
@@ -2256,7 +2240,7 @@
          * -
          */
 
-        window.changeBlogImage = function(blog) {
+        $scope.changeBlogImage = function(blog) {
             $scope.changeblobImage = true;
             $scope.blog_post = blog;
             angular.element("#media-manager-modal").modal('show');
@@ -2268,7 +2252,7 @@
          * -
          */
 
-        window.setPostImage = function(componentId) {
+        $scope.setPostImage = function(componentId) {
             $scope.postImage = true;
             angular.element("#media-manager-modal").modal('show');
             $scope.showInsert = true;
@@ -2279,7 +2263,7 @@
          * -
          */
 
-        window.addImageToGallery = function(componentId, index) {
+        $scope.addImageToGallery = function(componentId, index) {
             $scope.imgGallery = true;
             $scope.imgGalleryIndex = index;
             $scope.componentEditing = _.findWhere($scope.components, {
@@ -2294,7 +2278,7 @@
          * -
          */
 
-        window.deleteImageFromGallery = function(componentId, index) {
+        $scope.deleteImageFromGallery = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2308,7 +2292,7 @@
          * -
          */
 
-        window.addImageToThumbnail = function(componentId) {
+        $scope.addImageToThumbnail = function(componentId) {
             $scope.imgThumbnail = true;
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
@@ -2322,7 +2306,7 @@
          * -
          */
 
-        window.deleteImageFromThumbnail = function(componentId, index) {
+        $scope.deleteImageFromThumbnail = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2336,7 +2320,7 @@
          * -
          */
 
-        window.changeProfilePhoto = function(componentId, customer) {
+        $scope.changeProfilePhoto = function(componentId, customer) {
             $scope.profilepic = true;
             $scope.customerAccount = customer;
             angular.element("#media-manager-modal").modal('show');
@@ -2348,7 +2332,7 @@
          * -
          */
 
-        window.changeLogoImage = function(componentId) {
+        $scope.changeLogoImage = function(componentId) {
             $scope.logoImage = true;
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
@@ -2362,7 +2346,7 @@
          * -
          */
 
-        window.getPostImageUrl = function() {
+        $scope.getPostImageUrl = function() {
             return $scope.postImageUrl;
         };
 
@@ -2371,7 +2355,7 @@
          * -
          */
 
-        window.deleteTeamMember = function(componentId, index) {
+        $scope.deleteTeamMember = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2385,7 +2369,7 @@
          * -
          */
 
-        window.deleteTestimonial = function(componentId, index) {
+        $scope.deleteTestimonial = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2399,7 +2383,7 @@
          * -
          */
 
-        window.updateAdminPageScope = function(page) {
+        $scope.updateAdminPageScope = function(page) {
             $scope.singlePost = false;
             if (!$scope.$$phase) {
                 $scope.$apply(function() {
@@ -2430,14 +2414,11 @@
          * -
          */
 
-        window.checkIfSinglePost = function(post) {
-            if (post)
-            {
+        $scope.checkIfSinglePost = function(post) {
+            if (post) {
                 $scope.singlePost = true;
-                if (iFrame.contentWindow.copyPostMode) {
-                    iFrame.contentWindow.copyPostMode();
-                    $scope.post_data = post;
-                }
+                $scope.childScope.copyPostMode();
+                $scope.post_data = post;
             }
         };
 
@@ -2446,13 +2427,13 @@
          * -
          */
 
-        window.showToaster = function(value, toast, msg, redirect) {
+        $scope.showToaster = function(value, toast, msg, redirect) {
             $scope.saveLoading = value;
-            if(toast)
+            if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
-                    if(redirect)
-                        $location.path("/website/posts"); 
+                    if (redirect)
+                        $location.path("/website/posts");
                 })
         };
 
@@ -2461,7 +2442,7 @@
          * -
          */
 
-        window.deletePricingTable = function(componentId, index) {
+        $scope.deletePricingTable = function(componentId, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2475,7 +2456,7 @@
          * -
          */
 
-        window.addPricingTable = function(componentId, newTable, index) {
+        $scope.addPricingTable = function(componentId, newTable, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2489,7 +2470,7 @@
          * -
          */
 
-        window.deletePricingTableFeature = function(componentId, index, parentIndex) {
+        $scope.deletePricingTableFeature = function(componentId, index, parentIndex) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2503,7 +2484,7 @@
          * -
          */
 
-        window.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
+        $scope.addPricingTableFeature = function(componentId, newTable, index, parentIndex) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2517,7 +2498,7 @@
          * -
          */
 
-        window.addTeamMember = function(componentId, newTeam, index) {
+        $scope.addTeamMember = function(componentId, newTeam, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2531,7 +2512,7 @@
          * -
          */
 
-        window.addTestimonial = function(componentId, newTestimonial, index) {
+        $scope.addTestimonial = function(componentId, newTestimonial, index) {
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
@@ -2545,7 +2526,7 @@
          * -
          */
 
-        window.updateComponent = function(componentId) {
+        $scope.updateComponent = function(componentId) {
             //update single component
             return $scope.updateSingleComponent(componentId);
         };

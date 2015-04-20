@@ -91,6 +91,14 @@
                                                     {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
                                                 </a></td>
                                                 </tr>
+                                                <tr>
+                                                    <td>gender:</td>
+                                                    <td>{{customer.gender}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>tags:</td>
+                                                    <td>{{displayCustomerTags()}}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">
@@ -150,7 +158,7 @@
                         <!-- start: TAB EDIT ACCOUNT -->
                         <tab heading="Edit Account" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-disabled="saveContactDisabled" ng-click="customerSaveFn()">Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()">Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" role="form" id="form">
@@ -178,29 +186,37 @@
                                                     </code>
                                                 </small>
                                             </div>
+                                           
                                             <div class="form-group" ng-repeat="email in customer.details[0].emails">
                                                 <label class="control-label">
                                                     Email Address
                                                 </label>
-                                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                <span class="input-icon input-icon-right">
+                                                    <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                    <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                    <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                </span>                                                
                                             </div>
-                                            <div class="form-group" ng-if="customer.details[0].emails.length <= 0">
+                                           <div class="form-group" ng-repeat="phone in customer.details[0].phones">
                                                 <label class="control-label">
-                                                    Email Address
+                                                    Phone Number
                                                 </label>
-                                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[0].email" ng-blur="updateCustomer()">
+                                                <span class="input-icon input-icon-right">
+                                                    <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                    <i ng-if="showAddPhone(phone)" ng-click="addCustomerContactFn()" class="ti-plus"></i>
+                                                    <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
+                                                </span>                                                
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label">
-                                                    Phone
+                                                <label class="block">
+                                                    Tags
                                                 </label>
-                                                <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="userInfo.phone">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Url
-                                                </label>
-                                                <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="userurl">
+                                                <ui-select multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled" >
+                                                <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                                <ui-select-choices repeat="tag in customerTags | filter:$select.search">
+                                                  {{tag.label}}
+                                                </ui-select-choices>
+                                              </ui-select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -209,60 +225,99 @@
                                                     Gender
                                                 </label>
                                                 <div class="clip-radio radio-primary">
-                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="userInfo.gender">
+                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="customer.gender">
                                                     <label for="us-female">
                                                         Female
                                                     </label>
-                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="userInfo.gender">
+                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="customer.gender">
                                                     <label for="us-male">
                                                         Male
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Zip Code
-                                                        </label>
-                                                        <input class="form-control" placeholder="enter a zip code" type="text" name="zipcode" ng-model="userInfo.zipCode">
+                                            
+                                            <div ng-repeat="address in customer.details[0].addresses">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label class="control-label">
+                                                                    Address Line 1
+                                                                </label>
+                                                                <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                            <div class="form-group">
+                                                                <label class="control-label">
+                                                                    Address Line 2
+                                                                </label>
+                                                                <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                            </div>
+                                                    </div>
+                                                </div>    
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                City
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                State
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            City
-                                                        </label>
-                                                        <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="userInfo.city">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Country
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Zip Code
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your zip code" type="text" name="zip" ng-model="address.zip">
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                 <div class="row">
+                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right"  ng-click="customerAddAddressFn()">Add more address</div>
+                                                    <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
+                                                    </div>
                                             </div>
+                                            
+                                            
                                             <div class="form-group">
                                                 <label>
                                                     Image Upload
                                                 </label>
                                                 <div flow-init flow-object="obj.flow">
                                                     <div class="user-image">
-                                                        <div class="thumbnail margin-bottom-5">
-                                                            <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
-                                                            <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
-                                                            <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
+                                                        <div class="thumbnail margin-bottom-5">       
+                                                            <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
                                                         </div>
                                                     </div>
-                                                    <div class="user-image-buttons-edit" ng-if="obj.flow.files.length">
-                                                        <span class="btn btn-primary" flow-btn><i class="fa fa-pencil"></i></span>
-                                                        <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i></span>
-                                                    </div>
-                                                    <div class="user-image-buttons-edit" ng-if="!obj.flow.files.length">
-                                                        <span class="btn btn-primary" flow-btn><i class="fa fa-pencil"></i></span>
-                                                        <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i> </span>
+                                                    <div class="user-image-buttons-edit">
+                                                        <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
+                                                        <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
-                                <fieldset>
+                                <fieldset class="hidden">
                                     <legend>
                                         Additional Info
                                     </legend>
@@ -427,3 +482,4 @@
     </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>
+<div id="model_container"></div>

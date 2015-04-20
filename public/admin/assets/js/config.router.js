@@ -81,7 +81,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/editor.html",
         title: 'Page Single',
         icon: 'ti-layout-media-left-alt',
-        controller: 'EditorCtrl',
         ncyBreadcrumb: {
             label: '{{breadcrumbTitle}}',
             parent: 'app.website.pages'
@@ -93,7 +92,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Post Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Single Post'
+            label: 'Single Post',
+            parent: 'app.website.posts'
         },
         resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService')
     }).state('app.customers', {
@@ -115,7 +115,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{customer.first}} {{customer.last}}',
             parent: 'app.customers'
         },
-        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset')
+        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset','assetsService', 'bootstrap', 'toasterService','ui.select')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
