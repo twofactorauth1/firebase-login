@@ -92,8 +92,10 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/editor.html",
         title: 'Post Single',
         icon: 'ti-layout-media-left-alt',
+        controller: 'EditorCtrl',
         ncyBreadcrumb: {
-            label: 'Single Post'
+            label: 'Single Post',
+            parent: 'app.website.posts'
         },
         resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService')
     }).state('app.customers', {
