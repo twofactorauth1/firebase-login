@@ -545,7 +545,7 @@
         $scope.displayCustomerTags = function()            
             {
             var tags = "";
-            if($scope.customer.tags)
+            if($scope.customer.tags && $scope.customer.tags.length)
             {
                $scope.customer.tags.forEach(function(value, index) {
                 if(index == 0)
