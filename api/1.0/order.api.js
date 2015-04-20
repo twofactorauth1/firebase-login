@@ -39,7 +39,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createOrder');
 
         var order = new $$.m.Order(req.body);
-        var accessToken = paymentsAPI._getAccessToken(req);
+        var accessToken = self.getAccessToken(req);
         var userId = self.userId(req);
         var accountId = self.accountId(req);
         order.set('account_id', accountId);
