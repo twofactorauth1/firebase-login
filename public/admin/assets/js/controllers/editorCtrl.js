@@ -421,8 +421,10 @@
 
         $scope.activated = false;
         $scope.afteriframeLoaded = function() {
+            $scope.iframeLoaded = true;
             $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
             $scope.editPage();
+            $scope.updatePage();
         };
 
         /*
@@ -1006,9 +1008,8 @@
             if (autoSave)
                 msg = "Auto Saved";
             var iFrame = document.getElementById("iframe-website");
-            if ($scope.childScope.checkOrSetPageDirty) {
-                $scope.childScope.checkOrSetPageDirty(true);
-            }
+            $scope.childScope.checkOrSetPageDirty(true);
+
             if ($location.$$search['posthandle']) {
                 $scope.single_post = true;
                 $scope.childScope.savePostMode(toaster, msg);
@@ -1155,7 +1156,6 @@
                         settings: $scope.website.settings
                     };
                 })
-
             }
         };
 

@@ -46,7 +46,7 @@
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Schedule"><i class="fa fa-map-marker"></i></a>
                                 <a href="" tooltip-placement="top" tooltip-html-unsafe="Location"><i class="fa fa-calendar"></i></a>
                             </div>
-                            <button class="btn btn-green pull-right" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><span><span ng-show="postingToSocial"><i class="fa fa-spinner fa-spin"></i> Submitting </span><span ng-show="!postingToSocial">Submit Post</span></span>
+                            <button class="btn btn-green pull-right" ng-disabled="!selectedSocial || !postContent.length > 0" ng-click="postToSocial(selectedSocial.id, postContent, selectedSocial.type) "><span><span ng-show="postingToSocial"><i class="fa fa-spinner fa-spin"></i> Submitting </span><span ng-show="!postingToSocial">Submit Post</span></span>
                             </button>
                         </div>
                         <div class="clearfix"></div>
@@ -397,7 +397,7 @@
                         </ui-select>
                     </div>
                     <div class="col-xs-3">
-                        <button class="btn btn-green btn-block" ng-class='{"disabled": !addCommentinModal}' ng-click='addCommentFn(addCommentinModal)'>Comment</button>
+                        <button class="btn btn-green btn-block" ng-disabled="!addCommentAdminPage"  ng-click='addCommentFn(addCommentinModal)'>Comment</button>
                     </div>
                 </div>
             </div>

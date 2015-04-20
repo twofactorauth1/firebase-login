@@ -48,13 +48,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 that.pages = data[route];
                 $(document).ready(function() {
                     setTimeout(function() {
-                        $scope.$apply(function() {
-                            console.log("Page loaded");
+                        console.log("Page loaded");
                             $scope.isLoaded = true;
-                        })
 
                     }, 500);
-                })
+                });
+                $scope.parentScope.afteriframeLoaded();
                 var iframe = window.parent.document.getElementById("iframe-website")
                 iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope(that.pages);
                 // console.log("current Page");
@@ -264,13 +263,13 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if (post_excerpt_container.length > 0)
                 post_data.post_excerpt = post_excerpt_container.text();
 
-            var postImageUrl = window.parent.getPostImageUrl();
+            var postImageUrl = $scope.parentScope.getPostImageUrl();
             if (postImageUrl) {
                 post_data.featured_image = postImageUrl;
             }
-            var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
+            var pageId = $scope.parentScope.currentPage._id;
             PostService.updatePost(pageId, post_data._id, post_data, function(data) {
-                window.parent.window.showToaster(false, true, msg);
+                $scope.parentScope.showToaster(false, true, msg);
             });
         };
 
@@ -394,7 +393,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 body.className += ' editing';
             };
             $scope.isEditing = true;
-            $scope.$digest();
         };
 
         /*

@@ -1,4 +1,4 @@
-<div class="customer-detail">
+<div class="customer-detail" ng-controller="CustomerDetailCtrl">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -28,8 +28,7 @@
                                             <div class="user-image">
                                                 <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
                                             </div>
-                                            <hr>
-                                            <div class="social-icons block">
+                                            <div class="social-icons block" ng-if="checkTwitterId(customer) || checkFacebookId(customer) || checkGoogleId(customer) || checkLinkedInId(customer)">
                                                 <ul>
                                                     <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips" ng-if="checkTwitterId(customer)">
                                                         <a href="#" target="_blank">
@@ -53,8 +52,8 @@
                                                     </li>
                                                     </li>
                                                 </ul>
+                                                <hr>
                                             </div>
-                                            <hr>
                                         </div>
                                         <div class="map margin-bottom-15">
                                             <span class="text-bold">Location</span>
@@ -69,49 +68,65 @@
                                         <table class="table table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">Contact Information</th>
+                                                    <th colspan="3">General information</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="email in customer.details[0].emails">
-                                                    <td>email {{$index + 1}}:</td>
-                                                    <td>
-                                                        <a href>
-                                                    {{email.email}}
-                                                </a></td>
-                                                </tr>
-                                                <tr ng-repeat="phone in customer.details[0].phones">
-                                                    <td>phone {{$index + 1}}:</td>
-                                                    <td>{{phone.number}}</td>
-                                                </tr>
-                                                <tr ng-repeat="address in customer.details[0].addresses">
-                                                    <td>address {{$index + 1}}:</td>
-                                                    <td>
-                                                        <a href>
-                                                    {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
-                                                </a></td>
+                                                <tr>
+                                                    <td>tags:</td>
+                                                    <td>{{displayCustomerTags()}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>gender:</td>
                                                     <td>{{customer.gender}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>tags:</td>
-                                                    <td>{{displayCustomerTags()}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">General information</th>
+                                                    <th colspan="3">Contact Information</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Status</td>
-                                                    <td><span class="label label-sm label-info">{{ contactLabel(customer) }}</span></td>
+                                                    <td>email:</td>
+                                                    <td>
+                                                        <div ng-repeat="email in customer.details[0].emails">
+                                                            <a href="mailto:{{email.email}}">{{email.email}}</a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>phone:</td>
+                                                    <td>
+                                                        <div ng-repeat="phone in customer.details[0].phones">
+                                                            {{phone.number}}
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>address:</td>
+                                                    <td>
+                                                        <div ng-repeat="address in customer.details[0].addresses">
+                                                            <a href>
+                                                                {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
+                                                            </a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Interactions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
                                                 <tr>
                                                     <td>Page Views</td>
                                                     <td>18</td>
@@ -134,7 +149,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     <customer-activity single-customer="true" current-page="1" num-per-page="10"></customer-activity>
-                                    <div class="panel panel-white space20">
+                                    <div class="panel panel-white space20 hidden">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">Recent Tweets</h4>
                                         </div>
@@ -168,93 +183,57 @@
                                     </legend>
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="">Contact Name</label>
-                                                <input id="input-fullname" class="form-control input-lg" data-ng-model="fullName" placeholder="full name" type="text" ng-change="enableSaveBtnFn()">
-                                                <small style="margin-left:10px;">
-                                                    <strong>first:</strong>
-                                                    <code>
-                                                        <span id="hint-first">{{customer.first}}</span>
-                                                    </code>
-                                                    <strong>middle:</strong>
-                                                    <code>
-                                                        <span id="hint-middle">{{customer.middle}}</span>
-                                                    </code>
-                                                    <strong>last:</strong>
-                                                    <code>
-                                                        <span id="hint-last">{{customer.last}}</span>
-                                                    </code>
-                                                </small>
-                                            </div>
-                                           
-                                            <div class="form-group" ng-repeat="email in customer.details[0].emails">
+                                            <div>
                                                 <label class="control-label">
                                                     Email Address
                                                 </label>
-                                                <span class="input-icon input-icon-right">
-                                                    <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                                    <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
-                                                    <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                                                </span>                                                
+                                                {{customer.details[0].emails.length }}
+                                                <div class="form-group" ng-if="!customer.details[0].emails">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group" ng-repeat="email in customer.details[0].emails">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                    </span>
+                                                </div>
                                             </div>
-                                           <div class="form-group" ng-repeat="phone in customer.details[0].phones">
+                                            <div>
                                                 <label class="control-label">
                                                     Phone Number
                                                 </label>
-                                                <span class="input-icon input-icon-right">
-                                                    <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
-                                                    <i ng-if="showAddPhone(phone)" ng-click="addCustomerContactFn()" class="ti-plus"></i>
-                                                    <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
-                                                </span>                                                
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="block">
-                                                    Tags
-                                                </label>
-                                                <ui-select multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled" >
-                                                <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                                                <ui-select-choices repeat="tag in customerTags | filter:$select.search">
-                                                  {{tag.label}}
-                                                </ui-select-choices>
-                                              </ui-select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="block">
-                                                    Gender
-                                                </label>
-                                                <div class="clip-radio radio-primary">
-                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="customer.gender">
-                                                    <label for="us-female">
-                                                        Female
-                                                    </label>
-                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="customer.gender">
-                                                    <label for="us-male">
-                                                        Male
-                                                    </label>
+                                                <div class="form-group" ng-repeat="phone in customer.details[0].phones">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddPhone(phone)" ng-click="addCustomerContactFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            
                                             <div ng-repeat="address in customer.details[0].addresses">
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="control-label">
-                                                                    Address Line 1
-                                                                </label>
-                                                                <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Address Line 1
+                                                            </label>
+                                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-8">
-                                                            <div class="form-group">
-                                                                <label class="control-label">
-                                                                    Address Line 2
-                                                                </label>
-                                                                <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Address Line 2
+                                                            </label>
+                                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                        </div>
                                                     </div>
-                                                </div>    
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
@@ -291,28 +270,74 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                 <div class="row">
-                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right"  ng-click="customerAddAddressFn()">Add more address</div>
+                                                <div>
+                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="customerAddAddressFn()">Add more address</div>
                                                     <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
-                                                    </div>
+                                                </div>
                                             </div>
-                                            
-                                            
-                                            <div class="form-group">
-                                                <label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <fieldset>
+                                                <legend>
                                                     Image Upload
-                                                </label>
-                                                <div flow-init flow-object="obj.flow">
-                                                    <div class="user-image">
-                                                        <div class="thumbnail margin-bottom-5">       
-                                                            <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
+                                                </legend>
+                                                <div class="form-group center">
+                                                    <div flow-init flow-object="obj.flow">
+                                                        <div class="user-image">
+                                                            <div class="thumbnail margin-bottom-5">
+                                                                <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
+                                                            </div>
+                                                        </div>
+                                                        <div class="user-image-buttons-edit">
+                                                            <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
+                                                            <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
                                                         </div>
                                                     </div>
-                                                    <div class="user-image-buttons-edit">
-                                                        <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
-                                                        <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
-                                                    </div>
                                                 </div>
+                                            </fieldset>
+                                            <div class="form-group">
+                                                <label class="">Contact Name</label>
+                                                <input id="input-fullname" class="form-control" data-ng-model="fullName" placeholder="full name" type="text" ng-change="enableSaveBtnFn()">
+                                                <small>
+                                                    <strong>first:</strong>
+                                                    <code>
+                                                        <span id="hint-first">{{customer.first}}</span>
+                                                    </code>
+                                                    <strong>middle:</strong>
+                                                    <code>
+                                                        <span id="hint-middle">{{customer.middle}}</span>
+                                                    </code>
+                                                    <strong>last:</strong>
+                                                    <code>
+                                                        <span id="hint-last">{{customer.last}}</span>
+                                                    </code>
+                                                </small>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="block">
+                                                    Gender
+                                                </label>
+                                                <div class="clip-radio radio-primary">
+                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="customer.gender">
+                                                    <label for="us-female">
+                                                        Female
+                                                    </label>
+                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="customer.gender">
+                                                    <label for="us-male">
+                                                        Male
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="block">
+                                                    Tags
+                                                </label>
+                                                <ui-select multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled">
+                                                    <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                                    <ui-select-choices repeat="tag in customerTags | filter:$select.search">
+                                                        {{tag.label}}
+                                                    </ui-select-choices>
+                                                </ui-select>
                                             </div>
                                         </div>
                                     </div>
@@ -380,7 +405,7 @@
                         </tab>
                         <!-- end: TAB EDIT ACCOUNT -->
                         <!-- start: TAB PROJECTS -->
-                        <tab heading="Orders">
+                        <tab heading="Orders" class="hidden">
                             <table class="table" id="orders">
                                 <thead>
                                     <tr>

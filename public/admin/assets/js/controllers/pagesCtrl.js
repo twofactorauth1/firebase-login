@@ -3,7 +3,7 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PagesCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", function($scope, toaster, $modal, $filter, WebsiteService) {
+    app.controller('PagesCtrl', ["$scope", "toaster", "$filter", "WebsiteService", function($scope, toaster, $filter, WebsiteService) {
 
         WebsiteService.getPages(function(pages) {
             var pagesArr = [];
@@ -70,19 +70,6 @@
                     $scope.createPageValidated = true;
                 }
             }
-        };
-
-        $scope.openPageModal = function(size) {
-            $scope.modalInstance = $modal.open({
-                templateUrl: 'new-page-modal',
-                controller: 'PagesCtrl',
-                size: size,
-                scope: $scope
-            });
-        };
-
-        $scope.cancel = function() {
-            $scope.modalInstance.close();
         };
 
         $scope.createPageFromTemplate = function(page, $event) {

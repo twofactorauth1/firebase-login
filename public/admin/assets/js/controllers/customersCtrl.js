@@ -3,7 +3,7 @@
  * controller for customers
  */
 (function(angular) {
-    app.controller('CustomersCtrl', ["$scope", "toaster", "$modal", "$filter", "CustomerService", function($scope, toaster, $modal, $filter, CustomerService) {
+    app.controller('CustomersCtrl', ["$scope", "toaster", "$filter", "$modal", "CustomerService", "SocialConfigService", "userConstant", function($scope, toaster, $filter, $modal, CustomerService, SocialConfigService, userConstant) {
 
         CustomerService.getCustomers(function(customers) {
             console.log('customers >>> ', customers);
@@ -21,6 +21,21 @@
             modified: function(value) {
                 return value.modified.date;
             }
+        };
+
+        $scope.openModal = function(template) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: template,
+                scope: $scope
+            });
+        };
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
+
+        $scope.preventClick = function(event) {
+            event.stopPropagation();
         };
 
         $scope.column = {
@@ -70,25 +85,134 @@
             return returnVal;
         };
 
-        $scope.preventClick = function(event) {
-            event.stopPropagation();
+        $scope.viewSingle = function(customer) {
+            window.location = '/admin/#/customers/' + customer._id;
         };
 
-        $scope.openCustomerModal = function(size) {
-            $scope.modalInstance = $modal.open({
-                templateUrl: 'new-customer-modal',
-                controller: 'CustomerCtrl',
-                size: size,
-                scope: $scope
+        $scope.customer = {};
+        $scope.customer.tags = {};
+        $scope.customerTags = [{
+            label: "Customer",
+            data: "cu"
+        }, {
+            label: "Colleague",
+            data: "co"
+        }, {
+            label: "Friend",
+            data: "fr"
+        }, {
+            label: "Member",
+            data: "mb"
+        }, {
+            label: "Family",
+            data: "fa"
+        }, {
+            label: "Admin",
+            data: "ad"
+        }, {
+            label: 'Lead',
+            data: 'ld'
+        }, {
+            label: "Other",
+            data: "ot"
+        }];
+
+        $scope.addCustomer = function() {
+            console.log('addCustomer >>> ', $scope.fullName, $scope.customer.tags);
+            var tempTags = [];
+            _.each($scope.customer.tags, function(tag) {
+                tempTags.push(tag.data);
+            });
+            var tempCustomer = {
+                first: $scope.customer.first,
+                middle: $scope.customer.middle,
+                last: $scope.customer.last,
+                tags: tempTags
+            };
+            CustomerService.saveCustomer(tempCustomer, function(returnedCustomer) {
+                $scope.fullName = '';
+                $scope.customer.tags = {};
+                $scope.closeModal();
+                $scope.customers.unshift(returnedCustomer);
+                toaster.pop('success', 'Customer Successfully Added');
             });
         };
 
-        $scope.cancel = function() {
-            $scope.modalInstance.close();
+        $scope.$watch('fullName', function(newValue, oldValue) {
+            if (newValue !== undefined) {
+                var nameSplit = newValue.match(/\S+/g);
+                if (nameSplit) {
+                    if (nameSplit.length >= 3) {
+                        $scope.customer.first = nameSplit[0];
+                        $scope.customer.middle = nameSplit[1];
+                        $scope.customer.last = nameSplit[2];
+                    } else if (nameSplit.length == 2) {
+                        $scope.customer.first = nameSplit[0];
+                        $scope.customer.middle = '';
+                        $scope.customer.last = nameSplit[1];
+                    } else if (nameSplit.length == 1) {
+                        $scope.customer.first = nameSplit[0];
+                        $scope.customer.middle = '';
+                        $scope.customer.last = '';
+                    }
+                } else {
+                    $scope.customer.first = '';
+                    $scope.customer.middle = '';
+                    $scope.customer.last = '';
+                }
+            }
+        }, true);
+
+        SocialConfigService.getAllSocialConfig(function(data) {
+            $scope.socialAccounts = data.socialAccounts;
+        });
+
+        $scope.importFacebookFriends = function() {
+            CustomerService.importFacebookFriends(function(data, success) {
+                if (success) {
+                    $('#import-contacts-modal').modal('hide');
+                    ToasterService.show('success', "Contacts being imported.");
+                } else
+                    $window.location.href = "/socialconfig/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
+            });
         };
 
-        $scope.viewSingle = function(customer) {
-            window.location = '/admin/#/customers/' + customer._id;
+        $scope.importLinkedInConnections = function() {
+            var foundSocialId = false;
+            $scope.socialAccounts.forEach(function(value, index) {
+                if (value.type == userConstant.social_types.LINKEDIN) {
+                    foundSocialId = true;
+                    $scope.closeModal();
+                    toaster.pop('success', "Contacts import initiated.");
+                    SocialConfigService.importLinkedinContact(value.id, function(data) {
+                        $scope.closeModal();
+                        toaster.pop('success', "Contacts import complete.");
+                    });
+                }
+            });
+            if (foundSocialId == false) {
+                $scope.closeModal();
+                toaster.pop('warning', "No linkedin account integrated.");
+            }
+        };
+
+        $scope.importGmailContacts = function() {
+            var foundSocialId = false;
+            $scope.socialAccounts.forEach(function(value, index) {
+                if (value.type == userConstant.social_types.GOOGLE) {
+                    foundSocialId = true;
+                    $scope.closeModal();
+                    toaster.pop('success', "Contacts import initiated.");
+                    SocialConfigService.importGoogleContact(value.id, function(data) {
+                        $scope.closeModal();
+                        toaster.pop('success', "Contacts import complete.");
+                    });
+                }
+            });
+            if (foundSocialId == false) {
+                $scope.closeModal();
+                toaster.pop('warning', "No google account integrated.");
+            }
         };
 
     }]);
