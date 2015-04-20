@@ -3,8 +3,10 @@
  * controller for personal business page
  */
 (function(angular) {
-    app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService) {
+    app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant) {
         console.log('profile business >>> ');
+
+        $scope.hours = hoursConstant;
         //account API call for object population
         //account API call for object population
         UserService.getAccount(function(account) {
@@ -111,6 +113,28 @@
 
             if (!$scope.account.business.addresses.length)
                 $scope.accountAddAddressFn();
-        }
+        };
+
+        $scope.profileSaveFn = function() {
+            console.log('profileSaveFn ', $scope.checkProfileValidity());
+            UserService.putAccount($scope.account, function(account) {
+                $scope.account = account;
+                toaster.pop('success', 'Profile Saved.');
+                $scope.setDefaults();
+            });
+        };
+
+        $scope.checkProfileValidity = function() {
+            var name = $scope.account.business.name;
+            var email = _.filter($scope.account.business.emails, function(mail) {
+                return mail.email !== "";
+            });
+            console.log('name ', name);
+            if (name !== "" && email.length > 0)
+                return true;
+            else
+                return false;
+        };
+
     }]);
 })(angular);

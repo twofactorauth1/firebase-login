@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="social-icons hidden">
+                        <!-- <div class="social-icons">
                             <ul>
                                 <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
                                     <a href="#" target="_blank"> Twitter </a>
@@ -43,7 +43,7 @@
                                 </li>
                             </ul>
                             <hr>
-                        </div>
+                        </div> -->
                     </div>
                     <table class="table table-condensed">
                         <thead>
@@ -55,20 +55,30 @@
                             <tr>
                                 <td>email:</td>
                                 <td>
-                                    <a href>
-                                                    {{user.email}}
-                                                </a></td>
+                                    <div ng-repeat="email in account.business.emails">
+                                        <a href="mailto:{{email.email}}">
+                                            {{email.email}}
+                                        </a>
+                                        <br>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td>phone:</td>
-                                <td>{{user.phone}}</td>
+                                <td>
+                                    <span ng-repeat="phone in account.business.phones">{{phone.number}}<br></span>
+                                </td>
                             </tr>
                             <tr>
-                                <td>address</td>
+                                <td>address:</td>
                                 <td>
-                                    <a href>
-                                                    {{user.skype}}
-                                                </a></td>
+                                    <div ng-repeat="address in account.business.addresses">
+                                        <a href>
+                                            {{address.address}} {{address.address2}} <br> {{address.city}} {{address.state}} {{address.postcode}}
+                                        </a>
+                                        <br>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -95,6 +105,8 @@
                     </div>
                     <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
                         <div class="panel-body">
+                            <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                            <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
                         </div>
                     </div>
                 </div>
@@ -107,6 +119,7 @@
         <div class="col-xs-12">
             <button class="btn btn-info btn-o pull-right" ng-click="profileSaveFn()">Save</button>
         </div>
+        <div class="clearfix"></div>
         <form action="#" role="form" id="form">
             <fieldset>
                 <legend>
@@ -234,61 +247,73 @@
                 </div>
                 </div>
             </fieldset>
-            <fieldset class="hidden">
+            <fieldset>
                 <legend>
-                    Additional Info
+                    Business Hours
                 </legend>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">
-                                Twitter
-                            </label>
-                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="user.twitter">
-                                                <i class="fa fa-twitter"></i> </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Facebook
-                            </label>
-                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="user.facebook">
-                                                <i class="fa fa-facebook"></i> </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Google Plus
-                            </label>
-                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="user.google">
-                                                <i class="fa fa-google-plus"></i> </span>
-                        </div>
+                    <div class="form-group">
+                        <label for="split-hours">Id like to enter two sets of hours for a single day</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
+                        <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ng-change="saveComponent()"></switch>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">
-                                Github
-                            </label>
-                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Github" name="github" ng-model="user.github">
-                                                <i class="fa fa-github"></i> </span>
+                    <div class="form-group row">
+                        <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in account.business.hours">
+                            <div class="col-xs-1">
+                                <label for="val.day">{{val.day}}:</label>
+                            </div>
+                            <div class="col-xs-2">
+                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                </select>
+                            </div>
+                            <div class="col-xs-2">
+                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                </select>
+                            </div>
+                            <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
+                            <div class="col-xs-2">
+                                <select ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                </select>
+                            </div>
+                            <div class="col-xs-2">
+                                <select ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                </select>
+                            </div>
+                            <div class="col-xs-5 margin-left-5">
+                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                    <input type="checkbox" id="hoursClosed" ng-model="val.closed">
+                                    <label for="hoursClosed">
+                                        Closed
+                                    </label>
+                                </div>
+                                <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
+                                    <input type="checkbox" id="hoursSplit" ng-model="val.split">
+                                    <label for="hoursSplit">
+                                        Split
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Linkedin
-                            </label>
-                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="user.linkedin">
-                                                <i class="fa fa-linkedin"></i> </span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Skype
-                            </label>
-                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="user.skype">
-                                                <i class="fa fa-skype"></i> </span>
+                        <div class="col-xs-12" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
+                            <div class="col-xs-1">
+                                <label for="val.day">{{val.day}}:</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                </select>
+                            </div>
+                            <div class="col-xs-3">
+                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                </select>
+                            </div>
+                            <div class="col-xs-5">
+                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                    <input type="checkbox" id="closed-{{$index}}" ng-model="val.closed">
+                                    <label for="closed-{{$index}}">
+                                        Closed
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

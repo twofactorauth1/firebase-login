@@ -55,6 +55,24 @@ var account = $$.m.ModelBase.extend({
                 "addresses" : [],
                 "type" :'',
                 "nonProfit" : false
+                 /**
+                 * The hours a business is open, array
+                 *[
+                 *  "mon-friday: 8-5",
+                 *  "saturday: 9-4",
+                 *  "sunday: "closed"
+                 * ]
+                 */
+
+                splitHours: false,
+
+                hours: [{day: "Mon", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                   {day: "Tue", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                   {day: "Wed", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                   {day: "Thu", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                   {day: "Fri", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                   {day: "Sat", start:"",end:"", start2:"", end2:"", closed:true, split:false},
+                   {day: "Sun", start:"",end:"", start2:"", end2:"", closed:true, split:false}]
             },
 
             "billing" : {
