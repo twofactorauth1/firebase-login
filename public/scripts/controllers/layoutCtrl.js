@@ -24,7 +24,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
 
-        $scope.parentScope = $window.parent;
+        $scope.parentScope = parent.angular.element('#iframe-website').scope();
 
         $scope.sortBlogFn = function(component) {
             return function(blogpost) {
@@ -144,8 +144,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
                 $scope.currentpage = that.pages;
 
-
-
                 if ($route.current.params.custid != null) {
                     $scope.custid = $route.current.params.custid;
                     customerService.getCustomer($scope.custid, function(data) {
@@ -170,10 +168,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         return '';
                     }
                 }
+
                 angular.element(document).ready(function() {
                     setTimeout(function() {
                         $scope.$apply(function() {
                             $scope.isLoaded = true;
+                            $scope.parentScope.iframeLoaded;
+                            $scope.parentScope.afteriframeLoaded();
                             $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
                                 if (newValue !== undefined && newValue.length) {
                                     var tagsArr = [];
@@ -204,10 +205,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 $document.scrollToElementAnimated(element);
                         }
                     }, 500);
-                })
-                var iframe = window.parent.document.getElementById("iframe-website")
+                });
+
+                var iframe = window.document.getElementById("iframe-website")
                 $scope.isAdmin = iframe;
-                iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope($scope.currentpage);
+                if ($scope.parentScope.updateAdminPageScope) {
+                    $scope.parentScope.updateAdminPageScope($scope.currentpage);
+                }
             }
         });
 
@@ -642,20 +646,20 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.setPostImage = function(componentId, blogpost) {
-            window.parent.setPostImage(componentId);
-            blogpost.featured_image = window.parent.postImageUrl;
+            $scope.parentScope.setPostImage(componentId);
+            blogpost.featured_image = $scope.parentScope.postImageUrl;
         };
 
         $scope.setProfileImage = function(componentId, customer) {
-            window.parent.changeProfilePhoto(componentId, customer);
+            $scope.parentScope.changeProfilePhoto(componentId, customer);
         };
 
         $scope.changeBlogImage = function(blogpost) {
-            window.parent.changeBlogImage(blogpost);
+            $scope.parentScope.changeBlogImage(blogpost);
         };
 
         $scope.changeLogoImage = function(componentId) {
-            window.parent.changeLogoImage(componentId);
+            $scope.parentScope.changeLogoImage(componentId);
         };
 
         $scope.saveCustomerAccount = function(customer) {
@@ -666,7 +670,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.deleteTeamMember = function(componentId, index) {
-            window.parent.deleteTeamMember(componentId, index);
+            $scope.parentScope.deleteTeamMember(componentId, index);
         };
 
         $scope.addTeamMember = function(componentId, index) {
@@ -682,11 +686,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     "icon": "linkedin"
                 }]
             }
-            window.parent.addTeamMember(componentId, newTeam, index);
+            $scope.parentScope.addTeamMember(componentId, newTeam, index);
         };
 
         $scope.deleteFeatureList = function(componentId, index) {
-            window.parent.deleteFeatureList(componentId, index);
+            $scope.parentScope.deleteFeatureList(componentId, index);
         };
 
         $scope.addFeatureList = function(componentId, index) {
@@ -694,25 +698,25 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%23ffffff%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
                 "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Another Feature</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
             };
-            window.parent.addNewFeatureList(componentId, index, newFeature);
+            $scope.parentScope.addNewFeatureList(componentId, index, newFeature);
         };
 
-        window.clickImageButton = function(btn) {
+        $scope.clickImageButton = function(btn) {
             $scope.urlInput = angular.element(btn).closest('td').prev('td').find('input');
-            window.parent.clickImageButton();
+            $scope.parentScope.clickImageButton();
         };
 
-        window.clickandInsertImageButton = function(editor) {
+        $scope.clickandInsertImageButton = function(editor) {
             $scope.inlineInput = editor;
-            window.parent.clickImageButton();
+            $scope.parentScope.clickImageButton();
         };
 
         $scope.deletePricingTable = function(componentId, index) {
-            window.parent.deletePricingTable(componentId, index);
+            $scope.parentScope.deletePricingTable(componentId, index);
         };
 
         $scope.deletePricingTableFeature = function(componentId, index, parentIndex) {
-            window.parent.deletePricingTableFeature(componentId, index, parentIndex);
+            $scope.parentScope.deletePricingTableFeature(componentId, index, parentIndex);
         };
 
 
@@ -722,7 +726,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 title: "<h4>This is the feature title</h4>",
                 subtitle: "<b>This is the feature subtitle</b>",
             }
-            window.parent.addPricingTableFeature(componentId, newFeature, index, parentIndex);
+            $scope.parentScope.addPricingTableFeature(componentId, newFeature, index, parentIndex);
         };
 
         $scope.addPricingTable = function(componentId, index) {
@@ -739,11 +743,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 btn: "<a class=\"btn btn-primary\" href=\"#\" data-cke-saved-href=\"#\">Get it now</a>"
             }
 
-            window.parent.addPricingTable(componentId, newTable, index);
+            $scope.parentScope.addPricingTable(componentId, newTable, index);
         };
 
         $scope.deleteTestimonial = function(componentId, index) {
-            window.parent.deleteTestimonial(componentId, index);
+            $scope.parentScope.deleteTestimonial(componentId, index);
 
         };
 
@@ -756,7 +760,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 "site": "Site",
                 "text": "Description"
             }
-            window.parent.addTestimonial(componentId, newTestimonial, index);
+            $scope.parentScope.addTestimonial(componentId, newTestimonial, index);
         };
 
 
@@ -767,7 +771,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
 
-        window.activateAloha = function() {
+        $scope.activateCKEditor = function() {
             //if ($scope.activated == false) {
             for (name in CKEDITOR.instances) {
                 //CKEDITOR.instances[name].destroy()
@@ -814,22 +818,18 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             //}
         };
 
-        window.deactivateAloha = function() {
+        $scope.deactivateCKEditor = function() {
             for (name in CKEDITOR.instances) {
                 CKEDITOR.instances[name].destroy()
             }
         };
 
-        window.checkOrSetPageDirty = function(status) {
+        $scope.checkOrSetPageDirty = function(status) {
             if (status)
                 $scope.isPageDirty = false;
             else
                 return $scope.isPageDirty;
         }
-
-        window.updateWebsite = function(data) {
-            that.account.website = data;
-        };
 
         $scope.createPost = function(postData) {
             PostService.createPost($scope.currentpage._id, postData, function(data) {});
@@ -844,7 +844,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             });
         };
 
-        window.saveBlobData = function(iframe) {
+        $scope.saveBlogData = function(iframe) {
             if (iframe) {
                 var posts = iframe.body.querySelectorAll('.blog-entry');
                 for (var i = 0; i < posts.length; i++) {
@@ -869,7 +869,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             //document.getElementById("iframe-website").setAttribute("src", document.getElementById("iframe-website").getAttribute("src"));
         };
 
-        window.updateWebsite = function(data) {
+        $scope.updateWebsite = function(data) {
             $scope.$apply(function() {
                 if (data)
                     that.website = data;
@@ -877,7 +877,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
 
-        window.updateComponents = function(data) {
+        $scope.updateComponents = function(data) {
             $scope.$apply(function() {
                 var scroll = angular.element(window).scrollTop();
                 $scope.currentpage.components = data;
@@ -915,7 +915,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             });
         };
 
-        window.updateCustomComponent = function(data, networks) {
+        $scope.updateCustomComponent = function(data, networks) {
             var scroll = angular.element(window).scrollTop();
             $scope.dataLoaded = false;
             if (data) {
@@ -923,7 +923,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        activateAloha();
+                        $scope.activateCKEditor();
                         $scope.dataLoaded = true;
                     });
                 });
@@ -966,12 +966,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         };
 
-        window.updateContactComponent = function(data, networks) {
+        $scope.updateContactComponent = function(data, networks) {
             if (data) {
                 $scope.currentpage.components = data;
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        activateAloha();
+                        $scope.activateCKEditor();
                     });
                 });
             } else {
@@ -986,13 +986,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             };
         };
 
-        window.addCKEditorImageInput = function(url) {
+        $scope.addCKEditorImageInput = function(url) {
             if ($scope.urlInput) {
                 $scope.urlInput.val(url);
             }
         };
 
-        window.addCKEditorImage = function(url) {
+        $scope.addCKEditorImage = function(url) {
             if ($scope.inlineInput) {
                 $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
             } else if ($scope.urlInput) {
@@ -1000,24 +1000,24 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         };
 
-        window.triggerEditMode = function() {
+        $scope.triggerEditMode = function() {
             var body = document.getElementsByTagName('body')[0];
             var hasClass = body.classList.contains('editing');
             if (hasClass === false) {
                 body.className += ' editing';
             }
             window.oldScope.isEditing = true;
-            window.oldScope.$digest();
+            // window.oldScope.$digest();
         };
 
-        window.triggerEditModeOff = function() {
+        $scope.triggerEditModeOff = function() {
             var body = document.getElementsByTagName('body')[0];
             body.className = body.className.replace(/(?:^|\s)editing(?!\S)/, '');
             window.oldScope.isEditing = false;
             window.oldScope.$digest();
         };
 
-        window.triggerFontUpdate = function(font) {
+        $scope.triggerFontUpdate = function(font) {
             WebFont.load({
                 google: {
                     families: [font, 'undefined']
@@ -1041,7 +1041,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             parentElement: "body",
             dragStart: function(e, ui) {
                 var componentId = e.source.itemScope.modelValue._id;
-                e.source.itemScope.modelValue = window.parent.updateComponent(componentId);
+                e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
                 e.source.itemScope.element.addClass(" dragging");
                 clearTimeout($scope.wait);
             },
@@ -1051,7 +1051,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             dragEnd: function(e, ui) {
                 e.dest.sortableScope.element.removeClass("dragging");
                 $scope.wait = setTimeout(function() {
-                    activateAloha();
+                    $scope.activateCKEditor();
                     angular.element(".ui-sortable").removeClass("active");
                 }, 1500);
             }
@@ -1148,7 +1148,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         };
 
-        window.mobilecheck = function() {
+        $scope.mobilecheck = function() {
             var check = false;
             (function(a, b) {
                 if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true
@@ -1156,7 +1156,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             return check;
         };
 
-        window.isAdmin = function() {
+        $scope.isAdmin = function() {
             return $scope.isAdmin;
         };
 
@@ -1695,19 +1695,18 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             parent.angular.element('body').trigger('add_image');
         };
         $scope.DeleteImageFromGallery = function(componentId, index) {
-            window.parent.deleteImageFromGallery(componentId, index);
+            $scope.parentScope.deleteImageFromGallery(componentId, index);
         };
         $scope.AddImageToGallery = function(componentId, index) {
-            window.parent.addImageToGallery(componentId, index);
+            $scope.parentScope.addImageToGallery(componentId, index);
         };
         $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
             var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
-            window.parent.deleteImageFromThumbnail(componentId, imageIndex);
+            $scope.parentScope.deleteImageFromThumbnail(componentId, imageIndex);
         };
         $scope.addImageToThumbnail = function(componentId) {
-            window.parent.addImageToThumbnail(componentId);
+            $scope.parentScope.addImageToThumbnail(componentId);
         };
-
 
         $scope.feature_inserted = false;
         $scope.team_inserted = false;

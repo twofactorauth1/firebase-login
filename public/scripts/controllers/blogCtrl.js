@@ -11,11 +11,26 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
         $scope.testing = 'hello';
 
+        /*
+         * @back
+         * -
+         */
+
         $scope.$back = function() {
             window.history.back();
         };
 
+        /*
+         * @parentScope
+         * - access to the parent scope
+         */
+
         $scope.parentScope = parent.angular.element('#iframe-website').scope();
+
+        /*
+         * @pagesService
+         * -
+         */
 
         pagesService(function(err, data) {
             if (err) {
@@ -47,6 +62,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         });
 
+        /*
+         * @accountService
+         * -
+         */
+
         accountService(function(err, data) {
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -59,6 +79,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         });
 
+        /*
+         * @websiteService
+         * -
+         */
+
         websiteService(function(err, data) {
             if (err) {
                 console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
@@ -66,6 +91,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 that.website = data;
             }
         });
+
+        /*
+         * @postsService
+         * -
+         */
 
         postsService(function(err, data) {
             if (err) {
@@ -171,24 +201,42 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         });
 
-        window.copyPostMode = function() {
-            console.log(that.post);
+        /*
+         * @copyPostMode
+         * -
+         */
+
+        $scope.copyPostMode = function() {
             that.tempPost = angular.copy(that.post);
         };
 
-        window.getPostData = function() {
-            return that.post;
-        }
+        /*
+         * @getPostData
+         * -
+         */
 
-        window.deletePost = function(post_data, toaster) {
+        $scope.getPostData = function() {
+            return that.post;
+        };
+
+        /*
+         * @deletePost
+         * -
+         */
+
+        $scope.deletePost = function(post_data, toaster) {
             var pageId = post_data.pageId;
             PostService.deletePost(pageId, post_data._id, function(data) {
                 window.parent.window.showToaster(false, true, msg, "Post deleted successfully", true);
             });
         };
 
+        /*
+         * @savePostMode
+         * -
+         */
 
-        window.savePostMode = function(toaster, msg) {
+        $scope.savePostMode = function(toaster, msg) {
 
             var post_data = angular.copy(that.post);
             post_data.post_tags.forEach(function(v, i) {
@@ -222,109 +270,150 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
             var pageId = $scope.$parent.currentpage ? $scope.$parent.currentpage._id : post_data.pageId
             PostService.updatePost(pageId, post_data._id, post_data, function(data) {
-                console.log(data);
-                console.log(msg);
                 window.parent.window.showToaster(false, true, msg);
             });
         };
-        window.refreshPost = function() {
+
+        /*
+         * @refreshPost
+         * -
+         */
+
+        $scope.refreshPost = function() {
             if (!that.tempPost)
                 that.tempPost = angular.copy(that.post);
 
             $scope.$apply(function() {
                 $scope.initializePostData();
                 setTimeout(function() {
-                    activateAloha();
+                    activateCKEditor();
                 }, 500)
             })
         }
 
+        /*
+         * @initializePostData
+         * -
+         */
+
+        //TODO: sync with scope values instead of retrieving through angular.element
+
         $scope.initializePostData = function(revert) {
             var post_content = angular.copy(that.post.post_content);
-            var post_content_container = $('.post_content_div');
+            var post_content_container = angular.element('.post_content_div');
             if (post_content_container.length > 0)
                 that.post.post_content = post_content_container.html();
 
-            var post_title_container = $('.blog_post_title');
+            var post_title_container = angular.element('.blog_post_title');
             if (post_title_container.length > 0)
                 that.post.post_title = post_title_container.text();
 
-            var post_author_container = $('.blog_post_author');
+            var post_author_container = angular.element('.blog_post_author');
             if (post_author_container.length > 0)
                 that.post.post_author = post_author_container.text();
 
-            var post_category_container = $('.blog_post_category');
+            var post_category_container = angular.element('.blog_post_category');
             if (post_category_container.length > 0)
                 that.post.post_category = post_category_container.text();
 
             if (revert) {
-                var post_excerpt_container = $('.post_excerpt_div');
+                var post_excerpt_container = angular.element('.post_excerpt_div');
                 if (post_excerpt_container.length > 0)
                     post_excerpt_container.text(that.post.post_excerpt);
             } else {
-                var post_excerpt_container = $('.post_excerpt_div');
+                var post_excerpt_container = angular.element('.post_excerpt_div');
                 if (post_excerpt_container.length > 0)
                     that.post.post_excerpt = post_excerpt_container.text();
                 $scope.autoCreateExcerpt(post_excerpt_container, post_content_container, post_content);
             }
-        }
+        };
+
+        /*
+         * @autoCreateExcerpt
+         * -
+         */
 
         $scope.autoCreateExcerpt = function(post_excerpt_container, post_content_container, post_content) {
             if (post_excerpt_container.length > 0 && post_content_container.length > 0 && post_content !== that.post.post_content && jQuery.trim(post_content_container.text())) {
                 post_excerpt_container.text(jQuery.trim(post_content_container.text()).substring(0, 300) + "...");
             }
-        }
+        };
+
+        /*
+         * @revertComponent
+         * -
+         */
 
         $scope.revertComponent = function() {
             that.post.post_excerpt = that.tempPost.post_excerpt;
             that.post.featured_image = that.tempPost.featured_image;
             $scope.initializePostData(true);
 
-        }
-        $scope.changeBlogImage = function(blogpost) {
-            window.parent.changeBlogImage(blogpost);
-        }
+        };
 
-        window.setBlogImage = function(url) {
+        /*
+         * @changeBlogImage
+         * -
+         */
+
+        $scope.changeBlogImage = function(blogpost) {
+            $scope.parentScope.changeBlogImage(blogpost);
+        };
+
+        /*
+         * @setBlogImage
+         * -
+         */
+
+        $scope.setBlogImage = function(url) {
             $scope.$apply(function() {
                 that.post.featured_image = url;
             })
-        }
-
-        window.updatePostMode = function() {
-            console.log('post cancel');
-            console.log(that.post);
-            console.log(that.tempPost);
-            that.post = that.tempPost;
-            $scope.$$phase || $scope.$digest();
-
         };
 
-        $scope..triggerEditMode = function() {
-            console.log('edit mode engaged');
+        /*
+         * @updatePostMode
+         * -
+         */
+
+         //TODO: could not find where this function is used
+        $scope.updatePostMode = function() {
+            that.post = that.tempPost;
+            $scope.$$phase || $scope.$digest();
+        };
+
+        /*
+         * @triggerEditMode
+         * -
+         */
+
+        $scope.triggerEditMode = function() {
             var body = document.getElementsByTagName('body')[0];
             var hasClass = body.classList.contains('editing');
             if (hasClass === false) {
                 body.className += ' editing';
             };
-
-            // var toolbar = body.querySelectorAll('.btn-toolbar')[0];
-            // if (toolbar.classList.contains('editing') === false) {
-            //     toolbar.className += ' editing';
-            // }
             $scope.isEditing = true;
-
             $scope.$digest();
         };
 
+        /*
+         * @toTitleCase
+         * -
+         */
 
-        function toTitleCase(str) {
+        $scope.toTitleCase = function(str) {
             return str.replace(/\w\S*/g, function(txt) {
                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             });
-        }
+        };
 
-        window.activateAloha = function() {
+        /*
+         * @activateCKEditor
+         * -
+         */
+
+        $scope.activateCKEditor = function() {
             //if ($scope.activated == false) {
             $scope.isEditing = true;
             for (name in CKEDITOR.instances) {
@@ -333,14 +422,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 CKEDITOR.remove(CKEDITOR.instances[name]);
             }
             CKEDITOR.disableAutoInline = true;
-            var elements = $('.editable');
+            var elements = angular.element('.editable');
             elements.each(function() {
-                if (!$(this).parent().hasClass('edit-wrap')) {
-                    var dataClass = $(this).data('class').replace('.item.', ' ');
-                    $(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+                if (!angular.element(this).parent().hasClass('edit-wrap')) {
+                    var dataClass = angular.element(this).data('class').replace('.item.', ' ');
+                    angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + $scope.toTitleCase(dataClass) + '</span>');
                 }
-                // $scope.activated = true;
-                //if(!$(this).hasClass('cke_editable')) {
                 CKEDITOR.inline(this, {
                     on: {
                         instanceReady: function(ev) {
@@ -355,64 +442,92 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         top: 'editor-toolbar'
                     }
                 });
-                //}
             });
-
-            //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-            //}
         };
 
-        window.deactivateAloha = function() {
+        /*
+         * @deactivateCKEditor
+         * -
+         */
+
+        $scope.deactivateCKEditor = function() {
             for (name in CKEDITOR.instances) {
                 CKEDITOR.instances[name].destroy()
             }
-            // $('.editable').mahalo();
-            // if (aloha.editor && aloha.editor.selection) {
-            // aloha.dom.setStyle(aloha.editor.selection.caret, 'display', 'none');
-            // $('.aloha-caret.aloha-ephemera', document).css('visibility', 'collapse');
-            // }
-            // aloha.dom.query('.editable', document).forEach(aloha.mahalo);
         };
 
-        window.checkOrSetPageDirty = function(status) {
+        /*
+         * @checkOrSetPageDirty
+         * -
+         */
+
+        $scope.checkOrSetPageDirty = function(status) {
             if (status)
                 $scope.isPageDirty = false;
             else
                 return $scope.isPageDirty;
-        }
+        };
 
-        window.addCKEditorImageInput = function(url) {
+        /*
+         * @addCKEditorImageInput
+         * -
+         */
+
+         //TODO: could not find where this function is being used
+        $scope.addCKEditorImageInput = function(url) {
             console.log('addCKEditorImageInput ', url);
             if ($scope.urlInput) {
                 $scope.urlInput.val(url);
             }
         };
 
-        window.addCKEditorImage = function(url) {
-            console.log('addCKEditorImage ', url);
-            console.log('$scope.inlineInput ', $scope.inlineInput);
+        /*
+         * @addCKEditorImage
+         * -
+         */
+
+        $scope.addCKEditorImage = function(url) {
             if ($scope.inlineInput) {
-                console.log('inserting html');
                 $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
             } else if ($scope.urlInput) {
                 $scope.urlInput.val(url);
             }
         };
 
-        window.clickImageButton = function(btn) {
-            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
-            window.parent.clickImageButton();
-        }
+        /*
+         * @clickImageButton
+         * -
+         */
 
-        window.clickandInsertImageButton = function(editor) {
+        $scope.clickImageButton = function(btn) {
+            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
+            $scope.parentScope.clickImageButton();
+        };
+
+        /*
+         * @clickandInsertImageButton
+         * -
+         */
+
+        $scope.clickandInsertImageButton = function(editor) {
             $scope.inlineInput = editor;
-            window.parent.clickImageButton();
-        }
+            $parentScope.clickImageButton();
+        };
+
+        /*
+         * @setPostImage
+         * -
+         */
 
         $scope.setPostImage = function(componentId, blogpost) {
-            window.parent.setPostImage(componentId);
-            blogpost.featured_image = window.parent.postImageUrl;
-        }
+            $scope.parentScope.setPostImage(componentId);
+            blogpost.featured_image = $scope.parentScope.postImageUrl;
+        };
+
+        /*
+         * @sharePost
+         * -
+         */
 
         $scope.sharePost = function(post, type) {
             var url = $location.$$absUrl;
