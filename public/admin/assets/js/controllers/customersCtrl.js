@@ -91,16 +91,77 @@
 
         $scope.customer = {};
         $scope.customer.tags = {};
-        $scope.customerTags = [
-           {label: "Customer", data: "cu"},
-           {label: "Colleague", data: "co"},
-           {label: "Friend", data: "fr"},
-           {label: "Member", data: "mb"},
-           {label: "Family", data: "fa"},
-           {label: "Admin", data: "ad"},
-           {label: 'Lead', data: 'ld'},
-           {label: "Other", data: "ot"}
-        ];
+        $scope.customerTags = [{
+            label: "Customer",
+            data: "cu"
+        }, {
+            label: "Colleague",
+            data: "co"
+        }, {
+            label: "Friend",
+            data: "fr"
+        }, {
+            label: "Member",
+            data: "mb"
+        }, {
+            label: "Family",
+            data: "fa"
+        }, {
+            label: "Admin",
+            data: "ad"
+        }, {
+            label: 'Lead',
+            data: 'ld'
+        }, {
+            label: "Other",
+            data: "ot"
+        }];
+
+        $scope.addCustomer = function() {
+            console.log('addCustomer >>> ', $scope.fullName, $scope.customer.tags);
+            var tempTags = [];
+            _.each($scope.customer.tags, function(tag) {
+                tempTags.push(tag.data);
+            });
+            var tempCustomer = {
+                first: $scope.customer.first,
+                middle: $scope.customer.middle,
+                last: $scope.customer.last,
+                tags: tempTags
+            };
+            CustomerService.saveCustomer(tempCustomer, function(returnedCustomer) {
+                $scope.fullName = '';
+                $scope.customer.tags = {};
+                $scope.closeModal();
+                $scope.customers.unshift(returnedCustomer);
+                toaster.pop('success', 'Customer Successfully Added');
+            });
+        };
+
+        $scope.$watch('fullName', function(newValue, oldValue) {
+            if (newValue !== undefined) {
+                var nameSplit = newValue.match(/\S+/g);
+                if (nameSplit) {
+                    if (nameSplit.length >= 3) {
+                        $scope.customer.first = nameSplit[0];
+                        $scope.customer.middle = nameSplit[1];
+                        $scope.customer.last = nameSplit[2];
+                    } else if (nameSplit.length == 2) {
+                        $scope.customer.first = nameSplit[0];
+                        $scope.customer.middle = '';
+                        $scope.customer.last = nameSplit[1];
+                    } else if (nameSplit.length == 1) {
+                        $scope.customer.first = nameSplit[0];
+                        $scope.customer.middle = '';
+                        $scope.customer.last = '';
+                    }
+                } else {
+                    $scope.customer.first = '';
+                    $scope.customer.middle = '';
+                    $scope.customer.last = '';
+                }
+            }
+        }, true);
 
     }]);
 })(angular);

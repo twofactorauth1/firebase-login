@@ -8,8 +8,22 @@
     </div>
     <div class="modal-body customer-modal bg-white">
         <div class="form-group">
-            <label>Name:</label>
-            <input class="form-control" type="text" ng-model="newCustomer.name">
+            <label class="">Contact Name</label>
+            <input id="input-fullname" class="form-control" ng-model="$parent.fullName" placeholder="full name" type="text">
+            <small class="help-block">
+                <strong>first:</strong>
+                <code>
+                    <span id="hint-first">{{customer.first}}</span>
+                </code>
+                <strong>middle:</strong>
+                <code>
+                    <span id="hint-middle">{{customer.middle}}</span>
+                </code>
+                <strong>last:</strong>
+                <code>
+                    <span id="hint-last">{{customer.last}}</span>
+                </code>
+            </small>
         </div>
         <div class="form-group">
             <label>
@@ -27,6 +41,6 @@
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="">Add Customer</button>
+        <button class="btn btn-primary" ng-disabled="!customer.first || !customer.tags.length > 0" ng-click="addCustomer()">Add Customer</button>
     </div>
 </script>
