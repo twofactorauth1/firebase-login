@@ -53,8 +53,7 @@
                     method: "POST",
                     data: angular.toJson(product)
                 })
-                .success(function(data, status, headers, config) {
-                    ToasterService.show('success', 'Product Saved.');
+                .success(function(data, status, headers, config) {                    
                     fn(data);
                 });
         };

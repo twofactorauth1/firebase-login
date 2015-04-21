@@ -3,7 +3,7 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$stateParams", "ProductService", function($scope, $modal, $stateParams, ProductService) {
+    app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$stateParams", "ProductService", "toaster", function($scope, $modal, $stateParams, ProductService, toaster) {
 
         ProductService.getProduct($stateParams.productId, function(product) {
             $scope.product = product;
@@ -40,6 +40,28 @@
             window.location = '/admin/#/app/commerce/products/'+product._id;
         };
 
+        $scope.insertMedia = function(asset) {
+            $scope.product.icon = asset.url;
+        };
+
+        $scope.saveProductFn = function() {
+            
+            var variants = [];
+            $scope.product.variantSettings.variants.forEach(function(value, index) {
+                if (value.create == true) {
+                    variants.push(value);
+                }
+            });
+            $scope.product.variantSettings.variants = variants;
+
+            console.log('$scope.product >>> ', $scope.product);
+                ProductService.saveProduct($scope.product, function(product) {
+                    $scope.originalProduct = angular.copy(product);
+                    console.log('Save Product >>> ', product);
+                    toaster.pop('success', 'Product Saved.');
+                });
+            };
+
         angular.element('#convert').iconpicker({
             iconset: 'fontawesome',
             icon: 'fa-credit-card',
@@ -47,6 +69,6 @@
             cols: 5,
             placement: 'right'
         });
-
+        
     }]);
 })(angular);
