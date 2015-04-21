@@ -1,39 +1,60 @@
 'use strict';
 /** 
-  * controllers used for the dashboard
-*/
-app.controller('SparklineCtrl', ["$scope", function ($scope) {
+ * controllers used for the dashboard
+ */
+app.controller('DashboardCtrl', ["$scope", "OrderService", function($scope, OrderService) {
+    OrderService.getOrders(function(orders) {
+        console.log('orders ', orders);
+        _.each(getDaysThisMonth, function(day) {
+            var matchingOrder = _.find(orders, function(order){
+                return new Date(order.created.date).getDate() == formattedDate = new Date(day).getDate();
+            });
+            if (matchingOrder) {
+              console.log('matching ', day, matchingOrder);
+            }
+        });
+    });
     $scope.sales = [600, 923, 482, 1211, 490, 1125, 1487];
     $scope.earnings = [400, 650, 886, 443, 502, 412, 353];
-    $scope.referrals = [4879, 6567, 5022, 5890, 9234, 7128, 4811];
+    $scope.orders = [];
+
+    $scope.getDaysThisMonth = function() {
+        var newDate = new Date();
+        var numOfDays = newDate.getDate();
+        var days = [];
+
+        for (var i = 0; i <= numOfDays; i++) {
+            days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
+        }
+
+        return days;
+    };
+
 }]);
 
-app.controller('VisitsCtrl', ["$scope", function ($scope) {
+app.controller('VisitsCtrl', ["$scope", function($scope) {
 
     $scope.data = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [
-          {
-              label: 'My First dataset',
-              fillColor: 'rgba(220,220,220,0.2)',
-              strokeColor: 'rgba(220,220,220,1)',
-              pointColor: 'rgba(220,220,220,1)',
-              pointStrokeColor: '#fff',
-              pointHighlightFill: '#fff',
-              pointHighlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 80, 81, 56, 55, 40, 84, 64, 120, 132, 87]
-          },
-          {
-              label: 'My Second dataset',
-              fillColor: 'rgba(151,187,205,0.2)',
-              strokeColor: 'rgba(151,187,205,1)',
-              pointColor: 'rgba(151,187,205,1)',
-              pointStrokeColor: '#fff',
-              pointHighlightFill: '#fff',
-              pointHighlightStroke: 'rgba(151,187,205,1)',
-              data: [28, 48, 40, 19, 86, 27, 90, 102, 123, 145, 60, 161]
-          }
-        ]
+        datasets: [{
+            label: 'My First dataset',
+            fillColor: 'rgba(220,220,220,0.2)',
+            strokeColor: 'rgba(220,220,220,1)',
+            pointColor: 'rgba(220,220,220,1)',
+            pointStrokeColor: '#fff',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data: [65, 59, 80, 81, 56, 55, 40, 84, 64, 120, 132, 87]
+        }, {
+            label: 'My Second dataset',
+            fillColor: 'rgba(151,187,205,0.2)',
+            strokeColor: 'rgba(151,187,205,1)',
+            pointColor: 'rgba(151,187,205,1)',
+            pointStrokeColor: '#fff',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(151,187,205,1)',
+            data: [28, 48, 40, 19, 86, 27, 90, 102, 123, 145, 60, 161]
+        }]
     };
 
     $scope.options = {
@@ -80,39 +101,36 @@ app.controller('VisitsCtrl', ["$scope", function ($scope) {
         datasetFill: true,
 
         // Function - on animation progress
-        onAnimationProgress: function () { },
+        onAnimationProgress: function() {},
 
         // Function - on animation complete
-        onAnimationComplete: function () { },
+        onAnimationComplete: function() {},
 
         //String - A legend template
         legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
 }]);
-app.controller('SalesCtrl', ["$scope", function ($scope) {
+app.controller('SalesCtrl', ["$scope", function($scope) {
 
     // Chart.js Data
     $scope.data = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-              label: 'My First dataset',
-              fillColor: 'rgba(220,220,220,0.5)',
-              strokeColor: 'rgba(220,220,220,0.8)',
-              highlightFill: 'rgba(220,220,220,0.75)',
-              highlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-              label: 'My Second dataset',
-              fillColor: 'rgba(151,187,205,0.5)',
-              strokeColor: 'rgba(151,187,205,0.8)',
-              highlightFill: 'rgba(151,187,205,0.75)',
-              highlightStroke: 'rgba(151,187,205,1)',
-              data: [28, 48, 40, 19, 86, 27, 90]
-          }
-        ]
+        datasets: [{
+            label: 'My First dataset',
+            fillColor: 'rgba(220,220,220,0.5)',
+            strokeColor: 'rgba(220,220,220,0.8)',
+            highlightFill: 'rgba(220,220,220,0.75)',
+            highlightStroke: 'rgba(220,220,220,1)',
+            data: [65, 59, 80, 81, 56, 55, 40]
+        }, {
+            label: 'My Second dataset',
+            fillColor: 'rgba(151,187,205,0.5)',
+            strokeColor: 'rgba(151,187,205,0.8)',
+            highlightFill: 'rgba(151,187,205,0.75)',
+            highlightStroke: 'rgba(151,187,205,1)',
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }]
     };
 
     // Chart.js Options
@@ -151,29 +169,25 @@ app.controller('SalesCtrl', ["$scope", function ($scope) {
     };
 
 }]);
-app.controller('OnotherCtrl', ["$scope", function ($scope) {
+app.controller('OnotherCtrl', ["$scope", function($scope) {
 
     // Chart.js Data
-    $scope.data = [
-      {
-          value: 300,
-          color: '#F7464A',
-          highlight: '#FF5A5E',
-          label: 'Red'
-      },
-      {
-          value: 50,
-          color: '#46BFBD',
-          highlight: '#5AD3D1',
-          label: 'Green'
-      },
-      {
-          value: 100,
-          color: '#FDB45C',
-          highlight: '#FFC870',
-          label: 'Yellow'
-      }
-    ];
+    $scope.data = [{
+        value: 300,
+        color: '#F7464A',
+        highlight: '#FF5A5E',
+        label: 'Red'
+    }, {
+        value: 50,
+        color: '#46BFBD',
+        highlight: '#5AD3D1',
+        label: 'Green'
+    }, {
+        value: 100,
+        color: '#FDB45C',
+        highlight: '#FFC870',
+        label: 'Yellow'
+    }];
     $scope.total = 450;
     // Chart.js Options
     $scope.options = {
@@ -211,33 +225,30 @@ app.controller('OnotherCtrl', ["$scope", function ($scope) {
     };
 
 }]);
-app.controller('LastCtrl', ["$scope", function ($scope) {
+app.controller('LastCtrl', ["$scope", function($scope) {
 
     // Chart.js Data
     $scope.data = {
         labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
-        datasets: [
-          {
-              label: 'My First dataset',
-              fillColor: 'rgba(220,220,220,0.2)',
-              strokeColor: 'rgba(220,220,220,1)',
-              pointColor: 'rgba(220,220,220,1)',
-              pointStrokeColor: '#fff',
-              pointHighlightFill: '#fff',
-              pointHighlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 90, 81, 56, 55, 40]
-          },
-          {
-              label: 'My Second dataset',
-              fillColor: 'rgba(151,187,205,0.2)',
-              strokeColor: 'rgba(151,187,205,1)',
-              pointColor: 'rgba(151,187,205,1)',
-              pointStrokeColor: '#fff',
-              pointHighlightFill: '#fff',
-              pointHighlightStroke: 'rgba(151,187,205,1)',
-              data: [28, 48, 40, 19, 96, 27, 100]
-          }
-        ]
+        datasets: [{
+            label: 'My First dataset',
+            fillColor: 'rgba(220,220,220,0.2)',
+            strokeColor: 'rgba(220,220,220,1)',
+            pointColor: 'rgba(220,220,220,1)',
+            pointStrokeColor: '#fff',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(220,220,220,1)',
+            data: [65, 59, 90, 81, 56, 55, 40]
+        }, {
+            label: 'My Second dataset',
+            fillColor: 'rgba(151,187,205,0.2)',
+            strokeColor: 'rgba(151,187,205,1)',
+            pointColor: 'rgba(151,187,205,1)',
+            pointStrokeColor: '#fff',
+            pointHighlightFill: '#fff',
+            pointHighlightStroke: 'rgba(151,187,205,1)',
+            data: [28, 48, 40, 19, 96, 27, 100]
+        }]
     };
 
     // Chart.js Options

@@ -1,229 +1,226 @@
-<!-- start: DASHBOARD TITLE -->
-<section id="page-title" class="padding-top-15 padding-bottom-15">
-	<div class="row">
-		<div class="col-sm-7">
-			<h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">{{ mainTitle }}</h1>
-			<span class="mainDescription">overview &amp; stats </span>
-		</div>
-		<div class="col-sm-5">
-		</div>
-	</div>
-</section>
-<!-- end: DASHBOARD TITLE -->
-<!-- start: FEATURED BOX LINKS -->
-<div class="container-fluid container-fullw bg-white">
-	<div class="row">
-		<div class="col-sm-4">
-			<div class="panel panel-white no-radius text-center">
-				<div class="panel-body">
-					<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
-					<h2 class="StepTitle">Manage Customers</h2>
-					<p class="text-small">
-						To add customers, import them or create them manually.
-					</p>
-					<p class="links cl-effect-1">
-						<a ui-sref="app.customers">
+<div ng-controller="DashboardCtrl">
+    <!-- start: DASHBOARD TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-7">
+                <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">{{ mainTitle }}</h1>
+                <span class="mainDescription">overview &amp; stats </span>
+            </div>
+            <div class="col-sm-5">
+            </div>
+        </div>
+    </section>
+    <!-- end: DASHBOARD TITLE -->
+    <!-- start: FEATURED BOX LINKS -->
+    <div class="container-fluid container-fullw bg-white">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-white no-radius text-center margin-bottom-0">
+                    <div class="panel-body">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
+                        <h2 class="StepTitle">Manage Customers</h2>
+                        <p class="text-small">
+                            To add customers, import them or create them manually.
+                        </p>
+                        <p class="links cl-effect-1">
+                            <a ui-sref="app.customers">
 							view
 						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="panel panel-white no-radius text-center">
-				<div class="panel-body">
-					<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i> </span>
-					<h2 class="StepTitle">Manage Social Feed</h2>
-					<p class="text-small">
-						Manage Social Feed from various networks.
-					</p>
-					<p class="cl-effect-1">
-						<a ui-sref="app.marketing.socialfeed">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-white no-radius text-center margin-bottom-0">
+                    <div class="panel-body">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i> </span>
+                        <h2 class="StepTitle">Manage Social Feed</h2>
+                        <p class="text-small">
+                            Manage Social Feed from various networks.
+                        </p>
+                        <p class="cl-effect-1">
+                            <a ui-sref="app.marketing.socialfeed">
 							view
 						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="panel panel-white no-radius text-center">
-				<div class="panel-body">
-					<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-cube fa-stack-1x fa-inverse"></i> </span>
-					<h2 class="StepTitle">Manage Orders</h2>
-					<p class="text-small">
-						Manage your orders for products sold.
-					</p>
-					<p class="links cl-effect-1">
-						<a ui-sref="app.commerce.orders">
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-white no-radius text-center margin-bottom-0">
+                    <div class="panel-body">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-cube fa-stack-1x fa-inverse"></i> </span>
+                        <h2 class="StepTitle">Manage Orders</h2>
+                        <p class="text-small">
+                            Manage your orders for products sold.
+                        </p>
+                        <p class="links cl-effect-1">
+                            <a ui-sref="app.commerce.orders">
 							view
 						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="container-fluid container-fullw">
-	<div class="row">
-		<div class="col-xs-12 col-sm-6">
-			<div class="row">
-				<!-- /// controller:  'SparklineCtrl' -  localtion: assets/js/controllers/dashboardCtrl.js /// -->
-				<div ng-controller="SparklineCtrl">
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-success margin-top-10">253 Products</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="sales" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-danger margin-top-10">253 Orders</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="referrals" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-success margin-top-10">253 Pages</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="sales" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-danger margin-top-10">253 Posts</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="referrals" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6">
-			<div class="panel panel-white no-radius">
-				<div class="panel-heading border-bottom">
-					<h4 class="panel-title">Activities</h4>
-				</div>
-				<div class="panel-body">
-					<ul class="timeline-xs margin-top-15 margin-bottom-15">
-						<li class="timeline-item success">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									2 minutes ago
-								</div>
-								<p>
-									<a class="text-info" href>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid container-fullw">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="row">
+                    <div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius">
+                                <div class="panel-body padding-20 text-center">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Today</h5>
+                                        <h2 class="no-margin"><small>$</small>1,450</h2>
+                                        <span class="badge badge-success margin-top-10">253 Products</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="sales" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius">
+                                <div class="panel-body padding-20 text-center">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Today</h5>
+                                        <h2 class="no-margin"><small>$</small>1,450</h2>
+                                        <span class="badge badge-danger margin-top-10">253 Orders</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="referrals" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius">
+                                <div class="panel-body padding-20 text-center">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Today</h5>
+                                        <h2 class="no-margin"><small>$</small>1,450</h2>
+                                        <span class="badge badge-success margin-top-10">253 Pages</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="sales" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius">
+                                <div class="panel-body padding-20 text-center">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Today</h5>
+                                        <h2 class="no-margin"><small>$</small>1,450</h2>
+                                        <span class="badge badge-danger margin-top-10">253 Posts</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="referrals" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="panel panel-white no-radius">
+                    <div class="panel-heading border-bottom">
+                        <h4 class="panel-title">Activities</h4>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="timeline-xs margin-top-15 margin-bottom-15">
+                            <li class="timeline-item success">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        2 minutes ago
+                                    </div>
+                                    <p>
+                                        <a class="text-info" href>
 										Steven
-									</a>
-									has completed his account.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									12:30
-								</div>
-								<p>
-									Staff Meeting
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item danger">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									11:11
-								</div>
-								<p>
-									Completed new layout.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item info">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Thu, 12 Jun
-								</div>
-								<p>
-									Contacted
-									<a class="text-info" href>
+									</a> has completed his account.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        12:30
+                                    </div>
+                                    <p>
+                                        Staff Meeting
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="timeline-item danger">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        11:11
+                                    </div>
+                                    <p>
+                                        Completed new layout.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="timeline-item info">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        Thu, 12 Jun
+                                    </div>
+                                    <p>
+                                        Contacted
+                                        <a class="text-info" href>
 										Microsoft
-									</a>
-									for license upgrades.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Tue, 10 Jun
-								</div>
-								<p>
-									Started development new site
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Sun, 11 Apr
-								</div>
-								<p>
-									Lunch with
-									<a class="text-info" href>
+									</a> for license upgrades.
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        Tue, 10 Jun
+                                    </div>
+                                    <p>
+                                        Started development new site
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        Sun, 11 Apr
+                                    </div>
+                                    <p>
+                                        Lunch with
+                                        <a class="text-info" href>
 										Nicole
-									</a>
-									.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item warning">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Wed, 25 Mar
-								</div>
-								<p>
-									server Maintenance.
-								</p>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
+									</a> .
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="timeline-item warning">
+                                <div class="margin-left-15">
+                                    <div class="text-muted text-small">
+                                        Wed, 25 Mar
+                                    </div>
+                                    <p>
+                                        server Maintenance.
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
