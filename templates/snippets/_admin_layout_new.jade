@@ -42,6 +42,8 @@ html(lang='en', data-ng-app='clipApp')
     link(rel='stylesheet', href='/js/libs/ngOnboarding/dist/ng-onboarding.css')
     // Social Links
     link(rel='stylesheet', href='/js/libs/bootstrap-social/bootstrap-social.css')
+    // IconPicker
+    link(rel='stylesheet', href='/js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
     // jQuery
