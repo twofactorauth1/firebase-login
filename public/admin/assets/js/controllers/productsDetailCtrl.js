@@ -7,6 +7,8 @@
 
         ProductService.getProduct($stateParams.productId, function(product) {
             $scope.product = product;
+            if (angular.isDefined($scope.product.icon) && !$scope.product.is_image)
+                    $('#convert').iconpicker('setIcon', $scope.product.icon);
         });
 
         $scope.openProductModal = function(size) {
