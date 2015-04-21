@@ -66,7 +66,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Pages'
         },
-        resolve: loadSequence('pagesCtrl', 'userService')
+        resolve: loadSequence('pagesCtrl', 'userService', 'ui.select')
     }).state('app.website.posts', {
         url: '/posts',
         templateUrl: "assets/views/posts.html",

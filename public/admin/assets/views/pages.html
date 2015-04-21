@@ -22,9 +22,9 @@
                                     <div class="form-group">
                                         <div class="col-xs-7 col-sm-9">
                                             <span class="input-icon">
-        	                                    <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
-        	                                    <i class="ti-search"></i>
-        	                                </span>
+                                                <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                                <i class="ti-search"></i>
+                                            </span>
                                         </div>
                                         <div class="col-xs-5 col-sm-3 padding-right-0">
                                             <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
@@ -54,54 +54,68 @@
             </div>
         </div>
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
-	        <div class="panel panel-transparent row margin-bottom-0">
-	            <div class="panel-body">
-			        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedPages">
-			            <thead>
-			                <tr>
-			                    <th class="center">Screenshot</th>
-			                    <th st-sort="title">Title</th>
-			                    <th class="hidden-xs" st-sort="handle">Handle</th>
-			                    <th class="hidden-xs" st-sort="components" ng-class="{'center': tableView != 'grid'}">Components</th>
-			                    <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
-			                    <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
-			                </tr>
-			                <tr ng-if="showFilter">
-			                    <th></th>
-			                    <th>
-			                        <input st-search="title" placeholder="Title" class="form-control" type="search" />
-			                    </th>
-			                    <th class="hidden-xs">
-			                        <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
-			                    </th>
-			                    <th class="hidden-xs">
-			                        <input st-search="components" placeholder="Components" class="form-control" type="search" />
-			                    </th>
-			                    <th class="hidden">
-			                        <input st-search="created" placeholder="Created" class="form-control" type="search" />
-			                    </th>
-			                    <th class="hidden">
-			                        <input st-search="modified" placeholder="Modified" class="form-control" type="search" />
-			                    </th>
-			                </tr>
-			            </thead>
-			            <tbody>
-			                <tr ng-repeat="page in displayedPages" ng-click="viewSingle(page)">
-			                    <td class="center">
-			                        <img ng-src="{{ page.screenshot }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
-			                    </td>
-			                    <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
-			                    <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
-			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}" ><strong>Components: </strong> {{page.components}}</td>
-			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
-			                    <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
-			                </tr>
-			            </tbody>
-			        </table>
-			        <div class="load1 csspinner height-400" ng-show="!displayedPages"></div>
-			    </div>
-			</div>
-		</div>
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedPages">
+                        <thead>
+                            <tr>
+                                <th class="center">Screenshot</th>
+                                <th st-sort="title">Title</th>
+                                <th class="hidden-xs" st-sort="handle">Handle</th>
+                                <th class="hidden-xs" st-sort="components" ng-class="{'center': tableView != 'grid'}">Components</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
+                                <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                            </tr>
+                            <tr ng-if="showFilter">
+                                <th>
+                                    <input st-search="screenshot" placeholder="Screenshot" class="form-control hidden" type="search" id="searchScreenshot" ng-model="filterscreenshot.selected" />
+                                    <ui-select ng-model="filterscreenshot.selected" on-select="triggerInput('#searchScreenshot')" theme="bootstrap">
+                                        <ui-select-match placeholder="Select Screenshot">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="$select.selected.name"></small>
+                                            <button class="clear" ng-click="clear($event)">X</button>
+                                        </ui-select-match>
+                                        <ui-select-null-choice>No Status</ui-select-null-choice>
+                                        <ui-select-choices repeat="option in pageScreenshotOptions">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="status.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th>
+                                    <input st-search="title" placeholder="Title" class="form-control" type="search" />
+                                </th>
+                                <th class="hidden-xs">
+                                    <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
+                                </th>
+                                <th class="hidden-xs">
+                                    <input st-search="components" placeholder="Components" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="page in displayedPages" ng-click="viewSingle(page)">
+                                <td class="center">
+                                    <img ng-src="{{ page.screenshot }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
+                                </td>
+                                <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Components: </strong> {{page.components}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="!displayedPages"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- end: CONTENT -->
     <!-- start: NEW PAGE MODAL -->
@@ -132,8 +146,8 @@
                             </div>
                             <div class="col-sm-1 hidden-xs">
                                 <h1>
-			                    	<span class="fa fa-chevron-right"></span>
-			                  	</h1>
+                                    <span class="fa fa-chevron-right"></span>
+                                </h1>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -156,8 +170,8 @@
                             </div>
                             <div class="col-sm-1 hidden-xs">
                                 <h1>
-			                    	<span class="fa fa-chevron-right"></span>
-			                  	</h1>
+                                    <span class="fa fa-chevron-right"></span>
+                                </h1>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -180,8 +194,8 @@
                             </div>
                             <div class="col-xs-1 hidden-xs">
                                 <h1>
-			                    	<span class="fa fa-chevron-right"></span>
-			                  	</h1>
+                                    <span class="fa fa-chevron-right"></span>
+                                </h1>
                             </div>
                         </div>
                         <div class="clearfix"></div>
@@ -207,11 +221,11 @@
                     <p ng-show="createpage.title">Page Url will be
                         <strong>/{{createpage.title | slugify}}</strong>
                         <span class="links cl-effect-1">
-								<a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
-							</span>
+                                <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                            </span>
                         <span class="links cl-effect-1">
-	                        	<a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
-	                        </span>
+                                <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+                            </span>
                     </p>
                     <div class="clearfix mb15"></div>
                     <div class="form-group">

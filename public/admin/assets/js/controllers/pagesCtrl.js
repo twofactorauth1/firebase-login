@@ -6,6 +6,7 @@
     app.controller('PagesCtrl', ["$scope", "toaster", "$filter", "$modal", "WebsiteService", function($scope, toaster, $filter, $modal, WebsiteService) {
 
         WebsiteService.getPages(function(pages) {
+            console.log('pages >>> ', pages);
             var pagesArr = $scope.formatPages(pages);
             $scope.pages = pagesArr;
         });
@@ -142,6 +143,23 @@
 
         $scope.viewSingle = function(page) {
             window.location = '/admin/#/website/pages/?pagehandle=' + page.handle;
+        };
+
+        $scope.pageScreenshotOptions = [{
+            name: 'Screenshot',
+            value: true
+        }, {
+            name: 'No Screenshot',
+            value: false
+        }];
+
+        /*
+         * @triggerInput
+         * - trigger the hidden input to trick smart table into activating filter
+         */
+
+        $scope.triggerInput = function(element) {
+            angular.element(element).trigger('input');
         };
 
     }]);
