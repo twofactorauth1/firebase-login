@@ -40,7 +40,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Dashboard'
         },
-         resolve: loadSequence('dashboardCtrl', 'orderService', 'jquery-sparkline')
+         resolve: loadSequence('dashboardCtrl', 'orderService', 'customerService', 'jquery-sparkline', 'chartAnalyticsService', 'formatText')
     }).state('app.website', {
         url: '/website',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -57,7 +57,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Site Analytics'
         },
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'keenService', 'chartAnalyticsService')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "assets/views/pages.html",
