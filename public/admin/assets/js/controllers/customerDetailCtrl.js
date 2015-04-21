@@ -34,6 +34,7 @@
 
         CustomerService.getCustomer($stateParams.contactId, function(customer) {
             $scope.customer = customer;
+            $scope.setTags();
             $scope.setDefaults();
             if (customer.fingerprint !== undefined) {
                 var keenParams = {
@@ -226,8 +227,15 @@
             $scope.checkAddressLatLng($scope.customer.details[0].addresses, function(addresses) {
                 $scope.customer.details[0].addresses = addresses;
                 if ($scope.checkContactValidity()) {
-                    CustomerService.saveCustomer($scope.customer, function(customer) {
+                    var tempTags = [];
+                    var customer_data = angular.copy($scope.customer);
+                    _.each(customer_data.tags, function(tag) {
+                        tempTags.push(tag.data);
+                    });
+                    customer_data.tags = tempTags;
+                    CustomerService.saveCustomer(customer_data, function(customer) {
                         $scope.customer = customer;
+                        $scope.setTags();
                         $scope.saveLoading = false;
                         $scope.refreshMap();
                         if ($scope.currentState == 'customerAdd') {
@@ -517,6 +525,14 @@
         };
 
         $scope.setDefaults = function() {
+            // New customer
+            if($scope.customer.details.length == 0)
+            {
+                $scope.customer.details[0] = [];
+                $scope.customer.details[0].emails =[];
+                $scope.customer.details[0].phones =[];
+                $scope.customer.details[0].addresses =[];
+            }
             if ($scope.customer.details.length) {
                 if (!$scope.customer.details[0].emails.length)
                     $scope.customerAddEmailFn();
@@ -553,6 +569,18 @@
             label: "Other",
             data: "ot"
         }];
+
+        $scope.setTags = function()
+        {
+            var tempTags = [];
+            _.each($scope.customer.tags, function(tag) {
+                var matchingTag = _.findWhere($scope.customerTags, {
+                    data: tag
+                });
+                tempTags.push(matchingTag);
+            });
+            $scope.customer.tags = tempTags;
+        }
 
         $scope.displayCustomerTags = function() {
             var tags = "";
