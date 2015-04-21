@@ -44,9 +44,11 @@
 
         $scope.createPostValidated = false;
           $scope.validateCreatePost = function(post) {
+            console.log('post ', post);
             if (!post.post_title || post.post_title == '') {
               $scope.postTitleError = true
             } else {
+              post.post_url = $filter('slugify')(post.post_title);
               $scope.postTitleError = false
             }
             if (!post.post_author || post.post_author == '') {

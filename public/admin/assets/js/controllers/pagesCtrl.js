@@ -3,7 +3,7 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PagesCtrl', ["$scope", "toaster", "$filter", "WebsiteService", function($scope, toaster, $filter, WebsiteService) {
+    app.controller('PagesCtrl', ["$scope", "toaster", "$filter",  "$modal", "WebsiteService", function($scope, toaster, $filter, $modal, WebsiteService) {
 
         WebsiteService.getPages(function(pages) {
             var pagesArr = [];
@@ -23,6 +23,18 @@
         WebsiteService.getTemplates(function(templates) {
             $scope.templates = templates;
         });
+
+        $scope.openModal = function(template) {
+            console.log('template');
+            $scope.modalInstance = $modal.open({
+                templateUrl: template,
+                scope: $scope
+            });
+        };
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
 
         $scope.getters = {
             components: function (value) {
