@@ -21,21 +21,21 @@
          * get all customers to for customer select
          */
 
-        // CustomerService.getCustomers(function(customers) {
-        //     console.log('customers >>> ', customers);
-        //     $scope.customers = customers;
-        // });
+        CustomerService.getCustomers(function(customers) {
+            console.log('customers >>> ', customers);
+            $scope.customers = customers;
+        });
 
-        // $scope.createOrder = function(newOrder) {
-        //     var customer = newOrder.selectedCustomer;
-        //     var status = newOrder.selectedStatus;
-        //     var order = {};
-        //     order.status = status.value;
-        //     order.customer_id = customer._id;
-        //     OrderService.createOrder(order, function(returnedOrder) {
-        //         console.log('returnedOrder ', returnedOrder);
-        //     });
-        // };
+        $scope.createOrder = function(newOrder) {
+            var customer = newOrder.selectedCustomer;
+            var status = newOrder.selectedStatus;
+            var order = {};
+            order.status = status.value;
+            order.customer_id = customer._id;
+            OrderService.createOrder(order, function(returnedOrder) {
+                console.log('returnedOrder ', returnedOrder);
+            });
+        };
 
         /*
          * @formatInput
@@ -44,7 +44,13 @@
 
         $scope.formatInput = function(model) {
             console.log('model >>> ', model);
-            var email = model.email || 'No Email';
+            var email;
+            if (model && model.email) {
+                email = model.email
+            } else {
+                email = 'No Email';
+            }
+
             return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
         };
 
