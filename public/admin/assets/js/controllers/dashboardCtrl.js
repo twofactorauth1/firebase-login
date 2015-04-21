@@ -4,6 +4,26 @@
  */
 app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", function($scope, OrderService, CustomerService) {
 
+    $scope.isSameDateAs = function(oDate, pDate) {
+        return (
+            oDate.getFullYear() === pDate.getFullYear() &&
+            oDate.getMonth() === pDate.getMonth() &&
+            oDate.getDate() === pDate.getDate()
+        );
+    };
+
+    $scope.getDaysThisMonth = function() {
+        var newDate = new Date();
+        var numOfDays = newDate.getDate();
+        var days = [];
+
+        for (var i = 0; i <= numOfDays; i++) {
+            days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
+        }
+
+        return days;
+    };
+
     OrderService.getOrders(function(orders) {
         $scope.orders = orders;
         $scope.ordersThisMonth = [];
@@ -35,8 +55,8 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", fu
         return completedOrders.length;
     };
 
-    $scope.lastOrderDate = function() {
-        return $scope.ordersThisMonth[$scope.ordersThisMonth.length-1].created.date
+    $scope.lastCustomerDate = function() {
+        return $scope.customersThisMonth[$scope.customersThisMonth.length-1].created.date
     };
 
     CustomerService.getCustomers(function(customers) {
@@ -46,10 +66,11 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", fu
         _.each($scope.getDaysThisMonth(), function(day, index) {
             var thisDaysCustomers = 0;
             _.each(customers, function(customer) {
+                console.log('customer.created.date ', customer.created.date);
                 if (customer.created.date) {
                     if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
                         $scope.customersThisMonth.push(customer);
-                        thisDayscustomers = thisDaysCustomers + 1;
+                        thisDaysCustomers = thisDaysCustomers + 1;
                     }
                 }
             });
@@ -72,24 +93,8 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", fu
         return customerLeads.length;
     };
 
-    $scope.isSameDateAs = function(oDate, pDate) {
-        return (
-            oDate.getFullYear() === pDate.getFullYear() &&
-            oDate.getMonth() === pDate.getMonth() &&
-            oDate.getDate() === pDate.getDate()
-        );
-    };
-
-    $scope.getDaysThisMonth = function() {
-        var newDate = new Date();
-        var numOfDays = newDate.getDate();
-        var days = [];
-
-        for (var i = 0; i <= numOfDays; i++) {
-            days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
-        }
-
-        return days;
+    $scope.lastOrderDate = function() {
+        return $scope.ordersThisMonth[$scope.ordersThisMonth.length-1].created.date
     };
 
 }]);
