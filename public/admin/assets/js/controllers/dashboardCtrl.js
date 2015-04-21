@@ -2,27 +2,7 @@
 /** 
  * controllers used for the dashboard
  */
-app.controller('DashboardCtrl', ["$scope", "OrderService", function($scope, OrderService) {
-
-    $scope.sales = [600, 923, 482, 1211, 490, 1125, 1487];
-    $scope.earnings = [400, 650, 886, 443, 502, 412, 353];
-    $scope.orders = [];
-
-    OrderService.getOrders(function(orders) {
-        _.each($scope.getDaysThisMonth(), function(day, index) {
-            // var tempOrder = {day: new Date(day).getDate(), orders: []};
-            // $scope.orders.push(tempOrder);
-            _.each(orders, function(order) {
-                if (order.created.date) {
-                    if ($scope.isSameDateAs(new Date(order.created.date), new Date(day))) {
-                        $scope.orders[index] = $scope.orders[index] + 100;
-                    } else {
-                        $scope.orders[index] = $scope.orders[index] || 0;
-                    }
-                }
-            });
-        });
-    });
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", function($scope, OrderService, CustomerService, ChartAnalyticsService) {
 
     $scope.isSameDateAs = function(oDate, pDate) {
         return (
@@ -43,5 +23,110 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", function($scope, Orde
 
         return days;
     };
+
+    OrderService.getOrders(function(orders) {
+        $scope.orders = orders;
+        $scope.ordersThisMonth = [];
+        var tempData = [];
+        _.each($scope.getDaysThisMonth(), function(day, index) {
+            var thisDaysOrders = 0;
+            _.each(orders, function(order) {
+                if (order.created.date) {
+                    if ($scope.isSameDateAs(new Date(order.created.date), new Date(day))) {
+                        $scope.ordersThisMonth.push(order);
+                        thisDaysOrders = thisDaysOrders + 1;
+                    }
+                }
+            });
+
+            tempData.push(thisDaysOrders);
+        });
+        $scope.analyticsOrders = tempData;
+    });
+
+    $scope.getCompletedOrders = function() {
+        var completedOrders = [];
+        _.each($scope.ordersThisMonth, function(order) {
+            if (order.status == 'completed') {
+                completedOrders.push(order);
+            }
+        });
+
+        return completedOrders.length;
+    };
+
+    $scope.lastCustomerDate = function() {
+        return $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created.date
+    };
+
+    CustomerService.getCustomers(function(customers) {
+        $scope.customers = customers;
+        $scope.customersThisMonth = [];
+        var tempData = [];
+        _.each($scope.getDaysThisMonth(), function(day, index) {
+            var thisDaysCustomers = 0;
+            _.each(customers, function(customer) {
+                if (customer.created.date) {
+                    if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
+                        $scope.customersThisMonth.push(customer);
+                        thisDaysCustomers = thisDaysCustomers + 1;
+                    }
+                }
+            });
+
+            tempData.push(thisDaysCustomers);
+        });
+        $scope.analyticsCustomers = tempData;
+    });
+
+    $scope.getCustomerLeads = function() {
+        var customerLeads = [];
+        _.each($scope.customersThisMonth, function(customer) {
+            if (customer.tags && customer.tags.length > 0) {
+                if (customer.tags.indexOf('ld')) {
+                    customerLeads.push(customer);
+                }
+            }
+        });
+
+        return customerLeads.length;
+    };
+
+    $scope.lastOrderDate = function() {
+        return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
+    };
+
+    // $scope.visitorDataReport = function(result2, result3) {
+    //     var visitorsData = [];
+    //     var currentTotalVisitors = 0;
+    //     for (var k = 0; k < result2.length; k++) {
+    //         var subArr = [];
+    //         var value = result2[k].value || 0;
+    //         currentTotalVisitors += value;
+    //         subArr.push(new Date(result2[k].timeframe.start).getTime());
+    //         subArr.push(value);
+    //         visitorsData.push(subArr);
+    //     };
+
+    //     $scope.visitorsData = visitorsData;
+
+
+    //     var vistorsPreviousData = 0;
+    //     for (var h = 0; h < result3.length; h++) {
+    //         var value = result3[h].value || 0;
+    //         vistorsPreviousData += value;
+    //     };
+
+    //     var visitorsPercent = ChartAnalyticsService.calculatePercentage(vistorsPreviousData, currentTotalVisitors);
+
+    //     $scope.$apply(function() {
+    //         $scope.visitors = currentTotalVisitors;
+    //         $scope.visitorsPercent = visitorsPercent;
+    //     });
+    // };
+
+    // ChartAnalyticsService.runReports($scope.date, $scope.analyticsAccount, function(data) {
+    //     $scope.setReportData(data);
+    // });
 
 }]);

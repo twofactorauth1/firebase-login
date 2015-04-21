@@ -3,9 +3,14 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PagesCtrl', ["$scope", "toaster", "$filter",  "$modal", "WebsiteService", function($scope, toaster, $filter, $modal, WebsiteService) {
+    app.controller('PagesCtrl', ["$scope", "toaster", "$filter", "$modal", "WebsiteService", function($scope, toaster, $filter, $modal, WebsiteService) {
 
         WebsiteService.getPages(function(pages) {
+            var pagesArr = $scope.formatPages(pages);
+            $scope.pages = pagesArr;
+        });
+
+        $scope.formatPages = function(pages) {
             var pagesArr = [];
             for (var key in pages) {
                 if (pages.hasOwnProperty(key)) {
@@ -17,15 +22,15 @@
                     pagesArr.push(pages[key]);
                 }
             }
-            $scope.pages = pagesArr;
-        });
+
+            return pagesArr;
+        };
 
         WebsiteService.getTemplates(function(templates) {
             $scope.templates = templates;
         });
 
         $scope.openModal = function(template) {
-            console.log('template');
             $scope.modalInstance = $modal.open({
                 templateUrl: template,
                 scope: $scope
@@ -37,13 +42,13 @@
         };
 
         $scope.getters = {
-            components: function (value) {
+            components: function(value) {
                 return value.length;
             },
-            created: function (value) {
+            created: function(value) {
                 return value.created.date;
             },
-            modified: function (value) {
+            modified: function(value) {
                 return value.modified.date;
             }
         };
@@ -72,6 +77,7 @@
                     $scope.handleError = true;
                 } else {
                     $scope.handleError = false;
+                    page.handle = $filter('slugify')(page.title);
                 }
                 if (page.title == '') {
                     $scope.titleError = true;
@@ -86,45 +92,51 @@
 
         $scope.createPageFromTemplate = function(page, $event) {
             $scope.validateCreatePage(page);
-            console.log('$scope.createPageValidated ', $scope.createPageValidated);
 
             if (!$scope.createPageValidated) {
-              $scope.titleError = true;
-              $scope.handleError = true;
-              return false;
+                $scope.titleError = true;
+                $scope.handleError = true;
+                return false;
             } else {
-              $scope.titleError = false;
-              $scope.handleError = false;
+                $scope.titleError = false;
+                $scope.handleError = false;
             }
 
             var pageData = {
-              title: page.title,
-              handle: page.handle,
-              mainmenu: page.mainmenu
+                title: page.title,
+                handle: page.handle,
+                mainmenu: page.mainmenu
             };
 
             var hasHandle = false;
             for (var i = 0; i < $scope.pages.length; i++) {
-              if ($scope.pages[i].handle === page.handle) {
-                hasHandle = true;
-              }
+                if ($scope.pages[i].handle === page.handle) {
+                    hasHandle = true;
+                }
             };
 
             if (!hasHandle) {
-              WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function(newpage) {
-                toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
-                $scope.cancel();
-                $scope.pages.unshift(newpage);
-                $scope.displayedPages.unshift(newpage);
-                page.title = "";
-                page.handle = "";
-                $scope.showChangeURL = false;
-                $scope.templateDetails = false;
-              });
+                WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function(newpage) {
+                    toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
+                    $scope.closeModal();
+
+                    if (newpage.components) {
+                        newpage.components = newpage.components.length;
+                    } else {
+                        newpage.components = 0;
+                    }
+
+                    $scope.pages.unshift(newpage);
+                    $scope.displayedPages.unshift(newpage);
+                    page.title = "";
+                    page.handle = "";
+                    $scope.showChangeURL = false;
+                    $scope.templateDetails = false;
+                });
             } else {
-              toaster.pop('error', "Page URL " + page.handle, "Already exists");
-              $event.preventDefault();
-              $event.stopPropagation();
+                toaster.pop('error', "Page URL " + page.handle, "Already exists");
+                $event.preventDefault();
+                $event.stopPropagation();
             }
         };
 
