@@ -425,7 +425,9 @@
             $scope.iframeLoaded = true;
             $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
             $scope.editPage();
-            $scope.updatePage();
+            if (!$scope.single_post) {
+                $scope.updatePage($location.$$search['pagehandle']);
+            }
         };
 
         /*
