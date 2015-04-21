@@ -40,5 +40,13 @@
             window.location = '/admin/#/app/commerce/products/'+product._id;
         };
 
+        angular.element('#convert').iconpicker({
+            iconset: 'fontawesome',
+            icon: 'fa-credit-card',
+            rows: 5,
+            cols: 5,
+            placement: 'right'
+        });
+
     }]);
 })(angular);
