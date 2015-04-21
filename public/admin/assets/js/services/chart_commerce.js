@@ -1,5 +1,9 @@
-define(['app', 'paymentService', 'keenService'], function(app) {
-    app.register.service('ChartCommerceService', ['PaymentService', 'keenService', function(PaymentService, keenService) {
+'use strict';
+/**
+ * service for chart analytics
+ */
+(function(angular) {
+    app.service('ChartCommerceService', ['PaymentService', 'KeenService', function(PaymentService, KeenService) {
 
         //local variables
         var customers, totalCustomers;
@@ -219,7 +223,7 @@ define(['app', 'paymentService', 'keenService'], function(app) {
 
                 totalCustomers = data.length;
 
-                keenService.keenClient(function(client) {
+                KeenService.keenClient(function(client) {
                     var queryData = self.queryReports();
 
                     client.run([
@@ -430,7 +434,158 @@ define(['app', 'paymentService', 'keenService'], function(app) {
             //     });
             // });
             //fn(reportData);
-            
+        };
+
+        this.queryNetRevenueReport = function() {
+            var queryData = {};
+
+            // ======================================
+            // Net Revenue Metric
+            // Net revenue = gross revenue – damages/coupons/returns
+            // ======================================
+
+            queryData.netRevenueThisMonth = new Keen.Query("sum", {
+                eventCollection: "Stripe_Events",
+                targetProperty: 'data.object.amount',
+                timeframe: 'this_month',
+                interval: "daily",
+                filters: [{
+                    'property_name': 'type',
+                    'operator': 'eq',
+                    'property_value': 'charge.succeeded'
+                }, {
+                    "property_name": "accountId",
+                    "operator": "eq",
+                    "property_value": $$.server.accountId
+                }]
+            });
+
+            queryData.netRevenueCharges = new Keen.Query("count", {
+                eventCollection: "Stripe_Events",
+                timeframe: 'this_month',
+                filters: [{
+                    'property_name': 'type',
+                    'operator': 'eq',
+                    'property_value': 'charge.succeeded'
+                }, {
+                    "property_name": "accountId",
+                    "operator": "eq",
+                    "property_value": $$.server.accountId
+                }]
+            });
+
+            queryData.lastCharge = new Keen.Query("extraction", {
+                eventCollection: "Stripe_Events",
+                latest: 1,
+                filters: [{
+                    'property_name': 'type',
+                    'operator': 'eq',
+                    'property_value': 'charge.succeeded'
+                }, {
+                    "property_name": "accountId",
+                    "operator": "eq",
+                    "property_value": $$.server.accountId
+                }]
+            });
+
+            return queryData;
+        };
+
+        this.runNetRevenuReport = function(fn) {
+            var self = this;
+
+            var reportData = {};
+
+            PaymentService.getCustomers(function(data) {
+                customers = data;
+
+                // ======================================
+                // Total Customer Metric
+                // ======================================
+
+                totalCustomers = data.length;
+
+                KeenService.keenClient(function(client) {
+                    var queryData = self.queryNetRevenueReport();
+
+                    client.run([
+                        queryData.netRevenueThisMonth,
+                        queryData.netRevenueCharges,
+                        queryData.lastCharge
+                    ], function(response) {
+                        fn(response);
+                    });
+                });
+            }); //end PaymentService.getCustomers
+
+            // // ======================================
+            // // Other Revenue Metric
+            // // ======================================
+
+            // var otherRevenue = new Keen.Query("sum", {
+            //     eventCollection: "Stripe_Events",
+            //     targetProperty: 'data.object.total',
+            //     timeframe: 'this_day',
+            //     filters: [{
+            //         "property_name": "data.object.subscription",
+            //         "operator": "exists",
+            //         "property_value": false
+            //     }, {
+            //         "property_name": "type",
+            //         "operator": "eq",
+            //         "property_value": "invoice.payment_succeeded"
+            //     }]
+            // });
+            // client.run(otherRevenue, function(response) {
+            //     $scope.totalRevenue = this.data.result;
+            // });
+
+            // // ======================================
+            // // Upgrades Metric
+            // // ======================================
+
+            // var otherRevenueQuery = new Keen.Query("extraction", {
+            //     eventCollection: "Stripe_Events",
+            //     timeframe: 'this_day',
+            //     filters: [{
+            //         "property_name": "type",
+            //         "operator": "eq",
+            //         "property_value": "customer.subscription.updated"
+            //     }, {
+            //         "property_name": "data.object.customer",
+            //         "operator": "eq",
+            //         "property_value": "cus_5Fcng8oztqf8aD"
+            //     }]
+            // });
+            // client.run(otherRevenueQuery, function(response) {
+
+            //     var updatedSubscriptions = [];
+
+            //     var result = this.data.result;
+
+            //     console.log('result >>> ', result);
+
+            //     for (var x in result) {
+            //         //result[x].data.previous_attributes.plan.amount >= 
+            //         if (result[x].data.object.plan.amount) {
+            //             updatedSubscriptions.push(result[x]);
+            //         }
+            //     }
+
+            //     var result = updatedSubscriptions.length;
+
+            //     var data = {
+            //         result: result
+            //     };
+
+            //     window.chart = new Keen.Visualization(data, document.getElementById('upgrades'), {
+            //         chartType: "metric",
+            //         title: "Upgrades",
+            //         width: 345,
+            //         colors: ["#49c5b1"]
+            //     });
+            // });
+            //fn(reportData);
         };
 
         this.customerOverview = function(totalCustomerData, customerStart, cancelSubscriptionData, cancelstart, fn) {
@@ -485,4 +640,4 @@ define(['app', 'paymentService', 'keenService'], function(app) {
             fn(customerOverviewConfig);
         };
     }]);
-});
+})(angular);

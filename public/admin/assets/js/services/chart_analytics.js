@@ -236,10 +236,10 @@
          * .utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
          * moment().subtract(29, 'days'), moment()
          */
-        var timeframeStart = moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: 30d ago
-        var timeframeEnd = moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: today
+        var timeframeStart = moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 30d ago
+        var timeframeEnd = moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: today
         var timeframePreviousStart = moment().subtract(60, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 60d ago
-        var timeframePreviousEnd = moment().subtract(30, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";//TODO: 30d ago
+        var timeframePreviousEnd = moment().subtract(30, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 30d ago
         var interval = "daily";
         var firstQuery = true;
         var totalVisitors = 0;
@@ -412,8 +412,7 @@
                     "property_name": "referrer.domain",
                     "operator": "eq",
                     "property_value": hostname
-                },
-                {
+                }, {
                     "property_name": "page_length",
                     "operator": "eq",
                     "property_value": 1
@@ -431,8 +430,7 @@
                     "property_name": "referrer.domain",
                     "operator": "eq",
                     "property_value": hostname
-                },
-                {
+                }, {
                     "property_name": "page_length",
                     "operator": "eq",
                     "property_value": 1
@@ -523,10 +521,10 @@
             var self = this;
             var hostname = 'indigenous.io';
             //window.location.hostname
-            if(account.subdomain === 'main') {
+            if (account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
             }
-            
+
             KeenService.keenClient(function(client) {
                 var queryData = self.queryReports(date, hostname);
                 client.run([
@@ -558,7 +556,7 @@
             var filters = [];
             var hostname = 'www.indigenous.io';
             //window.location.hostname
-            if(account.subdomain === 'main') {
+            if (account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
             }
             filters.push({
@@ -643,6 +641,76 @@
                 reportData.pagedformattedTopPages = pagedformattedTopPages;
                 fn(reportData);
             });
+        };
+
+        this.visitorsReport = function(date, account, _hostname, fn) {
+            var self = this;
+            //window.location.hostname
+            if (account.subdomain === 'main') {
+                _hostname = _hostname.replace('main', 'www') || window.location.hostname;
+            }
+
+            KeenService.keenClient(function(client) {
+                var queryData = self.queryVisitorReports(date, _hostname);
+                client.run([
+                    queryData.returningVisitors,
+                    queryData.newVisitors,
+                    queryData.lastVisitor
+                ], function(results) {
+                    fn(results);
+                });
+            });
+        };
+
+        this.queryVisitorReports = function(date, _hostname) {
+            var queryData = {};
+            var hostname = _hostname || window.location.hostname;
+            console.log('>> queryReports ' + hostname);
+
+            queryData.returningVisitors = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "permanent_tracker",
+                timeframe: "this_month",
+                interval: "daily",
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": hostname
+                }, {
+                    "property_name": "new_visitor",
+                    "operator": "eq",
+                    "property_value": false
+                }]
+            });
+
+            queryData.newVisitors = new Keen.Query("count_unique", {
+                eventCollection: "session_data",
+                targetProperty: "permanent_tracker",
+                timeframe: "this_month",
+                interval: "daily",
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": hostname
+                }, {
+                    "property_name": "new_visitor",
+                    "operator": "eq",
+                    "property_value": true
+                }]
+            });
+
+            queryData.lastVisitor = new Keen.Query("extraction", {
+                eventCollection: "session_data",
+                targetProperty: "permanent_tracker",
+                latest: 1,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": hostname
+                }]
+            });
+
+            return queryData;
         };
 
         //charts
@@ -911,63 +979,62 @@
 
         this.visitorLocations = function(locationData, highchartsData) {
 
-            if($("#visitor_locations").length)
-            {
+            if ($("#visitor_locations").length) {
                 var chart1 = new Highcharts.Map({
-                chart: {
-                    renderTo: 'visitor_locations',
-                    height: 360,
-                },
-
-                title: {
-                    text: ''
-                },
-
-                exporting: {
-                    enabled: false
-                },
-
-                legend: {
-                    enabled: false
-                },
-
-                mapNavigation: {
-                    buttonOptions: {
-                        align: 'right',
-                        verticalAlign: 'bottom'
+                    chart: {
+                        renderTo: 'visitor_locations',
+                        height: 360,
                     },
-                    enableButtons: true,
-                    enableDoubleClickZoomTo: true,
-                    enableDoubleClickZoom: true,
-                    enableTouchZoom: false
-                },
 
-                colorAxis: {
-                    min: 1,
-                    type: 'logarithmic',
-                    minColor: '#4cb0ca',
-                    maxColor: '#224f5b'
-                },
-
-                series: [{
-                    animation: {
-                        duration: 1000
+                    title: {
+                        text: ''
                     },
-                    data: locationData,
-                    mapData: highchartsData,
-                    joinBy: ['postal-code', 'code'],
-                    dataLabels: {
+
+                    exporting: {
                         enabled: false
                     },
-                    name: '# of Visitors',
-                    tooltip: {
-                        pointFormat: '{point.code}: {point.value}'
+
+                    legend: {
+                        enabled: false
+                    },
+
+                    mapNavigation: {
+                        buttonOptions: {
+                            align: 'right',
+                            verticalAlign: 'bottom'
+                        },
+                        enableButtons: true,
+                        enableDoubleClickZoomTo: true,
+                        enableDoubleClickZoom: true,
+                        enableTouchZoom: false
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#4cb0ca',
+                        maxColor: '#224f5b'
+                    },
+
+                    series: [{
+                        animation: {
+                            duration: 1000
+                        },
+                        data: locationData,
+                        mapData: highchartsData,
+                        joinBy: ['postal-code', 'code'],
+                        dataLabels: {
+                            enabled: false
+                        },
+                        name: '# of Visitors',
+                        tooltip: {
+                            pointFormat: '{point.code}: {point.value}'
+                        }
+                    }],
+                    credits: {
+                        enabled: false
                     }
-                }],
-                credits: {
-                    enabled: false
-                }
-            });
+                });
             }
         };
 
