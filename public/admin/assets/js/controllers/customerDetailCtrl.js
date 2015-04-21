@@ -119,16 +119,16 @@
                 $scope.city = $scope.customer.details[0].addresses[0].city;
                 $scope.loadingMap = false;
             }
-            if ($scope.ip_geo_address) {
-                CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
-                    if (data.error === undefined) {
-                        $scope.location.lat = parseFloat(data.lat);
-                        $scope.location.lng = parseFloat(data.lon);
-                        $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                        $scope.markers.mainMarker.lng = parseFloat(data.lon);
-                        $scope.loadingMap = false;
-                    } else
-                        $scope.loadingMap = false;
+            if ($scope.ip_geo_address && !$scope.location.lng && !$scope.location.lng) {
+                    CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                        if (data.error === undefined) {
+                            $scope.location.lat = parseFloat(data.lat);
+                            $scope.location.lng = parseFloat(data.lon);
+                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                            $scope.loadingMap = false;
+                        } else
+                            $scope.loadingMap = false;
                 });
             }
         }
