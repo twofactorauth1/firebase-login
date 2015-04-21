@@ -259,6 +259,7 @@ app.constant('JS_REQUIRES', {
         'ckeditorCtrl': 'assets/js/controllers/ckeditorCtrl.js',
         'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
         'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
+        'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
 
         'cropCtrl': 'assets/js/controllers/cropCtrl.js',
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',

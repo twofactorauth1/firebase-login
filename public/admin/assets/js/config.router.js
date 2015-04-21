@@ -207,10 +207,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/profile-personal',
         templateUrl: "assets/views/profile-personal.html",
         title: 'Profile Personal',
-        icon: 'ti-layout-media-left-alt',        
+        icon: 'ti-layout-media-left-alt', 
+        controller: 'ProfilePersonalCtrl',       
         ncyBreadcrumb: {
             label: 'Profile Personal'
-        }
+        },
+        resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'bootstrap')
     }).state('app.account.billing', {
         url: '/billing',
         templateUrl: "assets/views/billing.html",
