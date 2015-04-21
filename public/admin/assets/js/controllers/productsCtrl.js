@@ -4,7 +4,7 @@
  */
 (function(angular) {
     app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", function($scope, $modal, ProductService) {
-        $scope.newProduct = {status: 'Inactive'};
+        $scope.newProduct = {status: 'Auto Inactive'};
         ProductService.getProducts(function(products) {
             $scope.products = products;
         });
