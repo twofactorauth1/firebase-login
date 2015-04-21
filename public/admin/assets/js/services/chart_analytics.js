@@ -655,6 +655,7 @@
                 client.run([
                     queryData.returningVisitors,
                     queryData.newVisitors,
+                    queryData.lastVisitor
                 ], function(results) {
                     fn(results);
                 });
@@ -669,10 +670,8 @@
             queryData.returningVisitors = new Keen.Query("count_unique", {
                 eventCollection: "session_data",
                 targetProperty: "permanent_tracker",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
+                timeframe: "this_month",
+                interval: "daily",
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
@@ -687,10 +686,8 @@
             queryData.newVisitors = new Keen.Query("count_unique", {
                 eventCollection: "session_data",
                 targetProperty: "permanent_tracker",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
+                timeframe: "this_month",
+                interval: "daily",
                 filters: [{
                     "property_name": "referrer.domain",
                     "operator": "eq",
@@ -699,6 +696,17 @@
                     "property_name": "new_visitor",
                     "operator": "eq",
                     "property_value": true
+                }]
+            });
+
+            queryData.lastVisitor = new Keen.Query("extraction", {
+                eventCollection: "session_data",
+                targetProperty: "permanent_tracker",
+                latest: 1,
+                filters: [{
+                    "property_name": "referrer.domain",
+                    "operator": "eq",
+                    "property_value": hostname
                 }]
             });
 

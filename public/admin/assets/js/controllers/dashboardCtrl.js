@@ -1,12 +1,12 @@
 'use strict';
-/** 
+/**
  * controllers used for the dashboard
  */
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService) {
 
     /*
      * @isSameDateAs
-     * -
+     * - determine if two dates are identical and return boolean
      */
 
     $scope.isSameDateAs = function(oDate, pDate) {
@@ -19,7 +19,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @getDaysThisMonth
-     * -
+     * - get an array of days this month for loop purposes
      */
 
     $scope.getDaysThisMonth = function() {
@@ -36,7 +36,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @getOrders
-     * -
+     * - get orders for orders widget
      */
 
     OrderService.getOrders(function(orders) {
@@ -61,7 +61,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @getCompletedOrders
-     * -
+     * - get the number of compled orders this month
      */
 
     $scope.getCompletedOrders = function() {
@@ -77,7 +77,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @lastCustomerDate
-     * -
+     * - get the last customer date that was created
      */
 
     $scope.lastCustomerDate = function() {
@@ -86,7 +86,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @getCustomers
-     * -
+     * - get customer for the customer widget
      */
 
     CustomerService.getCustomers(function(customers) {
@@ -111,7 +111,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @getCustomerLeads
-     * -
+     * - get the number of customers that have a lead tag
      */
 
     $scope.getCustomerLeads = function() {
@@ -129,26 +129,97 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
     /*
      * @lastOrderDate
-     * -
+     * - get the date of the last order created
      */
 
     $scope.lastOrderDate = function() {
         return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
     };
 
+    /*
+     * @getAccount
+     * - get user account and then run visitors report
+     */
+
     UserService.getAccount(function(account) {
         $scope.analyticsAccount = account;
         $scope.runVisitorsReport();
+        $scope.runNetRevenueReport();
     });
+
+    /*
+     * @date
+     * - start and end date for this month
+     */
 
     $scope.date = {
         startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
         endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
     };
 
+    /*
+     * @runVisitorsReport
+     * - vistor reports recieves Keen data for visitors widget
+     */
+    $scope.analyticsVisitors = [];
     $scope.runVisitorsReport = function() {
         ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, 'indigenous.io', function(data) {
-            console.log('visitors data ', data);
+            var returningVisitors = data[0].result;
+            var newVisitors = data[1].result;
+
+            $scope.visitorsThisMonth = 0;
+            $scope.totalNewVisitors = 0;
+            $scope.totalReturningVisitors = 0;
+            $scope.lastVisitorDate = data[2].result[0].keen.created_at;
+            var tempData = [];
+            _.each($scope.getDaysThisMonth(), function(day, index) {
+                var thisDaysVisitors = 0;
+                _.each(returningVisitors, function(visitor, index) {
+                    if ($scope.isSameDateAs(new Date(visitor.timeframe.start), new Date(day))) {
+                        $scope.visitorsThisMonth += (visitor.value + newVisitors[index].value);
+                        thisDaysVisitors += (visitor.value + newVisitors[index].value);
+                        $scope.totalNewVisitors += newVisitors[index].value;
+                        $scope.totalReturningVisitors += visitor.value;
+                    }
+                });
+
+                tempData.push(thisDaysVisitors);
+            });
+
+            $scope.$apply(function(){
+                $scope.analyticsVisitors = tempData;
+            });
+        });
+    };
+
+    /*
+     * @runNetRevenueReport
+     * - get net revenue data from Keen for dashboard widget
+     */
+
+    $scope.runNetRevenueReport = function() {
+        ChartCommerceService.runNetRevenuReport(function(revenueData) {
+            var revenue = revenueData[0].result;
+            $scope.charges = revenueData[1].result;
+            console.log(revenueData[2]);
+            // $scope.lastCharge = revenueData[2].result[0].keen.created_at;
+            $scope.revenueThisMonth = 0;
+            var tempData = [];
+            _.each($scope.getDaysThisMonth(), function(day, index) {
+                var thisDaysRevenue = 0;
+                _.each(revenue, function(rev) {
+                    if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
+                        $scope.revenueThisMonth += rev.value;
+                        thisDaysRevenue += rev.value;
+                    }
+                });
+
+                tempData.push(thisDaysRevenue);
+            });
+
+            $scope.$apply(function(){
+                $scope.analyticsRevenue = tempData;
+            });
         });
     };
 

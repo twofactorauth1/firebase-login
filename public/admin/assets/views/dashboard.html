@@ -116,32 +116,32 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <div class="panel panel-white no-radius">
+                            <div class="panel panel-white no-radius" ng-if="analyticsVisitors">
                                 <div class="panel-body padding-20 text-center">
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Visitors This Month</h5>
-                                        <h2 class="no-margin"><small>$</small>1,450</h2>
-                                        <span class="badge badge-success margin-top-10">253 Pages</span>
+                                        <h2 class="no-margin">{{visitorsThisMonth}}</h2>
+                                        <span class="badge margin-top-10" ng-class="{'badge-danger': visitorsThisMonth.length == 0, 'badge-success': visitorsThisMonth.length > 0}">{{totalNewVisitors}} New Visitors</span>
                                     </div>
                                     <div class="sparkline space10">
-                                        <span jq-sparkline ng-model="analyticsOrders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                        <span jq-sparkline ng-model="analyticsVisitors" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
                                     </div>
-                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                    <span><i class="fa fa-clock-o"></i> Last Visitor {{lastVisitorDate | timeAgoFilter}}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <div class="panel panel-white no-radius">
+                            <div class="panel panel-white no-radius" ng-if="analyticsRevenue">
                                 <div class="panel-body padding-20 text-center">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Today</h5>
-                                        <h2 class="no-margin"><small>$</small>1,450</h2>
-                                        <span class="badge badge-danger margin-top-10">253 Posts</span>
+                                        <h5 class="text-dark no-margin">Net Revenue This Month</h5>
+                                        <h2 class="no-margin">{{revenueThisMonth | currency}}</h2>
+                                        <span class="badge margin-top-10" ng-class="{'badge-danger': revenueThisMonth.length == 0, 'badge-success': revenueThisMonth.length > 0}">{{charges}} Charges</span>
                                     </div>
                                     <div class="sparkline space10">
-                                        <span jq-sparkline ng-model="analyticsOrders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                        <span jq-sparkline ng-model="analyticsRevenue" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
                                     </div>
-                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                    <!-- <span><i class="fa fa-clock-o"></i> Last Charge {{lastChargeDate | timeAgoFilter}}</span> -->
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-6">
-                <customer-activity all-activity="true" current-page="1" num-per-page="10"></customer-activity>
+                <!-- <customer-activity all-activity="true" current-page="1" num-per-page="10"></customer-activity> -->
             </div>
         </div>
     </div>
