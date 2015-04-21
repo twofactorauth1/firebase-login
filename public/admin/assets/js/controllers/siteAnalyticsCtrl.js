@@ -390,8 +390,8 @@
                     ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
                 }, 100);
                 if (!$scope.displayVisitors) {
-                    var deshBlockUI = blockUI.instances.get('deshboardBlock');
-                    deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
+                    // var deshBlockUI = blockUI.instances.get('deshboardBlock');
+                    // deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
                 }
             }
         };
