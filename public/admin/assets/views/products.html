@@ -108,7 +108,7 @@
             </button>
             <h3 class="modal-title">New Product</h3>
         </div>
-        <div class="modal-body">
+        <div class="modal-body bg-white">
             <form role="form" class="ng-pristine ng-valid">
                 <div class="form-group">
                     <label>
@@ -131,7 +131,7 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" ng-click="addProduct()">Add</button>
+            <button class="btn btn-primary" ng-class='{"disabled": !newProduct.title.length || !newProduct.type}' ng-click="addProduct()">Add</button>
         </div>
     </script>
     <!-- end:  NEW PRODUCT MODAL -->
