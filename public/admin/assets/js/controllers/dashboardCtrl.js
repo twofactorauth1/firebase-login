@@ -2,7 +2,12 @@
 /** 
  * controllers used for the dashboard
  */
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", function($scope, OrderService, CustomerService, ChartAnalyticsService) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService) {
+
+    /*
+     * @isSameDateAs
+     * -
+     */
 
     $scope.isSameDateAs = function(oDate, pDate) {
         return (
@@ -11,6 +16,11 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
             oDate.getDate() === pDate.getDate()
         );
     };
+
+    /*
+     * @getDaysThisMonth
+     * -
+     */
 
     $scope.getDaysThisMonth = function() {
         var newDate = new Date();
@@ -23,6 +33,11 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
         return days;
     };
+
+    /*
+     * @getOrders
+     * -
+     */
 
     OrderService.getOrders(function(orders) {
         $scope.orders = orders;
@@ -44,6 +59,11 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         $scope.analyticsOrders = tempData;
     });
 
+    /*
+     * @getCompletedOrders
+     * -
+     */
+
     $scope.getCompletedOrders = function() {
         var completedOrders = [];
         _.each($scope.ordersThisMonth, function(order) {
@@ -55,9 +75,19 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         return completedOrders.length;
     };
 
+    /*
+     * @lastCustomerDate
+     * -
+     */
+
     $scope.lastCustomerDate = function() {
         return $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created.date
     };
+
+    /*
+     * @getCustomers
+     * -
+     */
 
     CustomerService.getCustomers(function(customers) {
         $scope.customers = customers;
@@ -79,6 +109,11 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         $scope.analyticsCustomers = tempData;
     });
 
+    /*
+     * @getCustomerLeads
+     * -
+     */
+
     $scope.getCustomerLeads = function() {
         var customerLeads = [];
         _.each($scope.customersThisMonth, function(customer) {
@@ -92,41 +127,29 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         return customerLeads.length;
     };
 
+    /*
+     * @lastOrderDate
+     * -
+     */
+
     $scope.lastOrderDate = function() {
         return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
     };
 
-    // $scope.visitorDataReport = function(result2, result3) {
-    //     var visitorsData = [];
-    //     var currentTotalVisitors = 0;
-    //     for (var k = 0; k < result2.length; k++) {
-    //         var subArr = [];
-    //         var value = result2[k].value || 0;
-    //         currentTotalVisitors += value;
-    //         subArr.push(new Date(result2[k].timeframe.start).getTime());
-    //         subArr.push(value);
-    //         visitorsData.push(subArr);
-    //     };
+    UserService.getAccount(function(account) {
+        $scope.analyticsAccount = account;
+        $scope.runVisitorsReport();
+    });
 
-    //     $scope.visitorsData = visitorsData;
+    $scope.date = {
+        startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
+        endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
+    };
 
-
-    //     var vistorsPreviousData = 0;
-    //     for (var h = 0; h < result3.length; h++) {
-    //         var value = result3[h].value || 0;
-    //         vistorsPreviousData += value;
-    //     };
-
-    //     var visitorsPercent = ChartAnalyticsService.calculatePercentage(vistorsPreviousData, currentTotalVisitors);
-
-    //     $scope.$apply(function() {
-    //         $scope.visitors = currentTotalVisitors;
-    //         $scope.visitorsPercent = visitorsPercent;
-    //     });
-    // };
-
-    // ChartAnalyticsService.runReports($scope.date, $scope.analyticsAccount, function(data) {
-    //     $scope.setReportData(data);
-    // });
+    $scope.runVisitorsReport = function() {
+        ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, 'indigenous.io', function(data) {
+            console.log('visitors data ', data);
+        });
+    };
 
 }]);

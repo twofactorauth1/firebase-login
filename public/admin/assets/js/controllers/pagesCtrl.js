@@ -20,6 +20,10 @@
                     } else {
                         pages[key].components = 0;
                     }
+                    pages[key].hasScreenshot = false;
+                    if (pages[key].screenshot) {
+                        pages[key].hasScreenshot = true;
+                    }
                     pagesArr.push(pages[key]);
                 }
             }
@@ -128,7 +132,7 @@
                     }
 
                     $scope.pages.unshift(newpage);
-                    $scope.displayedPages.unshift(newpage);
+                    $scope.displayedPages.unshift(newpage);d
                     page.title = "";
                     page.handle = "";
                     $scope.showChangeURL = false;
@@ -145,6 +149,8 @@
             window.location = '/admin/#/website/pages/?pagehandle=' + page.handle;
         };
 
+        $scope.filterScreenshot = {};
+
         $scope.pageScreenshotOptions = [{
             name: 'Screenshot',
             value: true
@@ -160,6 +166,11 @@
 
         $scope.triggerInput = function(element) {
             angular.element(element).trigger('input');
+        };
+
+        $scope.clearFilter = function(event, input) {
+            $scope.filterScreenshot = {};
+            $scope.triggerInput(input);
         };
 
     }]);
