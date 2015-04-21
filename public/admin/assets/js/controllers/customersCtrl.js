@@ -162,9 +162,10 @@
                 }
             }
         }, true);
-
+        $scope.socialAccounts = {};
         SocialConfigService.getAllSocialConfig(function(data) {
             $scope.socialAccounts = data.socialAccounts;
+            console.log($scope.socialAccounts);
         });
 
         $scope.importFacebookFriends = function() {
@@ -213,6 +214,39 @@
                 $scope.closeModal();
                 toaster.pop('warning', "No google account integrated.");
             }
+        };
+
+        $scope.importContacts = function(selectedAccount) {
+            var foundSocialId = false;
+            if (selectedAccount.type == userConstant.social_types.GOOGLE) {
+                    foundSocialId = true;
+                    $scope.closeModal();
+                    toaster.pop('success', "Contacts import initiated.");
+                    SocialConfigService.importGoogleContact(selectedAccount.id, function(data) {
+                        $scope.closeModal();
+                        toaster.pop('success', "Contacts import complete.");
+                    });
+                }
+            if (selectedAccount.type == userConstant.social_types.LINKEDIN) {
+                foundSocialId = true;
+                $scope.closeModal();
+                toaster.pop('success', "Contacts import initiated.");
+                SocialConfigService.importLinkedinContact(selectedAccount.id, function(data) {
+                    $scope.closeModal();
+                    toaster.pop('success', "Contacts import complete.");
+                });
+            }  
+
+            if (foundSocialId == false) {
+                $scope.closeModal();
+                toaster.pop('warning', "No google account integrated.");
+            }
+        };
+        $scope.socailType = "";
+        $scope.socailList = false;
+        $scope.showSocialAccountSelect = function(socailType) { 
+            $scope.socailType = socailType;
+            $scope.socailList = true;
         };
 
     }]);

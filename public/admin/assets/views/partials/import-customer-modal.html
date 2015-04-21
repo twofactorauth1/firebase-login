@@ -13,21 +13,34 @@
             <div class="clearfix mb30"></div>
             <div class="social-icons center margin-top-30 margin-bottom-30">
                 <ul>
-                    <li class="social-twitter hidden" tooltip="Twitter" tooltip-placement="top">
+                    <li class="social-twitter hidden" tooltip="Twitter" tooltip-placement="top"  ng-click="showSocialAccountSelect('tw')">
                         <a target="_blank" href="#"> Twitter </a>
                     </li>
                     <li class="social-facebook hidden" tooltip="Facebook" tooltip-placement="top">
-                        <a target="_blank" href="#" data-import-source="facebook" ng-click="importFacebookFriends()"> Facebook </a>
+                        <a target="_blank" href="#" data-import-source="facebook" ng-click="showSocialAccountSelect('fb')"> Facebook </a>
                     </li>
                     <li class="social-google" tooltip="Google" tooltip-placement="top">
-                        <a target="_blank" href="#" data-import-source="googleplus" ng-click="importGmailContacts()"> Google+ </a>
+                        <a target="_blank" href="#" data-import-source="googleplus" ng-click="showSocialAccountSelect('go')"> Google+ </a>
                     </li>
-                    <li class="social-linkedin" tooltip="LinkedIn" tooltip-placement="top" data-import-source="linkedin" ng-click="importLinkedInConnections()">
+                    <li class="social-linkedin" tooltip="LinkedIn" tooltip-placement="top" data-import-source="linkedin" ng-click="showSocialAccountSelect('li')">
                         <a target="_blank" href="#"> LinkedIn </a>
                     </li>
                 </ul>
+
+               
             </div>
             <div class="clearfix mb30"></div>
+        </div>
+         <div class="form-group margin-bottom-0" ng-if="socailList">
+            <ui-select ng-model="selectedSocial" on-select="importContacts($select.selected)" theme="bootstrap">
+                <ui-select-match placeholder="Select a Social Profile">
+                    
+                    <small ng-bind-html="$select.selected.username || $select.selected.type"></small>
+                </ui-select-match>
+                <ui-select-choices repeat="type in socialAccounts | filter: {'type': socailType} ">
+                    <small ng-bind-html="type.username || type.type | highlight: $select.search"></small>
+                </ui-select-choices>
+            </ui-select>
         </div>
         <div class="row import-success hidden" data-import-section="success">
             <span class="fa fa-check"></span>
