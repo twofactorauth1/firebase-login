@@ -10,7 +10,7 @@ app.directive('indigewebSkeuocard', 'PaymentService', 'UserService', 'skeuocard'
                 autoClose: '=autoClose',
                 wrapper: '=wrapperDiv'
             },
-            templateUrl: '/angular_admin/views/partials/_skeocard.html',
+            templateUrl: '/admin/assets/views/partials/_skeocard.html',
             link: function(scope, element, attrs, controllers) {
                 UserService.getUser(function(user) {
                     scope.user = user;

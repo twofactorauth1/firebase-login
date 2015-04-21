@@ -4,7 +4,6 @@
  */
 (function(angular) {
     app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant) {
-        console.log('$location ', $location);
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -133,7 +132,7 @@
             var offsetHeight = angular.element('#page-title').outerHeight() + angular.element('#page-actions').outerHeight() + angular.element('.navbar').outerHeight();
             if (scrollTop > offsetHeight) {
                 editorToolbar.css({
-                    'top': scrollTop - offsetHeight
+                    'top': scrollTop - offsetHeight + 65
                 });
             } else {
                 editorToolbar.css({
