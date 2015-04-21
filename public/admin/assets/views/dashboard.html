@@ -89,12 +89,12 @@
                             <div class="panel panel-white no-radius">
                                 <div class="panel-body padding-20 text-center">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Today</h5>
-                                        <h2 class="no-margin"><small>$</small>1,450</h2>
-                                        <span class="badge badge-success margin-top-10">253 Products</span>
+                                        <h5 class="text-dark no-margin">Customers This Month</h5>
+                                        <h2 class="no-margin">{{customersThisMonth.length}}</h2>
+                                        <span class="badge badge-success margin-top-10">{{getCustomerLeads()}} Leads</span>
                                     </div>
                                     <div class="sparkline space10">
-                                        <span jq-sparkline ng-model="orders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                        <span jq-sparkline ng-model="analyticsCustomers" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
                                     </div>
                                     <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
                                 </div>
@@ -102,16 +102,16 @@
                         </div>
                         <div class="col-xs-12 col-sm-6">
                             <div class="panel panel-white no-radius">
-                                <div class="panel-body padding-20 text-center">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsOrders">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Today</h5>
-                                        <h2 class="no-margin"><small>$</small>1,450</h2>
-                                        <span class="badge badge-danger margin-top-10">253 Orders</span>
+                                        <h5 class="text-dark no-margin">Orders This Month</h5>
+                                        <h2 class="no-margin">{{ordersThisMonth.length}}</h2>
+                                        <span class="badge margin-top-10" ng-class="{'badge-danger': ordersThisMonth.length == 0, 'badge-success': ordersThisMonth.length > 0}">{{getCompletedOrders()}} Complete</span>
                                     </div>
                                     <div class="sparkline space10">
-                                        <span jq-sparkline ng-model="orders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                        <span jq-sparkline ng-model="analyticsOrders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
                                     </div>
-                                    <span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
+                                    <span><i class="fa fa-clock-o"></i> Last Order {{lastOrderDate() | timeAgoFilter}}</span>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +137,6 @@
                                         <h5 class="text-dark no-margin">Today</h5>
                                         <h2 class="no-margin"><small>$</small>1,450</h2>
                                         <span class="badge badge-danger margin-top-10">253 Posts</span>
-                                        <pre>{{orders}}</pre>
                                     </div>
                                     <div class="sparkline space10">
                                         <span jq-sparkline ng-model="orders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
