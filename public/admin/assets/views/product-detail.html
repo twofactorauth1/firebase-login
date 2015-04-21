@@ -35,15 +35,36 @@
                 <h5 class="over-title margin-bottom-15">Product <span class="text-bold">Details</span></h5>
                 <div class="row">
                     <div class="col-sm-4">
+                        <div class="product-gallery">
+                        <div class="panel panel-success">
+                            <div class="panel-heading padding5">
+                                <p class="product-img">
+                                    <a ng-hide="product.is_image" id="convert" role="iconpicker"></a>
+                                    <img ng-show="product.is_image" id="product-image" style="width:75px" class="img-responsive img-rounded hand center"
+                                    ng-src="{{ product.icon }}">
+                                </p>
+                            </div>
+                            <div class="panel-body">
+                                <h4 class="center">{{product.name || 'Product Title'}}</h4>
+                                <p class="subtle-gray center">${{ min_value(product.product_attributes.stripePlans) || product.regular_price}}<span ng-if="product.product_attributes.stripePlans">  -  ${{ max_value(product.product_attributes.stripePlans) || '0.00'}} </span></p>
+                            </div>
+                        </div>
+                    </div>
                         <a href="#" class="thumbnail" style="  height:230px;width: 230px;margin: 20px auto;">
                             <img src="assets/images/lion-565820_640.jpg" alt="">
                         </a>
-                        <div class="row">
+                        <div class="row hidden">
                             <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
                             <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
                             <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
                             <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
                         </div>
+                        <div class="row">
+                            <switch ng-model="product.is_image" type="checkbox" switch-label="Image"></switch>
+                                <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia"
+                                user='user' insert-media-type='"image"'> <span class="fa fa-image"></span>  <span class="hidden-xs">Change Image</span>
+                            </a>
+                </div>
                     </div>
                     <div ng-class="{'col-sm-8': showVariations, 'col-sm-4': !showVariations}">
                         <div class="panel panel-transparent">
@@ -343,3 +364,4 @@
     <!--     <pre>{{product}}</pre> -->
     <!-- end: YOUR CONTENT HERE -->
 </div>
+<div id="model_container"></div>
