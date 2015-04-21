@@ -4,7 +4,7 @@
  */
 (function(angular) {
     app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", function($scope, $modal, ProductService) {
-
+        $scope.newProduct = {};
         ProductService.getProducts(function(products) {
             $scope.products = products;
         });
@@ -33,6 +33,7 @@
             ProductService.postProduct($scope.newProduct, function(product) {
                 $scope.displayedProducts.unshift(product);
                 $scope.modalInstance.close();
+                $scope.newProduct = {};
             });
         };
 
