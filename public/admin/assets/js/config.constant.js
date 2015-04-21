@@ -291,6 +291,7 @@ app.constant('JS_REQUIRES', {
         'customerService': 'assets/js/services/customer.js',
         'ImportContactService': 'assets/js/services/import_contacts.js',
         'chartAnalyticsService': 'assets/js/services/chart_analytics.js',
+        'chartCommerceService': 'assets/js/services/chart_commerce.js',
         'keenService': 'assets/js/services/keen.js',
         'commonService': 'assets/js/services/common.js',
         'socialConfigService': 'assets/js/services/socialconfig.js',
