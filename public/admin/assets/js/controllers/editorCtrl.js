@@ -83,7 +83,9 @@
          * get the url for the view page/post button
          */
 
-        $scope.getUrl = function(handle) {
+        $scope.getUrl = function(handle, is_post) {
+            if(is_post)
+                 handle = "blog/"  + handle;
             return 'http://' + window.location.host + '/' + handle;
         };
 

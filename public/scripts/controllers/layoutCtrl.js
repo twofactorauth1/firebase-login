@@ -173,8 +173,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     setTimeout(function() {
                         $scope.$apply(function() {
                             $scope.isLoaded = true;
-                            $scope.parentScope.iframeLoaded;
-                            $scope.parentScope.afteriframeLoaded();
+                            if($scope.parentScope)
+                            {
+                                $scope.parentScope.iframeLoaded;
+                                $scope.parentScope.afteriframeLoaded();
+                            }
+                                
                             $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
                                 if (newValue !== undefined && newValue.length) {
                                     var tagsArr = [];
@@ -209,9 +213,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
                 var iframe = window.document.getElementById("iframe-website")
                 $scope.isAdmin = iframe;
-                if ($scope.parentScope.updateAdminPageScope) {
-                    $scope.parentScope.updateAdminPageScope($scope.currentpage);
-                }
+                //if ($scope.parentScope.updateAdminPageScope) {
+                   // $scope.parentScope.updateAdminPageScope($scope.currentpage);
+               // }
             }
         });
 

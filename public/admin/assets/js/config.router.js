@@ -200,7 +200,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         controller: 'ProfileBusinessCtrl',
         ncyBreadcrumb: {
-            label: 'Profile Business'
+            label: 'Business Profile'
         },
         resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService', 'bootstrap')
     }).state('app.account.profilepersonal', {
@@ -210,7 +210,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt', 
         controller: 'ProfilePersonalCtrl',       
         ncyBreadcrumb: {
-            label: 'Profile Personal'
+            label: 'Personal Profile'
         },
         resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'bootstrap')
     }).state('app.account.billing', {

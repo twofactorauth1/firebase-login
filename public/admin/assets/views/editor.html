@@ -3,8 +3,10 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">{{ currentPage.title || single_post.post_title || 'Title'}}</h1>
-                <span class="mainDescription">There are currently {{currentPage.components.length}} components.</span>
+                <h1 ng-if="single_post" class="mainTitle">{{ post_data.post_title || 'Single Post'}}</h1>
+                <h1 ng-if="!single_post" class="mainTitle">{{ currentPage.title || 'Title'}}</h1>
+                <span ng-if="single_post" class="mainDescription">There are currently {{post_data.post_tags.length}} tags.</span>
+                <span ng-if="!single_post" class="mainDescription">There are currently {{currentPage.components.length}} components.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -29,8 +31,11 @@
                         </div> -->
                         <div class="col-sm-9 col-sm-offset-3 col-md-7 col-md-offset-5">
                             <div class="col-sm-3 col-xs-6 center">
-                                <a type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(currentPage.handle) }}" target="_blank">
-                                    <span>{{single_post ? 'View Post' :  'View Page'}}</span>
+                                <a ng-if="!single_post" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(currentPage.handle, false) }}" target="_blank">
+                                    <span>View Page</span>
+                                </a>
+                                <a ng-if="single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(post_data.post_url, true) }}" target="_blank">
+                                    <span>View Post</span>
                                 </a>
                                 <div class="visible-xs margin-bottom-10"></div>
                             </div>
