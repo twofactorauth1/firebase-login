@@ -41,5 +41,68 @@
             window.location = '/admin/#/commerce/products/'+product._id;
         };
 
+        $scope.formatStatus = function(status) {
+            var formattedStatus = ' -- ';
+            if (status) {
+                var matchingStatus = _.findWhere($scope.productStatusTypes, {
+                    data: status
+                });
+                if (matchingStatus) {
+                    formattedStatus = matchingStatus.label;
+                }
+            }
+
+            return formattedStatus;
+        };
+
+        /*
+         * @clearFilter
+         * - clear the filter for the status when the red X is clicked
+         */
+
+        $scope.filterProduct = {};
+
+        $scope.clearFilter = function(event, input, filter) {
+            $scope.filterProduct[filter] = {};
+            $scope.triggerInput(input);
+        };
+
+        $scope.productTypes = [{
+            label: "Digital",
+            data: "digital"
+        }, {
+            label: "Subscription",
+            data: "Subscription"
+        }, {
+            label: "Physical",
+            data: "Physical"
+        }, {
+            label: "External Link",
+            data: "external_link"
+        }];
+
+        $scope.productStatusTypes = [{
+            label: "Backorder",
+            data: "backorder"
+        }, {
+            label: "Inactive",
+            data: "inactive"
+        }, {
+            label: "Active",
+            data: "active"
+        }, {
+            label: "Auto Inactive",
+            data: "auto_inactive"
+        }];
+
+        /*
+         * @triggerInput
+         * - trigger the hidden input to trick smart table into activating filter
+         */
+
+        $scope.triggerInput = function(element) {
+            angular.element(element).trigger('input');
+        };
+
     }]);
 })(angular);

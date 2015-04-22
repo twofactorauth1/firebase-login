@@ -421,13 +421,12 @@
          */
 
         $scope.activated = false;
-        $scope.afteriframeLoaded = function() {
+        $scope.afteriframeLoaded = function(page) {
             $scope.iframeLoaded = true;
             $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
             $scope.editPage();
-            if (!$scope.single_post) {
-                $scope.updatePage($location.$$search['pagehandle']);
-            }
+            $scope.currentPage = page;
+            $scope.updatePage($scope.currentPage.handle);
         };
 
         /*
@@ -1193,38 +1192,15 @@
                 document.getElementById("iframe-website").setAttribute("src", current_src + '&custid=' + $location.$$search['custid']);
             }
 
-            WebsiteService.getPages(function(pages) {
-                var currentPage = $scope.pageSelected;
-                var parsed = angular.fromJson(pages);
-                var arr = [];
-
-                for (var x in parsed) {
-                    arr.push(parsed[x]);
-                }
-                $scope.allPages = arr;
-                $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-                that.allPages = arr;
-                $scope.currentPage = _.findWhere(that.allPages, {
-                    handle: currentPage
-                });
-
-                WebsiteService.getPageVersions($scope.currentPage._id, function(pageVersions) {
-                    $scope.pageVersions = pageVersions;
-                });
-
-                var localPage = _.findWhere(pages, {
-                    handle: currentPage
-                });
-                //get components from page
+            //get components from page
                 if ($scope.currentPage && $scope.currentPage.components) {
                     $scope.components = $scope.currentPage.components;
                 } else {
                     $scope.components = [];
                 }
 
-                that.originalCurrentPageComponents = localPage.components;
+                that.originalCurrentPageComponents = $scope.currentPage.components;
                 $scope.originalCurrentPage = angular.copy($scope.currentPage);
-            });
         };
 
         /*
