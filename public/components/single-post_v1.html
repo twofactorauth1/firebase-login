@@ -184,7 +184,7 @@
                             </h2>
                             <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
-                                    <input ng-if="isEditing" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
+                                    <input ng-if="isEditing" placeholder="Publish Date" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'MM/dd/yyyy' }} </span>
                             </div>
