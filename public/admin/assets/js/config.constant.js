@@ -413,5 +413,10 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'ngTextTruncate',
         files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
-    }]
+    },
+    {
+        name: 'blueimp',
+        files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
+    }
+    ]
 });

@@ -135,7 +135,9 @@
                         <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
                             <div class="col-sm-3 col-xs-12">
                                 <div class="img-wrap">
+                                <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
                                     <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                    </a>
                                 </div>
                             </div>
                             <div class="col-sm-8 col-xs-12">
@@ -159,7 +161,9 @@
                         <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
                             <div class="col-sm-3 col-xs-12">
                                 <div class="img-wrap">
+                                <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
                                     <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                    </a>
                                 </div>
                             </div>
                             <div class="col-sm-8 col-xs-12">
@@ -183,7 +187,9 @@
                         <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
                             <div class="col-sm-3 col-xs-12">
                                 <div class="img-wrap">
+                                <a ng-href="{{template.previewUrl}}" title="">
                                     <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                    </a>
                                 </div>
                             </div>
                             <div class="col-sm-8 col-xs-12">
@@ -244,5 +250,40 @@
             <button class="btn btn-primary btn-o" ng-click="createPageFromTemplate(createpage, $event)">Add Page</button>
         </div>
     </script>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+            <!-- The container for the modal slides -->
+            <div class="slides">
+
+            </div>
+            <!-- Controls for the borderless lightbox -->
+            <h3 class="title"></h3>
+            <a class="prev">‹</a>
+            <a class="next">›</a>
+            <a class="close">×</a>
+            <a class="play-pause"></a>
+           
+            <!-- The modal dialog, which will be used to wrap the lightbox content -->
+            <div class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body next"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left prev">
+                                <i class="glyphicon glyphicon-chevron-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary next">
+                                Next
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
     <!-- end:  NEW PAGE MODAL -->
 </div>
