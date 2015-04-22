@@ -100,13 +100,15 @@
 
 app.controller('ChartCtrl3', ["$scope", 'UserService', function($scope, UserService) {
   UserService.getUserPreferences(function(preferences) {
-    var totalTasks = 15;
+    var taskKeys = ["basic_info", "profile-personal", "single-page", "single-post", "integrations", "social-feed", "customers", "single-customer", "commerce", "dashboard", "pages", "posts", "single-product", "profile-business", "billing", "site-analytics"];
+    var totalTasks = taskKeys.length;
     var completedTasks = 0;
-    for (var task in preferences.tasks) {
-      if (preferences.tasks[task]) {
+
+    taskKeys.forEach(function(value, index) {
+      if (preferences.tasks[value]) {
         completedTasks += 1;
       }
-    }
+    });
 
     var completedPercent = parseInt((completedTasks / totalTasks) * 100);
     var inCompletedPercent = parseInt(((totalTasks - completedTasks) / totalTasks) * 100);
