@@ -624,7 +624,7 @@
                 //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 100) + "px";
+                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70) + "px";
                     });
                 }, 100);
             }
