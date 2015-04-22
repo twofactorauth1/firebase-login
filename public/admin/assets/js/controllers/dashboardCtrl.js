@@ -4,6 +4,10 @@
  */
 app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService) {
 
+    $scope.myPagingFunction = function() {
+        console.log('paging');
+    };
+
     /*
      * @isSameDateAs
      * - determine if two dates are identical and return boolean
@@ -33,6 +37,18 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
         return days;
     };
+
+    CustomerService.getCustomers(function(customers) {
+        CustomerService.getAllCustomerActivities(function(activities) {
+            $scope.activities = activities.results;
+            _.each($scope.activities, function(activity) {
+                var matchingCustomer = _.findWhere(customers, {
+                    _id: activity.contactId
+                });
+                activity.customer = matchingCustomer;
+            });
+        });
+    });
 
     /*
      * @getOrders
@@ -186,7 +202,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
                 tempData.push(thisDaysVisitors);
             });
 
-            $scope.$apply(function(){
+            $scope.$apply(function() {
                 $scope.analyticsVisitors = tempData;
             });
         });
@@ -201,8 +217,9 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         ChartCommerceService.runNetRevenuReport(function(revenueData) {
             var revenue = revenueData[0].result;
             $scope.charges = revenueData[1].result;
-            console.log(revenueData[2]);
-            // $scope.lastCharge = revenueData[2].result[0].keen.created_at;
+            if (revenueData[2].result.length > 0) {
+                $scope.lastChargeDate = revenueData[2].result[0].keen.created_at;
+            }
             $scope.revenueThisMonth = 0;
             var tempData = [];
             _.each($scope.getDaysThisMonth(), function(day, index) {
@@ -217,7 +234,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
                 tempData.push(thisDaysRevenue);
             });
 
-            $scope.$apply(function(){
+            $scope.$apply(function() {
                 $scope.analyticsRevenue = tempData;
             });
         });

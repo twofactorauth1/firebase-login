@@ -14,6 +14,7 @@ app.directive('customerActivity', ['$filter', 'CustomerService', function($filte
         },
         templateUrl: '/admin/assets/views/partials/activity.html',
         link: function(scope, element, attrs, controllers) {
+            console.log('singleCustomer ', scope.singleCustomer);
             scope.next = false;
             scope.disablePaging = true;
             scope.main = {
