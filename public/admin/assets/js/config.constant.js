@@ -343,6 +343,9 @@ app.constant('JS_REQUIRES', {
         name: 'angularFileUpload',
         files: ['../js/libs/angular-file-upload/angular-file-upload.min.js']
     }, {
+        name: 'infinite-scroll',
+        files: ['../js/libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js']
+    }, {
         name: 'ngAside',
         files: ['../js/libs/angular-aside/dist/js/angular-aside.min.js', '../js/libs/angular-aside/dist/css/angular-aside.min.css']
     }, {

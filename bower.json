@@ -119,7 +119,8 @@
     "masonry": "~3.3.0",
     "angular-masonry": "~0.11.0",
     "ngOnboarding": "~0.1.7",
-    "ng-text-truncate": "https://github.com/lorenooliveira/ng-text-truncate.git"
+    "ng-text-truncate": "https://github.com/lorenooliveira/ng-text-truncate.git",
+    "ngInfiniteScroll": "1.0.0"
   },
   "resolutions": {
     "angular": "1.3.15",
