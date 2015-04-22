@@ -216,6 +216,27 @@
             }
         };
 
+        /*
+         * @triggerInput
+         * - trigger the hidden input to trick smart table into activating filter
+         */
+
+        $scope.triggerInput = function(element) {
+            angular.element(element).trigger('input');
+        };
+
+        /*
+         * @clearFilter
+         * - clear the filter for the status when the red X is clicked
+         */
+
+        $scope.filterCustomerStatus = {};
+
+        $scope.clearFilter = function(event, input) {
+            $scope.filterCustomerStatus = {};
+            $scope.triggerInput(input);
+        };
+
         $scope.importContacts = function(selectedAccount) {
             var foundSocialId = false;
             if (selectedAccount.type == userConstant.social_types.GOOGLE) {
