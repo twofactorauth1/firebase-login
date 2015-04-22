@@ -41,5 +41,40 @@
             window.location = '/admin/#/commerce/products/'+product._id;
         };
 
+        /*
+         * @clearFilter
+         * - clear the filter for the status when the red X is clicked
+         */
+
+        $scope.filterProduct = {};
+
+        $scope.clearFilter = function(event, input, filter) {
+            $scope.filterProduct[filter] = {};
+            $scope.triggerInput(input);
+        };
+
+        $scope.productStatusTypes = [{
+            label: "Backorder",
+            data: "backorder"
+        }, {
+            label: "Inactive",
+            data: "inactive"
+        }, {
+            label: "Active",
+            data: "active"
+        }, {
+            label: "Auto Inactive",
+            data: "auto_inactive"
+        }];
+
+        /*
+         * @triggerInput
+         * - trigger the hidden input to trick smart table into activating filter
+         */
+
+        $scope.triggerInput = function(element) {
+            angular.element(element).trigger('input');
+        };
+
     }]);
 })(angular);

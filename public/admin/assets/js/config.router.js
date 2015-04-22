@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -66,7 +66,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Pages'
         },
-        resolve: loadSequence('pagesCtrl', 'userService', 'ui.select')
+        resolve: loadSequence('pagesCtrl', 'userService')
     }).state('app.website.posts', {
         url: '/posts',
         templateUrl: "assets/views/posts.html",
@@ -104,7 +104,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Customers'
         },
-        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'ui.select')
+        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService')
     }).state('app.singleCustomer', {
         url: '/customers/:contactId',
         templateUrl: "assets/views/customer-detail.html",
@@ -114,7 +114,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{customer.first}} {{customer.last}}',
             parent: 'app.customers'
         },
-        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset','assetsService', 'bootstrap', 'toasterService','ui.select')
+        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'formatText', 'offset','assetsService', 'bootstrap', 'toasterService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -149,7 +149,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Orders'
         },
-        resolve: loadSequence('ordersCtrl', 'orderService', 'customerService', 'ui.select', 'dateRangePicker')
+        resolve: loadSequence('ordersCtrl', 'orderService', 'customerService', 'dateRangePicker')
     }).state('app.commerce.orderdetail', {
         url: '/orders/:orderId',
         templateUrl: "assets/views/order-detail.html",
@@ -176,7 +176,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Social Feed'
         },
-        resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry', 'ui.select')
+        resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "assets/views/campaigns.html",
