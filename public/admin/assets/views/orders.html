@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.commerce.ORDERS">{{ mainTitle }}</h1>
-                <span class="mainDescription">There are currently {{orders.length}} orders.</span>
+                <span ng-if="orders" class="mainDescription">There are currently {{orders.length}} orders.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
