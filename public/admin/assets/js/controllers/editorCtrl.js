@@ -421,13 +421,21 @@
          */
 
         $scope.activated = false;
-        $scope.afteriframeLoaded = function() {
+        $scope.afteriframeLoaded = function(page) {
             $scope.iframeLoaded = true;
             $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
             $scope.editPage();
-            if (!$scope.single_post) {
-                $scope.updatePage($location.$$search['pagehandle']);
+            //if (!$scope.single_post) {
+            $scope.currentPage = page;
+            if ($scope.currentPage && $scope.currentPage.components) {
+                $scope.components = $scope.currentPage.components;
+            } else {
+                $scope.components = [];
             }
+
+            that.originalCurrentPageComponents = $scope.currentPage.components;
+            $scope.originalCurrentPage = angular.copy($scope.currentPage);
+            
         };
 
         /*

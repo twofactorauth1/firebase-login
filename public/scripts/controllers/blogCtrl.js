@@ -54,7 +54,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     }, 500);
                 });
                 if($scope.parentScope)
-                    $scope.parentScope.afteriframeLoaded();
+                    $scope.parentScope.afteriframeLoaded(that.pages);
                 //var iframe = window.parent.document.getElementById("iframe-website")
                 //iframe && iframe.contentWindow && iframe.contentWindow.parent.updateAdminPageScope && iframe.contentWindow.parent.updateAdminPageScope(that.pages);
                 // console.log("current Page");

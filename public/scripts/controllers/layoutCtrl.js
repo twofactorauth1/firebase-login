@@ -176,7 +176,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             if($scope.parentScope)
                             {
                                 $scope.parentScope.iframeLoaded;
-                                $scope.parentScope.afteriframeLoaded();
+                                $scope.parentScope.afteriframeLoaded($scope.currentpage);
                             }
                                 
                             $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
