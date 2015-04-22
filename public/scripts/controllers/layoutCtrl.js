@@ -816,8 +816,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }).get());
                     angular.element(".meet-team-height").css("min-height", maxTeamHeight);
                 }
+                                
             }, 500)
-
+            $scope.parentScope.resizeIframe();
             //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
             //}
         };

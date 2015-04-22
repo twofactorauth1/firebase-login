@@ -442,6 +442,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     }
                 });
             });
+            $scope.parentScope.resizeIframe();
         };
 
         /*

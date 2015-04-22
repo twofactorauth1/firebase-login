@@ -427,6 +427,7 @@
             $scope.editPage();
             $scope.currentPage = page;
             $scope.updatePage($scope.currentPage.handle);
+           // $scope.resizeIframe();
         };
 
         /*
@@ -597,8 +598,7 @@
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: angular.element(e.currentTarget).closest('.component').data('id')
                     });
-                });
-                $scope.resizeIframe();
+                });                
             };
 
             if (iframeDoc.getElementById('body')) {
@@ -620,13 +620,13 @@
         $scope.resizeIframe = function() {
             var iframe = document.getElementById("iframe-website");
             if (iframe) {
-                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
+                //var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.iframeHeight = (iframeDoc.body.scrollHeight + 20) + "px";
+                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 100) + "px";
                     });
-                }, 1000);
+                }, 100);
             }
         };
 
@@ -1337,7 +1337,7 @@
                         }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
-                    $scope.resizeIframe();
+                    //$scope.resizeIframe();
                 }
             });
         };
@@ -1360,7 +1360,7 @@
             $scope.updateIframeComponents();
             $scope.componentEditing = null;
             $scope.activateCKEditor();
-            $scope.resizeIframe();
+           
             $scope.$apply(function() {
                 toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
             });
