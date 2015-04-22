@@ -31,7 +31,7 @@
                         </div> -->
                         <div class="col-sm-9 col-sm-offset-3 col-md-7 col-md-offset-5">
                             <div class="col-sm-3 col-xs-6 center">
-                                <a ng-if="!single_post" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(currentPage.handle, false) }}" target="_blank">
+                                <a ng-if="!single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(currentPage.handle, false) }}" target="_blank">
                                     <span>View Page</span>
                                 </a>
                                 <a ng-if="single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(post_data.post_url, true) }}" target="_blank">
@@ -76,4 +76,4 @@
     <div data-ng-include=" 'assets/views/partials/add-component-modal.html' "></div>
     <div data-ng-include=" 'assets/views/partials/social-links-modal.html' "></div>
     <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
-    <!-- <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div>  -->
+    <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div>

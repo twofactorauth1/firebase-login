@@ -421,13 +421,13 @@
          */
 
         $scope.activated = false;
-        $scope.afteriframeLoaded = function() {
+        $scope.afteriframeLoaded = function(page) {
             $scope.iframeLoaded = true;
             $scope.childScope = document.getElementById("iframe-website").contentWindow.angular.element("#childScope").scope();
             $scope.editPage();
-            if (!$scope.single_post) {
-                $scope.updatePage($location.$$search['pagehandle']);
-            }
+            $scope.currentPage = page;
+            $scope.updatePage($scope.currentPage.handle);
+           // $scope.resizeIframe();
         };
 
         /*
@@ -598,8 +598,7 @@
                     $scope.componentEditing = _.findWhere($scope.components, {
                         _id: angular.element(e.currentTarget).closest('.component').data('id')
                     });
-                });
-                $scope.resizeIframe();
+                });                
             };
 
             if (iframeDoc.getElementById('body')) {
@@ -621,13 +620,13 @@
         $scope.resizeIframe = function() {
             var iframe = document.getElementById("iframe-website");
             if (iframe) {
-                var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
+                //var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.iframeHeight = (iframeDoc.body.scrollHeight + 20) + "px";
+                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70) + "px";
                     });
-                }, 1000);
+                }, 100);
             }
         };
 
@@ -1193,38 +1192,15 @@
                 document.getElementById("iframe-website").setAttribute("src", current_src + '&custid=' + $location.$$search['custid']);
             }
 
-            WebsiteService.getPages(function(pages) {
-                var currentPage = $scope.pageSelected;
-                var parsed = angular.fromJson(pages);
-                var arr = [];
-
-                for (var x in parsed) {
-                    arr.push(parsed[x]);
-                }
-                $scope.allPages = arr;
-                $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-                that.allPages = arr;
-                $scope.currentPage = _.findWhere(that.allPages, {
-                    handle: currentPage
-                });
-
-                WebsiteService.getPageVersions($scope.currentPage._id, function(pageVersions) {
-                    $scope.pageVersions = pageVersions;
-                });
-
-                var localPage = _.findWhere(pages, {
-                    handle: currentPage
-                });
-                //get components from page
+            //get components from page
                 if ($scope.currentPage && $scope.currentPage.components) {
                     $scope.components = $scope.currentPage.components;
                 } else {
                     $scope.components = [];
                 }
 
-                that.originalCurrentPageComponents = localPage.components;
+                that.originalCurrentPageComponents = $scope.currentPage.components;
                 $scope.originalCurrentPage = angular.copy($scope.currentPage);
-            });
         };
 
         /*
@@ -1361,7 +1337,7 @@
                         }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
-                    $scope.resizeIframe();
+                    //$scope.resizeIframe();
                 }
             });
         };
@@ -1384,7 +1360,7 @@
             $scope.updateIframeComponents();
             $scope.componentEditing = null;
             $scope.activateCKEditor();
-            $scope.resizeIframe();
+           
             $scope.$apply(function() {
                 toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
             });

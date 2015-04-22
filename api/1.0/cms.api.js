@@ -1165,7 +1165,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('pageId', pageId);
                 blogPost.attributes.modified.date = new Date();
                 blogPost.attributes.created.date = new Date();
-
+                blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
+                self.log.debug('<< Publish Date is' + blogPost.attributes.publish_date);
                 cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
                     self.sendResultOrError(res, err, value, "Error creating Blog Post");
