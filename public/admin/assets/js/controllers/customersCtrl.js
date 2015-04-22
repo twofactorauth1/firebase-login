@@ -32,6 +32,7 @@
 
         $scope.closeModal = function() {
             $scope.modalInstance.close();
+            $scope.socailList = false;
         };
 
         $scope.preventClick = function(event) {
@@ -262,6 +263,7 @@
                 $scope.closeModal();
                 toaster.pop('warning', "No google account integrated.");
             }
+            $scope.socailList = false;
         };
         $scope.socailType = "";
         $scope.socailList = false;
