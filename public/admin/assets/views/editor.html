@@ -5,8 +5,8 @@
             <div class="col-sm-8">
                 <h1 ng-if="single_post" class="mainTitle">{{ post_data.post_title || 'Single Post'}}</h1>
                 <h1 ng-if="!single_post" class="mainTitle">{{ currentPage.title || 'Title'}}</h1>
-                <span ng-if="single_post" class="mainDescription">There are currently {{post_data.post_tags.length}} tags.</span>
-                <span ng-if="!single_post" class="mainDescription">There are currently {{currentPage.components.length}} components.</span>
+                <span ng-if="single_post && post_data.post_tags" class="mainDescription">There are currently {{post_data.post_tags.length}} tags.</span>
+                <span ng-if="!single_post && currentPage.components" class="mainDescription">There are currently {{currentPage.components.length}} components.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
