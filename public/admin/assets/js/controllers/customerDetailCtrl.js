@@ -218,11 +218,11 @@
         $scope.customerSaveFn = function() {
 
             $scope.saveLoading = true;
-            if ($scope.customer.details[0].phones) {
-                $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
-                    return num.number !== "";
-                });
-            }
+            // if ($scope.customer.details[0].phones) {
+            //     $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
+            //         return num.number !== "";
+            //     });
+            // }
 
             $scope.checkAddressLatLng($scope.customer.details[0].addresses, function(addresses) {
                 $scope.customer.details[0].addresses = addresses;
@@ -235,6 +235,7 @@
                     customer_data.tags = tempTags;
                     CustomerService.saveCustomer(customer_data, function(customer) {
                         $scope.customer = customer;
+                        $scope.setDefaults();
                         $scope.setTags();
                         $scope.saveLoading = false;
                         $scope.refreshMap();
@@ -526,7 +527,7 @@
 
         $scope.setDefaults = function() {
             // New customer
-            if($scope.customer.details.length == 0)
+            if($scope.customer.details.length == 0 || !$scope.customer.details[0].length)
             {
                 $scope.customer.details[0] = [];
                 $scope.customer.details[0].emails =[];
