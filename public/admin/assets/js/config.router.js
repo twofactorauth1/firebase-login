@@ -221,7 +221,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Billing'
         },
-        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'angular-cookie')
+        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'angular-cookie', 'skeuocard')
     }).state('app.account.integrations', {
         url: '/integrations',
         templateUrl: "assets/views/integrations.html",

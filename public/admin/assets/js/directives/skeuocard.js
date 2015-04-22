@@ -1,5 +1,6 @@
 'use strict';
-app.directive('indigewebSkeuocard', 'PaymentService', 'UserService', 'skeuocard', function() {
+
+app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(PaymentService, UserService) {
         return {
             require: [],
             restrict: 'C',
@@ -10,7 +11,7 @@ app.directive('indigewebSkeuocard', 'PaymentService', 'UserService', 'skeuocard'
                 autoClose: '=autoClose',
                 wrapper: '=wrapperDiv'
             },
-            templateUrl: '/admin/assets/views/partials/_skeocard.html',
+            templateUrl: '/admin/assets/views/partials/_skeuocard.html',
             link: function(scope, element, attrs, controllers) {
                 UserService.getUser(function(user) {
                     scope.user = user;
@@ -214,4 +215,4 @@ app.directive('indigewebSkeuocard', 'PaymentService', 'UserService', 'skeuocard'
                 };
             }
         }
-});
+}]);

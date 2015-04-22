@@ -321,7 +321,12 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'toaster',
         files: ['../js/libs/AngularJS-Toaster/toaster.js', '../js/libs/AngularJS-Toaster/toaster.css']
-    }, {
+    },
+    {
+        name: 'skeuocard',
+        files: ['../js/libs/skeuocard/lib/js/jquery.card.js']
+    },
+     {
         name: 'angularBootstrapNavTree',
         files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
     }, {
