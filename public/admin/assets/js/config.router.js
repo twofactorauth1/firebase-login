@@ -198,7 +198,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/profile-business.html",
         title: 'Profile Business',
         icon: 'ti-layout-media-left-alt',
-        controller: 'ProfileBusinessCtrl',
         ncyBreadcrumb: {
             label: 'Business Profile'
         },
@@ -208,7 +207,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "assets/views/profile-personal.html",
         title: 'Profile Personal',
         icon: 'ti-layout-media-left-alt', 
-        controller: 'ProfilePersonalCtrl',       
         ncyBreadcrumb: {
             label: 'Personal Profile'
         },

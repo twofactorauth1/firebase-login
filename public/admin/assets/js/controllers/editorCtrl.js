@@ -104,7 +104,7 @@
 
         $scope.openModal = function(modal) {
             $scope.modalInstance = $modal.open({
-                templateUrl: modal + '.html',
+                templateUrl: modal,
                 scope: $scope
             });
         };
