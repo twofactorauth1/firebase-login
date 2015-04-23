@@ -241,7 +241,7 @@
                                     <img ng-src="{{type.profile.picture.data.url || type.profile.profile_image_url_https || type.image}}" class="avatar pull-left" width="50" />
                                 </div>
                                 <div class="pull-left filter-details">
-                                    <h4>{{type.profile.name || type.username | limitTo: 12 }}</h4>
+                                    <h4 class="panel-title" ng-text-truncate="type.profile.name || type.username" ng-tt-chars-threshold="15" ng-tt-no-toggling></h4>
                                     <p><span class="fa" ng-class="{'fa-facebook-square': type.type == 'fb', 'fa-twitter-square': type.type == 'tw'}"></span> ({{feedLengths[type.id] || 0}})</p>
                                 </div>
                                 <div class="ckbox ckbox-default pull-right">
