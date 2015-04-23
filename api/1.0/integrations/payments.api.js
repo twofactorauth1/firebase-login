@@ -447,6 +447,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if(contact && contact.stripeId && contact.stripeId.length > 0) {
             return this.wrapError(resp, 409, null, "Customer already exists.");
         }
+        self.createUserActivityWithParams(_accountId, user.id(), 'CREATE_STRIPE_CUSTOMER', null, null, function(){});
 
         if(contact) {
             stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
@@ -515,7 +516,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.updateStripeCustomer(customerId, params.account_balance, params.cardToken, params.coupon, params.default_card,
                     params.description, params.email, params.metadata, function(err, value){
                         self.log.debug('<< updateCustomer');
-                        return self.sendResultOrError(resp, err, value, "Error updating Stripe Customer");
+                        self.sendResultOrError(resp, err, value, "Error updating Stripe Customer");
+                        self.createUserActivity(req, 'UPDATE_STRIPE_CUSTOMER', null, {customerId: customerId}, function(){});
+                        return;
                     });
 
             }
@@ -556,6 +559,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.error('Error deleting customer from Stripe: ' + err);
                             return self.wrapError(resp, null, 500, 'Error removing Stripe Customer');
                         }
+                        self.createUserActivity(req, 'DELETE_STRIPE_CUSTOMER', null, {customerId: customerId}, function(){});
                         customerLinkDao.removeLinksByCustomer(customerId, function(err, value){
                             self.log.debug('<< deleteCustomer');
                             return self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
@@ -652,7 +656,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.createStripePlan(planId, amount, currency, interval, interval_count, name, trial_period_days, metadata,
                     statement_description, accessToken, function(err, value){
                         self.log.debug('<< createPlan');
-                        return self.sendResultOrError(resp, err, value, "Error creating Stripe Plan");
+                        self.sendResultOrError(resp, err, value, "Error creating Stripe Plan");
+                        self.createUserActivity(req, 'CREATE_STRIPE_PLAN', null, {planId: planId}, function(){});
+                        return;
                     });
             }
         });
@@ -690,7 +696,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.updateStripePlan(planId, name, metadata, statement_description, accessToken, function(err, value){
                     self.log.debug('<< updatePlan');
-                    return self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
+                    self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
+                    self.createUserActivity(req, 'UPDATE_STRIPE_PLAN', null, {planId: planId}, function(){});
+                    return;
                 });
             }
         });
@@ -719,7 +727,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.deleteStripePlan(planId, accessToken, function(err, value){
                     self.log.debug('<< deletePlan');
-                    return self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
+                    self.sendResultOrError(resp, err, value, "Error updating Stripe Plan");
+                    self.createUserActivity(req, 'DELETE_STRIPE_PLAN', null, {planId: planId}, function(){});
+                    return;
                 });
             }
         });
@@ -800,7 +810,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                 }
                             });
                         }
-                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                        self.sendResultOrError(resp, err, value, "Error creating subscription");
+                        self.createUserActivity(req, 'CREATE_STRIPE_SUB', null, {id: value.id, planId: planId, customerId: customerId, contactId: contactId, userId: userId}, function(){});
+                        return;
                     });
             }
         });
@@ -861,7 +873,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.updateStripeSubscription(customerId, subscriptionId, planId, coupon, prorate, trial_end, card,
                     quantity, application_fee_percent, metadata, accessToken, function(err, value){
                         self.log.debug('<< updateSubscription');
-                        return self.sendResultOrError(resp, err, value, "Error updating subscription");
+                        self.sendResultOrError(resp, err, value, "Error updating subscription");
+                        self.createUserActivity(req, 'UPDATE_STRIPE_SUB', null, {id: subscriptionId}, function(){});
+                        return;
                     });
             }
         });
@@ -887,7 +901,9 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 stripeDao.cancelStripeSubscription(accountId, customerId, subscriptionId, at_period_end, accessToken, function(err, value){
                     self.log.debug('<< cancelSubscription');
-                    return self.sendResultOrError(resp, err, value, "Error cancelling subscription");
+                    self.sendResultOrError(resp, err, value, "Error cancelling subscription");
+                    self.createUserActivity(req, 'CANCEL_STRIPE_SUB', null, {id: subscriptionId}, function(){});
+                    return;
                 });
             }
         });
@@ -921,7 +937,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 stripeDao.createStripeCard(customerId, cardToken, function(err, value){
                     self.log.debug('<< createCard');
-                    return self.sendResultOrError(resp, err, value, "Error creating card");
+                    self.sendResultOrError(resp, err, value, "Error creating card");
+                    self.createUserActivity(req, 'CREATE_STRIPE_CARD', null, {customerId: customerId}, function(){});
+                    return;
                 });
             }
         });
@@ -996,7 +1014,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.updateStripeCard(customerId, cardId, name, address_city, address_country, address_line1,
                     address_line2, address_state, address_zip, exp_month, exp_year, function(err, value){
                         self.log.debug('<< updateCard');
-                        return self.sendResultOrError(resp, err, value, "Error updating card");
+                        self.sendResultOrError(resp, err, value, "Error updating card");
+                        self.createUserActivity(req, 'UPDATE_STRIPE_CARD', null, {customerId: customerId, cardId: cardId}, function(){});
+                        return;
                 });
             }
         });
@@ -1054,7 +1074,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.deleteStripeCard(customerId, cardId, function(err, value){
                     self.log.debug('<< deleteCard');
-                    return self.sendResultOrError(resp, err, value, "Error listing cards");
+                    self.sendResultOrError(resp, err, value, "Error listing cards");
+                    self.createUserActivity(req, 'DELETE_STRIPE_CARD', null, {customerId: customerId, cardId: cardId}, function(){});
+                    return;
                 });
             }
         });
@@ -1135,7 +1157,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata, capture,
                     statement_description, receipt_email, application_fee, userId, accessToken, function(err, value){
                         self.log.debug('<< createCharge');
-                        return self.sendResultOrError(resp, err, value, "Error creating a charge.");
+                        self.sendResultOrError(resp, err, value, "Error creating a charge.");
+                        self.createUserActivity(req, 'CREATE_STRIPE_CHARGE', null, {card: card, customerId: customerId, contactId: contactId, userId: userId}, function(){});
                     });
             }
         });
@@ -1270,7 +1293,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.updateStripeCharge(chargeId, description, metadata, accessToken, function(err, value){
                     self.log.debug('<< updateCharge');
-                    return self.sendResultOrError(resp, err, value, "Error updating a charge.");
+                    self.sendResultOrError(resp, err, value, "Error updating a charge.");
+                    self.createUserActivity(req, 'UPDATE_STRIPE_CHARGE', null, {chargeId: chargeId}, function(){});
+                    return;
                 });
             }
         });
@@ -1297,7 +1322,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.captureStripeCharge(chargeId, amount, application_fee, receipt_email, accessToken,
                     function(err, value){
                         self.log.debug('<< captureCharge');
-                        return self.sendResultOrError(resp, err, value, "Error capturing a charge.");
+                        self.sendResultOrError(resp, err, value, "Error capturing a charge.");
+                        self.createUserActivity(req, 'CAPTURE_STRIPE_CHARGE', null, {chargeId: chargeId}, function(){});
+                        return;
                     });
             }
         });
@@ -1337,7 +1364,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata,
                     accessToken, function(err, value){
                         self.log.debug('<< createInvoiceItem');
-                        return self.sendResultOrError(resp, err, value, "Error creating an invoice item.");
+                        self.sendResultOrError(resp, err, value, "Error creating an invoice item.");
+                        self.createUserActivity(req, 'CREATE_STRIPE_INVOICEITEM', null, {customerId: customerId}, function(){});
+                        return;
                     });
             }
         });
@@ -1418,7 +1447,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.updateInvoiceItem(invoiceItemId, amount, description, metadata, accessToken, function(err, value){
                     self.log.debug('<< getInvoiceItem');
-                    return self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
+                    self.sendResultOrError(resp, err, value, "Error retrieving invoice item.");
+                    self.createUserActivity(req, 'UPDATE_STRIPE_INVOICEITEM', null, {id: invoiceItemId}, function(){});
+                    return;
                 });
             }
         });
@@ -1441,7 +1472,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.deleteInvoiceItem(invoiceItemId, accessToken, function(err, value){
                     self.log.debug('<< deleteInvoiceItem');
-                    return self.sendResultOrError(resp, err, value, "Error deleting invoice item.");
+                    self.sendResultOrError(resp, err, value, "Error deleting invoice item.");
+                    self.createUserActivity(req, 'DELETE_STRIPE_INVOICEITEM', null, {id: invoiceItemId}, function(){});
+                    return;
                 });
             }
         });
@@ -1473,7 +1506,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.createInvoice(customerId, application_fee, description, metadata, statement_description,
                     subscriptionId, accessToken, function(err, value){
                         self.log.debug('<< createInvoice');
-                        return self.sendResultOrError(resp, err, value, "Error creating invoice.");
+                        self.sendResultOrError(resp, err, value, "Error creating invoice.");
+                        self.createUserActivity(req, 'CREATE_STRIPE_INVOICE', null, {customerId: customerId}, function(){});
+                        return;
                     });
             }
         });
@@ -1618,7 +1653,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 stripeDao.updateInvoice(invoiceId, application_fee, closed, description, forgiven, metadata,
                     statement_description, accessToken, function(err, value){
                         self.log.debug('<< updateInvoice');
-                        return self.sendResultOrError(resp, err, value, "Error updating invoice.");
+                        self.sendResultOrError(resp, err, value, "Error updating invoice.");
+                        self.createUserActivity(req, 'UPDATE_STRIPE_INVOICE', null, {id: invoiceId}, function(){});
+                        return;
                     });
             }
         });
@@ -1692,7 +1729,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.payInvoice(invoiceId, accessToken, function(err, value){
                     self.log.debug('<< payInvoice');
-                    return self.sendResultOrError(resp, err, value, "Error paying invoice.");
+                    self.sendResultOrError(resp, err, value, "Error paying invoice.");
+                    self.createUserActivity(req, 'PAY_STRIPE_INVOICE', null, {customerId: customerId, invoiceId:invoiceId}, function(){});
+                    return;
                 });
             }
         });
@@ -1719,7 +1758,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 stripeDao.createToken(cardId, customerId, null, function(err, value){
                     self.log.debug('<< createToken');
-                    return self.sendResultOrError(resp, err, value, "Error creating token.");
+                    self.sendResultOrError(resp, err, value, "Error creating token.");
+                    self.createUserActivity(req, 'CREATE_STRIPE_TOKEN', null, {customerId: customerId, cardId: cardId}, function(){});
+                    return;
                 });
             }
         });
