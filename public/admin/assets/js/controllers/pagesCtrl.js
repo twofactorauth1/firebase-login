@@ -66,6 +66,7 @@
         $scope.resetTemplateDetails = function() {
             $scope.templateDetails = false;
             $scope.selectedTemplate = null;
+            $scope.showChangeURL = false;
         };
 
         $scope.$watch('createpage.title', function(newValue, oldValue) {
@@ -140,8 +141,8 @@
                     $scope.displayedPages.unshift(newpage);d
                     page.title = "";
                     page.handle = "";
-                    $scope.showChangeURL = false;
-                    $scope.templateDetails = false;
+
+                    $scope.resetTemplateDetails();
                 });
             } else {
                 toaster.pop('error', "Page URL " + page.handle, "Already exists");
