@@ -9053,6 +9053,13 @@ Social Icons
 .social-icons ul li.social-linkedin a:after {
   background: #71B2D0;
 }
+.social-icons ul li.social-stripe a:before,
+.social-icons ul li.social-stripe a:after {
+  content: "\f1f5";
+}
+.social-icons ul li.social-stripe a:after {
+  background: #000000;
+}
 .social-icons ul li.social-youtube a:before,
 .social-icons ul li.social-youtube a:after {
   content: "\f167";
@@ -9178,6 +9185,34 @@ Social Icons
 }
 .social-icons ul li.social-foursquare a:after {
   background: #6FCCF4;
+}
+.social-icons ul li.social-paypal a:before,
+.social-icons ul li.social-paypal a:after {
+  content: "\f1ee";
+}
+.social-icons ul li.social-paypal a:after {
+  background: #003087;
+}
+.social-icons ul li.social-pinterest a:before,
+.social-icons ul li.social-pinterest a:after {
+  content: "\f0d2";
+}
+.social-icons ul li.social-pinterest a:after {
+  background: #cc2127;
+}
+.social-icons ul li.social-google-wallet a:before,
+.social-icons ul li.social-google-wallet a:after {
+  content: "\f1ee";
+}
+.social-icons ul li.social-google-wallet a:after {
+  background: #ffffff;
+}
+.social-icons ul li.social-authorize a:before,
+.social-icons ul li.social-authorize a:after {
+  content: "\f09d";
+}
+.social-icons ul li.social-authorize a:after {
+  background: #5fabe4;
 }
 .btn-scroll {
   position: relative;
