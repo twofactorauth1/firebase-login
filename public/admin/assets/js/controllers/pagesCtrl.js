@@ -138,7 +138,7 @@
                     }
 
                     $scope.pages.unshift(newpage);
-                    $scope.displayedPages.unshift(newpage);d
+                    $scope.displayedPages.unshift(newpage);
                     page.title = "";
                     page.handle = "";
 
