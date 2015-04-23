@@ -109,7 +109,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(res, 500, null, err, err);
                             } else {
                                 self.log.debug('<< updateCurrentAccountBilling');
-                                return res.send(updatedAccount);
+                                res.send(updatedAccount);
+                                self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                return;
                             }
                         });
                     }
@@ -188,6 +190,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(!err &&value != null){
                         self.log.debug('<< updateAccount');
                         resp.send(value.toJSON("public"));
+                        self.createUserActivity(req, 'MODIFY_ACCOUNT', null, null, function(){});
                     } else {
                         self.log.error('Error updating account: ' + err);
                         self.wrapError(resp, 500, null, err, value);
@@ -220,12 +223,12 @@ _.extend(api.prototype, baseApi.prototype, {
                         accountDao.saveOrUpdate(value, function(err, value) {
                             console.log(value);
                             if (!err && value != null) {
-                                resp.send(value.toJSON("public"));
+                                self.createUserActivity(req, 'MODIFY_ACCOUNT', null, null, function(){});
+                                return resp.send(value.toJSON("public"));
                             } else {
-                                self.wrapError(resp, 500, null, err, value);
+                                return self.wrapError(resp, 500, null, err, value);
                             }
                         });
-                        resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
@@ -256,12 +259,12 @@ _.extend(api.prototype, baseApi.prototype, {
                         accountDao.saveOrUpdate(value, function(err, value) {
                             console.log(value);
                             if (!err && value != null) {
-                                resp.send(value.toJSON("public"));
+                                self.createUserActivity(req, 'MODIFY_ACCOUNT', null, null, function(){});
+                                return resp.send(value.toJSON("public"));
                             } else {
-                                self.wrapError(resp, 500, null, err, value);
+                                return self.wrapError(resp, 500, null, err, value);
                             }
                         });
-                        resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
@@ -293,12 +296,12 @@ _.extend(api.prototype, baseApi.prototype, {
                         accountDao.saveOrUpdate(value, function(err, value) {
                             console.log(value);
                             if (!err && value != null) {
-                                resp.send(value.toJSON("public"));
+                                self.createUserActivity(req, 'MODIFY_ACCOUNT', null, null, function(){});
+                                return resp.send(value.toJSON("public"));
                             } else {
-                                self.wrapError(resp, 500, null, err, value);
+                                return self.wrapError(resp, 500, null, err, value);
                             }
                         });
-                        resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
                     }
@@ -329,6 +332,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         accountDao.deleteAccountAndArtifacts(accountIdParam, function(err, value){
                             self.log.debug('<< deleteAccount');
                             self.send200(res);
+                            self.createUserActivity(req, 'DELETE_ACCOUNT', null, null, function(){});
                         });
                     } else {
                         self.log.debug('<< deleteAccount');

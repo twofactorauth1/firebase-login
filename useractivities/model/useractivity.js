@@ -39,7 +39,10 @@ var userActivity = $$.m.ModelBase.extend({
     types: {
         LOGIN: 'LOGIN',
         LOGOUT: 'LOGOUT',
-        REAUTH: 'REAUTH'
+        REAUTH: 'REAUTH',
+        MODIFY_ACCOUNT_BILLING: 'MODIFY_ACCOUNT_BILLING',
+        MODIFY_ACCOUNT: 'MODIFY_ACCOUNT',
+        DELETE_ACCOUNT: 'DELETE_ACCOUNT'
 
     }
 });
