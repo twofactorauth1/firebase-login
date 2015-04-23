@@ -705,12 +705,22 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.parentScope.addNewFeatureList(componentId, index, newFeature);
         };
 
-        $scope.clickImageButton = function(btn) {
-            $scope.urlInput = angular.element(btn).closest('td').prev('td').find('input');
+        /*
+         * @clickImageButton
+         * -
+         */
+
+        window.clickImageButton = function(btn) {
+            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
             $scope.parentScope.clickImageButton();
         };
 
-        $scope.clickandInsertImageButton = function(editor) {
+        /*
+         * @clickandInsertImageButton
+         * -
+         */
+
+        window.clickandInsertImageButton = function(editor) {
             $scope.inlineInput = editor;
             $scope.parentScope.clickImageButton();
         };
@@ -777,11 +787,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         $scope.activateCKEditor = function() {
             //if ($scope.activated == false) {
+            $scope.isEditing = true;
             for (name in CKEDITOR.instances) {
                 //CKEDITOR.instances[name].destroy()
+                CKEDITOR.instances[name].removeAllListeners();
                 CKEDITOR.remove(CKEDITOR.instances[name]);
             }
-            $scope.isEditing = true;
             CKEDITOR.disableAutoInline = true;
             var elements = angular.element('.editable');
             elements.each(function() {
@@ -789,13 +800,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     var dataClass = angular.element(this).data('class').replace('.item.', ' ');
                     angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
                 }
-                // $scope.activated = true;
-                //if (!angular.element(this).hasClass('cke_editable')) {
                 CKEDITOR.inline(this, {
                     on: {
                         instanceReady: function(ev) {
                             var editor = ev.editor;
-                            // CKEDITOR.replace(editor.name);                
                             editor.setReadOnly(false);
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
@@ -806,8 +814,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         top: 'editor-toolbar'
                     }
                 });
-                //}
-
             });
             setTimeout(function() {
                 if (angular.element("div.meet-team-height").length) {
@@ -819,9 +825,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 
             }, 500)
             $scope.parentScope.resizeIframe();
-            //CKEDITOR.setReadOnly(true);//TODO: getting undefined why?
-            //}
         };
+
+
 
         $scope.deactivateCKEditor = function() {
             for (name in CKEDITOR.instances) {
