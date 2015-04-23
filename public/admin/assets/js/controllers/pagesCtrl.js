@@ -63,6 +63,11 @@
             $scope.selectedTemplate = templateDetails;
         };
 
+        $scope.resetTemplateDetails = function() {
+            $scope.templateDetails = false;
+            $scope.selectedTemplate = null;
+        };
+
         $scope.$watch('createpage.title', function(newValue, oldValue) {
             if (newValue) {
                 $scope.createpage.handle = $filter('slugify')(newValue);
