@@ -175,7 +175,8 @@
                     <legend>
                         Attributes
                     </legend>
-                    <div ng-repeat="attribute in productAttributes">
+                    {{attributes}}
+                    <!-- <div ng-repeat="attribute in productAttributes">
                         <div class="col-sm-4 col-xs-12">
                             <div class="form-group margin-bottom-0">
                                 <label for="attributeName">
@@ -197,13 +198,14 @@
                             <span ng-if="$index == 0" class="fa fa-plus text-success margin-top-30"></span>
                             <span ng-if="$index != 0" class="fa fa-minus text-danger margin-top-30"></span>
                         </div>
-                    </div>
+                    </div> -->
                 </fieldset>
                 <fieldset>
                     <legend>
                         Variations
                     </legend>
-                    <div class="panel panel-white margin-bottom-0" id="panel5">
+                    {{variations}}
+                    <!-- <div class="panel panel-white margin-bottom-0" id="panel5">
                         <div class="panel-heading" ng-class="{'border-light': !panel5}">
                             <h4 class="panel-title text-primary pull-left">#1234-1</h4>
                             <div ng-repeat="attribute in productAttributes" class="pull-left margin-left-5" style="margin-top: -6px;">
@@ -302,7 +304,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </fieldset>
             </div>
         </div>
