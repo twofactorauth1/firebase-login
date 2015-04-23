@@ -220,10 +220,10 @@
                     <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
                         <slug from="createpage.title" to="createpage.handle"></slug>
                         <label for="new-page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
-                        <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="validateCreatePage(createpage, false)">
+                        <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="validateCreatePage(createpage, true)">
                     </div>
                     <p ng-show="createpage.title">Page Url will be
-                        <strong>/{{createpage.title | slugify}}</strong>
+                        <strong>/{{createpage.handle}}</strong>
                         <span class="links cl-effect-1">
                                 <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
                             </span>
