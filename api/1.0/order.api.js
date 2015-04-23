@@ -48,6 +48,9 @@ _.extend(api.prototype, baseApi.prototype, {
         orderManager.createOrder(order, accessToken, userId, function(err, order){
             self.log.debug('<< createOrder');
             self.sendResultOrError(res, err, order, 'Error creating order');
+            if(userId) {
+                self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+            }
         });
 
     },
@@ -104,6 +107,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.completeOrder(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< completeOrder');
                     self.sendResultOrError(res, err, order, 'Error completing order');
+                    self.createUserActivity(req, 'COMPLETE_ORDER', null, {id: order.id()}, function(){});
                 });
             }
         });
@@ -126,6 +130,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.cancelOrder(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< cancelOrder');
                     self.sendResultOrError(res, err, order, 'Error cancelling order');
+                    self.createUserActivity(req, 'CANCEL_ORDER', null, {id: orderId}, function(){});
                 });
             }
         });
@@ -149,6 +154,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
                     self.log.debug('<< refundOrder');
                     self.sendResultOrError(res, err, order, 'Error refunding order');
+                    self.createUserActivity(req, 'REFUND_ORDER', null, {id: orderId}, function(){});
                 });
             }
         });
@@ -170,6 +176,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.holdOrder(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< holdOrder');
                     self.sendResultOrError(res, err, order, 'Error holding order');
+                    self.createUserActivity(req, 'HOLD_ORDER', null, {id: orderId}, function(){});
                 });
             }
         });
@@ -190,6 +197,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.addOrderNote(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< addOrderNote');
                     self.sendResultOrError(res, err, order, 'Error adding order note');
+                    self.createUserActivity(req, 'ADD_ORDER_NOTE', null, {id: orderId}, function(){});
                 });
             }
         });
