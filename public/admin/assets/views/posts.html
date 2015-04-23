@@ -66,7 +66,19 @@
                                 <th class="hidden-xs" st-sort="getters.modified">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
-                                <th></th>
+                                <th>
+                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Option" class="form-control hidden" type="search" id="searchPhoto" ng-model="filterPosts.photo.selected.value" />
+                                    <ui-select ng-model="filterPosts.photo.selected" on-select="triggerInput('#searchPhoto')" theme="bootstrap">
+                                        <ui-select-match placeholder="Choose a filter method">
+                                            <small ng-bind-html="$select.selected.name"></small>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPhoto', 'photo')"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="option in postsFeaturedImageOptions">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
                                 <th>
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
                                 </th>
