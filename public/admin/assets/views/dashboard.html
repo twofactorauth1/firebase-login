@@ -86,7 +86,7 @@
                 <div class="row">
                     <div>
                         <div class="col-xs-12 col-sm-6">
-                            <div class="panel panel-white no-radius">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsCustomers}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsCustomers">
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Customers This Month</h5>
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <div class="panel panel-white no-radius">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsOrders}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsOrders">
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Orders This Month</h5>
@@ -116,8 +116,8 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <div class="panel panel-white no-radius" ng-if="analyticsVisitors">
-                                <div class="panel-body padding-20 text-center">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsVisitors}">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsVisitors">
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Visitors This Month</h5>
                                         <h2 class="no-margin">{{visitorsThisMonth}}</h2>
@@ -131,8 +131,8 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-6">
-                            <div class="panel panel-white no-radius">
-                                <div class="panel-body padding-20 text-center">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsRevenue}">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsRevenue">
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Net Revenue This Month</h5>
                                         <h2 class="no-margin">{{revenueThisMonth | currency}}</h2>

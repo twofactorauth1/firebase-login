@@ -109,7 +109,7 @@
                             <tr>
                                 <th class="center" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="name" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Name</th>
-                                <th st-sort="handle" ng-show="column.category" ng-class="{'column-width': tableView == 'grid'}">Category</th>
+                                <th st-sort="handle" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
                                 <th class="hidden-xs" st-sort="email" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
                                 <th class="hidden-xs" st-sort="address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
                                 <th class="hidden-xs center" st-sort="phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
@@ -119,9 +119,9 @@
                             </tr>
                             <tr ng-if="showFilter">
                                 <th ng-show="column.photo">
-                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
+                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
                                     <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
-                                        <ui-select-match placeholder="Choose a filter method">
+                                        <ui-select-match placeholder="Select Photo">
                                             <small ng-bind-html="$select.selected.name"></small>
                                             <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPicture', 'photo')"></span>
                                         </ui-select-match>
@@ -134,7 +134,7 @@
                                 <th ng-show="column.name">
                                     <input st-search="{{first + last}}" placeholder="Name" class="form-control" type="search" />
                                 </th>
-                                <th ng-show="column.category">
+                                <th ng-show="column.tags">
                                     <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
                                     <ui-select ng-model="filterCustomer.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
@@ -172,7 +172,7 @@
                                     <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td ng-show="column.name"><strong>Name: </strong> <span ng-text-truncate="customer.first+' '+customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first && !customer.last">--</span></td>
-                                <td ng-show="column.category"><strong>Category: </strong>{{contactLabel(customer) || '--'}}</td>
+                                <td ng-show="column.tags"><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
                                 <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.bestEmail"><a href="mailto:{{customer.bestEmail}}"><span ng-text-truncate="customer.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
                                     </span><span ng-if="!customer.bestEmail">--</span></td>
                                 <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
