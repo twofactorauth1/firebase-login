@@ -52,7 +52,7 @@
         $scope.column = {
             "photo": true,
             "name": true,
-            "category": true,
+            "tags": true,
             "email": true,
             "address": true,
             "social": true,
@@ -61,8 +61,8 @@
             "modified": true
         };
 
-        $scope.contactLabel = function(customer) {
-            return CustomerService.contactLabel(customer);
+        $scope.contactTags = function(customer) {
+            return CustomerService.contactTags(customer);
         };
 
         $scope.checkBestEmail = function(contact) {

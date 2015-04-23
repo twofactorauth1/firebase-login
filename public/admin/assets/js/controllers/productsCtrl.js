@@ -67,6 +67,14 @@
             $scope.triggerInput(input);
         };
 
+        $scope.productImageTypes = [{
+            label: "Image",
+            data: "true"
+        }, {
+            label: "No Image",
+            data: "false"
+        }];
+
         $scope.productTypes = [{
             label: "Digital",
             data: "digital"

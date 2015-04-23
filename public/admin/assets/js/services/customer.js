@@ -143,12 +143,19 @@
                     });
             };
 
-            this.contactLabel = function(contact) {
+            this.contactTags = function(contact) {
                 var contactTypes = userConstant.contact_types.dp;
-                var type = _.find(contactTypes, function(type) {
-                    return type.data === contact.type;
-                });
-                return type == null ? "" : type.label;
+                var tags = [];
+                if (contact.tags) {
+                    _.each(contact.tags, function(tag) {
+                        var type = _.find(contactTypes, function(type) {
+                            return type.data === tag;
+                        });
+                        tags.push(type.label);
+                    });
+                }
+
+                return tags.join(', ');
             };
 
             this.checkBestEmail = function(contact) {
