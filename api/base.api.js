@@ -13,6 +13,7 @@ var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
 //var geoip = require('geoip-lite');
 var logger = global.getLogger("base.api");
+var userActivityManager = require('../useractivities/useractivity_manager');
 
 
 var apiBase = function(options) {
@@ -389,6 +390,23 @@ _.extend(apiBase.prototype, {
         //if the token is still null here, we need to connect with stripe still
 
         return token;
+    },
+
+    createUserActivity: function(req, type, note, detail, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+
+        var activity = new $$.m.UserActivity({
+            accountId: accountId,
+            userId: userId,
+            activityType: type,
+            note: note,
+            detail:detail
+        });
+        userActivityManager.createUserActivity(activity, function(err, value){
+            return fn(err, value);
+        });
     }
 
 });
