@@ -101,7 +101,8 @@ module.exports = {
 
     listActivities: function(accountId, skip, limit, fn) {
         var self = this;
-        log.debug('>> listActivities');
+        log.debug('>> listActivities(' + accountId  +', ' + skip + ', ' + limit + ')');
+
 
         dao.findAllWithFieldsAndLimit({
                 'accountId': accountId
