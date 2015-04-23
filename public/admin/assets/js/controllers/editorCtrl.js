@@ -1336,6 +1336,7 @@
                             $scope.activateCKEditor();
                         }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
+                    $scope.closeModal();    
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     //$scope.resizeIframe();
                 }
