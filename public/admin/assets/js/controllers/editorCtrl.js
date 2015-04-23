@@ -1336,6 +1336,7 @@
                             $scope.activateCKEditor();
                         }, 1000)
                         //$scope.scrollToIframeComponent(newComponent.anchor);
+                    $scope.closeModal();    
                     toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
                     //$scope.resizeIframe();
                 }
@@ -1616,7 +1617,8 @@
          */
 
         $scope.saveCustomComponent = function(networks) {
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
+            $scope.childScope.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks)
+            //iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
         };
 
         /*

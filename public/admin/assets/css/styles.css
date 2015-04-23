@@ -3290,13 +3290,10 @@ a.text-light:hover {
   z-index: 0;
   color: #2c2f3b;
 }
-.add-component-modal .tab-content {
-  max-height: 350px;
+.add-component-modal .nav-tabs {
+  max-height: 300px;
   overflow-y: scroll !important;
   overflow-x: hidden !important;
-}
-.add-component-modal .tab-content::-webkit-scrollbar {
-  display: none !important;
 }
 /* ---------------------------------------------------------------------- */
 /*  Panels

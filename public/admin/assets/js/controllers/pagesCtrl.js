@@ -63,6 +63,12 @@
             $scope.selectedTemplate = templateDetails;
         };
 
+        $scope.resetTemplateDetails = function() {
+            $scope.templateDetails = false;
+            $scope.selectedTemplate = null;
+            $scope.showChangeURL = false;
+        };
+
         $scope.$watch('createpage.title', function(newValue, oldValue) {
             if (newValue) {
                 $scope.createpage.handle = $filter('slugify')(newValue);
@@ -75,14 +81,15 @@
             }
         });
 
-        $scope.validateCreatePage = function(page) {
+        $scope.validateCreatePage = function(page, restrict) {
             $scope.createPageValidated = false;
             if (page) {
                 if (page.handle == '') {
                     $scope.handleError = true;
                 } else {
                     $scope.handleError = false;
-                    page.handle = $filter('slugify')(page.title);
+                    if(!restrict)
+                        page.handle = $filter('slugify')(page.title);
                 }
                 if (page.title == '') {
                     $scope.titleError = true;
@@ -132,11 +139,11 @@
                     }
 
                     $scope.pages.unshift(newpage);
-                    $scope.displayedPages.unshift(newpage);d
+                    $scope.displayedPages.unshift(newpage);
                     page.title = "";
                     page.handle = "";
-                    $scope.showChangeURL = false;
-                    $scope.templateDetails = false;
+
+                    $scope.resetTemplateDetails();
                 });
             } else {
                 toaster.pop('error', "Page URL " + page.handle, "Already exists");
