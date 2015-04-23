@@ -3,16 +3,25 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", function($scope, toaster, $modal, $filter, WebsiteService) {
+    app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", function($scope, toaster, $modal, $filter, WebsiteService, $log) {
 
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {
                 if (posts.hasOwnProperty(key)) {
-                    postsArr.push(posts[key]);
+                    var iPost = posts[key];
+
+                    iPost.hasPhoto = false;
+                    if(iPost.featured_image) {
+                        iPost.hasPhoto = true;
+                    }
+
+                    postsArr.push(iPost);
                 }
             }
             $scope.posts = postsArr;
+
+            //$log.debug($scope.posts);
         });
 
         //get website
@@ -29,7 +38,26 @@
             }
         };
 
-       
+
+        $scope.triggerInput = function(element) {
+            angular.element(element).trigger('input');
+        };
+
+        $scope.filterPosts = {};
+
+        $scope.clearFilter = function(event, input, filter) {
+            $scope.filterPosts[filter] = {};
+            $scope.triggerInput(input);
+        };
+
+        $scope.postsFeaturedImageOptions = [{
+            name: 'Photo',
+            value: true
+        }, {
+            name: 'No Photo',
+            value: false
+        }];
+
         $scope.$watch('post.post_title', function(newValue, oldValue) {
             if (newValue) {
                 $scope.post.post_url = $filter('slugify')(newValue);
