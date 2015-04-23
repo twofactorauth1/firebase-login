@@ -47,6 +47,7 @@ _.extend(router.prototype, baseRouter.prototype, {
             } else {
                 res.redirect(value);
             }
+            self.createUserActivityWithParams(accountId, req.user.id(), 'CONNECT_STRIPE_ACCOUNT', null, null, function(){});
         });
 
         //res.redirect('/login');

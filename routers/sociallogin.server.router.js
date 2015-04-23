@@ -295,7 +295,9 @@ _.extend(router.prototype, baseRouter.prototype, {
             self.log.debug('redirectUrl from cookies: ' + redirectUrl);
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function(err, value) {
                 self.log.debug('redirecting to authenticated url: ' + redirectUrl);
-                return resp.redirect(redirectUrl);
+                resp.redirect(redirectUrl);
+                self.createUserActivityWithParams(accountId, req.user.id(), 'SOCIAL_LOGIN', null, {type: state.socialType}, function(){});
+                return;
             });
             return;
         }
@@ -329,6 +331,7 @@ _.extend(router.prototype, baseRouter.prototype, {
             } else {
                 resp.redirect(value);
             }
+            self.createUserActivityWithParams(accountId, user.id(), 'SOCIAL_LOGIN', null, {type: state.socialType}, function(){});
         });
         //console.log(state);
     },
