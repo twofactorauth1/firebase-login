@@ -52,6 +52,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendFileUploadResult(resp, err, file);
                 } else {
                     self.sendFileUploadResult(resp, err, value);
+                    self.createUserActivity(req, 'UPLOAD_CONTACT_PHOTO', null, null, function(){});
                 }
             })
         });
