@@ -70,7 +70,10 @@ var userActivity = $$.m.ModelBase.extend({
         CANCEL_ORDER: 'CANCEL_ORDER',
         REFUND_ORDER: 'REFUND_ORDER',
         HOLD_ORDER: 'HOLD_ORDER',
-        ADD_ORDER_NOTE: 'ADD_ORDER_NOTE'
+        ADD_ORDER_NOTE: 'ADD_ORDER_NOTE',
+        CREATE_PRODUCT: 'CREATE_PRODUCT',
+        UPDATE_PRODUCT: 'UPDATE_PRODUCT',
+        DELETE_PRODUCT: 'DELETE_PRODUCT'
 
     }
 });

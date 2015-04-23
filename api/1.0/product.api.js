@@ -51,6 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 productManager.createProduct(productObj, function(err, value){
                     self.log.debug('<< createProduct');
                     self.sendResultOrError(res, err, value, "Error creating product");
+                    self.createUserActivity(req, 'CREATE_PRODUCT', null, {id: value.id()}, function(){});
                 });
             }
 
@@ -130,6 +131,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     productManager.updateProduct(product, function(err, value){
                         self.log.debug('<< updateProduct');
                         self.sendResultOrError(res, err, value, 'Error updating product');
+                        self.createUserActivity(req, 'UPDATE_PRODUCT', null, {id: value.id()}, function(){});
                     });
                 }
             });
@@ -152,6 +154,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     productManager.deleteProduct(productId, function(err, value){
                         self.log.debug('<< deleteProduct');
                         self.sendResultOrError(res, err, value, 'Error deleting product');
+                        self.createUserActivity(req, 'DELETE_PRODUCT', null, {id: value.id()}, function(){});
                     });
                 }
             });
