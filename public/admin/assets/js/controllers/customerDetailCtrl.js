@@ -228,12 +228,12 @@
                 $scope.customer.details[0].addresses = addresses;
                 if ($scope.checkContactValidity()) {
                     var tempTags = [];
-                    var customer_data = angular.copy($scope.customer);
-                    _.each(customer_data.tags, function(tag) {
+                    $scope.customer_data = angular.copy($scope.customer);
+                    _.each($scope.customer_data.tags, function(tag) {
                         tempTags.push(tag.data);
                     });
-                    customer_data.tags = tempTags;
-                    CustomerService.saveCustomer(customer_data, function(customer) {
+                    $scope.customer_data.tags = tempTags;
+                    CustomerService.saveCustomer($scope.customer_data, function(customer) {
                         $scope.customer = customer;
                         $scope.setDefaults();
                         $scope.setTags();
@@ -527,13 +527,17 @@
 
         $scope.setDefaults = function() {
             // New customer
-            if($scope.customer.details.length == 0 || !$scope.customer.details[0].length)
+            if($scope.customer.details.length == 0)
             {
-                $scope.customer.details[0] = [];
-                $scope.customer.details[0].emails =[];
-                $scope.customer.details[0].phones =[];
-                $scope.customer.details[0].addresses =[];
+                $scope.customer.details[0] = {};
             }
+            if(!$scope.customer.details[0].emails)                
+                $scope.customer.details[0].emails =[];
+            if(!$scope.customer.details[0].phones)
+                $scope.customer.details[0].phones =[];
+            if(!$scope.customer.details[0].addresses)
+                $scope.customer.details[0].addresses =[];
+
             if ($scope.customer.details.length) {
                 if (!$scope.customer.details[0].emails.length)
                     $scope.customerAddEmailFn();

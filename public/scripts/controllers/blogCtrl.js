@@ -499,7 +499,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          * -
          */
 
-        $scope.clickImageButton = function(btn) {
+        window.clickImageButton = function(btn) {
             $scope.urlInput = $(btn).closest('td').prev('td').find('input');
             $scope.parentScope.clickImageButton();
         };
@@ -509,9 +509,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          * -
          */
 
-        $scope.clickandInsertImageButton = function(editor) {
+        window.clickandInsertImageButton = function(editor) {
             $scope.inlineInput = editor;
-            $parentScope.clickImageButton();
+            $scope.parentScope.clickImageButton();
         };
 
         /*
