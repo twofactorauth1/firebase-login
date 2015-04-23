@@ -16,6 +16,8 @@ var cookies = require("../utils/cookieutil");
 var appConfig = require('../configs/app.config.js');
 var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
+var userActivityManager = require('../useractivities/useractivity_manager');
+
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -279,6 +281,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug('<< handleReauth');
                     resp.redirect(value);
+                    userActivityManager.createUserReauthActivity(req.session.accountId, self.userId(req), function(){});
                 }
             });
 
