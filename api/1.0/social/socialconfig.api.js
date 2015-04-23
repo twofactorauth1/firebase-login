@@ -155,6 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.updateSocialConfig(socialConfig, function(err, config){
                     self.log.debug('<< updateSocialConfig');
                     self.sendResultOrError(resp, err, config, "Error updating social config");
+                    self.createUserActivity(req, 'UPDATE_SOCIALCONFIG', null, null, function(){});
                 });
             }
         });
@@ -179,6 +180,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     socialAccount.scope, socialAccount.accountType, function(err, config){
                         self.log.debug('<< addSocialAccount');
                         self.sendResultOrError(resp, err, config, "Error adding social account");
+                        self.createUserActivity(req, 'ADD_SOCIAL_ACCOUNT', null, {type: socialAccount.type}, function(){});
                     });
             }
         });
@@ -231,6 +233,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(err) {
                         return self.wrapError(resp, 500, 'Server Error', err);
                     } else {
+                        self.createUserActivity(req, 'REMOVE_SOCIAL_ACCOUNT', null, {socialId: socialId}, function(){});
                         return self.send200(resp);
                     }
                     //self.sendResultOrError(resp, err, config, "Error removing social account");
@@ -459,6 +462,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.createFacebookPost(accountId, socialAccountId, message, url, function(err, value){
                     self.log.debug('<< createFacebookPost');
                     self.sendResultOrError(resp, err, value, "Error creating post");
+                    self.createUserActivity(req, 'CREATE_FACEBOOK_POST', null, {socialAccountId: socialAccountId}, function(){});
                 });
 
             }
@@ -486,6 +490,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     description, function(err, value){
                         self.log.debug('<< shareFacebookLink');
                         self.sendResultOrError(resp, err, value, "Error creating post");
+                        self.createUserActivity(req, 'SHARE_FACEBOOK_LINK', null, {socialAccountId: socialAccountId}, function(){});
                     });
             }
         });
@@ -506,6 +511,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.deleteFacebookPost(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< deleteFacebookPost');
                     self.sendResultOrError(resp, err, value, "Error deleting post");
+                    self.createUserActivity(req, 'DELETE_FACEBOOK_POST', null, {socialAccountId: socialAccountId, postId:postId}, function(){});
                 });
             }
         });
@@ -527,6 +533,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.addFacebookComment(accountId, socialAccountId, postId, comment, function(err, value){
                     self.log.debug('<< addPostComment');
                     self.sendResultOrError(resp, err, value, "Error adding comment");
+                    self.createUserActivity(req, 'ADD_FACEBOOK_COMMENT', null, {socialAccountId: socialAccountId, postId:postId}, function(){});
                 });
             }
         });
@@ -547,6 +554,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.addFacebookLike(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< addPostLike');
                     self.sendResultOrError(resp, err, value, "Error adding like");
+                    self.createUserActivity(req, 'ADD_FACEBOOK_LIKE', null, {socialAccountId: socialAccountId, postId:postId}, function(){});
                 });
             }
         });
@@ -567,6 +575,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.deleteFacebookLike(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< deletePostLike');
                     self.sendResultOrError(resp, err, value, "Error deleting like");
+                    self.createUserActivity(req, 'DELETE_FACEBOOK_LIKE', null, {socialAccountId: socialAccountId, postId:postId}, function(){});
                 });
             }
         });
@@ -702,6 +711,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.createTwitterPost(accountId, socialAccountId, post, function(err, savedPost){
                     self.log.debug('<< createTwitterPost');
                     self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                    self.createUserActivity(req, 'ADD_TWITTER_POST', null, {socialAccountId: socialAccountId}, function(){});
                 });
             }
         });
@@ -723,6 +733,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.replyToTwitterPost(accountId, socialAccountId, tweetId, post, function(err, savedPost){
                     self.log.debug('<< createTwitterReply');
                     self.sendResultOrError(resp, err, savedPost, "Error creating twitter post");
+                    self.createUserActivity(req, 'ADD_TWITTER_REPLY', null, {socialAccountId: socialAccountId, tweetId:tweetId}, function(){});
                 });
             }
         });
@@ -744,6 +755,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.retweetTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
                     self.log.debug('<< createTwitterRetweet');
                     self.sendResultOrError(resp, err, savedPost, "Error creating twitter retweet");
+                    self.createUserActivity(req, 'ADD_TWITTER_RETWEET', null, {socialAccountId: socialAccountId, tweetId:tweetId}, function(){});
                 });
             }
         });
@@ -768,6 +780,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     function (err, savedPost){
                         self.log.debug('<< createTwitterDM');
                         self.sendResultOrError(resp, err, savedPost, "Error creating twitter dm");
+                        self.createUserActivity(req, 'ADD_TWITTER_DM', null, {socialAccountId: socialAccountId}, function(){});
                     });
             }
         });
@@ -813,6 +826,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 socialConfigManager.deleteTwitterPost(accountId, socialAccountId, postId, function(err, savedPost){
                     self.log.debug('<< deleteTwitterPost');
                     self.sendResultOrError(resp, err, savedPost, "Error deleting twitter post");
+                    self.createUserActivity(req, 'DELETE_TWITTER_POST', null, {socialAccountId: socialAccountId, tweetId: postId}, function(){});
                 });
             }
         });
@@ -832,6 +846,7 @@ _.extend(api.prototype, baseApi.prototype, {
               socialConfigManager.getGoogleContacts(accountId, socialAccountId, req.user, function(err, contacts){
                   self.log.debug('<< getGoogleContacts');
                   self.sendResultOrError(res, err, contacts, "Error importing google contacts");
+                  self.createUserActivity(req, 'IMPORT_GOOGLE_CONTACTS', null, {socialAccountId: socialAccountId}, function(){});
               });
           }
       });
@@ -870,6 +885,7 @@ _.extend(api.prototype, baseApi.prototype, {
               socialConfigManager.getLinkedinContacts(accountId, socialAccountId, req.user, function(err, contacts){
                   self.log.debug('<< getLinkedinContacts');
                   self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
+                  self.createUserActivity(req, 'IMPORT_LINKEDIN_CONTACTS', null, {socialAccountId: socialAccountId}, function(){});
               });
           }
       });
@@ -895,6 +911,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     description, function(err, value){
                         self.log.debug('<< shareLinkedinLink');
                         self.sendResultOrError(resp, err, value, "Error creating post");
+                        self.createUserActivity(req, 'ADD_LINKEDIN_POST', null, {socialAccountId: socialAccountId}, function(){});
                     });
             }
         });
