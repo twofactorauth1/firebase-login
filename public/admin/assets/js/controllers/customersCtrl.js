@@ -10,6 +10,11 @@
             _.each(customers, function(customer) {
                 customer.bestEmail = $scope.checkBestEmail(customer);
                 customer.bestAddress = $scope.checkAddress(customer);
+
+                customer.hasPhoto = false;
+                if(customer.photo) {
+                    customer.hasPhoto = true;
+                }
             });
             $scope.customers = customers;
         });
@@ -22,6 +27,11 @@
                 return value.modified.date;
             }
         };
+
+        /*
+         * @getters
+         * - getters for the sort on the table
+         */
 
         $scope.openModal = function(template) {
             $scope.modalInstance = $modal.open({
@@ -116,6 +126,14 @@
         }, {
             label: "Other",
             data: "ot"
+        }];
+
+        $scope.customerPhotoOptions = [{
+            name: 'Photo',
+            value: true
+        }, {
+            name: 'No Photo',
+            value: false
         }];
 
         $scope.addCustomer = function() {
@@ -231,10 +249,10 @@
          * - clear the filter for the status when the red X is clicked
          */
 
-        $scope.filterCustomerStatus = {};
+        $scope.filterCustomer = {};
 
-        $scope.clearFilter = function(event, input) {
-            $scope.filterCustomerStatus = {};
+        $scope.clearFilter = function(event, input, filter) {
+            $scope.filterCustomer[filter] = {};
             $scope.triggerInput(input);
         };
 

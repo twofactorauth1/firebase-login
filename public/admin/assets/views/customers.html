@@ -118,22 +118,31 @@
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter">
-                                <th ng-show="column.photo"></th>
+                                <th ng-show="column.photo">
+                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
+                                    <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
+                                        <ui-select-match placeholder="Choose a filter method">
+                                            <small ng-bind-html="$select.selected.name"></small>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPicture', 'photo')"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="option in customerPhotoOptions">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
                                 <th ng-show="column.name">
                                     <input st-search="{{first + last}}" placeholder="Name" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.category">
-                                    <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchStatus" ng-model="filterCustomerStatus.selected.data" />
-                                    <ui-select ng-model="filterCustomerStatus.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
-                                        <ui-select-match placeholder="Select Status">
-                                            <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->
+                                    <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
+                                    <ui-select ng-model="filterCustomer.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
+                                        <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>
-                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchStatus')"></span>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
                                         </ui-select-match>
-                                        <ui-select-null-choice>No Status</ui-select-null-choice>
-                                        <ui-select-choices repeat="status in customerTags">
-                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
-                                            <small ng-bind-html="status.label | highlight: $select.search"></small>
+                                        <ui-select-choices repeat="tag in customerTags">
+                                            <small ng-bind-html="tag.label | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
