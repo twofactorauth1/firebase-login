@@ -136,6 +136,7 @@ _.extend(router.prototype, baseRouter.prototype, {
                 state.redirectUrl = encodeURIComponent(value);
                 self.log.debug('<< addSocialConfig');
                 resp.redirect(self.getInternalAuthRedirect(state));
+                self.createUserActivity(req, 'ADD_SOCIAL_ACCOUNT', null, {type: req.params.socialtype}, function(){});
             }
         });
     },
