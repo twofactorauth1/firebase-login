@@ -81,14 +81,15 @@
             }
         });
 
-        $scope.validateCreatePage = function(page) {
+        $scope.validateCreatePage = function(page, restrict) {
             $scope.createPageValidated = false;
             if (page) {
                 if (page.handle == '') {
                     $scope.handleError = true;
                 } else {
                     $scope.handleError = false;
-                    page.handle = $filter('slugify')(page.title);
+                    if(!restrict)
+                        page.handle = $filter('slugify')(page.title);
                 }
                 if (page.title == '') {
                     $scope.titleError = true;
