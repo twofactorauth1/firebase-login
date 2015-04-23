@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.commerce.PRODUCTS">{{ mainTitle }}</h1>
-                <span class="mainDescription">You currently have {{products.length}} products in your store.</span>
+                <span class="mainDescription" ng-if="products.length">You currently have {{products.length}} products in your store.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -68,7 +68,18 @@
                     <th class="hidden-xs">Modified</th>
                 </tr>
                 <tr ng-if="showFilter">
-                    <th></th>
+                    <th>
+                        <input st-search="is_image" placeholder="Image" class="form-control hidden" type="search" id="searchImage" ng-model="filterProduct.image.selected.data" />
+                        <ui-select ng-model="filterProduct.image.selected" on-select="triggerInput('#searchImage')" theme="bootstrap">
+                            <ui-select-match placeholder="Select Image">
+                                <small ng-bind-html="$select.selected.label"></small>
+                                <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchImage', 'image')"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="status in productImageTypes">
+                                <small ng-bind-html="status.label | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </th>
                     <th>
                         <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterProduct.status.selected.data" />
                         <ui-select ng-model="filterProduct.status.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
@@ -117,56 +128,7 @@
         </table>
     </div>
     <!-- end: CONTENT -->
-    <!-- start: NEW PRODUCT MODAL -->
-    <script type="text/ng-template" id="new-product-modal">
-        <div class="modal-header">
-            <button type="button" class="close" ng-click="cancel()">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <h3 class="modal-title">New Product</h3>
-        </div>
-        <div class="modal-body bg-white">
-            <form role="form" class="ng-pristine ng-valid">
-                <div class="form-group">
-                    <label>
-                        Title
-                    </label>
-                    <input type="text" placeholder="Product Title" class="form-control" ng-model="newProduct.title">
-                </div>
-                <div class="form-group">
-                    <label for="form-field-select-1">
-                        Type
-                    </label>
-                    <select class="cs-select cs-skin-elastic" ng-model="newProduct.type">
-                        <option value="">Select a Product Type</option>
-                        <option value="digital">Digital</option>
-                        <option value="physical">Physical</option>
-                        <option value="subscription">Subscription</option>
-                        <option value="external">External</option>
-                    </select>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" ng-class='{"disabled": !newProduct.title.length || !newProduct.type}' ng-click="addProduct()">Add</button>
-        </div>
-    </script>
-    <!-- end:  NEW PRODUCT MODAL -->
-    <!-- start: IMPORT PRODUCT MODAL -->
-    <script type="text/ng-template" id="import-product-modal">
-        <div class="modal-header">
-            <button type="button" class="close" ng-click="cancel()">
-                <span aria-hidden="true">&times;</span>
-                <span class="sr-only">Close</span>
-            </button>
-            <h3 class="modal-title">Import Products</h3>
-        </div>
-        <div class="modal-body">
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary">Import</button>
-        </div>
-    </script>
-    <!-- end: IMPORT PRODUCT MODAL -->
 </div>
+
+<div data-ng-include=" 'assets/views/partials/import-product-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/new-product-modal.html' "></div>

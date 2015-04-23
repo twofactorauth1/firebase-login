@@ -91,12 +91,22 @@ app.constant('userConstant', {
         GOOGLE: "go",
         FULL_CONTACT: "fc",
 
-        dp: [
-            {label:"Local", data:"lo"},
-            {label:"Facebook", data:"fb"},
-            {label:"Twitter", data:"tw"},
-            {label:"LinkedIn", data:"li"},
-            {label:"Google+", data:"go"}
+        dp: [{
+                label: "Local",
+                data: "lo"
+            }, {
+                label: "Facebook",
+                data: "fb"
+            }, {
+                label: "Twitter",
+                data: "tw"
+            }, {
+                label: "LinkedIn",
+                data: "li"
+            }, {
+                label: "Google+",
+                data: "go"
+            }
             //{label:"Full Contacnt", data:"fc"}
         ]
     },
@@ -235,7 +245,7 @@ app.constant('JS_REQUIRES', {
         'jquery-nestable-plugin': ['../js/libs/jquery-nestable/jquery.nestable.js'],
         'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
         'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
-        'bootstrap-icon-picker': [ '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'],
+        'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'],
         'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
         'uuid': '../js/libs_misc/uuid.js',
         'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
@@ -321,12 +331,10 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'toaster',
         files: ['../js/libs/AngularJS-Toaster/toaster.js', '../js/libs/AngularJS-Toaster/toaster.css']
-    },
-    {
+    }, {
         name: 'skeuocard',
         files: ['../js/libs/skeuocard/lib/js/jquery.card.js']
-    },
-     {
+    }, {
         name: 'angularBootstrapNavTree',
         files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
     }, {
@@ -413,10 +421,11 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'ngTextTruncate',
         files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
-    },
-    {
+    }, {
+        name: 'ngTagsInput',
+        files: ['../js/libs/ng-tags-input/ng-tags-input.min.js']
+    }, {
         name: 'blueimp',
         files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
-    }
-    ]
+    }]
 });

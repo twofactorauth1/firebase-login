@@ -1,9 +1,9 @@
-<div ng-controller="ProductsDetailCtrl">
+<div ng-controller="ProductsDetailCtrl" class="product-detail">
     <!-- start: PAGE TITLE -->
-    <section id="page-title padding-top-15 padding-bottom-15">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">{{product.name | uppercase}}</h1>
+                <h1 class="mainTitle">{{product.name}}</h1>
                 <span class="mainDescription">{{product.description}}</span>
             </div>
             <div ncy-breadcrumb></div>
@@ -11,24 +11,28 @@
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
-    <div class="container-fluid container-fullw bg-white ng-scope">
-        <div class="margin-bottom-30"></div>
-        <div class="col-sm-12 margin-bottom-30">
-            <div class="col-sm-4">
-            </div>
-            <div class="col-sm-4">
-                <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-receipt ng-click-active">
-                    <span>Duplicate</span>
-                </button>
-                <div class="margin-bottom-15 visible-xs"></div>
-            </div>
-            <div class="col-sm-4">
-                <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-credit-card ng-click-active">
-                    <span>Save</span>
-                </button>
-                <div class="margin-bottom-15 visible-xs"></div>
+    <div class="container-fluid container-fullw bg-white ng-scope  padding-top-0 padding-bottom-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0">
+                    <div class="panel-body">
+                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-8">
+                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-receipt ng-click-active pull-right">
+                                <span>Duplicate</span>
+                            </button>
+                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5">
+                                <span>Save</span>
+                            </button>
+                            <div class="margin-bottom-15 visible-xs"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+    <div class="container-fluid container-fullw ng-scope">
         <div class="clearfix"></div>
         <div class="row">
             <div class="col-md-12">
@@ -47,7 +51,7 @@
                         <div ng-show="product.is_image">
                             <div class="image">
                                 <div class="thumbnail">
-                                    <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="" >
+                                    <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
                                 </div>
                             </div>
                             <div class="row hidden">
@@ -57,19 +61,16 @@
                                 <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
                             </div>
                         </div>
-
-                        <div> 
+                        <div>
+                            <label>Icon or Image</label>
                             <switch ng-model="product.is_image" type="checkbox" switch-label="Image"></switch>
-                            <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia"
-                            user='user' insert-media-type='"image"'> <span class="fa fa-image"></span>  <span class="hidden-xs">Change Image</span>
+                            <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
                             </a>
-                        </div>    
-                    </div>    
-
-                    
+                        </div>
+                    </div>
                     <div ng-class="{'col-sm-8': showVariations, 'col-sm-4': !showVariations}">
                         <div class="panel panel-transparent">
-                            <div class="panel-body">
+                            <div class="panel-body padding-top-0">
                                 <form role="form" class="ng-pristine ng-valid">
                                     <div class="form-group">
                                         <label>
@@ -152,6 +153,157 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" id="variation-manager">
+        <div class="panel panel-white">
+            <div class="panel-heading border-light">
+                <h4 class="panel-title">Variation Manager</h4>
+                <ul class="panel-heading-tabs border-light">
+                    <li>
+                        <div class="pull-right">
+                            <div class="checkbox">
+                                <span class="green switch green checked ng-valid ng-click-active" ng-click="showVariations=!showVariations" ng-class="{ checked:showVariations }" ng-model="showVariations" ng-init="showVariations = true"><small></small><input type="checkbox" ng-model="showVariations" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-body" ng-if="showVariations">
+                <fieldset>
+                    <legend>
+                        Attributes
+                    </legend>
+                    <div ng-repeat="attribute in productAttributes">
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="form-group margin-bottom-0">
+                                <label for="attributeName">
+                                    Attribute Name
+                                </label>
+                                <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="attribute.name">
+                            </div>
+                        </div>
+                        <div class="col-sm-7 col-xs-12">
+                            <div class="form-group margin-bottom-0">
+                                <label class="margin-bottom-0">
+                                    <span ng-if="attributeName">{{attribute.name + ' Types' }}</span>
+                                    <span ng-if="!attributeName">Attribute Types</span>
+                                </label>
+                                <tags-input ng-model="attribute.attributes"></tags-input>
+                            </div>
+                        </div>
+                        <div class="col-sm-1 col-xs-12">
+                            <span ng-if="$index == 0" class="fa fa-plus text-success margin-top-30"></span>
+                            <span ng-if="$index != 0" class="fa fa-minus text-danger margin-top-30"></span>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        Variations
+                    </legend>
+                    <div class="panel panel-white margin-bottom-0" id="panel5">
+                        <div class="panel-heading" ng-class="{'border-light': !panel5}">
+                            <h4 class="panel-title text-primary pull-left">#1234-1</h4>
+                            <div ng-repeat="attribute in productAttributes" class="pull-left margin-left-5" style="margin-top: -6px;">
+                                <ui-select ng-model="variation" theme="bootstrap">
+                                    <ui-select-match placeholder="Select {{attribute.name}}">
+                                        <small ng-bind-html="$select.selected.text"></small>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="single in attribute.attributes">
+                                        <small ng-bind-html="single.text | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></ct-paneltool>
+                        </div>
+                        <div collapse="panel5" ng-init="panel5=true" class="panel-wrapper">
+                            <div class="panel-body">
+                                <div class="panel panel-transparent margin-bottom-0">
+                                    <div class="panel-body no-padding">
+                                        <div class="col-sm-4">
+                                            <div class="image">
+                                                <label>
+                                                    Image
+                                                </label>
+                                                <div class="media">
+                                                    <a class="media-left media-middle" href="#">
+                                                        <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="" class="media-object thumbnail">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <form role="form" class="ng-pristine ng-valid">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Title
+                                                    </label>
+                                                    <input type="text" placeholder="Title" ng-model="product.name" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form-field-select-1">
+                                                        Status
+                                                    </label>
+                                                    <select ng-model="product.status" class="form-control">
+                                                        <option value="">Status</option>
+                                                        <option value="active">Active</option>
+                                                        <option value="backorder">Backorder</option>
+                                                        <option value="inactive">Inactive</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="form-field-select-1">
+                                                        Description
+                                                    </label>
+                                                    <textarea class="form-control autosize area-animated msd-elastic: \n; ng-pristine ng-valid ng-touched" ng-model="product.description" style="overflow: hidden; word-wrap: break-word; resize: vertical; height: 105px;" placeholder="Description"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <form role="form" class="ng-pristine ng-valid">
+                                                <div class="form-group">
+                                                    <label>
+                                                        SKU
+                                                    </label>
+                                                    <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Regular Price
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <input type="text" class="form-control" ng-model="product.regular_price">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Sale Price
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <input type="text" class="form-control" ng-model="product.sales_price">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>
+                                                        Cost
+                                                    </label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">$</span>
+                                                        <input type="text" class="form-control" ng-model="product.cost">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
     </div>
@@ -329,33 +481,6 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="panel panel-white">
-                    <div class="panel-heading border-light">
-                        <h4 class="panel-title">Variations</h4>
-                        <ul class="panel-heading-tabs border-light">
-                            <li>
-                                <div class="pull-right">
-                                    <div class="checkbox">
-                                        <span class="green switch green checked ng-valid ng-click-active" ng-click="showVariations=!showVariations" ng-class="{ checked:showVariations }" ng-model="showVariations" ng-init="showVariations = true"><small></small><input type="checkbox" ng-model="showVariations" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="panel-body" ng-if="showVariations">
-                        <p>
-                            Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-                        </p>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        </p>
-                        <p>
-                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
-                        </p>
                     </div>
                 </div>
             </div>

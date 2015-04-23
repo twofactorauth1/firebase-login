@@ -50,7 +50,7 @@ block content
         	document.getElementById('timerSec').innerHTML = '<strong>' + secLeft + ' Sec</strong>';
         	if (secLeft <= 0) {
         		clearInterval(interval);
-        		//window.location = next;
+        		window.location = next;
         	} 
         };
         var interval = setInterval(intervalFn, 1000);
