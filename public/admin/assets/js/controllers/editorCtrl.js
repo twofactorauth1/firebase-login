@@ -1616,7 +1616,8 @@
          */
 
         $scope.saveCustomComponent = function(networks) {
-            iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
+            $scope.childScope.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks)
+            //iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent($scope.currentPage.components, networks ? networks : $scope.componentEditing.networks);
         };
 
         /*
