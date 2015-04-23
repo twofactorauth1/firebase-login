@@ -1,327 +1,328 @@
+<div ng-controller="ProfileBusinessCtrl" class="business">
 <!-- start: PAGE TITLE -->
-<section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
-    <div class="row">
-        <div class="col-sm-8">
-            <h1 class="mainTitle" translate="sidebar.nav.account.PROFILEBUSINESS">{{ mainTitle }}</h1>
-            <span class="mainDescription">Manage your business profile</span>
-        </div>
-        <div ncy-breadcrumb></div>
-    </div>
-</section>
-<tabset class="tabbable">
-    <!-- start: TAB OVERVIEW -->
-    <tab heading="Profile">
+    <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
         <div class="row">
-            <div class="col-md-4">
-                <div class="user-left">
-                    <div class="center">
-                        <h4>{{account.business.name}}</h4>
-                        <div>
-                            <div class="user-image">
-                                <div class="thumbnail">
-                                    <img ng-src="{{account.business.logo}}" err-src="assets/images/default-user.png" alt="">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.account.PROFILEBUSINESS">{{ mainTitle }}</h1>
+                <span class="mainDescription">Manage your business profile</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <tabset class="tabbable">
+        <!-- start: TAB OVERVIEW -->
+        <tab heading="Profile">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="user-left">
+                        <div class="center">
+                            <h4>{{account.business.name}}</h4>
+                            <div>
+                                <div class="user-image">
+                                    <div class="thumbnail">
+                                        <img ng-src="{{account.business.logo}}" err-src="assets/images/default-user.png" alt="">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <hr>
-                        <!-- <div class="social-icons">
-                            <ul>
-                                <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                                    <a href="#" target="_blank"> Twitter </a>
-                                </li>
-                                <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                                    <a href="#" target="_blank"> Facebook </a>
-                                </li>
-                                <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                                    <a href="#" target="_blank"> Google+ </a>
-                                </li>
-                                <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                                    <a href="#" target="_blank"> LinkedIn </a>
-                                </li>
-                                <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                                    <a href="#" target="_blank"> Github </a>
-                                </li>
-                            </ul>
                             <hr>
-                        </div> -->
+                            <!-- <div class="social-icons">
+                                <ul>
+                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                                        <a href="#" target="_blank"> Twitter </a>
+                                    </li>
+                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                                        <a href="#" target="_blank"> Facebook </a>
+                                    </li>
+                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                                        <a href="#" target="_blank"> Google+ </a>
+                                    </li>
+                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                                        <a href="#" target="_blank"> LinkedIn </a>
+                                    </li>
+                                    <li data-placement="top" data-original-title="Github" class="social-github tooltips">
+                                        <a href="#" target="_blank"> Github </a>
+                                    </li>
+                                </ul>
+                                <hr>
+                            </div> -->
+                        </div>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Contact Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>email:</td>
+                                    <td>
+                                        <div ng-repeat="email in account.business.emails">
+                                            <a href="mailto:{{email.email}}">
+                                                {{email.email}}
+                                            </a>
+                                            <br>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>phone:</td>
+                                    <td>
+                                        <span ng-repeat="phone in account.business.phones">{{phone.number}}<br></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>address:</td>
+                                    <td>
+                                        <div ng-repeat="address in account.business.addresses">
+                                            <a href>
+                                                {{address.address}} {{address.address2}} <br> {{address.city}} {{address.state}} {{address.postcode}}
+                                            </a>
+                                            <br>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Additional information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Description</td>
+                                    <td>{{account.business.description}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th colspan="3">Contact Information</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>email:</td>
-                                <td>
-                                    <div ng-repeat="email in account.business.emails">
-                                        <a href="mailto:{{email.email}}">
-                                            {{email.email}}
-                                        </a>
-                                        <br>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>phone:</td>
-                                <td>
-                                    <span ng-repeat="phone in account.business.phones">{{phone.number}}<br></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>address:</td>
-                                <td>
-                                    <div ng-repeat="address in account.business.addresses">
-                                        <a href>
-                                            {{address.address}} {{address.address2}} <br> {{address.city}} {{address.state}} {{address.postcode}}
-                                        </a>
-                                        <br>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th colspan="3">Additional information</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Description</td>
-                                <td>{{account.business.description}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                </div>
+                <div class="col-md-8">
+                    <div class="panel panel-white" id="businessHours">
+                        <div class="panel-heading border-light">
+                            <h4 class="panel-title text-primary">Business Hours</h4>
+                            <paneltool class="panel-tools" tool-collapse="tool-collapse"></paneltool>
+                        </div>
+                        <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
+                            <div class="panel-body">
+                                <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                                <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-8">
-                <div class="panel panel-white" id="businessHours">
-                    <div class="panel-heading border-light">
-                        <h4 class="panel-title text-primary">Business Hours</h4>
-                        <paneltool class="panel-tools" tool-collapse="tool-collapse"></paneltool>
-                    </div>
-                    <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
-                        <div class="panel-body">
-                            <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
-                            <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
-                        </div>
-                    </div>
-                </div>
+        </tab>
+        <!-- end: TAB OVERVIEW -->
+        <!-- start: TAB EDIT ACCOUNT -->
+        <tab heading="Edit Account" active="editActive">
+            <div class="col-xs-12">
+                <button class="btn btn-info btn-o pull-right" ng-click="profileSaveFn()">Save</button>
             </div>
-        </div>
-    </tab>
-    <!-- end: TAB OVERVIEW -->
-    <!-- start: TAB EDIT ACCOUNT -->
-    <tab heading="Edit Account" active="editActive">
-        <div class="col-xs-12">
-            <button class="btn btn-info btn-o pull-right" ng-click="profileSaveFn()">Save</button>
-        </div>
-        <div class="clearfix"></div>
-        <form action="#" role="form" id="form">
-            <fieldset>
-                <legend>
-                    Account Info
-                </legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div>
-                            <label class="control-label">
-                                Email Address
-                            </label>
-                            <div class="form-group" ng-repeat="email in account.business.emails">
-                                <span class="input-icon input-icon-right">
-                                    <input type="email" placeholder="email address" class="form-control" name="email" ng-model="account.business.emails[$index].email">
-                                    <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
-                                    <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="control-label">
-                                Phone Number
-                            </label>
-                            <div class="form-group" ng-repeat="phone in account.business.phones">
-                                <span class="input-icon input-icon-right">
-                                    <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
-                                    <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
-                                    <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
-                                </span>
-                            </div>
-                        </div>
-                        <div ng-repeat="address in account.business.addresses">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Address Line 1
-                                        </label>
-                                        <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Address Line 2
-                                        </label>
-                                        <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            City
-                                        </label>
-                                        <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            State
-                                        </label>
-                                        <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Country
-                                        </label>
-                                        <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label class="control-label">
-                                            Zip Code
-                                        </label>
-                                        <input class="form-control" placeholder="enter your zip code" type="text" name="zip" ng-model="address.zip">
-                                    </div>
+            <div class="clearfix"></div>
+            <form action="#" role="form" id="form">
+                <fieldset>
+                    <legend>
+                        Account Info
+                    </legend>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <label class="control-label">
+                                    Email Address
+                                </label>
+                                <div class="form-group" ng-repeat="email in account.business.emails">
+                                    <span class="input-icon input-icon-right">
+                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="account.business.emails[$index].email">
+                                        <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
+                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                    </span>
                                 </div>
                             </div>
                             <div>
-                                <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddAddressFn()">Add another address</div>
-                                <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
+                                <label class="control-label">
+                                    Phone Number
+                                </label>
+                                <div class="form-group" ng-repeat="phone in account.business.phones">
+                                    <span class="input-icon input-icon-right">
+                                        <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
+                                        <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
+                                        <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <fieldset>
-                            <legend>
-                                Logo Upload
-                            </legend>
-                            <div class="form-group center">
-                                <div>
-                                    <div class="user-image">
-                                        <div class="thumbnail margin-bottom-5">
-                                            <img src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
+                            <div ng-repeat="address in account.business.addresses">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Address Line 1
+                                            </label>
+                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
                                         </div>
                                     </div>
-                                    <div class="user-image-buttons-edit">
-                                        <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
-                                        <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Address Line 2
+                                            </label>
+                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                City
+                                            </label>
+                                            <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                State
+                                            </label>
+                                            <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Country
+                                            </label>
+                                            <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label">
+                                                Zip Code
+                                            </label>
+                                            <input class="form-control" placeholder="enter your zip code" type="text" name="zip" ng-model="address.zip">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddAddressFn()">Add another address</div>
+                                    <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <fieldset>
+                                <legend>
+                                    Logo Upload
+                                </legend>
+                                <div class="form-group center">
+                                    <div>
+                                        <div class="user-image">
+                                            <div class="thumbnail margin-bottom-5">
+                                                <img src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
+                                            </div>
+                                        </div>
+                                        <div class="user-image-buttons-edit">
+                                            <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
+                                            <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Business Name
+                                </label>
+                                <input type="text" placeholder="Business Name" class="form-control" name="businessname" ng-model="account.business.name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Description
+                                </label>
+                                <textarea placeholder="Description" class="form-control" name="businessdescription" ng-model="account.business.description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        Business Hours
+                    </legend>
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="split-hours">Id like to enter two sets of hours for a single day</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle"></i></span>
+                            <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ></switch>
+                        </div>
+                        <div class="form-group row">
+                            <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in account.business.hours">
+                                <div class="col-xs-1">
+                                    <label for="val.day">{{val.day}}:</label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="col-xs-2">
+                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
+                                <div class="col-xs-2">
+                                    <select ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="col-xs-2">
+                                    <select ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="col-xs-5 margin-left-5">
+                                    <div class="checkbox clip-check check-primary checkbox-inline">
+                                        <input type="checkbox" id="hoursClosed" ng-model="val.closed">
+                                        <label for="hoursClosed">
+                                            Closed
+                                        </label>
+                                    </div>
+                                    <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
+                                        <input type="checkbox" id="hoursSplit" ng-model="val.split">
+                                        <label for="hoursSplit">
+                                            Split
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                        </fieldset>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Business Name
-                            </label>
-                            <input type="text" placeholder="Business Name" class="form-control" name="businessname" ng-model="account.business.name">
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">
-                                Description
-                            </label>
-                            <textarea placeholder="Description" class="form-control" name="businessdescription" ng-model="account.business.description"></textarea>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>
-                    Business Hours
-                </legend>
-                <div class="row">
-                    <div class="form-group">
-                        <label for="split-hours">Id like to enter two sets of hours for a single day</label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
-                        <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ng-change="saveComponent()"></switch>
-                    </div>
-                    <div class="form-group row">
-                        <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in account.business.hours">
-                            <div class="col-xs-1">
-                                <label for="val.day">{{val.day}}:</label>
-                            </div>
-                            <div class="col-xs-2">
-                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-2">
-                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
-                            <div class="col-xs-2">
-                                <select ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-2">
-                                <select ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-5 margin-left-5">
-                                <div class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" id="hoursClosed" ng-model="val.closed">
-                                    <label for="hoursClosed">
-                                        Closed
-                                    </label>
+                            <div class="col-xs-12" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
+                                <div class="col-xs-1">
+                                    <label for="val.day">{{val.day}}:</label>
                                 </div>
-                                <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
-                                    <input type="checkbox" id="hoursSplit" ng-model="val.split">
-                                    <label for="hoursSplit">
-                                        Split
-                                    </label>
+                                <div class="col-xs-3">
+                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    </select>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
-                            <div class="col-xs-1">
-                                <label for="val.day">{{val.day}}:</label>
-                            </div>
-                            <div class="col-xs-3">
-                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-3">
-                                <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-5">
-                                <div class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" id="closed-{{$index}}" ng-model="val.closed">
-                                    <label for="closed-{{$index}}">
-                                        Closed
-                                    </label>
+                                <div class="col-xs-3">
+                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="col-xs-5">
+                                    <div class="checkbox clip-check check-primary checkbox-inline">
+                                        <input type="checkbox" id="closed-{{$index}}" ng-model="val.closed">
+                                        <label for="closed-{{$index}}">
+                                            Closed
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </fieldset>
-        </form>
-    </tab>
-    <!-- end: TAB EDIT ACCOUNT -->
-</tabset>
-<div id="model_container"></div>
+                </fieldset>
+            </form>
+        </tab>
+        <!-- end: TAB EDIT ACCOUNT -->
+    </tabset>
+    <div id="model_container"></div>
 <!-- end: YOUR CONTENT HERE -->
+</div>

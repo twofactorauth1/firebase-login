@@ -3,10 +3,10 @@
  * controller for personal business page
  */
 (function(angular) {
-    app.controller('ProfilePersonalCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant) {
+    app.controller('ProfilePersonalCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService) {
         console.log('profile personal >>> ');
 
-        $scope.hours = hoursConstant;
+        
         //account API call for object population
         //account API call for object population
         // Add remove photo
