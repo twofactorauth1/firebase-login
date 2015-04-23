@@ -9,6 +9,7 @@ var baseApi = require('../base.api');
 var campaignManager = require('../../campaign/campaign_manager');
 var accountDao = require('../../dao/account.dao');
 
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -54,6 +55,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.createCampaign(campaignObj, function(err, value){
                     self.log.debug('<< createCampaign');
                     self.sendResultOrError(resp, err, value, "Error creating campaign");
+                    self.createUserActivity(req, 'CREATE_CAMPAIGN', null, null, function(){});
                 });
             }
         });
@@ -80,6 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.updateCampaign(campaignObj, function(err, value){
                     self.log.debug('<< updateCampaign');
                     self.sendResultOrError(resp, err, value, "Error updating campaign");
+                    self.createUserActivity(req, 'UPDATE_CAMPAIGN', null, null, function(){});
                 });
             }
         });
@@ -104,6 +107,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.addContactToCampaign(contactId, campaignId, accountId, function(err, value){
                     self.log.debug('<< addContactToCampaign');
                     self.sendResultOrError(resp, err, value, "Error adding contact to campaign");
+                    self.createUserActivity(req, 'UPDATE_CAMPAIGN', null, null, function(){});
                 });
             }
         });
@@ -130,6 +134,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.bulkAddContactToCampaign(contactIdAry, campaignId, accountId, function(err, value){
                     self.log.debug('<< bulkAddContactToCampaign');
                     self.sendResultOrError(resp, err, value, "Error adding contacts to campaign");
+                    self.createUserActivity(req, 'UPDATE_CAMPAIGN', null, null, function(){});
                 });
             }
         });
@@ -154,6 +159,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.cancelRunningCampaign(campaignId, accountId, function(err, value){
                     self.log.debug('<< cancelRunningCampaign');
                     self.sendResultOrError(resp, err, value, "Error cancelling campaign");
+                    self.createUserActivity(req, 'CANCEL_CAMPAIGN', null, null, function(){});
                 });
             }
         });
@@ -228,6 +234,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.cancelCampaignForContact(accountId, campaignId, contactId, function(err, value){
                     self.log.debug('<< cancelContactCampaign');
                     self.sendResultOrError(resp, err, value, "Error cancelling campaign");
+                    self.createUserActivity(req, 'CANCEL_CAMPAIGN', null, null, function(){});
                 });
             }
         });
@@ -336,7 +343,6 @@ _.extend(api.prototype, baseApi.prototype, {
      * *NOTE* this method has NO security.  It can be invoked from anywhere.
      */
     triggerCampaignStep: function(req, resp) {
-        //TODO: this
         //campaigns/:id/running/contact/:contactid/steps/:stepNumber
         var self = this;
         self.log.debug('>> triggerCampaignStep');

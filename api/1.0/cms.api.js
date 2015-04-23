@@ -152,6 +152,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
                     self.log.debug('<< saveOrUpdateWebsite');
                     self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
+                    self.createUserActivity(req, 'UPDATE_WEBSITE_SETTINGS', null, null, function(){});
                     self = value = null;
                 });
             }
@@ -407,6 +408,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         result = {success:true};
                     }
                     self.sendResultOrError(resp, err, result, "Error Deleting Page Versions");
+                    self.createUserActivity(req, 'DELETE_PAGE_VERSION', null, {pageId: pageId, version: version}, function(){});
                     self = null;
                     return;
                 });
@@ -437,7 +439,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.revertPage(pageId, version, function(err, page){
                     self.log.debug('<< revertPage');
                     self.sendResultOrError(resp, err, page, "Error reverting page version");
-
+                    self.createUserActivity(req, 'REVERT_PAGE', null, {pageId:pageId, version:version}, function(){});
                     self = null;
                     return;
                 });
@@ -472,6 +474,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl);
+                    self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                 });
             }
         });
@@ -516,6 +519,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl);
+                        self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                     });
                 } else {
                     self.log.error('Cannot create null page.');
@@ -553,6 +557,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                     var pageUrl = self._buildPageUrl(req, value.get('handle'));
                     self._updatePageCache(pageUrl);
+                    self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
         });
@@ -584,7 +589,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.send200(res);
                     }
                     //self.sendResultOrError(res, err, value, "Error deleting Page");
-                    self.log.debug('sent');
+                    self.createUserActivity(req, 'DELETE_PAGE', null, {pageId: pageId}, function(){});
                     self = null;
                 });
             }
@@ -1170,6 +1175,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
                     self.sendResultOrError(res, err, value, "Error creating Blog Post");
+                    self.createUserActivity(req, 'CREATE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
             }
@@ -1240,6 +1246,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendResultOrError(res, err, value, "Error updating Blog Post");
                     var pageUrl = self._buildPageUrl(req, 'blog/' + value.get('post_url'));
                     self._updatePageCache(pageUrl);
+                    self.createUserActivity(req, 'UPDATE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
             }
@@ -1263,6 +1270,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function (err, value) {
                     self.log.debug('<< deleteBlogPost');
                     self.sendResultOrError(res, err, value, "Error deleting Blog Post");
+                    self.createUserActivity(req, 'DELETE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
             }
