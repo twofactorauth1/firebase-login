@@ -3141,11 +3141,15 @@ div[data-type=blog] .container {
   padding-right: 6px;
   padding-left: 6px;
   margin-top: -4px;
-  margin-bottom: -4px;
+  margin-bottom: 0px;
 }
 .editing .image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
+}
+.editing .image-wrap:hover .imgHeight {
+  max-height: 146px;
+  min-height: 146px;
 }
 .editing .image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -3222,11 +3226,6 @@ div[data-type=blog] .container {
   overflow: hidden;
   min-height: 150px;
   margin: 10px 0 20px 0;
-}
-@media (min-width: 1366px) {
-  .editing .image-wrap:hover {
-    margin-bottom: 0px;
-  }
 }
 .header-image-text-v1 {
   background-color: #F7F7F7;
