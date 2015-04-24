@@ -315,6 +315,7 @@ app.constant('JS_REQUIRES', {
         'offset': 'assets/js/filters/offset.js',
         'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
         'titleCase': 'assets/js/filters/titleCase.js',
+        'orderByArrayLength': 'assets/js/filters/orderByArrayLength.js',
 
         //*** Directives
         'mediaModal': 'assets/js/directives/mediadirective.js',
