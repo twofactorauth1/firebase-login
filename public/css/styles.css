@@ -971,12 +971,14 @@ ul.nav {
   height: auto;
 }
 .navigation-v3 .navbar-nav {
-  width: 100%;
   text-align: center;
+  float: right!important;
   margin-top: 0;
+  margin-right: 0;
 }
 .navigation-v3 .navbar-nav > li {
-  float: right;
+  float: left;
+  vertical-align: middle;
   display: inline-block;
 }
 .navigation-v3 .navbar {

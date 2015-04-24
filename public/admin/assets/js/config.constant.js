@@ -307,7 +307,7 @@ app.constant('JS_REQUIRES', {
         'socialConfigService': 'assets/js/services/socialconfig.js',
         'orderService': 'assets/js/services/order.js',
         'assetsService': 'assets/js/services/assets.js',
-
+        'geocodeService' : 'assets/js/services/geocode.js',
         //*** Filters
         'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
         'secTotime': 'assets/js/filters/secTotime.js',

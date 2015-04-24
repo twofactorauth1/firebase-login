@@ -347,6 +347,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         ProductService.getAllProducts(function(data) {
             that.products = data;
+            $scope.products = data;
         });
 
         $scope.stringifyAddress = function(address) {
