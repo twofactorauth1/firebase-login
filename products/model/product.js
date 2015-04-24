@@ -49,6 +49,8 @@ var product = $$.m.ModelBase.extend({
             */
             total_sales: 0,
 
+            hasVariations: false,
+
             variations: [],
 
             /* Example:
