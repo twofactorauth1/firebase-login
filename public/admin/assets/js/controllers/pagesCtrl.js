@@ -103,7 +103,7 @@
         };
 
         $scope.createPageFromTemplate = function(page, $event) {
-            $scope.validateCreatePage(page);
+            $scope.validateCreatePage(page, true);
 
             if (!$scope.createPageValidated) {
                 $scope.titleError = true;
