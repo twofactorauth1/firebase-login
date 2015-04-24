@@ -1494,6 +1494,7 @@
             $scope.currentPage.components = $scope.components;
             $scope.updateIframeComponents();
             $scope.activateCKEditor();
+            $scope.closeModal();
         };
 
         /*
