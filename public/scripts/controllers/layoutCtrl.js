@@ -344,55 +344,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         });
 
-        $scope.selectedProductChoice = [];
-
-        ProductService.getAllProducts(function(data) {
-            that.products = data;
-            $scope.products = data;
-        });
-
-        $scope.updateSelectedProduct = function(product) {
-            $scope.selectedProduct = product;
-        };
-
-        $scope.updatePrice = function() {
-            var selectedAttributes = $scope.selectedProduct.attributes;
-            console.log('selectedAttributes ', selectedAttributes);
-            var allselected = false;
-            _.each(selectedAttributes, function(attribute) {
-                if (attribute.selected) {
-                    allselected = true;
-                } else {
-                    allselected = false;
-                }
-            });
-            var variations = $scope.selectedProduct.variations;
-            var newPrice = 0;
-            if (allselected) {
-                //find matching variation
-                console.log('finding matching variation ', variations);
-                // _.each(variations, function(variation) {
-                //     var attributes = variation.attributes;
-                //     _.each(attributes, function(attribute, i) {
-                //         console.log('attribute ', attribute);
-                //         if (attribute.name == selectedAttributes[i].name && attribute.option == selectedAttributes[i].selected) {
-                //             console.log('variation price ', variation.regular_price);
-                //         }
-                //     });
-                // });
-                _.each(selectedAttributes, function(selected) {
-                    selected.matching = [];
-                    _.each(variations, function(variation) {
-                        var matchedVariation = _.findWhere(variation.attributes, {
-                            option: selected.selected
-                        });
-                        if (matchedVariation) {
-                            selected.matching.push(variation.id);
-                        }
-                    });
-                });
-            }
-        };
 
         $scope.stringifyAddress = function(address) {
             if (address) {
@@ -445,7 +396,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         }
 
-        /********** PRODUCT RELATED **********/
         $scope.checkoutModalState = 1;
         $scope.newContact = {
             isAuthenticated: true,
@@ -459,28 +409,114 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }]
         };
 
-        $scope.addDetailsToCart = function(product) {
-            // that.products[product.id].clicked = true;
-            var productMatch = _.find(that.products, function(item) {
-                return item._id === product._id
+        $scope.getUrl = function(value) {
+            if (value && !/http[s]?/.test(value)) {
+                value = 'http://' + value;
+            }
+            return value;
+        };
+
+        /********** PRODUCT RELATED **********/
+
+        /*
+         * @getAllProducts
+         * - get products for products and pricing table components
+         */
+
+        ProductService.getAllProducts(function(data) {
+            that.products = data;
+            $scope.products = data;
+        });
+
+        /*
+         * @updateSelectedProduct
+         * - when product details is clicked update selected product
+         */
+
+        $scope.updateSelectedProduct = function(product) {
+            $scope.selectedProduct = product;
+        };
+
+        /*
+         * @updatePrice
+         * - update the price when a matching variation is found based on the attribute selection
+         */
+
+        $scope.updatePrice = function() {
+            var selectedAttributes = $scope.selectedProduct.attributes;
+            var allselected = false;
+            _.each(selectedAttributes, function(attribute) {
+                if (attribute.selected) {
+                    allselected = true;
+                } else {
+                    allselected = false;
+                }
             });
-            productMatch.clicked = true;
+
+            if (allselected) {
+                var variations = $scope.selectedProduct.variations;
+
+                var _matchedVariation = _.find(variations, function(_variation) {
+                    var match = true;
+                    _.each(selectedAttributes, function(attr) {
+                        var matchedVarAttr = _.find(_variation.attributes, function(var_attr) {
+                            return var_attr.name === attr.name
+                        });
+                        if (matchedVarAttr.option !== attr.selected) {
+                            match = false;
+                        }
+                    });
+                    return match;
+                });
+
+                if (_matchedVariation) {
+                    $scope.matchedVariation = _matchedVariation;
+                } else {
+                    console.warn('no matching variation');
+                }
+            }
+        };
+
+        /*
+         * @addDetailsToCart
+         * - add product to cart
+         */
+
+        $scope.addDetailsToCart = function(product, variation) {
+            console.log('variation exists >>> ', variation);
+            // that.products[product.id].clicked = true;
+            if (variation) {
+                var productMatch = variation;
+                productMatch.variation = true;
+                productMatch.name = product.name;
+            } else {
+                var productMatch = _.find($scope.products, function(item) {
+                    return item._id === product._id
+                });
+                productMatch.clicked = true;
+            }
+
             if (!$scope.cartDetails) {
                 $scope.cartDetails = [];
             }
-            if (!product.quantity) {
-                product.quantity = 1;
+            if (!productMatch.quantity) {
+                productMatch.quantity = 1;
             }
             var match = _.find($scope.cartDetails, function(item) {
-                return item._id === product._id
+                return item._id === productMatch._id
             })
             if (match) {
                 match.quantity = parseInt(match.quantity) + 1;
             } else {
-                $scope.cartDetails.push(product);
+                $scope.cartDetails.push(productMatch);
             }
             $scope.calculateTotalChargesfn();
         };
+
+        /*
+         * @removeFromCart
+         * - remove product to cart
+         */
 
         $scope.removeFromCart = function(product) {
             var filtered = _.filter($scope.cartDetails, function(item) {
@@ -493,12 +529,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.cartDetails = filtered;
         };
 
-        $scope.getUrl = function(value) {
-            if (value && !/http[s]?/.test(value)) {
-                value = 'http://' + value;
-            }
-            return value;
-        };
+        /*
+         * @calculateTotalChargesfn
+         * - calculate the total based on products in cart
+         */
 
         $scope.calculateTotalChargesfn = function() {
             var subTotal = 0;
@@ -511,6 +545,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100);
             $scope.total = $scope.subTotal + $scope.totalTax;
         };
+
+        /*
+         * @makeCartPayment
+         * - make the final payment for checkout
+         */
 
         $scope.makeCartPayment = function() {
 
@@ -545,9 +584,25 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             PaymentService.getStripeCardToken(cardInput, function(token) {
                 PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
             });
-
         };
 
+        /*
+         * @variationAttributeExists
+         * - check variation attributes to see if they exist
+         */
+
+        $scope.variationAttributeExists = function(value) {
+            var variations = $scope.selectedProduct.variations;
+            var matchedAttribute = false;
+            _.each(variations, function(_variation) {
+                var _matchedVariation = _.find(_variation.attributes, function(_attribute) {
+                    if (_attribute.option == value) {
+                        matchedAttribute = true;
+                    }
+                });
+            });
+            return matchedAttribute;
+        };
 
         /********** END PRODUCT RELATED **********/
 

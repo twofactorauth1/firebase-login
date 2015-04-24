@@ -1895,13 +1895,19 @@ div[data-class='image-text'] p {
   right: 0;
   margin: 0 10px 0 0;
 }
-.order-line-items ul {
+.order-line-items > ul {
   padding-left: 0;
 }
-.order-line-items ul li {
+.order-line-items > ul > li {
   padding: 20px;
   border-bottom: 1px solid #f3f3f3;
   position: relative;
+}
+.order-line-items ul.variations {
+  padding-left: 0;
+}
+.order-line-items ul.variations li {
+  margin-right: 5px;
 }
 .card-details {
   padding: 20px;
