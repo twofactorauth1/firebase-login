@@ -180,7 +180,8 @@ var post = $$.m.ModelBase.extend({
         if(tweet.user) {
             obj.from = {
                 sourceId: tweet.user.id,
-                name: tweet.user.name
+                name: tweet.user.name,
+                profile_pic: tweet.user.profile_image_url_https,
             };
         } else if(tweet.sender) {
             obj.from = {

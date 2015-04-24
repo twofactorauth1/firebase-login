@@ -77,15 +77,27 @@
                     $log.debug(trackedAccount.type);
 
                     if (trackedAccount.type == 'tw') {
+
+                        // get feed
                         SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
                             $scope.feedLengths[trackedAccount.id] = posts.length;
-                            $log.debug('number of twitter posts: ' + posts.length);
+                            //$log.debug('number of twitter posts: ' + posts.length);
                             _.each(posts, function(post) {
                                 post.trackedId = trackedAccount.id;
-
-                                // TODO: fix this URL
-                                post.from.profile_pic = 'https://pbs.twimg.com/profile_images/570591655292448768/f6TmALKN.jpeg';
                                 $scope.feed.push(post);
+                                //$log.debug(post);
+                            });
+                        });
+
+                        // get followers
+                        SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
+                            // TODO: what does feedLengths need to be?
+                            //$scope.feedLengths[trackedAccount.id] = posts.length;
+                            //$log.debug('number of twitter follower posts: ' + posts.length);
+                            _.each(posts, function(post) {
+                                post.trackedId = trackedAccount.id;
+                                $scope.feed.push(post);
+                                //$log.debug(post);
                             });
                         });
                     }
