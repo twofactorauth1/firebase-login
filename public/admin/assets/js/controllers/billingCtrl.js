@@ -3,7 +3,7 @@
  * controller for billing
  */
 (function(angular) {
-    app.controller('BillingCtrl', ["$scope", "toaster", "$modal", "$filter", "$location", "ProductService", "PaymentService", "UserService", "$q", "ToasterService", "ipCookie", function($scope, toaster, $modal, $filter, $location, ProductService, PaymentService, UserService, $q, ToasterService, ipCookie) {
+    app.controller('BillingCtrl', ["$scope", "$rootScope", "toaster", "$modal", "$filter", "$location", "ProductService", "PaymentService", "UserService", "$q", "ToasterService", "ipCookie", function($scope, $rootScope, toaster, $modal, $filter, $location, ProductService, PaymentService, UserService, $q, ToasterService, ipCookie) {
 
         /*
          * @closeModal

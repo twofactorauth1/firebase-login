@@ -314,6 +314,7 @@ app.constant('JS_REQUIRES', {
         'formatText': 'assets/js/filters/formatText.js',
         'offset': 'assets/js/filters/offset.js',
         'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
+        'titleCase': 'assets/js/filters/titleCase.js',
 
         //*** Directives
         'mediaModal': 'assets/js/directives/mediadirective.js',
@@ -345,7 +346,7 @@ app.constant('JS_REQUIRES', {
         files: ['../js/libs/angular-smart-table/dist/smart-table.min.js']
     }, {
         name: 'ui.select',
-        files: ['../js/libs/angular-ui-select/dist/select.min.js', '../js/libs/angular-ui-select/dist/select.min.css', '../js/libs/select2/dist/css/select2.min.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
+        files: ['../js/libs/angular-ui-select/dist/select.min.js', '../js/libs/angular-ui-select/dist/select.min.css', '../js/libs/select2/select2.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
     }, {
         name: 'ui.mask',
         files: ['../js/libs/angular-ui-utils/mask.min.js']

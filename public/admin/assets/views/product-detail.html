@@ -80,32 +80,34 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="form-field-select-1">
-                                            Status
-                                        </label>
-                                        <select ng-model="product.status" class="form-control">
-                                            <option value="">Status</option>
-                                            <option value="active">Active</option>
-                                            <option value="backorder">Backorder</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="form-field-select-1">
-                                            Type
-                                        </label>
-                                        <select ng-model="product.type" class="form-control">
-                                            <option value="">Type</option>
-                                            <option value="physical">Physical</option>
-                                            <option value="digital">Digital</option>
-                                            <option value="subscription">Subscription</option>
-                                            <option value="externalLink">External</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="form-field-select-1">
                                             Description
                                         </label>
                                         <textarea class="form-control autosize area-animated msd-elastic: \n; ng-pristine ng-valid ng-touched" ng-model="product.description" style="overflow: hidden; word-wrap: break-word; resize: vertical; height: 80px;" placeholder="Description"></textarea>
+                                    </div>
+                                    <div ng-if="!showVariations">
+                                        <div class="form-group">
+                                            <label for="form-field-select-1">
+                                                Status
+                                            </label>
+                                            <select ng-model="product.status" class="form-control">
+                                                <option value="">Status</option>
+                                                <option value="active">Active</option>
+                                                <option value="backorder">Backorder</option>
+                                                <option value="inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-field-select-1">
+                                                Type {{product.type}}
+                                            </label>
+                                            <select ng-model="product.type" class="form-control">
+                                                <option value="">Type</option>
+                                                <option value="physical">Physical</option>
+                                                <option value="digital">Digital</option>
+                                                <option value="subscription">Subscription</option>
+                                                <option value="externalLink">External</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -113,7 +115,7 @@
                     </div>
                     <div class="col-sm-4" ng-if="!showVariations">
                         <div class="panel panel-transparent">
-                            <div class="panel-body">
+                            <div class="panel-body padding-top-0">
                                 <form role="form" class="ng-pristine ng-valid">
                                     <div class="form-group">
                                         <label>
@@ -164,46 +166,17 @@
                     <li>
                         <div class="pull-right">
                             <div class="checkbox">
-                                <span class="green switch green checked ng-valid ng-click-active" ng-click="showVariations=!showVariations" ng-class="{ checked:showVariations }" ng-model="showVariations" ng-init="showVariations = true"><small></small><input type="checkbox" ng-model="showVariations" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                                <span class="green switch green" ng-click="showVariations=!showVariations" ng-class="{ checked:showVariations }" ng-model="showVariations"><small></small><input type="checkbox" ng-model="showVariations" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
                             </div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="panel-body" ng-if="showVariations">
-                <fieldset>
-                    <legend>
-                        Attributes
-                    </legend>
-                    <div ng-repeat="attribute in product.attributes">
-                        <div class="col-sm-4 col-xs-12">
-                            <div class="form-group margin-bottom-0">
-                                <label for="attributeName">
-                                    Attribute Name
-                                </label>
-                                <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="product.attribute.name">
-                            </div>
-                        </div>
-                        <div class="col-sm-7 col-xs-12">
-                            <div class="form-group margin-bottom-0">
-                                <label class="margin-bottom-0">
-                                    <span ng-if="product.attribute.name">{{product.attribute.name + ' Types' }}</span>
-                                    <span ng-if="!product.attribute.name">Attribute Types</span>
-                                </label>
-                                <tags-input ng-model="product.attribute.attributes"></tags-input>
-                            </div>
-                        </div>
-                        <div class="col-sm-1 col-xs-12">
-                            <span ng-if="$index == 0" class="fa fa-plus text-success margin-top-30"></span>
-                            <span ng-if="$index != 0" class="fa fa-minus text-danger margin-top-30"></span>
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        Variations
-                    </legend>
-                    {{product.variations}}
+            <div class="panel-body" ng-if="showVariations" ng-class="{'height-250': !product.attributes}">
+                <div class="backdrop" ng-if="!products.attributes">
+                    <h5 class="panel-title">Please Add Attribute Before Adding Variations</h5>
+                </div>
+                <div class="col-sm-12" ng-if="!products.attributes">
                     <div class="panel panel-white margin-bottom-0" id="panel{{$index}}" ng-repeat="variation in product.variations">
                         <div class="panel-heading" ng-class="{'border-light': !panel{{$index}}}">
                             <h4 class="panel-title text-primary pull-left">#{{variation.id}}</h4>
@@ -219,7 +192,8 @@
                             </div>
                             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></ct-paneltool>
                         </div>
-                        <div collapse="panel{{$index}}" ng-init="panel{{$index}}=true" class="panel-wrapper">
+                        <!-- ng-init="'panel'+{{$index}}=true" -->
+                        <div collapse="panel{{$index}}" class="panel-wrapper">
                             <div class="panel-body">
                                 <div class="panel panel-transparent margin-bottom-0">
                                     <div class="panel-body no-padding">
@@ -236,24 +210,29 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>
+                                                    Type
+                                                </label>
+                                                <select ng-model="variation.type" class="form-control">
+                                                    <option value="physical">Physical</option>
+                                                    <option value="digital">Digital</option>
+                                                    <option value="subscription">Subscription</option>
+                                                    <option value="externalLink">External</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>
+                                                    Regular Price
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">$</span>
+                                                    <input type="text" class="form-control" ng-model="product.regular_price">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <form role="form" class="ng-pristine ng-valid">
-                                                <div class="form-group">
-                                                    <label>
-                                                        SKU
-                                                    </label>
-                                                    <input type="text" placeholder="SKU" ng-model="variation[$index].sku" class="form-control">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>
-                                                        Regular Price
-                                                    </label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">$</span>
-                                                        <input type="text" class="form-control" ng-model="product.regular_price">
-                                                    </div>
-                                                </div>
                                                 <div class="form-group">
                                                     <label>
                                                         Sale Price
@@ -274,18 +253,231 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        <div class="col-sm-12" ng-if="variation.type">
+                                            <hr>
+                                            <div class="row" ng-if="variation.type == 'digital'">
+                                                <div class="col-sm-12">
+                                                    <h4>Digital</h4>
+                                                </div>
+                                                <form role="form" class="form-horizontal ng-pristine ng-valid">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">
+                                                            Downloadable Files
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <table class="table table-striped table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name</th>
+                                                                        <th>File URL</th>
+                                                                        <th>&nbsp;</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody class="ui-sortable">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <input type="text" class="form-control" placeholder="File Name">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" class="form-control" placeholder="File URL">
+                                                                        </td>
+                                                                        <td width="30%">
+                                                                            <button type="button" class="btn btn-wide btn-o btn-info">Choose File</button>
+                                                                            <button type="button" class="btn btn-wide btn-o btn-danger">Delete</button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="3">
+                                                                            <div class="center">
+                                                                                <button type="button" class="btn btn-wide btn-o btn-info">Add File</button>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">
+                                                            Download Limit
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                                <input id="demo4" type="text" value="0" name="demo4" touchspin="" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" class="form-control" style="display: block;">
+                                                                <span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">
+                                                            Download Expiry
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group bootstrap-touchspin"><span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
+                                                                <input id="demo4" type="text" value="0" name="demo4" touchspin="" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" class="form-control" style="display: block;">
+                                                                <span class="input-group-addon bootstrap-touchspin-postfix" style="display: none;"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="col-sm-2 control-label">
+                                                            Download Type
+                                                        </label>
+                                                        <div class="col-sm-10">
+                                                            <select id="form-field-select-1" class="form-control">
+                                                                <option value="">&nbsp;</option>
+                                                                <option value="pdf">PDF</option>
+                                                                <option value="music">Music</option>
+                                                                <option value="software">Application/Software</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="row" ng-if="variation.type == 'physical'">
+                                                <h1>Physical</h1>
+                                            </div>
+                                            <div class="row" ng-if="variation.type == 'subscription'">
+                                                <div class="panel panel-white">
+                                                    <div class="panel-heading border-light">
+                                                        <h4 class="panel-title">Subscriptions</h4>
+                                                        <ul class="panel-heading-tabs border-light">
+                                                            <li>
+                                                                <div class="pull-right">
+                                                                    <button type="button" class="btn btn-wide btn-o btn-info">Add Subscription</button>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <table class="table table-primary">
+                                                            <thead>
+                                                                <tr class="ng-scope">
+                                                                    <th>Active</th>
+                                                                    <th>Name</th>
+                                                                    <th class="center">Interval</th>
+                                                                    <th class="center">Amount</th>
+                                                                    <th class="center">Sign Up Fee</th>
+                                                                    <th class="center">Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr class="ng-scope">
+                                                                    <td>
+                                                                        <div class="checkbox" style="margin:0">
+                                                                            <span class="green switch green checked ng-valid ng-click-active" ng-click="showVariations=!showVariations" ng-class="{ checked:showVariations }" ng-model="showVariations" ng-init="showVariations = true"><small></small><input type="checkbox" ng-model="showVariations" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="ng-binding">Indigenous Monthly</td>
+                                                                    <td class="center">1</td>
+                                                                    <td class="center">$49.95</td>
+                                                                    <td class="center">500</td>
+                                                                    <td class="center">
+                                                                        <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                                                            <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit"><i class="fa fa-pencil"></i></a>
+                                                                            <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Share"><i class="fa fa-share"></i></a>
+                                                                            <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                                                                        </div>
+                                                                        <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                                                            <div class="btn-group" dropdown="" is-open="status.isopen">
+                                                                                <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+                                                                                    <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
+                                                                                </button>
+                                                                                <ul class="dropdown-menu pull-right dropdown-light" role="menu">
+                                                                                    <li>
+                                                                                        <a href="#">Edit</a>
+                                                                                    </li>
+                                                                                    <li>
+                                                                                        <a href="#">Remove</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" ng-if="variation.type == 'externalLink'">
+                                                <div class="col-sm-12">
+                                                    <h4>External Link</h4>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label>Allow Product View</label>
+                                                        <select ng-change="setFormDirtyFn()" class="form-control" ng-model="product.externalLinkAllowProductView">
+                                                            <option value=true>Yes</option>
+                                                            <option value=false>No</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Link Text</label>
+                                                        <input ng-change="setFormDirtyFn()" class="form-control" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label>Link Url</label>
+                                                        <input ng-change="setFormDirtyFn()" indigeweb-validate-form-fields validation-type="url" class="form-control" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Open In</label>
+                                                        <select ng-change="setFormDirtyFn()" class="form-control" ng-model="product.externalLinkOpenIn">
+                                                            <option value='new'>New Window</option>
+                                                            <option value='same'>Same Window</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" ng-if="showVariations">
+        <div class="panel panel-white">
+            <div class="panel-heading border-light">
+                <h5 class="panel-title">Attributes</h5>
+            </div>
+            <div class="panel-body">
+                <div ng-repeat="attribute in product.attributes" class="row">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group margin-bottom-0">
+                            <label for="attributeName">
+                                Attribute Name
+                            </label>
+                            <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="product.attribute.name">
+                        </div>
+                    </div>
+                    <div class="col-sm-7 col-xs-12">
+                        <div class="form-group margin-bottom-0">
+                            <label class="margin-bottom-0">
+                                <span ng-if="product.attribute.name">{{product.attribute.name + ' Types' }}</span>
+                                <span ng-if="!product.attribute.name">Attribute Types</span>
+                            </label>
+                            <tags-input ng-model="product.attribute.attributes"></tags-input>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 col-xs-12">
+                        <span ng-if="$index == 0" class="fa fa-plus text-success margin-top-30"></span>
+                        <span ng-if="$index != 0" class="fa fa-minus text-danger margin-top-30"></span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="container-fluid container-fullw">
         <div class="row">
-            <div class="col-sm-12" ng-if="product.type == 'external'">
+            <div class="col-sm-12" ng-if="product.type == 'externalLink' && !showVariations">
                 <div class="panel panel-white">
                     <div class="panel-heading border-light">
                         <h4 class="panel-title">External Link</h4>
@@ -300,19 +492,36 @@
                         </ul> -->
                     </div>
                     <div class="panel-body">
-                        <p>
-                            Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
-                        </p>
-                        <p>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                        </p>
-                        <p>
-                            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.
-                        </p>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Allow Product View</label>
+                                <select ng-change="setFormDirtyFn()" class="form-control input-lg" ng-model="product.externalLinkAllowProductView">
+                                    <option value=true>Yes</option>
+                                    <option value=false>No</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Link Text</label>
+                                <input ng-change="setFormDirtyFn()" class="form-control input-lg mb20" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Link Url</label>
+                                <input ng-change="setFormDirtyFn()" indigeweb-validate-form-fields validation-type="url" class="form-control input-lg mb20" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                            </div>
+                            <div class="form-group">
+                                <label>Open In</label>
+                                <select ng-change="setFormDirtyFn()" class="form-control input-lg" ng-model="product.externalLinkOpenIn">
+                                    <option value='new'>New Window</option>
+                                    <option value='same'>Same Window</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12" ng-if="product.type == 'subscription'">
+            <div class="col-sm-12" ng-if="product.type == 'subscription' && !showVariations">
                 <div class="panel panel-white">
                     <div class="panel-heading border-light">
                         <h4 class="panel-title">Subscriptions</h4>
@@ -375,7 +584,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12" ng-if="product.type == 'digital'">
+            <div class="col-sm-12" ng-if="product.type == 'digital' && !showVariations">
                 <div class="panel panel-white">
                     <div class="panel-heading border-light">
                         <h4 class="panel-title">Digital File</h4>

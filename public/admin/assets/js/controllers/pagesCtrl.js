@@ -3,7 +3,7 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PagesCtrl', ["$scope", "toaster", "$filter", "$modal", "WebsiteService", function($scope, toaster, $filter, $modal, WebsiteService) {
+    app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function($scope, $location, toaster, $filter, $modal, WebsiteService) {
 
         WebsiteService.getPages(function(pages) {
             console.log('pages >>> ', pages);
@@ -154,6 +154,8 @@
 
         $scope.viewSingle = function(page) {
             window.location = '/admin/#/website/pages/?pagehandle=' + page.handle;
+            // console.log('$location.path() ',$location.path());
+            // $location.path('website/pages/?pagehandle=' + page.handle).replace();
         };
 
         $scope.filterScreenshot = {};
