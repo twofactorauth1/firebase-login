@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-7">
                 <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">{{ mainTitle }}</h1>
-                <span class="mainDescription">overview stats &amp; activity</span>
+                <span class="mainDescription">Overview &amp; activity</span>
             </div>
             <div class="col-sm-5">
             </div>
@@ -15,65 +15,45 @@
     <div class="container-fluid container-fullw bg-white">
         <div class="row">
             <div class="col-sm-3">
-                <div class="panel panel-white no-radius text-center margin-bottom-0">
-                    <div class="panel-body">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.customers">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
-                        <h3 class="StepTitle">Manage Customers</h3>
+                        <h3 class="StepTitle">Customers</h3>
                         <p class="text-small">
-                            import them or create them manually
-                        </p>
-                        <p class="links cl-effect-1">
-                            <a ui-sref="app.customers">
-                            view
-                        </a>
+                            Import or create them manually
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="panel panel-white no-radius text-center margin-bottom-0">
-                    <div class="panel-body">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.marketing.socialfeed">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false">
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
-                        <h3 class="StepTitle">Manage Social Feed</h3>
+                        <h3 class="StepTitle">Social Feed</h3>
                         <p class="text-small">
-                            various social networks
-                        </p>
-                        <p class="cl-effect-1">
-                            <a ui-sref="app.marketing.socialfeed">
-                            view
-                        </a>
+                            View and post to social networks
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="panel panel-white no-radius text-center margin-bottom-0">
-                    <div class="panel-body">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.website.pages">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover3}" ng-mouseenter="hover3 = true" ng-mouseleave="hover3 = false">
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-laptop fa-stack-1x fa-inverse"></i> </span>
-                        <h3 class="StepTitle">Manage Pages</h3>
+                        <h3 class="StepTitle">Pages</h3>
                         <p class="text-small">
-                            pages for your site
-                        </p>
-                        <p class="links cl-effect-1">
-                            <a ui-sref="app.website.pages">
-                            view
-                        </a>
+                            Pages for your site
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-sm-3">
-                <div class="panel panel-white no-radius text-center margin-bottom-0">
-                    <div class="panel-body">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.commerce.orders">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover4}" ng-mouseenter="hover4 = true" ng-mouseleave="hover4 = false">
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i> </span>
-                        <h3 class="StepTitle">Manage Orders</h3>
+                        <h3 class="StepTitle">Orders</h3>
                         <p class="text-small">
-                            orders for products sold
-                        </p>
-                        <p class="links cl-effect-1">
-                            <a ui-sref="app.commerce.orders">
-                            view
-                        </a>
+                            Track products sold
                         </p>
                     </div>
                 </div>
@@ -89,7 +69,7 @@
                             <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsCustomers}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsCustomers">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Customers This Month</h5>
+                                        <h5 class="text-dark no-margin">Customers this Month</h5>
                                         <h2 class="no-margin">{{customersThisMonth.length}}</h2>
                                         <span class="badge badge-success margin-top-10" ng-class="{'badge-danger': customersThisMonth.length == 0, 'badge-success': customersThisMonth.length > 0}">{{getCustomerLeads()}} Leads</span>
                                     </div>
@@ -104,7 +84,7 @@
                             <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsOrders}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsOrders">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Orders This Month</h5>
+                                        <h5 class="text-dark no-margin">Orders this Month</h5>
                                         <h2 class="no-margin">{{ordersThisMonth.length}}</h2>
                                         <span class="badge margin-top-10" ng-class="{'badge-danger': ordersThisMonth.length == 0, 'badge-success': ordersThisMonth.length > 0}">{{getCompletedOrders()}} Complete</span>
                                     </div>
@@ -119,7 +99,7 @@
                             <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsVisitors}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsVisitors">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Visitors This Month</h5>
+                                        <h5 class="text-dark no-margin">Visitors this Month</h5>
                                         <h2 class="no-margin">{{visitorsThisMonth}}</h2>
                                         <span class="badge margin-top-10" ng-class="{'badge-danger': visitorsThisMonth.length == 0, 'badge-success': visitorsThisMonth.length > 0}">{{totalNewVisitors}} New Visitors</span>
                                     </div>
@@ -134,7 +114,7 @@
                             <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsRevenue}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsRevenue">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Net Revenue This Month</h5>
+                                        <h5 class="text-dark no-margin">Net Revenue this Month</h5>
                                         <h2 class="no-margin">{{revenueThisMonth | currency}}</h2>
                                         <span class="badge margin-top-10" ng-class="{'badge-danger': revenueThisMonth.length == 0, 'badge-success': revenueThisMonth.length > 0}">{{charges}} Charges</span>
                                     </div>
@@ -185,7 +165,7 @@
                                                 <div ng-switch-when="CONTACT_CREATED">
                                                     <p class="cl-effect-13">
                                                         <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a> customer was added.
+                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a>was added.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                                 </div>

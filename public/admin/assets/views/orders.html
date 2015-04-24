@@ -1,6 +1,6 @@
 <div ng-controller="OrdersCtrl" class="orders">
     <!-- start: PAGE TITLE -->
-    <section id="page-title">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.commerce.ORDERS">{{ mainTitle }}</h1>
@@ -104,17 +104,14 @@
                     <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="orders">
                         <thead>
                             <tr>
-                                <th class="column-width" st-sort="getters.customerName">Customer</th>
                                 <th class="center column-width" st-sort="status">Status</th>
+                                <th class="column-width" st-sort="getters.customerName">Customer</th>
                                 <th class="hidden-xs center column-width" st-sort="getters.line_items">Items</th>
                                 <th class="hidden-xs center column-width" st-sort="total">Total</th>
                                 <th class="hidden-xs column-width" st-sort="getters.created">Created</th>
                                 <th class="hidden-xs column-width" st-sort="getters.modified">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
-                                <th>
-                                    <input st-search="{{order.customer._full}}" placeholder="Customer" class="form-control" type="search" />
-                                </th>
                                 <th>
                                     <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterorder.selected.name" />
                                     <ui-select ng-model="filterorder.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
@@ -129,6 +126,9 @@
                                             <small ng-bind-html="status.name | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
+                                </th>
+                                <th>
+                                    <input st-search="{{order.customer._full}}" placeholder="Customer" class="form-control" type="search" />
                                 </th>
                                 <th>
                                     <input st-search="line_items_total" ng-model="line_items" id="order_line_items" class="form-control hidden" type="search" />
@@ -151,18 +151,33 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
+                                <td class="center"><strong>Status: </strong>
+                                    <span class="fa-stack">
+                                        <span class="fa fa-circle-thin fa-stack-2x"
+                                        ng-class="{'text-warning': order.status == 'pending',
+                                                      'text-muted': order.status == 'on-hold',
+                                                      'text-blue': order.status == 'processing',
+                                                      'text-green': order.status == 'completed',
+                                                      'text-purple': order.status == 'refunded',
+                                                      'text-orange': order.status == 'failed',
+                                                      'text-red': order.status == 'cancelled',
+                                                      }">
+                                        </span>
+                                        <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{order.status | titleCase}} "
+                                           ng-class="{'fa-ellipsis-h text-warning': order.status == 'pending',
+                                                      'fa-minus text-muted': order.status == 'on-hold',
+                                                      'fa-clock-o text-blue': order.status == 'processing',
+                                                      'fa-check text-green': order.status == 'completed',
+                                                      'fa-exchange text-purple': order.status == 'refunded',
+                                                      'fa-exclamation text-orange': order.status == 'failed',
+                                                      'fa-times text-red': order.status == 'cancelled',
+                                                      }">
+                                        </span>
+                                    </span>
+                                </td>
                                 <td>
                                     <img src="{{ status.customer.photo ? status.customer.photo : '/admin/assets/images/default-user.png' }}" class="img-thumbnail screenshot" alt="image"> {{order.customer.first}} {{order.customer.last}}
                                 </td>
-                                <td class="center"><strong>Status: </strong> <span class="fa fa-2x" tooltip-placement="top" tooltip="{{order.status}}"
-                                   ng-class="{'fa-ellipsis-h': order.status == 'pending',
-                                              'fa-minus': order.status == 'on-hold',
-                                              'fa-clock-o': order.status == 'processing',
-                                              'fa-check': order.status == 'completed',
-                                              'fa-exchange': order.status == 'refunded',
-                                              'fa-exclamation': order.status == 'failed',
-                                              'fa-times': order.status == 'cancelled',
-                                              }"></span></td>
                                 <td class="hidden-xs center"><strong>Items: </strong>{{order.line_items.length}}</td>
                                 <td class="hidden-xs center"><strong>Total: </strong> {{order.total | currency}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{order.created.date | date:'MMM d yy'}}</td>
