@@ -1201,6 +1201,23 @@
 
                 that.originalCurrentPageComponents = $scope.currentPage.components;
                 $scope.originalCurrentPage = angular.copy($scope.currentPage);
+                
+                WebsiteService.getPages(function(pages) {
+                    var currentPage = $scope.pageSelected;
+                    var parsed = angular.fromJson(pages);
+                    var arr = [];
+
+                    for (var x in parsed) {
+                        arr.push(parsed[x]);
+                    }
+                    $scope.allPages = arr;
+                    $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+                    that.allPages = arr;
+                    WebsiteService.getPageVersions($scope.currentPage._id, function(pageVersions) {
+                        $scope.pageVersions = pageVersions;
+                    });
+               
+            });
         };
 
         /*
