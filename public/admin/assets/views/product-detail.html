@@ -175,39 +175,38 @@
                     <legend>
                         Attributes
                     </legend>
-                    {{attributes}}
-                    <!-- <div ng-repeat="attribute in productAttributes">
+                    <div ng-repeat="attribute in product.attributes">
                         <div class="col-sm-4 col-xs-12">
                             <div class="form-group margin-bottom-0">
                                 <label for="attributeName">
                                     Attribute Name
                                 </label>
-                                <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="attribute.name">
+                                <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="product.attribute.name">
                             </div>
                         </div>
                         <div class="col-sm-7 col-xs-12">
                             <div class="form-group margin-bottom-0">
                                 <label class="margin-bottom-0">
-                                    <span ng-if="attributeName">{{attribute.name + ' Types' }}</span>
-                                    <span ng-if="!attributeName">Attribute Types</span>
+                                    <span ng-if="product.attribute.name">{{product.attribute.name + ' Types' }}</span>
+                                    <span ng-if="!product.attribute.name">Attribute Types</span>
                                 </label>
-                                <tags-input ng-model="attribute.attributes"></tags-input>
+                                <tags-input ng-model="product.attribute.attributes"></tags-input>
                             </div>
                         </div>
                         <div class="col-sm-1 col-xs-12">
                             <span ng-if="$index == 0" class="fa fa-plus text-success margin-top-30"></span>
                             <span ng-if="$index != 0" class="fa fa-minus text-danger margin-top-30"></span>
                         </div>
-                    </div> -->
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>
                         Variations
                     </legend>
-                    {{variations}}
-                    <!-- <div class="panel panel-white margin-bottom-0" id="panel5">
-                        <div class="panel-heading" ng-class="{'border-light': !panel5}">
-                            <h4 class="panel-title text-primary pull-left">#1234-1</h4>
+                    {{product.variations}}
+                    <div class="panel panel-white margin-bottom-0" id="panel{{$index}}" ng-repeat="variation in product.variations">
+                        <div class="panel-heading" ng-class="{'border-light': !panel{{$index}}}">
+                            <h4 class="panel-title text-primary pull-left">#{{variation.id}}</h4>
                             <div ng-repeat="attribute in productAttributes" class="pull-left margin-left-5" style="margin-top: -6px;">
                                 <ui-select ng-model="variation" theme="bootstrap">
                                     <ui-select-match placeholder="Select {{attribute.name}}">
@@ -220,7 +219,7 @@
                             </div>
                             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></ct-paneltool>
                         </div>
-                        <div collapse="panel5" ng-init="panel5=true" class="panel-wrapper">
+                        <div collapse="panel{{$index}}" ng-init="panel{{$index}}=true" class="panel-wrapper">
                             <div class="panel-body">
                                 <div class="panel panel-transparent margin-bottom-0">
                                     <div class="panel-body no-padding">
@@ -237,31 +236,6 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <form role="form" class="ng-pristine ng-valid">
-                                                <div class="form-group">
-                                                    <label>
-                                                        Title
-                                                    </label>
-                                                    <input type="text" placeholder="Title" ng-model="product.name" class="form-control">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="form-field-select-1">
-                                                        Status
-                                                    </label>
-                                                    <select ng-model="product.status" class="form-control">
-                                                        <option value="">Status</option>
-                                                        <option value="active">Active</option>
-                                                        <option value="backorder">Backorder</option>
-                                                        <option value="inactive">Inactive</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="form-field-select-1">
-                                                        Description
-                                                    </label>
-                                                    <textarea class="form-control autosize area-animated msd-elastic: \n; ng-pristine ng-valid ng-touched" ng-model="product.description" style="overflow: hidden; word-wrap: break-word; resize: vertical; height: 105px;" placeholder="Description"></textarea>
-                                                </div>
-                                            </form>
                                         </div>
                                         <div class="col-sm-4">
                                             <form role="form" class="ng-pristine ng-valid">
@@ -269,7 +243,7 @@
                                                     <label>
                                                         SKU
                                                     </label>
-                                                    <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
+                                                    <input type="text" placeholder="SKU" ng-model="variation[$index].sku" class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>
@@ -304,7 +278,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </fieldset>
             </div>
         </div>
