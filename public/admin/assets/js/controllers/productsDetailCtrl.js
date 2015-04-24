@@ -21,12 +21,12 @@
                     'values': []
                 }];
             }
-
-            if (!$scope.product.variations) {
+            console.log('$scope.product.variations.length ', $scope.product.variations.length);
+            if ($scope.product.variations.length <= 0) {
+                $scope.showVariations = false;
                 $scope.product.variations = [{
                     "id": $scope.product._id+'-1',
-                    "downloadable": false,
-                    "virtual": false,
+                    "type": $scope.product.type,
                     "permalink": "https://example/product/ship-your-idea-10/?attribute_pa_color=black",
                     "sku": "",
                     "price": "19.99",
@@ -69,6 +69,8 @@
                     "download_limit": 0,
                     "download_expiry": 0
                 }];
+            } else {
+                $scope.showVariations = true;
             }
 
         });
