@@ -3,7 +3,7 @@
  * controller for social feed
  */
 (function(angular) {
-    app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
+    app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
 
         /*
          * @openModal
@@ -74,6 +74,21 @@
 
                 //get feed items
                 if (trackedAccount.toggle) {
+                    $log.debug(trackedAccount.type);
+
+                    if (trackedAccount.type == 'tw') {
+                        SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
+                            $scope.feedLengths[trackedAccount.id] = posts.length;
+                            $log.debug('number of twitter posts: ' + posts.length);
+                            _.each(posts, function(post) {
+                                post.trackedId = trackedAccount.id;
+
+                                // TODO: fix this URL
+                                post.from.profile_pic = 'https://pbs.twimg.com/profile_images/570591655292448768/f6TmALKN.jpeg';
+                                $scope.feed.push(post);
+                            });
+                        });
+                    }
                     if (trackedAccount.type == 'fb') {
                         SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
                             $scope.feedLengths[trackedAccount.id] = posts.length;
