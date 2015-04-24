@@ -314,6 +314,7 @@ app.constant('JS_REQUIRES', {
         'formatText': 'assets/js/filters/formatText.js',
         'offset': 'assets/js/filters/offset.js',
         'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
+        'titleCase': 'assets/js/filters/titleCase.js',
 
         //*** Directives
         'mediaModal': 'assets/js/directives/mediadirective.js',
