@@ -110,16 +110,16 @@ app.controller('ChartCtrl3', ["$scope", 'UserService', function($scope, UserServ
       }
     });
 
-    var completedPercent = parseInt((completedTasks / totalTasks) * 100);
-    var inCompletedPercent = parseInt(((totalTasks - completedTasks) / totalTasks) * 100);
+    $scope.completedPercent = parseInt((completedTasks / totalTasks) * 100);
+    $scope.inCompletedPercent = parseInt(((totalTasks - completedTasks) / totalTasks) * 100);
     // Chart.js Data
     $scope.data = [{
-      value: completedPercent,
+      value: $scope.completedPercent,
       color: '#27ae60',
       highlight: '#2ecc71',
       label: 'Completion'
     }, {
-      value: inCompletedPercent,
+      value: $scope.inCompletedPercent,
       color: 'rgba(0,0,0,0)',
       highlight: 'rgba(0,0,0,0)',
       label: ''
