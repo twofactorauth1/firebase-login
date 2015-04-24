@@ -54,6 +54,9 @@
 	                                <div class="col-sm-12">
 	                                    <div class="text-center margin-bottom-15">
 	                                        <canvas class="tc-chart" tc-chartjs-doughnut chart-options="options" chart-data="data" chart-legend="lineChart3" width="250"></canvas>
+                                          <div ng-show='completedPercent' style="position: absolute; height: 100%; width: 100%; top: 0px; left: 0px; padding: 60px; font-weight: bold;">
+                                            {{completedPercent}}% Complete
+                                          </div>
 	                                    </div>
 	                                </div>
 	                            </div>
