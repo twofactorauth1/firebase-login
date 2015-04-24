@@ -1712,6 +1712,9 @@ contenthover a {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
 }
+.testimonials-v1 .btn-add-testimonial {
+  position: relative !important;
+}
 .testimonials-v1 .testimonials {
   display: block;
   position: relative;
@@ -1803,6 +1806,9 @@ contenthover a {
 }
 .testimonials-v2 .carousel-inner {
   overflow: inherit;
+}
+.testimonials-v2 .btn-add-testimonial {
+  position: relative !important;
 }
 .testimonials-v2 .carousel-caption {
   position: static;

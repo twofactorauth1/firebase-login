@@ -52,4 +52,5 @@
         </div>  
     </slick>
   </div>
+  <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial" >Add new testimonial</button>
 </div>
