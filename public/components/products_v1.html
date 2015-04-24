@@ -14,7 +14,7 @@
         </header>
 
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in layout.products track by $index">
+            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in layout.products | filter:{'active': status} track by $index">
                 <div class="product hidden" id="{{product.id}}">
                     <div>
 
@@ -29,6 +29,7 @@
                                 </div>
                             </div>
                             <h4>{{product.name}}</h4>
+                            <h1>{{product.status}}</h1>
 
                             <h5>$ {{product.regular_price}}</h5>
 

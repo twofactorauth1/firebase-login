@@ -14,6 +14,7 @@ var product = $$.m.ModelBase.extend({
             _id: null,
             accountId: null,
             websiteId: null,
+            status: 'auto_inactive', //auto_inactive, active, inactive, backorder
             sku: null,
             name: null,
             type: null,

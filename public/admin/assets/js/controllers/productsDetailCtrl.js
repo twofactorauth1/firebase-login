@@ -99,11 +99,11 @@
             // $scope.product.variations = variants;
 
             console.log('$scope.product >>> ', $scope.product);
-            // ProductService.saveProduct($scope.product, function(product) {
-            //     $scope.originalProduct = angular.copy(product);
-            //     console.log('Save Product >>> ', product);
-            //     toaster.pop('success', 'Product Saved.');
-            // });
+            ProductService.saveProduct($scope.product, function(product) {
+                $scope.originalProduct = angular.copy(product);
+                console.log('Save Product >>> ', product);
+                toaster.pop('success', 'Product Saved.');
+            });
         };
 
         /*
@@ -118,26 +118,6 @@
             cols: 5,
             placement: 'right'
         });
-
-        /*
-         * @demo material
-         * - demo material for the ui
-         */
-
-        // $scope.availableColors = ['Red', 'Green', 'Blue', 'Yellow', 'Magenta', 'Maroon', 'Umbra', 'Turquoise'];
-
-        // $scope.multipleDemo = {};
-
-        // $scope.productAttributes = [
-        //     {
-        //         name: 'Color',
-        //         attributes: ['red', 'green', 'blue']
-        //     },
-        //     {
-        //         name: 'Size',
-        //         attributes: ['small', 'medium', 'large']
-        //     }
-        // ];
 
     }]);
 })(angular);
