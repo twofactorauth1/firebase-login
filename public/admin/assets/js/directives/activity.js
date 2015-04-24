@@ -1,4 +1,4 @@
-app.directive('customerActivity', ['$filter', 'CustomerService', function($filter, CustomerService) {
+app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', function($filter, CustomerService, $modal) {
 
     return {
         require: [],
@@ -32,6 +32,18 @@ app.directive('customerActivity', ['$filter', 'CustomerService', function($filte
                     scope.activity_types = activity_types;
                 });
             }
+
+            scope.openModal = function(modal) {
+                scope.modalInstance = $modal.open({
+                    templateUrl: modal,
+                    scope: scope
+                });
+            };
+
+            scope.closeModal = function() {
+                scope.modalInstance.close();
+            };
+
             scope.addActivityFn = function() {
                 CustomerService.postCustomerActivity(scope.newActivity, function(activity) {
                     scope.all_activities.push(activity);
@@ -50,6 +62,7 @@ app.directive('customerActivity', ['$filter', 'CustomerService', function($filte
                     });
                     scope.total = scope.activities.length;
 
+                    scope.closeModal('addActivityModal');
                 });
             };
             scope.filterActivities = function(newVal) {
