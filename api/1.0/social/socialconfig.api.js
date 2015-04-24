@@ -884,9 +884,10 @@ _.extend(api.prototype, baseApi.prototype, {
           } else {
               socialConfigManager.getLinkedinContacts(accountId, socialAccountId, req.user, function(err, contacts){
                   self.log.debug('<< getLinkedinContacts');
-                  self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
+                  //self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
                   self.createUserActivity(req, 'IMPORT_LINKEDIN_CONTACTS', null, {socialAccountId: socialAccountId}, function(){});
               });
+              self.sendResult(res, "Ok");
           }
       });
     },

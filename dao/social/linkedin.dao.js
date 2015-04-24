@@ -549,7 +549,7 @@ var dao = {
     //social config
     getConnectionsForSocialId: function(accessToken, socialAccountId, updated, options, fn) {
         var self = this;
-
+        self.log.debug('>> getConnectionsForSocialId');
         if (_.isFunction(updated)) {
             fn = updated;
             updated = null;
@@ -599,6 +599,7 @@ var dao = {
             request(url, function(err, resp, body) {
                 if (!err) {
                     var list = JSON.parse(body);
+                    self.log.debug('<< importConnectionsAsContactsForSocial ');
                     return fxn(null, list);
                 } else {
                     return fxn(err, resp);
@@ -664,7 +665,7 @@ var dao = {
 
     importConnectionsAsContactsForSocialId: function(accountId, accessToken, socialAccountId, user, fn) {
         var self = this, totalImported = 0;
-
+        self.log.debug('>> importConnectionsAsContactsForSocial');
         var linkedInBaggage = user.getUserAccountBaggage(accountId, "linkedin");
         linkedInBaggage.contacts = linkedInBaggage.contacts || {};
         var updated = linkedInBaggage.contacts.updated;
@@ -673,12 +674,13 @@ var dao = {
             if (err) {
                 return fn(err, value);
             }
+
             linkedInBaggage.contacts.updated = new Date().getTime();
 
             var linkedInId = socialAccountId;
             //filter out any bogus values that LinkedIn returns
             var _connections = _.filter(value.values, Boolean);
-
+            self.log.debug('got ' + _connections.length + ' connections');
             var updateContactFromConnection = function(contact, connection, cb) {
                 var location= null;
                 if(connection) {                   
@@ -691,6 +693,7 @@ var dao = {
                         };
                         var tempFileName = tempFile.path;
                         self._download(connection.pictureUrl, tempFile, function(){
+                            self.log.debug('downloaded');
                             var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
                             var accountId = accountId;
                             var directory = "acct_indigenous";
@@ -724,16 +727,33 @@ var dao = {
                         });
 
 
+                    } else {
+                        contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
+
+                        var websites = [];
+                        if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                            websites.push(connection.publicProfielUrl);
+                        }
+                        if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                            websites.push(connection.siteStandardProfileRequest.url);
+                        }
+
+                        //Update contact details
+                        contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+
+                        cb();
                     }
                     
 
+                } else {
+                    cb();
                 }
 
             };
 
 
             (function importConnections(connections, page) {
-
+                self.log.debug('>> importConnections (page ' + page + ')');
                 if (connections != null) {
                     var numPerPage = 50, socialType = $$.constants.social.types.LINKEDIN;
 
@@ -750,6 +770,7 @@ var dao = {
                         var contactValues = value;
                         async.series([
                             function(callback) {
+                                self.log.debug('Step 1');
                                 if (contactValues != null && contactValues.length > 0) {
                                     async.eachSeries(contactValues, function(contact, cb) {
 
@@ -764,6 +785,7 @@ var dao = {
                                                     if (err) {
                                                         self.log.error("An error occurred updating contact during LinkedIn import", err);
                                                     }
+                                                    self.log.debug('Updated');
                                                     totalImported++;
                                                     cb();
                                                 });
@@ -785,6 +807,7 @@ var dao = {
                             },
 
                             function(callback) {
+                                self.log.debug('Step 2');
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
                                     async.eachSeries(items, function(connection, cb) {
@@ -815,6 +838,7 @@ var dao = {
                             }
 
                         ], function(err, results) {
+                            self.log.debug('Final results');
                             if (pagingInfo.nextPage > page) {
                                 process.nextTick(function() {
                                     importConnections(connections, pagingInfo.nextPage);
@@ -841,6 +865,8 @@ var dao = {
                             }
                         });
                     });
+                } else {
+                    self.log.warn('connections was null??');
                 }
             })(_connections, 1);
         });
