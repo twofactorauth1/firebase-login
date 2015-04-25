@@ -225,6 +225,28 @@
                 }
             };
 
+            this.checkGoogleId = function(contact) {
+                if (contact.details && contact.details.length > 0) {
+                    var details = _.findWhere(contact.details, {
+                        type: userConstant.social_types.GOOGLE
+                    });
+                    if (details) {
+                        if (details.websites && details.websites.length > 0) {
+                            var _value = _.find(details.websites, function(num) {
+                                return num !== null;
+                            });
+                            if (_value) {
+                                contact.googleUrl = _value;
+                                return true;
+                            }
+                        }
+                        contact.googleId = details.socialId;
+                        return true;
+                    }
+                    return false;
+                }
+            };
+
 
             this.checkAddress = function(contact) {
                 var _address = null;

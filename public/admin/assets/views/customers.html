@@ -189,6 +189,8 @@
                                         </li>
                                         <li ng-if="checkLinkedInId(customer)"><a ng-href="{{customer.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
                                         </li>
+                                        <li ng-if="checkGoogleId(customer)"><i class="fa fa-google-plus-square"></i>
+                                        </li>
                                     </ul>
                                 </td>
                                 <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{customer.created.date | date:'MMM d yy' || '--'}}</td>

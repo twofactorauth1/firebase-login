@@ -179,6 +179,20 @@
                 });
         };
 
+        this.importGoogleContactsForGroup = function(socialAccountId, groupId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'importcontacts'].join('/');
+            if(groupId !== 'All') {
+                apiUrl += "?groupId=" + groupId;
+            }
+            $http({
+                url: apiUrl,
+                method: 'GET'
+            })
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         this.getGoogleGroups = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'google', socialAccountId, 'groups'].join('/');
             $http({

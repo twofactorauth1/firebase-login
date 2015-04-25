@@ -43,6 +43,7 @@
         $scope.closeModal = function() {
             $scope.modalInstance.close();
             $scope.socailList = false;
+            $scope.groupList = false;
         };
 
         $scope.preventClick = function(event) {
@@ -87,6 +88,13 @@
             var returnVal = CustomerService.checkLinkedInId(contact);
             this.linkedInUrl = contact.linkedInUrl;
             this.linkedInId = contact.linkedInId;
+            return returnVal;
+        };
+
+        $scope.checkGoogleId = function(contact) {
+            var returnVal = CustomerService.checkGoogleId(contact);
+            this.googleUrl = contact.googleUrl;
+            this.googleId = contact.googleId;
             return returnVal;
         };
 
@@ -256,16 +264,36 @@
             $scope.triggerInput(input);
         };
 
+        $scope.importGoogleContacts = function(groupId) {
+            console.log("account: ", $scope.tempGoogleAccount);
+            console.log("group: ", groupId);
+            $scope.closeModal();
+            toaster.pop('success', "Contacts import initiated.");
+            SocialConfigService.importGoogleContactsForGroup($scope.tempGoogleAccount.id, groupId.id, function(data) {
+                $scope.closeModal();
+                toaster.pop('success', "Your Google contacts are being imported in the background.");
+            });
+            $scope.tempGoogleAccount = null;
+            $scope.socailList = false;
+            $scope.groupList = false;
+        };
+
         $scope.importContacts = function(selectedAccount) {
             var foundSocialId = false;
             if (selectedAccount.type == userConstant.social_types.GOOGLE) {
                     foundSocialId = true;
-                    $scope.closeModal();
-                    toaster.pop('success', "Contacts import initiated.");
-                    SocialConfigService.importGoogleContact(selectedAccount.id, function(data) {
-                        $scope.closeModal();
-                        toaster.pop('success', "Contacts import complete.");
+                    $scope.tempGoogleAccount = selectedAccount;
+                    SocialConfigService.getGoogleGroups(selectedAccount.id, function(data){
+                        console.dir(data);
+                        data.push({name:'All', id:'All'});
+                        $scope.socialAccountGroups = data;
                     });
+                    //$scope.closeModal();
+                    //toaster.pop('success', "Contacts import initiated.");
+                    //SocialConfigService.importGoogleContact(selectedAccount.id, function(data) {
+                    //    $scope.closeModal();
+                    //    toaster.pop('success', "Your Google contacts are being imported in the background.");
+                    //});
                 }
             if (selectedAccount.type == userConstant.social_types.LINKEDIN) {
                 foundSocialId = true;
@@ -273,21 +301,34 @@
                 toaster.pop('success', "Contacts import initiated.");
                 SocialConfigService.importLinkedinContact(selectedAccount.id, function(data) {
                     $scope.closeModal();
-                    toaster.pop('success', "Contacts import complete.");
+                    toaster.pop('success', "Your LinkedIn contacts are being imported in the background.");
+
                 });
+                $scope.socailList = false;
+                $scope.groupList = false;
             }  
 
             if (foundSocialId == false) {
                 $scope.closeModal();
-                toaster.pop('warning', "No google account integrated.");
+                toaster.pop('warning', "No such account integrated.");
+                $scope.socailList = false;
+                $scope.groupList = false;
             }
-            $scope.socailList = false;
+
+
         };
         $scope.socailType = "";
         $scope.socailList = false;
+        $scope.groupList = false;
+
         $scope.showSocialAccountSelect = function(socailType) { 
             $scope.socailType = socailType;
             $scope.socailList = true;
+            if(socailType === userConstant.social_types.GOOGLE) {
+                $scope.groupList = true;
+            } else {
+                $scope.groupList = false;
+            }
         };
 
     }]);
