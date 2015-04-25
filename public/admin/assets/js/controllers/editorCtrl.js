@@ -137,7 +137,7 @@
             if (scrollTop > offsetHeight) {
                 console.log('scrollTop ', scrollTop);
                 editorToolbar.css({
-                    'top': scrollTop + 65
+                    'top': scrollTop -30
                 });
                 mainToolbar.css({
                     'top': scrollTop,

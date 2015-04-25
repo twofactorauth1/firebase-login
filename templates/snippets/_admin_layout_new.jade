@@ -39,13 +39,13 @@ html(lang='en', data-ng-app='clipApp')
     link(rel='stylesheet', href='../js/libs/spectrum/spectrum.css')
     //NG Sortable
     link(rel='stylesheet', href='/js/libs/ng-sortable/dist/ng-sortable.min.css')
-    link(rel='stylesheet', href='/js/libs/ngOnboarding/dist/ng-onboarding.css')
     // Social Links
     link(rel='stylesheet', href='/js/libs/bootstrap-social/bootstrap-social.css')
     // IconPicker
     link(rel='stylesheet', href='/js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')
     // NG Tags Input
-    link(rel='stylesheet', href='/js/libs/ng-tags-input/ng-tags-input.min.css')
+    link(rel='stylesheet', href='../js/libs/ng-tags-input/ng-tags-input.min.css')
+    link(rel='stylesheet', href='../js/libs/ng-joyride/ng-joyride.css')
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
     // jQuery
@@ -79,6 +79,9 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-breadcrumb/dist/angular-breadcrumb.min.js')
     // UI Bootstrap
     script(src='../js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js')
+    // JoyRide
+    script(src='../js/libs/bootstrap/dist/js/bootstrap.min.js')
+    script(src='../js/libs/ng-joyride/ng-joyride.js')
     // Loading Bar
     script(src='../js/libs/angular-loading-bar/build/loading-bar.min.js')
     // Angular Scroll
@@ -87,8 +90,6 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-slugify/angular-slugify.js')
     // Underscore
     script(src='../js/libs/underscore/underscore-min.js')
-    // NgOnboarding
-    script(src='../js/libs/ngOnboarding/dist/ng-onboarding.min.js')
     //config
     script(src="../js/scripts/config.js")
     // Keen Library

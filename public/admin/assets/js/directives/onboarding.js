@@ -5,127 +5,95 @@
 app.directive('indigOnboarding', function($location, $sce, UserService, toaster) {
     return {
         restrict: 'E',
-        template: '<onboarding-popover enabled="onboardingEnabled" steps="onboardingSteps" on-finish-callback="onboardingFinishFn" step-index="onboardingIndex"></onboarding-popover>',
-        controller: function($scope, $element, $attrs) {
-            $scope.onboardingSteps = [{
-                overlay: false
-            }];
-        },
+        template: '<div ng-joy-ride="startJoyRide" config="config" on-finish="onFinish()" on-skip="onFinish()"></div>',
+        // controller: function($scope, $element, $attrs) {
+        //     $scope.onboardingSteps = [{
+        //         overlay: false
+        //     }];
+        // },
         link: function(scope, elem, attrs) {
+
+            scope.startJoyRide = false;
+
             UserService.getUserPreferences(function(preferences) {
                 scope.userPreferences = preferences;
             });
-            scope.onboardingEnabled = false;
-            scope.onboardingSteps = [{
-                overlay: false
-            }];
-            scope.onboardingIndex = 0;
+
             scope.onboardingStepMap = {
                 pages: [{
-                    overlay: true,
-                    title: 'Task: Visit page list',
-                    description: "This view provides you with listing of all the system pages.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                    type: "title",
+                    heading: 'Task: Visit page list',
+                    text: "This view provides you with listing of all the system pages."
                 }],
                 'single-page': [{
-                    overlay: true,
-                    title: 'Task: Add pages',
-                    description: "Add a page here for your site.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add pages',
+                    text: "Add a page here for your site."
                 }],
                 posts: [{
-                    overlay: true,
-                    title: 'Task: Post list',
-                    description: "Here you can see all the posts on your system.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Post list',
+                    text: "Here you can see all the posts on your system."
                 }],
                 'single-post': [{
-                    overlay: true,
-                    title: 'Task: Add Posts',
-                    description: "Add a post here for your site.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add Posts',
+                    text: "Add a post here for your site."
                 }],
                 commerce: [{
-                    overlay: true,
-                    title: 'Task: List products',
-                    description: "Here you see listing of all products.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: List products',
+                    text: "Here you see listing of all products."
                 }],
                 'single-product': [{
-                    overlay: true,
-                    title: 'Task: Add Products',
-                    description: "Here you can add a product for your business.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add Products',
+                    text: "Here you can add a product for your business."
                 }],
                 'social-feed': [{
-                    overlay: true,
-                    title: 'Task: Add feed',
-                    description: "See your social presence.",
-                    position: 'centered',
-                    showCloseButton: true,
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add feed',
+                    text: "See your social presence."
                 }],
                 customers: [{
-                    overlay: true,
-                    title: 'Task: List customers',
-                    description: "See your business contacts here.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: List customers',
+                    text: "See your business contacts here."
                 }],
                 'single-customer': [{
-                    overlay: true,
-                    title: 'Task: Add contacts',
-                    description: "Add a contact here.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add contacts',
+                    text: "Add a contact here."
                 }],
                 'profile-business': [{
-                    overlay: true,
-                    title: 'Task: Add business info',
-                    description: "Here you can add info about your business.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add business info',
+                    text: "Here you can add info about your business."
                 }],
                 'profile-personal': [{
-                    overlay: true,
-                    title: 'Task: Add personal info',
-                    description: "Here you can add your personal info.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add personal info',
+                    text: "Here you can add your personal info."
                 }],
                 billing: [{
-                    overlay: true,
-                    title: 'Task: Add billing info',
-                    description: "Here you can add your social accounts.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add billing info',
+                    text: "Here you can add your social accounts."
                 }],
                 integrations: [{
-                    overlay: true,
-                    title: 'Task: Add social accounts',
-                    description: "Here you can add your social accounts.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Add social accounts',
+                    text: "Here you can add your social accounts."
                 }],
                 dashboard: [{
-                    overlay: true,
-                    title: 'Task: Dashboard',
-                    description: "Here you can see your site's progress.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Dashboard',
+                    text: "Here you can see your site's progress."
                 }],
                 'site-analytics': [{
-                    overlay: true,
-                    title: 'Task: Analytics',
-                    description: "Hee whats happening on your site.",
-                    position: 'centered',
-                    link: '/admin/#/account/profile?onboarding=profile-personal'
+                  type: "title",
+                    heading: 'Task: Analytics',
+                    text: "Hee whats happening on your site."
                 }]
             };
 
@@ -133,17 +101,18 @@ app.directive('indigOnboarding', function($location, $sce, UserService, toaster)
                 if ($location.$$search['onboarding']) {
                     scope.obType = $location.$$search['onboarding'].trim();
                     if (scope.obType in scope.onboardingStepMap) {
-                        console.info('Found onboarding steps >>>', scope.onboardingStepMap[scope.obType]);
-                        scope.onboardingSteps = scope.onboardingStepMap[scope.obType];
-                        scope.onboardingEnabled = true;
+                        console.info('Found onboarding steps >>>', scope.onboardingStepMap[scope.obType][0]);
+                        scope.config = [];
+                        scope.config.push(scope.onboardingStepMap[scope.obType][0]);
+                        scope.startJoyRide = true;
                     }
                 }
             });
 
-            scope.onboardingFinishFn = function() {
+            scope.onFinish = function() {
                 scope.userPreferences.tasks[scope.obType] = true;
                 UserService.updateUserPreferences(scope.userPreferences, false, function() {
-                    scope.onboardingEnabled = false;
+                    scope.startJoyRide = false;
 
                     //get next task
                     var nextTasks = [];

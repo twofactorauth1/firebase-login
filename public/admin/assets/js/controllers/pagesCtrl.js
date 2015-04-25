@@ -88,7 +88,7 @@
                     $scope.handleError = true;
                 } else {
                     $scope.handleError = false;
-                    if(!restrict)
+                    if (!restrict)
                         page.handle = $filter('slugify')(page.title);
                 }
                 if (page.title == '') {
