@@ -128,15 +128,30 @@
 
         angular.element(window).scroll(function() {
             var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
+            var mainToolbar = angular.element("#page-actions");
             var scrollTop = $(document).scrollTop();
-            var offsetHeight = angular.element('#page-title').outerHeight() + angular.element('#page-actions').outerHeight() + angular.element('.navbar').outerHeight();
+            var navbarCollapse = angular.element('header').outerHeight();
+            var pageActions = angular.element('#page-actions').outerHeight();
+            var offsetHeight = angular.element('#page-title').outerHeight();
+            console.log('pageActions ', scrollTop);
             if (scrollTop > offsetHeight) {
+                console.log('scrollTop ', scrollTop);
                 editorToolbar.css({
-                    'top': scrollTop - offsetHeight + 65
+                    'top': scrollTop + 65
+                });
+                mainToolbar.css({
+                    'top': scrollTop,
+                    'position': 'absolute',
+                    'width': '100%',
+                    'margin-left': '0px'
                 });
             } else {
                 editorToolbar.css({
                     'top': 0
+                });
+                mainToolbar.css({
+                    'top': 0,
+                    'position': 'relative'
                 });
             }
         });
