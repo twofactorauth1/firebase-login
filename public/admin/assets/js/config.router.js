@@ -85,7 +85,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{breadcrumbTitle}}',
             parent: 'app.website.pages'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService')
+        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService', 'geocodeService')
     }).state('app.website.singlepost', {
         url: '/posts/:id',
         templateUrl: "assets/views/editor.html",
@@ -176,7 +176,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Social Feed'
         },
-        resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry')
+        resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry','orderByArrayLength')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "assets/views/campaigns.html",

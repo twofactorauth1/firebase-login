@@ -838,16 +838,21 @@ _.extend(api.prototype, baseApi.prototype, {
 
       var accountId = parseInt(self.accountId(req));
       var socialAccountId = req.params.socialAccountId;
+      var groupId = req.query.groupId;
+      if(groupId) {
+          self.log.debug('groupId: ', groupId.id);
+      }
 
       self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
           if (isAllowed !== true) {
               return self.send403(res);
           } else {
-              socialConfigManager.getGoogleContacts(accountId, socialAccountId, req.user, function(err, contacts){
+              socialConfigManager.getGoogleContacts(accountId, socialAccountId, req.user, groupId, function(err, contacts){
                   self.log.debug('<< getGoogleContacts');
-                  self.sendResultOrError(res, err, contacts, "Error importing google contacts");
+                  //self.sendResultOrError(res, err, contacts, "Error importing google contacts");
                   self.createUserActivity(req, 'IMPORT_GOOGLE_CONTACTS', null, {socialAccountId: socialAccountId}, function(){});
               });
+              self.sendResult(res, "Ok");
           }
       });
     },
@@ -884,9 +889,10 @@ _.extend(api.prototype, baseApi.prototype, {
           } else {
               socialConfigManager.getLinkedinContacts(accountId, socialAccountId, req.user, function(err, contacts){
                   self.log.debug('<< getLinkedinContacts');
-                  self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
+                  //self.sendResultOrError(res, err, contacts, "Error importing linkedin contacts");
                   self.createUserActivity(req, 'IMPORT_LINKEDIN_CONTACTS', null, {socialAccountId: socialAccountId}, function(){});
               });
+              self.sendResult(res, "Ok");
           }
       });
     },

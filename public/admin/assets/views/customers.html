@@ -187,7 +187,9 @@
                                         </li>
                                         <li ng-if="checkTwitterId(customer)"><i class="fa fa-twitter-square"></i>
                                         </li>
-                                        <li ng-if="checkLinkedInId(customer)"><i class="fa fa-linkedin-square"></i>
+                                        <li ng-if="checkLinkedInId(customer)"><a ng-href="{{customer.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
+                                        </li>
+                                        <li ng-if="checkGoogleId(customer)"><i class="fa fa-google-plus-square"></i>
                                         </li>
                                     </ul>
                                 </td>

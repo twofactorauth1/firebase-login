@@ -28,46 +28,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup.bind(this), this.index.bind(this));
 
-        //send all routes to index and let the app router to navigate to the appropiate view
-        app.get("/index", this.setup.bind(this), this.index.bind(this));
-        app.get("/blog", this.setup.bind(this), this.index.bind(this));
-        app.get("/blog/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/tag/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/category/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/author/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/page/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/signup", this.setupForSocialSignup.bind(this), this.index.bind(this));
-        app.get("/post", this.setup.bind(this), this.index.bind(this));
-
-        app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
-        // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
-        // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
-
-        // app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
-        // app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
-        // app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
-        // app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
-
-//        app.post("/signupnews", this.signUpNews.bind(this));
-
-        app.get("/home", this.isHomeAuth.bind(this), this.showHome.bind(this));
-        app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
-
-        app.get("/admin", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        app.get("/admin/*", this.isAuth.bind(this), this.rerouteToAngularAdmin.bind(this));
-
-        app.get("/admin1", this.isAuth.bind(this), this.showAngularAdmin.bind(this));
-        app.get("/admin1/*", this.isAuth.bind(this), this.rerouteToAngularAdmin.bind(this));
-
-        app.get("/demo", this.setup.bind(this), this.demo.bind(this));
-        app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
-
-        app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
-
-        app.get('/main/:page', this.setup.bind(this), this.serveMainHtml.bind(this));
-        //app.get("/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/*", this.setup.bind(this), this.index.bind(this));
 
         return this;
     },
@@ -86,6 +48,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
         self.log.debug('<< index ... req.session.accountId:' + req.session.accountId);
     },
+
     indexTempPage: function(req,resp) {
         var self = this
             , accountId = this.accountId(req);
@@ -189,13 +152,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
         this._showHome(req, resp);
 
         /*
-        if (accountId > 0) {
-            //This is an account based url, there is no /home
-            resp.redirect("/admin");
-        } else {
-            this._showHome(req,resp);
-        }
-        */
+         if (accountId > 0) {
+         //This is an account based url, there is no /home
+         resp.redirect("/admin");
+         } else {
+         this._showHome(req,resp);
+         }
+         */
     },
 
     showAdmin: function(req,resp) {
@@ -219,9 +182,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     rerouteToAngularAdmin: function(req, res) {
-      var path = req.url;
-      var angularPath = path.slice(6, path.length);
-      res.redirect('/admin/#' + angularPath);
+        var path = req.url;
+        var angularPath = path.slice(6, path.length);
+        res.redirect('/admin/#' + angularPath);
     },
 
     _showHome: function(req,resp) {

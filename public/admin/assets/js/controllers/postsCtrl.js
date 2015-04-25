@@ -108,7 +108,7 @@
         };
 
         $scope.createPost = function(postData) {
-            $scope.validateCreatePost(postData);
+            $scope.validateCreatePost(postData, true);
             console.log('$scope.createPostValidated ', $scope.createPostValidated);
             if (!$scope.createPostValidated) {
               return false;

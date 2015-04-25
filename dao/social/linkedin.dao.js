@@ -296,7 +296,7 @@ var dao = {
                     if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
                         websites.push(connection.siteStandardProfileRequest.url);
                     }
-
+                    websites = _.compact(websites);
                     //Update contact details
                     contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
                 }
@@ -549,7 +549,7 @@ var dao = {
     //social config
     getConnectionsForSocialId: function(accessToken, socialAccountId, updated, options, fn) {
         var self = this;
-
+        self.log.debug('>> getConnectionsForSocialId');
         if (_.isFunction(updated)) {
             fn = updated;
             updated = null;
@@ -599,6 +599,7 @@ var dao = {
             request(url, function(err, resp, body) {
                 if (!err) {
                     var list = JSON.parse(body);
+                    self.log.debug('<< importConnectionsAsContactsForSocial ');
                     return fxn(null, list);
                 } else {
                     return fxn(err, resp);
@@ -664,7 +665,7 @@ var dao = {
 
     importConnectionsAsContactsForSocialId: function(accountId, accessToken, socialAccountId, user, fn) {
         var self = this, totalImported = 0;
-
+        self.log.debug('>> importConnectionsAsContactsForSocial');
         var linkedInBaggage = user.getUserAccountBaggage(accountId, "linkedin");
         linkedInBaggage.contacts = linkedInBaggage.contacts || {};
         var updated = linkedInBaggage.contacts.updated;
@@ -673,31 +674,45 @@ var dao = {
             if (err) {
                 return fn(err, value);
             }
+
             linkedInBaggage.contacts.updated = new Date().getTime();
 
             var linkedInId = socialAccountId;
             //filter out any bogus values that LinkedIn returns
             var _connections = _.filter(value.values, Boolean);
-
-            var updateContactFromConnection = function(contact, connection, cb) {
+            self.log.debug('got ' + _connections.length + ' connections');
+            var updateContactFromConnection = function(contact, connection, accountId, cb) {
                 var location= null;
-                if(connection) {                   
+                if(connection) {
+                    //self.log.debug('connection:', connection);
+                    /*
+                     connection: { firstName: 'Heidi',
+                     headline: 'Publisher at South Dakota Magazine',
+                     id: 'KhO57C0IFf',
+                     lastName: 'Marsh',
+                     location: { name: 'Sioux Falls, South Dakota Area' },
+                     pictureUrl: 'https://media.licdn.com/mpr/mprx/0_Vu55rTMHSvUgWYCPZ7n9riJITqxuwZiPZalVriEVYAwgNpq1nEvWY_Oq7s0tHxGxR7bU0kqKwBE9',
+                     publicProfileUrl: 'https://www.linkedin.com/pub/heidi-marsh/4/83a/1a2',
+                     siteStandardProfileRequest: { url: 'https://www.linkedin.com/profile/view?id=14014346&authType=name&authToken=u6T-&trk=api*a3944204*s4012794*' } }
+                     */
                     if(connection.pictureUrl) {
-                        var name =new Date().getTime() + '.png';
+                        var name =new Date().getTime();
                         var tempFile = {
                             name: name,
-                            type: 'image/png',
                             path: 'tmp/' + name
                         };
                         var tempFileName = tempFile.path;
                         self._download(connection.pictureUrl, tempFile, function(){
+                            //self.log.debug('downloaded: ' + tempFile.path);
                             var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
                             var accountId = accountId;
                             var directory = "acct_indigenous";
                             if (accountId > 0) {
                                 directory = "acct_" + accountId;
+                            } else {
+                                self.log.warn('accountId: ' + accountId + ' is not > 0');
                             }
-                            s3Dao.uploadToS3(bucket, directory, tempFile, true, function (err, value) {
+                            s3Dao.uploadToS3(bucket, directory, tempFile, false, function (err, value) {
                                 if (err) {
                                     log.error('Error uploading to s3: ' + err);
                                 } else {
@@ -705,6 +720,7 @@ var dao = {
                                 }
                                 if (connection.location && connection.location.name) {
                                     location = connection.location.name;
+
                                 }
                                 contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
 
@@ -724,16 +740,33 @@ var dao = {
                         });
 
 
+                    } else {
+                        contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
+
+                        var websites = [];
+                        if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                            websites.push(connection.publicProfielUrl);
+                        }
+                        if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                            websites.push(connection.siteStandardProfileRequest.url);
+                        }
+
+                        //Update contact details
+                        contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+
+                        cb();
                     }
                     
 
+                } else {
+                    cb();
                 }
 
             };
 
 
             (function importConnections(connections, page) {
-
+                self.log.debug('>> importConnections (page ' + page + ')');
                 if (connections != null) {
                     var numPerPage = 50, socialType = $$.constants.social.types.LINKEDIN;
 
@@ -750,6 +783,7 @@ var dao = {
                         var contactValues = value;
                         async.series([
                             function(callback) {
+                                self.log.debug('Step 1');
                                 if (contactValues != null && contactValues.length > 0) {
                                     async.eachSeries(contactValues, function(contact, cb) {
 
@@ -759,11 +793,12 @@ var dao = {
                                             //remove the contact from the items array so we don't process again
                                             items = _.without(items, connection);
 
-                                            updateContactFromConnection(contact, connection, function(){
+                                            updateContactFromConnection(contact, connection, accountId, function(){
                                                 contactDao.saveOrUpdateContact(contact, function(err, value) {
                                                     if (err) {
                                                         self.log.error("An error occurred updating contact during LinkedIn import", err);
                                                     }
+                                                    self.log.debug('Updated');
                                                     totalImported++;
                                                     cb();
                                                 });
@@ -785,6 +820,7 @@ var dao = {
                             },
 
                             function(callback) {
+                                self.log.debug('Step 2');
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
                                     async.eachSeries(items, function(connection, cb) {
@@ -795,7 +831,7 @@ var dao = {
                                         });
 
                                         contact.createdBy(user.id(), socialType, linkedInId);
-                                        updateContactFromConnection(contact, connection, function(){
+                                        updateContactFromConnection(contact, connection, accountId, function(){
                                             contactDao.saveOrMerge(contact, function(err, value) {
                                                 if (err) {
                                                     self.log.error("An error occurred saving contact during LinkedIn import", err);
@@ -815,6 +851,7 @@ var dao = {
                             }
 
                         ], function(err, results) {
+                            self.log.debug('Final results');
                             if (pagingInfo.nextPage > page) {
                                 process.nextTick(function() {
                                     importConnections(connections, pagingInfo.nextPage);
@@ -841,6 +878,8 @@ var dao = {
                             }
                         });
                     });
+                } else {
+                    self.log.warn('connections was null??');
                 }
             })(_connections, 1);
         });

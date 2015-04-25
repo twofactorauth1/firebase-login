@@ -45,7 +45,7 @@
         $scope.trackedAccounts = [];
         $scope.feed = [];
         $scope.feedLengths = {};
-
+        $scope.orderByAttribute = '';
         $scope.initializeSocialConfig = function(config) {
 
             $scope.config = config;
@@ -461,6 +461,21 @@
                 };
                 toaster.pop('warning', 'unliked post.');
             });
+        };
+
+        $scope.orderbyFilter = [{
+            label: "Most liked",
+            data: "likes"
+        }, {
+            label: "Most commented",
+            data: "comments"
+        }];
+
+        $scope.sortFeed = function(type) {
+            $scope.orderByAttribute = type.data;
+            setTimeout(function() {
+                $('#mcontainer').masonry();
+            }, 1000);
         };
 
 

@@ -347,6 +347,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         ProductService.getAllProducts(function(data) {
             that.products = data;
+            $scope.products = data;
         });
 
         $scope.stringifyAddress = function(address) {
@@ -761,6 +762,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.deleteTestimonial = function(componentId, index) {
+            $scope.dataLoaded = false;
             $scope.parentScope.deleteTestimonial(componentId, index);
 
         };
@@ -774,6 +776,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 "site": "Site",
                 "text": "Description"
             }
+            $scope.dataLoaded = false;
             $scope.parentScope.addTestimonial(componentId, newTestimonial, index);
         };
 
@@ -928,7 +931,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         $scope.updateCustomComponent = function(data, networks) {
             var scroll = angular.element(window).scrollTop();
-            $scope.dataLoaded = false;
+            //$scope.dataLoaded = false;
             if (data) {
                 $scope.currentpage.components = data;
 
@@ -1077,6 +1080,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.dataLoaded = false;
                 $scope.currentcomponents = newValue;
                 newValue.forEach(function(value, index) {
+                    $scope.dataLoaded = true;
                     if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
                         value.bg.img.show = true;
                     if (value && value.type === 'payment-form') {
@@ -1134,7 +1138,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     if (value && value.type == 'contact-us') {
                         $scope.updateContactUsMap(value);
                     }
-                    $scope.dataLoaded = true;
+                    
                 });
             }
         });
