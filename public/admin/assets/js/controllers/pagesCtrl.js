@@ -90,6 +90,8 @@
                     $scope.handleError = false;
                     if (!restrict)
                         page.handle = $filter('slugify')(page.title);
+                    else
+                        page.handle = $filter('slugify')(page.handle);
                 }
                 if (page.title == '') {
                     $scope.titleError = true;

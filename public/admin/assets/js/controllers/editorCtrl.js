@@ -33,6 +33,12 @@
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
         var stopInterval;
+        
+        $scope.$watch('currentPage.handle', function(newValue, oldValue) {
+            if (newValue) {
+                $scope.currentPage.handle = $filter('slugify')(newValue);
+            }
+        });
         $scope.breadcrumbTitle = $location.$$search['pagehandle'] || $location.$$search['posthandle'];
 
         /*
