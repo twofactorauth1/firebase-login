@@ -112,6 +112,10 @@ app.controller('ChartCtrl3', ["$scope", 'UserService', function($scope, UserServ
 
     $scope.completedPercent = parseInt((completedTasks / totalTasks) * 100);
     $scope.inCompletedPercent = parseInt(((totalTasks - completedTasks) / totalTasks) * 100);
+
+    $scope.completedTasks = completedTasks;
+    $scope.totalTasks = totalTasks;
+
     // Chart.js Data
     $scope.data = [{
       value: $scope.completedPercent,

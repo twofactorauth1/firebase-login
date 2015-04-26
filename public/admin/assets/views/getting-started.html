@@ -25,7 +25,7 @@
 	                		<h3><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks[pane.taskKey] , 'fa-circle-o' : !userPreferences.tasks[pane.taskKey] }"></i></h3>
 	                	</div>
 	                	<div class="col-xs-11">
-		                    <h5 class="list-group-item-heading">{{pane.header}} {{pane.taskKey}} {{userPreferences.tasks[pane.taskKey]}}</h5>
+		                    <h5 class="list-group-item-heading">{{pane.header}}</h5>
 		                    <p class="list-group-item-text">
 		                        {{pane.content}}
 		                    </p>
@@ -49,16 +49,17 @@
 	                <div class="row">
 	                    <div class="col-sm-12">
 	                        <div class="row">
-	                            <h3>Task Completion</h3>
+	                            <h3 class="margin-bottom-15">Task Completion</h3>
 	                            <div ng-controller="ChartCtrl3">
 	                                <div class="col-sm-12">
 	                                    <div class="text-center margin-bottom-15">
 	                                        <canvas class="tc-chart" tc-chartjs-doughnut chart-options="options" chart-data="data" chart-legend="lineChart3" width="250"></canvas>
                                           <div ng-show='completedPercent' style="position: absolute; height: 100%; width: 100%; top: 0px; left: 0px; padding: 60px; font-weight: bold;">
-                                            {{completedPercent}}% Complete
+                                            {{completedPercent}}%
                                           </div>
 	                                    </div>
 	                                </div>
+	                                <p>You have completed {{completedTasks}} out of {{totalTasks}} tasks and have {{totalTasks - completedTasks}} remaining.</p>
 	                            </div>
 	                        </div>
 	                    </div>
