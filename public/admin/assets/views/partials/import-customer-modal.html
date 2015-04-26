@@ -42,6 +42,17 @@
                 </ui-select-choices>
             </ui-select>
         </div>
+
+        <div class="form-group margin-bottom-0" ng-if="groupList">
+            <ui-select ng-model="selectedGroup" on-select="importGoogleContacts($select.selected)" theme="bootstrap">
+                <ui-select-match placeholder="Select a Group">
+                    <small ng-bind-html="$select.selected.username || $select.selected.type"></small>
+                </ui-select-match>
+                <ui-select-choices repeat="type in socialAccountGroups">
+                    <small ng-bind-html="type.name || type.id | highlight: $select.search"></small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
         <div class="row import-success hidden" data-import-section="success">
             <span class="fa fa-check"></span>
             <div class="clearfix mb15"></div>
