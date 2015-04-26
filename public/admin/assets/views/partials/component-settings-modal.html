@@ -547,6 +547,7 @@
                         <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
                         <label for="chk_{{field.name}}">{{field.display}}</label>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             </tab>
             <tab ng-if="componentEditing.type === 'video'">
@@ -662,9 +663,9 @@
     </div>
     <div class="modal-footer" ng-class="{hidden: hover}">
         <div class="form-group margin-bottom-0">
-            // <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
-            //     Revert
-            // </button>
+             <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+                Revert
+             </button>
             <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                 Done
             </button>
