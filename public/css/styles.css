@@ -1976,6 +1976,7 @@ div[data-class='image-text'] p {
 .order-summary {
   padding: 1px 15px;
   min-height: 376px;
+  border-left: 1px solid #eee;
 }
 .order-summary h4 {
   margin: 30px 0;
