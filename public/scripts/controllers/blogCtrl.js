@@ -486,12 +486,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          * -
          */
 
-        $scope.addCKEditorImage = function(url) {
-            if ($scope.inlineInput) {
-                $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
-            } else if ($scope.urlInput) {
-                $scope.urlInput.val(url);
-            }
+        $scope.addCKEditorImage = function(url, inlineInput, edit) {
+            if(edit)
+                inlineInput.val(url);
+            else    
+                inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
         };
 
         /*
@@ -500,18 +499,17 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
         window.clickImageButton = function(btn) {
-            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
-            $scope.parentScope.clickImageButton();
+            var urlInput = $(btn).closest('td').prev('td').find('input');
+            $scope.parentScope.clickImageButton(urlInput, true);
         };
-
+        
         /*
          * @clickandInsertImageButton
          * -
          */
 
         window.clickandInsertImageButton = function(editor) {
-            $scope.inlineInput = editor;
-            $scope.parentScope.clickImageButton();
+            $scope.parentScope.clickImageButton(editor);
         };
 
         /*

@@ -1765,7 +1765,7 @@
                 return;
             } else if ($scope.insertMediaImage) {
                 $scope.insertMediaImage = false;
-                $scope.childScope.addCKEditorImage(asset.url);
+                $scope.childScope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
                 return;
             } else if ($scope.logoImage && $scope.componentEditing) {
                 $scope.logoImage = false;
@@ -2241,8 +2241,10 @@
          * -
          */
 
-        $scope.clickImageButton = function() {
+        $scope.clickImageButton = function(editor, edit) {
             $scope.insertMediaImage = true;
+            $scope.inlineInput = editor;
+            $scope.isEditMode = edit;
             //$scope.openModal('mediamodal');
             angular.element("#media-manager-modal").modal('show');
             $scope.showInsert = true;
