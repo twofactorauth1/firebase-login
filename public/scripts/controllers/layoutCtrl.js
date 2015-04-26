@@ -1157,6 +1157,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
                 e.source.itemScope.element.addClass(" dragging");
                 clearTimeout($scope.wait);
+                $scope.parentScope.resizeIframe();
             },
             dragMove: function(e, ui) {
                 console.log('sorting update');
