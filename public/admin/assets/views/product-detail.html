@@ -173,9 +173,9 @@
                 </ul>
             </div>
             <div class="panel-body" ng-if="showVariations" ng-class="{'height-250': !product.attributes}">
-                <div class="backdrop" ng-if="!products.attributes">
+                <!-- <div class="backdrop" ng-if="!products.attributes">
                     <h5 class="panel-title">Please Add Attribute Before Adding Variations</h5>
-                </div>
+                </div> -->
                 <div class="col-sm-12" ng-if="!products.attributes">
                     <div class="panel panel-white margin-bottom-0" id="panel{{$index}}" ng-repeat="variation in product.variations">
                         <div class="panel-heading" ng-class="{'border-light': !panel{{$index}}}">
@@ -204,7 +204,7 @@
                                                 </label>
                                                 <div class="media">
                                                     <a class="media-left media-middle" href="#">
-                                                        <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="" class="media-object thumbnail">
+                                                        <img ng-src="{{ variation.icon }}" err-src="assets/images/default-user.png" alt="" class="media-object thumbnail">
                                                     </a>
                                                 </div>
                                             </div>
@@ -227,7 +227,7 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">$</span>
-                                                    <input type="text" class="form-control" ng-model="product.regular_price">
+                                                    <input type="text" class="form-control" ng-model="variation.regular_price">
                                                 </div>
                                             </div>
                                         </div>
@@ -239,7 +239,7 @@
                                                     </label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="text" class="form-control" ng-model="product.sales_price">
+                                                        <input type="text" class="form-control" ng-model="variation.sales_price">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -248,7 +248,7 @@
                                                     </label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">$</span>
-                                                        <input type="text" class="form-control" ng-model="product.cost">
+                                                        <input type="text" class="form-control" ng-model="variation.cost">
                                                     </div>
                                                 </div>
                                             </form>
@@ -455,16 +455,16 @@
                             <label for="attributeName">
                                 Attribute Name
                             </label>
-                            <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="product.attribute.name">
+                            <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="attribute.name">
                         </div>
                     </div>
                     <div class="col-sm-7 col-xs-12">
                         <div class="form-group margin-bottom-0">
                             <label class="margin-bottom-0">
-                                <span ng-if="product.attribute.name">{{product.attribute.name + ' Types' }}</span>
-                                <span ng-if="!product.attribute.name">Attribute Types</span>
+                                <span ng-if="attribute.name">{{attribute.name + ' Types' }}</span>
+                                <span ng-if="!attribute.name">Attribute Types</span>
                             </label>
-                            <tags-input ng-model="product.attribute.attributes"></tags-input>
+                            <tags-input ng-model="attribute.values"></tags-input>
                         </div>
                     </div>
                     <div class="col-sm-1 col-xs-12">

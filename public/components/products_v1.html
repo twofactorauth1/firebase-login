@@ -11,8 +11,7 @@
             </div>
         </header>
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <pre>{{selectedProduct}}</pre>
-            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true">
+            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in layout.products | filter:{status:'active'}:true">
                 <div class="product">
                     <div class="thumbnail">
                         <div class="product-img">
@@ -27,14 +26,13 @@
                             </div>
                         </div>
                         <div class="caption">
-                            <h4 class="pull-right">${{product.regular_price}}</h4>
+                            <h4 class="pull-right">{{product.regular_price | currency}}</h4>
                             <h4 class="title"><a href="#">{{product.hasVariations}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description">{{product.description}}</p>
                         </div>
                         <div class="actions">
-                            <pre>{{product}}</pre>
-                            <a class="btn btn-primary btn-block center" href="#" ng-if="product.hasVariations"  ng-click="selectedProduct = product">
+                            <a class="btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
                             <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external_link' && product.clicked != true && !product.hasVariations">
@@ -86,19 +84,27 @@
                             <div class="mb15"></div>
                             <ul>
                                 <li ng-repeat="item in cartDetails track by $index">
-                                    <div class="line-item-header row">
-                                        <h4 class="col-sm-5">{{item.name}}</h4>
-                                        <div class="col-sm-3">
-                                            <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input">
+                                    <div class="col-sm-12">
+                                        <div class="line-item-header row">
+                                            <h4 class="col-sm-5">{{item.name}}</h4>
+                                            <div class="col-sm-3">
+                                                <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input">
+                                            </div>
+                                            <p class="price col-sm-3">$ {{item.regular_price}}</p>
+                                            <div class="col-sm-1">
+                                                <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(item)">×</button>
+                                            </div>
                                         </div>
-                                        <p class="price col-sm-3">$ {{item.regular_price}}</p>
-                                        <div class="col-sm-1">
-                                            <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(item)">×</button>
+                                        <p if="item.description">
+                                            {{item.description}}
+                                        </p>
+                                        <div class="col-sm-12 row" ng-if="item.variation">
+                                            <ul class="variations">
+                                                <li style="display:inline-block" ng-repeat="attribute in item.attributes">{{attribute.name}}: {{attribute.option}}</li>
+                                            </ul>
                                         </div>
                                     </div>
-                                    <p class="description">
-                                        {{item.description}}
-                                    </p>
+                                    <div class="clearfix"></div>
                                 </li>
                             </ul>
                             <div ng-if="cartDetails.length <= 0">
@@ -120,8 +126,8 @@
                                 <div class="col-xs-6"></div>
                                 <div class="clearfix mb30"></div>
                                 <div class="col-xs-offset-6 col-xs-6">
-                                    <p>Subtotal: $ {{ subTotal }}</p>
-                                    <p>Tax (8%): $ {{ totalTax }}</p>
+                                    <p>Subtotal: {{ subTotal | currency }}</p>
+                                    <p>Tax (8%): {{ totalTax | currency }}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -129,7 +135,7 @@
                                     <h2>Total</h2>
                                 </div>
                                 <div class="col-xs-6">
-                                    <h2>$ {{ total }}</h2>
+                                    <h2>{{ total  | number:2 | currency }}</h2>
                                 </div>
                             </div>
                             <div class="mb15"></div>
@@ -391,7 +397,6 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
     <div class="modal fade" id="product-details-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -400,63 +405,84 @@
                     <h4 class="modal-title"> Product Detail</h4>
                 </div>
                 <div class="modal-body">
-                <pre>{{selectedProduct}}</pre>
-                    <div class="product">
-                        <div class="thumbnail">
-                            <div class="product-img">
-                                <div ng-if="selectedProduct.is_image" class="img-wrap">
-                                    <img ng-src="{{selectedProduct.icon}}" class="img-responsive">
-                                </div>
-                                <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
-                                    <i class="fa {{selectedProduct.icon}}"></i>
-                                </div>
-                                <div ng-if="!selectedProduct.is_image && !selectedProduct.icon" class="img-wrap no-preview">
-                                    <h3>No Preview <br> Available</h3>
-                                </div>
+                    <div class="col-sm-6">
+                        <div class="product-img">
+                            <div ng-if="selectedProduct.is_image" class="img-wrap">
+                                <img ng-src="{{selectedProduct.icon}}" class="img-responsive">
                             </div>
-                            <div class="caption">
-                                <h4 class="pull-right">${{selectedProduct.regular_price}}</h4>
-                                <h4 class="title"><a href="#">{{selectedProduct.hasVariations}}</a></h4>
-                                <div class="clearfix"></div>
-                                <p class="description">{{selectedProduct.description}}</p>
+                            <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
+                                <i class="fa {{selectedProduct.icon}}"></i>
                             </div>
-                            <div class="actions">
-                                <button class="btn btn-primary btn-block center" href="#" ng-if="selectedProduct.hasVariations" data-toggle="modal" data-target="#product-details-modal">
-                                    Select Options
-                                </button>
-                                <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct)" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked != true && !selectedProduct.hasVariations">
-                                    <div data-class="btn-text">
-                                        <span class="fa fa-shopping-cart"></span> Add to Cart
-                                    </div>
-                                </button>
-                                <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
-                                    <div data-class="btn-text">
-                                        <span class="fa fa-check"></span> Added to Cart!
-                                    </div>
-                                </button>
-                                <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external_link'" target="{{selectedProduct.externalLinkOpenIn}}">
-                                    <div data-class="btn-text">
-                                        <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="ratings hidden">
-                                <p class="pull-right">15 reviews</p>
-                                <p>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                    <span class="glyphicon glyphicon-star"></span>
-                                </p>
+                            <div ng-if="!selectedProduct.is_image && !selectedProduct.icon" class="img-wrap no-preview">
+                                <h3>No Preview <br> Available</h3>
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                        <tabset class="tabbable">
+                            <tab heading="Details">
+                                <div class="caption">
+                                    <h4 class="title">{{selectedProduct.name}}</h4>
+                                    <h4 ng-if="!selectedProduct.hasVariations">{{selectedProduct.regular_price | currency}}</h4>
+                                    <h4 ng-if="selectedProduct.hasVariations && matchedVariation">{{matchedVariation.regular_price | currency}}</h4>
+                                    <p class="description">{{selectedProduct.description}}</p>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="attributes form-horizontal">
+                                    <div class="form-group" ng-repeat="attribute in selectedProduct.attributes">
+                                        <label class="col-sm-2 control-label">
+                                            {{attribute.name}}
+                                        </label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" ng-model="attribute.selected" ng-change="updatePrice()">
+                                                <option ng-repeat="value in attribute.values" ng-if="variationAttributeExists(value)" value="{{value}}">{{value}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked != true && matchedVariation">
+                                        <div data-class="btn-text">
+                                            <span class="fa fa-shopping-cart"></span> Add to Cart
+                                        </div>
+                                    </button>
+                                    <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
+                                        <div data-class="btn-text">
+                                            <span class="fa fa-check"></span> Added to Cart!
+                                        </div>
+                                    </button>
+                                    <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external_link'" target="{{selectedProduct.externalLinkOpenIn}}">
+                                        <div data-class="btn-text">
+                                            <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
+                                        </div>
+                                    </a>
+                                </div>
+                            </tab>
+                            <tab heading="Addtional Information">
+                                <h4>Static content</h4>
+                                <p>
+                                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent.
+                                </p>
+                                <p>
+                                    Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+                                </p>
+                            </tab>
+                            <tab heading="Reviews">
+                                <h4>Static content</h4>
+                                <p>
+                                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent.
+                                </p>
+                                <p>
+                                    Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+                                </p>
+                            </tab>
+                        </tabset>
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 <script type="text/javascript">
 card = $('.payment').card({

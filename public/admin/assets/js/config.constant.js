@@ -321,7 +321,7 @@ app.constant('JS_REQUIRES', {
         'mediaModal': 'assets/js/directives/mediadirective.js',
 
         //*** Utils
-        'namespaces': '../js/utils/namespaces.js',
+        'namespaces': '../js/utils/namespaces.js'
     },
     //*** angularJS Modules
     modules: [{
@@ -429,5 +429,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'blueimp',
         files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
+    }, {
+        name: 'ngJoyRide',
+        files: ['../js/libs/ng-joyride/ng-joyride.js']
     }]
 });
