@@ -270,6 +270,7 @@ app.constant('JS_REQUIRES', {
         'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
         'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
         'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
+        'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
 
         'cropCtrl': 'assets/js/controllers/cropCtrl.js',
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',
