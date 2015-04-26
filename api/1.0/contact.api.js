@@ -523,9 +523,12 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     } else {
                                                         var contactEmail = savedContact.getEmails()[0];
                                                         var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                        var fromEmail = fromContactEmail || notificationConfig.WELCOME_FROM_EMAIL;
                                                         self.log.debug('sending email to: ', contactEmail);
+                                                        self.log.debug('sending email from: ', fromContactEmail);
+
                                                         var vars = [];
-                                                        mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                                        mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                             notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                                             '<h1>hey</h1>', value.id(), savedContact.id(), vars, function(err, result){});
                                                     }
