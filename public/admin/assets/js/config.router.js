@@ -67,6 +67,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Pages'
         },
         resolve: loadSequence('pagesCtrl', 'userService')
+    }).state('app.website.templates', {
+        url: '/templates',
+        templateUrl: "assets/views/templates.html",
+        title: 'Templates',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Templates'
+        },
+        resolve: loadSequence('templatesCtrl', 'userService')
     }).state('app.website.posts', {
         url: '/posts',
         templateUrl: "assets/views/posts.html",
@@ -95,7 +104,17 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Post',
             parent: 'app.website.posts'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService')
+        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService', 'geocodeService')
+    }).state('app.website.singletemplate', {
+        url: '/templates/:id',
+        templateUrl: "assets/views/editor.html",
+        title: 'Template Single',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Single Template',
+            parent: 'app.website.templates'
+        },
+        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'uuid', 'ui.sortable', 'assetsService', 'bootstrap', 'toasterService', 'geocodeService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",

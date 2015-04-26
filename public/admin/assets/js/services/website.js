@@ -338,6 +338,21 @@
 			});
 		};
 
+		this.updateTemplate = function (templateId, templatedata, fn) {
+			var apiUrl = baseUrl + ['cms', 'template', templateId].join('/');
+			$http({
+	            url: apiUrl,
+	            method: "POST",
+	            data: angular.toJson(templatedata)
+	        })
+	            .success(function (data, status, headers, config) {
+	                fn(data);
+	            })
+	            .error(function (err) {
+	                console.log('END:Update Template with ERROR', err);
+	            });
+		};
+
 		this.getPageComponents = function (pageId, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
 			$http.get(apiUrl)
