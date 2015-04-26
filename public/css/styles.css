@@ -224,10 +224,10 @@ body.editing .fragment:hover .add-component {
   margin-bottom: 0;
 }
 .ui-sortable .dragging {
-  height: 60px!important;
+  height: 57px!important;
 }
 .ui-sortable .as-sortable-placeholder {
-  height: 60px!important;
+  height: 57px!important;
 }
 .ui-sortable .componentActions span.fa {
   padding: 10px;
@@ -252,7 +252,7 @@ body.editing .fragment:hover .add-component {
   opacity: 0.9;
 }
 ul.ui-sortable.active .fragment {
-  height: 60px!important;
+  height: 57px!important;
 }
 ul.ui-sortable.active .fragment .componentActions {
   display: block;
@@ -1976,6 +1976,7 @@ div[data-class='image-text'] p {
 .order-summary {
   padding: 1px 15px;
   min-height: 376px;
+  border-left: 1px solid #eee;
 }
 .order-summary h4 {
   margin: 30px 0;

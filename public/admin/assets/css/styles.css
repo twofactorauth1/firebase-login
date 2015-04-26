@@ -12259,6 +12259,11 @@ table.grid tbody td strong {
   background: #f6f6f6!important;
   color: #6a6a6a;
 }
+.add-component-modal .tab-content {
+  max-height: 300px;
+  height: 100%;
+  overflow: auto;
+}
 .btn-comment-o {
   color: #fff;
   background-color: #F0E301;
