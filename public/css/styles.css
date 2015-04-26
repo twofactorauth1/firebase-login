@@ -1096,6 +1096,9 @@ div[data-type="feature-block"] .component-inner {
 .overlay-gallery-image:hover:before {
   opacity: 1;
 }
+.gallery-v1 .btn-add-image {
+  position: relative !important;
+}
 .contenthover {
   padding: 20px 20px 10px 20px;
 }
