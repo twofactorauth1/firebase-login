@@ -60,7 +60,7 @@
                             <tr>
                                 <th class="center">Featured Image</th>
                                 <th st-sort="title">Title</th>
-                                <th st-sort="handle">Handle</th>
+                                <th st-sort="handle">Url</th>
                                 <th class="hidden-xs" st-sort="status">Status</th>
                                 <th class="hidden-xs" st-sort="getters.created">Created</th>
                                 <th class="hidden-xs" st-sort="getters.modified">Modified</th>
@@ -83,7 +83,7 @@
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
                                 </th>
                                 <th>
-                                    <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
+                                    <input st-search="handle" placeholder="Url" class="form-control" type="search" />
                                 </th>
                                 <th>
                                     <input st-search="status" placeholder="Status" class="form-control" type="search" />
@@ -102,7 +102,7 @@
                                     <img src="{{ post.featured_image ? post.featured_image : '/admin/assets/images/default-media.jpg' }}" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{post.post_title | limitTo: 20 }}{{post.post_title.length > 20 ? '...' : ''}}</td>
-                                <td class="hidden-xs"><strong>Handle: </strong>{{post.post_url | limitTo: 20 }}{{post.post_url.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs"><strong>Url: </strong>{{post.post_url | limitTo: 20 }}{{post.post_url.length > 20 ? '...' : ''}}</td>
                                 <td class="hidden-xs"><strong>Status: </strong> {{post.post_status}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{post.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs"><strong>Modified: </strong>{{post.modified.date | date:'MMM d yy'}}</td>

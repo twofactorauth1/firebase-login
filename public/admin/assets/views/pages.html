@@ -61,7 +61,7 @@
                             <tr>
                                 <th class="center">Screenshot</th>
                                 <th st-sort="title">Title</th>
-                                <th class="hidden-xs" st-sort="handle">Handle</th>
+                                <th class="hidden-xs" st-sort="handle">Page Url</th>
                                 <th class="hidden-xs" st-sort="components" ng-class="{'center': tableView != 'grid'}">Components</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
                                 <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
@@ -84,7 +84,7 @@
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
                                 </th>
                                 <th class="hidden-xs">
-                                    <input st-search="handle" placeholder="Handle" class="form-control" type="search" />
+                                    <input st-search="handle" placeholder="Page Url" class="form-control" type="search" />
                                 </th>
                                 <th class="hidden-xs">
                                     <input st-search="components" placeholder="Components" class="form-control" type="search" />
@@ -103,7 +103,7 @@
                                     <img ng-src="{{ page.screenshot }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
-                                <td class="hidden-xs"><strong>Handle: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs"><strong>Page Url: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Components: </strong> {{page.components}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>

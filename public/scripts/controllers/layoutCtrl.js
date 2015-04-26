@@ -811,8 +811,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
          */
 
         window.clickImageButton = function(btn) {
-            $scope.urlInput = $(btn).closest('td').prev('td').find('input');
-            $scope.parentScope.clickImageButton();
+            var urlInput = $(btn).closest('td').prev('td').find('input');
+            $scope.parentScope.clickImageButton(urlInput, true);
         };
 
         /*
@@ -820,9 +820,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
          * -
          */
 
-        window.clickandInsertImageButton = function(editor) {
-            $scope.inlineInput = editor;
-            $scope.parentScope.clickImageButton();
+        window.clickandInsertImageButton = function(editor) {           
+            $scope.parentScope.clickImageButton(editor, false);
         };
 
         $scope.deletePricingTable = function(componentId, index) {
@@ -1099,18 +1098,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             };
         };
 
-        $scope.addCKEditorImageInput = function(url) {
-            if ($scope.urlInput) {
-                $scope.urlInput.val(url);
-            }
-        };
-
-        $scope.addCKEditorImage = function(url) {
-            if ($scope.inlineInput) {
-                $scope.inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
-            } else if ($scope.urlInput) {
-                $scope.urlInput.val(url);
-            }
+        $scope.addCKEditorImage = function(url, inlineInput, edit) {
+                if(edit)
+                    inlineInput.val(url);
+                else    
+                    inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
         };
 
         $scope.triggerEditMode = function() {

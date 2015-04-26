@@ -33,6 +33,12 @@
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
         var stopInterval;
+        
+        $scope.$watch('currentPage.handle', function(newValue, oldValue) {
+            if (newValue) {
+                $scope.currentPage.handle = $filter('slugify')(newValue);
+            }
+        });
         $scope.breadcrumbTitle = $location.$$search['pagehandle'] || $location.$$search['posthandle'];
 
         /*
@@ -1174,6 +1180,7 @@
 
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         $scope.isEditing = true;
+
                         WebsiteService.setEditedPageHandle($scope.currentPage.handle);
                         if (!$scope.redirect)
                             $scope.autoSavePage();
@@ -1185,7 +1192,12 @@
                         else
                             toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.saveLoading = false;
+
                         $scope.childScope.saveBlogData(iFrame.contentWindow);
+                        if($scope.originalCurrentPage.handle !== $scope.currentPage.handle)
+                        {
+                            window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
+                        }
 
                     });
                     var data = {
@@ -1789,7 +1801,7 @@
                 return;
             } else if ($scope.insertMediaImage) {
                 $scope.insertMediaImage = false;
-                $scope.childScope.addCKEditorImage(asset.url);
+                $scope.childScope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
                 return;
             } else if ($scope.logoImage && $scope.componentEditing) {
                 $scope.logoImage = false;
@@ -2265,8 +2277,10 @@
          * -
          */
 
-        $scope.clickImageButton = function() {
+        $scope.clickImageButton = function(editor, edit) {
             $scope.insertMediaImage = true;
+            $scope.inlineInput = editor;
+            $scope.isEditMode = edit;
             //$scope.openModal('mediamodal');
             angular.element("#media-manager-modal").modal('show');
             $scope.showInsert = true;

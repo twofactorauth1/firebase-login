@@ -16,8 +16,8 @@
     </div>
 
    <div class="clearfix"></div>  
-   <div class="testimonial-wrap" style="position: relative;">
-    <slick init-onload="false" data="dataLoaded" slides-to-show='1' slides-to-scroll='1' autoplay = "{{!isEditing}}" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
+   <div class="testimonial-wrap" ng-if="isEditing" style="position: relative;">
+    <slick init-onload="false" data="dataLoaded" slides-to-show='1' slides-to-scroll='1' autoplay = "false" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
         <div ng-show="dataLoaded" ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
             <div class="img">
                 <div class="center editable" data-text="Insert image here" data-index="{{$index}}" data-class="testimonials.item.img" ng-bind-html="testimonial.img | unsafe"></div>
@@ -49,6 +49,32 @@
                                 <i class="fa fa-plus"></i>
                             </a>
                         </div>  
+        </div>  
+    </slick>
+  </div>
+   <div class="testimonial-wrap" ng-if="!isEditing" style="position: relative;">
+    <slick init-onload="false" data="dataLoaded" slides-to-show='1' slides-to-scroll='1' autoplay = "true" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
+        <div ng-show="dataLoaded" ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
+            <div class="img">
+                <div class="center editable" data-text="Insert image here" data-index="{{$index}}" data-class="testimonials.item.img" ng-bind-html="testimonial.img | unsafe"></div>
+            </div>
+           
+                <div class="row ">
+                    <div class="col-sm-12">
+                        <div class="text">
+                            <div class="editable" data-class="testimonials.item.text" data-text="Enter Description here" data-index="{{$index}}" ng-bind-html="testimonial.text">
+                            </div>
+                        </div>
+                        <h4 class="name">
+                            <div class="editable" data-class="testimonials.item.name" data-text="Enter Name here" data-index="{{$index}}" ng-bind-html="testimonial.name">
+                            </div>
+                        </h4>
+                        <div class="site">
+                            <div class="editable" data-class="testimonials.item.site" data-text="Enter Site here" data-index="{{$index}}" ng-bind-html="testimonial.site">
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>  
     </slick>
   </div>

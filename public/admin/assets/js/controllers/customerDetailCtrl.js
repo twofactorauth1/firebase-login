@@ -3,7 +3,7 @@
  * controller for customer details
  */
 (function(angular) {
-    app.controller('CustomerDetailCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", function($scope, $modal, $timeout, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService) {
+    app.controller('CustomerDetailCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService",'SweetAlert', '$state', function($scope, $modal, $timeout, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state) {
 
 
         /*
@@ -482,7 +482,7 @@
             return email._id === $scope.customer.details[0].emails[0]._id;
         };
 
-        // Add/Remove phone numbers        
+        // Add/Remove phone numbers
         $scope.addCustomerContactFn = function() {
             $scope.customer.details[0].phones.push({
                 _id: CommonService.generateUniqueAlphaNumericShort(),
@@ -531,7 +531,7 @@
             {
                 $scope.customer.details[0] = {};
             }
-            if(!$scope.customer.details[0].emails)                
+            if(!$scope.customer.details[0].emails)
                 $scope.customer.details[0].emails =[];
             if(!$scope.customer.details[0].phones)
                 $scope.customer.details[0].phones =[];
@@ -601,6 +601,29 @@
                 });
             }
             return tags;
+        };
+
+        $scope.deleteCustomerFn = function(customer) {
+          SweetAlert.swal({
+                  title: "Are you sure?",
+                  text: "Do you want to delete this customer?",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes, delete it!",
+                  cancelButtonText: "No, do not delete it!",
+                  closeOnConfirm: true,
+                  closeOnCancel: true
+              },
+              function(isConfirm) {
+                  if (isConfirm) {
+                    CustomerService.deleteCustomer(customer._id, function() {
+                      console.log('Customer Deleted >>>');
+                      toaster.pop('warning', 'Customer Deleted.');
+                      $state.go('customer');
+                    });
+                  };
+              });
         };
     }]);
 })(angular);
