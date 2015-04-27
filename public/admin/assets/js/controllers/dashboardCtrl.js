@@ -159,7 +159,6 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         } else {
             return null;
         }
-
     };
 
     /*

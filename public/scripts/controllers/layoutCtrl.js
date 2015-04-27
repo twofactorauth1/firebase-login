@@ -434,6 +434,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
          */
 
         $scope.updateSelectedProduct = function(product) {
+            product.attributes = $scope.selectedProductAttributes(product);
+            console.log('product.attributes ', product.attributes);
             $scope.selectedProduct = product;
         };
 
@@ -461,6 +463,41 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             } else {
                 console.log('all not selected');
             }
+        };
+
+        /*
+         * @selectedProductAttributes
+         * - get attributes availiable for the selected product
+         */
+
+        $scope.selectedProductAttributes = function(product) {
+            var attributes;
+            if (product) {
+                var formattedAttributes = [];
+                _.each(product.variations, function(variation) {
+                    _.each(variation.attributes, function(attribute) {
+                        var foundAttr = _.find(formattedAttributes, function(formAttr) {
+                            return formAttr.name == attribute.name;
+                        });
+                        if (foundAttr) {
+                            if (foundAttr.values.indexOf(attribute.option) < 0) {
+                                foundAttr.values.push(attribute.option);
+                            }
+                        } else {
+                            var _attribute = {
+                                name: attribute.name,
+                                values: [attribute.option]
+                            };
+                            formattedAttributes.push(_attribute);
+                        }
+                    });
+                });
+                console.log('formattedAttributes ', formattedAttributes);
+                attributes = formattedAttributes;
+            } else {
+                attributes = [];
+            }
+            return attributes;
         };
 
         /*
