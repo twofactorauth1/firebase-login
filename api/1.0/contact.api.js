@@ -200,7 +200,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactId = parseInt(contactId);
                 contactDao.removeById(contactId, function (err, value) {
                     if (!err && value != null) {
-                        self.sendResult(resp, value);
+                        self.sendResult(resp, {deleted:true});
                         self.createUserActivity(req, 'DELETE_CONTACT', null, {id: contactId}, function(){});
                     } else {
                         self.wrapError(resp, 401, null, err, value);

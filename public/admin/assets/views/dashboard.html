@@ -91,7 +91,7 @@
                                     <div class="sparkline space10">
                                         <span jq-sparkline ng-model="analyticsOrders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
                                     </div>
-                                    <span><i class="fa fa-clock-o"></i> Last Order {{lastOrderDate() | timeAgoFilter}}</span>
+                                    <span><i class="fa fa-clock-o"></i> Last Order <span ng-if="lastOrderDate()">{{lastOrderDate() | timeAgoFilter}}</span></span>
                                 </div>
                             </div>
                         </div>
