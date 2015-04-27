@@ -2,7 +2,7 @@
 /**
  * controllers used for the dashboard
  */
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal","$filter", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter) {
 
     $scope.myPagingFunction = function() {
         console.log('paging');
@@ -249,4 +249,50 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         });
     };
 
+     /*
+         * @openModal
+         * -
+         */
+
+        $scope.openModal = function(modal) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: modal,
+                scope: $scope
+            });
+        };
+
+        /*
+         * @closeModal
+         * -
+         */
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
+
+        $scope.newActivity = {
+            start: new Date(),
+            end: new Date()
+        };
+        //$scope.all_activities = angular.copy($scope.activities);
+        $scope.addActivityFn = function() {
+                CustomerService.postCustomerActivity($scope.newActivity, function(activity) {
+                    $scope.activities.push(activity);
+                    $scope.activities = _.sortBy($scope.activities, function(o) {
+                        return o.start;
+                    }).reverse();
+                    $scope.newActivity = {
+                        start: new Date(),
+                        end: new Date()
+                    };
+                    if (!angular.isDefined($scope.activity_type))
+                        $scope.activity_type = '';
+                    $scope.activities = $filter('filter')($scope.activities, {
+                        activityType: $scope.activity_type
+                    });
+                    $scope.total = $scope.activities.length;
+
+                    $scope.closeModal('addActivityModal');
+                });
+            };
 }]);
