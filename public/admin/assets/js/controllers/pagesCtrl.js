@@ -11,6 +11,33 @@
             $scope.pages = pagesArr;
         });
 
+        $scope.default_image_url = "/admin/assets/images/default-page.jpg";
+
+        $scope.filterPages = function()
+        {
+            $scope.showFilter  = !$scope.showFilter;
+            $scope.filterScreenshots($scope.pages)
+        }
+
+        $scope.filterScreenshots = function(pages)
+        {
+            for (var key in pages) {
+                if (pages.hasOwnProperty(key)) {                    
+                    pages[key].hasScreenshot = false;
+                    if (pages[key].screenshot) {                        
+                        if($("#screenshot_"+pages[key]._id).attr("src") === $scope.default_image_url)
+                        {
+                            pages[key].hasScreenshot = false;
+                        }
+                        else
+                        {
+                            pages[key].hasScreenshot = true;
+                        }
+                    }
+                }
+            }
+        }
+
         $scope.formatPages = function(pages) {
             var pagesArr = [];
             for (var key in pages) {
@@ -21,16 +48,18 @@
                         pages[key].components = 0;
                     }
                     pages[key].hasScreenshot = false;
-                    if (pages[key].screenshot) {
+                    if (pages[key].screenshot) {                        
+                        if($("#screenshot_"+pages[key]._id).attr("src") === $scope.default_image_url)
+                        {
+                            pages[key].hasScreenshot = false;
+                        }
                         pages[key].hasScreenshot = true;
                     }
-
                     if (pages[key].type != 'template') {
                         pagesArr.push(pages[key]);
                     }
                 }
             }
-
             return pagesArr;
         };
 
