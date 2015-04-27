@@ -27,7 +27,7 @@
                                             </span>
                                         </div>
                                         <div class="col-xs-5 col-sm-3 padding-right-0">
-                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterPages()">
                                                 <span>Filter</span>
                                             </button>
                                         </div>
@@ -100,7 +100,7 @@
                         <tbody>
                             <tr ng-repeat="page in displayedPages" ng-click="viewSingle(page)">
                                 <td class="center">
-                                    <img ng-src="{{ page.screenshot }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
+                                    <img ng-src="{{ page.screenshot }}" id="screenshot_{{page._id}}" err-src="{{default_image_url}}" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{page.title | limitTo: 20 }}{{page.title.length > 20 ? '...' : ''}}</td>
                                 <td class="hidden-xs"><strong>Page Url: </strong>{{page.handle | limitTo: 20 }}{{page.handle.length > 20 ? '...' : ''}}</td>
