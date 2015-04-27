@@ -154,7 +154,12 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
      */
 
     $scope.lastOrderDate = function() {
-        return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
+        if($scope.ordersThisMonth && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created) {
+            return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
+        } else {
+            return null;
+        }
+
     };
 
     /*
