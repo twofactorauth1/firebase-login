@@ -60,10 +60,10 @@ fi
 # run grunt
 echo Running grunt production
 grunt production --optimize=uglify
-if [ "$1" = "master" ]; then
+#if [ "$1" = "master" ]; then
     # copy the minimized jade file
     # mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
-fi
+#fi
 
 # rename mainforproduction to main.js
 #mv public/js/mainforproduction.js public/js/main.js
