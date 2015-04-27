@@ -156,10 +156,9 @@
             });
             trackedAccount.toggle = false;
             SocialConfigService.updateTrackedAccount(trackedAccount, function(data) {
-                var newFeed = _.filter($scope.feed, function(obj) {
+                var newFeed = _.filter($scope.displayFeed, function(obj) {
                     return obj.trackedId != trackedAccount.id;
                 });
-                $scope.feed = newFeed;
                 $scope.displayFeed = newFeed;
                 toaster.pop('warning', 'Social feed removed.');
             });
