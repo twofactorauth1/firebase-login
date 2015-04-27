@@ -3,7 +3,7 @@
  * controller for social feed
  */
 (function(angular) {
-    app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
+    app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
 
         /*
          * @openModal
@@ -74,33 +74,6 @@
 
                 //get feed items
                 if (trackedAccount.toggle) {
-                    $log.debug(trackedAccount.type);
-
-                    if (trackedAccount.type == 'tw') {
-
-                        // get feed
-                        SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
-                            $scope.feedLengths[trackedAccount.id] = posts.length;
-                            //$log.debug('number of twitter posts: ' + posts.length);
-                            _.each(posts, function(post) {
-                                post.trackedId = trackedAccount.id;
-                                $scope.feed.push(post);
-                                //$log.debug(post);
-                            });
-                        });
-
-                        // get followers
-                        SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
-                            // TODO: what does feedLengths need to be?
-                            //$scope.feedLengths[trackedAccount.id] = posts.length;
-                            //$log.debug('number of twitter follower posts: ' + posts.length);
-                            _.each(posts, function(post) {
-                                post.trackedId = trackedAccount.id;
-                                $scope.feed.push(post);
-                                //$log.debug(post);
-                            });
-                        });
-                    }
                     if (trackedAccount.type == 'fb') {
                         SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
                             $scope.feedLengths[trackedAccount.id] = posts.length;
@@ -183,10 +156,9 @@
             });
             trackedAccount.toggle = false;
             SocialConfigService.updateTrackedAccount(trackedAccount, function(data) {
-                var newFeed = _.filter($scope.feed, function(obj) {
+                var newFeed = _.filter($scope.displayFeed, function(obj) {
                     return obj.trackedId != trackedAccount.id;
                 });
-                $scope.feed = newFeed;
                 $scope.displayFeed = newFeed;
                 toaster.pop('warning', 'Social feed removed.');
             });

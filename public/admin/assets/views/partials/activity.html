@@ -434,9 +434,9 @@
 </div>
 <script type="text/ng-template" id="addActivityModal">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content side-margin">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                <button type="button" class="close" ng-click="closeModal()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel">Add Activity</h4>
             </div>
@@ -453,7 +453,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
             </div>
         </div>
