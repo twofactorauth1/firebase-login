@@ -25,7 +25,7 @@
             if ($scope.product.variations.length <= 0) {
                 $scope.showVariations = false;
                 $scope.product.variations = [{
-                    "id": $scope.product._id+'-1',
+                    "id": $scope.product._id + '-1',
                     "type": $scope.product.type,
                     "permalink": "https://example/product/ship-your-idea-10/?attribute_pa_color=black",
                     "sku": "",
@@ -91,15 +91,37 @@
 
         $scope.addAttribute = function() {
             console.log('addAttribute');
+            var tempAttribute = {
+                "name": "",
+                "values": []
+            };
+            $scope.product.attributes.push(tempAttribute);
+            toaster.pop('success', 'New attribute has been added.');
         };
 
-         /*
+        /*
          * @removeAttribute
          * - remove an attribute
          */
 
-        $scope.removeAttribute = function() {
-            console.log('removeAttribute');
+        $scope.removeAttribute = function(index) {
+            var formattedAttributes = [];
+            var attributeRemoved = [];
+            _.each($scope.product.attributes, function(attribute, i) {
+                if (i != index) {
+                    formattedAttributes.push(attribute);
+                } else {
+                    attributeRemoved.push(attribute);
+                }
+            });
+            $scope.product.attributes = formattedAttributes;
+            var name;
+            if (attributeRemoved[0].name.length > 0) {
+                name = attributeRemoved[0].name;
+            } else {
+                name = 'Empty Attribute';
+            }
+            toaster.pop('error', name + ' attribute has been removed.');
         };
 
         /*
