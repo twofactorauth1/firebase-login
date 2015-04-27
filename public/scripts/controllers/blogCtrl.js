@@ -227,7 +227,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         $scope.deletePost = function(post_data, toaster) {
             var pageId = $scope.parentScope.currentPage._id;
             PostService.deletePost(pageId, post_data._id, function(data) {
-                $scope.parentScope.showToaster(false, true, "Post deleted successfully", true);
+                $scope.parentScope.showToaster(false, true, "Post deleted successfully", data, true);
             });
         };
 
@@ -270,7 +270,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
             var pageId = $scope.parentScope.currentPage._id;
             PostService.updatePost(pageId, post_data._id, post_data, function(data) {
-                $scope.parentScope.showToaster(false, true, msg);
+                $scope.parentScope.showToaster(false, true, msg, data);
             });
         };
 
