@@ -297,6 +297,7 @@ module.exports = function(grunt) {
                         'public/scripts/directives/fileChange.js',
                         'public/scripts/directives/last.js',
                         'public/scripts/directives/ngEnter.js',
+                        'public/scripts/directives/convertHtml.js',
 			            'public/scripts/directives/scrollTo.js',
                         'public/scripts/directives/skeuocard.js',
                         'public/scripts/services/accountService.js',
@@ -538,7 +539,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
+
     grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
+
 
     /*
      * This task is run by CI.

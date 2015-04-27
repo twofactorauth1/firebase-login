@@ -71,7 +71,6 @@ grunt production --optimize=uglify
 # Compile all handlebars templates
 #grunt compiletemplates
 
-
 # rename /min to /js directory
 #mv public/min public/js
 ########################
