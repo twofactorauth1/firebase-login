@@ -151,7 +151,7 @@
                                 <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'start':true">
                                     <div class="margin-left-15">
                                         <div class="text-muted text-small">
-                                            {{activity.start | timeAgoFilter}}
+                                            {{activity.start | timeAgoFilter}} {{activity.activityType}}
                                         </div>
                                         <p>
                                             <div ng-switch on="activity.activityType">
@@ -165,7 +165,7 @@
                                                 <div ng-switch-when="CONTACT_CREATED">
                                                     <p class="cl-effect-13">
                                                         <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a>was added.
+                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a> was added.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                                 </div>
@@ -183,7 +183,7 @@
                                                         <span class="label label-success">SUBSCRIBE</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
                                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to a <a href="">Indigenous Yearly</a> for $99.
                                                     </p>
                                                 </div>
                                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
@@ -282,3 +282,32 @@
         </div>
     </div>
 </div>
+
+<script type="text/ng-template" id="addActivityModal">
+    <div class="modal-dialog">
+        <div class="modal-content side-margin">
+            <div class="modal-header">
+                <button type="button" class="close" ng-click="closeModal()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Add Activity</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Type</label>
+                        <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
+                    </div>
+                    <div class="form-group">
+                        <label>Detail</label>
+                        <textarea class="form-control" ng-model="newActivity.detail" style="resize:vertical"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
+            </div>
+        </div>
+    </div>
+</script>
+
