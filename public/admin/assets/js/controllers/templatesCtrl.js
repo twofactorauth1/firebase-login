@@ -3,40 +3,33 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function($scope, $location, toaster, $filter, $modal, WebsiteService) {
+    app.controller('TemplatesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function($scope, $location, toaster, $filter, $modal, WebsiteService) {
 
-        WebsiteService.getPages(function(pages) {
-            console.log('pages >>> ', pages);
-            var pagesArr = $scope.formatPages(pages);
-            $scope.pages = pagesArr;
+        WebsiteService.getTemplates(function(templates) {
+            console.log('templates >>> ', templates);
+            var templatesArr = $scope.formatTemplates(templates);
+            $scope.templates = templatesArr;
         });
 
-        $scope.formatPages = function(pages) {
-            var pagesArr = [];
-            for (var key in pages) {
-                if (pages.hasOwnProperty(key)) {
-                    if (pages[key].components) {
-                        pages[key].components = pages[key].components.length;
+        $scope.formatTemplates = function(templates) {
+            var templatesArr = [];
+            for (var key in templates) {
+                if (templates.hasOwnProperty(key)) {
+                    if (templates[key].components) {
+                        templates[key].components = templates[key].components.length;
                     } else {
-                        pages[key].components = 0;
+                        templates[key].components = 0;
                     }
-                    pages[key].hasScreenshot = false;
-                    if (pages[key].screenshot) {
-                        pages[key].hasScreenshot = true;
+                    templates[key].hasScreenshot = false;
+                    if (templates[key].screenshot) {
+                        templates[key].hasScreenshot = true;
                     }
-
-                    if (pages[key].type != 'template') {
-                        pagesArr.push(pages[key]);
-                    }
+                    templatesArr.push(templates[key]);
                 }
             }
 
-            return pagesArr;
+            return templatesArr;
         };
-
-        WebsiteService.getTemplates(function(templates) {
-            $scope.templates = templates;
-        });
 
         $scope.openModal = function(template) {
             $scope.modalInstance = $modal.open({
@@ -93,8 +86,6 @@
                     $scope.handleError = false;
                     if (!restrict)
                         page.handle = $filter('slugify')(page.title);
-                    else
-                        page.handle = $filter('slugify')(page.handle);
                 }
                 if (page.title == '') {
                     $scope.titleError = true;
@@ -157,8 +148,8 @@
             }
         };
 
-        $scope.viewSingle = function(page) {
-            window.location = '/admin/#/website/pages/?pagehandle=' + page.handle;
+        $scope.viewSingle = function(template) {
+            window.location = '/admin/#/website/templates/?templatehandle=' + template.handle;
             // console.log('$location.path() ',$location.path());
             // $location.path('website/pages/?pagehandle=' + page.handle).replace();
         };

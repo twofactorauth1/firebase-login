@@ -6,14 +6,13 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="col-xs-12 col-sm-6 col-sm-offset-3">
 
-        <div class="contact-us-title">
-            <div class="editable text-center" data-class="maintitle" ng-bind-html="component.maintitle">
-                <span ></span>
-            </div>
+        <div class="contact-us--title">
+           <div class="editable" data-class="maintitle" ng-bind-html="component.maintitle | unsafe" data-index="{{$index}}">
+          </div>
         </div>
 
         <div class="contact-us-subtitle">
-            <div class="editable text-center" data-class="subtitle" ng-bind-html="component.subtitle">
+            <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe" data-index="{{$index}}">
             </div>
         </div>
 

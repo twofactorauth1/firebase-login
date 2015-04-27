@@ -434,8 +434,8 @@
                                             {{attribute.name}}
                                         </label>
                                         <div class="col-sm-10">
-                                            <select class="form-control" ng-model="attribute.selected" ng-change="updatePrice()">
-                                                <option ng-repeat="value in attribute.values" ng-if="variationAttributeExists(value)" value="{{value}}">{{value}}</option>
+                                            <select class="form-control" ng-model="attribute.selected" ng-change="selectChanged($index)" ng-disabled="selectDisabled($index)">
+                                                <option ng-repeat="value in filteredAttributes()" ng-if="variationAttributeExists(value)" value="{{value}}">{{value}}</option>
                                             </select>
                                         </div>
                                     </div>

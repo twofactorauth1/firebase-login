@@ -78,7 +78,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
         // app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
         // app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
-        // app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
+        app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
         // app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
         // app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
         app.post(this.url('template/:id/website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
@@ -759,31 +759,33 @@ _.extend(api.prototype, baseApi.prototype, {
     // },
 
 
-    // updateTheme: function(req, res) {
-    //     var self = this;
-    //     self.log.debug('>> updateTheme');
-    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-    //         if (isAllowed !== true) {
-    //             return self.send403(req);
-    //         } else {
-    //             var themeId = req.params.id;
-    //             var accountId = parseInt(self.accountId(req));
-    //             var themeObj = new $$.m.cms.Theme(req.body);
-    //             themeObj.set('modified.by', self.userId(req));
-    //             themeObj.set('modified.date', new Date());
-    //             themeObj.set('_id', themeId);
+    updateTemplate: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateTemplate');
+        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var themeId = req.params.id;
+                var accountId = parseInt(self.accountId(req));
+                var themeObj = new $$.m.cms.Theme(req.body);
+                themeObj.attributes.modified.by = self.userId(req);
+                themeObj.attributes.modified.date = new Date();
+                themeObj.set('_id', themeId);
 
-    //             cmsManager.updateTheme(themeObj, function(err, value){
-    //                 self.log.debug('<< updateTheme');
-    //                 self.sendResultOrError(res, err, value, 'Error updating theme.');
+                self.log.debug('themeObj ', themeObj);
 
-    //             });
-    //         }
-    //     });
+                cmsManager.updateTemplate(themeObj, function(err, value){
+                    self.log.debug('<< updateTemplate ', value.components);
+                    self.sendResultOrError(res, err, value, 'Error updating template.');
+
+                });
+            }
+        });
 
 
 
-    // },
+    },
 
 
     // deleteTheme: function(req, res) {

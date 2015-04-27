@@ -51,6 +51,21 @@
         }
 
         /*
+         * @location:templatehandle
+         * - get the templatehandle, replace iframe src and set templateActive to true
+         */
+
+        if ($location.$$search['templatehandle']) {
+            $scope.templateActive = true;
+            document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['templatehandle'] + '?editor=true');
+            WebsiteService.getTemplates(function(templates) {
+                $scope.template = _.find(templates, function(tmpl) {
+                    return tmpl.handle == $location.$$search['templatehandle'];
+                });
+            });
+        }
+
+        /*
          * @getWebsite
          * - get website obj, settings, and website variables
          */
@@ -113,8 +128,7 @@
                 templateUrl: modal,
                 scope: $scope
             });
-            $scope.modalInstance.result.then(function() {
-            }, function() {
+            $scope.modalInstance.result.then(function() {}, function() {
                 console.log('call 2 ', $scope.spectrum);
                 angular.element('.sp-container').addClass('sp-hidden');
             });
@@ -1156,6 +1170,14 @@
                     //         return false;
                     //     }
                     // }
+                    if ($scope.templateActive) {
+                        $scope.template.config.components = $scope.currentPage.components;
+                        WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
+                            console.log('success');
+                            toaster.pop('success', "Template Saved", "The " + $scope.currentPage.handle + " template was saved successfully.");
+                        });
+                    }
+
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         $scope.isEditing = true;
 
@@ -1183,7 +1205,9 @@
                         accountId: $scope.website.accountId,
                         settings: $scope.website.settings
                     };
-                })
+                });
+
+
             }
         };
 

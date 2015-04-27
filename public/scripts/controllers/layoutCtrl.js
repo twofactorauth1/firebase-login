@@ -437,43 +437,58 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.selectedProduct = product;
         };
 
+        $scope.selectDisabled = function(index) {
+            if (index > 0) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.selectChanged = function(index) {
+            var selectedAttributes = $scope.selectedProduct.attributes;
+            var allselected = false;
+            _.each(selectedAttributes, function(attribute, i) {
+                if (attribute.selected) {
+                    allselected = true;
+                } else {
+                    console.log('attribute.selected ', i);
+                    allselected = false;
+                }
+            });
+
+            if (allselected) {
+                $scope.updatePrice();
+            } else {
+                console.log('all not selected');
+            }
+        };
+
         /*
          * @updatePrice
          * - update the price when a matching variation is found based on the attribute selection
          */
 
         $scope.updatePrice = function() {
-            var selectedAttributes = $scope.selectedProduct.attributes;
-            var allselected = false;
-            _.each(selectedAttributes, function(attribute) {
-                if (attribute.selected) {
-                    allselected = true;
-                } else {
-                    allselected = false;
-                }
+
+            var variations = $scope.selectedProduct.variations;
+
+            var _matchedVariation = _.find(variations, function(_variation) {
+                var match = true;
+                _.each(selectedAttributes, function(attr) {
+                    var matchedVarAttr = _.find(_variation.attributes, function(var_attr) {
+                        return var_attr.name === attr.name
+                    });
+                    if (matchedVarAttr.option !== attr.selected) {
+                        match = false;
+                    }
+                });
+                return match;
             });
 
-            if (allselected) {
-                var variations = $scope.selectedProduct.variations;
-
-                var _matchedVariation = _.find(variations, function(_variation) {
-                    var match = true;
-                    _.each(selectedAttributes, function(attr) {
-                        var matchedVarAttr = _.find(_variation.attributes, function(var_attr) {
-                            return var_attr.name === attr.name
-                        });
-                        if (matchedVarAttr.option !== attr.selected) {
-                            match = false;
-                        }
-                    });
-                    return match;
-                });
-
-                if (_matchedVariation) {
-                    $scope.matchedVariation = _matchedVariation;
-                } else {
-                    console.warn('no matching variation');
-                }
+            if (_matchedVariation) {
+                $scope.matchedVariation = _matchedVariation;
+            } else {
+                console.warn('no matching variation');
             }
         };
 
@@ -820,7 +835,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
          * -
          */
 
-        window.clickandInsertImageButton = function(editor) {           
+        window.clickandInsertImageButton = function(editor) {
             $scope.parentScope.clickImageButton(editor, false);
         };
 
@@ -1099,10 +1114,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.addCKEditorImage = function(url, inlineInput, edit) {
-                if(edit)
-                    inlineInput.val(url);
-                else    
-                    inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+            if (edit)
+                inlineInput.val(url);
+            else
+                inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
         };
 
         $scope.triggerEditMode = function() {
@@ -1230,7 +1245,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     if (value && value.type == 'contact-us') {
                         $scope.updateContactUsMap(value);
                     }
-                    
+
                 });
             }
         });
