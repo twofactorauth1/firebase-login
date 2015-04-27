@@ -55,14 +55,14 @@ fi
 # precompile assets, ...
 ########################
 # remove original main file
-rm -f public/js/main.js
+#rm -f public/js/main.js
 
 # run grunt
 echo Running grunt production
 grunt production --optimize=uglify
 if [ "$1" = "master" ]; then
     # copy the minimized jade file
-    mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
+    # mv templates/snippets/index_body_scripts_minimized.jade templates/snippets/index_body_scripts.jade
 fi
 
 # rename mainforproduction to main.js
@@ -75,7 +75,7 @@ fi
 # rename /min to /js directory
 #mv public/min public/js
 ########################
-rm -r public/comps
+#rm -r public/comps
 
 echo Starting zip
 # zip the application
