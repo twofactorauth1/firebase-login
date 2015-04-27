@@ -12540,6 +12540,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 .social-feed .masonry-brick .facebook .panel-heading {
   background: #3b5998;
 }
+.social-feed .masonry-brick .twitter .panel-heading {
+  background: #00aced;
+}
 .social-feed .feeds {
   list-style-type: none;
   padding-left: 0;
