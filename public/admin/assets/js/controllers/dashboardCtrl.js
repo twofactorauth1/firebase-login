@@ -97,7 +97,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
      */
 
     $scope.lastCustomerDate = function() {
-        if($scope.customersThisMonth && $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created) {
+        if($scope.customersThisMonth && $scope.customersThisMonth[$scope.customersThisMonth.length - 1] && $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created) {
             return $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created.date
         } else {
             return null;
@@ -154,7 +154,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
      */
 
     $scope.lastOrderDate = function() {
-        if($scope.ordersThisMonth && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created) {
+        if($scope.ordersThisMonth && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1] && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created) {
             return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
         } else {
             return null;
