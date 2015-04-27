@@ -125,6 +125,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(req);
             } else {
                 self._saveOrUpdateContact(req, resp, true);
+
             }
         });
 
@@ -141,6 +142,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(req);
             } else {
                 self._saveOrUpdateContact(req, resp, false);
+
             }
         });
 
@@ -168,6 +170,12 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!err) {
                 self.log.debug('>> saveOrUpdate', value);
                 self.sendResult(resp, value);
+                if(isNew===true) {
+                    self.createUserActivity(req, 'CREATE_CONTACT', null, {id: value.id()}, function(){});
+                } else {
+                    self.createUserActivity(req, 'UPDATE_CONTACT', null, {id: value.id()}, function(){});
+                }
+
             } else {
                 self.wrapError(resp, 500, "There was an error updating contact", err, value);
             }
@@ -192,7 +200,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactId = parseInt(contactId);
                 contactDao.removeById(contactId, function (err, value) {
                     if (!err && value != null) {
-                        self.sendResult(resp, value);
+                        self.sendResult(resp, {deleted:true});
+                        self.createUserActivity(req, 'DELETE_CONTACT', null, {id: contactId}, function(){});
                     } else {
                         self.wrapError(resp, 401, null, err, value);
                     }
@@ -311,7 +320,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             if(user) {
                                 responseObj =  user.toJSON("public", {accountId:self.accountId(req)});
                             }
-
+                            self.createUserActivity(req, 'CREATE_USER', null, {contactId: contactId}, function(){});
                             return self.sendResultOrError(resp, err, responseObj, 'Error creating user');
                         });
                     }
@@ -409,6 +418,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactDao.mergeDuplicates(dupeAry, accountId, function (err, value) {
                     self.log.debug('<< mergeDuplicates');
                     self.sendResultOrError(res, err, value, "Error merging duplicate contacts");
+                    self.createUserActivity(req, 'MERGE_CONTACTS', null, null, function(){});
                     self = null;
                 });
             }
@@ -513,9 +523,12 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     } else {
                                                         var contactEmail = savedContact.getEmails()[0];
                                                         var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                        var fromEmail = fromContactEmail || notificationConfig.WELCOME_FROM_EMAIL;
                                                         self.log.debug('sending email to: ', contactEmail);
+                                                        self.log.debug('sending email from: ', fromContactEmail);
+
                                                         var vars = [];
-                                                        mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                                        mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                             notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                                             '<h1>hey</h1>', value.id(), savedContact.id(), vars, function(err, result){});
                                                     }
@@ -751,6 +764,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactActivityManager.createActivity(contactActivity, function(err, value){
                     self.log.debug('<< getActivityById');
                     self.sendResultOrError(resp, err, value, "Error getting activity by ID.");
+                    self.createUserActivity(req, 'CREATE_ACTIVITY', null, null, function(){});
                     self = null;
                 });
             }
@@ -937,7 +951,9 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 contactActivityManager.markActivityRead(activityId, function(err, value){
                     self.log.debug('<< markActivityRead');
-                    return self.sendResultOrError(resp, err, value, 'Error marking activity as read.');
+                    self.sendResultOrError(resp, err, value, 'Error marking activity as read.');
+                    self.createUserActivity(req, 'MARK_ACTIVITY_READ', null, {activityId: activityId}, function(){});
+                    return;
                 });
             }
         });

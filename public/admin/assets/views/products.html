@@ -1,0 +1,139 @@
+<div ng-controller="ProductsCtrl">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.commerce.PRODUCTS">{{ mainTitle }}</h1>
+                <span class="mainDescription" ng-if="products.length">You currently have {{products.length}} products in your store.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: CONTENT -->
+    <div st-table="displayedProducts" st-safe-src="products">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-8 col-sm-9">
+                                            <span class="input-icon">
+                                            <input type="text" st-search placeholder="Search by status, name, type..." id="form-field-14" class="form-control">
+                                            <i class="ti-search"></i>
+                                        </span>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-0 pull-right">
+                                    <div class="col-xs-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-import ng-click-active hidden" ng-click="openImportModal()">
+                                            <span>Import</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active hidden">
+                                            <span>Export</span>
+                                        </button>
+                                        <div class="form-group">
+                                            <div class="btn-group tableView">
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                    <div class="col-xs-6 col-xs-offset-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openProductModal()">
+                                            <span>New</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}">
+            <thead>
+                <tr>
+                    <th class="center">Image</th>
+                    <th class="hidden-xs" st-sort="status">Status</th>
+                    <th>Name</th>
+                    <th class="hidden-xs" st-sort="type">Type</th>
+                    <th class="hidden-xs">Modified</th>
+                </tr>
+                <tr ng-if="showFilter">
+                    <th>
+                        <input st-search="is_image" placeholder="Image" class="form-control hidden" type="search" id="searchImage" ng-model="filterProduct.image.selected.data" />
+                        <ui-select ng-model="filterProduct.image.selected" on-select="triggerInput('#searchImage')" theme="bootstrap">
+                            <ui-select-match placeholder="Select Image">
+                                <small ng-bind-html="$select.selected.label"></small>
+                                <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchImage', 'image')"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="status in productImageTypes">
+                                <small ng-bind-html="status.label | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </th>
+                    <th>
+                        <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterProduct.status.selected.data" />
+                        <ui-select ng-model="filterProduct.status.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
+                            <ui-select-match placeholder="Select Status">
+                                <small ng-bind-html="$select.selected.label"></small>
+                                <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchStatus', 'status')"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="status in productStatusTypes">
+                                <small ng-bind-html="status.label | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </th>
+                    <th>
+                        <input st-search="name" placeholder="Name" class="form-control" type="search" />
+                    </th>
+                    <th>
+                        <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterProduct.type.selected.data" />
+                        <ui-select ng-model="filterProduct.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
+                            <ui-select-match placeholder="Select Type">
+                                <small ng-bind-html="$select.selected.label"></small>
+                                <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="status in productTypes">
+                                <small ng-bind-html="status.label | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </th>
+                    <th>
+                        <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in displayedProducts" ng-click="viewSingleProduct(product)">
+                    <td class="center">
+                        <img ng-if="product.icon && is_image" src="{{product.icon}}" class="img-circle img-thumbnail" alt="image" style="width:50px;height:50px">
+                        <h3 ng-if="!product.icon"><span class="fa fa-cube"></span></h3>
+                        <h3 ng-if="!is_image && product.icon"><span class="fa {{product.icon}}"></span></h3>
+                    </td>
+                    <td class="hidden-xs">{{formatStatus(product.status)}}</td>
+                    <td>{{product.name||product.title | limitTo: 20 }}{{product.name.length||product.title.length > 20 ? '...' : ''}}</td>
+                    <td class="hidden-xs">{{product.type}}</td>
+                    <td class="hidden-xs">{{product.modified.date | date:'MMM d yy'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- end: CONTENT -->
+</div>
+<div data-ng-include=" 'assets/views/partials/import-product-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/new-product-modal.html' "></div>

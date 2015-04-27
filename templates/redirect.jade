@@ -7,24 +7,32 @@
 extends snippets/_layout
 
 block content
-    section
-        .signinpanel
-            if account
+    .row
+      .main-login.col-xs-10.col-xs-offset-1.col-sm-8.col-sm-offset-2.col-md-4.col-md-offset-4
+        .logo.margin-top-30
+          if account
                 if account.business.logo
                     img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
                 else
                     h1.center.company-title #{account.company.name}
-            else
-                span.logo
 
-            form(role="form", action="/login" method="post")
+        // start: LOGIN BOX
+        .box-login.margin-top-30
+          h5.nomargin Redirecting
+            p.margin-top-5.margin-bottom-20(id="redirectMsg")
+            div(id="timerSec", class="center")
+            p(id="redirectDesc") Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
 
-                div.welcome-text
-                    h4.nomargin Redirecting
-                    p.mt5.mb20(id="redirectMsg")
-                    div(id="timerSec")                   
-                    p 
-                      h4(id="redirectDesc") Indigenous is asking for permission to view your contacts and post to this social network on your behalf. We will never post anything without your explicit permission.
+          // start: COPYRIGHT
+          .copyright
+            | &#169;
+            span.current-year
+            span.text-bold.text-uppercase  Indigenous Software, Inc
+            | .
+            span  All rights reserved
+          // end: COPYRIGHT
+        // end: LOGIN BOX
+
     script.
         var next = decodeURIComponent('//#{next}');
         var socialNetwork = decodeURIComponent('#{socialNetwork}');

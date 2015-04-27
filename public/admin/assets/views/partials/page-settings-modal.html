@@ -1,0 +1,80 @@
+<script type="text/ng-template" id="page-settings-modal">
+    <!-- Page Settings Modal -->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Page Settings</h4>
+    </div>
+    <div class="modal-body no-padding" style="max-height:500px;">
+        <tabset>
+            <tab>
+                <tab-heading>
+                    Settings
+                </tab-heading>
+                <div>
+                    <div class="mb10"></div>
+                    <div class="form-group">
+                        <label>Title:</label>
+                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title">
+                    </div>
+                    <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                        <label>URL:</label>
+                        <input id="edit-page-url" class="form-control input-lg" type="text" ng-model="currentPage.handle">
+                    </div>
+                    <div class="padding-right-0">
+                        <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                            <label>Show:</label>
+                            <switch ng-model="currentPage.visible.visibility" class="pull-right"></switch>
+                            <span class="help-block"><i class="ti-info-alt text-primary"></i> Allow visitors to view this page or hide until later.</span>
+                        </div>
+                        <div class="form-group">
+                            <label>Secure:</label>
+                            <switch ng-model="currentPage.secure" class="pull-right"></switch>
+                            <span class="help-block"><i class="ti-info-alt text-primary"></i> Make this page secure and allow only logged in users.</span>
+                        </div>
+                    </div>
+                    <div class="clearfix margin-bottom-"></div>
+                    <div class="well margin-bottom-0">
+                        <p>Danger Zone</p>
+                        <button class="btn btn-block btn-danger mb10" data-ng-disabled="currentPage.handle==='index'" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                    </div>
+                </div>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Historical Pages
+                </tab-heading>
+                <div style="height:100%;overflow:auto;max-height: 450px;margin: -15px;padding: 15px;">
+                    <div class="revisions" ng-hide="previewSwitch">
+                        <table class="table table-hover margin-bottom-0">
+                            <thead>
+                                <tr>
+                                    <th>Modified</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="version in pageVersions | orderBy: 'modified.date':true">
+                                    <th scope="row">{{version.modified.date | date:'MMM d, y h:mm:ss a'}}</th>
+                                    <td><a href="" ng-click="showPreview(version)">Preview</a> | <a href="" ng-click="revertPage(version)">Restore</a> <a href="" ng-click="deletePage()" class="hidden">Delete</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="revision-preview" ng-show="previewSwitch">
+                        <img id="previewImg" src="{{selectedVersion.screenshot}}" class="img-responsive img-thumbnail" ng-hide="!selectedVersion.screenshot">
+                        <div ng-if="!selectedVersion.screenshot" style="height: 300px;">
+                            <h4 class="center" style="line-height: 260px;">No Preview Available</h4>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+            Done
+        </button>
+    </div>
+</script>

@@ -1,0 +1,78 @@
+<div class="page-detail" ng-controller="EditorCtrl">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 ng-if="single_post" class="mainTitle">{{ post_data.post_title || 'Single Post'}}</h1>
+                <h1 ng-if="!single_post" class="mainTitle">{{ currentPage.title || 'Title'}}</h1>
+                <span ng-if="single_post && post_data.post_tags" class="mainDescription">There are currently {{post_data.post_tags.length}} tags.</span>
+                <span ng-if="!single_post && currentPage.components" class="mainDescription">There are currently {{currentPage.components.length}} components.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0">
+                    <div class="panel-body">
+                        <!-- <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-announcement btn-o">
+                                    <span>SEO</span>
+                                </button>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layers-alt btn-o">
+                                    <span>Dupicate</span>
+                                </button>
+                            </div>
+                        </div> -->
+                        <div class="col-sm-9 col-sm-offset-3 col-md-7 col-md-offset-5">
+                            <div class="col-sm-3 col-xs-6 center">
+                                <a ng-if="!single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(currentPage.handle, false) }}" target="_blank">
+                                    <span>View Page</span>
+                                </a>
+                                <a ng-if="single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" href="{{ getUrl(post_data.post_url, true) }}" target="_blank">
+                                    <span>View Post</span>
+                                </a>
+                                <div class="visible-xs margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
+                                    <span>{{single_post ? 'Post Settings' :  'Page Settings'}}</span>
+                                </button>
+                                <div class="visible-xs margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
+                                    <span>Save</span>
+                                </button>
+                            </div>
+                            <div class="col-sm-3 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
+                                    <span>Cancel</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="!iframeHeight">
+        <div class="load1 csspinner bg-white" ct-fullheight ct-fullheight-exclusion="header, footer, #page-title, #page-actions"></div>
+    </div>
+    <iframe id="iframe-website" name="iframe-website" src="" ng-style="{'height':iframeHeight || '0px'}"></iframe>
+    <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+        <i class="fa fa fa-image"></i>
+        <span class="hidden-xs">Media</span>
+    </a>
+    <div id="model_container"></div>
+</div>
+<div data-ng-include=" 'assets/views/partials/component-settings-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/add-component-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/social-links-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div>

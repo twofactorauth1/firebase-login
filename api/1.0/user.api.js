@@ -156,7 +156,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.error('Error occurred removing social credentials: ' + err);
                     return self.wrapError(resp, 500, null, err);
                 }
-                return resp.send(value.toJSON('public'));
+                resp.send(value.toJSON('public'));
+                self.createUserActivity(req, 'REMOVE_SOCIAL_CREDENTIALS', null, {type: type}, function(){});
+                return
             });
         });
 
@@ -511,7 +513,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         responseObj =  user.toJSON("public", {accountId:self.accountId(req)});
                     }
 
-                    return self.sendResultOrError(resp, err, responseObj, 'Error creating user');
+                    self.sendResultOrError(resp, err, responseObj, 'Error creating user');
+                    self.createUserActivity(req, 'CREATE_USER', null, {username: user.username}, function(){});
+                    return;;
                 });
             }
         });
@@ -531,7 +535,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermission(req, self.sc.privs.VIEW_USER, function (err, isAllowed) {
             if (isAllowed !== true || !_.contains(req.user.getAllAccountIds(), self.accountId(req)) || !_.contains(req.user.getPermissionsForAccount(accountId), 'admin')) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 userManager.getUserAccounts(accountId, function(err, userAry){
                     if(err) {
@@ -585,7 +589,9 @@ _.extend(api.prototype, baseApi.prototype, {
                             return self.wrapError(resp, 500, null, 'Error sending forgot password email.');
                         } else {
                             self.log.debug('<< resetPassword');
-                            return self.sendResult(resp, 'sent');
+                            self.sendResult(resp, 'sent');
+                            self.createUserActivity(req, 'RESET_PASSWORD', null, {id: userId}, function(){});
+                            return;
                         }
                     });
                 });
@@ -633,6 +639,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         userDao.saveOrUpdate(user, function(err, value) {
                             if (!err && value != null) {
                                 resp.send(value.toJSON("public"));
+                                self.createUserActivity(req, 'UPDATE_USER', null, {id: userId}, function(){});
                             } else {
                                 self.wrapError(resp, 500, null, err, value);
                             }
@@ -695,7 +702,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(res, 500, null, err, value);
                             } else {
                                 self.log.debug('<< updateUserPreferences');
-                                return res.send(updatedUser.get('user_preferences'));
+                                res.send(updatedUser.get('user_preferences'));
+                                self.createUserActivity(req, 'MODIFY_PREFERENCES', null, null, function(){});
+                                return;
                             }
                         });
                     }
@@ -719,7 +728,9 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 userManager.deleteOrRemoveUserForAccount(accountId, userId, function(err, value){
                     self.log.debug('<< deleteUser');
-                    return self.sendResultOrError(resp, err, value, 'Error deleting user');
+                    self.sendResultOrError(resp, err, value, 'Error deleting user');
+                    self.createUserActivity(req, 'DELETE_USER', null, {id: userId}, function(){});
+                    return;
                 });
             }
         });

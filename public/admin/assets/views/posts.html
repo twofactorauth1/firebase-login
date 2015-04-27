@@ -1,0 +1,167 @@
+<div ng-controller="PostsCtrl" class="posts">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.website.POSTS">{{ mainTitle }}</h1>
+                <span ng-if="posts" class="mainDescription">There are currently {{posts.length}} posts.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: CONTENT -->
+    <div st-table="displayedPosts" st-safe-src="posts">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-xs-9">
+                                            <span class="input-icon">
+                                        <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                        <i class="ti-search"></i>
+                                    </span>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-xs-12">
+                                    <div class="form-group  pull-right">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openPostModal()">
+                                            <span>New Post</span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="btn-group tableView">
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}">
+                        <thead>
+                            <tr>
+                                <th class="center">Featured Image</th>
+                                <th st-sort="title">Title</th>
+                                <th st-sort="handle">Url</th>
+                                <th class="hidden-xs" st-sort="status">Status</th>
+                                <th class="hidden-xs" st-sort="getters.created">Created</th>
+                                <th class="hidden-xs" st-sort="getters.modified">Modified</th>
+                            </tr>
+                            <tr ng-if="showFilter">
+                                <th>
+                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Option" class="form-control hidden" type="search" id="searchPhoto" ng-model="filterPosts.photo.selected.value" />
+                                    <ui-select ng-model="filterPosts.photo.selected" on-select="triggerInput('#searchPhoto')" theme="bootstrap">
+                                        <ui-select-match placeholder="Select Photo">
+                                            <small ng-bind-html="$select.selected.name"></small>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPhoto', 'photo')"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="option in postsFeaturedImageOptions">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th>
+                                    <input st-search="title" placeholder="Title" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="handle" placeholder="Url" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <input st-search="status" placeholder="Status" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="post in displayedPosts" ng-click="viewSingle(post)">
+                                <td class="center">
+                                    <img src="{{ post.featured_image ? post.featured_image : '/admin/assets/images/default-media.jpg' }}" class="img-thumbnail screenshot" alt="image">
+                                </td>
+                                <td><strong>Title: </strong>{{post.post_title | limitTo: 20 }}{{post.post_title.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs"><strong>Url: </strong>{{post.post_url | limitTo: 20 }}{{post.post_url.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs"><strong>Status: </strong> {{post.post_status}}</td>
+                                <td class="hidden-xs"><strong>Created: </strong> {{post.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs"><strong>Modified: </strong>{{post.modified.date | date:'MMM d yy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="!displayedPosts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: CONTENT -->
+    <!-- start: NEW PAGE MODAL -->
+    <script type="text/ng-template" id="new-post-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h3 class="modal-title">New Post</h3>
+        </div>
+        <div class="modal-body bg-white">
+                <div id="new_page">
+                    <div class="form-group" ng-class="{ 'has-error': postAuthorError}">
+                        <label for="post-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
+                        <input id="post-author" class="form-control input-lg" type="text" placeholder="Post Author" ng-model="post.post_author" ng-change="validateCreatePost(post)">
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': postTitleError}">
+                        <label for="post-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
+                        <input id="post-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title" ng-change="validateCreatePost(post)">
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': postUrlError}" ng-show="showChangeURL">
+                        <slug from="post.post_title" to="post.post_url"></slug>
+                        <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
+                        <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post, true)">
+                    </div>
+                    <p ng-show="post.post_title">Post Url will be
+                        <strong>/{{post.post_url}}</strong>
+                            <span class="links cl-effect-1">
+                                <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                            </span>
+                            <span class="links cl-effect-1">
+                                <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+                            </span>
+                    </p>
+                    <div class="clearfix mb15"></div>
+                    <div class="form-group hidden">
+                        <div class="ckbox ckbox-success">
+                            <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
+                            <label for="comment_status">Comment Status On?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-o" ng-click="createPost(post, $event)">Add Post</button>
+            </div>
+    </script>
+    <!-- end:  NEW PAGE MODAL -->
+
+</div>

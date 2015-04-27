@@ -14,6 +14,7 @@ var product = $$.m.ModelBase.extend({
             _id: null,
             accountId: null,
             websiteId: null,
+            status: 'auto_inactive', //auto_inactive, active, inactive, backorder
             sku: null,
             name: null,
             type: null,
@@ -47,6 +48,65 @@ var product = $$.m.ModelBase.extend({
                 }
             */
             total_sales: 0,
+
+            hasVariations: false,
+
+            variations: [],
+
+            /* Example:
+                {
+                    "id": 609,
+                    "created_at": "2015-01-22T20:37:14Z",
+                    "updated_at": "2015-01-22T20:37:14Z",
+                    "downloadable": false,
+                    "virtual": false,
+                    "permalink": "https://example/product/ship-your-idea-10/?attribute_pa_color=black",
+                    "sku": "",
+                    "price": "19.99",
+                    "regular_price": "19.99",
+                    "sale_price": null,
+                    "taxable": true,
+                    "tax_status": "taxable",
+                    "tax_class": "",
+                    "managing_stock": false,
+                    "stock_quantity": 0,
+                    "in_stock": true,
+                    "backordered": false,
+                    "purchaseable": true,
+                    "visible": true,
+                    "on_sale": false,
+                    "weight": null,
+                    "dimensions": {
+                      "length": "",
+                      "width": "",
+                      "height": "",
+                      "unit": "cm"
+                    },
+                    "shipping_class": "",
+                    "shipping_class_id": null,
+                    "image": [
+                      {
+                        "id": 610,
+                        "created_at": "2015-01-22T20:37:18Z",
+                        "updated_at": "2015-01-22T20:37:18Z",
+                        "src": "http://example/wp-content/uploads/2015/01/ship-your-idea-black-front.jpg",
+                        "title": "",
+                        "alt": "",
+                        "position": 0
+                      }
+                    ],
+                    "attributes": [
+                      {
+                        "name": "Color",
+                        "slug": "color",
+                        "option": "black"
+                      }
+                    ],
+                    "downloads": [],
+                    "download_limit": 0,
+                    "download_expiry": 0
+                }
+            */
             created: {
                 date: new Date(),
                 by: null
@@ -55,8 +115,8 @@ var product = $$.m.ModelBase.extend({
                 date: new Date(),
                 by: null
             },
-            _v:"0.1",
-            is_image : false,
+            _v: "0.1",
+            is_image: false,
             starred: false
         }
     },

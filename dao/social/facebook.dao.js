@@ -907,7 +907,7 @@ var dao = {
 
     postLikeWithToken: function(accessToken, socialId, fn) {
         var self = this;
-        self.log.debug('>> postLikeWithToken');
+        self.log.debug('>> postLikeWithToken ', socialId);
 
         var urlOptions = {access_token:accessToken};
 

@@ -733,6 +733,8 @@ var dao = {
             if(err) {
                 self.log.error('Exception getting contact by id: ' + err);
                 fn(err, null);
+            } else if(value === null){
+                return fn(null, contact1);
             } else {
                 self._safeMergeByContact(contact1, value, fn);
                 return;
@@ -743,6 +745,9 @@ var dao = {
     _safeMergeByContact: function(contact1, contact2, fn) {
         var self = this;
         self.log.debug('>> _safeMergeByContact');
+        if(!contact2) {
+            return fn(null, contact1);
+        }
         var merged =  _.defaults(contact1, contact2);
         //union details, notes, siteActivity
         merged.set('details', _.union(contact1.get('details'), contact2.get('details')));

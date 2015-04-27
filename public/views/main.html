@@ -3,44 +3,46 @@
         <div ng-include src="component.url"></div>
     </div>
 </div> -->
- <div data-sample="1" id="top">
-    <!-- This div will handle all toolbars. -->
-</div>
-<div ng-show="isEditing">
-    <div id="editor-toolbar"></div>
-</div>
-<div ng-show="isEditing ? true : isLoaded">
-    <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;" ng-model="currentcomponents">
-    <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
-        <div class="componentActions" as-sortable-item-handle>
-            <span  class="reorder fa fa-arrows"><p>Reorder</p></span>
-            <h4 class="pull-left">{{component.type | cleanType}}</h4>
-            <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Delete</p></span>
-            <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation'"><p>Duplicate</p></span>
-            <span class="settings fa fa-cog" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Settings</p></span>
-        </div>
-        <div ng-include="'/components/component-wrap.html'"></div>
-        <div ng-class="{'zee-blur': !component.visibility}"></div>
-        <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing">
-            <a href="">
-            <i class="fa fa-plus"></i>
-            <p>Add New</p>
-            </a>
-        </div>
-    </li>
-    <li ng-if="currentpage && currentpage.components && currentpage.components.length===0" class="no-component">
-        <div class="well empty-page">
-            <h1 class="center">This Page is Empty.</h1>
-            <h4 class="center">Add some components and start editing!</h4>
-        </div>
-        <div class="clearfix mb15"></div>
-        <div class="add-component" data-index = 1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
-            <a href="">
+<div id="childScope">
+     <div data-sample="1" id="top">
+        <!-- This div will handle all toolbars. -->
+    </div>
+    <div ng-show="isEditing">
+        <div id="editor-toolbar" ng-class="{'fullyLocaded': isLoaded}"></div>
+    </div>
+    <div ng-show="isEditing ? true : isLoaded">
+        <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents">
+        <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
+            <div class="componentActions" as-sortable-item-handle>
+                <span  class="reorder fa fa-arrows"><p>Reorder</p></span>
+                <h4 class="pull-left">{{component.type | cleanType}}</h4>
+                <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Delete</p></span>
+                <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation'"><p>Duplicate</p></span>
+                <span class="settings fa fa-cog" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Settings</p></span>
+            </div>
+            <div ng-include="'/components/component-wrap.html'"></div>
+            <div ng-class="{'zee-blur': !component.visibility}"></div>
+            <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing" ng-if="component.type != 'footer'">
+                <a href="">
                 <i class="fa fa-plus"></i>
-            </a>
-        </div>
-    </li>
-</ul>
+                <p>Add New</p>
+                </a>
+            </div>
+        </li>
+        <li ng-if="currentpage && currentpage.components && currentpage.components.length===0" class="no-component">
+            <div class="well empty-page">
+                <h1 class="center">This Page is Empty.</h1>
+                <h4 class="center">Add some components and start editing!</h4>
+            </div>
+            <div class="clearfix mb15"></div>
+            <div class="add-component" data-index = 1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
+                <a href="">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
+    </div>
 </div>
 
 

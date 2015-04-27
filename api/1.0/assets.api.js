@@ -82,6 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         file.date = value.get("created").date;
                         //self.sendResultOrError(res, err, value, "Error creating Asset");
                         self.sendFileUploadResult(res, err, file);
+                        self.createUserActivity(req, 'CREATE_ASSET', null, null, function(){});
                     });
 
                 });
@@ -154,6 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     assetManager.updateAsset(asset, function(err, value) {
                         self.log.debug('<< updateAsset');
                         self.sendResultOrError(res, err, value, "Error updating Asset");
+                        self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});
                     });
                 }
             });
@@ -190,7 +192,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         }
                     });
                     self.log.debug('<< deleteAsset');
-                    return self.sendResult(res, "Deleted");
+                    self.sendResult(res, "Deleted");
+                    self.createUserActivity(req, 'DELETE_ASSET', null, null, function(){});
+                    return;
                 }
             });
         });

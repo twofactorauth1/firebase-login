@@ -13,6 +13,7 @@ var EmailTemplateUtil = require('../utils/emailtemplateutil');
 var crypto = require('../utils/security/crypto');
 var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
+var userActivityManager = require('../useractivities/useractivity_manager');
 
 var dao = {
 
@@ -491,6 +492,8 @@ var dao = {
 
                 userDao.saveOrUpdate(user, function (err, value) {
                     if (!err) {
+                        var userActivity = new $$.m.UserActivity({accountId:accountId, userId:user.id(), type:'RESET_PASSWORD'});
+                        userActivityManager.createUserActivity(userActivity, function(){});
                         fn(null, value);
                     } else {
                         return fn("An error occurred: " + err);

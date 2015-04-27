@@ -81,14 +81,14 @@ module.exports = {
         });
     },
 
-    updateTheme: function(theme, fn) {
-        log.debug('>> updateTheme');
-        themeDao.saveOrUpdate(theme, function(err, value){
+    updateTemplate: function(template, fn) {
+        log.debug('>> updateTemplate ', template);
+        templateDao.saveOrUpdate(template, function(err, value){
             if(err) {
-                log.error('Exception thrown updating theme: ' + err);
+                log.error('Exception thrown updating template: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< updateTheme');
+                log.debug('<< updateTemplate');
                 fn(null, value);
             }
         });
@@ -1729,8 +1729,8 @@ module.exports = {
                 serverUrl +='/page/' + pageHandle;
             }
             var options = {
-                width: 1280,
-                height: 1024,
+                width: 300,
+                height: 200,
                 full_page: true,
                 delay: 3500,
                 force: true

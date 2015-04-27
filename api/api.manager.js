@@ -52,6 +52,9 @@ var dashboardApi = require('./1.0/dashboard.api');
 //Order
 var orderApi = require('./1.0/order.api');
 
+//User Activities
+var userActivityApi = require('./1.0/useractivity.api');
+
 module.exports = {
 
 };

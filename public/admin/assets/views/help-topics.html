@@ -1,0 +1,27 @@
+<!-- start: PAGE TITLE -->
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle" translate="sidebar.nav.support.HELPTOPICS">{{ mainTitle }}</h1>
+            <span class="mainDescription">Browse through the help topics to find out the answer you require</span>
+        </div>
+        <div ncy-breadcrumb></div>
+    </div>
+</section>
+<!-- end: PAGE TITLE -->
+<!-- start: CONTENT -->
+<div ng-controller="HelpTopicsCtrl">
+    <div class="container-fluid container-fullw bg-white">
+        <div class="row">
+            <div class="col-lg-12 margin-bottom-15" ng-repeat="(key, value) in panes | groupBy: 'category'">
+                <h5 class="over-title margin-bottom-15"><span class="text-bold">{{key}}</span></h5>
+                <accordion close-others="oneAtATime" class="accordion">
+                    <accordion-group heading="{{pane.header}}" ng-repeat="pane in value">
+                        {{pane.content}}
+                    </accordion-group>
+                </accordion>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: CONTENT -->

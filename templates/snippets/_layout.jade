@@ -21,57 +21,19 @@ html(class="no-js", lang="en")
                 include standardhead
             title=title
 
-            link(rel='stylesheet', href='/css/site.css')
-            link(rel='stylesheet', href='/css/style.default.css')
-            //link(rel='stylesheet', href='/css/font-awesome.min.css')
-            //- link(rel='stylesheet', href='/css/style.inverse.css')
+            // Bootstrap
+            link(rel='stylesheet', href='../js/libs/bootstrap/dist/css/bootstrap.min.css')
+            // Font Awesome
+            link(rel='stylesheet', href='../js/libs/font-awesome/css/font-awesome.min.css')
+            // Clip-Two CSS
+            link(rel='stylesheet', href='admin/assets/css/styles.css')
+            link(rel='stylesheet', href='admin/assets/css/plugins.css')
+            // Clip-Two Theme
+            link(rel='stylesheet', data-ng-href='admin/assets/css/themes/theme-6.css')
+            link(rel='stylesheet', href='css/styles.min.css')
+
     body
+        block content
 
-        if showPreloader
-            #preloader
-                #status
-                    img(src='/assets/icons/loader.gif')
-
-        #wrap
-
-            #container-alert.hidden
-
-            .container
-
-                if errorMsg
-                    #error-msg.alert.alert-danger
-                        button.close(type="button" aria-hidden="true") &times;
-                        span.message #{errorMsg}
-                else
-                    #error-msg.alert.alert-danger.hidden
-                        button.close(type="button" aria-hidden="true") &times;
-                        span.message #{errorMsg}
-
-                if infoMsg
-                    #info-msg.alert.alert-info
-                        button.close(type="button" aria-hidden="true") &times;
-                        span.message #{infoMsg}
-                else
-                    #info-msg.alert.alert-info.hidden
-                        button.close(type="button" aria-hidden="true") &times;
-                        span.message #{infoMsg}
-
-                #main-viewport
-                    block content
-                        //- Anything here gets overwritten by sub views that extend "block content"
-
-                //- some common modals
-                #common-modal.modal.fade.hide
-                //- common progress modal
-                #common-progress.modal.fade.hide
-                    #common-progress-title.modal-header Progress...
-                    .modal-body
-                        .progress.progress-striped.active
-                            .bar(style="width:100%") Processing...
-                    #common-progress-label.modal-footer
-
-            //required for sticky footer
-            #push
-
-            include _serverprops
+    include _serverprops
 
