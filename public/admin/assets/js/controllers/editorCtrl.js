@@ -2478,13 +2478,16 @@
          * -
          */
 
-        $scope.showToaster = function(value, toast, msg, redirect) {
+        $scope.showToaster = function(value, toast, msg, post, redirect) {
             $scope.saveLoading = value;
             if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
+                    $scope.post_data = $scope.childScope.getPostData();
                     if (redirect)
                         $location.path("/website/posts");
+                    else
+                       $scope.post_data = post;
                 })
         };
 
