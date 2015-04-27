@@ -246,7 +246,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true">
+                        <li ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true" ng-show="type.type == 'fb' || type.type == 'tw'">
                             <div class="feedTypeDetail">
                                 <div class="filter-avatar pull-left padding-right-5">
                                     <span class="fa fa-{{type.type}}"></span>
@@ -298,6 +298,20 @@
                     <li ng-repeat="account in trackedAccounts | filter: {'type': 'fb'}">
                         <div class="parentaccount">
                             <img ng-src="{{account.profile.picture.data.url}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{account.profile.name}}
+                            <span ng-show="account.toggle" class="fa fa-minus-square pull-right text-danger" ng-click="removePageFeed(account)"></span>
+                            <span ng-hide="account.toggle" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(account)"></span>
+                        </div>
+                    </li>
+                </ul>
+            </tab>
+            <tab>
+                <tab-heading>
+                    Twitter
+                </tab-heading>
+                <ul class="fb-admin-pages">
+                    <li ng-repeat="account in trackedAccounts | filter: {'type': 'tw'}">
+                        <div class="parentaccount">
+                            <img ng-src="{{account.image}}" class="thumbnail pull-left clearfix margin-bottom-10" width="50"> {{account.username}}
                             <span ng-show="account.toggle" class="fa fa-minus-square pull-right text-danger" ng-click="removePageFeed(account)"></span>
                             <span ng-hide="account.toggle" class="fa fa-plus-square pull-right text-success" ng-click="addPageFeed(account)"></span>
                         </div>
