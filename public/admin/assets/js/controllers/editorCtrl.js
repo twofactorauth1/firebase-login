@@ -1198,7 +1198,14 @@
                         {
                             window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
                         }
-
+                        //Update linked list                        
+                        $scope.website.linkLists.forEach(function(value, index) {
+                          if(value.handle === "head-menu") {
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                console.log('Updated linked list');    
+                            });
+                          }
+                        }); 
                     });
                     var data = {
                         _id: $scope.website._id,
@@ -1251,7 +1258,7 @@
 
             that.originalCurrentPageComponents = $scope.currentPage.components;
             $scope.originalCurrentPage = angular.copy($scope.currentPage);
-
+            
             WebsiteService.getPages(function(pages) {
                 var currentPage = $scope.pageSelected;
                 var parsed = angular.fromJson(pages);
@@ -1559,6 +1566,24 @@
                 }
             }
             $scope.currentPage.components = $scope.components;
+            if($scope.componentEditing.type === 'navigation')
+            {
+            $scope.website.linkLists = $scope.backup["website"].linkLists;
+            if ($scope.componentEditing.customnav) {
+                $scope.website.linkLists.forEach(function(value, index) {
+                if (value.handle === "head-menu") {
+                    $scope.saveCustomComponent();
+                }
+                });
+            } else {
+                $scope.website.linkLists.forEach(function(value, index) {
+                if (value.handle === "head-menu") {
+                    $scope.childScope.updateWebsite($scope.website);
+                }
+                });
+            }
+            }
+            
             $scope.updateIframeComponents();
             $scope.activateCKEditor();
             $scope.closeModal();
@@ -2072,10 +2097,7 @@
                             };
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
-                                WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                    $scope.childScope.updateWebsite($scope.website);
-                                    //toaster.pop('success', "Navigation updated successfully.");
-                                });
+                                $scope.childScope.updateWebsite($scope.website);
                             }
 
                         }
@@ -2095,10 +2117,7 @@
                     $scope.website.linkLists.forEach(function(value, index) {
                         if (value.handle === "head-menu") {
                             $scope.website.linkLists[index].links = [];
-                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                $scope.childScope.updateWebsite($scope.website);
-                                //toaster.pop('success', "Navigation updated successfully.");
-                            });
+                            $scope.childScope.updateWebsite($scope.website);
                         }
                     });
                 }
