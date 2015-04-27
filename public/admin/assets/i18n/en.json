@@ -60,7 +60,8 @@
                 "MAIN": "Website",
                 "ANALYTICS": "Site Analytics",
                 "PAGES": "Pages",
-                "POSTS": "Posts"
+                "POSTS": "Posts",
+                "TEMPLATES": "Templates"
             },
             "customers": {
                 "MAIN": "Customers"

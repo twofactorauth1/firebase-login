@@ -200,7 +200,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 contactId = parseInt(contactId);
                 contactDao.removeById(contactId, function (err, value) {
                     if (!err && value != null) {
-                        self.sendResult(resp, value);
+                        self.sendResult(resp, {deleted:true});
                         self.createUserActivity(req, 'DELETE_CONTACT', null, {id: contactId}, function(){});
                     } else {
                         self.wrapError(resp, 401, null, err, value);
@@ -523,9 +523,12 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     } else {
                                                         var contactEmail = savedContact.getEmails()[0];
                                                         var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                        var fromEmail = fromContactEmail || notificationConfig.WELCOME_FROM_EMAIL;
                                                         self.log.debug('sending email to: ', contactEmail);
+                                                        self.log.debug('sending email from: ', fromContactEmail);
+
                                                         var vars = [];
-                                                        mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                                                        mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                             notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                                             '<h1>hey</h1>', value.id(), savedContact.id(), vars, function(err, result){});
                                                     }

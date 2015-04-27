@@ -270,6 +270,7 @@ app.constant('JS_REQUIRES', {
         'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
         'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
         'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
+        'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
 
         'cropCtrl': 'assets/js/controllers/cropCtrl.js',
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',
@@ -321,7 +322,7 @@ app.constant('JS_REQUIRES', {
         'mediaModal': 'assets/js/directives/mediadirective.js',
 
         //*** Utils
-        'namespaces': '../js/utils/namespaces.js',
+        'namespaces': '../js/utils/namespaces.js'
     },
     //*** angularJS Modules
     modules: [{
@@ -429,5 +430,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'blueimp',
         files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
+    }, {
+        name: 'ngJoyRide',
+        files: ['../js/libs/ng-joyride/ng-joyride.js']
     }]
 });
