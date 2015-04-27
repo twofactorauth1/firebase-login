@@ -620,7 +620,7 @@
                     CustomerService.deleteCustomer(customer._id, function() {
                       console.log('Customer Deleted >>>');
                       toaster.pop('warning', 'Customer Deleted.');
-                      $state.go('customer');
+                      $state.go('app.customers');
                     });
                   };
               });
