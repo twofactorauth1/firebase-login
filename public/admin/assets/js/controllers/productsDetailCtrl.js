@@ -85,6 +85,24 @@
         };
 
         /*
+         * @addAttribute
+         * - add an attribute
+         */
+
+        $scope.addAttribute = function() {
+            console.log('addAttribute');
+        };
+
+         /*
+         * @removeAttribute
+         * - remove an attribute
+         */
+
+        $scope.removeAttribute = function() {
+            console.log('removeAttribute');
+        };
+
+        /*
          * @saveProductFn
          * - save product function
          */
