@@ -149,7 +149,13 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
      */
 
     $scope.lastOrderDate = function() {
-        return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
+        var createdDate;
+        if ($scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date) {
+            createdDate = $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
+        } else {
+            createdDate = '';
+        }
+        return createdDate;
     };
 
     /*
