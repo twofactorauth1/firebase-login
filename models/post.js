@@ -192,7 +192,12 @@ var post = $$.m.ModelBase.extend({
 
         if (tweet.created_at) {
             obj.date = new Date(tweet.created_at).getTime();
-        };
+        }
+
+        //if (tweet.link) {
+        //    obj.link = tweet.link;
+        //}
+        obj.link = 'TODO_FIX_LINK';
 
         obj.message = tweet.text;
         if (tweet.hashtags && tweet.hashtags.length > 0) {
@@ -215,6 +220,7 @@ var post = $$.m.ModelBase.extend({
             type: $$.constants.social.types.TWITTER,
             sourceId: follower.id_str,
             postType: "follower",
+            link: 'TODO_FIX_LINK',
             from: {
                 name: follower.screen_name,
                 description: follower.description,
@@ -224,7 +230,7 @@ var post = $$.m.ModelBase.extend({
 
         if (follower.created_at) {
             obj.date = new Date(follower.created_at).getTime();
-        };
+        }
 
         this.set(obj);
         return this;

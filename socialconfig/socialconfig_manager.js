@@ -295,7 +295,7 @@ module.exports = {
                                     var obj = {
                                         socialId: trackedAccountPage.id,
                                         type: type
-                                    }
+                                    };
                                     trackedObjects.push(obj);
                                 });
                             });
@@ -310,7 +310,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         } else if(creds.type === $$.constants.social.types.TWITTER) {
@@ -318,7 +318,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         }
@@ -348,7 +348,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         } else if(creds.type === $$.constants.social.types.TWITTER) {
@@ -356,7 +356,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         }
@@ -553,7 +553,7 @@ module.exports = {
                     var obj = {
                         socialId: trackedAccount.id,
                         type: type
-                    }
+                    };
                     trackedObjects.push(obj);
                 });
             } else if(trackedAccount.type === $$.constants.social.types.TWITTER || trackedAccount.type === 'twitter') {
@@ -561,7 +561,7 @@ module.exports = {
                     var obj = {
                         socialId: trackedAccount.id,
                         type: type
-                    }
+                    };
                     trackedObjects.push(obj);
                 });
             }

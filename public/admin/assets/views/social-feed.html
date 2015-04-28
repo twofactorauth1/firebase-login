@@ -147,6 +147,7 @@
                                         <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click="" class="padding-5 text-muted"><i class="fa fa-reply"></i></a>
                                         <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click="" class="padding-5 text-muted"><i class="fa fa-retweet"></i></a>
                                         <a tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank" data-toggle="modal" data-target="#marketing-comments-tw" ng-click="updateComments(post)" class="padding-5 text-muted"><i class="fa fa-envelope"></i></a>
+                                        <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank" class="padding-5 text-muted"><i class="fa fa-link"></i></a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -189,6 +190,7 @@
                                         <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click="" class="padding-5 text-muted"><i class="fa fa-reply"></i></a>
                                         <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click="" class="padding-5 text-muted"><i class="fa fa-retweet"></i></a>
                                         <a tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank" data-toggle="modal" data-target="#marketing-comments-tw" ng-click="updateComments(post)" class="padding-5 text-muted"><i class="fa fa-envelope"></i></a>
+                                        <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank" class="padding-5 text-muted"><i class="fa fa-link"></i></a>
                                     <!--</div>-->
                                     <div class="clearfix"></div>
                                 </div>
