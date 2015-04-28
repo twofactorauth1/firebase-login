@@ -174,8 +174,9 @@ var post = $$.m.ModelBase.extend({
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
             postType: "tweet",
-            pagingId: tweet.id_str
-        };
+            pagingId: tweet.id_str,
+            link: ['http://twitter.com', tweet.user.id_str, 'status', tweet.id_str].join('/')
+    };
 
         if(tweet.user) {
             obj.from = {
@@ -193,11 +194,6 @@ var post = $$.m.ModelBase.extend({
         if (tweet.created_at) {
             obj.date = new Date(tweet.created_at).getTime();
         }
-
-        //if (tweet.link) {
-        //    obj.link = tweet.link;
-        //}
-        obj.link = 'TODO_FIX_LINK';
 
         obj.message = tweet.text;
         if (tweet.hashtags && tweet.hashtags.length > 0) {
