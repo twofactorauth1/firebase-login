@@ -12120,6 +12120,9 @@ td.small-width {
 .customer-detail .no-location {
   line-height: 155px;
 }
+.side-margin {
+  margin: 5px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Order Detail
 /* ---------------------------------------------------------------------- */
@@ -12539,9 +12542,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .social-feed .masonry-brick .facebook .panel-heading {
   background: #3b5998;
-}
-.social-feed .masonry-brick .twitter .panel-heading {
-  background: #00aced;
 }
 .social-feed .feeds {
   list-style-type: none;
