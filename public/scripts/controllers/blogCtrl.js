@@ -456,6 +456,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         };
 
+
+        window.calculateWindowHeight = function() {
+           return $scope.parentScope.calculateWindowHeight();
+        };
+
         /*
          * @checkOrSetPageDirty
          * -

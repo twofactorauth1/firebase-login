@@ -980,6 +980,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.parentScope.resizeIframe();
         };
 
+        
         window.calculateWindowHeight = function() {
            return $scope.parentScope.calculateWindowHeight();
         };
