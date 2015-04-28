@@ -975,12 +975,22 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }).get());
                     angular.element(".meet-team-height").css("min-height", maxTeamHeight);
                 }
+                for (var i = 1; i <= 3; i++) { 
+                    if($("div.feature-height-"+i).length)
+                    {
+                      var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                      {
+                          return $(this).height();
+                      }).get());
+                      $("div.feature-single").css("min-height", maxFeatureHeight - 10);
+                    }
+                }
 
             }, 500)
             $scope.parentScope.resizeIframe();
         };
 
-        
+
         window.calculateWindowHeight = function() {
            return $scope.parentScope.calculateWindowHeight();
         };
@@ -1872,19 +1882,27 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         $scope.feature_inserted = false;
         $scope.team_inserted = false;
-        angular.element('body').on("DOMNodeInserted", ".feature-height", function(e) {
-            setTimeout(function() {
-                if (!$scope.feature_inserted) {
-                    $scope.feature_inserted = true;
-                    if (angular.element("div.feature-height").length) {
-                        var maxFeatureHeight = Math.max.apply(null, angular.element("div.feature-height").map(function() {
-                            return angular.element(this).height();
-                        }).get());
-                        angular.element(".feature-height").css("min-height", maxFeatureHeight + 10);
+        angular.element('body').on("DOMNodeInserted", ".feature", function (e)
+            {
+                setTimeout(function() {
+                  if(!$scope.feature_inserted)
+                  {
+                   $scope.feature_inserted = true; 
+                   for (var i = 0; i <= 3; i++) { 
+                      if($("div.feature-height-"+i).length)
+                      {
+                        var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                        {
+                            return $(this).height();
+                         }).get());
+
+                        $("div.feature-single").css("min-height", maxFeatureHeight - 20);
+                      }
                     }
-                }
-            }, 1000)
-        });
+                    $scope.feature_inserted = true;
+                  }  
+                }, 1000)
+            })
 
         angular.element('body').on("DOMNodeInserted", ".meet-team-height", function(e) {
             setTimeout(function() {
