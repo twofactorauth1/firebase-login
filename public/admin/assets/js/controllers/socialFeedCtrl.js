@@ -74,6 +74,31 @@
 
                 //get feed items
                 if (trackedAccount.toggle) {
+                    if (trackedAccount.type == 'tw') {
+
+                        // get feed
+                        SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
+                            $scope.feedLengths[trackedAccount.id] = posts.length;
+                            //$log.debug('number of twitter posts: ' + posts.length);
+                            _.each(posts, function(post) {
+                                post.trackedId = trackedAccount.id;
+                                $scope.feed.push(post);
+                                //$log.debug(post);
+                            });
+                        });
+
+                        // get followers
+                        SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
+                            // TODO: what does feedLengths need to be?
+                            $scope.feedLengths[trackedAccount.id] = posts.length;
+                            //$log.debug('number of twitter follower posts: ' + posts.length);
+                            _.each(posts, function(post) {
+                                post.trackedId = trackedAccount.id;
+                                $scope.feed.push(post);
+                                //$log.debug(post);
+                            });
+                        });
+                    }
                     if (trackedAccount.type == 'fb') {
                         SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
                             $scope.feedLengths[trackedAccount.id] = posts.length;
@@ -301,10 +326,10 @@
             if ($scope.commentType == 'fb') {
                 SocialConfigService.addFacebookPostComment($scope.selectedSocial.parentSocialAccount, $scope.addCommentPage.sourceId, $scope.addCommentinModal, function(comment) {
                     var tempDate = new Date();
-                    tempDate.setHours ( tempDate.getHours() + 7 );
+                    tempDate.setHours(tempDate.getHours() + 7);
                     $scope.visibleComments.unshift({
                         picture: $scope.selectedSocial.profile.picture.data.url,
-                        created: $filter('date')(tempDate , 'yyyy-MM-ddTHH:mm:ss')+'+0000',
+                        created: $filter('date')(tempDate, 'yyyy-MM-ddTHH:mm:ss') + '+0000',
                         name: $scope.selectedSocial.profile.name,
                         comment: $scope.addCommentinModal
                     });
@@ -327,7 +352,7 @@
             }
         };
 
-         /*
+        /*
          * @updateComments
          * update the visible comments to display in the comment modal
          */
