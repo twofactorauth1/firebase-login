@@ -980,7 +980,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.parentScope.resizeIframe();
         };
 
-
+        window.calculateWindowHeight = function() {
+           return $scope.parentScope.calculateWindowHeight();
+        };
 
         $scope.deactivateCKEditor = function() {
             for (name in CKEDITOR.instances) {

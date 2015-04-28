@@ -147,6 +147,17 @@
         };
 
         /*
+         * @window height
+        */
+
+        $scope.calculateWindowHeight = function()
+        { 
+           var scrollTop = $(document).scrollTop();
+           var winHeight = $(document).height();
+           return scrollTop//winHeight - scrollTop;
+        }
+
+        /*
          * @window:scroll
          * - when the window is scrolled in the admin, ud
          */
