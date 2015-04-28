@@ -90,7 +90,7 @@
                         // get followers
                         SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
                             // TODO: what does feedLengths need to be?
-                            //$scope.feedLengths[trackedAccount.id] = posts.length;
+                            $scope.feedLengths[trackedAccount.id] = posts.length;
                             //$log.debug('number of twitter follower posts: ' + posts.length);
                             _.each(posts, function(post) {
                                 post.trackedId = trackedAccount.id;

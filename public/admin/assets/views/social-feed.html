@@ -245,7 +245,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true" ng-show="type.type == 'fb' || type.type == 'tw'">
+                        <li ng-repeat="type in trackedAccounts | filter: { toggle: true }" is-disabled="true" ng-show="type.type == 'fb' || type.type == 'tw'" class="margin-bottom-5 padding-bottom-5">
                             <div class="feedTypeDetail">
                                 <div class="filter-avatar pull-left padding-right-5">
                                     <span class="fa fa-{{type.type}}"></span>
