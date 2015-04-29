@@ -1674,6 +1674,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.checkCardCvv();
                 return;
             }
+
+            if(!$scope.couponIsValid) {
+                return;
+            }
             //end validate
             $scope.isFormValid = true;
             $scope.showFooter(false);
@@ -1873,17 +1877,20 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         angular.element("#coupon-name .error").html("");
                         angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
                         angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        $scope.couponIsValid = true;
                     } else {
                         console.log('invalid');
                         angular.element("#coupon-name .error").html("Invalid Coupon");
                         angular.element("#coupon-name").addClass('has-error');
                         angular.element("#coupon-name .glyphicon").addClass('glyphicon-remove');
+                        $scope.couponIsValid = false;
                     }
                 });
             } else {
                 angular.element("#coupon-name .error").html("");
                 angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
                 angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                $scope.couponIsValid = true;
             }
         };
 
