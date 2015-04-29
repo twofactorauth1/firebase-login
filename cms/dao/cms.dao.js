@@ -1324,7 +1324,255 @@ var dao = {
                 "by" : null
             },
             "mainmenu" : null,
-            "page_type" : "email"
+            "page_type" : "email",
+            'type': 'email',
+            'email_type': 'welcome'
+        });
+
+        var newOrderEmailPage = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "new-order-email",
+            "title" : "New Order",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
+                    "title" : "<h2 class='center'>New Order</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "New Order",
+                    "from_email" : "info@indigenous.io",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "mainmenu" : null,
+            'type': 'email',
+            'email_type': 'new_order'
+        });
+        var orderProcessingEmailPage = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "order-processing-email",
+            "title" : "Order Processing",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
+                    "title" : "<h2 class='center'>Order Processing</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "Order Processing",
+                    "from_email" : "info@indigenous.io",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "mainmenu" : null,
+            'type': 'email',
+            'email_type': 'order_processing'
+        });
+        var orderCompletedEmailPage = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "order-completed-email",
+            "title" : "Order Completed",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
+                    "title" : "<h2 class='center'>Order Completed</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "Order Completed",
+                    "from_email" : "info@indigenous.io",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "mainmenu" : null,
+            'type': 'email',
+            'email_type': 'order_completed'
+        });
+        var orderCancelledEmailPage = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "order-cancelled-email",
+            "title" : "Order Cancelled",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
+                    "title" : "<h2 class='center'>Order Cancelled</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "Order Cancelled",
+                    "from_email" : "info@indigenous.io",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "mainmenu" : null,
+            'type': 'email',
+            'email_type': 'order_cancelled'
+        });
+        var customerInvoiceEmailPage = new $$.m.cms.Page({
+
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "customer-invoice-email",
+            "title" : "Customer Invoice",
+            "seo" : null,
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
+                    "title" : "<h2 class='center'>Customer Invoice</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "Customer Invoice",
+                    "from_email" : "info@indigenous.io",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "mainmenu" : null,
+            'type': 'email',
+            'email_type': 'customerInvoice'
         });
 
         var customerAccountPage = new $$.m.cms.Page({
@@ -1348,6 +1596,8 @@ var dao = {
                 "by" : null
             }
         });
+
+
 
         self.saveOrUpdate(page, function(err, value){
             if(err) {
