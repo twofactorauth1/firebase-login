@@ -1861,6 +1861,32 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         };
 
+        $scope.checkCoupon = function() {
+            console.log('>> checkCoupon');
+            var coupon = $scope.newAccount.coupon
+            //console.dir(coupon);
+            //console.log($scope.newAccount.coupon);
+            if(coupon) {
+                PaymentService.validateCoupon(coupon, function(data){
+                    if(data.id && data.id === coupon) {
+                        console.log('valid');
+                        angular.element("#coupon-name .error").html("");
+                        angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+                        angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    } else {
+                        console.log('invalid');
+                        angular.element("#coupon-name .error").html("Invalid Coupon");
+                        angular.element("#coupon-name").addClass('has-error');
+                        angular.element("#coupon-name .glyphicon").addClass('glyphicon-remove');
+                    }
+                });
+            } else {
+                angular.element("#coupon-name .error").html("");
+                angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+                angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
+        };
+
         /********** END SIGNUP SECTION **********/
 
         $scope.addImage = function(component) {

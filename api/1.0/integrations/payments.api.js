@@ -308,7 +308,12 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
             self.log.debug('<< validateCoupon');
-            self.sendResultOrError(resp, err, coupon, "Error getting Stripe Coupon");
+            if(err) {
+                self.sendResult(resp, {valid:false});
+            } else {
+                self.sendResult(resp, coupon);
+            }
+
         });
 
     },
