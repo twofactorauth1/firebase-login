@@ -82,6 +82,35 @@ app.constant('contactConstant', {
 });
 
 app.constant('userConstant', {
+
+    social_types: {
+        LOCAL: "lo",
+        FACEBOOK: "fb",
+        TWITTER: "tw",
+        LINKEDIN: "li",
+        GOOGLE: "go",
+        FULL_CONTACT: "fc",
+
+        dp: [{
+                label: "Local",
+                data: "lo"
+            }, {
+                label: "Facebook",
+                data: "fb"
+            }, {
+                label: "Twitter",
+                data: "tw"
+            }, {
+                label: "LinkedIn",
+                data: "li"
+            }, {
+                label: "Google+",
+                data: "go"
+            }
+            //{label:"Full Contacnt", data:"fc"}
+        ]
+    },
+
     credential_types: {
         LOCAL: "lo",
         FACEBOOK: "fb",
@@ -215,7 +244,9 @@ app.constant('JS_REQUIRES', {
         'ckeditor-plugin': '../js/libs/ckeditor/ckeditor.js',
         'jquery-nestable-plugin': ['../js/libs/jquery-nestable/jquery.nestable.js'],
         'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
-        'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js'],
+        //'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
+        'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'],
+        "bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
         'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
         'uuid': '../js/libs_misc/uuid.js',
         'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
@@ -238,6 +269,9 @@ app.constant('JS_REQUIRES', {
         'vAccordionCtrl': 'assets/js/controllers/vAccordionCtrl.js',
         'ckeditorCtrl': 'assets/js/controllers/ckeditorCtrl.js',
         'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
+        'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
+        'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
+        'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
 
         'cropCtrl': 'assets/js/controllers/cropCtrl.js',
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',
@@ -269,20 +303,27 @@ app.constant('JS_REQUIRES', {
         'customerService': 'assets/js/services/customer.js',
         'ImportContactService': 'assets/js/services/import_contacts.js',
         'chartAnalyticsService': 'assets/js/services/chart_analytics.js',
+        'chartCommerceService': 'assets/js/services/chart_commerce.js',
         'keenService': 'assets/js/services/keen.js',
         'commonService': 'assets/js/services/common.js',
         'socialConfigService': 'assets/js/services/socialconfig.js',
         'orderService': 'assets/js/services/order.js',
-
+        'assetsService': 'assets/js/services/assets.js',
+        'geocodeService' : 'assets/js/services/geocode.js',
         //*** Filters
         'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
         'secTotime': 'assets/js/filters/secTotime.js',
         'formatText': 'assets/js/filters/formatText.js',
         'offset': 'assets/js/filters/offset.js',
         'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
+        'titleCase': 'assets/js/filters/titleCase.js',
+        'orderByArrayLength': 'assets/js/filters/orderByArrayLength.js',
+
+        //*** Directives
+        'mediaModal': 'assets/js/directives/mediadirective.js',
 
         //*** Utils
-        'namespaces': '../js/utils/namespaces.js',
+        'namespaces': '../js/utils/namespaces.js'
     },
     //*** angularJS Modules
     modules: [{
@@ -295,6 +336,9 @@ app.constant('JS_REQUIRES', {
         name: 'toaster',
         files: ['../js/libs/AngularJS-Toaster/toaster.js', '../js/libs/AngularJS-Toaster/toaster.css']
     }, {
+        name: 'skeuocard',
+        files: ['../js/libs/skeuocard/lib/js/jquery.card.js']
+    }, {
         name: 'angularBootstrapNavTree',
         files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
     }, {
@@ -305,7 +349,7 @@ app.constant('JS_REQUIRES', {
         files: ['../js/libs/angular-smart-table/dist/smart-table.min.js']
     }, {
         name: 'ui.select',
-        files: ['../js/libs/angular-ui-select/dist/select.min.js', '../js/libs/angular-ui-select/dist/select.min.css', '../js/libs/select2/dist/css/select2.min.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
+        files: ['../js/libs/angular-ui-select/dist/select.min.js', '../js/libs/angular-ui-select/dist/select.min.css', '../js/libs/select2/select2.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
     }, {
         name: 'ui.mask',
         files: ['../js/libs/angular-ui-utils/mask.min.js']
@@ -315,6 +359,9 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'angularFileUpload',
         files: ['../js/libs/angular-file-upload/angular-file-upload.min.js']
+    }, {
+        name: 'infinite-scroll',
+        files: ['../js/libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js']
     }, {
         name: 'ngAside',
         files: ['../js/libs/angular-aside/dist/js/angular-aside.min.js', '../js/libs/angular-aside/dist/css/angular-aside.min.css']
@@ -372,5 +419,20 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'ui.sortable',
         files: ['../js/libs/ng-sortable/dist/ng-sortable.min.js']
+    }, {
+        name: 'wu.masonry',
+        files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
+    }, {
+        name: 'ngTextTruncate',
+        files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
+    }, {
+        name: 'ngTagsInput',
+        files: ['../js/libs/ng-tags-input/ng-tags-input.min.js']
+    }, {
+        name: 'blueimp',
+        files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
+    }, {
+        name: 'ngJoyRide',
+        files: ['../js/libs/ng-joyride/ng-joyride.js']
     }]
 });

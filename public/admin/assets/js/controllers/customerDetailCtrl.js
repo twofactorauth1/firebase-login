@@ -3,7 +3,29 @@
  * controller for customer details
  */
 (function(angular) {
-    app.controller('CustomerDetailCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", function($scope, $modal, $timeout, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService) {
+    app.controller('CustomerDetailCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService",'SweetAlert', '$state', function($scope, $modal, $timeout, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state) {
+
+
+        /*
+         * @openModal
+         * -
+         */
+
+        $scope.openModal = function(modal) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: modal,
+                scope: $scope
+            });
+        };
+
+        /*
+         * @closeModal
+         * -
+         */
+
+        $scope.closeModal = function() {
+            $scope.modalInstance.close();
+        };
 
         $scope.ip_geo_address = '';
         $scope.location = {};
@@ -12,6 +34,8 @@
 
         CustomerService.getCustomer($stateParams.contactId, function(customer) {
             $scope.customer = customer;
+            $scope.setTags();
+            $scope.setDefaults();
             if (customer.fingerprint !== undefined) {
                 var keenParams = {
                     event_collection: 'session_data',
@@ -88,6 +112,26 @@
                 return str !== "";
             }).join(",")
         };
+
+        $scope.refreshMap = function() {
+            if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
+                $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
+                $scope.city = $scope.customer.details[0].addresses[0].city;
+                $scope.loadingMap = false;
+            }
+            if ($scope.ip_geo_address && !$scope.location.lng && !$scope.location.lng) {
+                    CustomerService.getGeoSearchAddress($scope.ip_geo_address, function(data) {
+                        if (data.error === undefined) {
+                            $scope.location.lat = parseFloat(data.lat);
+                            $scope.location.lng = parseFloat(data.lon);
+                            $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                            $scope.markers.mainMarker.lng = parseFloat(data.lon);
+                            $scope.loadingMap = false;
+                        } else
+                            $scope.loadingMap = false;
+                });
+            }
+        }
 
         //header map
         var marker, map;
@@ -174,18 +218,27 @@
         $scope.customerSaveFn = function() {
 
             $scope.saveLoading = true;
-            if ($scope.customer.details[0].phones) {
-                $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
-                    return num.number !== "";
-                });
-            }
+            // if ($scope.customer.details[0].phones) {
+            //     $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
+            //         return num.number !== "";
+            //     });
+            // }
 
             $scope.checkAddressLatLng($scope.customer.details[0].addresses, function(addresses) {
                 $scope.customer.details[0].addresses = addresses;
                 if ($scope.checkContactValidity()) {
-                    CustomerService.saveCustomer($scope.customer, function(customer) {
+                    var tempTags = [];
+                    $scope.customer_data = angular.copy($scope.customer);
+                    _.each($scope.customer_data.tags, function(tag) {
+                        tempTags.push(tag.data);
+                    });
+                    $scope.customer_data.tags = tempTags;
+                    CustomerService.saveCustomer($scope.customer_data, function(customer) {
                         $scope.customer = customer;
+                        $scope.setDefaults();
+                        $scope.setTags();
                         $scope.saveLoading = false;
+                        $scope.refreshMap();
                         if ($scope.currentState == 'customerAdd') {
                             toaster.pop('success', 'Contact Created.');
                         } else {
@@ -233,65 +286,29 @@
             $scope.customer.details[0].phones[index].type = type;
         };
 
-        $scope.addCustomerContactFn = function() {
-            $scope.customer.details[0].phones.push({
-                _id: CommonService.generateUniqueAlphaNumericShort(),
-                number: '',
-                default: false,
-                type: 'm'
-            });
-        };
-
-        $scope.customerAddressWatchFn = function(index) {
-            $scope.$watch('customer.details[0].addresses[' + index + '].displayName', function(newValue, oldValue) {
-                if (newValue && (newValue.length % displayAddressCharLimit === 0)) {
-                    CustomerService.getGeoSearchAddress(newValue, function(data) {
-                        if (data.error === undefined) {
-                            $scope.customer.details[0].addresses[index].address = data.address;
-                            $scope.customer.details[0].addresses[index].address2 = data.address2;
-                            $scope.customer.details[0].addresses[index].state = data.state;
-                            $scope.customer.details[0].addresses[index].country = data.country;
-                            $scope.customer.details[0].addresses[index].countryCode = data.countryCode;
-                            $scope.customer.details[0].addresses[index].lat = data.lat;
-                            $scope.customer.details[0].addresses[index].lon = data.lon;
-                        }
-                    });
-                }
-            });
-        };
-
-        $scope.customerAddAddressFn = function() {
-            $scope.customer.details[0].addresses.push({
-                _id: CommonService.generateUniqueAlphaNumericShort(),
-                address: '',
-                address2: '',
-                state: '',
-                zip: '',
-                country: '',
-                defaultShipping: false,
-                defaultBilling: false,
-                city: '',
-                countryCode: '',
-                displayName: '',
-                lat: '',
-                lon: ''
-            });
-            $scope.customerAddressWatchFn($scope.customer.details[0].addresses.length - 1);
-        };
-
+        // $scope.customerAddressWatchFn = function(index) {
+        //     $scope.$watch('customer.details[0].addresses[' + index + '].displayName', function(newValue, oldValue) {
+        //         if (newValue && (newValue.length % displayAddressCharLimit === 0)) {
+        //             CustomerService.getGeoSearchAddress(newValue, function(data) {
+        //                 if (data.error === undefined) {
+        //                     $scope.customer.details[0].addresses[index].address = data.address;
+        //                     $scope.customer.details[0].addresses[index].address2 = data.address2;
+        //                     $scope.customer.details[0].addresses[index].state = data.state;
+        //                     $scope.customer.details[0].addresses[index].country = data.country;
+        //                     $scope.customer.details[0].addresses[index].countryCode = data.countryCode;
+        //                     $scope.customer.details[0].addresses[index].lat = data.lat;
+        //                     $scope.customer.details[0].addresses[index].lon = data.lon;
+        //                 }
+        //             });
+        //         }
+        //     });
+        // };
         $scope.getModifyAddressFn = function(index) {
             return $scope.modifyAddress[index];
         };
 
         $scope.setModifyAddressFn = function(index, state) {
             $scope.modifyAddress[index] = state;
-        };
-
-        $scope.customerAddEmailFn = function() {
-            $scope.customer.details[0].emails.push({
-                _id: CommonService.generateUniqueAlphaNumericShort(),
-                email: ''
-            });
         };
 
         $scope.customerDeleteFn = function() {
@@ -396,9 +413,9 @@
                         $scope.customer.last = '';
                     }
                 } else {
-                        $scope.customer.first = '';
-                        $scope.customer.middle = '';
-                        $scope.customer.last = '';
+                    $scope.customer.first = '';
+                    $scope.customer.middle = '';
+                    $scope.customer.last = '';
                 }
             }
         }, true);
@@ -407,9 +424,206 @@
             $scope.customer.photo = asset.url;
         };
 
+        $scope.removePhoto = function(asset) {
+            $scope.customer.photo = null;
+        };
+
         $scope.enableSaveBtnFn = function() {
             $scope.saveContactDisabled = false;
         };
 
+        $scope.contactLabel = function(customer) {
+            return CustomerService.contactLabel(customer);
+        };
+
+        $scope.checkBestEmail = function(contact) {
+            var returnVal = CustomerService.checkBestEmail(contact);
+            this.email = contact.email;
+            return returnVal;
+        };
+
+        $scope.checkFacebookId = function(contact) {
+            var returnVal = CustomerService.checkFacebookId(contact);
+            this.facebookId = contact.facebookId;
+            return returnVal;
+        };
+
+        $scope.checkTwitterId = function(contact) {
+            var returnVal = CustomerService.checkTwitterId(contact);
+            this.twitterId = contact.twitterId;
+            return returnVal;
+        };
+
+        $scope.checkLinkedInId = function(contact) {
+            var returnVal = CustomerService.checkLinkedInId(contact);
+            this.linkedInUrl = contact.linkedInUrl;
+            this.linkedInId = contact.linkedInId;
+            return returnVal;
+        };
+
+        $scope.checkAddress = function(contact) {
+            var returnVal = CustomerService.checkAddress(contact);
+            this.address = contact.address;
+            return returnVal;
+        };
+
+        // Add/Remove email adresses
+        $scope.customerAddEmailFn = function() {
+            $scope.customer.details[0].emails.push({
+                _id: CommonService.generateUniqueAlphaNumericShort(),
+                email: ''
+            });
+        };
+        $scope.removeEmail = function(index) {
+            $scope.customer.details[0].emails.splice(index, 1);
+        };
+
+        $scope.showAddEmail = function(email) {
+            return email._id === $scope.customer.details[0].emails[0]._id;
+        };
+
+        // Add/Remove phone numbers
+        $scope.addCustomerContactFn = function() {
+            $scope.customer.details[0].phones.push({
+                _id: CommonService.generateUniqueAlphaNumericShort(),
+                number: ''
+            });
+        };
+        $scope.removePhone = function(index) {
+            $scope.customer.details[0].phones.splice(index, 1);
+        };
+
+        $scope.showAddPhone = function(phone) {
+            return phone._id === $scope.customer.details[0].phones[0]._id;
+        };
+
+        // Add/Remove phone numbers
+        $scope.removeAddress = function(index) {
+            $scope.customer.details[0].addresses.splice(index, 1);
+        };
+
+        $scope.showAddAddress = function(address) {
+            return address._id === $scope.customer.details[0].addresses[0]._id;
+        };
+
+        $scope.customerAddAddressFn = function() {
+            $scope.customer.details[0].addresses.push({
+                _id: CommonService.generateUniqueAlphaNumericShort(),
+                address: '',
+                address2: '',
+                state: '',
+                zip: '',
+                country: '',
+                defaultShipping: false,
+                defaultBilling: false,
+                city: '',
+                countryCode: '',
+                displayName: '',
+                lat: '',
+                lon: ''
+            });
+            //$scope.customerAddressWatchFn($scope.customer.details[0].addresses.length - 1);
+        };
+
+        $scope.setDefaults = function() {
+            // New customer
+            if($scope.customer.details.length == 0)
+            {
+                $scope.customer.details[0] = {};
+            }
+            if(!$scope.customer.details[0].emails)
+                $scope.customer.details[0].emails =[];
+            if(!$scope.customer.details[0].phones)
+                $scope.customer.details[0].phones =[];
+            if(!$scope.customer.details[0].addresses)
+                $scope.customer.details[0].addresses =[];
+
+            if ($scope.customer.details.length) {
+                if (!$scope.customer.details[0].emails.length)
+                    $scope.customerAddEmailFn();
+                if (!$scope.customer.details[0].phones.length)
+                    $scope.addCustomerContactFn();
+                if (!$scope.customer.details[0].addresses.length)
+                    $scope.customerAddAddressFn();
+            }
+        }
+        if (!$scope.customer.tags)
+            $scope.customer.tags = {};
+        $scope.customerTags = [{
+            label: "Customer",
+            data: "cu"
+        }, {
+            label: "Colleague",
+            data: "co"
+        }, {
+            label: "Friend",
+            data: "fr"
+        }, {
+            label: "Member",
+            data: "mb"
+        }, {
+            label: "Family",
+            data: "fa"
+        }, {
+            label: "Admin",
+            data: "ad"
+        }, {
+            label: 'Lead',
+            data: 'ld'
+        }, {
+            label: "Other",
+            data: "ot"
+        }];
+
+        $scope.setTags = function()
+        {
+            var tempTags = [];
+            _.each($scope.customer.tags, function(tag) {
+                var matchingTag = _.findWhere($scope.customerTags, {
+                    data: tag
+                });
+                tempTags.push(matchingTag);
+            });
+            $scope.customer.tags = tempTags;
+        }
+
+        $scope.displayCustomerTags = function() {
+            var tags = "";
+            if ($scope.customer.tags && $scope.customer.tags.length) {
+                $scope.customer.tags.forEach(function(value, index) {
+                    if (index == 0) {
+                        tags = value.label;
+                    } else {
+                        if (tags) {
+                            tags = tags.concat(", ", value.label);
+                        }
+                    }
+                });
+            }
+            return tags;
+        };
+
+        $scope.deleteCustomerFn = function(customer) {
+          SweetAlert.swal({
+                  title: "Are you sure?",
+                  text: "Do you want to delete this customer?",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes, delete it!",
+                  cancelButtonText: "No, do not delete it!",
+                  closeOnConfirm: true,
+                  closeOnCancel: true
+              },
+              function(isConfirm) {
+                  if (isConfirm) {
+                    CustomerService.deleteCustomer(customer._id, function() {
+                      console.log('Customer Deleted >>>');
+                      toaster.pop('warning', 'Customer Deleted.');
+                      $state.go('app.customers');
+                    });
+                  };
+              });
+        };
     }]);
 })(angular);

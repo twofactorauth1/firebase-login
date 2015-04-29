@@ -12,6 +12,7 @@ var logger = $$.g.getLogger("baserouter");
 var urlUtils = require('../utils/urlutils.js');
 var accountDao = require("../dao/account.dao");
 var appConfig = require('../configs/app.config');
+var userActivityManager = require('../useractivities/useractivity_manager');
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -460,6 +461,36 @@ _.extend(baseRouter.prototype, {
         }catch(exception) {
             return null;
         }
+    },
+
+    createUserActivity: function(req, type, note, detail, fn) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+
+        var activity = new $$.m.UserActivity({
+            accountId: accountId,
+            userId: userId,
+            activityType: type,
+            note: note,
+            detail:detail
+        });
+        userActivityManager.createUserActivity(activity, function(err, value){
+            return fn(err, value);
+        });
+    },
+
+    createUserActivityWithParams: function(accountId, userId, type, note, detail, fn) {
+        var activity = new $$.m.UserActivity({
+            accountId: accountId,
+            userId: userId,
+            activityType: type,
+            note: note,
+            detail:detail
+        });
+        userActivityManager.createUserActivity(activity, function(err, value){
+            return fn(err, value);
+        });
     }
 });
 

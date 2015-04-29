@@ -1,267 +1,306 @@
-<!-- start: DASHBOARD TITLE -->
-<section id="page-title" class="padding-top-15 padding-bottom-15">
-	<div class="row">
-		<div class="col-sm-7">
-			<h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">{{ mainTitle }}</h1>
-			<span class="mainDescription">overview &amp; stats </span>
-		</div>
-		<div class="col-sm-5">
-			<!-- start: MINI STATS WITH SPARKLINE -->
-			<!-- /// controller:  'SparklineCtrl' -  localtion: assets/js/controllers/dashboardCtrl.js /// -->
-			<ul class="mini-stats pull-right hidden" ng-controller="SparklineCtrl">
-				<li>
-					<div class="sparkline">
-						<span jq-sparkline ng-model="sales" type="bar" height="20px" bar-color="#D43F3A"></span>
-					</div>
-					<div class="values">
-						<strong class="text-dark">18304</strong>
-						<p class="text-small no-margin">
-							Sales
-						</p>
-					</div>
-				</li>
-				<li>
-					<div class="sparkline">
-						<span jq-sparkline ng-model="earnings" type="bar" height="20px" bar-color="#5CB85C"></span>
-					</div>
-					<div class="values">
-						<strong class="text-dark">&#36;3,833</strong>
-						<p class="text-small no-margin">
-							Earnings
-						</p>
-					</div>
-				</li>
-				<li>
-					<div class="sparkline">
-						<span jq-sparkline ng-model="referrals" type="bar" height="20px" bar-color="#46B8DA"></span>
-					</div>
-					<div class="values">
-						<strong class="text-dark">&#36;848</strong>
-						<p class="text-small no-margin">
-							Referrals
-						</p>
-					</div>
-				</li>
-			</ul>
-			<!-- end: MINI STATS WITH SPARKLINE -->
-		</div>
-	</div>
-</section>
-<!-- end: DASHBOARD TITLE -->
-<!-- start: FEATURED BOX LINKS -->
-<div class="container-fluid container-fullw bg-white">
-	<div class="row">
-		<div class="col-sm-4">
-			<div class="panel panel-white no-radius text-center">
-				<div class="panel-body">
-					<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
-					<h2 class="StepTitle">Manage Customers</h2>
-					<p class="text-small">
-						To add customers, import them or create them manually.
-					</p>
-					<p class="links cl-effect-1">
-						<a ui-sref="app.customers">
-							view
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="panel panel-white no-radius text-center">
-				<div class="panel-body">
-					<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-newspaper-o fa-stack-1x fa-inverse"></i> </span>
-					<h2 class="StepTitle">Manage Social Feed</h2>
-					<p class="text-small">
-						Manage Social Feed from various networks.
-					</p>
-					<p class="cl-effect-1">
-						<a ui-sref="app.marketing.socialfeed">
-							view
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="panel panel-white no-radius text-center">
-				<div class="panel-body">
-					<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-cube fa-stack-1x fa-inverse"></i> </span>
-					<h2 class="StepTitle">Manage Orders</h2>
-					<p class="text-small">
-						Manage your orders for products sold.
-					</p>
-					<p class="links cl-effect-1">
-						<a href>
-							view
-						</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+<div ng-controller="DashboardCtrl">
+    <!-- start: DASHBOARD TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-7">
+                <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">{{ mainTitle }}</h1>
+                <span class="mainDescription">Overview &amp; activity</span>
+            </div>
+            <div class="col-sm-5">
+            </div>
+        </div>
+    </section>
+    <!-- end: DASHBOARD TITLE -->
+    <!-- start: FEATURED BOX LINKS -->
+    <div class="container-fluid container-fullw bg-white">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.customers">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
+                        <h3 class="StepTitle">Customers</h3>
+                        <p class="text-small">
+                            Import or create them manually
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.marketing.socialfeed">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
+                        <h3 class="StepTitle">Social Feed</h3>
+                        <p class="text-small">
+                            View and post to social networks
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.website.pages">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover3}" ng-mouseenter="hover3 = true" ng-mouseleave="hover3 = false">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-laptop fa-stack-1x fa-inverse"></i> </span>
+                        <h3 class="StepTitle">Pages</h3>
+                        <p class="text-small">
+                            Pages for your site
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-white no-radius text-center margin-bottom-0" ui-sref="app.commerce.orders">
+                    <div class="panel-body" ng-class="{'bg-light-grey': hover4}" ng-mouseenter="hover4 = true" ng-mouseleave="hover4 = false">
+                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i> </span>
+                        <h3 class="StepTitle">Orders</h3>
+                        <p class="text-small">
+                            Track products sold
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid container-fullw">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="row">
+                    <div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsCustomers}">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsCustomers">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Customers this Month</h5>
+                                        <h2 class="no-margin">{{customersThisMonth.length}}</h2>
+                                        <span class="badge badge-success margin-top-10" ng-class="{'badge-danger': customersThisMonth.length == 0, 'badge-success': customersThisMonth.length > 0}">{{getCustomerLeads()}} Leads</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="analyticsCustomers" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span><i class="fa fa-clock-o"></i> Last Customer {{lastCustomerDate() | timeAgoFilter}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsOrders}">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsOrders">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Orders this Month</h5>
+                                        <h2 class="no-margin">{{ordersThisMonth.length}}</h2>
+                                        <span class="badge margin-top-10" ng-class="{'badge-danger': ordersThisMonth.length == 0, 'badge-success': ordersThisMonth.length > 0}">{{getCompletedOrders()}} Complete</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="analyticsOrders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span><i class="fa fa-clock-o"></i> Last Order <span ng-if="lastOrderDate()">{{lastOrderDate() | timeAgoFilter}}</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsVisitors}">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsVisitors">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Visitors this Month</h5>
+                                        <h2 class="no-margin">{{visitorsThisMonth}}</h2>
+                                        <span class="badge margin-top-10" ng-class="{'badge-danger': visitorsThisMonth.length == 0, 'badge-success': visitorsThisMonth.length > 0}">{{totalNewVisitors}} New Visitors</span>
+                                    </div>
+                                    <div class="sparkline space10">
+                                        <span jq-sparkline ng-model="analyticsVisitors" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span><i class="fa fa-clock-o"></i> Last Visitor {{lastVisitorDate | timeAgoFilter}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsRevenue}">
+                                <div class="panel-body padding-20 text-center" ng-if="analyticsRevenue">
+                                    <div class="space10">
+                                        <h5 class="text-dark no-margin">Net Revenue this Month</h5>
+                                        <h2 class="no-margin">{{revenueThisMonth | currency}}</h2>
+                                        <span class="badge margin-top-10" ng-class="{'badge-danger': revenueThisMonth.length == 0, 'badge-success': revenueThisMonth.length > 0}">{{charges}} Charges</span>
+                                    </div>
+                                    <div class="sparkline space10" ng-if="analyticsRevenue">
+                                        <span jq-sparkline ng-model="analyticsRevenue" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
+                                    </div>
+                                    <span><i class="fa fa-clock-o"></i> Last Charge <span ng-if="lastChargeDate">{{lastChargeDate | timeAgoFilter}}</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="panel panel-white no-radius">
+                    <div class="panel-heading border-bottom">
+                        <h4 class="panel-title">Activities</h4>
+                        <div class="panel-tools">
+                            <button type="button" class="btn btn-primary btn-o margin-top-neg-5" ng-click="openModal('addActivityModal')">
+                                Add Activity
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body no-padding">
+                        <div ng-if="!activities.length">
+                            <div class="panel panel-transparent">
+                                <div class="panel-body">
+                                    <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-scroll">
+                            <ul class="timeline-xs padding-left-15 padding-right-15" style="height:375px!important" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" infinite-scroll="myPagingFunction()" infinite-scroll-distance="3" infinite-scroll-parent="true">
+                                <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'start':true">
+                                    <div class="margin-left-15">
+                                        <div class="text-muted text-small">
+                                            {{activity.start | timeAgoFilter}} {{activity.activityType}}
+                                        </div>
+                                        <p>
+                                            <div ng-switch on="activity.activityType">
+                                                <div ng-switch-when="EMAIL">
+                                                    {{activity.detail}}
+                                                </div>
+                                                <div ng-switch-when="TWEET">
+                                                    <a href="javascript:void(0);" class="btn btn-xs btn-green">
+                                                        <i class="fa fa-reply"></i> Reply to Tweet</a>
+                                                </div>
+                                                <div ng-switch-when="CONTACT_CREATED">
+                                                    <p class="cl-effect-13">
+                                                        <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a> was added.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="ACCOUNT_CREATED">
+                                                    <p>
+                                                        <span class="label label-info">CONTACT CREATED</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="SUBSCRIBE">
+                                                    <p>
+                                                        <span class="label label-success">SUBSCRIBE</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                                    </p>
+                                                </div>
+                                                <div ng-switch-when="SUBSCRIBE_CANCEL">
+                                                    <p>
+                                                        <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                </div>
+                                                <div ng-switch-when="PAGE_VIEW">
+                                                    <p>
+                                                        <span class="label label-default">PAGE VIEW {{activity._id}}</span>
+                                                    </p>
+                                                    <p ng-if="activity.customer && activity.customer.first">
+                                                        {{activity.customer.first+' '+activity.customer.last}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                                    <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
+                                                        {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                                    <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                                        Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="CONTACT_FORM">
+                                                    <p>
+                                                        <span class="label label-default">CONTACT FORM</span> was submitted with the data:
+                                                        <ul class="form-values">
+                                                            <li ng-repeat="(k,v) in activity.extraFields">
+                                                                <b>{{k}}</b>: {{v}}
+                                                            </li>
+                                                        </ul>
+                                                    </p>
+                                                </div>
+                                                <div ng-switch-when="FORM_SUBMISSION">
+                                                    <p>
+                                                        <span class="label label-info">FORM SUBMITTED</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="EMAIL_DELIVERED">
+                                                    <p>
+                                                        <span class="label label-info">EMAIL DELIVERED</span> to
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="EMAIL_OPENED">
+                                                    <p>
+                                                        <span class="label label-info">EMAIL OPENED</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="EMAIL_CLICKED">
+                                                    <p>
+                                                        <span class="label label-info">EMAIL CLICKED</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="EMAIL_UNSUB">
+                                                    <p>
+                                                        <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                                <div ng-switch-when="SUBSCRIPTION_PAID">
+                                                    <p>
+                                                        <span class="label label-info">SUBSCRIPTION PAID</span> for
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                    </p>
+                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                                </div>
+                                            </div>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class="container-fluid container-fullw">
-	<div class="row">
-		<div class="col-xs-12 col-sm-6">
-			<div class="row">
-				<!-- /// controller:  'SparklineCtrl' -  localtion: assets/js/controllers/dashboardCtrl.js /// -->
-				<div ng-controller="SparklineCtrl">
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-success margin-top-10">253 Products</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="sales" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-danger margin-top-10">253 Orders</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="referrals" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-success margin-top-10">253 Pages</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="sales" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-12 col-sm-6">
-						<div class="panel panel-white no-radius">
-							<div class="panel-body padding-20 text-center">
-								<div class="space10">
-									<h5 class="text-dark no-margin">Today</h5>
-									<h2 class="no-margin"><small>$</small>1,450</h2>
-									<span class="badge badge-danger margin-top-10">253 Posts</span>
-								</div>
-								<div class="sparkline space10">
-									<span jq-sparkline ng-model="referrals" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
-								</div>
-								<span class="text-white-transparent"><i class="fa fa-clock-o"></i> 1 hour ago</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6">
-			<div class="panel panel-white no-radius">
-				<div class="panel-heading border-bottom">
-					<h4 class="panel-title">Activities</h4>
-				</div>
-				<div class="panel-body">
-					<ul class="timeline-xs margin-top-15 margin-bottom-15">
-						<li class="timeline-item success">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									2 minutes ago
-								</div>
-								<p>
-									<a class="text-info" href>
-										Steven
-									</a>
-									has completed his account.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									12:30
-								</div>
-								<p>
-									Staff Meeting
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item danger">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									11:11
-								</div>
-								<p>
-									Completed new layout.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item info">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Thu, 12 Jun
-								</div>
-								<p>
-									Contacted
-									<a class="text-info" href>
-										Microsoft
-									</a>
-									for license upgrades.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Tue, 10 Jun
-								</div>
-								<p>
-									Started development new site
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Sun, 11 Apr
-								</div>
-								<p>
-									Lunch with
-									<a class="text-info" href>
-										Nicole
-									</a>
-									.
-								</p>
-							</div>
-						</li>
-						<li class="timeline-item warning">
-							<div class="margin-left-15">
-								<div class="text-muted text-small">
-									Wed, 25 Mar
-								</div>
-								<p>
-									server Maintenance.
-								</p>
-							</div>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<script type="text/ng-template" id="addActivityModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Add Activity</h4>
+    </div>
+    <div class="modal-body bg-white" style="max-height:500px;">
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Type</label>
+                <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
+            </div>
+            <div class="form-group">
+                <label>Detail</label>
+                <textarea class="form-control" ng-model="newActivity.detail" style="resize:vertical"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
+    </div>
+</script>

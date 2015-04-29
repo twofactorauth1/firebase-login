@@ -13,7 +13,7 @@ function ($rootScope, $state, $stateParams) {
     // set below basic information
     $rootScope.app = {
         name: 'Indigenous', // name of your project
-        author: 'Indigenous INC.', // author's name or company name
+        author: 'Indigenous Software, INC', // author's name or company name
         description: 'A all in one solution for small to medium sized businesses.', // brief description
         version: '1.0', // current version
         year: ((new Date()).getFullYear()), // automatic current year (for copyright information)

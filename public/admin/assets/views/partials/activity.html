@@ -127,198 +127,304 @@
             </div> -->
     </div>
 </div>
-<div ng-if="allActivity">
-    <div class="panel panel-default panel-nopadding">
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-xs-6">
-                    <div>
-                        <h3>
-                           <span class="fa fa-comments"></span>
-                           <span>Activity</span>
-                           <span class="label label-default ng-binding">{{unread || 0}}</span>
-                       </h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panel-body smart-timeline">
-            <ul class="smart-timeline-list">
-                <li ng-repeat="activity in activities | filter:orderBy:activity.start:true">
-                    <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon"> <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32"> </a>
-                    <div class="smart-timeline-time">
-                        <small>{{activity.start | date:'d MMM, yyyy'}}</small>
-                    </div>
-                    <div class="smart-timeline-content">
-                        <div ng-switch on="activity.activityType">
-                            <div ng-switch-when="EMAIL">
-                                <p>
-                                    <span class="label label-default">EMAIL SENT</span> {{activity.detail}}
-                                </p>
-                                <p>
-                                    An email was sent
-                                </p>
-                            </div>
-                            <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Reply to Tweet</a>
-                            <div ng-switch-when="CONTACT_CREATED">
-                                <p>
-                                    <span class="label label-info">CONTACT CREATED</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
-                            </div>
-                            <div ng-switch-when="ACCOUNT_CREATED">
-                                <p>
-                                    <span class="label label-info">CONTACT CREATED</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
-                            </div>
-                            <div ng-switch-when="SUBSCRIBE">
-                                <p>
-                                    <span class="label label-success">SUBSCRIBE</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if=! "activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
-                                </p>
-                            </div>
-                            <div ng-switch-when="SUBSCRIBE_CANCEL">
-                                <p>
-                                    <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                            </div>
-                            <div ng-switch-when="PAGE_VIEW">
-                                <p>
-                                    <span class="label label-default">PAGE VIEW</span>
-                                </p>
-                                <span ng-if="!activity.customer">[deleted]</span>
-                                <p ng-if="activity.customer && activity.customer.first">
-                                    {{activity.customer.first+' '+activity.customer.last}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
-                                    {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
-                                    Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
-                            </div>
-                            <div ng-switch-when="CONTACT_FORM">
-                                <p>
-                                    <span class="label label-default">CONTACT FORM</span> was submitted with the data:
-                                    <ul class="form-values">
-                                        <li ng-repeat="(k,v) in activity.extraFields">
-                                            <b>{{k | formatText}}</b>: {{v}}
-                                        </li>
-                                    </ul>
-                                </p>
-                            </div>
-                            <div ng-switch-when="FORM_SUBMISSION">
-                                <p>
-                                    <span class="label label-info">FORM SUBMITTED</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
-                            </div>
-                            <div ng-switch-when="EMAIL_DELIVERED">
-                                <p>
-                                    <span class="label label-info">EMAIL DELIVERED</span> to
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
-                            </div>
-                            <div ng-switch-when="EMAIL_OPENED">
-                                <p>
-                                    <span class="label label-info">EMAIL OPENED</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
-                            </div>
-                            <div ng-switch-when="EMAIL_CLICKED">
-                                <p>
-                                    <span class="label label-info">EMAIL CLICKED</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
-                            </div>
-                            <div ng-switch-when="EMAIL_UNSUB">
-                                <p>
-                                    <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
-                            </div>
-                            <div ng-switch-when="SUBSCRIPTION_PAID">
-                                <p>
-                                    <span class="label label-info">SUBSCRIPTION PAID</span> for
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
-                                </p>
-                                <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <div class="pagination pagination-centered" ng-if="total && total > numPerPage">
-                <ul class="pagination-controle">
-                    <li>
-                        <button type="button" class="btn btn-primary" ng-disabled="disablePaging || main.page <= 1" ng-click='previousPage()'>
-                            <span class="fa fa-arrow-left"></span>
-                            <span class="hidden-xs">PREV</span>
-                        </button>
-                    </li>
-                    <li>
-                        <span>Page {{main.page}} of {{ pageCount() }}</span>
-                        <i ng-if="disablePaging" class="fa fa-spinner fa-spin"></i>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-primary" ng-disabled="disablePaging || (main.page === pageCount())" ng-click='nextPage()'>
-                            <span class="hidden-xs">Next</span>
-                            <span class="fa fa-arrow-right"></span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div ng-if="singleCustomer && activities">
+<!-- <div ng-if="allActivity">
     <div class="panel panel-white no-radius">
         <div class="panel-heading border-bottom">
             <h4 class="panel-title">Activities</h4>
             <div class="panel-tools">
-                <button type="button" class="btn btn-primary btn-o margin-top-neg-5" data-toggle="modal" data-target="#addActivityModal">
+                <button type="button" class="btn btn-primary btn-o margin-top-neg-5" ng-click="openModal('addActivityModal')">
                     Add Activity
                 </button>
             </div>
         </div>
         <div class="panel-body">
-            <ul class="timeline-xs margin-top-15 margin-bottom-15">
+            <div ng-if="!activities.length">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                    </div>
+                </div>
+            </div>
+            <ul class="timeline-xs height-330" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                 <li class="timeline-item success" ng-repeat="activity in activities">
                     <div class="margin-left-15">
                         <div class="text-muted text-small">
                             {{activity.start | timeAgoFilter}}
                         </div>
                         <p>
-                            <a class="text-info" href>
-                                        {{activity.activityType}}
-                                    </a> {{activity.note}}
+                            <div ng-switch on="activity.activityType">
+                                <div ng-switch-when="EMAIL">
+                                    <p>
+                                        <span class="label label-default">EMAIL SENT</span> {{activity.detail}}
+                                    </p>
+                                    <p>
+                                        An email was sent
+                                    </p>
+                                </div>
+                                <div ng-switch-when="TWEET">
+                                    <a href="javascript:void(0);" class="btn btn-xs btn-green">
+                                        <i class="fa fa-reply"></i> Reply to Tweet</a>
+                                </div>
+                                <div ng-switch-when="CONTACT_CREATED">
+                                    <p>
+                                        <span class="label label-info">CONTACT CREATED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                </div>
+                                <div ng-switch-when="ACCOUNT_CREATED">
+                                    <p>
+                                        <span class="label label-info">CONTACT CREATED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+
+                                </div>
+                                <div ng-switch-when="SUBSCRIBE">
+                                    <p>
+                                        <span class="label label-success">SUBSCRIBE</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if=! "activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                    </p>
+                                </div>
+                                <div ng-switch-when="SUBSCRIBE_CANCEL">
+                                    <p>
+                                        <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                </div>
+                                <div ng-switch-when="PAGE_VIEW">
+                                    <p>
+                                        <span class="label label-default">PAGE VIEW</span>
+                                    </p>
+                                    <span ng-if="!activity.customer">[deleted]</span>
+                                    <p ng-if="activity.customer && activity.customer.first">
+                                        {{activity.customer.first+' '+activity.customer.last}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
+                                        {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                        Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                </div>
+                                <div ng-switch-when="CONTACT_FORM">
+                                    <p>
+                                        <span class="label label-default">CONTACT FORM</span> was submitted with the data:
+                                        <ul class="form-values">
+                                            <li ng-repeat="(k,v) in activity.extraFields">
+                                                <b>{{k | formatText}}</b>: {{v}}
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                                <div ng-switch-when="FORM_SUBMISSION">
+                                    <p>
+                                        <span class="label label-info">FORM SUBMITTED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                </div>
+                                <div ng-switch-when="EMAIL_DELIVERED">
+                                    <p>
+                                        <span class="label label-info">EMAIL DELIVERED</span> to
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+
+                                </div>
+                                <div ng-switch-when="EMAIL_OPENED">
+                                    <p>
+                                        <span class="label label-info">EMAIL OPENED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    </div>
+                                <div ng-switch-when="EMAIL_CLICKED">
+                                    <p>
+                                        <span class="label label-info">EMAIL CLICKED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    </div>
+                                <div ng-switch-when="EMAIL_UNSUB">
+                                    <p>
+                                        <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                   </div>
+                                <div ng-switch-when="SUBSCRIPTION_PAID">
+                                    <p>
+                                        <span class="label label-info">SUBSCRIPTION PAID</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    </div>
+                            </div>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div> -->
+<div ng-if="singleCustomer && activities">
+    <div class="panel panel-white no-radius">
+        <div class="panel-heading border-bottom">
+            <h4 class="panel-title">Activities</h4>
+            <div class="panel-tools">
+                <button type="button" class="btn btn-primary btn-o margin-top-neg-5" ng-click="openModal('addActivityModal')">
+                    Add Activity
+                </button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div ng-if="!activities.length">
+                <div class="panel panel-transparent">
+                    <div class="panel-body">
+                        <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                    </div>
+                </div>
+            </div>
+            <ul class="timeline-xs margin-top-15 margin-bottom-15" ng-if="activities.length">
+                <li class="timeline-item success" ng-repeat="activity in activities | filter:orderBy:activity.start:true">
+                    <div class="margin-left-15">
+                        <div class="text-muted text-small">
+                            {{activity.start | timeAgoFilter}} {{activity.activityType}}
+                        </div>
+                        <p>
+                            <div ng-switch on="activity.activityType">
+                                <div ng-switch-when="EMAIL">
+                                    <p>
+                                        <span class="label label-default">EMAIL SENT</span> {{activity.detail}}
+                                    </p>
+                                    <p>
+                                        An email was sent
+                                    </p>
+                                </div>
+                                <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green">
+                                    <i class="fa fa-reply"></i> Reply to Tweet</a>
+                                <div ng-switch-when="CONTACT_CREATED">
+                                    <p>
+                                        <span class="label label-info">CONTACT CREATED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                </div>
+                                <div ng-switch-when="ACCOUNT_CREATED">
+                                    <p>
+                                        <span class="label label-info">CONTACT CREATED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                </div>
+                                <div ng-switch-when="SUBSCRIBE">
+                                    <p>
+                                        <span class="label label-success">SUBSCRIBE</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if=! "activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                    </p>
+                                </div>
+                                <div ng-switch-when="SUBSCRIBE_CANCEL">
+                                    <p>
+                                        <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                </div>
+                                <div ng-switch-when="PAGE_VIEW">
+                                    <p>
+                                        <span class="label label-default">PAGE VIEW</span>
+                                    </p>
+                                    <span ng-if="!activity.customer">[deleted]</span>
+                                    <p ng-if="activity.customer && activity.customer.first">
+                                        {{activity.customer.first+' '+activity.customer.last}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
+                                        {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                        Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
+                                </div>
+                                <div ng-switch-when="CONTACT_FORM">
+                                    <p>
+                                        <span class="label label-default">CONTACT FORM</span> was submitted with the data:
+                                        <ul class="form-values">
+                                            <li ng-repeat="(k,v) in activity.extraFields">
+                                                <b>{{k | formatText}}</b>: {{v}}
+                                            </li>
+                                        </ul>
+                                    </p>
+                                </div>
+                                <div ng-switch-when="FORM_SUBMISSION">
+                                    <p>
+                                        <span class="label label-info">FORM SUBMITTED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                                <div ng-switch-when="EMAIL_DELIVERED">
+                                    <p>
+                                        <span class="label label-info">EMAIL DELIVERED</span> to
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                                <div ng-switch-when="EMAIL_OPENED">
+                                    <p>
+                                        <span class="label label-info">EMAIL OPENED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                                <div ng-switch-when="EMAIL_CLICKED">
+                                    <p>
+                                        <span class="label label-info">EMAIL CLICKED</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                                <div ng-switch-when="EMAIL_UNSUB">
+                                    <p>
+                                        <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                                <div ng-switch-when="SUBSCRIPTION_PAID">
+                                    <p>
+                                        <span class="label label-info">SUBSCRIPTION PAID</span> for
+                                        <span ng-if="!activity.customer">[deleted]</span>
+                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                            </div>
                         </p>
                     </div>
                 </li>
@@ -326,31 +432,26 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="addActivityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Add Activity</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Type</label>
-                        <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
-                    </div>
-                    <div class="form-group">
-                        <label>Detail</label>
-                        <textarea class="form-control" ng-model="newActivity.detail" style="resize:vertical"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
-            </div>
-        </div>
+<script type="text/ng-template" id="addActivityModal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Add Activity</h4>
     </div>
-</div>
+    <div class="modal-body bg-white" style="max-height:500px;">
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Type</label>
+                <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
+            </div>
+            <div class="form-group">
+                <label>Detail</label>
+                <textarea class="form-control" ng-model="newActivity.detail" style="resize:vertical"></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
+    </div>
+</script>
 <!-- end: ACTIVITY -->

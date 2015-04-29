@@ -8,8 +8,7 @@
 var baseApi = require('../base.api');
 var orderManager = require('../../orders/order_manager');
 var appConfig = require('../../configs/app.config');
-//TODO: refactor getAccessToken into base.api
-var paymentsAPI = require('./integrations/payments.api');
+
 
 
 var api = function () {
@@ -39,7 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createOrder');
 
         var order = new $$.m.Order(req.body);
-        var accessToken = paymentsAPI._getAccessToken(req);
+        var accessToken = self.getAccessToken(req);
         var userId = self.userId(req);
         var accountId = self.accountId(req);
         order.set('account_id', accountId);
@@ -49,6 +48,9 @@ _.extend(api.prototype, baseApi.prototype, {
         orderManager.createOrder(order, accessToken, userId, function(err, order){
             self.log.debug('<< createOrder');
             self.sendResultOrError(res, err, order, 'Error creating order');
+            if(userId) {
+                self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+            }
         });
 
     },
@@ -105,6 +107,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.completeOrder(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< completeOrder');
                     self.sendResultOrError(res, err, order, 'Error completing order');
+                    self.createUserActivity(req, 'COMPLETE_ORDER', null, {id: order.id()}, function(){});
                 });
             }
         });
@@ -127,6 +130,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.cancelOrder(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< cancelOrder');
                     self.sendResultOrError(res, err, order, 'Error cancelling order');
+                    self.createUserActivity(req, 'CANCEL_ORDER', null, {id: orderId}, function(){});
                 });
             }
         });
@@ -146,10 +150,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 var userId = self.userId(req);
                 var amount = req.body.amount;
                 var reason = req.body.reason;
-                var accessToken = paymentsAPI._getAccessToken(req);
+                var accessToken = self.getAccessToken(req);
                 orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
                     self.log.debug('<< refundOrder');
                     self.sendResultOrError(res, err, order, 'Error refunding order');
+                    self.createUserActivity(req, 'REFUND_ORDER', null, {id: orderId}, function(){});
                 });
             }
         });
@@ -171,6 +176,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.holdOrder(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< holdOrder');
                     self.sendResultOrError(res, err, order, 'Error holding order');
+                    self.createUserActivity(req, 'HOLD_ORDER', null, {id: orderId}, function(){});
                 });
             }
         });
@@ -191,6 +197,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.addOrderNote(accountId, orderId, note, userId, function(err, order){
                     self.log.debug('<< addOrderNote');
                     self.sendResultOrError(res, err, order, 'Error adding order note');
+                    self.createUserActivity(req, 'ADD_ORDER_NOTE', null, {id: orderId}, function(){});
                 });
             }
         });

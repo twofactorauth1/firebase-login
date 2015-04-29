@@ -78,7 +78,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // app.get(this.url('template/name/:name'), this.isAuthApi.bind(this), this.getTemplateByName.bind(this));
         // app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.createTemplate.bind(this));
         // app.post(this.url('template/website/:websiteId'), this.isAuthAndSubscribedApi.bind(this), this.createTemplateFromWebsite.bind(this));
-        // app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
+        app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTemplate.bind(this));
         // app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTemplate.bind(this));
         // app.put(this.url('template/:id/website'), this.isAuthAndSubscribedApi.bind(this), this.createWebsiteFromTemplate.bind(this));
         app.post(this.url('template/:id/website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
@@ -152,6 +152,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
                     self.log.debug('<< saveOrUpdateWebsite');
                     self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
+                    self.createUserActivity(req, 'UPDATE_WEBSITE_SETTINGS', null, null, function(){});
                     self = value = null;
                 });
             }
@@ -407,6 +408,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         result = {success:true};
                     }
                     self.sendResultOrError(resp, err, result, "Error Deleting Page Versions");
+                    self.createUserActivity(req, 'DELETE_PAGE_VERSION', null, {pageId: pageId, version: version}, function(){});
                     self = null;
                     return;
                 });
@@ -437,7 +439,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.revertPage(pageId, version, function(err, page){
                     self.log.debug('<< revertPage');
                     self.sendResultOrError(resp, err, page, "Error reverting page version");
-
+                    self.createUserActivity(req, 'REVERT_PAGE', null, {pageId:pageId, version:version}, function(){});
                     self = null;
                     return;
                 });
@@ -472,6 +474,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl);
+                    self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                 });
             }
         });
@@ -516,6 +519,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl);
+                        self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                     });
                 } else {
                     self.log.error('Cannot create null page.');
@@ -553,6 +557,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                     var pageUrl = self._buildPageUrl(req, value.get('handle'));
                     self._updatePageCache(pageUrl);
+                    self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
         });
@@ -584,7 +589,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.send200(res);
                     }
                     //self.sendResultOrError(res, err, value, "Error deleting Page");
-                    self.log.debug('sent');
+                    self.createUserActivity(req, 'DELETE_PAGE', null, {pageId: pageId}, function(){});
                     self = null;
                 });
             }
@@ -754,31 +759,33 @@ _.extend(api.prototype, baseApi.prototype, {
     // },
 
 
-    // updateTheme: function(req, res) {
-    //     var self = this;
-    //     self.log.debug('>> updateTheme');
-    //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
-    //         if (isAllowed !== true) {
-    //             return self.send403(req);
-    //         } else {
-    //             var themeId = req.params.id;
-    //             var accountId = parseInt(self.accountId(req));
-    //             var themeObj = new $$.m.cms.Theme(req.body);
-    //             themeObj.set('modified.by', self.userId(req));
-    //             themeObj.set('modified.date', new Date());
-    //             themeObj.set('_id', themeId);
+    updateTemplate: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateTemplate');
+        self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var themeId = req.params.id;
+                var accountId = parseInt(self.accountId(req));
+                var themeObj = new $$.m.cms.Theme(req.body);
+                themeObj.attributes.modified.by = self.userId(req);
+                themeObj.attributes.modified.date = new Date();
+                themeObj.set('_id', themeId);
 
-    //             cmsManager.updateTheme(themeObj, function(err, value){
-    //                 self.log.debug('<< updateTheme');
-    //                 self.sendResultOrError(res, err, value, 'Error updating theme.');
+                self.log.debug('themeObj ', themeObj);
 
-    //             });
-    //         }
-    //     });
+                cmsManager.updateTemplate(themeObj, function(err, value){
+                    self.log.debug('<< updateTemplate ', value.components);
+                    self.sendResultOrError(res, err, value, 'Error updating template.');
+
+                });
+            }
+        });
 
 
 
-    // },
+    },
 
 
     // deleteTheme: function(req, res) {
@@ -1165,10 +1172,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('pageId', pageId);
                 blogPost.attributes.modified.date = new Date();
                 blogPost.attributes.created.date = new Date();
-
+                blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
+                self.log.debug('<< Publish Date is' + blogPost.attributes.publish_date);
                 cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
                     self.sendResultOrError(res, err, value, "Error creating Blog Post");
+                    self.createUserActivity(req, 'CREATE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
             }
@@ -1239,6 +1248,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendResultOrError(res, err, value, "Error updating Blog Post");
                     var pageUrl = self._buildPageUrl(req, 'blog/' + value.get('post_url'));
                     self._updatePageCache(pageUrl);
+                    self.createUserActivity(req, 'UPDATE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
             }
@@ -1262,6 +1272,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function (err, value) {
                     self.log.debug('<< deleteBlogPost');
                     self.sendResultOrError(res, err, value, "Error deleting Blog Post");
+                    self.createUserActivity(req, 'DELETE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
             }

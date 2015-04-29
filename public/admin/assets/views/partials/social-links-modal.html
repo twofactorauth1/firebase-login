@@ -1,0 +1,33 @@
+<script type="text/ng-template" id="social-links-modal">
+    <!-- Add/Edit Social Links -->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Add/Edit Social Links</h4>
+    </div>
+    <div class="modal-body no-padding" style="max-height:300px;height:100%;overflow:auto">
+                    <div id="new_page" style="margin:10px">
+                        <div class="form-group">
+                            <label for="Link Type">Choose a Link Type* </label>
+                            <div class="modal-events col-sm-12" style="z-index:10000">
+                                <a tooltip-placement="bottom" tooltip="{{social_link.tooltip}}" style="margin:5px" ng-repeat="social_link in social_links" class="btn btn-social-link btn-social-icon btn-{{social_link.name}}" ng-click="setSelectedLink(social_link)"><i class="fa fa-{{social_link.icon}}"></i></a>
+                            </div>
+                        </div>
+                        <div ng-if="social.icon" class="form-group" id="social-link-name">
+                            <label for="link-name">Selected Link Type </label>
+                            <a id="link-name" class="btn btn-social-icon btn-{{social.name}}"><i class="fa fa-{{social.icon}}"></i></a>
+                            <span class="error help-block" />
+                        </div>
+                        <div ng-if="social.icon" class="form-group" id="social-link-url">
+                            <label for="link-url">Link Url* </label>
+                            <input id="link-url" class="form-control input-lg" type="text" ng-model="social.url">
+                            <span class="error help-block" />
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+    </div>
+    <div class="modal-footer">
+        <button ng-if="social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'update')">Update {{social.selectedLink}}</button>
+        <button ng-if="social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'delete')" data-dismiss="modal">Delete {{social.selectedLink}}</button>
+        <button ng-if="!social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'add')">Save changes</button>
+    </div>
+</script>

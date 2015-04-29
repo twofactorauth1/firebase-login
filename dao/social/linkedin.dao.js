@@ -17,6 +17,7 @@ var async = require('async');
 var querystring = require('querystring');
 var awsConfig = require('../../configs/aws.config.js');
 var s3Dao = require('../../dao/integrations/s3.dao');
+var fs = require('fs');
 
 var dao = {
 
@@ -295,7 +296,7 @@ var dao = {
                     if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
                         websites.push(connection.siteStandardProfileRequest.url);
                     }
-
+                    websites = _.compact(websites);
                     //Update contact details
                     contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
                 }
@@ -548,7 +549,7 @@ var dao = {
     //social config
     getConnectionsForSocialId: function(accessToken, socialAccountId, updated, options, fn) {
         var self = this;
-
+        self.log.debug('>> getConnectionsForSocialId');
         if (_.isFunction(updated)) {
             fn = updated;
             updated = null;
@@ -589,15 +590,16 @@ var dao = {
             if (max != null) {
                 path += "&count=" + max;
             }
-            if (updated != null) {
-                path += "&modified-since=" + updated;
-            }
+            //if (updated != null) {
+            //    path += "&modified-since=" + updated;
+            //}
 
             var url = self._generateUrl(path, accessToken);
 
             request(url, function(err, resp, body) {
                 if (!err) {
                     var list = JSON.parse(body);
+                    self.log.debug('<< importConnectionsAsContactsForSocial ');
                     return fxn(null, list);
                 } else {
                     return fxn(err, resp);
@@ -663,7 +665,7 @@ var dao = {
 
     importConnectionsAsContactsForSocialId: function(accountId, accessToken, socialAccountId, user, fn) {
         var self = this, totalImported = 0;
-
+        self.log.debug('>> importConnectionsAsContactsForSocial');
         var linkedInBaggage = user.getUserAccountBaggage(accountId, "linkedin");
         linkedInBaggage.contacts = linkedInBaggage.contacts || {};
         var updated = linkedInBaggage.contacts.updated;
@@ -672,58 +674,99 @@ var dao = {
             if (err) {
                 return fn(err, value);
             }
-            linkedInBaggage.contacts.updated = new Date().getTime();
+
+            //linkedInBaggage.contacts.updated = new Date().getTime();
 
             var linkedInId = socialAccountId;
             //filter out any bogus values that LinkedIn returns
             var _connections = _.filter(value.values, Boolean);
-
-            var updateContactFromConnection = function(contact, connection) {
+            self.log.debug('got ' + _connections.length + ' connections');
+            var updateContactFromConnection = function(contact, connection, accountId, cb) {
                 var location= null;
-                if(connection) {                   
-                   if(connection.pictureUrl)
-                   {
-                     var file = {};
-                    file.name = new Date().getTime() + '.png';
-                    file.type = 'image/png';                    
-                    file.path = photo;    
-                    //var ssURL = urlboxhelper.getUrl(serverUrl, options);
-                    var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
-                    var accountId = accountId;
-                    var directory = "acct_indigenous";
-                    if (accountId > 0) {
-                        directory = "acct_" + accountId;
-                    } 
-                    s3Dao.uploadToS3(bucket, directory, file, true, function (err, value) {
-                        if (err) {
-                            log.error('Error uploading to s3: ' + err);
-                        } else {
-                           connection.pictureUrl = 'http://' + bucket + '.s3.amazonaws.com/' + directory + '/' + file.name;
+                if(connection) {
+                    //self.log.debug('connection:', connection);
+                    /*
+                     connection: { firstName: 'Heidi',
+                     headline: 'Publisher at South Dakota Magazine',
+                     id: 'KhO57C0IFf',
+                     lastName: 'Marsh',
+                     location: { name: 'Sioux Falls, South Dakota Area' },
+                     pictureUrl: 'https://media.licdn.com/mpr/mprx/0_Vu55rTMHSvUgWYCPZ7n9riJITqxuwZiPZalVriEVYAwgNpq1nEvWY_Oq7s0tHxGxR7bU0kqKwBE9',
+                     publicProfileUrl: 'https://www.linkedin.com/pub/heidi-marsh/4/83a/1a2',
+                     siteStandardProfileRequest: { url: 'https://www.linkedin.com/profile/view?id=14014346&authType=name&authToken=u6T-&trk=api*a3944204*s4012794*' } }
+                     */
+                    if(connection.pictureUrl) {
+                        var name =new Date().getTime();
+                        var tempFile = {
+                            name: name,
+                            path: 'tmp/' + name
+                        };
+                        var tempFileName = tempFile.path;
+                        self._download(connection.pictureUrl, tempFile, function(){
+                            //self.log.debug('downloaded: ' + tempFile.path);
+                            var bucket = awsConfig.BUCKETS.CONTACT_PHOTOS;
+                            var accountId = accountId;
+                            var directory = "acct_indigenous";
+                            if (accountId > 0) {
+                                directory = "acct_" + accountId;
+                            } else {
+                                self.log.warn('accountId: ' + accountId + ' is not > 0');
+                            }
+                            s3Dao.uploadToS3(bucket, directory, tempFile, false, function (err, value) {
+                                if (err) {
+                                    log.error('Error uploading to s3: ' + err);
+                                } else {
+                                    connection.pictureUrl = '//' + bucket + '.s3.amazonaws.com/' + directory + '/' + tempFile.name;
+                                }
+                                if (connection.location && connection.location.name) {
+                                    location = connection.location.name;
+
+                                }
+                                contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
+
+                                var websites = [];
+                                if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                                    websites.push(connection.publicProfielUrl);
+                                }
+                                if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                                    websites.push(connection.siteStandardProfileRequest.url);
+                                }
+
+                                //Update contact details
+                                contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+
+                                cb();
+                            });
+                        });
+
+
+                    } else {
+                        contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
+
+                        var websites = [];
+                        if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
+                            websites.push(connection.publicProfielUrl);
                         }
-                    })  
+                        if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
+                            websites.push(connection.siteStandardProfileRequest.url);
+                        }
 
-                   }
+                        //Update contact details
+                        contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+
+                        cb();
+                    }
                     
-                    if (connection.location && connection.location.name) { location = connection.location.name; }
-                    contact.updateContactInfo(connection.firstName, null, connection.lastName, connection.pictureUrl, connection.pictureUrl, null, location);
 
-                    var websites = [];
-                    if (!String.isNullOrEmpty(connection.publicProfileUrl)) {
-                        websites.push(connection.publicProfielUrl);
-                    }
-                    if (connection.siteStandardProfileRequest && !String.isNullOrEmpty(connection.siteStandardProfileRequest.url)) {
-                        websites.push(connection.siteStandardProfileRequest.url);
-                    }
-
-                    //Update contact details
-                    contact.createOrUpdateDetails($$.constants.social.types.LINKEDIN, linkedInId, connection.id, connection.pictureUrl, null, connection.pictureUrl, null, websites);
+                } else {
+                    cb();
                 }
 
             };
 
 
             (function importConnections(connections, page) {
-
+                self.log.debug('>> importConnections (page ' + page + ')');
                 if (connections != null) {
                     var numPerPage = 50, socialType = $$.constants.social.types.LINKEDIN;
 
@@ -740,6 +783,7 @@ var dao = {
                         var contactValues = value;
                         async.series([
                             function(callback) {
+                                self.log.debug('Step 1');
                                 if (contactValues != null && contactValues.length > 0) {
                                     async.eachSeries(contactValues, function(contact, cb) {
 
@@ -749,15 +793,18 @@ var dao = {
                                             //remove the contact from the items array so we don't process again
                                             items = _.without(items, connection);
 
-                                            updateContactFromConnection(contact, connection);
-
-                                            contactDao.saveOrUpdateContact(contact, function(err, value) {
-                                                if (err) {
-                                                    self.log.error("An error occurred updating contact during LinkedIn import", err);
-                                                }
-                                                totalImported++;
-                                                cb();
+                                            updateContactFromConnection(contact, connection, accountId, function(){
+                                                contactDao.saveOrUpdateContact(contact, function(err, value) {
+                                                    if (err) {
+                                                        self.log.error("An error occurred updating contact during LinkedIn import", err);
+                                                    }
+                                                    self.log.debug('Updated');
+                                                    totalImported++;
+                                                    cb();
+                                                });
                                             });
+
+
                                         } else {
                                             self.log.warn('Could not find connection for contact.');
                                             cb();
@@ -773,6 +820,7 @@ var dao = {
                             },
 
                             function(callback) {
+                                self.log.debug('Step 2');
                                 //Iterate through remaining items
                                 if (items != null && items.length > 0) {
                                     async.eachSeries(items, function(connection, cb) {
@@ -783,14 +831,16 @@ var dao = {
                                         });
 
                                         contact.createdBy(user.id(), socialType, linkedInId);
-                                        updateContactFromConnection(contact, connection);
-                                        contactDao.saveOrMerge(contact, function(err, value) {
-                                            if (err) {
-                                                self.log.error("An error occurred saving contact during LinkedIn import", err);
-                                            }
-                                            totalImported++;
-                                            cb();
+                                        updateContactFromConnection(contact, connection, accountId, function(){
+                                            contactDao.saveOrMerge(contact, function(err, value) {
+                                                if (err) {
+                                                    self.log.error("An error occurred saving contact during LinkedIn import", err);
+                                                }
+                                                totalImported++;
+                                                cb();
+                                            });
                                         });
+
 
                                     }, function(err) {
                                         callback(err);
@@ -801,6 +851,7 @@ var dao = {
                             }
 
                         ], function(err, results) {
+                            self.log.debug('Final results');
                             if (pagingInfo.nextPage > page) {
                                 process.nextTick(function() {
                                     importConnections(connections, pagingInfo.nextPage);
@@ -808,27 +859,37 @@ var dao = {
                             } else {
                                 self.log.info("LinkedIn friend import succeed. " + totalImported + " imports");
                                 //Last step, save the user
-                                userDao.saveOrUpdate(user, function(err, value) {
+                                contactDao.mergeDuplicates(null, accountId, function(err, value){
                                     if(err) {
-                                        self.log.error('Error updating user: '  + err);
-                                        return fn(null);
+                                        self.log.error('Error occurred during duplicate merge: ' + err);
+                                        fn(null);
+                                    } else {
+                                        self.log.info('Duplicate merge successful.');
+                                        fn(null);
                                     }
-                                    self.log.info('User updated. Merging duplicates.');
-                                    contactDao.mergeDuplicates(null, accountId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error occurred during duplicate merge: ' + err);
-                                            fn(null);
-                                        } else {
-                                            self.log.info('Duplicate merge successful.');
-                                            fn(null);
-                                        }
-                                    });
                                 });
                             }
                         });
                     });
+                } else {
+                    self.log.warn('connections was null??');
                 }
             })(_connections, 1);
+        });
+    },
+
+    _download: function(uri, file, callback){
+        var self = this;
+        self.log.debug('calling download.  Saving to: ' + file.path);
+        request.head(uri, function(err, res, body){
+            file.type = res.headers['content-type'];
+            file.size = res.headers['content-length'];
+            if(err) {
+                self.log.error('err getting the head for ' + uri);
+            }
+            request(uri).on('error', function(err) {
+                self.log.error('error downloading file: ' + err);
+            }).pipe(fs.createWriteStream(file.path)).on('close', callback);
         });
     }
 };

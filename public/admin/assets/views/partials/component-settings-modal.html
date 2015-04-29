@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="component-settings-modal.html">
+<script type="text/ng-template" id="component-settings-modal">
     <div class="modal-header">
         <div class="modal-btns">
             <button type="button" class="close" ng-click="closeModal()">
@@ -464,14 +464,14 @@
                         </div>
                         <div class="col-xs-5 margin-left-5">
                             <div class="checkbox clip-check check-primary checkbox-inline">
-                                <input type="checkbox" id="hoursClosed" ng-model="val.closed">
-                                <label for="hoursClosed">
+                                <input type="checkbox" id="closed-{{$index}}" ng-model="val.closed">
+                                <label for="closed-{{$index}}">
                                     Closed
                                 </label>
                             </div>
                             <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
-                                <input type="checkbox" id="hoursSplit" ng-model="val.split">
-                                <label for="hoursSplit">
+                                <input type="checkbox" id="split-{{$index}}" ng-model="val.split">
+                                <label for="split-{{$index}}">
                                     Split
                                 </label>
                             </div>
@@ -547,6 +547,7 @@
                         <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
                         <label for="chk_{{field.name}}">{{field.display}}</label>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
             </tab>
             <tab ng-if="componentEditing.type === 'video'">
@@ -662,9 +663,9 @@
     </div>
     <div class="modal-footer" ng-class="{hidden: hover}">
         <div class="form-group margin-bottom-0">
-            <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+             <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
                 Revert
-            </button>
+             </button>
             <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                 Done
             </button>
@@ -672,3 +673,4 @@
     </div>
     <!-- /.modal -->
 </script>
+

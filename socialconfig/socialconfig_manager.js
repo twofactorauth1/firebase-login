@@ -900,6 +900,7 @@ module.exports = {
                 return fn(err, null);
             }
             var socialAccount = config.getSocialAccountById(socialAccountId);
+            log.debug('>> socialAccount ', socialAccount.accessToken);
             if (socialAccount === null) {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
@@ -1148,7 +1149,7 @@ module.exports = {
         }
     },
 
-    getGoogleContacts: function(accountId, socialAccountId, user, fn) {
+    getGoogleContacts: function(accountId, socialAccountId, user, groupId, fn) {
         var self = this;
         log.debug('>> getGoogleContacts');
         self.getSocialConfig(accountId, null, function(err, config) {
@@ -1161,7 +1162,11 @@ module.exports = {
                 log.error('Invalid social account Id');
                 return fn('Invalid social accountId', null);
             }
-            return googleDao.importContactsForSocialId(accountId, socialAccount.accessToken, socialAccount.socialId, user, [], fn);
+            var groupIdAry = [];
+            if(groupId) {
+                groupIdAry.push(groupId);
+            }
+            return googleDao.importContactsForSocialId(accountId, socialAccount.accessToken, socialAccount.socialId, user, groupIdAry, fn);
         });
     },
 

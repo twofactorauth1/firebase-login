@@ -81,14 +81,14 @@ module.exports = {
         });
     },
 
-    updateTheme: function(theme, fn) {
-        log.debug('>> updateTheme');
-        themeDao.saveOrUpdate(theme, function(err, value){
+    updateTemplate: function(template, fn) {
+        log.debug('>> updateTemplate ', template);
+        templateDao.saveOrUpdate(template, function(err, value){
             if(err) {
-                log.error('Exception thrown updating theme: ' + err);
+                log.error('Exception thrown updating template: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< updateTheme');
+                log.debug('<< updateTemplate');
                 fn(null, value);
             }
         });
@@ -343,20 +343,23 @@ module.exports = {
 
     createDefaultPageForAccount: function(accountId, websiteId, fn) {
         var self = this;
-        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, page){
+        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, pageAry){
             if(err) {
                 log.error('Error creating default page: ' + err);
                 return fn(err, null);
             }
-            log.debug('creating page screenshot');
-            self.updatePageScreenshot(page.id(), function(err, value){
-                if(err) {
-                    log.error('Error updating screenshot: ' + err);
-                } else {
-                    log.debug('updated screenshot: ' + value);
-                }
+            log.debug('creating screenshots for default pages');
+            _.each(pageAry, function(page){
+                self.updatePageScreenshot(page.id(), function(err, value){
+                    if(err) {
+                        log.error('Error updating screenshot: ' + err);
+                    } else {
+                        log.debug('updated screenshot: ' + value);
+                    }
+                });
             });
-            return fn(null, page);
+
+            return fn(null, pageAry[0]);
         });
     },
 
@@ -1959,5 +1962,28 @@ module.exports = {
         }).pipe(request.put(s3Url).on('error', function(err){
             console.log('error during put: ' + err);
         }).on('close', callback));
+    },
+
+
+    getEmailPage: function(accountId, email_type, fn) {
+        var self = this;
+        log.debug('>> getEmailPage');
+
+        var query = {
+            accountId: accountId,
+            type:'email',
+            email_type:email_type,
+            latest:true
+        };
+
+        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+            if(err) {
+                log.error('Error finding email page: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getEmailPage');
+                return fn(null, page);
+            }
+        });
     }
 };

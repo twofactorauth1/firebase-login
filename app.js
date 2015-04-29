@@ -292,6 +292,7 @@ require('./api/api.manager');
 //  SETUP ROUTING
 //-----------------------------------------------------
 require('./routers/router.manager');
+require('./routers/page.server.router');
 
 
 

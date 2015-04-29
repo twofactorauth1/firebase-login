@@ -1,6 +1,5 @@
-define(['app'], function (app) {
-	app.register.service('GeocodeService', function ($http) {
-
+(function(angular) {
+    app.service('GeocodeService', function($http) {
 		var baseUrl = '/api/1.0/';
 
 	    this.getGeoSearchAddress = function(addressStr, fn) {
@@ -12,4 +11,4 @@ define(['app'], function (app) {
 		}
 
 	});
-});
+})(angular);

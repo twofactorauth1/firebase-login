@@ -6,6 +6,66 @@
     #postContent {
         color: black;
     }
+    .submit-post-form {
+        .panel-footer {
+            label {
+                // color: #fff;
+            }
+        }
+    }
+    .masonry-brick {
+        .panel-heading {
+            color: white;
+            min-height: 35px;
+            padding: 10px;
+            .fa-facebook, .fa-twitter, .fa-google-plus {
+                font-size: 18px;
+            }
+        }
+        .panel-footer {
+            padding: 8px;
+            min-height: 35px;
+        }
+        .facebook {
+            .panel-heading {
+                background: @facebook;
+            }
+        }
+        .twitter {
+            .panel-heading {
+                background: @twitter;
+            }
+        }
+    }
+    .feeds {
+        list-style-type: none;
+        padding-left: 0;
+        margin-bottom: 0;
+        li {
+            border-bottom: 1px solid #eee;
+            padding-top: 5px;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+.comments {
+    padding: 15px;
+    max-height: 350px;
+    height: 100%;
+    overflow: auto;
+    margin-bottom: 0;
+    li {
+        list-style-type: none;
+        padding: 10px 0;
+        border-bottom: 1px solid #e7e7e7;
+        &:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
 }
 
 .manage-feed {

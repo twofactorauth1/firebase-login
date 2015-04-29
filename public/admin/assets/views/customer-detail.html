@@ -1,10 +1,10 @@
-<div class="customer-detail">
+<div class="customer-detail" ng-controller="CustomerDetailCtrl">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">{{ fullName || 'No Customer Name'}} </h1>
-                <span class="mainDescription">{{ customer.type }}</span>
+                <span class="mainDescription">{{displayCustomerTags()}}</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -26,41 +26,38 @@
                                         <div class="center">
                                             <h4>{{customer.first}} {{customer.last}}</h4>
                                             <div class="user-image">
-                                                <img src="{{ customer.photo ? customer.photo : '/admin/assets/images/default-user.png' }}" alt="" class="thumbnail img-circle">
+                                                <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
                                             </div>
-                                            <hr>
-                                            <div class="social-icons block">
+                                            <div class="social-icons block" ng-if="checkTwitterId(customer) || checkFacebookId(customer) || checkGoogleId(customer) || checkLinkedInId(customer)">
                                                 <ul>
-                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips" ng-if="checkTwitterId(customer)">
                                                         <a href="#" target="_blank">
                                                         Twitter
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips" ng-if="checkFacebookId(customer)">
                                                         <a href="#" target="_blank">
                                                         Facebook
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips" ng-if="checkGoogleId(customer)">
                                                         <a href="#" target="_blank">
                                                         Google+
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                                                        <a href="#" target="_blank">
+                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips" ng-if="checkLinkedInId(customer)">
+                                                        <a href="{{customer.linkedInUrl}}" target="_blank">
                                                         LinkedIn
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                                                        <a href="#" target="_blank">
-                                                        Github
-                                                    </a>
                                                     </li>
                                                 </ul>
+                                                <hr>
                                             </div>
-                                            <hr>
                                         </div>
-                                        <div class="map">
+                                        <div class="map margin-bottom-15">
+                                            <span class="text-bold">Location</span>
+                                            <hr class="margin-top-5">
                                             <map zoom="10" center="{{location.lat}}, {{location.lng}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
                                                 <marker position="{{location.lat}}, {{location.lng}}"></marker>
                                             </map>
@@ -71,92 +68,95 @@
                                         <table class="table table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">Contact Information</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>url</td>
-                                                    <td>
-                                                        <a href="#">
-                                                    {{userInfo.url}}
-                                                </a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>email:</td>
-                                                    <td>
-                                                        <a href>
-                                                    {{userInfo.email}}
-                                                </a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>phone:</td>
-                                                    <td>{{userInfo.phone}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>skye</td>
-                                                    <td>
-                                                        <a href>
-                                                    {{userInfo.skype}}
-                                                </a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <table class="table table-condensed">
-                                            <thead>
-                                                <tr>
                                                     <th colspan="3">General information</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Position</td>
-                                                    <td>UI Designer</td>
+                                                    <td>tags:</td>
+                                                    <td>{{displayCustomerTags()}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Last Logged In</td>
-                                                    <td>56 min</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Position</td>
-                                                    <td>Senior Marketing Manager</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Supervisor</td>
-                                                    <td>
-                                                        <a href="#">
-                                                    Kenneth Ross
-                                                </a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Status</td>
-                                                    <td><span class="label label-sm label-info">Administrator</span></td>
+                                                    <td>gender:</td>
+                                                    <td>{{customer.gender}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">Additional information</th>
+                                                    <th colspan="3">Contact Information</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Groups</td>
-                                                    <td>New company web site development, HR Management</td>
+                                                    <td>email:</td>
+                                                    <td>
+                                                        <div ng-repeat="email in customer.details[0].emails">
+                                                            <a href="mailto:{{email.email}}">{{email.email}}</a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>phone:</td>
+                                                    <td>
+                                                        <div ng-repeat="phone in customer.details[0].phones">
+                                                            {{phone.number}}
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>address:</td>
+                                                    <td>
+                                                        <div ng-repeat="address in customer.details[0].addresses">
+                                                            <a href>
+                                                                {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
+                                                            </a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <div class="text-right">
-                                            <a class="btn btn-primary btn-o btn-wide" href="#" ng-click="editActive = true">
-                                            Edit Account
-                                        </a>
+                                        <table class="table table-condensed hidden">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Interactions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Page Views</td>
+                                                    <td>18</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Page View</td>
+                                                    <td><a href="">/hello-there</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Avg. Time on Site</td>
+                                                    <td>1:21</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Logged In</td>
+                                                    <td>56 min</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="btn-group btn-group-justified margin-top-10">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteCustomerFn(customer)">
+                                                  <span>Delete Customer</span>
+                                              </button>
+                                          </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
                                     <customer-activity single-customer="true" current-page="1" num-per-page="10"></customer-activity>
-                                    <div class="panel panel-white space20">
+                                    <div class="panel panel-white space20 hidden">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">Recent Tweets</h4>
                                         </div>
@@ -178,9 +178,9 @@
                         </tab>
                         <!-- end: TAB OVERVIEW -->
                         <!-- start: TAB EDIT ACCOUNT -->
-                        <tab heading="Edit Account" active="editActive">
+                        <tab heading="Edit Customer" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-disabled="saveContactDisabled" ng-click="customerSaveFn()">Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()">Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" role="form" id="form">
@@ -190,10 +190,122 @@
                                     </legend>
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <div>
+                                                <label class="control-label">
+                                                    Email Address
+                                                </label>
+                                                <div class="form-group" ng-if="!customer.details[0].emails">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="form-group" ng-repeat="email in customer.details[0].emails">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label class="control-label">
+                                                    Phone Number
+                                                </label>
+                                                <div class="form-group" ng-repeat="phone in customer.details[0].phones">
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddPhone(phone)" ng-click="addCustomerContactFn()" class="ti-plus"></i>
+                                                        <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div ng-repeat="address in customer.details[0].addresses">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Address Line 1
+                                                            </label>
+                                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Address Line 2
+                                                            </label>
+                                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                City
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                State
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Country
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label class="control-label">
+                                                                Zip Code
+                                                            </label>
+                                                            <input class="form-control" placeholder="enter your zip code" type="text" name="zip" ng-model="address.zip">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="customerAddAddressFn()">Add another address</div>
+                                                    <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <fieldset>
+                                                <legend>
+                                                    Image Upload
+                                                </legend>
+                                                <div class="form-group center">
+                                                    <div flow-init flow-object="obj.flow">
+                                                        <div class="user-image">
+                                                            <div class="thumbnail margin-bottom-5">
+                                                                <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
+                                                            </div>
+                                                        </div>
+                                                        <div class="user-image-buttons-edit">
+                                                            <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertPhoto" user='user' flow-btn><i class="fa fa-pencil"></i></span>
+                                                            <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <div class="form-group">
                                                 <label class="">Contact Name</label>
-                                                <input id="input-fullname" class="form-control input-lg" data-ng-model="fullName" placeholder="full name" type="text" ng-change="enableSaveBtnFn()">
-                                                <small style="margin-left:10px;">
+                                                <input id="input-fullname" class="form-control" ng-model="fullName" placeholder="full name" type="text" ng-change="enableSaveBtnFn()">
+                                                <small>
                                                     <strong>first:</strong>
                                                     <code>
                                                         <span id="hint-first">{{customer.first}}</span>
@@ -208,91 +320,36 @@
                                                     </code>
                                                 </small>
                                             </div>
-                                            <div class="form-group" ng-repeat="email in customer.details[0].emails">
-                                                <label class="control-label">
-                                                    Email Address
-                                                </label>
-                                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                            </div>
-                                            <div class="form-group" ng-if="customer.details[0].emails.length <= 0">
-                                                <label class="control-label">
-                                                    Email Address
-                                                </label>
-                                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[0].email" ng-blur="updateCustomer()">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Phone
-                                                </label>
-                                                <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="userInfo.phone">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Url
-                                                </label>
-                                                <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="userurl">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="block">
                                                     Gender
                                                 </label>
                                                 <div class="clip-radio radio-primary">
-                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="userInfo.gender">
+                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="customer.gender">
                                                     <label for="us-female">
                                                         Female
                                                     </label>
-                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="userInfo.gender">
+                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="customer.gender">
                                                     <label for="us-male">
                                                         Male
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            Zip Code
-                                                        </label>
-                                                        <input class="form-control" placeholder="enter a zip code" type="text" name="zipcode" ng-model="userInfo.zipCode">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group">
-                                                        <label class="control-label">
-                                                            City
-                                                        </label>
-                                                        <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="userInfo.city">
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="form-group">
-                                                <label>
-                                                    Image Upload
+                                                <label class="block">
+                                                    Tags
                                                 </label>
-                                                <div flow-init flow-object="obj.flow">
-                                                    <div class="user-image">
-                                                        <div class="thumbnail margin-bottom-5">
-                                                            <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
-                                                            <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
-                                                            <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
-                                                        </div>
-                                                    </div>
-                                                    <div class="user-image-buttons-edit" ng-if="obj.flow.files.length">
-                                                        <span class="btn btn-primary" flow-btn><i class="fa fa-pencil"></i></span>
-                                                        <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i></span>
-                                                    </div>
-                                                    <div class="user-image-buttons-edit" ng-if="!obj.flow.files.length">
-                                                        <span class="btn btn-primary" flow-btn><i class="fa fa-pencil"></i></span>
-                                                        <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i> </span>
-                                                    </div>
-                                                </div>
+                                                <ui-select multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled">
+                                                    <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                                    <ui-select-choices repeat="tag in customerTags | filter:$select.search">
+                                                        {{tag.label}}
+                                                    </ui-select-choices>
+                                                </ui-select>
                                             </div>
                                         </div>
                                     </div>
                                 </fieldset>
-                                <fieldset>
+                                <fieldset class="hidden">
                                     <legend>
                                         Additional Info
                                     </legend>
@@ -355,7 +412,7 @@
                         </tab>
                         <!-- end: TAB EDIT ACCOUNT -->
                         <!-- start: TAB PROJECTS -->
-                        <tab heading="Orders">
+                        <tab heading="Orders" class="hidden">
                             <table class="table" id="orders">
                                 <thead>
                                     <tr>
@@ -457,3 +514,4 @@
     </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>
+<div id="model_container"></div>

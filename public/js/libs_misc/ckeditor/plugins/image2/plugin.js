@@ -450,8 +450,8 @@
 			// @see CKEDITOR.plugins.widget#addClass
 			addClass: function( className ) {
 				if(getStyleableElement( this ).hasClass("img-rounded") || 
-					getStyleableElement( this ).hasClass("img-rounded") || 
-					getStyleableElement( this ).hasClass("img-rounded"))
+					getStyleableElement( this ).hasClass("img-thumbnail") || 
+					getStyleableElement( this ).hasClass("mg-circle"))
 					{
 						// do nothing
 					}

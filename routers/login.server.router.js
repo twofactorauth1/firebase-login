@@ -18,6 +18,7 @@ var SignupView = require('../views/signup.server.view');
 var UnsubscribeView = require('../views/unsubscribe.server.view');
 var urlUtils = require('../utils/urlutils');
 var userManager = require('../dao/user.manager');
+var userActivityManager = require('../useractivities/useractivity_manager');
 var appConfig = require('../configs/app.config');
 
 
@@ -122,7 +123,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
             authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
                 self.log.debug('onLogin authenticatedUrl: ' + redirectUrl);
                 self.log.debug('<< onLogin');
-                return resp.redirect(redirectUrl);
+
+                resp.redirect(redirectUrl);
+
+                userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), function(){});
+
+                return;
             });
             return;
         }
@@ -150,6 +156,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 if(subObject.isMainApp && accountIds.length > 1) {
                     self.log.debug('redirecting to /home');
                     resp.redirect("/home");
+                    userActivityManager.createUserLoginActivity(0, self.userId(req), function(){});
                     self = req = resp = null;
                     return;
                 } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
@@ -164,6 +171,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                         self.log.debug('redirecting to ' + value);
                         resp.redirect(value);
+                        userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), function(){});
                         self = null;
                         return;
                     });
@@ -188,6 +196,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 req.session.domain = account.get('domain');
                                 self.log.debug('redirecting to ' + value);
                                 resp.redirect(value);
+                                userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), function(){});
                                 self = null;
                                 return;
                             }
@@ -204,7 +213,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             self = req = resp = null;
                             return;
                         }
-                        authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, value) {
+                        authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, authUrl) {
                             if (err) {
                                 self.log.debug('redirecting to /home');
                                 resp.redirect("/home");
@@ -223,11 +232,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                     value= value + '#/almost-there';
                                 }
                                 */
-                                value = "/interim.html";
+                                authUrl = "/interim.html";
                             }
-                            self.log.debug('redirecting to ' + value);
-                            resp.redirect(value);
-
+                            self.log.debug('redirecting to ' + authUrl);
+                            resp.redirect(authUrl);
+                            userActivityManager.createUserLoginActivity(value.id(), self.userId(req), function(){});
 
                             self = null;
                         });
@@ -242,6 +251,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     handleLogout: function (req, resp) {
         var accountId = this.accountId(req);
+        var userId = this.userId(req);
+
         req.session.cookie = null;
         req.session.accountId = null; 
         req.logout();
@@ -261,9 +272,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
             }
         }
         */
-        setTimeout(function() {
-            resp.redirect("/login");
-        }, 2000);
+        userActivityManager.createUserLogoutActivity(accountId, userId, function() {
+            setTimeout(function() {
+                resp.redirect("/login");
+            }, 2000);
+        });
+
         //return resp.redirect("/login");
     },
     //endregion
