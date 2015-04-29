@@ -13,7 +13,7 @@ var cryptoUtil = require('../../utils/security/crypto');
 
 var accountDao = require('./../../dao/account.dao.js');
 var themesConfig = require('../../configs/themes.config.js');
-var segmentioConfig = require('../../configs/segmentio.config.js')
+var segmentioConfig = require('../../configs/segmentio.config.js');
 
 var Website = require('../model/website');
 var Page = require('../model/page');
@@ -396,14 +396,14 @@ var dao = {
     getAllTagsFromPosts: function(blogposts, fn) {
         var self = this;
 
-        var tags = new Array();
+        var tags = [];
 
         for (var i = blogposts.length - 1; i >= 0; i--) {
             var pulledTags = blogposts[i].attributes.post_tags;
-            for (var i = pulledTags.length - 1; i >= 0; i--) {
-                tags.push(pulledTags[i]);
-            };
-        };
+            for (var j = pulledTags.length - 1; j >= 0; j--) {
+                tags.push(pulledTags[j]);
+            }
+        }
 
         var scrubbedTags = self.eliminateDuplicates(tags);
         fn(null, scrubbedTags);
@@ -413,11 +413,11 @@ var dao = {
     getAllCategoriesFromPosts: function(blogposts, fn) {
         var self = this;
 
-        var categories = new Array();
+        var categories = [];
 
         for (var i = blogposts.length - 1; i >= 0; i--) {
             categories.push(blogposts[i].attributes.post_category);
-        };
+        }
 
         var scrubbedCategories = self.eliminateDuplicates(categories);
         fn(null, scrubbedCategories);
@@ -598,7 +598,7 @@ var dao = {
 
             account = value;
 
-            websiteObj == account.get("website");
+            websiteObj = account.get("website");
             if (websiteObj != null) {
                 themeId = websiteObj.themeId || "default";
             } else {
@@ -663,8 +663,6 @@ var dao = {
 
         if (website.get("linkLists") != null && website.get("footer") != null) {
             return fn(null, website);
-            fn = null;
-            return;
         }
 
         this.getThemeConfig(themeId, function(err, value) {
@@ -1598,34 +1596,32 @@ var dao = {
         });
 
 
+        var defaultPageArray = [page, welcomeEmailPage, newOrderEmailPage, orderProcessingEmailPage,
+            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, customerAccountPage];
 
-        self.saveOrUpdate(page, function(err, value){
+        async.each(defaultPageArray, function(page, callback){
+            self.log.debug('saving default page with handle: ' + page.get('handle') );
+            self.saveOrUpdate(page, function(err, value){
+                if(err) {
+                    self.log.error('Error creating default page: ' + err);
+                    callback(err);
+                } else {
+                    callback(null);
+                }
+
+            });
+        }, function(err){
             if(err) {
-                self.log.error('Error creating default page: ' + err);
-                fn(err, null);
+                self.log.error('Error creating pages: ' + err);
+                return fn(err, null);
             } else {
-                self.log.debug('Created coming soon page.');
-                self.saveOrUpdate(welcomeEmailPage, function(err, emailPage){
-                    if(err) {
-                        self.log.error('Error creating welcome email page: ' + err);
-                        fn(err, null);
-                    } else {
-                        self.log.debug('Created welcome email page.');
-                        self.saveOrUpdate(customerAccountPage, function(err, customerPage){
-                            if(err) {
-                                self.log.error('Error creating customer account page: ' + err);
-                                fn(err, null);
-                            } else {
-                                self.log.debug('<< createDefaultPageForAccount');
-                                fn(null, value);
-                            }
-                        });
-
-                    }
-                });
-
+                self.log.debug('<< createDefaultPageForAccount');
+                fn(null, defaultPageArray);
             }
+
         });
+
+
     },
 
     getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
@@ -1942,7 +1938,7 @@ var dao = {
 
                 if (blogposts != null) {
                     self.log.debug('adding blogposts to data for backbone');
-                    data.blogposts = new Array();
+                    data.blogposts = [];
                     for (var i = 0; i < blogposts.length; i++) {
                         blogposts[i].attributes.created.date = moment(blogposts[i].attributes.created.date).format("DD.MM.YYYY");
                         data.blogposts.push(blogposts[i]);
@@ -1950,14 +1946,14 @@ var dao = {
                 }
 
                 if (tags != null) {
-                    data.tags = new Array();
+                    data.tags = [];
                     for (var i = 0; i < tags.length; i++) {
                         data.tags.push(tags[i]);
                     }
                 }
 
                 if (categories != null) {
-                    data.categories = new Array();
+                    data.categories = [];
                     for (var i = 0; i < categories.length; i++) {
                         data.categories.push(categories[i]);
                     }
@@ -2067,8 +2063,6 @@ var dao = {
                             console.log('CSS SCRIPT: ' + editableCssScript);
                             if (editableCssScript) {
                                 data.footer = data.footer + " " + editableCssScript;
-                            } else {
-                                data.footer = data.footer;
                             }
                         }
                     }
