@@ -104,10 +104,14 @@ var page = $$.m.ModelBase.extend({
              */
             secure:false,
 
+            type:'page',
+            email_type:null,
+
             /**
              * Version of the page.  Auto incremented.  Cannot be modified externally.
              */
             version:0,
+            latest:true,
 
             /**
              * Created by data

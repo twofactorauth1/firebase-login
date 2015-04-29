@@ -11,6 +11,9 @@ var async = require('async');
 var stripeDao = require('../payments/dao/stripe.dao');
 var contactDao = require('../dao/contact.dao');
 require('./model/order');
+var mandrillHelper = require('../utils/mandrillhelper');
+var accountDao = require('../dao/account.dao');
+var cmsManager = require('../cms/cms_manager');
 
 module.exports = {
 
@@ -131,7 +134,7 @@ module.exports = {
                                     callback(err);
                                 });
                             } else {
-                                callback(null, savedOrder, charge);
+                                callback(null, savedOrder, charge, contact);
                             }
                         });
                 } else {
@@ -140,7 +143,7 @@ module.exports = {
                 }
             },
             //update
-            function(savedOrder, charge, callback){
+            function(savedOrder, charge, contact, callback){
                 log.debug('updating saved order');
                 /*
                  * need to set:
@@ -166,9 +169,46 @@ module.exports = {
                         log.error('Error updating order: ' + err);
                         callback(err);
                     } else {
-                        callback(null, updatedOrder);
+                        callback(null, updatedOrder, contact);
                     }
                 });
+
+            },
+            //send new order email
+            function(updatedOrder, contact, callback) {
+                log.debug('Sending new order email');
+                var toAddress = contact.getEmails()[0];
+                var toName = contact.get('first') + ' ' + contact.get('last');
+                var subject = 'New Order';
+                var accountId = updatedOrder.get('account_id');
+                var orderId = updatedOrder.id();
+                var vars = [];
+
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err) {
+                        callback(err);
+                    } else {
+                        var business = account.get('business');
+                        var fromAddress = business.emails[0].email;
+                        var fromName = business.name;
+                        cmsManager.getEmailPage(accountId, 'new_order', function(err, page){
+                            if(err) {
+                                callback(err);
+                            } else {
+                                var component = page.get('components')[0];
+                                self.log.debug('Using this for data', component);
+                                app.render('emails/base_email_order', component, function(err, html) {
+                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
+                                        callback(null, updatedOrder);
+                                    });
+                                });
+
+                            }
+                        });
+
+                    }
+                });
+
 
             }
         ], function(err, result){

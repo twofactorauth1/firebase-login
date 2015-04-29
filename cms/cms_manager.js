@@ -1959,5 +1959,28 @@ module.exports = {
         }).pipe(request.put(s3Url).on('error', function(err){
             console.log('error during put: ' + err);
         }).on('close', callback));
+    },
+
+
+    getEmailPage: function(accountId, email_type, fn) {
+        var self = this;
+        log.debug('>> getEmailPage');
+
+        var query = {
+            accountId: accountId,
+            type:'email',
+            email_type:email_type,
+            latest:true
+        };
+
+        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+            if(err) {
+                log.error('Error finding email page: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getEmailPage');
+                return fn(null, page);
+            }
+        });
     }
 };
