@@ -3,7 +3,24 @@
  * controller for social feed
  */
 (function(angular) {
-    app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
+    app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
+
+        // TODO: temporary, remove these functions
+        $scope.foo = function(post) {
+            $log.debug("foo: \n" + post);
+        };
+
+        $scope.bar = function() {
+
+        };
+
+        $scope.foo2 = function() {
+
+        };
+
+        $scope.foo3 = function() {
+
+        };
 
         /*
          * @openModal
