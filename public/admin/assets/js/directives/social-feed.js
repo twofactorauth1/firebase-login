@@ -27,6 +27,7 @@ app.directive('twitterFeed', function () {
         scope: {
             post: '=',
             actionReply: '&',
+            actionFavorite: '&',
             actionRetweet: '&',
             actionDirectMessage: '&'
         }

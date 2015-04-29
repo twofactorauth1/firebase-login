@@ -5,23 +5,6 @@
 (function(angular) {
     app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
 
-        // TODO: temporary, remove these functions
-        $scope.foo = function(post) {
-            $log.debug("foo: \n" + post);
-        };
-
-        $scope.bar = function() {
-
-        };
-
-        $scope.foo2 = function() {
-
-        };
-
-        $scope.foo3 = function() {
-
-        };
-
         /*
          * @openModal
          * -
@@ -354,7 +337,7 @@
                     toaster.pop('success', 'Comment added', 'Comment added to the facebook post.');
                 });
             } else if ($scope.commentType == 'tw') {
-                SocialConfigService.addTwitterPostComment($scope.selectedSocial.socialId, $scope.addCommentPage.sourceId, $scope.selectedSocial.screen_name, $scope.addCommentinModal, function(comment) {
+                SocialConfigService.addTwitterReply($scope.selectedSocial.socialId, $scope.addCommentPage.sourceId, $scope.selectedSocial.screen_name, $scope.addCommentinModal, function(comment) {
                     $scope.visibleComments.unshift({
                         picture: $scope.selectedSocial.profile_image_url,
                         created: new Date(),

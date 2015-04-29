@@ -70,8 +70,8 @@
             <div masonry id="mcontainer" load-images="false" masonry-options="{columnWidth: '.masonry-brick'}" reload-on-show class="margin-bottom-15">
                 <div class="col-xs-12 col-sm-6 col-md-4 masonry-brick" ng-repeat="post in displayFeed | orderByArrayLength:orderByAttribute track by $index">
                     <facebook-post post="post" action-like="showLikeModal(aPost)" action-comment="showCommentModal(aPost)"></facebook-post>
-                    <twitter-feed post="post" action-reply="foo2(aPost)" action-retweet="foo3(aPost)" action-direct-message="updateComments(aPost)"></twitter-feed>
-                    <twitter-follower post="post" action-tweet-at="foo(aFollower)" action-follow-back="bar(aFollower)" action-direct-message="updateComments(aFollower)"></twitter-follower>
+                    <twitter-feed post="post" action-favorite="showLikeModal(aPost)" action-reply="showCommentModal(aPost)" action-retweet="showCommentModal(aPost)" action-direct-message="updateComments(aPost)"></twitter-feed>
+                    <twitter-follower post="post" action-tweet-at="showCommentModal(aFollower)" action-follow-back="bar(aFollower)" action-direct-message="updateComments(aFollower)"></twitter-follower>
                 </div>
             </div>
             <div ng-show="feed.length <= 0 && isLoaded">

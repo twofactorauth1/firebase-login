@@ -32,7 +32,8 @@
             <div class="timeline-btns">
                 <div class="pull-left">
                     <a href="" tooltip-placement="top" tooltip-html-unsafe="Reply" data-toggle="modal" data-target="#marketing-reply" ng-click="actionReply({aPost: post})" class="padding-5 text-muted"><i class="fa fa-reply"></i></a>
-                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click="actionRetweet({aPost: post})" class="padding-5 text-muted"><i class="fa fa-retweet"></i></a>
+                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Retweet" data-toggle="modal" data-target="#marketing-retweet" ng-click="actionRetweet({aPost: post})" class="padding-5 text-muted"><i class="fa fa-retweet"></i><span ng-if="post.retweet_count > 0"> {{post.retweet_count}}</span></a>
+                    <a href="" tooltip-placement="top" tooltip-html-unsafe="Favorite" data-toggle="modal" data-target="#marketing-favorite" ng-click="actionFavorite({aPost: post})" class="padding-5 text-muted"><i class="fa fa-star-o"></i><span ng-if="post.favorite_count > 0"> {{post.favorite_count}}</span></a>
                     <a tooltip-placement="top" tooltip-html-unsafe="Direct Message" target="_blank" data-toggle="modal" data-target="#marketing-comments-tw" ng-click="actionDirectMessage({aPost: post})" class="padding-5 text-muted"><i class="fa fa-envelope"></i></a>
                     <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank" class="padding-5 text-muted"><i class="fa fa-link"></i></a>
                 </div>
