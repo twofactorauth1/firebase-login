@@ -68,7 +68,7 @@
           order.line_items_total = 0;
         }
 
-        order.total = order.total.toFixed(2);
+        order.total = order.total;
       });
       $scope.orders = orders;
     });

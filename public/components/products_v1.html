@@ -1,4 +1,4 @@
-<div class="products-v1" data-class="products" data-id="{{component._id}}">
+<div class="products-v1" data-class="products" data-id="{{component._id}}" ng-controller="ProductsComponentCtrl">
     <div class="products">
         <header class="jumbotron hero-spacer col-xs-12d">
             <div class="title">
@@ -11,7 +11,7 @@
             </div>
         </header>
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in layout.products | filter:{status:'active'}:true">
+            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true">
                 <div class="product">
                     <div class="thumbnail">
                         <div class="product-img">
@@ -179,6 +179,14 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
+                                                <label class="control-label" for="email">Email</label>
+                                                <input type="text" class="form-control" id="email" ng-model="newContact.details[0].emails[0].email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
                                                 <label class="control-label" for="address">Address</label>
                                                 <input type="text" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
                                             </div>
@@ -292,20 +300,20 @@
                     </div>
                     <div class="row payment" ng-class="{'hidden': checkoutModalState !== 3}">
                         <div class="col-sm-8 information">
-                            <div class="clearfix mb30"></div>
+                            <div class="clearfix margin-bottom-30"></div>
                             <div class="card-wrapper"></div>
-                            <div class="clearfix mb30"></div>
+                            <div class="clearfix margin-bottom-30"></div>
                             <div class="active col-xs-12">
                                 <form name="product-card-details" action="">
                                     <div class="row">
                                         <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
-                                            <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control input-lg">
+                                            <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
                                         <div class="visible-xs mb20"></div>
                                         <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
-                                            <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                                            <input placeholder="Full name" type="text" id="name" name="name" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
@@ -313,12 +321,12 @@
                                     <div class="clearfix mb20"></div>
                                     <div class="row">
                                         <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
-                                            <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                            <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
                                         <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
-                                            <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                            <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>

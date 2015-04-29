@@ -111,6 +111,7 @@ module.exports = {
                     }
                     var application_fee = 0;
                     var userId = null;
+                    log.debug('contant ', contact);
                     var receipt_email = contact.getEmails()[0];
                     log.debug('Setting receipt_email to ' + receipt_email);
 
@@ -141,7 +142,7 @@ module.exports = {
             },
             //update
             function(savedOrder, charge, callback){
-                log.debug('updating saved order');
+                log.debug('updating saved order ', savedOrder);
                 /*
                  * need to set:
                  * paid:true
@@ -151,7 +152,7 @@ module.exports = {
                  * modified.by: userId
                  */
                 savedOrder.set('updated_at', new Date());
-                savedOrder.set('status', savedOrder.status.PENDING);
+                // savedOrder.set('status', savedOrder.status.PENDING);
                 var paymentDetails = savedOrder.get('payment_details');
                 paymentDetails.paid = true;
                 paymentDetails.charge = charge;
