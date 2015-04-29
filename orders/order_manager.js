@@ -189,14 +189,20 @@ module.exports = {
                         callback(err);
                     } else {
                         var business = account.get('business');
+                        if(!business || !business.emails || !business.emails[0].email) {
+                            log.warn('No account email.  No NEW_ORDER email sent');
+                            callback(null, updatedOrder);
+                        }
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
+                        
                         cmsManager.getEmailPage(accountId, 'new_order', function(err, page){
-                            if(err) {
-                                callback(err);
+                            if(err || !page) {
+                                log.warn('No NEW_ORDER email sent: ' + err);
+                                callback(null, updatedOrder);
                             } else {
                                 var component = page.get('components')[0];
-                                self.log.debug('Using this for data', component);
+                                log.debug('Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
                                     mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
                                         callback(null, updatedOrder);
