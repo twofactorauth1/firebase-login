@@ -273,7 +273,6 @@ app.constant('JS_REQUIRES', {
         'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
         'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
 
-        'cropCtrl': 'assets/js/controllers/cropCtrl.js',
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',
         'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
         'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
@@ -281,7 +280,6 @@ app.constant('JS_REQUIRES', {
         'ordersCtrl': 'assets/js/controllers/ordersCtrl.js',
         'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
         'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
-        'chartsCtrl': 'assets/js/controllers/chartsCtrl.js',
         'calendarCtrl': 'assets/js/controllers/calendarCtrl.js',
         'nestableCtrl': 'assets/js/controllers/nestableCtrl.js',
         'validationCtrl': ['assets/js/controllers/validationCtrl.js'],

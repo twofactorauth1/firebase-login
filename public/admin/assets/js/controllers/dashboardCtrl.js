@@ -191,7 +191,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       $scope.totalReturningVisitors = 0;
       $scope.lastVisitorDate = data[2].result[0].keen.created_at;
       var tempData = [];
-      _.each($scope.getDaysThisMonth(), function (day, index) {
+      _.each($scope.getDaysThisMonth(), function (day) {
         var thisDaysVisitors = 0;
         _.each(returningVisitors, function (visitor, index) {
           if ($scope.isSameDateAs(new Date(visitor.timeframe.start), new Date(day))) {
@@ -225,7 +225,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       }
       $scope.revenueThisMonth = 0;
       var tempData = [];
-      _.each($scope.getDaysThisMonth(), function (day, index) {
+      _.each($scope.getDaysThisMonth(), function (day) {
         var thisDaysRevenue = 0;
         _.each(revenue, function (rev) {
           if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
@@ -279,8 +279,9 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         start: new Date(),
         end: new Date()
       };
-      if (!angular.isDefined($scope.activity_type))
+      if (!angular.isDefined($scope.activity_type)) {
         $scope.activity_type = '';
+      }
       $scope.activities = $filter('filter')($scope.activities, {
         activityType: $scope.activity_type
       });
