@@ -490,25 +490,25 @@
                     <div class="panel-body">
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label>Link Text</label>
+                                <input class="form-control" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                            </div>
+                            <div class="form-group">
+                                <label>Link Url</label>
+                                <input indigeweb-validate-form-fields validation-type="url" class="form-control" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label>Allow Product View</label>
-                                <select class="form-control cs-select cs-skin-elastic" ng-model="product.externalLinkAllowProductView">
+                                <select class="cs-select cs-skin-elastic" ng-model="product.externalLinkAllowProductView">
                                     <option value=true>Yes</option>
                                     <option value=false>No</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Link Text</label>
-                                <input class="form-control" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Link Url</label>
-                                <input indigeweb-validate-form-fields validation-type="url" class="form-control" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
-                            </div>
-                            <div class="form-group">
                                 <label>Open In</label>
-                                <select class="form-control cs-select cs-skin-elastic" ng-model="product.externalLinkOpenIn">
+                                <select class="cs-select cs-skin-elastic" ng-model="product.externalLinkOpenIn">
                                     <option value='new'>New Window</option>
                                     <option value='same'>Same Window</option>
                                 </select>
@@ -610,7 +610,7 @@
                                                         <input type="text" class="form-control" placeholder="File URL" ng-model="download.file">
                                                     </td>
                                                     <td width="30%">
-                                                        <button type="button" class="btn btn-wide btn-o btn-info media-modal" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"' ng-if="!download.file">Choose File</button>
+                                                        <button type="button" class="btn btn-wide btn-o btn-info media-modal" media-modal-show-insert="true" on-insert-mediacb="insertDownloadFile" user='user' insert-media-type='"image"' ng-if="!download.file">Choose File</button>
                                                         <button type="button" class="btn btn-wide btn-o btn-danger" ng-if="download.file">Delete</button>
                                                     </td>
                                                 </tr>

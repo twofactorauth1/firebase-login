@@ -35,17 +35,17 @@
                             <a class="btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
-                            <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external_link' && product.clicked != true && !product.hasVariations">
+                            <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external' && product.clicked != true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart"></span> Add to Cart
                                 </div>
                             </button>
-                            <button class="btn btn-success btn-block center" href="#" ng-if="product.type != 'external_link' && product.clicked == true && !product.hasVariations">
+                            <button class="btn btn-success btn-block center" href="#" ng-if="product.type != 'external' && product.clicked == true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-check"></span> Added to Cart!
                                 </div>
                             </button>
-                            <a class="btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external_link'" target="{{product.externalLinkOpenIn}}">
+                            <a class="btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external'" target="{{product.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText || 'External Link'}}
                                 </div>
@@ -441,17 +441,17 @@
                                     </div>
                                 </div>
                                 <div class="actions">
-                                    <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked != true && matchedVariation">
+                                    <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked != true && matchedVariation">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart"></span> Add to Cart
                                         </div>
                                     </button>
-                                    <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
+                                    <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
                                         <div data-class="btn-text">
                                             <span class="fa fa-check"></span> Added to Cart!
                                         </div>
                                     </button>
-                                    <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external_link'" target="{{selectedProduct.externalLinkOpenIn}}">
+                                    <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external'" target="{{selectedProduct.externalLinkOpenIn}}">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
                                         </div>

@@ -115,6 +115,15 @@
     };
 
     /*
+     * @insertDownloadFile
+     * - insert media function
+     */
+
+    $scope.insertDownloadFile = function (asset) {
+      console.log('insertDownloadFile');
+    };
+
+    /*
      * @addAttribute
      * - add an attribute
      */
