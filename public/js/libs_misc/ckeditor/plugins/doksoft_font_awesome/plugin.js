@@ -89,7 +89,7 @@
 			var bindClick = function(instance)
 			{
 				selectedElement = null;
-				var spans = $(instance.element.$.children).find(".fa");
+				var spans = $(instance.element.$.children).find("span.fa");
 				for (var Z = 0; Z < spans.length; Z++) {
 				   spans[Z].onclick = function() {
 				   		var sel = instance.getSelection();
