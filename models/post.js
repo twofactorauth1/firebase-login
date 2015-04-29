@@ -219,8 +219,10 @@ var post = $$.m.ModelBase.extend({
             link: ['https://twitter.com', follower.screen_name].join('/'),
             from: {
                 name: follower.screen_name,
+                fullname: follower.name,
                 description: follower.description,
-                profileimg: follower.profile_background_image_url_https
+                profileimg: follower.profile_background_image_url_https,
+                profile_pic: follower.profile_image_url_https,
             }
         };
 

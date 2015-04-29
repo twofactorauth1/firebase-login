@@ -12,7 +12,8 @@
                         <img alt="" ng-src="{{post.from.profile_pic}}" class="media-object img-circle">
                     </a>
                     <div class="media-body">
-                        <h4 class="text-primary" slide-toggle="#slide-{{$index}}">{{post.from.name}} <small>shared a {{post.postType}}</small></h4>
+                        <h4 class="text-primary" slide-toggle="#slide-{{$index}}">{{post.from.fullname}}</h4>
+                        @{{post.from.name}} <small>FOLLOWS YOU</small>
                         <small class="text-muted">{{formatDate(post.date)}}</small>
                     </div>
                 </div>
