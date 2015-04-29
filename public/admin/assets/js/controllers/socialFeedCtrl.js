@@ -72,11 +72,7 @@
                 trackedAccount.checked = true;
                 $scope.trackedAccounts.push(trackedAccount);
 
-                //get feed items
-                if (trackedAccount.toggle) {
-
-                    $scope.fetchFeeds(trackedAccount);
-                }
+                $scope.fetchFeeds(trackedAccount);
             });
             //wait a few seconds to ensure everything is loaded
             setTimeout(function() {
@@ -88,40 +84,42 @@
         };
 
         $scope.fetchFeeds = function(trackedAccount) {
-            if (trackedAccount.type == 'tw') {
+            if (trackedAccount.toggle && trackedAccount.checked) {
+                if (trackedAccount.type == 'tw') {
 
-                // get feed
-                SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
-                    $scope.feedLengths[trackedAccount.id] = posts.length;
-                    //$log.debug('number of twitter posts: ' + posts.length);
-                    _.each(posts, function(post) {
-                        post.trackedId = trackedAccount.id;
-                        $scope.feed.push(post);
-                        //$log.debug(post);
+                    // get feed
+                    SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
+                        $scope.feedLengths[trackedAccount.id] = posts.length;
+                        //$log.debug('number of twitter posts: ' + posts.length);
+                        _.each(posts, function(post) {
+                            post.trackedId = trackedAccount.id;
+                            $scope.feed.push(post);
+                            //$log.debug(post);
+                        });
                     });
-                });
 
-                // get followers
-                SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
-                    // TODO: what does feedLengths need to be?
-                    //$scope.feedLengths[trackedAccount.id] = posts.length;
-                    //$log.debug('number of twitter follower posts: ' + posts.length);
-                    _.each(posts, function(post) {
-                        post.trackedId = trackedAccount.id;
-                        $scope.feed.push(post);
-                        //$log.debug(post);
+                    // get followers
+                    SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
+                        // TODO: what does feedLengths need to be?
+                        //$scope.feedLengths[trackedAccount.id] = posts.length;
+                        //$log.debug('number of twitter follower posts: ' + posts.length);
+                        _.each(posts, function(post) {
+                            post.trackedId = trackedAccount.id;
+                            $scope.feed.push(post);
+                            //$log.debug(post);
+                        });
                     });
-                });
-            }
-            if (trackedAccount.type == 'fb') {
-                SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
-                    $scope.feedLengths[trackedAccount.id] = posts.length;
-                    _.each(posts, function(post) {
-                        post.trackedId = trackedAccount.id;
-                        post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
-                        $scope.feed.push(post);
+                }
+                if (trackedAccount.type == 'fb') {
+                    SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
+                        $scope.feedLengths[trackedAccount.id] = posts.length;
+                        _.each(posts, function(post) {
+                            post.trackedId = trackedAccount.id;
+                            post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
+                            $scope.feed.push(post);
+                        });
                     });
-                });
+                }
             }
         };
 

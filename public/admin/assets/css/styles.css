@@ -12615,6 +12615,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 .product-detail #variation-manager .ui-select-toggle {
   padding-right: 20px;
 }
+.product-detail #variation-manager #panel4 .panel-body {
+  border-top: 1px solid #eee;
+}
 /* ---------------------------------------------------------------------- */
 /*  Customers
 /* ---------------------------------------------------------------------- */

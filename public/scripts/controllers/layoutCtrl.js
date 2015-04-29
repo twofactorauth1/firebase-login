@@ -439,17 +439,18 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.selectedProduct = product;
         };
 
-        $scope.selectDisabled = function(index) {
-            if (index > 0) {
-                return true;
-            }
-            return false;
-        };
+        // $scope.selectDisabled = function(index) {
+        //     if (index > 0) {
+        //         return true;
+        //     }
+        //     return false;
+        // };
 
         $scope.selectChanged = function(index) {
             var selectedAttributes = $scope.selectedProduct.attributes;
             var allselected = false;
             _.each(selectedAttributes, function(attribute, i) {
+                console.log('attribute ', attribute);
                 if (attribute.selected) {
                     allselected = true;
                 } else {
@@ -459,7 +460,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             });
 
             if (allselected) {
-                $scope.updatePrice();
+                console.log('updating price');
+                // $scope.updatePrice();
             } else {
                 console.log('all not selected');
             }
