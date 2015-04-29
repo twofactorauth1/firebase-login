@@ -343,20 +343,23 @@ module.exports = {
 
     createDefaultPageForAccount: function(accountId, websiteId, fn) {
         var self = this;
-        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, page){
+        cmsDao.createDefaultPageForAccount(accountId, websiteId, function(err, pageAry){
             if(err) {
                 log.error('Error creating default page: ' + err);
                 return fn(err, null);
             }
-            log.debug('creating page screenshot');
-            self.updatePageScreenshot(page.id(), function(err, value){
-                if(err) {
-                    log.error('Error updating screenshot: ' + err);
-                } else {
-                    log.debug('updated screenshot: ' + value);
-                }
+            log.debug('creating screenshots for default pages');
+            _.each(pageAry, function(page){
+                self.updatePageScreenshot(page.id(), function(err, value){
+                    if(err) {
+                        log.error('Error updating screenshot: ' + err);
+                    } else {
+                        log.debug('updated screenshot: ' + value);
+                    }
+                });
             });
-            return fn(null, page);
+
+            return fn(null, pageAry[0]);
         });
     },
 
