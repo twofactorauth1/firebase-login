@@ -2793,7 +2793,7 @@ div[data-class="blog"] .single-blog {
   border-color: #b5b5b5;
 }
 #component-setting-modal {
-  top: 10%;
+  z-index: 999 !important;
 }
 #component-setting-modal .nav.nav-tabs {
   margin-top: 0px !important;
@@ -2810,6 +2810,8 @@ div[data-class="blog"] .single-blog {
   background-color: #e8e8e8;
 }
 #component-setting-modal .modal-body {
+  max-height: 250px;
+  overflow: auto;
   background-color: #fff;
 }
 #component-setting-modal .modal-footer,

@@ -285,9 +285,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
             $scope.$apply(function() {
                 $scope.initializePostData();
-                setTimeout(function() {
-                    activateCKEditor();
-                }, 500)
             })
         }
 
