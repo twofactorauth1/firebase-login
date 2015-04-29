@@ -216,7 +216,7 @@ var post = $$.m.ModelBase.extend({
             type: $$.constants.social.types.TWITTER,
             sourceId: follower.id_str,
             postType: "follower",
-            link: 'TODO_FIX_LINK',
+            link: ['https://twitter.com', follower.screen_name].join('/'),
             from: {
                 name: follower.screen_name,
                 description: follower.description,
