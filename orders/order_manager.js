@@ -179,12 +179,15 @@ module.exports = {
             //send new order email
             function(updatedOrder, contact, callback) {
                 log.debug('Sending new order email');
-                var toAddress = contact.getEmails()[0];
+                var toAddress = contact.getEmails()[0].email;
                 var toName = contact.get('first') + ' ' + contact.get('last');
-                var subject = 'New Order';
                 var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
+
+                log.debug('toAddress ', toAddress);
+                log.debug('toName ', toName);
+                log.debug('toAddress ', toAddress);
 
                 accountDao.getAccountByID(accountId, function(err, account){
                     if(err) {
@@ -195,6 +198,7 @@ module.exports = {
                             log.warn('No account email.  No NEW_ORDER email sent');
                             callback(null, updatedOrder);
                         }
+                        var subject = 'Your '+business.name+' order receipt from '+updatedOrder.get('created.date');
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
                         
