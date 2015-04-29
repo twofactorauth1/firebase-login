@@ -285,9 +285,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
             $scope.$apply(function() {
                 $scope.initializePostData();
-                setTimeout(function() {
-                    activateCKEditor();
-                }, 500)
             })
         }
 
@@ -454,6 +451,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             for (name in CKEDITOR.instances) {
                 CKEDITOR.instances[name].destroy()
             }
+        };
+
+
+        window.calculateWindowHeight = function() {
+           return $scope.parentScope.calculateWindowHeight();
         };
 
         /*

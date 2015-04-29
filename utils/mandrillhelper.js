@@ -213,6 +213,98 @@ var mandrillHelper =  {
         });
     },
 
+    sendOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId, vars, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> sendOrderEmail');
+        vars.push({
+            "name": "SENDDATE",
+            "content": moment().format('MMM Do, YYYY')
+            },
+            {
+                "name": 'ORDERID',
+                "content": orderId
+            });
+        var message = {
+            'html': htmlContent,
+            'subject': subject,
+            'from_email':fromAddress,
+            'to': [
+                {
+                    'email': toAddress,
+                    'type': 'to'
+                }
+            ],
+            "headers": {
+                'encoding': 'UTF8'
+            },
+            "important": false,
+            "track_opens": true,
+            "track_clicks": true,
+            "auto_text": null,
+            "auto_html": null,
+            "inline_css": null,
+            "url_strip_qs": null,
+            "preserve_recipients": null,
+            "view_content_link": false,
+            "bcc_address": null,
+            "tracking_domain": null,
+            "signing_domain": null,
+            "return_path_domain": null,
+            "merge": false,
+            "merge_vars": [
+                {
+                    "rcpt": toAddress,
+                    "vars": vars
+                }
+            ],
+            "subaccount": null,
+            "google_analytics_domains": [
+                "indigenous.io" //TODO: This should be dynamic
+            ],
+            "google_analytics_campaign": null,
+            "metadata": {
+                "accountId": accountId
+            },
+            "recipient_metadata": [
+                {
+                    "rcpt": toAddress,
+                    "values": {
+
+                    }
+                }
+            ],
+            "attachments": null,
+            "images": null
+        };
+        if(fromName && fromName.length > 0) {
+            message.from_name = fromName;
+        }
+        if(toName && toName.length > 0) {
+            message.to.name = toName;
+        }
+        var async = false;
+        var ip_pool = "Main Pool";
+
+        var send_at = moment().utc().toISOString();
+
+        self.log.debug('message: ' + JSON.stringify(message));
+        self.log.debug('async: ' + async);
+        self.log.debug('ip_pool: ' + ip_pool);
+        self.log.debug('send_at: ' + send_at);
+
+
+        mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+            self.log.debug('result >>> ', result);
+            fn(null, result);
+        }, function(e) {
+            // Mandrill returns the error as an object with name and message keys
+            self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+            // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+            fn(e, null);
+        });
+    },
+
     _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         /*var now = new Date();
         now.setHours(hoursValue);

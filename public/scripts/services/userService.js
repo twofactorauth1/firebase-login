@@ -89,15 +89,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
             fn(data);
         })
         .error(function (err) {
-            console.log('Attempt #'+attemptNumber+' END:userService with ERROR', err);
-            if (attemptNumber < maxAttempts) {
-                setTimeout(function(){
-                    self.initializeUser(user, fn);
-                    attemptNumber+=1;
-                },3000);
-            } else {
-                fn(null);
-            }
+            fn(null);
         });
     };
 

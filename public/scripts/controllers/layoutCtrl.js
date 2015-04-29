@@ -1059,10 +1059,32 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
               });
             });
-          }
-          if (value && value.type === 'contact-us') {
-            $scope.updateContactUsMap(value);
-          }
+            setTimeout(function() {
+                if (angular.element("div.meet-team-height").length) {
+                    var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
+                        return angular.element(this).height();
+                    }).get());
+                    angular.element(".meet-team-height").css("min-height", maxTeamHeight);
+                }
+                for (var i = 1; i <= 3; i++) { 
+                    if($("div.feature-height-"+i).length)
+                    {
+                      var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                      {
+                          return $(this).height();
+                      }).get());
+                      $("div.feature-single").css("min-height", maxFeatureHeight - 10);
+                    }
+                }
+
+            }, 500)
+            $scope.parentScope.resizeIframe();
+        };
+
+
+        window.calculateWindowHeight = function() {
+           return $scope.parentScope.calculateWindowHeight();
+        };
 
         });
       }
@@ -1341,21 +1363,329 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
           } else if (data) {
             angular.element("#contact_email_" + component._id + " .error").html("");
-            angular.element("#contact_email_" + component._id).removeClass('has-error').addClass('has-success');
-            angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
 
-            contact.email = '';
-            contact.message = '';
-            contact.success = true;
-            component.fields.forEach(function (value) {
-              value.model = null;
-            })
-            setTimeout(function () {
-              $scope.$apply(function () {
-                contact.success = false;
-              });
-            }, 3000);
-          }
+            angular.element("#contact_email_" + component._id).removeClass('has-error');
+            angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+            angular.element("#contact_phone_" + component._id + " .error").html("");
+            angular.element("#contact_phone_" + component._id).removeClass('has-error');
+            angular.element("#contact_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+
+            if (!contact || !contact.email) {
+                angular.element("#contact_email_" + component._id + " .error").html("Email Required");
+                angular.element("#contact_email_" + component._id).addClass('has-error');
+                angular.element("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
+                return;
+            }
+
+            var first_name = _.findWhere(component.fields, {
+                name: 'first'
+            });
+            var last_name = _.findWhere(component.fields, {
+                name: 'last'
+            });
+            var phone = _.findWhere(component.fields, {
+                name: 'phone'
+            });
+            if (first_name)
+                contact.first_name = first_name.model;
+            if (last_name)
+                contact.last_name = last_name.model;
+            if (phone)
+                contact.phone = phone.model;
+
+            if (contact.phone) {
+                var regex = /^\s*$|^(\+?1-?\s?)*(\([0-9]{3}\)\s*|[0-9]{3}-)[0-9]{3}-[0-9]{4}|[0-9]{10}|[0-9]{3}-[0-9]{4}$/;
+                if (!regex.test(contact.phone)) {
+                    angular.element("#contact_phone_" + component._id + " .error").html("Phone is invalid");
+                    angular.element("#contact_phone_" + component._id).addClass('has-error');
+                    angular.element("#contact_phone_" + component._id + " .glyphicon").addClass('glyphicon-remove');
+                    return;
+                }
+            }
+            if (contact.email) {
+                if (contact.full_name) {
+                    var full_name = contact.full_name.split(" ")
+                    contact.first_name = full_name[0];
+                    contact.last_name = full_name[1];
+                }
+                var contact_info = {
+                    first: contact.first_name,
+                    last: contact.last_name,
+                    fromEmail: component.from_email,
+                    details: [{
+                        emails: [],
+                        phones: []
+                    }],
+                    activity: {
+                        activityType: 'CONTACT_FORM',
+                        note: "Contact form data.",
+                        sessionId: ipCookie("session_cookie")["id"],
+                        contact: contact
+                    }
+                };
+
+                contact_info.details[0].emails.push({
+                    email: contact.email
+                });
+                if (contact.phone) {
+                    contact_info.details[0].phones.push({
+                        number: contact.phone,
+                        type: 'm'
+                    });
+                }
+
+
+                userService.addContact(contact_info, function(data, err) {
+                    if (err && err.code === 409) {
+                        // angular.element("#input-company-name").val('');
+                        angular.element("#contact_email_" + component._id + " .error").html("Email already exists");
+                        angular.element("#contact_email_" + component._id).addClass('has-error');
+                        angular.element("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
+
+                    } else if (data) {
+                        angular.element("#contact_email_" + component._id + " .error").html("");
+                        angular.element("#contact_email_" + component._id).removeClass('has-error').addClass('has-success');
+                        angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+
+                        contact.email = '';
+                        contact.message = '';
+                        contact.success = true;
+                        component.fields.forEach(function(value) {
+                            value.model = null;
+                        })
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                contact.success = false;
+                            });
+                        }, 3000);
+                    }
+
+                });
+            }
+
+
+            //create contact
+
+
+            //redirect to signup with details
+            //window.location.href = "http://app.indigenous.local:3000/signup";
+        };
+
+        $scope.removeAccount = function(type) {
+            $scope.newAccount.businessName = null;
+            $scope.newAccount.profilePhoto = null;
+            $scope.newAccount.tempUserId = null;
+            $scope.newAccount.email = null;
+            $scope.tmpAccount.tempUser = null;
+        };
+
+        $scope.makeSocailAccount = function(socialType) {
+            if (socialType) {
+                window.location.href = "/signup/" + socialType + "?redirectTo=/signup";
+                return;
+            }
+        };
+        if ($scope.$location.$$path === '/signup') {
+            userService.getTmpAccount(function(data) {
+                $scope.tmpAccount = data;
+            });
+        };
+
+        $scope.showFooter = function(status) {
+            if (status)
+                angular.element("#footer").show();
+            else
+                angular.element("#footer").hide();
+        };
+
+        $scope.createAccount = function(newAccount) {
+            //validate
+            //email
+            $scope.isFormValid = false;
+            $scope.showFooter(true);
+            if (!$scope.newAccount.email) {
+                $scope.checkEmailExists(newAccount);
+                return;
+            }
+
+            //pass
+            if (!$scope.newAccount.password && !$scope.newAccount.tempUserId) {
+                $scope.checkPasswordLength(newAccount);
+                return;
+            }
+
+            //url
+            if (!$scope.newAccount.businessName) {
+                $scope.checkDomainExists(newAccount);
+                return;
+            }
+
+            //membership selection
+            if (!$scope.newAccount.membership) {
+                $scope.checkMembership(newAccount);
+                return;
+            }
+
+            //credit card
+
+            newAccount.card = {
+                number: angular.element('#number').val(),
+                cvc: angular.element('#cvc').val(),
+                exp_month: parseInt(angular.element('#expiry').val().split('/')[0]),
+                exp_year: parseInt(angular.element('#expiry').val().split('/')[1])
+            };
+
+            var cc_name = angular.element('#name').val();
+
+            if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year) {
+                //|| !cc_name
+                //hightlight card in red
+                $scope.checkCardNumber();
+                $scope.checkCardExpiry();
+                $scope.checkCardCvv();
+                return;
+            }
+
+            if(!$scope.couponIsValid) {
+                return;
+            }
+            //end validate
+            $scope.isFormValid = true;
+            $scope.showFooter(false);
+            var tmpAccount = $scope.tmpAccount;
+            tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+            userService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+                var newUser = {
+                    username: newAccount.email,
+                    password: newAccount.password,
+                    email: newAccount.email,
+                    accountToken: data.token,
+                    coupon: newAccount.coupon
+                };
+                //get the token
+                PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
+                    if (error) {
+                        console.info(error);
+                        $scope.$apply(function() {
+                            $scope.isFormValid = false;
+                            $scope.showFooter(true);
+                        })
+                        switch (error.param) {
+                            case "number":
+                                angular.element("#card_number .error").html(error.message);
+                                angular.element("#card_number").addClass('has-error');
+                                angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                break;
+                            case "exp_year":
+                                angular.element("#card_expiry .error").html(error.message);
+                                angular.element("#card_expiry").addClass('has-error');
+                                angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                break;
+                            case "cvc":
+                                angular.element("#card_cvc .error").html(error.message);
+                                angular.element("#card_cvc").addClass('has-error');
+                                angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                                break;
+                        }
+                    } else {
+                        newUser.cardToken = token;
+                        newUser.plan = $scope.newAccount.membership;
+                        newUser.anonymousId = window.analytics.user().anonymousId();
+                        newUser.permanent_cookie = ipCookie("permanent_cookie");
+                        newUser.fingerprint = new Fingerprint().get();
+                        if ($scope.subscriptionPlanOneTimeFee) {
+                            newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
+                        }
+                        userService.initializeUser(newUser, function(data) {
+                            if (data && data.accountUrl) {
+                                /*
+                                 * I'm not sure why these lines were added.  The accountUrl is a string.
+                                 * It will never have a host attribute.
+                                 *
+                                 * var currentHost = $.url(window.location.origin).attr('host');
+                                 * var futureHost = $.url(data.accountUrl).attr('host');
+                                 * if (currentHost.indexOf(futureHost) > -1) {
+                                 *      window.location = data.accountUrl;
+                                 * } else {
+                                 *      window.location = currentHost;
+                                 * }
+                                 */
+                                window.location = data.accountUrl;
+                            } else {
+                                $scope.isFormValid = false;
+                                $scope.showFooter(true);
+                            }
+                        });
+                    }
+
+                });
+
+            });
+        };
+
+        $scope.newAccount = {};
+
+        $scope.checkDomainExists = function(newAccount) {
+            if (!newAccount.businessName) {
+                angular.element("#business-name .error").html("Url Required");
+                angular.element("#business-name").addClass('has-error');
+                angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
+            } else {
+                var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                userService.checkDomainExists(name, function(data) {
+                    if (data != 'true') {
+                        angular.element("#business-name .error").html("Domain Already Exists");
+                        angular.element("#business-name").addClass('has-error');
+                        angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
+                    } else {
+                        angular.element("#business-name .error").html("");
+                        angular.element("#business-name").removeClass('has-error').addClass('has-success');
+                        angular.element("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    }
+                });
+            }
+        };
+
+        $scope.checkEmailExists = function(newAccount) {
+            $scope.newAccount.email = newAccount.email;
+            if (!newAccount.email) {
+                angular.element("#email .error").html("Email Required");
+                angular.element("#email").addClass('has-error');
+                angular.element("#email .glyphicon").addClass('glyphicon-remove');
+            } else {
+                userService.checkEmailExists(newAccount.email, function(data) {
+                    if (data === 'true') {
+                        angular.element("#email .error").html("Email Already Exists");
+                        angular.element("#email").addClass('has-error');
+                        angular.element("#email .glyphicon").addClass('glyphicon-remove');
+                    } else {
+                        angular.element("#email .error").html("");
+                        angular.element("#email").removeClass('has-error').addClass('has-success');
+                        angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    }
+                });
+            }
+        };
+
+        $scope.checkPasswordLength = function(newAccount) {
+            if (!newAccount.password) {
+                angular.element("#password .error").html("Password must contain at least 5 characters");
+                angular.element("#password").addClass('has-error');
+                angular.element("#password .glyphicon").addClass('glyphicon-remove');
+            } else {
+                angular.element("#password .error").html("");
+                angular.element("#password").removeClass('has-error').addClass('has-success');
+                angular.element("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
+        };
+
+        $scope.checkMembership = function(newAccount) {
+            if (!newAccount.membership) {
+                console.log('membership not selected');
+            } else {
+                console.log('membership has been selected');
+            }
+        };
 
         });
       }
@@ -1480,38 +1810,79 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
                 break;
             }
-          } else {
-            newUser.cardToken = token;
-            newUser.plan = $scope.newAccount.membership;
-            newUser.anonymousId = window.analytics.user().anonymousId();
-            newUser.permanent_cookie = ipCookie("permanent_cookie");
-            newUser.fingerprint = new Fingerprint().get();
-            if ($scope.subscriptionPlanOneTimeFee) {
-              newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
-            }
-            userService.initializeUser(newUser, function (data) {
-              if (data && data.accountUrl) {
-                /*
-                 * I'm not sure why these lines were added.  The accountUrl is a string.
-                 * It will never have a host attribute.
-                 *
-                 * var currentHost = $.url(window.location.origin).attr('host');
-                 * var futureHost = $.url(data.accountUrl).attr('host');
-                 * if (currentHost.indexOf(futureHost) > -1) {
-                 *      window.location = data.accountUrl;
-                 * } else {
-                 *      window.location = currentHost;
-                 * }
-                 */
-                window.location = data.accountUrl;
-              } else {
-                $scope.isFormValid = false;
-                $scope.showFooter(true);
-              }
-            });
-          }
+        };
 
-        });
+        $scope.checkCoupon = function() {
+            console.log('>> checkCoupon');
+            var coupon = $scope.newAccount.coupon
+            //console.dir(coupon);
+            //console.log($scope.newAccount.coupon);
+            if(coupon) {
+                PaymentService.validateCoupon(coupon, function(data){
+                    if(data.id && data.id === coupon) {
+                        console.log('valid');
+                        angular.element("#coupon-name .error").html("");
+                        angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+                        angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        $scope.couponIsValid = true;
+                    } else {
+                        console.log('invalid');
+                        angular.element("#coupon-name .error").html("Invalid Coupon");
+                        angular.element("#coupon-name").addClass('has-error');
+                        angular.element("#coupon-name .glyphicon").addClass('glyphicon-remove');
+                        $scope.couponIsValid = false;
+                    }
+                });
+            } else {
+                angular.element("#coupon-name .error").html("");
+                angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+                angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                $scope.couponIsValid = true;
+            }
+        };
+
+        /********** END SIGNUP SECTION **********/
+
+        $scope.addImage = function(component) {
+            parent.angular.element('body').trigger('add_image');
+        };
+        $scope.DeleteImageFromGallery = function(componentId, index) {
+            $scope.parentScope.deleteImageFromGallery(componentId, index);
+        };
+        $scope.AddImageToGallery = function(componentId, index) {
+            $scope.parentScope.addImageToGallery(componentId, index);
+        };
+        $scope.deleteImageFromThumbnail = function(componentId, index, parentIndex) {
+            var imageIndex = parentIndex > 0 ? (parentIndex * $scope.imagesPerPage + index) : index;
+            $scope.parentScope.deleteImageFromThumbnail(componentId, imageIndex);
+        };
+        $scope.addImageToThumbnail = function(componentId) {
+            $scope.parentScope.addImageToThumbnail(componentId);
+        };
+
+        $scope.feature_inserted = false;
+        $scope.team_inserted = false;
+        angular.element('body').on("DOMNodeInserted", ".feature", function (e)
+            {
+                setTimeout(function() {
+                  if(!$scope.feature_inserted)
+                  {
+                   $scope.feature_inserted = true; 
+                   for (var i = 0; i <= 3; i++) { 
+                      if($("div.feature-height-"+i).length)
+                      {
+                        var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                        {
+                            return $(this).height();
+                         }).get());
+
+                        $("div.feature-single").css("min-height", maxFeatureHeight - 20);
+                      }
+                    }
+                    $scope.feature_inserted = true;
+                  }  
+                }, 1000)
+            })
 
       });
     };

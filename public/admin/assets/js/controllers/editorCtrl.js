@@ -147,6 +147,17 @@
         };
 
         /*
+         * @window height
+        */
+
+        $scope.calculateWindowHeight = function()
+        { 
+           var scrollTop = $(document).scrollTop();
+           var winHeight = $(document).height();
+           return scrollTop//winHeight - scrollTop;
+        }
+
+        /*
          * @window:scroll
          * - when the window is scrolled in the admin, ud
          */
@@ -177,6 +188,14 @@
                     'position': 'relative'
                 });
             }
+                var postSettingsModal = angular.element("#iframe-website").contents().find("#component-setting-modal");
+                //var scrollTop = $(document).scrollTop(); 
+                //var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");       
+                //var toolBarTop = editorToolbar.offset().top;
+                if(postSettingsModal.length)
+                    postSettingsModal.css({
+                        'top': editorToolbar.offset().top + editorToolbar.height()
+                    });
         });
 
 
@@ -520,8 +539,18 @@
                     if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
                         $scope.tabs.address = true;
                     $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                    if ($(e.currentTarget).hasClass("single-post-settings"))
-                        $("#iframe-website").contents().find('#component-setting-modal').modal('show');
+                    if ($(e.currentTarget).hasClass("single-post-settings"))                       
+                     {
+                        //$("#iframe-website").contents().find('#component-setting-modal').modal('show');
+                        var postSettingsModal = angular.element("#iframe-website").contents().find("#component-setting-modal");
+                        var scrollTop = $(document).scrollTop(); 
+                        var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");       
+                        
+                        postSettingsModal.css({
+                            'top': editorToolbar.offset().top + editorToolbar.height()
+                        });
+                        postSettingsModal.modal('show');
+                    }
                     //iFrame.co .openModal('single-post-settings-modal');
                     else {
                         $scope.openModal('component-settings-modal');

@@ -213,6 +213,14 @@
                     });
             };
 
+            this.validateCoupon = function(couponId, fn) {
+                var apiUrl = baseUrl + ['integrations', 'payments', 'coupon', couponId, 'validate'].join('/');
+                $http.get(apiUrl)
+                    .success(function(data, status, headers, config) {
+                        fn(data);
+                    });
+            };
+
         }
     ]);
 })(angular);
