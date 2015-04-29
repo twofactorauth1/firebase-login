@@ -1,5 +1,6 @@
 'use strict';
-/*global app*/
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 (function (angular) {
   app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$stateParams", "ProductService", "toaster", function ($scope, $modal, $timeout, $stateParams, ProductService, toaster) {
 
