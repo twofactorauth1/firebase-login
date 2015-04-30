@@ -198,16 +198,17 @@ module.exports = {
                             log.warn('No account email.  No NEW_ORDER email sent');
                             callback(null, updatedOrder);
                         }
-                        var subject = 'Your '+business.name+' order receipt from '+updatedOrder.get('created.date');
+                        var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
-                        
+
                         cmsManager.getEmailPage(accountId, 'new_order', function(err, page){
                             if(err || !page) {
                                 log.warn('No NEW_ORDER email sent: ' + err);
                                 callback(null, updatedOrder);
                             } else {
                                 var component = page.get('components')[0];
+                                component.order = updatedOrder.attributes;
                                 log.debug('Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
                                     mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
