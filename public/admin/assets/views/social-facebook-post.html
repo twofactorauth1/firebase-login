@@ -32,9 +32,7 @@
             <div class="timeline-btns">
                 <div class="pull-left">
                     <a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="actionLike({aPost: post})" class="padding-5 text-muted"><i class="fa fa-thumbs-up"></i> {{post.likes.length || 0}}</a>
-                    <!--<a href="" tooltip-placement="top" tooltip-html-unsafe="Like" ng-click="showLikeModal(post)" class="padding-5 text-muted"><i class="fa fa-thumbs-up"></i> {{post.likes.length || 0}}</a>-->
                     <a href="" tooltip-placement="top" tooltip-html-unsafe="Comment" ng-click="actionComment({aPost: post})" class="padding-5 text-muted"><i class="fa fa-comment"></i> {{post.comments.length || 0}}</a>
-                    <!--<a href="" tooltip-placement="top" tooltip-html-unsafe="Comment" ng-click="showCommentModal(post)" class="padding-5 text-muted"><i class="fa fa-comment"></i> {{post.comments.length || 0}}</a>-->
                     <a ng-show='post.link' ng-href="{{post.link}}" tooltip-placement="top" tooltip-html-unsafe="External Link" target="_blank" class="padding-5 text-muted"><i class="fa fa-link"></i></a>
                 </div>
                 <div class="clearfix"></div>

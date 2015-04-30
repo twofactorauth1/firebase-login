@@ -460,6 +460,52 @@ var dao = {
         );
     },
 
+    favoritePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> favoritePostWithToken');
+
+        twitter.favorites("create", {
+                id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error favorite-ing status: ', error);
+                    fn(error, null);
+                } else {
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    self.log.debug('<< favoritePostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
+    unfavoritePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> unfavoritePostWithToken');
+
+        twitter.favorites("destroy", {
+                id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error un-favorite-ing status: ', error);
+                    fn(error, null);
+                } else {
+                    self.log.debug('data: ', data);
+                    self.log.debug('response:', response);
+                    self.log.debug('<< unfavoritePostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
     directMessageTwitterUserWithToken: function(accessToken, accessTokenSecret, userId, screenName, msg, fn) {
         var self = this;
         self.log.debug('>> directMessageTwitterUserWithToken');

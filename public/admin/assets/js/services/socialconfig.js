@@ -167,6 +167,22 @@
             });
         };
 
+        this.favTwitterPost = function(socialAccountId, postId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'favorite'].join('/');
+            $http.post(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.unfavTwitterPost = function(socialAccountId, postId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'favorite'].join('/');
+            $http.delete(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         //Facebook
         this.getFBPosts = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
