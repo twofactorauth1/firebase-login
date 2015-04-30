@@ -238,6 +238,15 @@ var dao = {
         });
     },
 
+    findContactsByEmail: function(accountId, email, fn) {
+        var self = this;
+        var query = {
+            'details.emails.email': email,
+            accountId: accountId
+        };
+        self.findMany(query, $$.m.Contact, fn);
+    },
+
     getContactByEmail: function (email, fn) {
         if (email == null) {
             return fn(null, null);
