@@ -115,7 +115,7 @@
     "jquery-ui": "~1.11.0",
     "requirejs": "2.1.17",
     "bootstrap-icon-picker": "https://github.com/victor-valencia/bootstrap-iconpicker.git#~1.6.0",
-    "bootstrap-social": "https://github.com/lipis/bootstrap-social.git",
+    "bootstrap-social": "4.8.0",
     "masonry": "~3.3.0",
     "angular-masonry": "~0.11.0",
     "ng-text-truncate": "https://github.com/lorenooliveira/ng-text-truncate.git",

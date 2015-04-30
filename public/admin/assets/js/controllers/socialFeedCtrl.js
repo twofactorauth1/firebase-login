@@ -74,18 +74,6 @@
 
                 //get feed items
                 if (trackedAccount.toggle) {
-                    if (trackedAccount.type == 'tw') {
-
-                        // get feed
-                        SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
-                            $scope.feedLengths[trackedAccount.id] = posts.length;
-                            //$log.debug('number of twitter posts: ' + posts.length);
-                            _.each(posts, function(post) {
-                                post.trackedId = trackedAccount.id;
-                                $scope.feed.push(post);
-                                //$log.debug(post);
-                            });
-                        });
 
                         // get followers
                         SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
@@ -118,6 +106,44 @@
             //push the feed into the display
             $scope.displayFeed = $scope.feed;
 
+        };
+
+        $scope.fetchFeeds = function(trackedAccount) {
+            if (trackedAccount.type == 'tw') {
+
+                // get feed
+                SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
+                    $scope.feedLengths[trackedAccount.id] = posts.length;
+                    //$log.debug('number of twitter posts: ' + posts.length);
+                    _.each(posts, function(post) {
+                        post.trackedId = trackedAccount.id;
+                        $scope.feed.push(post);
+                        //$log.debug(post);
+                    });
+                });
+
+                // get followers
+                SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
+                    // TODO: what does feedLengths need to be?
+                    //$scope.feedLengths[trackedAccount.id] = posts.length;
+                    //$log.debug('number of twitter follower posts: ' + posts.length);
+                    _.each(posts, function(post) {
+                        post.trackedId = trackedAccount.id;
+                        $scope.feed.push(post);
+                        //$log.debug(post);
+                    });
+                });
+            }
+            if (trackedAccount.type == 'fb') {
+                SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
+                    $scope.feedLengths[trackedAccount.id] = posts.length;
+                    _.each(posts, function(post) {
+                        post.trackedId = trackedAccount.id;
+                        post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
+                        $scope.feed.push(post);
+                    });
+                });
+            }
         };
 
         /*
@@ -156,16 +182,8 @@
             trackedAccount.toggle = true;
             SocialConfigService.updateTrackedAccount(trackedAccount, function(data) {
                 trackedAccount.checked = true;
-                if (trackedAccount.type == 'fb') {
-                    SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
-                        $scope.feedLengths[trackedAccount.id] = posts.length;
-                        _.each(posts, function(post) {
-                            post.trackedId = trackedAccount.id;
-                            $scope.feed.push(post);
-                            $scope.displayFeed.push(post);
-                        });
-                    });
-                }
+                $scope.fetchFeeds(trackedAccount);
+                $scope.displayFeed = $scope.feed;
                 toaster.pop('success', 'Feed Added');
             });
         };

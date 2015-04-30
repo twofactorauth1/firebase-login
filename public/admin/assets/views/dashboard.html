@@ -282,32 +282,25 @@
         </div>
     </div>
 </div>
-
 <script type="text/ng-template" id="addActivityModal">
-    <div class="modal-dialog">
-        <div class="modal-content side-margin">
-            <div class="modal-header">
-                <button type="button" class="close" ng-click="closeModal()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Add Activity</h4>
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Add Activity</h4>
+    </div>
+    <div class="modal-body bg-white" style="max-height:500px;">
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Type</label>
+                <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
             </div>
-            <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">Type</label>
-                        <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
-                    </div>
-                    <div class="form-group">
-                        <label>Detail</label>
-                        <textarea class="form-control" ng-model="newActivity.detail" style="resize:vertical"></textarea>
-                    </div>
-                </form>
+            <div class="form-group">
+                <label>Detail</label>
+                <textarea class="form-control" ng-model="newActivity.detail" style="resize:vertical"></textarea>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
-            </div>
-        </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addActivityFn()">Add</button>
     </div>
 </script>
-

@@ -361,9 +361,16 @@ var dao = {
     },
 
     getTokenStream: function(accessToken, socialId, since, until, limit, fn) {
+        var self = this;
+        var fields = '?fields=id,from,message,story,story_tags,picture,link,icon,actions,privacy,type,status_type,object_id,created_time,updated_time,likes,comments{id,attachment,comment_count,created_time,like_count,message,user_likes,from{id,name,picture}}';
         var key = 'feed?fields=id,from,message,story,story_tags,picture,link,icon,actions,privacy,type,status_type,object_id,created_time,updated_time,likes,comments{id,attachment,comment_count,created_time,like_count,message,user_likes,from{id,name,picture}}';
         //var key = 'feed';
-        return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
+        async.concat(['links', 'posts', 'statuses', 'tagged'], function(item, callback){
+            self._getStreamPart(null, accessToken, socialId, item + fields, since, until, limit, callback);
+        }, fn);
+
+
+        //return this._getStreamPart(null, accessToken, socialId, key, since, until, limit, fn);
     },
 
     getLikedPages: function(accessToken, socialId, since, until, limit, fn) {
@@ -685,7 +692,7 @@ var dao = {
         var myFacebookId = this._getFacebookId(user);
         var accessToken = this._getAccessToken(user);
 
-        var url = '/' + myFacebookId + '/feed'
+        var url = '/' + myFacebookId + '/statuses'
             , apiOptions = {
                 access_token: accessToken
                 , limit: 15
@@ -704,7 +711,6 @@ var dao = {
         var defaultFields = 'id,message,story,link,picture,type,created_time,comments,shares,likes';
         apiOptions.fields = defaultFields;
 
-        logger.info('Requesting posts data', { method: 'getPosts', id: this.myFacebookId });
 
         FB.api(url, 'get', apiOptions, function(res){
             logger.info('Received posts data');
