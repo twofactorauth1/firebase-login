@@ -396,7 +396,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         }
 
-        $scope.checkoutModalState = 1;
         $scope.newContact = {
             isAuthenticated: true,
             details: [{

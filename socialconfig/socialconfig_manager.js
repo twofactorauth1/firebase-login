@@ -15,7 +15,7 @@ var userDao = require('../dao/user.dao');
 
 module.exports = {
 
-    defaultTwitterTrackedObjects : ['feed', 'user', 'mentions', 'numberFollowers', 'profile', 'messages'],
+    defaultTwitterTrackedObjects : ['feed', 'user', 'mentions', 'numberFollowers', 'profile', 'messages', 'favorites'],
     defaultFacebookTrackedObjects: ['feed', 'pages', 'likes', 'profile', 'messages'],
 
     createSocialConfig: function(socialConfig, fn) {
@@ -295,7 +295,7 @@ module.exports = {
                                     var obj = {
                                         socialId: trackedAccountPage.id,
                                         type: type
-                                    }
+                                    };
                                     trackedObjects.push(obj);
                                 });
                             });
@@ -310,7 +310,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         } else if(creds.type === $$.constants.social.types.TWITTER) {
@@ -318,7 +318,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         }
@@ -348,7 +348,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         } else if(creds.type === $$.constants.social.types.TWITTER) {
@@ -356,7 +356,7 @@ module.exports = {
                                 var obj = {
                                     socialId: trackedAccount.id,
                                     type: type
-                                }
+                                };
                                 trackedObjects.push(obj);
                             });
                         }
@@ -553,7 +553,7 @@ module.exports = {
                     var obj = {
                         socialId: trackedAccount.id,
                         type: type
-                    }
+                    };
                     trackedObjects.push(obj);
                 });
             } else if(trackedAccount.type === $$.constants.social.types.TWITTER || trackedAccount.type === 'twitter') {
@@ -561,7 +561,7 @@ module.exports = {
                     var obj = {
                         socialId: trackedAccount.id,
                         type: type
-                    }
+                    };
                     trackedObjects.push(obj);
                 });
             }
@@ -1033,6 +1033,40 @@ module.exports = {
                 return fn('Invalid social accountId', null);
             }
             return twitterDao.retweetPostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, tweetId, fn);
+        });
+    },
+
+    favoriteTwitterPost: function(accountId, socialAccountId, tweetId, fn) {
+        var self = this;
+        log.debug('>> favoriteTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.favoritePostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, tweetId, fn);
+        });
+    },
+
+    unfavoriteTwitterPost: function(accountId, socialAccountId, tweetId, fn) {
+        var self = this;
+        log.debug('>> unfavoriteTwitterPost');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.unfavoritePostWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, tweetId, fn);
         });
     },
 

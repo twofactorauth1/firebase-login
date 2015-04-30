@@ -272,6 +272,7 @@ app.constant('JS_REQUIRES', {
         'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
         'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
         'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
+        'commerceSettingsCtrl': 'assets/js/controllers/commerceSettingsCtrl.js',
 
         'asideCtrl': 'assets/js/controllers/asideCtrl.js',
         'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',

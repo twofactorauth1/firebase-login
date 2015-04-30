@@ -29,14 +29,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4" ng-if="blogpost.featured_image">
+                    <div class="col-sm-4" ng-if="blogpost.featured_image">
                         <div class="featured-image">
                             <div class="editable" data-class="featimage">
                                 <img ng-src="{{blogpost.featured_image}}" class="thumbnail img-responsive" />
                             </div>
                         </div>
                     </div>
-                    <div ng-class="{'col-xs-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}">
+                    <div ng-class="{'col-sm-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}">
                         <p>
                             <div class="excerpt">
                                 <div class="editable" data-class="post_excerpt">

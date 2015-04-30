@@ -154,7 +154,7 @@ var dao = {
             }
 
             var tweets = JSON.parse(value);
-            self.log.debug('>> tweets ', tweets);
+            //self.log.debug('>> tweets ', tweets);
             if (tweets.length > 0) {
                 var result = [];
 
@@ -199,7 +199,7 @@ var dao = {
             }
 
             var tweets = JSON.parse(value);
-            self.log.debug('>> tweets ', tweets);
+            //self.log.debug('>> tweets ', tweets);
 
             if (tweets.length > 0) {
                 var result = [];
@@ -243,7 +243,7 @@ var dao = {
             }
 
             var profile = JSON.parse(value);
-            self.log.debug('>> profile ', profile);
+            //self.log.debug('>> profile ', profile);
             fn(null, profile);
 
             // if (profile.length > 0) {
@@ -280,7 +280,7 @@ var dao = {
 
         self._makeRequestWithTokens(url, accessToken, accessTokenSecret, function(err, value){
             var profile = JSON.parse(value);
-            self.log.debug('>> profile ', profile);
+            //self.log.debug('>> profile ', profile);
             fn(null, profile);
         });
     },
@@ -310,7 +310,7 @@ var dao = {
             }
 
             var followers = JSON.parse(value);
-            self.log.debug('>> followers ', followers['users']);
+            //self.log.debug('>> followers ', followers['users']);
 
             if (followers['users'].length > 0) {
                 var result = [];
@@ -321,7 +321,7 @@ var dao = {
                 };
 
                 async.eachLimit(followers['users'], 10, processFollower, function (cb) {
-                    self.log.debug('>> result ', result);
+                    //self.log.debug('>> result ', result);
                     return fn(null, result);
                 });
             } else {
@@ -344,7 +344,7 @@ var dao = {
             }
 
             var followers = JSON.parse(value);
-            self.log.debug('>> followers ', followers['users']);
+            //self.log.debug('>> followers ', followers['users']);
 
             if (followers['users'].length > 0) {
                 var result = [];
@@ -355,7 +355,7 @@ var dao = {
                 };
 
                 async.eachLimit(followers['users'], 10, processFollower, function (cb) {
-                    self.log.debug('>> result ', result);
+                    //self.log.debug('>> result ', result);
                     return fn(null, result);
                 });
             } else {
@@ -381,9 +381,9 @@ var dao = {
                     self.log.error('Error updating status: ', error);
                     fn(error, null);
                 } else {
-                    self.log.debug('data: ', data);
-                    self.log.debug('response:', response);
-                    self.log.debug('<< post');
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    //self.log.debug('<< post');
                     fn(null, response);
                 }
             }
@@ -404,9 +404,9 @@ var dao = {
                     self.log.error('Error updating status: ', error);
                     fn(error, null);
                 } else {
-                    self.log.debug('data: ', data);
-                    self.log.debug('response:', response);
-                    self.log.debug('<< postWithToken');
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    //self.log.debug('<< postWithToken');
                     fn(null, data);
                 }
             }
@@ -428,9 +428,9 @@ var dao = {
                     self.log.error('Error updating status: ', error);
                     fn(error, null);
                 } else {
-                    self.log.debug('data: ', data);
-                    self.log.debug('response:', response);
-                    self.log.debug('<< replyToPostWithToken');
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    //self.log.debug('<< replyToPostWithToken');
                     fn(null, data);
                 }
             }
@@ -451,9 +451,55 @@ var dao = {
                     self.log.error('Error retweeting status: ', error);
                     fn(error, null);
                 } else {
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    //self.log.debug('<< retweetPostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
+    favoritePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> favoritePostWithToken');
+
+        twitter.favorites("create", {
+                id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error favorite-ing status: ', error);
+                    fn(error, null);
+                } else {
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    self.log.debug('<< favoritePostWithToken');
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
+    unfavoritePostWithToken: function(accessToken, accessTokenSecret, statusId, fn) {
+        var self = this;
+        self.log.debug('>> unfavoritePostWithToken');
+
+        twitter.favorites("destroy", {
+                id: statusId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error un-favorite-ing status: ', error);
+                    fn(error, null);
+                } else {
                     self.log.debug('data: ', data);
                     self.log.debug('response:', response);
-                    self.log.debug('<< retweetPostWithToken');
+                    self.log.debug('<< unfavoritePostWithToken');
                     fn(null, data);
                 }
             }
@@ -480,9 +526,9 @@ var dao = {
                     self.log.error('Error creating DM: ', error);
                     fn(error, null);
                 } else {
-                    self.log.debug('data: ', data);
-                    self.log.debug('response:', response);
-                    self.log.debug('<< directMessageTwitterUserWithToken');
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    //self.log.debug('<< directMessageTwitterUserWithToken');
                     fn(null, data);
                 }
             }
@@ -497,9 +543,9 @@ var dao = {
                 self.log.error('Error updating status: ', error);
                 fn(error, null);
             } else {
-                self.log.debug('data: ', data);
-                self.log.debug('response:', response);
-                self.log.debug('<< deletePostWithToken');
+                //self.log.debug('data: ', data);
+                //self.log.debug('response:', response);
+                //self.log.debug('<< deletePostWithToken');
                 fn(null, data);
             }
         });
@@ -527,7 +573,7 @@ var dao = {
             }
 
             var tweets = JSON.parse(value);
-            self.log.debug('>> tweets ', tweets);
+            //self.log.debug('>> tweets ', tweets);
             if (tweets.length > 0) {
                 var result = [];
 

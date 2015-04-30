@@ -3,7 +3,7 @@
  * controller for social feed
  */
 (function(angular) {
-    app.controller('SocialFeedCtrl', ["$scope", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
+    app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
 
         /*
          * @openModal
@@ -72,7 +72,32 @@
                 trackedAccount.checked = true;
                 $scope.trackedAccounts.push(trackedAccount);
 
-                $scope.fetchFeeds(trackedAccount);
+                //get feed items
+                if (trackedAccount.toggle) {
+
+                        // get followers
+                        SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
+                            // TODO: what does feedLengths need to be?
+                            $scope.feedLengths[trackedAccount.id] = posts.length;
+                            //$log.debug('number of twitter follower posts: ' + posts.length);
+                            _.each(posts, function(post) {
+                                post.trackedId = trackedAccount.id;
+                                $scope.feed.push(post);
+                                //$log.debug(post);
+                            });
+                        });
+                    }
+                    if (trackedAccount.type == 'fb') {
+                        SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
+                            $scope.feedLengths[trackedAccount.id] = posts.length;
+                            _.each(posts, function(post) {
+                                post.trackedId = trackedAccount.id;
+                                post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
+                                $scope.feed.push(post);
+                            });
+                        });
+                    }
+                }
             });
             //wait a few seconds to ensure everything is loaded
             setTimeout(function() {
@@ -294,6 +319,24 @@
         };
 
         /*
+         * @showFavModal
+         * -
+         */
+
+        $scope.showFavModal = function(post) {
+            $log.debug('--showFavModal');
+            $scope.tempPost = post;
+            $scope.openModal('fav-unfav-modal');
+            $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+
+            //$log.debug($scope.tempTrackedAccounts);
+            _.each($scope.tempTrackedAccounts, function(tempAccount, index) {
+                //$log.debug('account: ' + JSON.stringify(tempAccount));
+                $scope.tempTrackedAccounts[index].favorited = $scope.checkFavExistFn(tempAccount);
+            });
+        };
+
+        /*
          * @showCommentModal
          * -
          */
@@ -332,7 +375,7 @@
                     toaster.pop('success', 'Comment added', 'Comment added to the facebook post.');
                 });
             } else if ($scope.commentType == 'tw') {
-                SocialConfigService.addTwitterPostComment($scope.selectedSocial.socialId, $scope.addCommentPage.sourceId, $scope.selectedSocial.screen_name, $scope.addCommentinModal, function(comment) {
+                SocialConfigService.addTwitterReply($scope.selectedSocial.socialId, $scope.addCommentPage.sourceId, $scope.selectedSocial.screen_name, $scope.addCommentinModal, function(comment) {
                     $scope.visibleComments.unshift({
                         picture: $scope.selectedSocial.profile_image_url,
                         created: new Date(),
@@ -385,11 +428,37 @@
             }
 
             $scope.tempPost.likes.forEach(function(like, index) {
-                console.log(account.socialId, like.sourceId);
+                //$log.debug(account.socialId, like.sourceId);
                 if (account.socialId == like.sourceId) {
                     status = true;
                 }
             });
+
+            return status;
+        };
+
+        /*
+         * @checkFavExistFn
+         * -
+         */
+
+        $scope.checkFavExistFn = function(account) {
+            var status = false;
+            if ($scope.tempPost == undefined) {
+                return status;
+            }
+            if ($scope.tempPost.favorites == undefined) {
+                return status;
+            }
+
+            $log.debug('--checking favorites');
+            $scope.tempPost.favorites.forEach(function(like, index) {
+                $log.debug(account.socialId, like.sourceId);
+                if (account.socialId == like.sourceId) {
+                    status = true;
+                }
+            });
+            $log.debug('--done checking favorites');
 
             return status;
         };
@@ -449,9 +518,68 @@
                     var admins = $scope.tempSocialAccounts[i].admins;
                     for (var j = 0; j < admins.length; j++) {
                         admins[j].liked = $scope.checkLikeExistFn(admins[j], 'admin');
-                    };
-                };
+                    }
+                }
                 toaster.pop('warning', 'unliked post.');
+            });
+        };
+
+
+        /*
+         * @addTwitterPostFavorites
+         * add a favorite on twitter post
+         */
+
+        $scope.addTwitterPostFavorites = function(page, $event) {
+            $log.debug('addTwitterPostFavorites >>>');
+            var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                return tracked.socialId == page.socialId;
+            });
+            SocialConfigService.favTwitterPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
+                //$log.debug('postReturn: ' + JSON.stringify(postReturn));
+                //$scope.tempPost.favorited.forEach(function(value, index) {
+                //    if (value.sourceId == page.sourceId) {
+                //        $scope.tempPost.likes.splice(index, 1);
+                //    }
+                //});
+                //$scope.tempSocialAccounts = angular.copy($scope.socialAccounts);
+                //for (var i = 0; i < $scope.tempSocialAccounts.length; i++) {
+                //    $scope.tempSocialAccounts[i].favorited = $scope.checkFavExistFn($scope.tempSocialAccounts[i], 'account');
+                //    var admins = $scope.tempSocialAccounts[i].admins;
+                //    for (var j = 0; j < admins.length; j++) {
+                //        admins[j].liked = $scope.checkFavExistFn(admins[j], 'admin');
+                //    }
+                //}
+                toaster.pop('warning', 'favorited post.');
+            });
+        };
+
+        /*
+         * @deleteTwitterPostFavorites
+         * remove a favorite on twitter post
+         */
+
+        $scope.deleteTwitterPostFavorites = function(page, $event) {
+            $log.debug('deleteTwitterPostFavorites >>>');
+            var trackedAccount = _.find($scope.config.trackedAccounts, function(tracked) {
+                return tracked.socialId == page.socialId;
+            });
+            SocialConfigService.unfavoriteTwitterPost(trackedAccount.id, $scope.tempPost.sourceId, function(postReturn) {
+                //$log.debug('postReturn: ' + JSON.stringify(postReturn));
+                //$scope.tempPost.favorited.forEach(function(value, index) {
+                //    if (value.sourceId == page.sourceId) {
+                //        $scope.tempPost.likes.splice(index, 1);
+                //    }
+                //});
+                //$scope.tempSocialAccounts = angular.copy($scope.socialAccounts);
+                //for (var i = 0; i < $scope.tempSocialAccounts.length; i++) {
+                //    $scope.tempSocialAccounts[i].favorited = $scope.checkFavExistFn($scope.tempSocialAccounts[i], 'account');
+                //    var admins = $scope.tempSocialAccounts[i].admins;
+                //    for (var j = 0; j < admins.length; j++) {
+                //        admins[j].liked = $scope.checkFavExistFn(admins[j], 'admin');
+                //    }
+                //}
+                toaster.pop('warning', 'unfavorited post.');
             });
         };
 

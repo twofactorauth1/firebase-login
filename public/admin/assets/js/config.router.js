@@ -179,6 +179,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             parent: 'app.orders'
         },
         resolve: loadSequence('orderDetailCtrl', 'orderService', 'customerService', 'userService')
+    }).state('app.commerce.settings', {
+        url: '/settings',
+        templateUrl: "assets/views/commerce-settings.html",
+        title: 'Commerce Settings',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Commerce Settings'
+        },
+        resolve: loadSequence('commerceSettingsCtrl', 'orderService', 'customerService', 'dateRangePicker')
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',
