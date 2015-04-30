@@ -41,6 +41,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('shortform'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
         app.get(this.url('shortform/:letter'), this.isAuthAndSubscribedApi.bind(this), this.getContactsShortForm.bind(this));
+        app.get(this.url('search/email/:email'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
+        app.get(this.url('search/name/:name'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
+        app.get(this.url('search/:term'), this.isAuthAndSubscribedApi.bind(this), this.search.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getContactById.bind(this));
         /*
          * Temp remove security for create contact.  Eventually, we will need to move this to a public API.
@@ -248,6 +251,34 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendResultOrError(res, err, value, "Error listing contacts by letter [" + letter + "]");
                     self = null;
                 });
+            }
+        });
+    },
+
+    search: function(req, resp) {
+        var self = this;
+        self.log.debug('>> search');
+        var accountId = parseInt(self.accountId(req));
+        var skip = parseInt(req.query['skip'] || 0);
+        var limit = parseInt(req.query['limit'] || 0);
+        var term = null;
+
+
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                if(req.params.email) {
+                    term = req.params.email;
+                    contactDao.findContactsByEmail(accountId, term, function(err, contacts){
+                        self.log.debug('<< search');
+                        self.sendResultOrError(resp, err, contacts, "Error finding contacts");
+                    });
+                } else {
+                    self.log.debug('<< search');
+                    self.sendResult({ok:true});
+                }
             }
         });
     },
