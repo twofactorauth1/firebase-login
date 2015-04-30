@@ -7,7 +7,6 @@ app.directive('facebookPost', function () {
     return {
         restrict: 'E',
         templateUrl: '/admin/assets/views/social-facebook-post.html',
-        replace: true,
         scope: {
             post: '=',
             actionLike: '&',
@@ -23,7 +22,6 @@ app.directive('twitterFeed', function () {
     return {
         restrict: 'E',
         templateUrl: '/admin/assets/views/social-twitter-feed.html',
-        replace: true,
         scope: {
             post: '=',
             actionReply: '&',
@@ -41,7 +39,6 @@ app.directive('twitterFollower', function () {
     return {
         restrict: 'E',
         templateUrl: '/admin/assets/views/social-twitter-follower.html',
-        replace: true,
         scope: {
             post: '=',
             actionTweetAt: '&',
