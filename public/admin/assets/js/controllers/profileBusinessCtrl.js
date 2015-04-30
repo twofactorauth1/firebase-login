@@ -95,6 +95,19 @@
                 lon: ''
             });
         };
+
+        $scope.accountAddHoursFn = function() {
+            $scope.account.business.splitHours = false;
+            $scope.account.business.hours = [
+                    {day: "Mon", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                    {day: "Tue", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                    {day: "Wed", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                    {day: "Thu", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                    {day: "Fri", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
+                    {day: "Sat", start:"",end:"", start2:"", end2:"", closed:true, split:false},
+                    {day: "Sun", start:"",end:"", start2:"", end2:"", closed:true, split:false}];
+        };
+
         $scope.setDefaults = function() {
             if (!$scope.account.business.phones)
                 $scope.account.business.phones = [];
@@ -113,6 +126,9 @@
 
             if (!$scope.account.business.addresses.length)
                 $scope.accountAddAddressFn();
+
+            if (!$scope.account.business.hours || !$scope.account.business.hours.length)
+                $scope.accountAddHoursFn();
         };
 
         $scope.profileSaveFn = function() {

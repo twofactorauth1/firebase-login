@@ -248,6 +248,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                                 $scope.batch.splice(i, 1);
                             }
                         });
+                        ToasterService.show('success', 'Image(s) deleted');
                     }
                     $scope.selectModel.select_all = false;
                 });

@@ -74,16 +74,8 @@
 
                 //get feed items
                 if (trackedAccount.toggle) {
-                    if (trackedAccount.type == 'fb') {
-                        SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
-                            $scope.feedLengths[trackedAccount.id] = posts.length;
-                            _.each(posts, function(post) {
-                                post.trackedId = trackedAccount.id;
-                                post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
-                                $scope.feed.push(post);
-                            });
-                        });
-                    }
+
+                    $scope.fetchFeeds(trackedAccount);
                 }
             });
             //wait a few seconds to ensure everything is loaded
@@ -93,6 +85,44 @@
             //push the feed into the display
             $scope.displayFeed = $scope.feed;
 
+        };
+
+        $scope.fetchFeeds = function(trackedAccount) {
+            if (trackedAccount.type == 'tw') {
+
+                // get feed
+                SocialConfigService.getTwitterFeed(trackedAccount.id, function(posts) {
+                    $scope.feedLengths[trackedAccount.id] = posts.length;
+                    //$log.debug('number of twitter posts: ' + posts.length);
+                    _.each(posts, function(post) {
+                        post.trackedId = trackedAccount.id;
+                        $scope.feed.push(post);
+                        //$log.debug(post);
+                    });
+                });
+
+                // get followers
+                SocialConfigService.getTwitterFollowers(trackedAccount.id, function(posts) {
+                    // TODO: what does feedLengths need to be?
+                    //$scope.feedLengths[trackedAccount.id] = posts.length;
+                    //$log.debug('number of twitter follower posts: ' + posts.length);
+                    _.each(posts, function(post) {
+                        post.trackedId = trackedAccount.id;
+                        $scope.feed.push(post);
+                        //$log.debug(post);
+                    });
+                });
+            }
+            if (trackedAccount.type == 'fb') {
+                SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
+                    $scope.feedLengths[trackedAccount.id] = posts.length;
+                    _.each(posts, function(post) {
+                        post.trackedId = trackedAccount.id;
+                        post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
+                        $scope.feed.push(post);
+                    });
+                });
+            }
         };
 
         /*
@@ -131,16 +161,8 @@
             trackedAccount.toggle = true;
             SocialConfigService.updateTrackedAccount(trackedAccount, function(data) {
                 trackedAccount.checked = true;
-                if (trackedAccount.type == 'fb') {
-                    SocialConfigService.getFBPosts(trackedAccount.id, function(posts) {
-                        $scope.feedLengths[trackedAccount.id] = posts.length;
-                        _.each(posts, function(post) {
-                            post.trackedId = trackedAccount.id;
-                            $scope.feed.push(post);
-                            $scope.displayFeed.push(post);
-                        });
-                    });
-                }
+                $scope.fetchFeeds(trackedAccount);
+                $scope.displayFeed = $scope.feed;
                 toaster.pop('success', 'Feed Added');
             });
         };
@@ -156,10 +178,9 @@
             });
             trackedAccount.toggle = false;
             SocialConfigService.updateTrackedAccount(trackedAccount, function(data) {
-                var newFeed = _.filter($scope.feed, function(obj) {
+                var newFeed = _.filter($scope.displayFeed, function(obj) {
                     return obj.trackedId != trackedAccount.id;
                 });
-                $scope.feed = newFeed;
                 $scope.displayFeed = newFeed;
                 toaster.pop('warning', 'Social feed removed.');
             });
@@ -302,10 +323,10 @@
             if ($scope.commentType == 'fb') {
                 SocialConfigService.addFacebookPostComment($scope.selectedSocial.parentSocialAccount, $scope.addCommentPage.sourceId, $scope.addCommentinModal, function(comment) {
                     var tempDate = new Date();
-                    tempDate.setHours ( tempDate.getHours() + 7 );
+                    tempDate.setHours(tempDate.getHours() + 7);
                     $scope.visibleComments.unshift({
                         picture: $scope.selectedSocial.profile.picture.data.url,
-                        created: $filter('date')(tempDate , 'yyyy-MM-ddTHH:mm:ss')+'+0000',
+                        created: $filter('date')(tempDate, 'yyyy-MM-ddTHH:mm:ss') + '+0000',
                         name: $scope.selectedSocial.profile.name,
                         comment: $scope.addCommentinModal
                     });
@@ -328,7 +349,7 @@
             }
         };
 
-         /*
+        /*
          * @updateComments
          * update the visible comments to display in the comment modal
          */

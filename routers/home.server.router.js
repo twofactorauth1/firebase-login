@@ -67,6 +67,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
         app.get('/main/:page', this.setup.bind(this), this.serveMainHtml.bind(this));
+        app.get('/interim*', this.setup.bind(this), this.serveInterim.bind(this));
         //app.get("/*", this.setup.bind(this), this.index.bind(this));
 
         return this;
@@ -291,6 +292,27 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     externalRedirect: function(req, resp) {
         resp.render('redirect', {next: encodeURIComponent(req.query.next),socialNetwork: encodeURIComponent(req.query.socialNetwork)});
+    },
+
+    serveInterim: function(req, resp) {
+        var pageName = 'public/static/interim.html';
+        fs.readFile(pageName, function(err, page) {
+            if(err) {
+                resp.status(404);
+                resp.render('404.html', {title: '404: File Not Found'});
+                return;
+            } else {
+                resp.writeHead(200, {'Content-Type': 'text/html'});
+                resp.end(page, 'utf8');
+                req.session.cookie = null;
+                req.session.accountId = null;
+                req.logout();
+                req.session.destroy();
+                req.session = null;
+                req.user = null;
+            }
+
+        });
     },
 
     serveMainHtml: function(req, resp) {
