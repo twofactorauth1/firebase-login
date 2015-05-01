@@ -763,16 +763,16 @@
 
     OrderService.getCustomerOrders($stateParams.contactId, function (orders) {
       console.log('orders >>> ', orders);
-      // _.each(orders, function (order) {
-      //   if (order.line_items) {
-      //     order.line_items_total = order.line_items.length;
-      //   } else {
-      //     order.line_items_total = 0;
-      //   }
+      _.each(orders, function (order) {
+        if (order.line_items) {
+          order.line_items_total = order.line_items.length;
+        } else {
+          order.line_items_total = 0;
+        }
 
-      //   order.total = order.total;
-      // });
-      // $scope.orders = orders;
+        order.total = order.total;
+      });
+      $scope.orders = orders;
     });
 
     /*

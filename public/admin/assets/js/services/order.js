@@ -45,6 +45,22 @@
                 });
         };
 
+        this.refundOrder = function(orderId, reasonData, fn) {
+            var apiUrl = baseUrl + [orderId, 'refund'].join('/');
+            console.log('apiUrl ', apiUrl);
+            $http({
+                    url: apiUrl,
+                    method: "POST",
+                    data: reasonData
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                })
+                .error(function(error) {
+                    console.error('OrderService: refundOrder error >>> ', error);
+                });
+        };
+
         this.completeOrder = function(orderId, note, fn) {
             var apiUrl = baseUrl + [orderId, 'complete'].join('/');
             $http({

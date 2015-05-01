@@ -59,6 +59,7 @@
         // var notes = order.notes;
         order.notes = $scope.matchUsers(order);
         order.line_items = $scope.matchProducts(order);
+        $scope.currentStatus = order.status;
         $scope.order = order;
       });
     };
@@ -211,8 +212,8 @@
      * the order status has been updated
      */
 
-    $scope.statusUpdated = function () {
-      var newStatus = $scope.newStatus;
+    $scope.statusUpdated = function (newStatus) {
+      $scope.currentStatus = newStatus;
       var toasterMsg = 'Status has been updated to ';
       var note = 'Order status changed from ' + $scope.order.status + ' to ' + newStatus;
       if (newStatus === 'processing') {
@@ -251,7 +252,16 @@
      */
 
     $scope.refundOrder = function () {
-      console.log('refund order');
+      $scope.reasonData = {
+        note: 'Order has been refunded $42.68',
+        amount: '$42.68',
+        reason: "duplicate" //duplicate, fraudulent, requested_by_customer
+      };
+
+      OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
+        console.log('data ', data);
+        toaster.pop('success', 'Order has been refunded $4268.');
+      });
     };
 
     /*

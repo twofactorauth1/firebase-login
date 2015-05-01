@@ -11,12 +11,37 @@
     </section>
     <!-- end: PAGE TITLE -->
     <div class="container-fluid container-fullw bg-white margin-bottom-15">
-        <button type="button" class="btn btn-wide btn-info btn-wide btn-o" ng-click="duplicateOrder()">
-            Duplicate
-        </button>
         <button type="button" class="btn btn-wide btn-info btn-wide btn-o" ng-click="refundOrder()">
             Refund
         </button>
+        <div class="btn-group" dropdown is-open="status.isopen">
+            <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                Status <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li ng-class="{'active': currentStatus == 'pending_payment'}">
+                    <a href="#" ng-click="statusUpdated('pending_payment')">Pending Payment</a>
+                </li>
+                <li ng-class="{'active': currentStatus == 'processing'}">
+                    <a href="#" ng-click="statusUpdated('processing')">Processing</a>
+                </li>
+                <li ng-class="{'active': currentStatus == 'on_hold'}">
+                    <a href="#" ng-click="statusUpdated('on_hold')">On Hold</a>
+                </li>
+                <li ng-class="{'active': currentStatus == 'completed'}">
+                    <a href="#" ng-click="statusUpdated('completed')">Completed</a>
+                </li>
+                <li ng-class="{'active': currentStatus == 'cancelled'}">
+                    <a href="#" ng-click="statusUpdated('cancelled')">Cancelled</a>
+                </li>
+                <li ng-class="{'active': currentStatus == 'refunded'}">
+                    <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
+                </li>
+                <li ng-class="{'active': currentStatus == 'failed'}">
+                    <a href="#" ng-click="statusUpdated('failed')">Falied</a>
+                </li>
+            </ul>
+        </div>
         <div class="btn-group" dropdown is-open="email.isopen">
             <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                 Send Email <span class="caret"></span>
@@ -73,20 +98,6 @@
                                         <button type="button" class="btn btn-default" ng-click="open($event)">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </button> </span></p>
-                    </div>
-                    <div class="form-group">
-                        <label for="orderStatus">
-                            Order Status
-                        </label>
-                        <select id="orderStatus" class="cs-select cs-skin-elastic" ng-model="newStatus" ng-change="statusUpdated()">
-                            <option value="pending_payment">Pending Payment</option>
-                            <option value="processing">Processing</option>
-                            <option value="on_hold">On Hold</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                            <option value="refunded">Refunded</option>
-                            <option value="failed">Falied</option>
-                        </select>
                     </div>
                     <div class="form-group typeahead">
                         <label for="form-field-select-1">

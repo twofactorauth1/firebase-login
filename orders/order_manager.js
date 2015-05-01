@@ -334,11 +334,12 @@ module.exports = {
      */
     refundOrder: function(accountId, orderId, note, userId, amount, reason, accessToken, fn) {
         var self = this;
-        log.debug('>> refundOrder');
+        log.debug('>> refundOrder ', orderId);
         var query = {
             _id: orderId,
-            accountId: accountId
+            account_id: accountId
         };
+        log.debug('>> query ', query);
         dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
                 log.error('Error getting order: ' + err);
