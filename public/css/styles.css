@@ -478,6 +478,11 @@ div[data-type='campaign'] .inner-page .overlay {
   border: 2px solid #fff!important;
   color: #ffffff;
 }
+@media (max-width: 796px) {
+  .inner-page {
+    padding: 50px 15px;
+  }
+}
 /********** Feature List v1 **********/
 .editing .features-wrap .feature {
   border: 4px solid rgba(0, 0, 0, 0);
@@ -955,6 +960,12 @@ ul.nav {
   .navigation-v2 .navbar .navbar-brand img {
     height: 100px;
     width: 250px;
+  }
+}
+@media (max-width: 796px) {
+  .navigation-v2 .navbar .navbar-header {
+    margin-left: 0px;
+    margin-right: 0px;
   }
 }
 .navigation1 {
