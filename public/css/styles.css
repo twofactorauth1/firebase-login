@@ -361,6 +361,9 @@ ol.circles-list > li:before {
 .powertour-step:focus {
   outline: 0!important;
 }
+.cke_widget_inline img {
+  max-width: 100%;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
