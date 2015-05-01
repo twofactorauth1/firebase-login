@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert) {
 
     //TODO
     // - $q all api calls
@@ -61,7 +61,19 @@
         order.line_items = $scope.matchProducts(order);
         $scope.currentStatus = order.status;
         $scope.order = order;
+        $scope.selectedCustomer = _.find($scope.customers, function(customer) {
+          return customer._id = $scope.order.customer_id;
+        });
       });
+    };
+
+    /*
+     * @clearCustomer
+     * - clear the customer
+     */
+
+    $scope.clearCustomer = function() {
+      $scope.selectedCustomer = null;
     };
 
     /*
@@ -139,8 +151,17 @@
 
     $scope.formatInput = function (model) {
       console.log('model >>> ', model);
-      var email = model.email || 'No Email';
-      return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
+      if (model) {
+
+        var email = 'No Email';
+        if (model.email) {
+          email = model.email;
+        }
+
+        return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
+      }
+
+      return '';
     };
 
     /*
@@ -172,36 +193,138 @@
         defaultShipping = addresses[0];
       }
 
+      //check if exists and set defaults
+
+      var first = '';
+      if (customer.first) {
+        first = customer.first;
+      }
+
+      var last = '';
+      if (customer.last) {
+        last = customer.last;
+      }
+
+      var phone = '';
+      if (phones.length > 0) {
+        phone = phones[0].phone;
+      }
+
+      var email = '';
+      if (emails.length > 0) {
+        email = emails[0].email;
+      }
+
+      var company = '';
+      if (customer.company) {
+        company = customer.company;
+      }
+
+      var company = '';
+      if (customer.company) {
+        company = customer.company;
+      }
+
+      var billingAddress1 = '';
+      var billingAddress2 = '';
+      var billingCity = '';
+      var billingState = '';
+      var billingPostcode = '';
+      var billingCountry = '';
+
+      if (defaultBilling) {
+
+        if (defaultBilling.address_1) {
+          billingAddress1 = defaultBilling.address_1;
+        }
+
+        if (defaultBilling.address_2) {
+          billingAddress2 = defaultBilling.address_2;
+        }
+
+        if (defaultBilling.city) {
+          billingCity = defaultBilling.city;
+        }
+
+        if (defaultBilling.state) {
+          billingState = defaultBilling.state;
+        }
+
+        if (defaultBilling.postcode) {
+          billingPostcode = defaultBilling.postcode;
+        }
+
+        if (defaultBilling.country) {
+          billingCountry = defaultBilling.country;
+        }
+
+      }
+
+      var shippingAddress1 = '';
+      var shippingAddress2 = '';
+      var shippingCity = '';
+      var shippingState = '';
+      var shippingPostcode = '';
+      var shippingCountry = '';
+
+      if (defaultShipping) {
+
+        if (defaultShipping.address_1) {
+          shippingAddress1 = defaultShipping.address_1;
+        }
+
+        if (defaultShipping.address_2) {
+          shippingAddress2 = defaultShipping.address_2;
+        }
+
+        if (defaultShipping.city) {
+          shippingCity = defaultShipping.city;
+        }
+
+        if (defaultShipping.state) {
+          shippingState = defaultShipping.state;
+        }
+
+        if (defaultShipping.postcode) {
+          shippingPostcode = defaultShipping.postcode;
+        }
+
+        if (defaultShipping.country) {
+          shippingCountry = defaultShipping.country;
+        }
+
+      }
+
       if (type === 'billing') {
         var newBillingAddress = {
-          "first_name": customer.first,
-          "last_name": customer.last,
-          "phone": phones[0].phone,
-          "email": emails[0].email,
-          "company": customer.company,
-          "address_1": defaultBilling.address_1,
-          "address_2": defaultBilling.address_2,
-          "city": defaultBilling.city,
-          "state": defaultBilling.state,
-          "postcode": defaultBilling.postcode,
-          "country": defaultBilling.country
+          "first_name": first,
+          "last_name": last,
+          "phone": phone,
+          "email": email,
+          "company": company,
+          "address_1": billingAddress1,
+          "address_2": billingAddress2,
+          "city": billingCity,
+          "state": billingState,
+          "postcode": billingPostcode,
+          "country": billingCountry
         };
         $scope.order.billing_address = newBillingAddress;
       }
 
       if (type === 'shipping') {
         var newShippingAddress = {
-          "first_name": customer.first,
-          "last_name": customer.last,
-          "phone": phones[0].phone,
-          "email": emails[0].email,
-          "company": customer.company,
-          "address_1": defaultShipping.address_1,
-          "address_2": defaultShipping.address_2,
-          "city": defaultShipping.city,
-          "state": defaultShipping.state,
-          "postcode": defaultShipping.postcode,
-          "country": defaultShipping.country
+          "first_name": first,
+          "last_name": last,
+          "phone": phone,
+          "email": email,
+          "company": company,
+          "address_1": shippingAddress1,
+          "address_2": shippingAddress2,
+          "city": shippingCity,
+          "state": shippingState,
+          "postcode": shippingPostcode,
+          "country": shippingCountry
         };
         $scope.order.shipping_address = newShippingAddress;
       }
@@ -213,7 +336,6 @@
      */
 
     $scope.statusUpdated = function (newStatus) {
-      $scope.currentStatus = newStatus;
       var toasterMsg = 'Status has been updated to ';
       var note = 'Order status changed from ' + $scope.order.status + ' to ' + newStatus;
       if (newStatus === 'processing') {
@@ -237,40 +359,38 @@
       }
 
       if (newStatus === 'refunded') {
-        toaster.pop('success', toasterMsg + '"Refunded"');
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "This order will be refunded and funds will be returned.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, refund it.",
+            cancelButtonText: "No, cancel!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $scope.reasonData = {
+                  note: 'Order has been refunded $42.68',
+                  amount: '$42.68',
+                  reason: "duplicate" //duplicate, fraudulent, requested_by_customer
+                };
+
+                OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
+                  console.log('data ', data);
+                  SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                });
+            } else {
+                SweetAlert.swal("Cancelled", "Order refund cancelled.)", "error");
+            }
+        });
       }
 
       if (newStatus === 'failed') {
         toaster.pop('success', toasterMsg + '"Failed"');
       }
       $scope.order.status = newStatus;
-    };
-
-    /*
-     * @refundOrder
-     * refund the order
-     */
-
-    $scope.refundOrder = function () {
-      $scope.reasonData = {
-        note: 'Order has been refunded $42.68',
-        amount: '$42.68',
-        reason: "duplicate" //duplicate, fraudulent, requested_by_customer
-      };
-
-      OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
-        console.log('data ', data);
-        toaster.pop('success', 'Order has been refunded $4268.');
-      });
-    };
-
-    /*
-     * @duplicateOrder
-     * duplicate the order
-     */
-
-    $scope.duplicateOrder = function () {
-      console.log('duplicate order');
     };
 
     /*

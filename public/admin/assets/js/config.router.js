@@ -175,8 +175,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Order Detail',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: '{{order._id}}',
-            parent: 'app.orders'
+            label: 'Single Order',
+            parent: 'app.commerce.orders'
         },
         resolve: loadSequence('orderDetailCtrl', 'orderService', 'customerService', 'userService')
     }).state('app.commerce.settings', {
@@ -187,7 +187,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Commerce Settings'
         },
-        resolve: loadSequence('commerceSettingsCtrl', 'orderService', 'customerService', 'dateRangePicker')
+        resolve: loadSequence('commerceSettingsCtrl', 'orderService', 'customerService', 'dateRangePicker', 'sweet-alert')
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',
