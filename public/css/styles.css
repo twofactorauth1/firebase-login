@@ -4491,6 +4491,11 @@ fieldset[disabled] .btn-vimeo-square.active {
     padding: 10px;
   }
 }
+@media (max-width: 720px) {
+  .text-only-v1 .table-scroll table {
+    display: block;
+  }
+}
 #editor-toolbar {
   position: fixed;
   top: 0;
