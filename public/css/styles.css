@@ -1584,11 +1584,24 @@ contenthover a {
 .meet-team-v4 {
   /* Small devices (tablets, 768px and up) */
 }
+.meet-team-v4 .title {
+  text-align: center;
+}
+.meet-team-v4 .name {
+  text-align: center;
+}
+.meet-team-v4 .position {
+  text-align: center;
+}
+.meet-team-v4 .bio {
+  text-align: center;
+}
 .meet-team-v4 .social {
   margin: 20px auto;
   font-size: 14px;
   list-style-type: none;
   padding-left: 0;
+  text-align: center;
 }
 .meet-team-v4 .social a {
   font-size: 1.1em;
