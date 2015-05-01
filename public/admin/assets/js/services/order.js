@@ -14,6 +14,14 @@
                 });
         };
 
+        this.getCustomerOrders = function(customerId, fn) {
+            var apiUrl = baseUrl + ['customer', customerId].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         this.getOrder = function(orderId, fn) {
             var apiUrl = baseUrl + orderId;
             $http.get(apiUrl)

@@ -560,5 +560,23 @@ module.exports = {
 
             }
         });
+    },
+
+    listOrdersByCustomer: function(customerId, accountId, fn) {
+        log.debug('>> listOrdersByCustomer ', customerId, accountId);
+        var query = {
+            'customer_id': customerId,
+            'account_id': accountId
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            log.debug('>> listOrdersByCustomer ', orders);
+            if(err) {
+                log.error('Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                return fn(null, orders);
+            }
+        });
     }
 };
