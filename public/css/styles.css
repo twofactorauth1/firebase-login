@@ -2645,6 +2645,9 @@ div[data-class='image-text'] p {
 .blog-teaser-v1 .posts {
   margin-top: 45px;
 }
+.blog-teaser-v1 .posts .featured-image {
+  padding-top: 15px;
+}
 .blog-teaser-v1 .label-info {
   margin-right: 5px;
 }
