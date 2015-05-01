@@ -361,6 +361,9 @@ ol.circles-list > li:before {
 .powertour-step:focus {
   outline: 0!important;
 }
+.cke_widget_inline img {
+  max-width: 100%;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -394,8 +397,8 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .contact-us-v1 .widget-weather .temp {
   background: rgba(0, 0, 0, 0.5);
-  padding: 14px !important;
-  height: 250px;
+  padding: 5px !important;
+  height: 218px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
@@ -477,6 +480,11 @@ div[data-type='campaign'] .inner-page .overlay {
   background-color: #16778b!important;
   border: 2px solid #fff!important;
   color: #ffffff;
+}
+@media (max-width: 796px) {
+  .inner-page {
+    padding: 50px 15px;
+  }
 }
 /********** Feature List v1 **********/
 .editing .features-wrap .feature {
@@ -955,6 +963,12 @@ ul.nav {
   .navigation-v2 .navbar .navbar-brand img {
     height: 100px;
     width: 250px;
+  }
+}
+@media (max-width: 796px) {
+  .navigation-v2 .navbar .navbar-header {
+    margin-left: 0px;
+    margin-right: 0px;
   }
 }
 .navigation1 {
@@ -1573,11 +1587,24 @@ contenthover a {
 .meet-team-v4 {
   /* Small devices (tablets, 768px and up) */
 }
+.meet-team-v4 .title {
+  text-align: center;
+}
+.meet-team-v4 .name {
+  text-align: center;
+}
+.meet-team-v4 .position {
+  text-align: center;
+}
+.meet-team-v4 .bio {
+  text-align: center;
+}
 .meet-team-v4 .social {
   margin: 20px auto;
   font-size: 14px;
   list-style-type: none;
   padding-left: 0;
+  text-align: center;
 }
 .meet-team-v4 .social a {
   font-size: 1.1em;
@@ -2165,6 +2192,26 @@ div[data-class='image-text'] p {
   padding: 10px 12px;
   pointer-events: none;
 }
+.simple-form-v1 .has-success .form-control {
+  border-color: #2ecc71;
+}
+.simple-form-v1 .has-success .glyphicon {
+  color: #2ecc71;
+}
+.simple-form-v1 .has-error .form-control {
+  border-color: #e74c3c;
+}
+.simple-form-v1 .has-error .glyphicon {
+  color: #e74c3c;
+}
+.simple-form-v1 .has-error .help-block {
+  color: #e74c3c;
+}
+.simple-form-v1 .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
 /********** Simple Form v2 **********/
 .simple-form-v2 {
   background: black;
@@ -2203,6 +2250,26 @@ div[data-class='image-text'] p {
 .simple-form-v2 .btn {
   text-transform: uppercase;
 }
+.simple-form-v2 .has-success .form-control {
+  border-color: #2ecc71;
+}
+.simple-form-v2 .has-success .glyphicon {
+  color: #2ecc71;
+}
+.simple-form-v2 .has-error .form-control {
+  border-color: #e74c3c;
+}
+.simple-form-v2 .has-error .glyphicon {
+  color: #e74c3c;
+}
+.simple-form-v2 .has-error .help-block {
+  color: #e74c3c;
+}
+.simple-form-v2 .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
 /********** Simple Form v3 **********/
 .simple-form-v3 input[type='radio'] {
   margin-right: 5px;
@@ -2210,6 +2277,26 @@ div[data-class='image-text'] p {
 .simple-form-v3 .btn-editable {
   padding-top: 15px !important;
   -moz-user-select: text;
+}
+.simple-form-v3 .has-success .form-control {
+  border-color: #2ecc71;
+}
+.simple-form-v3 .has-success .glyphicon {
+  color: #2ecc71;
+}
+.simple-form-v3 .has-error .form-control {
+  border-color: #e74c3c;
+}
+.simple-form-v3 .has-error .glyphicon {
+  color: #e74c3c;
+}
+.simple-form-v3 .has-error .help-block {
+  color: #e74c3c;
+}
+.simple-form-v3 .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 /********** Products v1 component **********/
 .products-v1 .nav-tabs {
@@ -2557,6 +2644,9 @@ div[data-class='image-text'] p {
 }
 .blog-teaser-v1 .posts {
   margin-top: 45px;
+}
+.blog-teaser-v1 .posts .featured-image {
+  padding-top: 15px;
 }
 .blog-teaser-v1 .label-info {
   margin-right: 5px;
@@ -4465,6 +4555,11 @@ fieldset[disabled] .btn-vimeo-square.active {
   .customer-forgot-password-v1 .signinpanel form {
     margin-top: 20px;
     padding: 10px;
+  }
+}
+@media (max-width: 720px) {
+  .text-only-v1 .table-scroll table {
+    display: block;
   }
 }
 #editor-toolbar {
