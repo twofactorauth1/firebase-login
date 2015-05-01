@@ -52,7 +52,7 @@
                     <div class="col-xs-12">
                         <p></p>
                         <p>
-                            <span data-ng-if="blogpost.post_author"><i class="fa fa-user"></i> by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{blogpost.created.date | amDateFormat:'MMM D, YYYY'}} <span data-ng-if="blogpost.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
+                            <span data-ng-if="blogpost.post_author"><i class="fa fa-user"></i> by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{blogpost.created.date | amDateFormat:'MM/dd/yyyy'}} <span data-ng-if="blogpost.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
                             <a href="/tag/{{post_tags}}" data-ng-repeat="post_tags in blogpost.post_tags track by $index"><span class="label label-info">{{post_tags}}</span></a>
                         </p>
                     </div>
