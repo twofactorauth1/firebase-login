@@ -2192,6 +2192,26 @@ div[data-class='image-text'] p {
   padding: 10px 12px;
   pointer-events: none;
 }
+.simple-form-v1 .has-success .form-control {
+  border-color: #2ecc71;
+}
+.simple-form-v1 .has-success .glyphicon {
+  color: #2ecc71;
+}
+.simple-form-v1 .has-error .form-control {
+  border-color: #e74c3c;
+}
+.simple-form-v1 .has-error .glyphicon {
+  color: #e74c3c;
+}
+.simple-form-v1 .has-error .help-block {
+  color: #e74c3c;
+}
+.simple-form-v1 .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
 /********** Simple Form v2 **********/
 .simple-form-v2 {
   background: black;
@@ -2230,6 +2250,26 @@ div[data-class='image-text'] p {
 .simple-form-v2 .btn {
   text-transform: uppercase;
 }
+.simple-form-v2 .has-success .form-control {
+  border-color: #2ecc71;
+}
+.simple-form-v2 .has-success .glyphicon {
+  color: #2ecc71;
+}
+.simple-form-v2 .has-error .form-control {
+  border-color: #e74c3c;
+}
+.simple-form-v2 .has-error .glyphicon {
+  color: #e74c3c;
+}
+.simple-form-v2 .has-error .help-block {
+  color: #e74c3c;
+}
+.simple-form-v2 .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
 /********** Simple Form v3 **********/
 .simple-form-v3 input[type='radio'] {
   margin-right: 5px;
@@ -2237,6 +2277,26 @@ div[data-class='image-text'] p {
 .simple-form-v3 .btn-editable {
   padding-top: 15px !important;
   -moz-user-select: text;
+}
+.simple-form-v3 .has-success .form-control {
+  border-color: #2ecc71;
+}
+.simple-form-v3 .has-success .glyphicon {
+  color: #2ecc71;
+}
+.simple-form-v3 .has-error .form-control {
+  border-color: #e74c3c;
+}
+.simple-form-v3 .has-error .glyphicon {
+  color: #e74c3c;
+}
+.simple-form-v3 .has-error .help-block {
+  color: #e74c3c;
+}
+.simple-form-v3 .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
 }
 /********** Products v1 component **********/
 .products-v1 .nav-tabs {
