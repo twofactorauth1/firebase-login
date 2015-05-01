@@ -4,6 +4,7 @@
 mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService',
   function ($scope, ProductService, UserService, OrderService, PaymentService) {
 
+    $scope.checkoutModalState = 1;
     /*
      * @getAllProducts
      * - get products for products and pricing table components
@@ -167,6 +168,7 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       });
       productMatch.clicked = false;
       $scope.cartDetails = filtered;
+      $scope.calculateTotalChargesfn();
     };
 
     /*

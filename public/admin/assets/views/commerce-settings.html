@@ -10,9 +10,24 @@
         </div>
     </section>
     <tabset class="tabbable">
-        <tab heading="General">
-            <div class="row">
-            </div>
+        <tab heading="Taxes">
+            <form class="col-sm-6 form-horizontal">
+                <div class="form-group">
+                    <label>Enable Taxes</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                    <switch ng-model="taxes.enabled" class="pull-right" ng-change="saveComponent()"></switch>
+                </div>
+                <div class="clearfix"></div>
+                <div ng-if="taxes.enabled">
+                    <div class="form-group">
+                        <label>Calculate Tax Based On:</label>
+                        <select ng-model="taxes.calculated" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions">
+                            <option value="">-- choose --</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix"></div>
         </tab>
         <tab heading="Emails">
             <div class="row">

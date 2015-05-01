@@ -29,6 +29,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteProduct.bind(this));
         app.get(this.url('type/:type'), this.isAuthApi.bind(this), this.getProductsByType.bind(this));
 
+        app.get(this.url('tax/:postcode'), this.setup.bind(this), this.getTax.bind(this));
+
 
 
     },
@@ -71,6 +73,23 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 self.log.debug('<< getProduct');
                 self.sendResultOrError(res, err, value, "Error retrieving product");
+            }
+
+        });
+    },
+
+    getTax: function(req, res) {
+        var self = this;
+        self.log.debug('>> getTax');
+
+        var postcode = parseInt(req.params.postcode);
+
+        productManager.getTax(postcode, function(err, value){
+            if(!err && value != null) {
+                return self.sendResult(res, value);
+            } else {
+                self.log.debug('<< getTax');
+                self.sendResultOrError(res, err, value, "Error retrieving tax");
             }
 
         });
