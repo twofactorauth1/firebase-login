@@ -380,9 +380,20 @@ div[data-type='campaign'] .inner-page .overlay {
 .contact-us-v1 p {
   margin: 0px 0 3px;
 }
+@media (max-width: 767px) {
+  .contact-us-v1 .widget-weather {
+    margin: 0!important;
+    padding: 0!important;
+  }
+  .contact-us-v1 .widget-weather .panel-body {
+    padding: 0!important;
+  }
+}
 .contact-us-v1 .widget-weather {
-  margin-top: -250px;
+  margin-top: -280px;
   margin-left: 100px;
+  margin-bottom: 0;
+  border: none;
 }
 .contact-us-v1 .panel-default,
 .contact-us-v1 .panel-body {
@@ -2554,6 +2565,7 @@ div[data-class='image-text'] p {
 /********** Blog Teaser v1 **********/
 .blog-teaser-v1 {
   color: #777;
+  padding: 15px;
 }
 .blog-teaser-v1 .posts {
   margin-top: 45px;
