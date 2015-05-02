@@ -29,14 +29,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4" ng-if="blogpost.featured_image">
+                    <div class="col-lg-4 col-md-4 col-sm-4" ng-if="blogpost.featured_image">
                         <div class="featured-image">
                             <div class="editable" data-class="featimage">
                                 <img ng-src="{{blogpost.featured_image}}" class="thumbnail img-responsive" />
                             </div>
                         </div>
                     </div>
-                    <div ng-class="{'col-sm-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}">
+                    <div ng-class="{'col-xs-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}" class="col-lg-8 col-md-8 col-sm-8">
                         <p>
                             <div class="excerpt">
                                 <div class="editable" data-class="post_excerpt">
@@ -52,7 +52,7 @@
                     <div class="col-xs-12">
                         <p></p>
                         <p>
-                            <span data-ng-if="blogpost.post_author"><i class="fa fa-user"></i> by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{blogpost.created.date | amDateFormat:'MMM D, YYYY'}} <span data-ng-if="blogpost.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
+                            <span data-ng-if="blogpost.post_author"><i class="fa fa-user"></i> by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{blogpost.created.date | amDateFormat:'MM/DD/YYYY'}} <span data-ng-if="blogpost.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
                             <a href="/tag/{{post_tags}}" data-ng-repeat="post_tags in blogpost.post_tags track by $index"><span class="label label-info">{{post_tags}}</span></a>
                         </p>
                     </div>

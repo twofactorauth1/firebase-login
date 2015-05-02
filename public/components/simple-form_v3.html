@@ -32,8 +32,9 @@
         <div class="mb30 visible-xs clearfix"></div>
         <div class="col-sm-6 col-xs-12 contact-right">                
                     <fieldset>
-                        <div ng-repeat="field in component.fields" ng-if="field.value" id="contact_{{field.name}}_{{component._id}}" class="form-group">
-                            <input class="form-control" type="text" ng-model="field.model" placeholder="{{field.display}}" />
+                        <div ng-repeat="field in component.fields" ng-if="field.value" id="contact_{{field.name}}_{{component._id}}" class="form-group has-feedback">
+                            <input class="form-control" class="form-control" type="text" ng-model="field.model" placeholder="{{field.display}}" />
+                            <span class="glyphicon form-control-feedback"></span>
                             <span class="error help-block" />
                         </div>                        
                         <div id="contact_email_{{component._id}}" class="form-group">

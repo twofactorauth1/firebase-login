@@ -1115,12 +1115,15 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         $scope.createUser = function(user, component) {
             angular.element("#user_email_" + component._id + " .error").html("");
-            angular.element("#user_email_" + component._id + " .error").html("");
             angular.element("#user_email_" + component._id).removeClass('has-error');
+            angular.element("#user_email_" + component._id).removeClass('has-success');
             angular.element("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+            angular.element("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-ok');
             angular.element("#user_phone_" + component._id + " .error").html("");
             angular.element("#user_phone_" + component._id).removeClass('has-error');
+            angular.element("#user_phone_" + component._id).removeClass('has-success');
             angular.element("#user_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+            angular.element("#user_phone_" + component._id + " .glyphicon").removeClass('glyphicon-ok');
 
             var fingerprint = new Fingerprint().get();
             var sessionId = ipCookie("session_cookie")["id"];
@@ -1169,6 +1172,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     return;
                 }
 
+
                 var skipWelcomeEmail;
 
                 if (component.skipWelcomeEmail) {
@@ -1208,8 +1212,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
                     } else if (data) {
                         angular.element("#user_email_" + component._id + " .error").html("");
-                        angular.element("#user_email_" + component._id).removeClass('has-error').addClass('has-success');
-                        angular.element("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        angular.element("#user_email_" + component._id).removeClass('has-error')
+                        angular.element("#user_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
                         user.email = "";
                         component.fields.forEach(function(value) {
                             value.model = null;
@@ -1253,10 +1257,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             angular.element("#contact_email_" + component._id + " .error").html("");
             angular.element("#contact_email_" + component._id).removeClass('has-error');
             angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
+            angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-ok');
+            angular.element("#contact_email_" + component._id).removeClass('has-success');
             angular.element("#contact_phone_" + component._id + " .error").html("");
             angular.element("#contact_phone_" + component._id).removeClass('has-error');
             angular.element("#contact_phone_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
-
+            angular.element("#contact_phone_" + component._id + " .glyphicon").removeClass('glyphicon-ok');
+            angular.element("#contact_phone_" + component._id).removeClass('has-success');
+            
             if (!contact || !contact.email) {
                 angular.element("#contact_email_" + component._id + " .error").html("Email Required");
                 angular.element("#contact_email_" + component._id).addClass('has-error');
@@ -1331,9 +1339,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
                     } else if (data) {
                         angular.element("#contact_email_" + component._id + " .error").html("");
-                        angular.element("#contact_email_" + component._id).removeClass('has-error').addClass('has-success');
-                        angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-
+                        angular.element("#contact_email_" + component._id).removeClass('has-error');
+                        angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
                         contact.email = '';
                         contact.message = '';
                         contact.success = true;
