@@ -8,13 +8,13 @@
     $scope.panes = [{
       header: "Sign Up For Indigenous",
       content: "You completed the most difficult task of starting to take control of your business.",
-      taskKey: 'basic_info',
-      state: 'app.account'
+      taskKey: 'sign_up',
+      state: 'app.support.gettingstarted'
     }, {
       header: "Basic Account Information",
       content: "Enter the basic information about your business like your address and logo.",
       taskKey: 'profile-personal',
-      state: 'app.account.profile'
+      state: 'app.account.profilebusiness'
     }, {
       header: "Edit the Homepage",
       content: "Lets make the home page according to your taste.",
@@ -92,6 +92,7 @@
         absolute: false
       });
       url += '?onboarding=' + pane.taskKey;
+      console.log('url ', url);
       window.location = url;
     };
 
