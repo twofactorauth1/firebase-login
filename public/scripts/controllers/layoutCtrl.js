@@ -177,7 +177,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 $scope.parentScope.iframeLoaded;
                                 $scope.parentScope.afteriframeLoaded($scope.currentpage);
                             }
-
+                            $scope.dataLoaded = true;
                             $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
                                 if (newValue !== undefined && newValue.length) {
                                     var tagsArr = [];
@@ -1237,7 +1237,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.dataLoaded = false;
                 $scope.currentcomponents = newValue;
                 newValue.forEach(function(value, index) {
-                    $scope.dataLoaded = true;
+                    
                     if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
                         value.bg.img.show = true;
                     if (value && value.type === 'payment-form') {
@@ -1295,7 +1295,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     if (value && value.type == 'contact-us') {
                         $scope.updateContactUsMap(value);
                     }
-
                 });
             }
         });
