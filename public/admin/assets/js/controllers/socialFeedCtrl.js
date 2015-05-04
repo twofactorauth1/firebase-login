@@ -5,6 +5,21 @@
   app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function ($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
 
     /*
+     * initialize all state in the controller, like a constructor.
+     */
+
+    $scope.init = function() {
+      $scope.followModalCheckmarks = [];
+      $scope.trackedAccounts = [];
+      $scope.feed = [];
+      $scope.feedLengths = {};
+      $scope.orderByAttribute = '';
+    };
+
+    // execute the 'constructor'
+    $scope.init();
+
+    /*
      * @openModal
      * -
      */
@@ -41,10 +56,7 @@
      * -
      */
 
-    $scope.trackedAccounts = [];
-    $scope.feed = [];
-    $scope.feedLengths = {};
-    $scope.orderByAttribute = '';
+
     $scope.initializeSocialConfig = function (config) {
 
       $scope.config = config;
@@ -116,7 +128,6 @@
       }, 1500);
       //push the feed into the display
       $scope.displayFeed = $scope.feed;
-
     };
 
     /*
@@ -314,6 +325,52 @@
         //$log.debug('account: ' + JSON.stringify(tempAccount));
         $scope.tempTrackedAccounts[index].favorited = $scope.checkFavExistFn(tempAccount);
       });
+    };
+
+    /*
+     * @showFavModal
+     * -
+     */
+
+    $scope.showFollowModal = function (post) {
+      $log.debug('--showFollowModal');
+      $scope.tempPost = post;
+
+      //$scope.followModalCheckmarks.length = 0; //= [];
+
+      $scope.openModal('follow-modal');
+
+      $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+
+      //$log.debug($scope.tempTrackedAccounts);
+      _.each($scope.tempTrackedAccounts, function (tempAccount, index) {
+        //$log.debug('account: ' + JSON.stringify(tempAccount));
+        //$scope.tempTrackedAccounts[index].favorited = $scope.checkFavExistFn(tempAccount);
+        //$scope.followModalCheckmarks.push(false); // TODO: call API
+        $scope.followModalCheckmarks[tempAccount] = false; // TODO: call API
+      });
+    };
+
+    /*
+     * @showRetweetModal
+     * -
+     */
+
+    $scope.showTweetModal = function (post) {
+      _.each(post.comments, function (comment) {
+        //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
+      });
+      $scope.tempPost = post;
+      $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+      //$scope.visibleComments = post.comments;
+
+      // set the intitial value of the textarea because
+      // "reply" means their handle is supposed to come before the message
+      $scope.addComment = '@' + $scope.tempPost.from.name + ' ';
+
+      //$scope.updateComments(post, 'tw');
+
+      $scope.openModal('twitter-comments-modal');
     };
 
     /*
@@ -559,6 +616,69 @@
         //    }
         //}
         toaster.pop('warning', 'unfavorited post.');
+      });
+    };
+
+    /*
+     * updates the checkmarks used on the follow modal
+     *
+     * follower: the twitter ID that we want to follow/unfollow
+     * id_str:
+     */
+    $scope.followTwitterCheck = function(follower, postReturn, account) {
+      //account.following.push(follower.twitterId);
+      if(follower === postReturn.id_str) {
+        //var index = $scope.followModalCheckmarks.indexOf(account);
+        //$log.debug('followTwitterCheck, search index=' + index.toString());
+        $log.debug('followTwitterCheck, postReturn.following=' + postReturn.following.toString());
+
+        //!postReturn.following
+        if(postReturn.friendly) {
+          //$scope.followModalCheckmarks[follower] = true;
+          //$scope.followModalCheckmarks.push(account);
+
+          $scope.followModalCheckmarks[account] = true;
+        }
+        else {
+          // TODO: is postReturn.following useful here?
+          //$log.warn('need to remove follower?');
+          //delete $scope.followModalCheckmarks[follower];
+
+          //if(index > -1) {
+          //  $scope.followModalCheckmarks.splice(index,1);
+          //}
+          $scope.followModalCheckmarks[account] = false;
+        }
+      }
+      //else {
+      //  $log.debug('not following');
+      //  $log.warn('not a follower?');
+      //  //delete $scope.followModalCheckmarks[follower];
+      //  if(index > -1) {
+      //    $scope.followModalCheckmarks.splice(index,1);
+      //  }
+      //}
+    };
+
+    /*
+     * followTwitterUser(account, follower)
+     */
+    $scope.followTwitterUser = function(account, follower) {
+      $log.debug('---followTwitterUser, sourceID=' + follower);
+      SocialConfigService.followTwitterUser(account.id, follower, function(postReturn) {
+        $log.debug('returned from followTwitterUser(' + JSON.stringify(postReturn) + ')');
+        $scope.followTwitterCheck(follower, postReturn, account);
+      });
+    };
+
+    /*
+     * unfollowTwitterUser(account, follower)
+     */
+    $scope.unfollowTwitterUser = function(account, follower) {
+      $log.debug('---unfollowTwitterUser, sourceID=' + follower);
+      SocialConfigService.unfollowTwitterUser(account.id, follower, function(postReturn) {
+        $log.debug('returned from unfollowTwitterUser(' + JSON.stringify(postReturn) + ')');
+        $scope.followTwitterCheck(follower, postReturn, account);
       });
     };
 
