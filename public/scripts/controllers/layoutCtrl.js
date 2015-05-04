@@ -982,7 +982,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                       {
                           return $(this).height();
                       }).get());
-                      $("div.feature-single").css("min-height", maxFeatureHeight - 10);
+                      $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
                     }
                 }
 
@@ -1935,7 +1935,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             return $(this).height();
                          }).get());
 
-                        $("div.feature-single").css("min-height", maxFeatureHeight - 20);
+                        $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
                       }
                     }
                     $scope.feature_inserted = true;
@@ -1955,6 +1955,25 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }
                 }
             }, 1000)
+        });
+
+        angular.element($window).bind('resize', function() {
+            $scope.feature_inserted = false;
+            if(!$scope.feature_inserted)
+                  {
+                   $scope.feature_inserted = true;
+                   for (var i = 0; i <= 3; i++) {
+                      if($("div.feature-height-"+i).length)
+                      {
+                        var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                        {
+                            return $(this).height();
+                         }).get());
+                        $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
+                      }
+                    }
+                    $scope.feature_inserted = true;
+                  }
         });
     }
 
