@@ -16,6 +16,138 @@ app.constant('hoursConstant', {
     HOURS: ["5:00 am", "5:30 am", "6:00 am", "6:30 am", "7:00 am", "7:30 am", "8:00 am", "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "1:00 pm", "1:30 pm", "2:00 pm", "2:30 pm", "3:00 pm", "3:30 pm", "4:00 pm", "4:30 pm", "5:00 pm", "5:30 pm", "6:00 pm", "6:30 pm", "7:00 pm", "7:30 pm", "8:00 pm", "8:30 pm", "9:00 pm", "9:30 pm", "10:00 pm", "10:30 pm", "11:00 pm", "11:30 pm", "12:00 am"]
 });
 
+app.constant('ONBOARDINGCONSTANT', {
+
+  tasks: [{
+    type: 'title',
+    heading: "Sign Up For Indigenous",
+    text: "You completed the most difficult task of starting to take control of your business.",
+    taskKey: 'sign_up',
+    state: 'app.support.gettingstarted'
+  }, {
+    type: 'title',
+    heading: "Basic Account Information",
+    text: "Enter the basic information about your business like your address and logo.",
+    taskKey: 'profile-personal',
+    state: 'app.account.profilebusiness'
+  }, {
+    type: 'title',
+    heading: "Edit the Homepage",
+    text: "Lets make the home page according to your taste.",
+    taskKey: 'single-page',
+    state: 'app.website.pages'
+  }, {
+    type: 'title',
+    heading: "Create First BlogPost",
+    text: "Keep everyone up to date and informed with a regular blog.",
+    taskKey: 'single-post',
+    state: 'app.website.posts'
+  }, {
+    type: 'title',
+    heading: "Connect Social Accounts",
+    text: "Connect your social account so you can import contacts and create marketing campaigns.",
+    taskKey: 'integrations',
+    state: 'app.account.integrations'
+  }, {
+    type: 'title',
+    heading: "Add Social Feed",
+    text: "Add social feeds of your friends.",
+    taskKey: 'social-feed',
+    state: 'app.marketing.socialfeed'
+  }, {
+    type: 'title',
+    heading: "Import/Create Contacts",
+    text: "Import your contact from your various accounts or create them.",
+    taskKey: 'customers',
+    state: 'app.customers'
+  }, {
+    type: 'title',
+    heading: "Add New Contact",
+    text: "Add a new contact.",
+    taskKey: 'single-customer',
+    state: 'app.customers'
+  }, {
+    type: 'title',
+    heading: "Import/Create Products",
+    text: "Import or create new products to start selling and creating revenue.",
+    taskKey: 'commerce',
+    state: 'app.commerce'
+  }, {
+    type: 'title',
+    heading: "Discover the Dashboard",
+    text: "Now evetything is set up, its time to start trakcing.",
+    taskKey: 'dashboard',
+    state: 'app.dashboard'
+  }, {
+    type: 'title',
+    heading: 'View pages',
+    text: 'See all pages',
+    taskKey: 'pages',
+    state: 'app.website.pages'
+  }, {
+    type: 'title',
+    heading: 'View posts',
+    text: 'See all posts',
+    taskKey: 'posts',
+    state: 'app.website.posts'
+  }, {
+    type: 'title',
+    heading: 'Add product',
+    text: 'Add a product',
+    taskKey: 'single-product',
+    state: 'app.commerce'
+  }, {
+    type: 'title',
+    heading: 'Add business info',
+    text: 'Add business info',
+    taskKey: 'profile-business',
+    state: 'app.account'
+  }, {
+    type: 'title',
+    heading: 'Analytics',
+    text: 'Check site status',
+    taskKey: 'site-analytics',
+    state: 'app.dashboard'
+  }, {
+    type: 'title',
+    heading: 'Add a Contact',
+    text: 'Learn how to manually add a contact.',
+    taskKey: 'add_contact',
+    state: 'app.'
+  }, {
+    type: 'title',
+    heading: 'Add Social Feed',
+    text: 'Add a social feed to display with all the other networks.',
+    taskKey: 'add_feed',
+    state: 'app.'
+  }, {
+    type: 'title',
+    heading: 'Add a Post',
+    text: 'Add a post that will show up in your blog.',
+    taskKey: 'add_post',
+    state: 'app.'
+  }, {
+    type: 'title',
+    heading: 'Add a Product',
+    text: 'Add a product to show in your products component.',
+    taskKey: 'add_product',
+    state: 'app.'
+  }, {
+    type: 'title',
+    heading: 'Basic Info',
+    text: 'Enter the basic info for your business profile.',
+    taskKey: 'basic_info',
+    state: 'app.'
+  }, {
+    type: 'title',
+    heading: 'Edit Home',
+    text: 'Edit the home page of your site.',
+    taskKey: 'edit_home',
+    state: 'app.'
+  }]
+
+});
+
 app.constant('social', {
     types: {
         LOCAL: "lo",
