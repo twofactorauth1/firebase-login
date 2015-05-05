@@ -689,7 +689,8 @@
                 //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70) + "px";
+                        //$scope.iframeHeight = ($("#iframe-website").contents().find("body").height() - 70) + "px";
+                        $scope.iframeHeight = (angular.element(window).height() - 100) + "px";
                     });
                 }, 100);
             }
@@ -2632,6 +2633,17 @@
             //update single component
             return $scope.updateSingleComponent(componentId);
         };
+
+        /*
+         * @Media button click
+         * -
+         */
+
+        $scope.insertMediaOnClick = function(componentId) {
+            var editor = $scope.childScope.getActiveEditor();
+            $scope.clickImageButton(editor, false);
+        };
+
 
     }]);
 })(angular);
