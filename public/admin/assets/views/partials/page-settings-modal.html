@@ -55,7 +55,9 @@
                             <tbody>
                                 <tr ng-repeat="version in pageVersions | orderBy: 'modified.date':true">
                                     <th scope="row">{{version.modified.date | date:'MMM d, y h:mm:ss a'}}</th>
-                                    <td><a href="" ng-click="showPreview(version)">Preview</a> | <a href="" ng-click="revertPage(version)">Restore</a> <a href="" ng-click="deletePage()" class="hidden">Delete</a>
+                                    <td>
+                                    <!--
+                                    <a href="" ng-click="showPreview(version)">Preview</a> | <a href="" ng-click="revertPage(version)">Restore</a> <a href="" ng-click="deletePage()" class="hidden">Delete</a> -->
                                     </td>
                                 </tr>
                             </tbody>
