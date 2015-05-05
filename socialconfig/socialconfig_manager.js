@@ -1070,6 +1070,40 @@ module.exports = {
         });
     },
 
+    followTwitterUser: function(accountId, socialAccountId, userId, fn) {
+        var self = this;
+        log.debug('>> followTwitterUser');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.followUserWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, userId, fn);
+        });
+    },
+
+    unfollowTwitterUser: function(accountId, socialAccountId, userId, fn) {
+        var self = this;
+        log.debug('>> unfollowTwitterUser');
+        self.getSocialConfig(accountId, null, function(err, config) {
+            if (err) {
+                log.error('Error getting social config: ' + err);
+                return fn(err, null);
+            }
+            var socialAccount = config.getSocialAccountById(socialAccountId);
+            if (socialAccount === null) {
+                log.error('Invalid social account Id');
+                return fn('Invalid social accountId', null);
+            }
+            return twitterDao.unfollowUserWithToken(socialAccount.accessToken, socialAccount.accessTokenSecret, userId, fn);
+        });
+    },
+
     directMessageTwitterUser: function(accountId, socialAccountId, userId, screenName, msg, fn) {
         var self = this;
         log.debug('>> directMessageTwitterUser');

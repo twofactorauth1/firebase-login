@@ -506,6 +506,54 @@ var dao = {
         );
     },
 
+    followUserWithToken: function(accessToken, accessTokenSecret, userId, fn) {
+        var self = this;
+        self.log.debug('>> followUserWithToken');
+
+        twitter.friendships("create", {
+                user_id: userId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error to follow user: ' + userId, error);
+                    fn(error, null);
+                } else {
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    self.log.debug('<< followUserWithToken');
+                    data.friendly = true;
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
+    unfollowUserWithToken: function(accessToken, accessTokenSecret, userId, fn) {
+        var self = this;
+        self.log.debug('>> unfollowUserWithToken');
+
+        twitter.friendships("destroy", {
+                user_id: userId
+            },
+            accessToken,
+            accessTokenSecret,
+            function(error, data, response) {
+                if (error) {
+                    self.log.error('Error unfollowing status: ', error);
+                    fn(error, null);
+                } else {
+                    //self.log.debug('data: ', data);
+                    //self.log.debug('response:', response);
+                    self.log.debug('<< unfollowUserWithToken');
+                    data.friendly = false;
+                    fn(null, data);
+                }
+            }
+        );
+    },
+
     directMessageTwitterUserWithToken: function(accessToken, accessTokenSecret, userId, screenName, msg, fn) {
         var self = this;
         self.log.debug('>> directMessageTwitterUserWithToken');

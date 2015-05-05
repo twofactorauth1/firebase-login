@@ -3,7 +3,7 @@
  * service for social config
  */
 (function(angular) {
-    app.service('SocialConfigService', function($http) {
+    app.service('SocialConfigService', ['$http', '$log', function($http, $log) {
         var baseUrl = '/api/1.0/';
         this.getAllSocialConfig = function(fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig'].join('/');
@@ -183,6 +183,24 @@
             });
         };
 
+        this.followTwitterUser = function(socialAccountId, twitterFollowerId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'follow', twitterFollowerId, 'follow'].join('/');
+
+            $log.debug('xxx followTwitterUser');
+            $http.post(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.unfollowTwitterUser = function(socialAccountId, twitterFollowerId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'follow', twitterFollowerId, 'unfollow'].join('/');
+            $http.delete(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         //Facebook
         this.getFBPosts = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
@@ -305,5 +323,5 @@
                     fn(data);
                 });
         };
-    })
+    }])
 })(angular);
