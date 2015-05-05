@@ -114,6 +114,7 @@ module.exports = {
                     }
                     var application_fee = 0;
                     var userId = null;
+                    log.debug('contant ', contact);
                     var receipt_email = contact.getEmails()[0];
                     log.debug('Setting receipt_email to ' + receipt_email);
 
@@ -143,6 +144,7 @@ module.exports = {
                 }
             },
             //update
+
             function(savedOrder, charge, contact, callback){
                 log.debug('updating saved order');
                 /*
@@ -154,7 +156,7 @@ module.exports = {
                  * modified.by: userId
                  */
                 savedOrder.set('updated_at', new Date());
-                savedOrder.set('status', savedOrder.status.PENDING);
+                // savedOrder.set('status', savedOrder.status.PENDING);
                 var paymentDetails = savedOrder.get('payment_details');
                 paymentDetails.paid = true;
                 paymentDetails.charge = charge;
@@ -177,12 +179,15 @@ module.exports = {
             //send new order email
             function(updatedOrder, contact, callback) {
                 log.debug('Sending new order email');
-                var toAddress = contact.getEmails()[0];
+                var toAddress = contact.getEmails()[0].email;
                 var toName = contact.get('first') + ' ' + contact.get('last');
-                var subject = 'New Order';
                 var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
+
+                log.debug('toAddress ', toAddress);
+                log.debug('toName ', toName);
+                log.debug('toAddress ', toAddress);
 
                 accountDao.getAccountByID(accountId, function(err, account){
                     if(err) {
@@ -193,15 +198,17 @@ module.exports = {
                             log.warn('No account email.  No NEW_ORDER email sent');
                             callback(null, updatedOrder);
                         }
+                        var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
-                        
+
                         cmsManager.getEmailPage(accountId, 'new_order', function(err, page){
                             if(err || !page) {
                                 log.warn('No NEW_ORDER email sent: ' + err);
                                 callback(null, updatedOrder);
                             } else {
                                 var component = page.get('components')[0];
+                                component.order = updatedOrder.attributes;
                                 log.debug('Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
                                     mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
@@ -327,11 +334,12 @@ module.exports = {
      */
     refundOrder: function(accountId, orderId, note, userId, amount, reason, accessToken, fn) {
         var self = this;
-        log.debug('>> refundOrder');
+        log.debug('>> refundOrder ', orderId);
         var query = {
             _id: orderId,
-            accountId: accountId
+            account_id: accountId
         };
+        log.debug('>> query ', query);
         dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
                 log.error('Error getting order: ' + err);
@@ -551,6 +559,24 @@ module.exports = {
                     }
                 });
 
+            }
+        });
+    },
+
+    listOrdersByCustomer: function(customerId, accountId, fn) {
+        log.debug('>> listOrdersByCustomer ', customerId, accountId);
+        var query = {
+            'customer_id': customerId,
+            'account_id': accountId
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            log.debug('>> listOrdersByCustomer ', orders);
+            if(err) {
+                log.error('Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                return fn(null, orders);
             }
         });
     }

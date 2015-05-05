@@ -14,6 +14,14 @@
                 });
         };
 
+        this.getCustomerOrders = function(customerId, fn) {
+            var apiUrl = baseUrl + ['customer', customerId].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         this.getOrder = function(orderId, fn) {
             var apiUrl = baseUrl + orderId;
             $http.get(apiUrl)
@@ -34,6 +42,22 @@
                 })
                 .error(function(error) {
                     console.error('OrderService: createOrder error >>> ', error);
+                });
+        };
+
+        this.refundOrder = function(orderId, reasonData, fn) {
+            var apiUrl = baseUrl + [orderId, 'refund'].join('/');
+            console.log('apiUrl ', apiUrl);
+            $http({
+                    url: apiUrl,
+                    method: "POST",
+                    data: reasonData
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                })
+                .error(function(error) {
+                    console.error('OrderService: refundOrder error >>> ', error);
                 });
         };
 

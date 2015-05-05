@@ -109,6 +109,16 @@ var mainApp = angular
         analyticsService.sessionStart(function(data) {
         });
 
+        $rootScope.app = {
+            isMobile: (function () { // true if the browser is a mobile device
+              var check = false;
+              if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                check = true;
+              };
+              return check;
+            })()
+          };
+
 
         $rootScope.$on("$routeChangeStart", function (scope, next, current) {
             var self = this;

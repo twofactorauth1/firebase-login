@@ -1,4 +1,4 @@
-<div class="products-v1" data-class="products" data-id="{{component._id}}">
+<div class="products-v1" data-class="products" data-id="{{component._id}}" ng-controller="ProductsComponentCtrl">
     <div class="products">
         <header class="jumbotron hero-spacer col-xs-12d">
             <div class="title">
@@ -11,7 +11,7 @@
             </div>
         </header>
         <div class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in layout.products | filter:{status:'active'}:true">
+            <div data-class="product-section-id" class="col-sm-4 col-lg-4 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true">
                 <div class="product">
                     <div class="thumbnail">
                         <div class="product-img">
@@ -27,7 +27,7 @@
                         </div>
                         <div class="caption">
                             <h4 class="pull-right">{{product.regular_price | currency}}</h4>
-                            <h4 class="title"><a href="#">{{product.hasVariations}}</a></h4>
+                            <h4 class="title"><a href="#">{{product.name}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description">{{product.description}}</p>
                         </div>
@@ -35,17 +35,17 @@
                             <a class="btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
-                            <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external_link' && product.clicked != true && !product.hasVariations">
+                            <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external' && product.clicked != true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart"></span> Add to Cart
                                 </div>
                             </button>
-                            <button class="btn btn-success btn-block center" href="#" ng-if="product.type != 'external_link' && product.clicked == true && !product.hasVariations">
+                            <button class="btn btn-success btn-block center" href="#" ng-if="product.type != 'external' && product.clicked == true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-check"></span> Added to Cart!
                                 </div>
                             </button>
-                            <a class="btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external_link'" target="{{product.externalLinkOpenIn}}">
+                            <a class="btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external'" target="{{product.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText || 'External Link'}}
                                 </div>
@@ -79,8 +79,8 @@
                     <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row shopping-cart" ng-class="{'hidden': checkoutModalState !== 1}">
-                        <div class="col-sm-8 order-line-items">
+                    <div class="row shopping-cart" ng-hide="checkoutModalState !== 1">
+                        <div class="col-sm-8 order-line-items height-400" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                             <div class="mb15"></div>
                             <ul>
                                 <li ng-repeat="item in cartDetails track by $index">
@@ -115,33 +115,10 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <h4 class="text-center">Order Summary</h4>
-                            <ul style="list-style:none;">
-                                <li ng-repeat="item in cartDetails track by $index">
-                                    <p class="text-left product-name">{{item.name}}</p>
-                                    <p class="text-right product-price">$ {{item.regular_price * item.quantity}}</p>
-                                </li>
-                            </ul>
-                            <div class="row">
-                                <div class="col-xs-6"></div>
-                                <div class="clearfix mb30"></div>
-                                <div class="col-xs-offset-6 col-xs-6">
-                                    <p>Subtotal: {{ subTotal | currency }}</p>
-                                    <p>Tax (8%): {{ totalTax | currency }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <h2>Total</h2>
-                                </div>
-                                <div class="col-xs-6">
-                                    <h2>{{ total  | number:2 | currency }}</h2>
-                                </div>
-                            </div>
-                            <div class="mb15"></div>
+                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
                         </div>
                     </div>
-                    <div class="row billing-shipping" ng-class="{'hidden': checkoutModalState !== 2}">
+                    <div class="row billing-shipping" ng-hide="checkoutModalState !== 2">
                         <div class="col-sm-8 information">
                             <ul class="nav nav-tabs hidden">
                                 <li class="active">
@@ -173,6 +150,14 @@
                                             <div class="form-group">
                                                 <label class="control-label" for="lastName">Last Name</label>
                                                 <input type="text" class="form-control" id="lastName" ng-model="newContact.last">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="email">Email</label>
+                                                <input type="text" class="form-control" id="email" ng-model="newContact.details[0].emails[0].email">
                                             </div>
                                         </div>
                                     </div>
@@ -264,48 +249,25 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <h4 class="text-center">Order Summary</h4>
-                            <ul style="list-style:none;">
-                                <li ng-repeat="item in cartDetails track by $index">
-                                    <p class="text-left product-name">{{item.name}}</p>
-                                    <p class="text-right product-price">$ {{item.regular_price * item.quantity}}</p>
-                                </li>
-                            </ul>
-                            <div class="row">
-                                <div class="col-xs-6"></div>
-                                <div class="clearfix mb30"></div>
-                                <div class="col-xs-offset-6 col-xs-6">
-                                    <p>Subtotal: $ {{ subTotal }}</p>
-                                    <p>Tax (8%): $ {{ totalTax }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <h2>Total</h2>
-                                </div>
-                                <div class="col-xs-6">
-                                    <h2>$ {{ total }}</h2>
-                                </div>
-                            </div>
-                            <div class="mb15"></div>
+                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
                         </div>
                     </div>
-                    <div class="row payment" ng-class="{'hidden': checkoutModalState !== 3}">
+                    <div class="row payment" ng-hide="checkoutModalState !== 3">
                         <div class="col-sm-8 information">
-                            <div class="clearfix mb30"></div>
+                            <div class="clearfix margin-bottom-30"></div>
                             <div class="card-wrapper"></div>
-                            <div class="clearfix mb30"></div>
+                            <div class="clearfix margin-bottom-30"></div>
                             <div class="active col-xs-12">
                                 <form name="product-card-details" action="">
                                     <div class="row">
                                         <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
-                                            <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control input-lg">
+                                            <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
                                         <div class="visible-xs mb20"></div>
                                         <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
-                                            <input placeholder="Full name" type="text" id="name" name="name" class="form-control input-lg">
+                                            <input placeholder="Full name" type="text" id="name" name="name" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
@@ -313,12 +275,12 @@
                                     <div class="clearfix mb20"></div>
                                     <div class="row">
                                         <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
-                                            <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                                            <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
                                         <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
-                                            <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                                            <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control">
                                             <span class="glyphicon form-control-feedback"></span>
                                             <span class="error help-block" />
                                         </div>
@@ -328,33 +290,10 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <h4 class="text-center">Order Summary</h4>
-                            <ul style="list-style:none;">
-                                <li ng-repeat="item in cartDetails track by $index">
-                                    <p class="text-left product-name">{{item.name}}</p>
-                                    <p class="text-right product-price">$ {{item.regular_price * item.quantity}}</p>
-                                </li>
-                            </ul>
-                            <div class="row">
-                                <div class="col-xs-6"></div>
-                                <div class="clearfix mb30"></div>
-                                <div class="col-xs-offset-6 col-xs-6">
-                                    <p>Subtotal: $ {{ subTotal }}</p>
-                                    <p>Tax (8%): $ {{ totalTax }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <h2>Total</h2>
-                                </div>
-                                <div class="col-xs-6">
-                                    <h2>$ {{ total }}</h2>
-                                </div>
-                            </div>
-                            <div class="mb15"></div>
+                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
                         </div>
                     </div>
-                    <div class="row thank-you" ng-class="{'hidden': checkoutModalState !== 4}">
+                    <div class="row thank-you" ng-hide="checkoutModalState !== 4">
                         <h3 class="center mb20">Thank You For you Purchase</h3>
                         <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
                         <div class="clearfix mb30"></div>
@@ -376,17 +315,17 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="modal-footer cart-footer" ng-class="{'hidden': checkoutModalState !== 3}">
+                <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
                     <button class="btn btn-info continue-shopping pull-left" ng-click="checkoutModalState = 2"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
-                <div class="modal-footer billing-footer" ng-class="{'hidden': checkoutModalState !== 2}">
+                <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
                     <button class="btn btn-success btn-payment pull-right" ng-click="checkoutModalState = 3"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
                     <button class="btn pull-left btn-info back-to-shopping-cart" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
-                <div class="modal-footer payment-footer" ng-class="{'hidden': checkoutModalState !== 1}">
+                <div class="modal-footer payment-footer" ng-hide="checkoutModalState !== 1">
                     <button class="btn btn-success btn-confirm-payment pull-right" ng-click="checkoutModalState = 2"> Basic Info <i class="fa fa-chevron-right"></i>
                     </button>
                     <button class="btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Continue Shopping
@@ -441,17 +380,17 @@
                                     </div>
                                 </div>
                                 <div class="actions">
-                                    <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked != true && matchedVariation">
+                                    <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked != true && matchedVariation">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart"></span> Add to Cart
                                         </div>
                                     </button>
-                                    <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external_link' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
+                                    <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
                                         <div data-class="btn-text">
                                             <span class="fa fa-check"></span> Added to Cart!
                                         </div>
                                     </button>
-                                    <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external_link'" target="{{selectedProduct.externalLinkOpenIn}}">
+                                    <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external'" target="{{selectedProduct.externalLinkOpenIn}}">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
                                         </div>

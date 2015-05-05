@@ -1,0 +1,26 @@
+<h4 class="text-center">Order Summary</h4>
+<div class="panel-scroll height-200" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+    <ul style="list-style:none;">
+        <li ng-repeat="item in cartDetails track by $index">
+            <p class="text-left product-name">{{item.name}}</p>
+            <p class="text-right product-price">$ {{item.regular_price * item.quantity}}</p>
+        </li>
+    </ul>
+</div>
+<div class="row">
+    <div class="col-xs-6"></div>
+    <div class="clearfix mb30"></div>
+    <div class="col-xs-offset-6 col-xs-6">
+        <p>Subtotal: {{ subTotal | currency }}</p>
+        <p>Tax (8%): {{ totalTax | currency }}</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <h2>Total</h2>
+    </div>
+    <div class="col-xs-6">
+        <h2>{{ total  | number:2 | currency }}</h2>
+    </div>
+</div>
+<div class="mb15"></div>

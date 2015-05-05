@@ -11,63 +11,63 @@
 <!-- end: PAGE TITLE -->
 <!-- start: YOUR CONTENT HERE -->
 <div class="getting-started">
-	<div class="col-sm-8" ng-controller="GettingStartedCtrl">
-	    <div class="panel panel-transparent">
-	        <div class="panel-heading">
-	            <div class="panel-title">
-	                Tasks
-	            </div>
-	        </div>
-	        <div class="panel-body">
-	            <div class="list-group" ng-repeat="pane in panes">
-	                <a class="list-group-item" ng-click='startOnboardFn(pane)'>
-	                	<div class="col-xs-1">
-	                		<h3><i class="fa" ng-class="{'fa-check-circle-o' : userPreferences.tasks[pane.taskKey] , 'fa-circle-o' : !userPreferences.tasks[pane.taskKey] }"></i></h3>
-	                	</div>
-	                	<div class="col-xs-11">
-		                    <h5 class="list-group-item-heading">{{pane.header}}</h5>
-		                    <p class="list-group-item-text">
-		                        {{pane.content}}
-		                    </p>
-	                    </div>
-	                    <div class="clearfix"></div>
-	                </a>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-	<div class="col-sm-4">
-	    <div class="panel panel-transparent">
-	        <div class="panel-heading">
-	            <div class="panel-title">
-	                Progress
-	            </div>
-	        </div>
-	        <div class="panel-body">
-	            <!-- start: DOUGHNUT CHART -->
-	            <div class="container-fluid container-fullw bg-white">
-	                <div class="row">
-	                    <div class="col-sm-12">
-	                        <div class="row">
-	                            <h3 class="margin-bottom-15">Task Completion</h3>
-	                            <div ng-controller="ChartCtrl3">
-	                                <div class="col-sm-12">
-	                                    <div class="text-center margin-bottom-15">
-	                                        <canvas class="tc-chart" tc-chartjs-doughnut chart-options="options" chart-data="data" chart-legend="lineChart3" width="250"></canvas>
-                                          <div ng-show='completedPercent' style="position: absolute; height: 100%; width: 100%; top: 0px; left: 0px; padding: 60px; font-weight: bold;">
-                                            {{completedPercent}}%
-                                          </div>
-	                                    </div>
-	                                </div>
-	                                <p>You have completed {{completedTasks}} out of {{totalTasks}} tasks and have {{totalTasks - completedTasks}} remaining.</p>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	            <!-- end: DOUGHNUT CHART -->
-	        </div>
-	    </div>
-	</div>
+    <div class="col-sm-8" ng-controller="GettingStartedCtrl">
+        <div class="panel panel-transparent">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Tasks
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="list-group" ng-repeat="pane in panes">
+                    <a class="list-group-item" ng-click='startOnboardFn(pane)'>
+                        <div class="col-xs-1">
+                            <h3><i class="fa" ng-class="{'fa-check-circle-o' : pane.completed , 'fa-circle-o' : !pane.completed }"></i></h3>
+                        </div>
+                        <div class="col-xs-11">
+                            <h5 class="list-group-item-heading">{{pane.heading}}</h5>
+                            <p class="list-group-item-text">
+                                {{pane.text}}
+                            </p>
+                        </div>
+                        <div class="clearfix"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-transparent">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    Progress
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- start: DOUGHNUT CHART -->
+                <div class="container-fluid container-fullw bg-white">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <h3 class="margin-bottom-15">Task Completion</h3>
+                                <div ng-controller="ChartCtrl3">
+                                    <div class="col-sm-12">
+                                        <div class="text-center margin-bottom-15">
+                                            <canvas class="tc-chart" tc-chartjs-doughnut chart-options="options" chart-data="data" chart-legend="lineChart3" width="250"></canvas>
+                                            <div ng-show='completedPercent' style="position: absolute; height: 100%; width: 100%; top: 0px; left: 0px; padding: 60px; font-weight: bold;">
+                                                {{completedPercent}}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p>You have completed {{completedTasks}} out of {{totalTasks}} tasks and have {{totalTasks - completedTasks}} remaining.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end: DOUGHNUT CHART -->
+            </div>
+        </div>
+    </div>
 </div>
 <!-- end: YOUR CONTENT HERE -->

@@ -60,7 +60,7 @@ var dao = {
         } else {
             fn($$.u.errors._401_INVALID_CREDENTIALS, "No LinkedIn credentials found");
             self = fn = user = null;
-            retun;
+            return;
         }
     },
 

@@ -2,11 +2,23 @@
     p {
         margin: 0px 0 3px;
     }
-    .widget-weather {
-        margin-top: -250px;
-        margin-left: 100px;
+    @media(max-width:767px) {
+        .widget-weather {
+            margin: 0!important;
+            padding: 0!important;
+            .panel-body {
+                padding: 0!important;
+            }
+        }
     }
-    .panel-default, .panel-body {
+    .widget-weather {
+        margin-top: -280px;
+        margin-left: 100px;
+        margin-bottom: 0;
+        border: none;
+    }
+    .panel-default,
+    .panel-body {
         background: none;
     }
     .row {
@@ -21,7 +33,6 @@
     .widget-weather .temp span {
         padding-bottom: 5px;
     }
-
     .widget-weather .temp span.blocked {
         display: block;
     }
@@ -62,6 +73,6 @@
         margin-right: 5px;
     }
     .current-day {
-    font-weight: bold;
+        font-weight: bold;
     }
 }

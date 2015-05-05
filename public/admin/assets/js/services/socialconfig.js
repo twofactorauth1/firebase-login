@@ -3,7 +3,7 @@
  * service for social config
  */
 (function(angular) {
-    app.service('SocialConfigService', function($http) {
+    app.service('SocialConfigService', ['$http', '$log', function($http, $log) {
         var baseUrl = '/api/1.0/';
         this.getAllSocialConfig = function(fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig'].join('/');
@@ -140,6 +140,67 @@
             });
         };
 
+        this.addTwitterPostReply = function(socialAccountId, postId, username, comment, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'reply'].join('/');
+            $http.post(apiUrl, {
+                post: '@' + username + ' ' + comment
+            }).success(function(data, status, headers, config) {
+                    fn(data);
+            });
+        };
+
+        this.addTwitterPostRetweet = function(socialAccountId, postId, username, comment, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'retweet'].join('/');
+            $http.post(apiUrl, {
+                post: '@' + username + ' ' + comment
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.addTwitterDirectMessage = function(socialAccountId, username, comment, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'dm'].join('/');
+            $http.post(apiUrl, {
+                post: '@' + username + ' ' + comment
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.favTwitterPost = function(socialAccountId, postId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'favorite'].join('/');
+            $http.post(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.unfavTwitterPost = function(socialAccountId, postId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'favorite'].join('/');
+            $http.delete(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.followTwitterUser = function(socialAccountId, twitterFollowerId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'follow', twitterFollowerId, 'follow'].join('/');
+
+            $log.debug('xxx followTwitterUser');
+            $http.post(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
+        this.unfollowTwitterUser = function(socialAccountId, twitterFollowerId, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'follow', twitterFollowerId, 'unfollow'].join('/');
+            $http.delete(apiUrl, {
+            }).success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         //Facebook
         this.getFBPosts = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
@@ -202,7 +263,7 @@
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
-        }
+        };
 
         this.addFacebookPostComment = function(socialAccountId, postId, comment, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'post', postId, 'comment'].join('/');
@@ -214,11 +275,21 @@
                 });
         };
 
-        this.addTwitterPostComment = function(socialAccountId, postId, username, comment, fn) {
+        this.addTwitterReply = function(socialAccountId, postId, username, comment, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'reply'].join('/');
             $http.post(apiUrl, {
                     post: '@' + username + ' ' + comment
                 })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.addTwitterPostRetweet = function(socialAccountId, postId, username, comment, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'retweet'].join('/');
+            $http.post(apiUrl, {
+                post: '@' + username + ' ' + comment
+            })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -252,5 +323,5 @@
                     fn(data);
                 });
         };
-    })
+    }])
 })(angular);
