@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <hr ng-show="componentEditing.type == 'navigation'" />
-                    <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
+                    <div class="form-group" ng-hide="componentEditing.bg.img.show ||  (componentEditing.type == 'navigation' && componentEditing.version == 1)">
                         <label for="colorpicker">Background Color:</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span>
                         <div class="pull-right">
