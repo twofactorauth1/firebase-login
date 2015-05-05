@@ -177,7 +177,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 $scope.parentScope.iframeLoaded;
                                 $scope.parentScope.afteriframeLoaded($scope.currentpage);
                             }
-
+                            $scope.dataLoaded = true;
                             $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
                                 if (newValue !== undefined && newValue.length) {
                                     var tagsArr = [];
@@ -740,7 +740,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                       {
                           return $(this).height();
                       }).get());
-                      $("div.feature-single").css("min-height", maxFeatureHeight - 10);
+                      $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
                     }
                 }
 
@@ -995,7 +995,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.dataLoaded = false;
                 $scope.currentcomponents = newValue;
                 newValue.forEach(function(value, index) {
-                    $scope.dataLoaded = true;
+                    
                     if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
                         value.bg.img.show = true;
                     if (value && value.type === 'payment-form') {
@@ -1053,7 +1053,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     if (value && value.type == 'contact-us') {
                         $scope.updateContactUsMap(value);
                     }
-
                 });
             }
         });
@@ -1694,7 +1693,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             return $(this).height();
                          }).get());
 
-                        $("div.feature-single").css("min-height", maxFeatureHeight - 20);
+                        $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
                       }
                     }
                     $scope.feature_inserted = true;
@@ -1714,6 +1713,25 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }
                 }
             }, 1000)
+        });
+
+        angular.element($window).bind('resize', function() {
+            $scope.feature_inserted = false;
+            if(!$scope.feature_inserted)
+                  {
+                   $scope.feature_inserted = true;
+                   for (var i = 0; i <= 3; i++) {
+                      if($("div.feature-height-"+i).length)
+                      {
+                        var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                        {
+                            return $(this).height();
+                         }).get());
+                        $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
+                      }
+                    }
+                    $scope.feature_inserted = true;
+                  }
         });
     }
 
