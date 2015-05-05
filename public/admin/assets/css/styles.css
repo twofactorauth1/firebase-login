@@ -12634,6 +12634,47 @@ fieldset[disabled] .btn-vimeo-square.active {
 .orders .column-width {
   width: 16.66666666666667%;
 }
+.choose-account ul {
+  margin-bottom: 0;
+  padding-left: 0;
+}
+.choose-account ul li {
+  list-style-type: none;
+  margin-bottom: 15px;
+}
+.choose-account ul li .account-logo {
+  width: 130px;
+  background: #f1f1f1;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 15px;
+  float: left;
+  min-height: 40px;
+}
+.choose-account ul li .account-logo img {
+  max-width: 120px;
+  max-height: 30px;
+  margin: 0 auto;
+  display: block;
+}
+.choose-account ul li span {
+  line-height: 40px;
+}
+.choose-account ul li:last-child {
+  margin-bottom: 0;
+}
+.choose-account ul li:hover {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+.choose-account ul li i {
+  line-height: 40px;
+  color: #4bafca;
+  margin-right: 10px;
+}
+.choose-account fieldset {
+  margin-bottom: 0;
+}
 .filemanager-options {
   list-style: none;
   margin: 0;

@@ -2,8 +2,24 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('GettingStartedCtrl', ["$scope", '$state', 'ONBOARDINGCONSTANT', function ($scope, $state, ONBOARDINGCONSTANT) {
-    $scope.panes = ONBOARDINGCONSTANT.tasks;
+  app.controller('GettingStartedCtrl', ["$scope", '$state', 'UserService', 'ONBOARDINGCONSTANT', function ($scope, $state, UserService, ONBOARDINGCONSTANT) {
+
+    $scope.panes = [];
+    UserService.getUserPreferences(function (preferences) {
+      _.each(ONBOARDINGCONSTANT.tasks, function (task) {
+        var matchedTask = _.find(preferences.tasks, function (v, k) {
+          return k === task.pane.taskKey;
+        });
+
+        if (matchedTask) {
+          task.pane.completed = matchedTask;
+        } else {
+          task.pane.completed = false;
+        }
+
+        $scope.panes.push(task.pane);
+      });
+    });
 
     $scope.startOnboardFn = function (pane) {
       var url = $state.href(pane.state, {}, {
@@ -22,7 +38,7 @@ app.controller('ChartCtrl3', ["$scope", 'UserService', 'ONBOARDINGCONSTANT', fun
 
     var taskKeys = [];
     _.each(ONBOARDINGCONSTANT.tasks, function (task) {
-      taskKeys.push(task.taskKey);
+      taskKeys.push(task.pane.taskKey);
     });
 
     var totalTasks = taskKeys.length;

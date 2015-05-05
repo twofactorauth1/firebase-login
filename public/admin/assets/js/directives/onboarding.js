@@ -17,7 +17,7 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
       UserService.getUserPreferences(function (preferences) {
         var addedTask = false;
         _.each(defaultTasks, function (task) {
-          var matchedTask = _.find(preferences.tasks, function (k, v) {
+          var matchedTask = _.find(preferences.tasks, function (v, k) {
             return k === task;
           });
 
@@ -42,7 +42,9 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
       scope.onboardingStepMap = ONBOARDINGCONSTANT.tasks;
 
       scope.$on("$locationChangeSuccess", function (event, current, previous) {
-        scope.executeOnboarding();
+        if ($location.$$search['onboarding'] && $location.$$search['onboarding'] === 'sign_up') {
+          scope.executeOnboarding();
+        }
       });
 
       scope.$on("$stateChangeSuccess", function (event, current, previous) {
@@ -54,11 +56,13 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
           scope.obType = $location.$$search['onboarding'].trim();
 
           var matchingStep = _.find(scope.onboardingStepMap, function (step) {
-            return step.taskKey === scope.obType;
+            return step.pane.taskKey === scope.obType;
           });
           if (matchingStep) {
             scope.config = [];
-            scope.config.push(matchingStep);
+            _.each(matchingStep.steps, function (step) {
+              scope.config.push(step);
+            });
             scope.startJoyRide = true;
             $location.url($location.path());
           }
@@ -67,27 +71,30 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
 
       scope.onFinish = function () {
         scope.userPreferences.tasks[scope.obType] = true;
-
-        UserService.updateUserPreferences(scope.userPreferences, false, function () {
+        console.log(' scope.userPreferences.tasks[scope.obType] ' + scope.obType + ' ' + scope.userPreferences.tasks[scope.obType]);
+        UserService.updateUserPreferences(scope.userPreferences, false, function (updatedPreferences) {
+          console.log('updatedPreferences >>> ', updatedPreferences.tasks);
           scope.startJoyRide = false;
           var tasksRemaining = false;
-          _.each(scope.onboardingStepMap, function(step) {
-            var matchingTask = _.find(scope.userPreferences.tasks, function(v, k) {
-              return k === step.taskKey;
+          _.each(scope.onboardingStepMap, function (step) {
+            var matchingTask = _.find(scope.userPreferences.tasks, function (v, k) {
+              return k === step.pane.taskKey;
             });
             if (!matchingTask) {
               tasksRemaining = true;
             }
-            step.completed = matchingTask
+            step.pane.completed = matchingTask;
           });
 
           if (tasksRemaining) {
-            var nextTask = _.find(scope.onboardingStepMap, function (step) { return !step.completed })
-            var url = $state.href(nextTask.state, {}, {
+            var nextTask = _.find(scope.onboardingStepMap, function (step) {
+              return !step.pane.completed;
+            });
+            var url = $state.href(nextTask.pane.state, {}, {
               absolute: false
             });
-            url += '?onboarding=' + nextTask.taskKey;
-            toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.heading + '</a>', 15000, 'trustedHtml');
+            url += '?onboarding=' + nextTask.pane.taskKey;
+            toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
           } else {
             toaster.pop('success', 'Task Complete. No more tasks to complete.');
           }
