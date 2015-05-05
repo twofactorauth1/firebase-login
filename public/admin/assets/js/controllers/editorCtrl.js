@@ -691,6 +691,8 @@
                     $scope.$apply(function() {
                         //$scope.iframeHeight = ($("#iframe-website").contents().find("body").height() - 70) + "px";
                         $scope.iframeHeight = (angular.element(window).height() - 100) + "px";
+                        var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
+                        //$scope.iframeHeight = (angular.element(window).height() - (editorToolbar.offset().top + editorToolbar.height())) + "px"
                     });
                 }, 100);
             }

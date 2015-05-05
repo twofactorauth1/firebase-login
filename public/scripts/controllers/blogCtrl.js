@@ -525,6 +525,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         };
 
         /*
+         * @Get active editor instance
+         * -
+         */
+        $scope.getActiveEditor = function() {
+           return $scope.activeEditor;
+        };
+
+
+        /*
          * @setPostImage
          * -
          */
