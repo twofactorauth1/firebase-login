@@ -32,6 +32,7 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.buffering",
         "com.2fdevs.videogular.plugins.poster",
         "ngTagsInput",
+        "truncate",
         'ngInputDate',
         'angular-jqcloud',
         'socialLinks',

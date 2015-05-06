@@ -20,68 +20,85 @@ app.constant('ONBOARDINGCONSTANT', {
 
   tasks: [{
     pane: {
-      heading: "Sign Up For Indigenous",
-      text: "You completed the most difficult task of starting to take control of your business.",
+      heading: "Sign up for Indigenous",
+      text: "You have taken the first step in growing your business.",
       taskKey: 'sign_up',
       state: 'app.support.gettingstarted'
     },
     steps: [{
       type: 'title',
-      heading: "Sign Up For Indigenous",
-      text: "You completed the most difficult task of starting to take control of your business."
-    },
-    {
-      type: 'title',
-      heading: "Second",
-      text: "hola."
+      heading: "Sign up for Indigenous",
+      text: "You have taken the first step in growing your business."
     }]
   }, {
     pane: {
-      heading: "Basic Account Information",
-      text: "Enter the basic information about your business like your address and logo.",
+      heading: "Basic account information",
+      text: "Enter basic information about your business like your address and logo.",
       taskKey: 'profile-personal',
       state: 'app.account.profilebusiness'
     },
     steps: [{
       type: 'title',
-      heading: "Sign Up For Indigenous",
-      text: "You completed the most difficult task of starting to take control of your business."
+      heading: "Enter your basic information.",
+      text: "Enter your contact information and business hours."
+    }, {
+      type: "element",
+      selector: ".edit-account a",
+      heading: "Edit Account tab.",
+      text: "Click Edit Account tab to upload your logo and enter your information. Remember to click Save in the upper right hand corner, and then review under the Profile tab.",
+      placement: "bottom",
+      scroll: false
     }]
   }, {
     pane: {
-      heading: "Edit the Homepage",
-      text: "Lets make the home page according to your taste.",
+      heading: "Billing",
+      text: "Manage the type of account you have and your method of payment.",
+      taskKey: 'billing',
+      state: 'app.account.billing'
+    },
+    steps: [{
+      type: 'title',
+      heading: "Manage your account type and payment method",
+      text: "Select your plan and enter your payment method for your Indigenous account."
+    }]
+  }, {
+    pane: {
+      heading: "Homepage",
+      text: "Choose a template and begin customizing your site.",
       taskKey: 'single-page',
       state: 'app.website.pages'
     },
     steps: [{
-      type: 'title',
-      heading: "Edit the Homepage",
-      text: "Lets make the home page according to your taste."
+      type: "element",
+      selector: "#new-page",
+      heading: "Choose a template and customize your site",
+      text: "Click on New Page in the upper right corner and select a template.",
+      placement: "bottom",
+      scroll: false
     }]
   }, {
     pane: {
-      heading: "Create First BlogPost",
-      text: "Keep everyone up to date and informed with a regular blog.",
-      taskKey: 'single-post',
-      state: 'app.website.posts'
-    },
-    steps: [{
-      type: 'title',
-      heading: "Create First BlogPost",
-      text: "Keep everyone up to date and informed with a regular blog."
-    }]
-  }, {
-    pane: {
-      heading: "Connect Social Accounts",
-      text: "Connect your social account so you can import contacts and create marketing campaigns.",
+      heading: "Social accounts",
+      text: "Connect your social accounts so you can import contacts and create targeted marketing campaigns.",
       taskKey: 'integrations',
       state: 'app.account.integrations'
     },
     steps: [{
       type: 'title',
-      heading: "Connect Social Accounts",
-      text: "Connect your social account so you can import contacts and create marketing campaigns."
+      heading: "Social accounts",
+      text: "Connect your social accounts so you can import contacts and create targeted marketing campaigns."
+    }]
+  }, {
+    pane: {
+      heading: "Contacts",
+      text: "Import contacts from various accounts or create them individually.",
+      taskKey: 'customers',
+      state: 'app.customers'
+    },
+    steps: [{
+      type: 'title',
+      heading: "Contacts",
+      text: "Import contacts from various accounts or create them individually."
     }]
   }, {
     pane: {
@@ -98,27 +115,15 @@ app.constant('ONBOARDINGCONSTANT', {
 
   }, {
     pane: {
-      heading: "Import/Create Contacts",
-      text: "Import your contact from your various accounts or create them.",
-      taskKey: 'customers',
-      state: 'app.customers'
+      heading: "Create First BlogPost",
+      text: "Keep everyone up to date and informed with a regular blog.",
+      taskKey: 'single-post',
+      state: 'app.website.posts'
     },
     steps: [{
       type: 'title',
-      heading: "Import/Create Contacts",
-      text: "Import your contact from your various accounts or create them."
-    }]
-  }, {
-    pane: {
-      heading: "Add New Contact",
-      text: "Add a new contact.",
-      taskKey: 'single-customer',
-      state: 'app.customers'
-    },
-    steps: [{
-      type: 'title',
-      heading: "Add New Contact",
-      text: "Add a new contact."
+      heading: "Create First BlogPost",
+      text: "Keep everyone up to date and informed with a regular blog."
     }]
   }, {
     pane: {

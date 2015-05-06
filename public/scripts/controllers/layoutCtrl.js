@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData',
-    function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData', 'cartService',
+    function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData, cartService) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -18,11 +18,17 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.currentcomponents = [];
         $scope.thumbnailSlider = [];
         $scope.contactDetails = [];
-
+        $scope.activeEditor = null;
         //displays the year dynamically for the footer
         var d = new Date();
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
+
+        $scope.$watch(function () { return cartService.getCartItems() }, function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                console.log('cart changed >>> ', newValue);
+            }
+        });
 
         $scope.parentScope = parent.angular.element('#iframe-website').scope();
 
@@ -634,6 +640,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.parentScope.clickImageButton(editor, false);
         };
 
+        $scope.getActiveEditor = function() {
+           return $scope.activeEditor;
+        };
+
         $scope.deletePricingTable = function(componentId, index) {
             $scope.parentScope.deletePricingTable(componentId, index);
         };
@@ -718,6 +728,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             editor.setReadOnly(false);
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
+                            });
+                            editor.on('focus', function() {
+                                $scope.activeEditor = editor;
+                            });
+                            editor.on('blur', function() {
+                                $scope.activeEditor = null;
                             });
                         }
                     },
@@ -935,10 +951,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.addCKEditorImage = function(url, inlineInput, edit) {
-            if (edit)
-                inlineInput.val(url);
-            else
-                inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+            if(inlineInput)
+            {
+                if (edit)
+                    inlineInput.val(url);
+                else
+                    inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+            }
         };
 
         $scope.triggerEditMode = function() {

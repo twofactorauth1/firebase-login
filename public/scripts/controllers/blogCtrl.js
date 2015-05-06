@@ -10,6 +10,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         route = $location.$$path;
 
         $scope.testing = 'hello';
+        $scope.activeEditor = null;
 
         /*
          * @back
@@ -432,6 +433,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
                             });
+                            editor.on('focus', function() {
+                                $scope.activeEditor = editor;
+                            });
+                            editor.on('blur', function() {
+                                $scope.activeEditor = null;
+                            });
                         }
                     },
                     sharedSpaces: {
@@ -476,10 +483,13 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
          //TODO: could not find where this function is being used
-        $scope.addCKEditorImageInput = function(url) {
-            console.log('addCKEditorImageInput ', url);
-            if ($scope.urlInput) {
-                $scope.urlInput.val(url);
+        $scope.addCKEditorImage = function(url, inlineInput, edit) {
+            if(inlineInput)
+            {
+                if (edit)
+                    inlineInput.val(url);
+                else
+                    inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
             }
         };
 
@@ -513,6 +523,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         window.clickandInsertImageButton = function(editor) {
             $scope.parentScope.clickImageButton(editor);
         };
+
+        /*
+         * @Get active editor instance
+         * -
+         */
+        $scope.getActiveEditor = function() {
+           return $scope.activeEditor;
+        };
+
 
         /*
          * @setPostImage

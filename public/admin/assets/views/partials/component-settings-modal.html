@@ -659,6 +659,12 @@
                     <switch ng-model="componentEditing.teamSettings.networks" class="pull-right" ng-change="saveComponent()"></switch>
                 </div>
             </tab>
+            <tab ng-if="componentEditing.type === 'products'">
+                <tab-heading>
+                    <span>Product Display</span>
+                </tab-heading>
+                
+            </tab>
         </tabset>
     </div>
     <div class="modal-footer" ng-class="{hidden: hover}">
