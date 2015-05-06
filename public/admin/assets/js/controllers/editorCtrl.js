@@ -158,11 +158,11 @@
         }
 
         /*
-         * @window:scroll
-         * - when the window is scrolled in the admin, ud
-         */
+         * @set top of editor and maintoolbar
+        */
 
-        angular.element(window).scroll(function() {
+        $scope.setToolbarsTop = function()
+        {
             var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
             var mainToolbar = angular.element("#page-actions");
             var scrollTop = $(document).scrollTop();
@@ -170,9 +170,13 @@
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
             if (scrollTop > offsetHeight) {
+
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
+                if($(document).width() <= 990) {
+                    scrollTop = scrollTop + 65;
+                }
                 mainToolbar.css({
                     'top': scrollTop,
                     'position': 'absolute',
@@ -196,7 +200,18 @@
                     postSettingsModal.css({
                         'top': editorToolbar.offset().top + editorToolbar.height()
                     });
+        }
+
+        /*
+         * @window:scroll
+         * - when the window is scrolled in the admin, ud
+         */
+
+        angular.element(window).scroll(function() {
+            $scope.setToolbarsTop();
         });
+
+
 
 
         /*
@@ -680,6 +695,7 @@
 
         w.bind('resize', function() {
             $scope.resizeIframe();
+            $scope.setToolbarsTop();
         });
 
         $scope.resizeIframe = function() {
@@ -690,6 +706,7 @@
                 setTimeout(function() {
                     $scope.$apply(function() {
                         $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70) + "px";
+                                  
                     });
                 }, 100);
             }
