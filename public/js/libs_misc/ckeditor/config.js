@@ -50,7 +50,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'colordialog,colorbutton,pastetext,doksoft_button,mediamanager,sharedspace,image2,tooltip,lineheight';
+	config.extraPlugins = 'colordialog,colorbutton,pastetext,doksoft_button,sharedspace,image2,tooltip,lineheight';
 
 	config.filebrowserBrowseUrl = '';
 
