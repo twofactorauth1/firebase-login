@@ -23,7 +23,10 @@ CKEDITOR.dialog.add("anchor", function(c) {
 				"data-cke-saved-name" : a
 			};
 			if (this._.selectedElement)
-				this._.selectedElement.data("cke-realelement") ? ( a = d(c, a), a.replace(this._.selectedElement), CKEDITOR.env.ie && c.getSelection().selectElement(a)) : this._.selectedElement.setAttributes(a);
+			{
+				var a = c.getSelection(), b = a.getSelectedElement()
+				this._.selectedElement.data("cke-realelement") ?  CKEDITOR.plugins.link.tryRestoreFakeAnchor(c, b).replace(b) : this._.selectedElement.setAttributes(a);
+			}
 			else {
 				var b = c.getSelection(), b = b && b.getRanges()[0];
 				CKEDITOR.env.ie && 9 > CKEDITOR.env.version && (a["class"] = "cke_anchor"), a = new CKEDITOR.style({

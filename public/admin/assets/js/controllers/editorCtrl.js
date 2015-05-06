@@ -158,11 +158,11 @@
         }
 
         /*
-         * @window:scroll
-         * - when the window is scrolled in the admin, ud
-         */
+         * @set top of editor and maintoolbar
+        */
 
-        angular.element(window).scroll(function() {
+        $scope.setToolbarsTop = function()
+        {
             var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
             var mainToolbar = angular.element("#page-actions");
             var scrollTop = $(document).scrollTop();
@@ -170,9 +170,13 @@
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
             if (scrollTop > offsetHeight) {
+
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
+                if($(document).width() <= 990) {
+                    scrollTop = scrollTop + 65;
+                }
                 mainToolbar.css({
                     'top': scrollTop,
                     'position': 'absolute',
@@ -196,7 +200,18 @@
                     postSettingsModal.css({
                         'top': editorToolbar.offset().top + editorToolbar.height()
                     });
+        }
+
+        /*
+         * @window:scroll
+         * - when the window is scrolled in the admin, ud
+         */
+
+        angular.element(window).scroll(function() {
+            $scope.setToolbarsTop();
         });
+
+
 
 
         /*
@@ -680,6 +695,7 @@
 
         w.bind('resize', function() {
             $scope.resizeIframe();
+            $scope.setToolbarsTop();
         });
 
         $scope.resizeIframe = function() {
@@ -690,6 +706,7 @@
                 setTimeout(function() {
                     $scope.$apply(function() {
                         $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70) + "px";
+                                  
                     });
                 }, 100);
             }
@@ -1102,6 +1119,7 @@
                         _id: componentId
                     });
 
+                    
                     //get all the editable variables and replace the ones in view with variables in DB
                     var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
                     if (componentEditable.length >= 1) {
@@ -1183,6 +1201,19 @@
                     var matchedComponent = _.findWhere($scope.currentPage.components, {
                         _id: componentIdArr[i]
                     });
+                    if(matchedComponent.type === "single-post")
+                    {
+                        var post_tags = angular.copy($scope.childScope.blog.post.post_tags);
+                        if(post_tags)
+                        {
+                           post_tags.forEach(function(v, i) {
+                            if (v.text)
+                                post_tags[i] = v.text;
+                            });
+                            matchedComponent.post_tags = post_tags;
+                        }
+                        matchedComponent.publish_date = $scope.childScope.blog.post.publish_date;                        
+                    }
                     newComponentOrder.push(matchedComponent);
                 };
 
@@ -1414,6 +1445,15 @@
                 });
                 if (navigationType) {
                     toaster.pop('error', "Navbar header already exists");
+                    return;
+                }
+            }
+            if (addedType.type === 'single-post') {
+                var navigationType = _.findWhere($scope.currentPage.components, {
+                    type: addedType
+                });
+                if (navigationType) {
+                    toaster.pop('error', "Single post component already exists");
                     return;
                 }
             }

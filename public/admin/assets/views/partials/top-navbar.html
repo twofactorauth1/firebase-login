@@ -134,7 +134,7 @@
 		<!-- start: USER OPTIONS DROPDOWN -->
 		<li class="dropdown current-user" dropdown on-toggle="toggled(open)">
 			<a href class="dropdown-toggle" dropdown-toggle>
-				<img ng-src="{{ currentUser.profilePhotos[0] }}" err-src="/admin/assets/images/default-user.png" alt="{{currentUser.first}} {{currentUser.last}}" height="40"> <span class="username">{{currentUser.first}} {{currentUser.last}} <i class="ti-angle-down"></i></i></span>
+				<img ng-src="{{ currentUser.profilePhotos[0] }}" err-src="/admin/assets/images/default-user.png" alt="{{(currentUser.first + " " + currentUser.last).trim() || currentUser.email}}" height="40"> <span class="username">{{(currentUser.first + " " + currentUser.last).trim() || currentUser.email}} <i class="ti-angle-down"></i></i></span>
 			</a>
 			<ul class="dropdown-menu dropdown-dark">
 				<li>
