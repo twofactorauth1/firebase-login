@@ -48,7 +48,8 @@ var component = $$.m.ModelBase.extend({
             value:"",
 
             posts: "",
-            title:""
+            title:"",
+            txtcolor: "#444"
         }
     },
 

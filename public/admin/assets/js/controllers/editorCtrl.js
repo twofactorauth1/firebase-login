@@ -1102,6 +1102,7 @@
                         _id: componentId
                     });
 
+                    
                     //get all the editable variables and replace the ones in view with variables in DB
                     var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
                     if (componentEditable.length >= 1) {
@@ -1183,6 +1184,19 @@
                     var matchedComponent = _.findWhere($scope.currentPage.components, {
                         _id: componentIdArr[i]
                     });
+                    if(matchedComponent.type === "single-post")
+                    {
+                        var post_tags = angular.copy($scope.childScope.blog.post.post_tags);
+                        if(post_tags)
+                        {
+                           post_tags.forEach(function(v, i) {
+                            if (v.text)
+                                post_tags[i] = v.text;
+                            });
+                            matchedComponent.post_tags = post_tags;
+                        }
+                        matchedComponent.publish_date = $scope.childScope.blog.post.publish_date;                        
+                    }
                     newComponentOrder.push(matchedComponent);
                 };
 
@@ -1414,6 +1428,15 @@
                 });
                 if (navigationType) {
                     toaster.pop('error', "Navbar header already exists");
+                    return;
+                }
+            }
+            if (addedType.type === 'single-post') {
+                var navigationType = _.findWhere($scope.currentPage.components, {
+                    type: addedType
+                });
+                if (navigationType) {
+                    toaster.pop('error', "Single post component already exists");
                     return;
                 }
             }

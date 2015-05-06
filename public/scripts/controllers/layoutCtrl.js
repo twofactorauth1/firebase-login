@@ -843,6 +843,19 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         var winWidth = w.width();
                         $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
                     }
+                    if ($scope.currentpage.components[i].type == 'single-post') {  
+                        if(!$scope.blog)
+                        {
+                            $scope.blog = {};
+                            $scope.blog.post = {};                      
+                        }
+                        $scope.blog.post.post_title = $scope.currentpage.components[i].post_title;
+                        $scope.blog.post.post_excerpt = $scope.currentpage.components[i].post_excerpt;                    
+                        $scope.blog.post.post_content = $scope.currentpage.components[i].post_content;
+                        $scope.blog.post.publish_date = $scope.currentpage.components[i].publish_date;
+                        $scope.blog.post.post_tags = $scope.currentpage.components[i].post_tags;
+                        $scope.blog.post.post_author = $scope.currentpage.components[i].post_author || " ";
+                    }
                 };
                 setTimeout(function() {
                     angular.element(window).scrollTop(scroll);
@@ -992,6 +1005,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.planStatus = {};
         $scope.$watch('currentpage.components', function(newValue, oldValue) {
             if (newValue) {
+                
                 $scope.dataLoaded = false;
                 $scope.currentcomponents = newValue;
                 newValue.forEach(function(value, index) {
@@ -1052,6 +1066,19 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }
                     if (value && value.type == 'contact-us') {
                         $scope.updateContactUsMap(value);
+                    }
+                    if (value && value.type == 'single-post') {  
+                        if(!$scope.blog)
+                        {
+                            $scope.blog = {};
+                            $scope.blog.post = {};                      
+                        }                     
+                        $scope.blog.post.post_title = value.post_title;
+                        $scope.blog.post.post_excerpt = value.post_excerpt;
+                        $scope.blog.post.post_content = value.post_content;
+                        $scope.blog.post.publish_date = value.publish_date;
+                        $scope.blog.post.post_tags = value.post_tags;
+                        $scope.blog.post.post_author = value.post_author || " ";
                     }
                 });
             }
