@@ -1,8 +1,8 @@
 'use strict';
-/*global mainApp, moment, angular*/
+/*global mainApp, moment, angular, cartData*/
 /*jslint unparam:true*/
-mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService',
-  function ($scope, ProductService, UserService, OrderService, PaymentService) {
+mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService', 'cartService',
+  function ($scope, ProductService, UserService, OrderService, PaymentService, cartService) {
 
     $scope.checkoutModalState = 1;
     /*
@@ -21,7 +21,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
 
     $scope.updateSelectedProduct = function (product) {
       product.attributes = $scope.selectedProductAttributes(product);
-      console.log('product.attributes ', product.attributes);
       $scope.selectedProduct = product;
     };
 
@@ -36,11 +35,9 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       var selectedAttributes = $scope.selectedProduct.attributes;
       var allselected = false;
       _.each(selectedAttributes, function (attribute, i) {
-        console.log('attribute ', attribute);
         if (attribute.selected) {
           allselected = true;
         } else {
-          console.log('attribute.selected ', i);
           allselected = false;
         }
       });
@@ -80,7 +77,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
             }
           });
         });
-        console.log('formattedAttributes ', formattedAttributes);
         attributes = formattedAttributes;
       } else {
         attributes = [];
@@ -124,7 +120,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
      */
 
     $scope.addDetailsToCart = function (product, variation) {
-      console.log('variation exists >>> ', variation);
       var productMatch = '';
       if (variation) {
         productMatch = variation;
@@ -147,10 +142,14 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         return item._id === productMatch._id;
       });
       if (match) {
-        match.quantity = parseInt(match.quantity) + 1;
+        match.quantity = parseInt(match.quantity, 10) + 1;
       } else {
+        cartService.addItem(productMatch);
         $scope.cartDetails.push(productMatch);
       }
+
+      console.log('cart ', cartService.getCartItems());
+
       $scope.calculateTotalChargesfn();
     };
 
@@ -194,20 +193,22 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
      */
 
     $scope.makeCartPayment = function () {
-      console.log('cartDetails >>> ', $scope.cartDetails);
-      var expiry = angular.element('#expiry').val().split("/");
+      var expiry = angular.element('#expiry')
+        .val()
+        .split("/");
       var exp_month = expiry[0].trim();
       var exp_year = "";
       if (expiry.length > 1) {
         exp_year = expiry[1].trim();
       }
       var cardInput = {
-        number: angular.element('#number').val(),
-        cvc: angular.element('#cvc').val(),
+        number: angular.element('#number')
+          .val(),
+        cvc: angular.element('#cvc')
+          .val(),
         exp_month: exp_month,
         exp_year: exp_year
       };
-      console.log('cardInput >>> ', cardInput);
 
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         $scope.checkCardNumber();
@@ -225,81 +226,79 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         //     console.log('card details ', data);
         // });
 
-          if ($scope.newContact.first !== undefined) {
-            // Is this checking to see if the customer already exists
-            UserService.postContact($scope.newContact, function (customer, err) {
+        if ($scope.newContact.first !== undefined) {
+          // Is this checking to see if the customer already exists
+          UserService.postContact($scope.newContact, function (customer, err) {
 
-              var order = {
-                "customer_id": customer._id,
-                "session_id": null,
-                "completed_at": null,
-                "status": "processing",
-                "total": 0.0,
-                "cart_discount": 0.0,
-                "total_discount": 0.0,
-                "total_shipping": 0.0,
-                "total_tax": 0.0,
-                "shipping_tax": 0.0,
-                "cart_tax": 0.0,
-                "currency": "usd",
-                "line_items": [{
-                  "product_id": 31,
-                  "quantity": 1,
-                  "variation_id": 7,
-                  "subtotal": "20.00",
-                  "tax_class": null,
-                  "sku": "",
-                  "total": "20.00",
-                  "name": "Product Name",
-                  "total_tax": "0.00"
-                }],
-                "total_line_items_quantity": 0,
-                "payment_details": {
-                  "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                  "method_id": 'cc', //check, cc
-                  "card_token": token, //Stripe card token if applicable
-                  "charge_description": null, //description of charge if applicable
-                  "statement_description": null, //22char string for cc statement if applicable
-                  "paid": true
-                },
-                "shipping_methods": "", // "Free Shipping",
-                "shipping_address": {
-                  "first_name": customer.first,
-                  "last_name": customer.last,
-                  "phone": customer.details[0].phones[0].number,
-                  "city": customer.details[0].addresses[0].city,
-                  "country": "US",
-                  "address_1": customer.details[0].addresses[0].address,
-                  "company": "",
-                  "postcode": customer.details[0].addresses[0].zip,
-                  "email": customer.details[0].emails[0].email,
-                  "address_2": customer.details[0].addresses[0].address_2,
-                  "state": customer.details[0].addresses[0].state
-                },
-                "billing_address": {
-                  "first_name": customer.first,
-                  "last_name": customer.last,
-                  "phone": customer.details[0].phones[0].number,
-                  "city": customer.details[0].addresses[0].city,
-                  "country": "US",
-                  "address_1": customer.details[0].addresses[0].address,
-                  "company": "",
-                  "postcode": customer.details[0].addresses[0].zip,
-                  "email": customer.details[0].emails[0].email,
-                  "address_2": customer.details[0].addresses[0].address_2,
-                  "state": customer.details[0].addresses[0].state
-                },
-                "notes": []
-              };
+            var order = {
+              "customer_id": customer._id,
+              "session_id": null,
+              "completed_at": null,
+              "status": "processing",
+              "total": 0.0,
+              "cart_discount": 0.0,
+              "total_discount": 0.0,
+              "total_shipping": 0.0,
+              "total_tax": 0.0,
+              "shipping_tax": 0.0,
+              "cart_tax": 0.0,
+              "currency": "usd",
+              "line_items": [{
+                "product_id": 31,
+                "quantity": 1,
+                "variation_id": 7,
+                "subtotal": "20.00",
+                "tax_class": null,
+                "sku": "",
+                "total": "20.00",
+                "name": "Product Name",
+                "total_tax": "0.00"
+              }],
+              "total_line_items_quantity": 0,
+              "payment_details": {
+                "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+                "method_id": 'cc', //check, cc
+                "card_token": token, //Stripe card token if applicable
+                "charge_description": null, //description of charge if applicable
+                "statement_description": null, //22char string for cc statement if applicable
+                "paid": true
+              },
+              "shipping_methods": "", // "Free Shipping",
+              "shipping_address": {
+                "first_name": customer.first,
+                "last_name": customer.last,
+                "phone": customer.details[0].phones[0].number,
+                "city": customer.details[0].addresses[0].city,
+                "country": "US",
+                "address_1": customer.details[0].addresses[0].address,
+                "company": "",
+                "postcode": customer.details[0].addresses[0].zip,
+                "email": customer.details[0].emails[0].email,
+                "address_2": customer.details[0].addresses[0].address_2,
+                "state": customer.details[0].addresses[0].state
+              },
+              "billing_address": {
+                "first_name": customer.first,
+                "last_name": customer.last,
+                "phone": customer.details[0].phones[0].number,
+                "city": customer.details[0].addresses[0].city,
+                "country": "US",
+                "address_1": customer.details[0].addresses[0].address,
+                "company": "",
+                "postcode": customer.details[0].addresses[0].zip,
+                "email": customer.details[0].emails[0].email,
+                "address_2": customer.details[0].addresses[0].address_2,
+                "state": customer.details[0].addresses[0].state
+              },
+              "notes": []
+            };
 
-              console.log('order ', order);
-
-              OrderService.createOrder(order, function (newOrder) {
-                console.log('newOrder >>> ', newOrder);
-                // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
-              });
+            OrderService.createOrder(order, function (newOrder) {
+              console.log('newOrder >>> ', newOrder);
+              // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
             });
-          }
+          });
+        }
       });
 
     };
@@ -313,7 +312,7 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       var variations = $scope.selectedProduct.variations;
       var matchedAttribute = false;
       _.each(variations, function (_variation) {
-        var _matchedVariation = _.find(_variation.attributes, function (_attribute) {
+        _.find(_variation.attributes, function (_attribute) {
           if (_attribute.option === value) {
             matchedAttribute = true;
           }
@@ -323,3 +322,18 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
     };
   }
 ]);
+
+mainApp.service('cartService', function () {
+  var cartData = {};
+
+  cartData.items = [];
+
+  this.getCartItems = function () {
+    return cartData.items;
+  };
+
+  this.addItem = function (item) {
+    cartData.items.push(item);
+  };
+
+});

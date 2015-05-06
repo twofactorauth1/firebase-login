@@ -4,7 +4,7 @@
 app.directive('indigOnboarding', function ($location, $sce, $state, UserService, toaster, ONBOARDINGCONSTANT) {
   return {
     restrict: 'E',
-    template: '<div ng-joy-ride="startJoyRide" config="config" on-finish="onFinish()" on-skip="onFinish()"></div>',
+    template: '<div ng-joy-ride="startJoyRide" config="config" on-finish="onFinish()" on-skip="onSkip()"></div>',
     link: function (scope, elem, attrs) {
 
       scope.startJoyRide = false;
@@ -43,7 +43,7 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
 
       scope.$on("$locationChangeSuccess", function (event, current, previous) {
         if ($location.$$search['onboarding'] && $location.$$search['onboarding'] === 'sign_up') {
-          scope.executeOnboarding();
+          $location.url($location.path());
         }
       });
 
@@ -51,8 +51,12 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
         scope.executeOnboarding();
       });
 
+      scope.openPageModal = function() {
+        console.log('scope.$parent');
+      };
+
       scope.executeOnboarding = function () {
-        if ($location.$$search['onboarding']) {
+        if ($location.$$search['onboarding'] ) {
           scope.obType = $location.$$search['onboarding'].trim();
 
           var matchingStep = _.find(scope.onboardingStepMap, function (step) {
@@ -67,6 +71,10 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
             $location.url($location.path());
           }
         }
+      };
+
+      scope.onSkip = function() {
+        toaster.pop('warning', 'Task Skipped. Not completed.');
       };
 
       scope.onFinish = function () {
