@@ -53,8 +53,9 @@
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
                             {{component.bg.img.parallax ? parallax-background : ""}}
                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
+                            ng-attr-parallax-vertical-offset="100"
                             style='
-                                background: url("{{component.bg.img.url}}") fixed;
+                                background: url("{{component.bg.img.url}}");
                                 background-size: cover;
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
@@ -65,7 +66,7 @@
                             {{component.bg.img.parallax ? parallax-background : ""}}
                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
-                                background: url("{{component.bg.img.url}}") no-repeat fixed;
+                                background: url("{{component.bg.img.url}}") no-repeat;
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'>
                         </div>
