@@ -168,16 +168,23 @@
             var navbarCollapse = angular.element('header').outerHeight();
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
+            
             if (scrollTop > offsetHeight) {
 
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
 
+                if($(document).width() < 768) {
+                    editorToolbar.css({
+                    'top': scrollTop + 40
+                    });
+                }
+                
                 if($(document).width() <= 990) {
-                    var incrementHeight = 0; 
-                    scrollTop = scrollTop + 65;
-                }                
+                    scrollTop = scrollTop + 65 
+                }
+                 
                 mainToolbar.css({
                     'top': scrollTop,
                     'position': 'absolute',
