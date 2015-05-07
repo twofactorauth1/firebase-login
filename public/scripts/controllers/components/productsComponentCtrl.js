@@ -193,6 +193,8 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
      */
 
     $scope.makeCartPayment = function () {
+      $scope.checkoutModalState = 4;
+      console.log('makeCartPayment >>> ');
       var expiry = angular.element('#expiry')
         .val()
         .split("/");
@@ -214,93 +216,134 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         $scope.checkCardNumber();
         $scope.checkCardExpiry();
         $scope.checkCardCvv();
+        $scope.checkoutModalState = 3;
         return;
       }
 
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+        $scope.checkoutModalState = 3;
         return;
       }
 
+      var contact = $scope.newContact;
+      if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email) || isEmpty(contact.details[0].phones[0].number)) {
+        $scope.checkoutModalState = 2;
+        return;
+      }
+
+      function isEmpty(str) {
+        return (!str || 0 === str.length);
+      }
+
       PaymentService.getStripeCardToken(cardInput, function (token) {
+        console.log('getStripeCardToken >>>');
         // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function (data) {
         //     console.log('card details ', data);
         // });
+        console.log('$scope.newContact.first >>> ', $scope.newContact.first);
+        // Is this checking to see if the customer already exists
+        UserService.postContact($scope.newContact, function (customer, err) {
+          console.log('postContact >>>');
+          var order = {
+            "customer_id": customer._id,
+            "session_id": null,
+            "completed_at": null,
+            "status": "processing",
+            "total": 0.0,
+            "cart_discount": 0.0,
+            "total_discount": 0.0,
+            "total_shipping": 0.0,
+            "total_tax": 0.0,
+            "shipping_tax": 0.0,
+            "cart_tax": 0.0,
+            "currency": "usd",
+            "line_items": [{
+              "product_id": 31,
+              "quantity": 1,
+              "variation_id": 7,
+              "subtotal": "20.00",
+              "tax_class": null,
+              "sku": "",
+              "total": "20.00",
+              "name": "Product Name",
+              "total_tax": "0.00"
+            }],
+            "total_line_items_quantity": 0,
+            "payment_details": {
+              "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+              "method_id": 'cc', //check, cc
+              "card_token": token, //Stripe card token if applicable
+              "charge_description": null, //description of charge if applicable
+              "statement_description": null, //22char string for cc statement if applicable
+              "paid": true
+            },
+            "shipping_methods": "", // "Free Shipping",
+            "shipping_address": {
+              "first_name": customer.first,
+              "last_name": customer.last,
+              "phone": customer.details[0].phones[0].number,
+              "city": customer.details[0].addresses[0].city,
+              "country": "US",
+              "address_1": customer.details[0].addresses[0].address,
+              "company": "",
+              "postcode": customer.details[0].addresses[0].zip,
+              "email": customer.details[0].emails[0].email,
+              "address_2": customer.details[0].addresses[0].address_2,
+              "state": customer.details[0].addresses[0].state
+            },
+            "billing_address": {
+              "first_name": customer.first,
+              "last_name": customer.last,
+              "phone": customer.details[0].phones[0].number,
+              "city": customer.details[0].addresses[0].city,
+              "country": "US",
+              "address_1": customer.details[0].addresses[0].address,
+              "company": "",
+              "postcode": customer.details[0].addresses[0].zip,
+              "email": customer.details[0].emails[0].email,
+              "address_2": customer.details[0].addresses[0].address_2,
+              "state": customer.details[0].addresses[0].state
+            },
+            "notes": []
+          };
 
-        if ($scope.newContact.first !== undefined) {
-          // Is this checking to see if the customer already exists
-          UserService.postContact($scope.newContact, function (customer, err) {
-
-            var order = {
-              "customer_id": customer._id,
-              "session_id": null,
-              "completed_at": null,
-              "status": "processing",
-              "total": 0.0,
-              "cart_discount": 0.0,
-              "total_discount": 0.0,
-              "total_shipping": 0.0,
-              "total_tax": 0.0,
-              "shipping_tax": 0.0,
-              "cart_tax": 0.0,
-              "currency": "usd",
-              "line_items": [{
-                "product_id": 31,
-                "quantity": 1,
-                "variation_id": 7,
-                "subtotal": "20.00",
-                "tax_class": null,
-                "sku": "",
-                "total": "20.00",
-                "name": "Product Name",
-                "total_tax": "0.00"
-              }],
-              "total_line_items_quantity": 0,
-              "payment_details": {
-                "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                "method_id": 'cc', //check, cc
-                "card_token": token, //Stripe card token if applicable
-                "charge_description": null, //description of charge if applicable
-                "statement_description": null, //22char string for cc statement if applicable
-                "paid": true
-              },
-              "shipping_methods": "", // "Free Shipping",
-              "shipping_address": {
-                "first_name": customer.first,
-                "last_name": customer.last,
-                "phone": customer.details[0].phones[0].number,
-                "city": customer.details[0].addresses[0].city,
-                "country": "US",
-                "address_1": customer.details[0].addresses[0].address,
-                "company": "",
-                "postcode": customer.details[0].addresses[0].zip,
-                "email": customer.details[0].emails[0].email,
-                "address_2": customer.details[0].addresses[0].address_2,
-                "state": customer.details[0].addresses[0].state
-              },
-              "billing_address": {
-                "first_name": customer.first,
-                "last_name": customer.last,
-                "phone": customer.details[0].phones[0].number,
-                "city": customer.details[0].addresses[0].city,
-                "country": "US",
-                "address_1": customer.details[0].addresses[0].address,
-                "company": "",
-                "postcode": customer.details[0].addresses[0].zip,
-                "email": customer.details[0].emails[0].email,
-                "address_2": customer.details[0].addresses[0].address_2,
-                "state": customer.details[0].addresses[0].state
-              },
-              "notes": []
-            };
-
-            OrderService.createOrder(order, function (newOrder) {
-              console.log('newOrder >>> ', newOrder);
-              // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
+          OrderService.createOrder(order, function (newOrder) {
+            $scope.checkoutModalState = 5;
+            $scope.cartDetails = [];
+            _.each($scope.products, function (product) {
+              product.clicked = false;
             });
+            $scope.subTotal = 0;
+            $scope.totalTax = 0;
+            $scope.total = 0;
+            console.log('newOrder >>> ', newOrder);
+            // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
           });
+        });
+      });
+
+    };
+
+    angular.element('#cart-checkout-modal')
+      .on('hidden.bs.modal', function () {
+        console.log('checkoutModalState ', $scope.checkoutModalState);
+        if ($scope.checkoutModalState === 5) {
+          $scope.checkoutModalState = 1;
         }
       });
 
+    $scope.currentProductPage = 1;
+
+    $scope.setPage = function (pageNo) {
+      $scope.currentProductPage = pageNo;
+    };
+
+    $scope.pageChanged = function () {
+      $log.log('Page changed to: ' + $scope.currentProductPage);
+    };
+
+    $scope.getProductOffset = function (currentProductPage, numtodisplay) {
+      return (currentProductPage * numtodisplay) - numtodisplay;
     };
 
     /*

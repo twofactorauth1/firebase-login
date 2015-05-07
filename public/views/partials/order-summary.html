@@ -2,8 +2,9 @@
 <div class="panel-scroll height-200" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
     <ul style="list-style:none;">
         <li ng-repeat="item in cartDetails track by $index">
-            <p class="text-left product-name">{{item.name}}</p>
-            <p class="text-right product-price">$ {{item.regular_price * item.quantity}}</p>
+            <p class="pull-left text-left product-name">{{item.name}} <span ng-if="item.quantity > 1"> x {{item.quantity}}</span></p>
+            <p class="pull-right text-right product-price">$ {{item.regular_price * item.quantity}}</p>
+            <div class="clearfix"></div>
         </li>
     </ul>
 </div>

@@ -2400,8 +2400,38 @@ div[data-class='image-text'] p {
 .products-v1 .product-content .btn {
   margin-bottom: 15px;
 }
+.products-v1 .btnLaunchCart {
+  position: fixed;
+  right: 0;
+  top: 0;
+  margin-top: 30px;
+  margin-top: 130px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.products-v1 .btnLaunchCart:focus {
+  outline: none;
+}
 .shopping-cart {
   color: #444!important;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.shopping-cart .order-line-items ul {
+  padding: 0px;
+}
+.shopping-cart .order-line-items ul li {
+  list-style-type: none;
+  padding: 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+.shopping-cart .order-line-items ul li .description {
+  margin-bottom: 0px;
+}
+.shopping-cart .order-line-items ul li .quantity,
+.shopping-cart .order-line-items ul li .price {
+  top: 10px;
+  position: relative;
 }
 #cart-checkout-modal .glyphicon.form-control-feedback {
   position: absolute;

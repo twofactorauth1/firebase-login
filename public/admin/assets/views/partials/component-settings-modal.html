@@ -663,15 +663,36 @@
                 <tab-heading>
                     <span>Product Display</span>
                 </tab-heading>
-                
+                <div class="form-group">
+                    <label># of Products per Page</label>
+                    <div class="col-sm-6 pull-right">
+                        <select class="form-control" ng-model="componentEditing.numtodisplay" ng-change="saveComponent()" ng-options="status.value as status.name for status in numberOfProductOptions">
+                            <option value="">-- choose number --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <pre>{{availableProductTags}}</pre>
+                    <label>Show Products by Tags</label>
+                    <div class="col-sm-6 pull-right">
+                        <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" close-on-select="false">
+                            <ui-select-match placeholder="Select tags...">
+                                {{$item}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="tag in availableProductTags | filter:$select.search">
+                                {{tag}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
             </tab>
         </tabset>
     </div>
     <div class="modal-footer" ng-class="{hidden: hover}">
         <div class="form-group margin-bottom-0">
-             <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+            <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
                 Revert
-             </button>
+            </button>
             <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                 Done
             </button>
@@ -679,4 +700,3 @@
     </div>
     <!-- /.modal -->
 </script>
-

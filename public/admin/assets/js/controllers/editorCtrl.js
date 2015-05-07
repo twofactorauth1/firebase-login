@@ -3,7 +3,7 @@
  * controller for editor
  */
 (function(angular) {
-    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService) {
+    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService) {
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -2684,6 +2684,60 @@
             var editor = $scope.childScope.getActiveEditor();
             $scope.clickImageButton(editor, false);
         };
+
+        /*
+         * @getProducts
+         * - get a list of products
+         */
+
+         $scope.availableProductTags = [];
+
+         ProductService.getProducts(function (products) {
+            _.each(products, function(product) {
+                if (product.tags && product.tags.length > 0) {
+                    _.each(product.tags, function(tag) {
+                        $scope.availableProductTags.push(tag);
+                    });
+                }
+            });
+          $scope.products = products;
+        });
+
+        /*
+         * @numberOfProductOptions
+         * - list of product options for the dropdown in component settings
+         */
+
+        $scope.numberOfProductOptions = [
+          {
+            name: 'All',
+            value: 'Infinity'
+          }, {
+            name: '1',
+            value: 1
+          }, {
+            name: '2',
+            value: 2
+          }, {
+            name: '3',
+            value: 3
+          }, {
+            name: '4',
+            value: 5
+          }, {
+            name: '5',
+            value: 5
+          }, {
+            name: '10',
+            value: 10
+          }, {
+            name: '15',
+            value: 15
+          }, {
+            name: '20',
+            value: 20
+          }
+        ];
 
 
     }]);

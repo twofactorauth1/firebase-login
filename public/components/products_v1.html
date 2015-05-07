@@ -11,7 +11,7 @@
             </div>
         </header>
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true">
+            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true | offset: getProductOffset(currentProductPage, component.numtodisplay) | limitTo: component.numtodisplay">
                 <div class="product">
                     <div class="thumbnail">
                         <div class="product-img">
@@ -66,10 +66,11 @@
             </div>
             <div class="clearfix mb15"></div>
         </div>
+        <pagination total-items="products.length" ng-model="currentProductPage" max-size="component.numtodisplay" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
         <!-- </div> -->
     </div>
-    <button class="btn btn-primary btn-lg btnLauchCart" data-toggle="modal" data-target="#cart-checkout-modal">
-        Launch Cart modal
+    <button class="btn btn-primary btn-lg btnLaunchCart" data-toggle="modal" data-target="#cart-checkout-modal">
+        <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
     </button>
     <div class="modal fade" id="cart-checkout-modal">
         <div class="modal-dialog modal-lg">
@@ -79,7 +80,7 @@
                     <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row shopping-cart" ng-hide="checkoutModalState !== 1">
+                    <div class="shopping-cart" ng-if="checkoutModalState == 1">
                         <div class="col-sm-8 order-line-items height-400" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                             <div class="mb15"></div>
                             <ul>
@@ -88,14 +89,14 @@
                                         <div class="line-item-header row">
                                             <h4 class="col-sm-5">{{item.name}}</h4>
                                             <div class="col-sm-3">
-                                                <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input">
+                                                <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input quantity">
                                             </div>
                                             <p class="price col-sm-3">$ {{item.regular_price}}</p>
                                             <div class="col-sm-1">
                                                 <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(item)">×</button>
                                             </div>
                                         </div>
-                                        <p if="item.description">
+                                        <p if="item.description" class="description">
                                             {{item.description}}
                                         </p>
                                         <div class="col-sm-12 row" ng-if="item.variation">
@@ -107,7 +108,7 @@
                                     <div class="clearfix"></div>
                                 </li>
                             </ul>
-                            <div ng-if="cartDetails.length <= 0">
+                            <div ng-if="!cartDetails || cartDetails.length <= 0">
                                 <div class="empty-cart">
                                     <i class="fa fa-shopping-cart"></i>
                                     <h2>No Items Added to the cart</h2>
@@ -118,7 +119,7 @@
                             <div data-ng-include=" 'views/partials/order-summary.html' "></div>
                         </div>
                     </div>
-                    <div class="row billing-shipping" ng-hide="checkoutModalState !== 2">
+                    <div class="row billing-shipping" ng-if="checkoutModalState == 2">
                         <div class="col-sm-8 information">
                             <ul class="nav nav-tabs hidden">
                                 <li class="active">
@@ -139,59 +140,65 @@
                                             <input type="checkbox" value="true" checked>Shipping same as billing information
                                         </label>
                                     </div>
-                                    <div class="row">
+                                    <div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="firstName">First Name</label>
-                                                <input type="text" class="form-control" id="firstName" ng-model="newContact.first">
+                                                <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst()">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="lastName">Last Name</label>
-                                                <input type="text" class="form-control" id="lastName" ng-model="newContact.last">
+                                                <input type="text" placeholder="Last Name" class="form-control" id="lastName" ng-model="newContact.last">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="email">Email</label>
-                                                <input type="text" class="form-control" id="email" ng-model="newContact.details[0].emails[0].email">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label class="control-label" for="address">Address</label>
-                                                <input type="text" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label class="control-label" for="city">City</label>
-                                                <input type="text" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2">
-                                            <div class="form-group">
-                                                <label class="control-label" for="state">State</label>
-                                                <input type="text" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label class="control-label" for="zipCode">Zip Code</label>
-                                                <input type="text" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip">
+                                                <input type="text" placeholder="Email" class="form-control" id="email" ng-model="newContact.details[0].emails[0].email">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="phone">Phone</label>
-                                                <input type="text" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
+                                                <input type="text" placeholder="Phone" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="address">Address</label>
+                                                <input type="text" placeholder="Address" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="address2">Address 2</label>
+                                                <input type="text" placeholder="Address 2" class="form-control" id="address2" ng-model="newContact.details[0].addresses[0].address2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label class="control-label" for="city">City</label>
+                                                <input type="text" placeholder="City" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label class="control-label" for="state">State</label>
+                                                <input type="text" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="zipCode">Zip Code</label>
+                                                <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip">
                                             </div>
                                         </div>
                                     </div>
@@ -252,7 +259,7 @@
                             <div data-ng-include=" 'views/partials/order-summary.html' "></div>
                         </div>
                     </div>
-                    <div class="row payment" ng-hide="checkoutModalState !== 3">
+                    <div class="row payment" ng-show="checkoutModalState == 3">
                         <div class="col-sm-8 information">
                             <div class="clearfix margin-bottom-30"></div>
                             <div class="card-wrapper"></div>
@@ -293,25 +300,21 @@
                             <div data-ng-include=" 'views/partials/order-summary.html' "></div>
                         </div>
                     </div>
-                    <div class="row thank-you" ng-hide="checkoutModalState !== 4">
-                        <h3 class="center mb20">Thank You For you Purchase</h3>
-                        <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
-                        <div class="clearfix mb30"></div>
-                        <div class="col-xs-12">
-                            <button class="btn btn-lg btn-orange">View Order</button>
+                    <div class="row processing" style="height:400px" ng-if="checkoutModalState == 4">
+                        <h3 style="margin-top: 110px">Order Processing</h3>
+                        <div class="text-center">
+                            <span class="fa fa-spinner fa-spin fa-4x"></span>
                         </div>
-                        <div class="clearfix mb30"></div>
-                        <p class="center">Stay Connected</p>
-                        <div class="clearfix mb30"></div>
-                        <ul class="social-connected">
-                            <li>
-                                <i class="fa fa-facebook"></i>
-                            </li>
-                            <li><i class="fa fa-twitter"></i>
-                            </li>
-                            <li><i class="fa fa-google-plus"></i>
-                            </li>
-                        </ul>
+                        <div style="margin-bottom:30px"></div>
+                    </div>
+                    <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 5">
+                        <h3 class="center mb20">Thank you for your Purchase.</h3>
+                        <p class="center">You will be receiving an order summary by email shortly.</p>
+                        <div class="clearfix" style="margin-bottom:30px"></div>
+                        <div class="col-xs-12 text-center">
+                            <span class="fa fa-check-circle fa-5x text-green"></span>
+                            <!-- <button class="btn btn-lg btn-orange">View Order</button> -->
+                        </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -326,7 +329,7 @@
                     </button>
                 </div>
                 <div class="modal-footer payment-footer" ng-hide="checkoutModalState !== 1">
-                    <button class="btn btn-success btn-confirm-payment pull-right" ng-click="checkoutModalState = 2"> Basic Info <i class="fa fa-chevron-right"></i>
+                    <button class="btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="checkoutModalState = 2"> Next <i class="fa fa-chevron-right"></i>
                     </button>
                     <button class="btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Continue Shopping
                     </button>
