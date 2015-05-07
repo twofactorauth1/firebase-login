@@ -174,7 +174,10 @@ var post = $$.m.ModelBase.extend({
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
             postType: "tweet",
-            pagingId: tweet.id_str
+            pagingId: tweet.id_str,
+            link: ['http://twitter.com', tweet.user.id_str, 'status', tweet.id_str].join('/'),
+            retweet_count: tweet.retweet_count,
+            favorite_count: tweet.favorite_count
         };
 
         if(tweet.user) {
@@ -192,7 +195,7 @@ var post = $$.m.ModelBase.extend({
 
         if (tweet.created_at) {
             obj.date = new Date(tweet.created_at).getTime();
-        };
+        }
 
         obj.message = tweet.text;
         if (tweet.hashtags && tweet.hashtags.length > 0) {
@@ -217,14 +220,17 @@ var post = $$.m.ModelBase.extend({
             postType: "follower",
             from: {
                 name: follower.screen_name,
+                fullname: follower.name,
                 description: follower.description,
-                profileimg: follower.profile_background_image_url_https
+                profileimg: follower.profile_background_image_url_https,
+                profile_pic: follower.profile_image_url_https,
+                link: ['https://twitter.com', follower.screen_name].join('/'),
             }
         };
 
         if (follower.created_at) {
             obj.date = new Date(follower.created_at).getTime();
-        };
+        }
 
         this.set(obj);
         return this;

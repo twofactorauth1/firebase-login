@@ -65,8 +65,16 @@
                             <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                         </div>
                     </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'feature-list'">
+                        <label>Feature Block BG Color:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Background color of Feature Block."><i class="fa fa-info-circle" /></span>
+                        <div class="pull-right">
+                            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                            <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.blockbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                    </div>
                     <hr ng-show="componentEditing.type == 'navigation'" />
-                    <div class="form-group" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
+                    <div class="form-group" ng-hide="componentEditing.bg.img.show ||  (componentEditing.type == 'navigation' && componentEditing.version == 1)">
                         <label for="colorpicker">Background Color:</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span>
                         <div class="pull-right">
@@ -636,7 +644,7 @@
                 <div class="form-group">
                     <label for="bg_blur">Show members image</label>
                     <span tooltip-placement="top" tooltip-html-unsafe="Show/hide team members image."><i class="fa fa-info-circle" /></span>
-                    <switch ng-model="componentEditing.customnav" class="pull-right" ng-change="saveComponent()"></switch>
+                    <switch ng-model="componentEditing.teamSettings.profilepic" class="pull-right" ng-change="saveComponent()"></switch>
                 </div>
                 <div class="form-group">
                     <label for="bg_blur">Show members name</label>
@@ -659,13 +667,40 @@
                     <switch ng-model="componentEditing.teamSettings.networks" class="pull-right" ng-change="saveComponent()"></switch>
                 </div>
             </tab>
+            <tab ng-if="componentEditing.type === 'products'">
+                <tab-heading>
+                    <span>Product Display</span>
+                </tab-heading>
+                <div class="form-group">
+                    <label># of Products per Page</label>
+                    <div class="col-sm-6 pull-right">
+                        <select class="form-control" ng-model="componentEditing.numtodisplay" ng-change="saveComponent()" ng-options="status.value as status.name for status in numberOfProductOptions">
+                            <option value="">-- choose number --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <pre>{{availableProductTags}}</pre>
+                    <label>Show Products by Tags</label>
+                    <div class="col-sm-6 pull-right">
+                        <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" close-on-select="false">
+                            <ui-select-match placeholder="Select tags...">
+                                {{$item}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="tag in availableProductTags | filter:$select.search">
+                                {{tag}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </tab>
         </tabset>
     </div>
     <div class="modal-footer" ng-class="{hidden: hover}">
         <div class="form-group margin-bottom-0">
-             <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+            <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
                 Revert
-             </button>
+            </button>
             <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                 Done
             </button>
@@ -673,4 +708,3 @@
     </div>
     <!-- /.modal -->
 </script>
-

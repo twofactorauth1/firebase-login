@@ -11,47 +11,71 @@
     </section>
     <!-- end: PAGE TITLE -->
     <div class="container-fluid container-fullw bg-white margin-bottom-15">
-        <button type="button" class="btn btn-wide btn-info btn-wide btn-o" ng-click="duplicateOrder()">
-            Duplicate
-        </button>
-        <button type="button" class="btn btn-wide btn-info btn-wide btn-o" ng-click="refundOrder()">
-            Refund
-        </button>
-        <div class="btn-group" dropdown is-open="email.isopen">
-            <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                Send Email <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li>
-                    <a href="#" ng-click="sendEmail('new-order')">New Order</a>
-                </li>
-                <li>
-                    <a href="#" ng-click="sendEmail('cancelled-order')">Cancelled Order</a>
-                </li>
-                <li>
-                    <a href="#" ng-click="sendEmail('processing-order')">Processing Order</a>
-                </li>
-                <li>
-                    <a href="#" ng-click="sendEmail('completed-order')">Completed Order</a>
-                </li>
-                <li>
-                    <a href="#" ng-click="sendEmail('customer-invoice')">Customer Invoice</a>
-                </li>
-            </ul>
-        </div>
-        <div class="btn-group" dropdown is-open="print.isopen">
-            <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                Print <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu">
-                <li>
-                    <a href="#" ng-click="print('invoice')">Invoice</a>
-                </li>
-                <li>
-                    <a href="#" ng-click="print('packing-slip')">Packing Slip</a>
-                </li>
-                <li>
-            </ul>
+        <div class="pull-right">
+            <div class="btn-group" dropdown is-open="status.isopen">
+                <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                    Status <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-class="{'active': currentStatus == 'pending_payment'}">
+                        <a href="#" ng-click="statusUpdated('pending_payment')">Pending Payment</a>
+                    </li>
+                    <li ng-class="{'active': currentStatus == 'processing'}">
+                        <a href="#" ng-click="statusUpdated('processing')">Processing</a>
+                    </li>
+                    <li ng-class="{'active': currentStatus == 'on_hold'}">
+                        <a href="#" ng-click="statusUpdated('on_hold')">On Hold</a>
+                    </li>
+                    <li ng-class="{'active': currentStatus == 'completed'}">
+                        <a href="#" ng-click="statusUpdated('completed')">Completed</a>
+                    </li>
+                    <li ng-class="{'active': currentStatus == 'cancelled'}">
+                        <a href="#" ng-click="statusUpdated('cancelled')">Cancelled</a>
+                    </li>
+                    <li ng-class="{'active': currentStatus == 'refunded'}">
+                        <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
+                    </li>
+                    <li ng-class="{'active': currentStatus == 'failed'}">
+                        <a href="#" ng-click="statusUpdated('failed')">Falied</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- <div class="btn-group" dropdown is-open="email.isopen">
+                <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                    Send Email <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" ng-click="sendEmail('new-order')">New Order</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="sendEmail('cancelled-order')">Cancelled Order</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="sendEmail('processing-order')">Processing Order</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="sendEmail('completed-order')">Completed Order</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="sendEmail('customer-invoice')">Customer Invoice</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group" dropdown is-open="print.isopen">
+                <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                    Print <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" ng-click="print('invoice')">Invoice</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="print('packing-slip')">Packing Slip</a>
+                    </li>
+                    <li>
+                </ul>
+            </div> -->
         </div>
     </div>
     <!-- start: YOUR CONTENT HERE -->
@@ -68,31 +92,19 @@
                             Order Date
                         </label>
                         <p class="input-group">
-                            <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyy" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                            <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyy" ng-model="order.created.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                             <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open($event)">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </button> </span></p>
                     </div>
-                    <div class="form-group">
-                        <label for="orderStatus">
-                            Order Status
-                        </label>
-                        <select id="orderStatus" class="cs-select cs-skin-elastic" ng-model="newStatus" ng-change="statusUpdated()">
-                            <option value="pending_payment">Pending Payment</option>
-                            <option value="processing">Processing</option>
-                            <option value="on_hold">On Hold</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                            <option value="refunded">Refunded</option>
-                            <option value="failed">Falied</option>
-                        </select>
-                    </div>
                     <div class="form-group typeahead">
                         <label for="form-field-select-1">
                             Customer
                         </label>
-                        <input type="text" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
+                        <span class="input-icon input-icon-right">
+                        <input type="text" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
+                        <i class="ti-close" style="color: #a94442" ng-if="selectedCustomer" ng-click="clearCustomer()"></i></span>
                     </div>
                     <div class="form-group row margin-bottom-0">
                         <div class="col-sm-6 col-xs-12">
@@ -176,18 +188,20 @@
                                 <div class="margin-top-5" ng-if="!billingEdit">
                                     <address>
                                         <strong>{{order.billing_address.company}}</strong>
-                                        <br> {{order.billing_address.address_1}}, {{order.billing_address.address_2}}
-                                        <br> {{order.billing_address.city}}, {{order.billing_address.state}} {{order.billing_address.postcode}}
+                                        <br> {{order.billing_address.address_1}}<span ng-if='order.billing_address.address_2'>,</span> {{order.billing_address.address_2}}
+                                        <br> {{order.billing_address.city}} <span ng-if='order.billing_address.city'>,</span> {{order.billing_address.state}} {{order.billing_address.postcode}}
                                         <br>
-                                        <span class="fa fa-phone"></span> {{order.billing_address.phone}}
+                                        <span ng-if="order.billing_address.phone"><span class="fa fa-phone"></span> {{order.billing_address.phone}}</span>
                                     </address>
                                     <address class="margin-bottom-0">
                                         <strong>{{order.billing_address.first_name}} {{order.billing_address.last_name}}</strong>
                                         <br>
-                                        <span class="fa fa-envelope-o"></span>
-                                        <a href="mailto:#{{order.billing_address.email}}">
-                                            {{order.billing_address.email}}
-                                        </a>
+                                        <span ng-if="order.billing_address.email">
+                                            <span class="fa fa-envelope-o"></span>
+                                            <a href="mailto:#{{order.billing_address.email}}">
+                                                {{order.billing_address.email}}
+                                            </a>
+                                        </span>
                                     </address>
                                 </div>
                             </fieldset>
@@ -349,18 +363,20 @@
                                 <div class="margin-top-5" ng-if="!shippingEdit">
                                     <address>
                                         <strong>{{order.shipping_address.company}}</strong>
-                                        <br> {{order.shipping_address.address_1}}, {{order.shipping_address.address_2}}
-                                        <br> {{order.shipping_address.city}}, {{order.shipping_address.state}} {{order.shipping_address.postcode}}
+                                        <br> {{order.shipping_address.address_1}}<span ng-if='order.shipping_address.address_2'>,</span> {{order.shipping_address.address_2}}
+                                        <br> {{order.shipping_address.city}}<span ng-if='order.shipping_address.state'>,</span> {{order.shipping_address.state}} {{order.shipping_address.postcode}}
                                         <br>
-                                        <span class="fa fa-phone"></span> {{order.shipping_address.phone}}
+                                        <span ng-if="order.shipping_address.phone"><span class="fa fa-phone"></span> {{order.shipping_address.phone}}</span>
                                     </address>
                                     <address class="margin-bottom-0">
                                         <strong>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</strong>
                                         <br>
-                                        <span class="fa fa-envelope-o"></span>
-                                        <a href="mailto:#{{order.shipping_address.email}}">
-                                            {{order.shipping_address.email}}
-                                        </a>
+                                        <span ng-if="order.shipping_address.email">
+                                            <span class="fa fa-envelope-o"></span>
+                                            <a href="mailto:#{{order.shipping_address.email}}">
+                                                {{order.shipping_address.email}}
+                                            </a>
+                                        </span>
                                     </address>
                                 </div>
                             </fieldset>
@@ -378,7 +394,9 @@
                         <table st-table="displayedItems" class="table table-hover margin-bottom-0">
                             <thead>
                                 <tr>
-                                    <th colspan="2">Item</th>
+                                    <th></th>
+                                    <th>Sku</th>
+                                    <th>Item</th>
                                     <th class="center">Cost</th>
                                     <th class="center">Qty</th>
                                     <th class="center">Total</th>
@@ -390,7 +408,10 @@
                                         <img src="{{item.product.icon}}" width="32" class="img-circle">
                                     </td>
                                     <td>
-                                        {{item.product.name}}
+                                        {{item.sku}}
+                                    </td>
+                                    <td>
+                                        {{item.name}}
                                     </td>
                                     <td class="center">
                                         <span>{{item.subtotal | currency}}</span>
@@ -407,10 +428,14 @@
                         <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
                             <div class="panel panel-default panel-transparent">
                                 <div class="panel-body">
-                                    <p><span class="text-bold">Discount:</span> <span class="pull-right">$0.00</span></p>
-                                    <p><span class="text-bold">Shipping:</span> <span class="pull-right">$0.00</span></p>
-                                    <p><span class="text-bold">Total:</span> <span class="pull-right">$0.00</span></p>
-                                    <p class="text-danger"><span class="text-bold">Refunded:</span> <span class="pull-right">-$0.00</span></p>
+                                    <p ng-if="order.total_discount"><span class="text-bold">Discount ({{order.cart_discount}}):</span> <span class="pull-right">{{order.total_discount | currency}}</span></p>
+                                    <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
+                                    <p ng-if="order.total_tax"><span class="text-bold">Tax:</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
+                                    <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
+                                    <p class="text-danger" ng-if="order.status == 'refunded'">
+                                        <span class="text-bold">Refunded:</span>
+                                        <span class="pull-right">-$0.00</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -420,12 +445,12 @@
                             <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addLineItem()">
                                 <span>Add Line Item</span>
                             </button>
-                            <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
+                            <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
                                 <span>Add Fee</span>
                             </button>
                             <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addShipping()">
                                 <span>Add Shipping</span>
-                            </button>
+                            </button> -->
                         </div>
                         <div class="clearfix"></div>
                     </div>

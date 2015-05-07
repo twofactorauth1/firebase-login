@@ -24,6 +24,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listOrders.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
+        app.get(this.url('customer/:customerid'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersByCustomer.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
         app.post(this.url(':id/complete'), this.isAuthAndSubscribedApi.bind(this), this.completeOrder.bind(this));
         app.post(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelOrder.bind(this));
@@ -85,6 +86,25 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 orderManager.listOrdersByAccount(accountId, function(err, orders){
                     self.log.debug('<< listOrders');
+                    self.sendResultOrError(res, err, orders, 'Error listing orders');
+                });
+            }
+        });
+
+    },
+
+    listOrdersByCustomer: function(req, res) {
+        var self = this;
+        self.log.debug('>> listOrdersByCustomer');
+        var accountId = parseInt(self.accountId(req));
+        var customerId = parseInt(req.params.customerid);
+
+        self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.listOrdersByCustomer(customerId, accountId, function(err, orders){
+                    self.log.debug('<< listOrdersByCustomer');
                     self.sendResultOrError(res, err, orders, 'Error listing orders');
                 });
             }

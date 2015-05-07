@@ -50,6 +50,7 @@ script(src="../js/libs/angular-social-links/angular-social-links.js")
 script(src="../js/libs/slick-carousel/slick/slick.js")
 script(src="../js/libs/angular-slick/dist/slick.js")
 script(src="../js/libs/jsVideoUrlParser/dist/jsVideoUrlParser.min.js")
+script(src="../js/libs/angular-truncate/src/truncate.js")
 
 //- TODO Remove
 script(src="../js/libs/leaflet/dist/leaflet.js")
@@ -62,6 +63,7 @@ script(src="../js/libs/angular-input-date/src/angular-input-date.js")
 script(src="../js/libs/angular-ui/modules/directives/sortable/sortable.js")
 script(src="../js/libs/ng-tags-input/ng-tags-input.js")
 script(src="../js/libs_misc/angular-file-upload/angular-file-upload.js")
+script(src='../js/libs/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js')
 
 //- END AUTOINCLUDE SECTION
 
@@ -73,6 +75,7 @@ script(src="scripts/controllers/CourseSubscribeModalController.js")
 script(src="scripts/directives/coursePreview.js")
 script(src="scripts/directives/skeuocard.js")
 script(src="scripts/directives/fileChange.js")
+script(src="scripts/directives/perfect-scrollbar.js")
 script(src="scripts/services/accountService.js")
 script(src="scripts/services/analyticsService.js")
 script(src="scripts/services/websiteService.js")
@@ -87,6 +90,7 @@ script(src="scripts/services/userService.js")
 script(src="scripts/services/courseService.js")
 script(src="scripts/services/customerService.js")
 script(src="scripts/services/pageService.js")
+script(src="scripts/services/orderService.js")
 script(src="scripts/filters/CreateUrlFilter.js")
 script(src="scripts/filters/generateURLforLinks.js")
 script(src="scripts/filters/trustHtml.js")
@@ -96,13 +100,15 @@ script(src="scripts/filters/getBytype.js")
 script(src="scripts/controllers/mainCtrl.js")
 script(src="scripts/controllers/blogCtrl.js")
 script(src="scripts/controllers/layoutCtrl.js")
+script(src="scripts/controllers/components/productsComponentCtrl.js")
 script(src="scripts/directives/angularparallax.js")
 script(src="scripts/directives/last.js")
 script(src="scripts/directives/carousel.js")
 script(src="scripts/filters/offset.js")
 script(src="scripts/filters/cleanType.js")
 script(src="scripts/filters/reverse.js")
-
+script(src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js")
+script(src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js")
 if !includeEditor
   script(type='text/javascript').
     adroll_adv_id = "QEWFBVIXY5CKJEMIWJXZBA";

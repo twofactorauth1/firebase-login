@@ -8,6 +8,7 @@
 require('./dao/product.dao.js');
 var productDao = require('./dao/product.dao.js');
 var log = $$.g.getLogger("product_manager");
+var request = require('request');
 
 module.exports = {
     createProduct: function(productObj, fn){
@@ -35,6 +36,21 @@ module.exports = {
             } else {
                 log.debug('<< getProduct');
                 fn(null, value);
+            }
+        });
+    },
+
+    getTax: function(postcode, fn) {
+        var self = this;
+        log.debug('>> getTax ', postcode);
+        var apiUrl = 'http://api.zip-tax.com/request/v20?key=CWVPBQ9&postalcode='+postcode+'&format=JSON';
+        request.get(apiUrl, function(err, resp, body){
+            if(err) {
+                log.error('Error updating product: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< updateProduct');
+                fn(null, body);
             }
         });
     },

@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData',
-    function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData', 'cartService',
+    function($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData, cartService) {
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
@@ -18,11 +18,17 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.currentcomponents = [];
         $scope.thumbnailSlider = [];
         $scope.contactDetails = [];
-
+        $scope.activeEditor = null;
         //displays the year dynamically for the footer
         var d = new Date();
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
+
+        $scope.$watch(function () { return cartService.getCartItems() }, function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                console.log('cart changed >>> ', newValue);
+            }
+        });
 
         $scope.parentScope = parent.angular.element('#iframe-website').scope();
 
@@ -177,7 +183,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 $scope.parentScope.iframeLoaded;
                                 $scope.parentScope.afteriframeLoaded($scope.currentpage);
                             }
-
+                            $scope.dataLoaded = true;
                             $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
                                 if (newValue !== undefined && newValue.length) {
                                     var tagsArr = [];
@@ -396,7 +402,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         }
 
-        $scope.checkoutModalState = 1;
         $scope.newContact = {
             isAuthenticated: true,
             details: [{
@@ -405,7 +410,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     default: false,
                     number: ''
                 }],
-                addresses: [{}]
+                addresses: [{}],
+                emails: [{}]
             }]
         };
 
@@ -415,248 +421,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
             return value;
         };
-
-        /********** PRODUCT RELATED **********/
-
-        /*
-         * @getAllProducts
-         * - get products for products and pricing table components
-         */
-
-        ProductService.getAllProducts(function(data) {
-            that.products = data;
-            $scope.products = data;
-        });
-
-        /*
-         * @updateSelectedProduct
-         * - when product details is clicked update selected product
-         */
-
-        $scope.updateSelectedProduct = function(product) {
-            product.attributes = $scope.selectedProductAttributes(product);
-            console.log('product.attributes ', product.attributes);
-            $scope.selectedProduct = product;
-        };
-
-        $scope.selectDisabled = function(index) {
-            if (index > 0) {
-                return true;
-            }
-            return false;
-        };
-
-        $scope.selectChanged = function(index) {
-            var selectedAttributes = $scope.selectedProduct.attributes;
-            var allselected = false;
-            _.each(selectedAttributes, function(attribute, i) {
-                if (attribute.selected) {
-                    allselected = true;
-                } else {
-                    console.log('attribute.selected ', i);
-                    allselected = false;
-                }
-            });
-
-            if (allselected) {
-                $scope.updatePrice();
-            } else {
-                console.log('all not selected');
-            }
-        };
-
-        /*
-         * @selectedProductAttributes
-         * - get attributes availiable for the selected product
-         */
-
-        $scope.selectedProductAttributes = function(product) {
-            var attributes;
-            if (product) {
-                var formattedAttributes = [];
-                _.each(product.variations, function(variation) {
-                    _.each(variation.attributes, function(attribute) {
-                        var foundAttr = _.find(formattedAttributes, function(formAttr) {
-                            return formAttr.name == attribute.name;
-                        });
-                        if (foundAttr) {
-                            if (foundAttr.values.indexOf(attribute.option) < 0) {
-                                foundAttr.values.push(attribute.option);
-                            }
-                        } else {
-                            var _attribute = {
-                                name: attribute.name,
-                                values: [attribute.option]
-                            };
-                            formattedAttributes.push(_attribute);
-                        }
-                    });
-                });
-                console.log('formattedAttributes ', formattedAttributes);
-                attributes = formattedAttributes;
-            } else {
-                attributes = [];
-            }
-            return attributes;
-        };
-
-        /*
-         * @updatePrice
-         * - update the price when a matching variation is found based on the attribute selection
-         */
-
-        $scope.updatePrice = function() {
-
-            var variations = $scope.selectedProduct.variations;
-
-            var _matchedVariation = _.find(variations, function(_variation) {
-                var match = true;
-                _.each(selectedAttributes, function(attr) {
-                    var matchedVarAttr = _.find(_variation.attributes, function(var_attr) {
-                        return var_attr.name === attr.name
-                    });
-                    if (matchedVarAttr.option !== attr.selected) {
-                        match = false;
-                    }
-                });
-                return match;
-            });
-
-            if (_matchedVariation) {
-                $scope.matchedVariation = _matchedVariation;
-            } else {
-                console.warn('no matching variation');
-            }
-        };
-
-        /*
-         * @addDetailsToCart
-         * - add product to cart
-         */
-
-        $scope.addDetailsToCart = function(product, variation) {
-            console.log('variation exists >>> ', variation);
-            // that.products[product.id].clicked = true;
-            if (variation) {
-                var productMatch = variation;
-                productMatch.variation = true;
-                productMatch.name = product.name;
-            } else {
-                var productMatch = _.find($scope.products, function(item) {
-                    return item._id === product._id
-                });
-                productMatch.clicked = true;
-            }
-
-            if (!$scope.cartDetails) {
-                $scope.cartDetails = [];
-            }
-            if (!productMatch.quantity) {
-                productMatch.quantity = 1;
-            }
-            var match = _.find($scope.cartDetails, function(item) {
-                return item._id === productMatch._id
-            })
-            if (match) {
-                match.quantity = parseInt(match.quantity) + 1;
-            } else {
-                $scope.cartDetails.push(productMatch);
-            }
-            $scope.calculateTotalChargesfn();
-        };
-
-        /*
-         * @removeFromCart
-         * - remove product to cart
-         */
-
-        $scope.removeFromCart = function(product) {
-            var filtered = _.filter($scope.cartDetails, function(item) {
-                return item._id !== product._id
-            });
-            var productMatch = _.find(that.products, function(item) {
-                return item._id === product._id
-            });
-            productMatch.clicked = false;
-            $scope.cartDetails = filtered;
-        };
-
-        /*
-         * @calculateTotalChargesfn
-         * - calculate the total based on products in cart
-         */
-
-        $scope.calculateTotalChargesfn = function() {
-            var subTotal = 0;
-            var totalTax = 0;
-            var total = 0;
-            $scope.cartDetails.forEach(function(item) {
-                subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity);
-            })
-            $scope.subTotal = subTotal;
-            $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100);
-            $scope.total = $scope.subTotal + $scope.totalTax;
-        };
-
-        /*
-         * @makeCartPayment
-         * - make the final payment for checkout
-         */
-
-        $scope.makeCartPayment = function() {
-
-            var expiry = angular.element('#card_expiry').val().split("/")
-            var exp_month = expiry[0].trim();
-            var exp_year = "";
-            if (expiry.length > 1)
-                exp_year = expiry[1].trim();
-            angular.element('#expiry').val().split("/")[0].trim()
-            var cardInput = {
-                number: angular.element('#number').val(),
-                cvc: angular.element('#cvc').val(),
-                exp_month: exp_month,
-                exp_year: exp_year
-            };
-
-            if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
-                $scope.checkCardNumber();
-                $scope.checkCardExpiry();
-                $scope.checkCardCvv();
-                return;
-            }
-
-            if ($scope.newContact.first !== undefined) {
-                userService.postContact($scope.newContact, function(data, err) {});
-            }
-
-            if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
-                return;
-            }
-
-            PaymentService.getStripeCardToken(cardInput, function(token) {
-                PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
-            });
-        };
-
-        /*
-         * @variationAttributeExists
-         * - check variation attributes to see if they exist
-         */
-
-        $scope.variationAttributeExists = function(value) {
-            var variations = $scope.selectedProduct.variations;
-            var matchedAttribute = false;
-            _.each(variations, function(_variation) {
-                var _matchedVariation = _.find(_variation.attributes, function(_attribute) {
-                    if (_attribute.option == value) {
-                        matchedAttribute = true;
-                    }
-                });
-            });
-            return matchedAttribute;
-        };
-
-        /********** END PRODUCT RELATED **********/
 
         /********** BLOG PAGE PAGINATION RELATED **********/
         $scope.curPage = 0;
@@ -876,6 +640,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.parentScope.clickImageButton(editor, false);
         };
 
+        $scope.getActiveEditor = function() {
+           return $scope.activeEditor;
+        };
+
         $scope.deletePricingTable = function(componentId, index) {
             $scope.parentScope.deletePricingTable(componentId, index);
         };
@@ -961,6 +729,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
                             });
+                            editor.on('focus', function() {
+                                $scope.activeEditor = editor;
+                            });
+                            editor.on('blur', function() {
+                                $scope.activeEditor = null;
+                            });
                         }
                     },
                     sharedSpaces: {
@@ -982,7 +756,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                       {
                           return $(this).height();
                       }).get());
-                      $("div.feature-single").css("min-height", maxFeatureHeight - 10);
+                      $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
                     }
                 }
 
@@ -1085,6 +859,19 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         var winWidth = w.width();
                         $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
                     }
+                    if ($scope.currentpage.components[i].type == 'single-post') {  
+                        if(!$scope.blog)
+                        {
+                            $scope.blog = {};
+                            $scope.blog.post = {};                      
+                        }
+                        $scope.blog.post.post_title = $scope.currentpage.components[i].post_title;
+                        $scope.blog.post.post_excerpt = $scope.currentpage.components[i].post_excerpt;                    
+                        $scope.blog.post.post_content = $scope.currentpage.components[i].post_content;
+                        $scope.blog.post.publish_date = $scope.currentpage.components[i].publish_date;
+                        $scope.blog.post.post_tags = $scope.currentpage.components[i].post_tags;
+                        $scope.blog.post.post_author = $scope.currentpage.components[i].post_author || " ";
+                    }
                 };
                 setTimeout(function() {
                     angular.element(window).scrollTop(scroll);
@@ -1164,10 +951,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.addCKEditorImage = function(url, inlineInput, edit) {
-            if (edit)
-                inlineInput.val(url);
-            else
-                inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+            if(inlineInput)
+            {
+                if (edit)
+                    inlineInput.val(url);
+                else
+                    inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+            }
         };
 
         $scope.triggerEditMode = function() {
@@ -1234,10 +1024,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.planStatus = {};
         $scope.$watch('currentpage.components', function(newValue, oldValue) {
             if (newValue) {
+                
                 $scope.dataLoaded = false;
                 $scope.currentcomponents = newValue;
                 newValue.forEach(function(value, index) {
-                    $scope.dataLoaded = true;
+                    
                     if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
                         value.bg.img.show = true;
                     if (value && value.type === 'payment-form') {
@@ -1295,7 +1086,19 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     if (value && value.type == 'contact-us') {
                         $scope.updateContactUsMap(value);
                     }
-
+                    if (value && value.type == 'single-post') {  
+                        if(!$scope.blog)
+                        {
+                            $scope.blog = {};
+                            $scope.blog.post = {};                      
+                        }                     
+                        $scope.blog.post.post_title = value.post_title;
+                        $scope.blog.post.post_excerpt = value.post_excerpt;
+                        $scope.blog.post.post_content = value.post_content;
+                        $scope.blog.post.publish_date = value.publish_date;
+                        $scope.blog.post.post_tags = value.post_tags;
+                        $scope.blog.post.post_author = value.post_author || " ";
+                    }
                 });
             }
         });
@@ -1936,7 +1739,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             return $(this).height();
                          }).get());
 
-                        $("div.feature-single").css("min-height", maxFeatureHeight - 20);
+                        $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
                       }
                     }
                     $scope.feature_inserted = true;
@@ -1956,6 +1759,25 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }
                 }
             }, 1000)
+        });
+
+        angular.element($window).bind('resize', function() {
+            $scope.feature_inserted = false;
+            if(!$scope.feature_inserted)
+                  {
+                   $scope.feature_inserted = true;
+                   for (var i = 0; i <= 3; i++) {
+                      if($("div.feature-height-"+i).length)
+                      {
+                        var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                        {
+                            return $(this).height();
+                         }).get());
+                        $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
+                      }
+                    }
+                    $scope.feature_inserted = true;
+                  }
         });
     }
 

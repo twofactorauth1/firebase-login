@@ -3,7 +3,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.website.PAGES">{{ mainTitle }}</h1>
+                <h1 class="mainTitle" translate="sidebar.nav.website.PAGES"></h1>
                 <span ng-if="pages" class="mainDescription">There are currently {{pages.length}} pages.</span>
             </div>
             <div ncy-breadcrumb></div>
@@ -36,7 +36,7 @@
                                 <div class="visible-xs margin-bottom-15 clearfix"></div>
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form-group margin-bottom-0 pull-right">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-page-modal')">
+                                        <button id="new-page" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-page-modal')">
                                             <span>New Page</span>
                                         </button>
                                     </div>
