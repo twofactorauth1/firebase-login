@@ -13,7 +13,7 @@
 
     <div ng-repeat="feature in component.features track by $index" class="features-wrap">
         <div class="col-sm-4 feature feature-height-{{component.version}}" >
-            <div class="feature-single">
+            <div class="feature-single" ng-style="{&#39;background&#39;: component.blockbgcolor}">
                 <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
                     </div>
                <div class="feature-content">

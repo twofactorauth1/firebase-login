@@ -65,6 +65,14 @@
                             <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                         </div>
                     </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'feature-list'">
+                        <label>Feature Block BG Color:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Background color of Feature Block."><i class="fa fa-info-circle" /></span>
+                        <div class="pull-right">
+                            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                            <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.blockbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                    </div>
                     <hr ng-show="componentEditing.type == 'navigation'" />
                     <div class="form-group" ng-hide="componentEditing.bg.img.show ||  (componentEditing.type == 'navigation' && componentEditing.version == 1)">
                         <label for="colorpicker">Background Color:</label>

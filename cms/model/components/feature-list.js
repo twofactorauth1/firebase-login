@@ -92,6 +92,7 @@ var component = $$.m.ModelBase.extend({
                 },
                 color : "#0B4C6B"
             },
+            blockbgcolor: "#4bb0cb",
 
             /**
              *

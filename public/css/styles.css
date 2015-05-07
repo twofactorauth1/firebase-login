@@ -531,12 +531,10 @@ div[data-type='campaign'] .inner-page .overlay {
   position: relative;
 }
 .feature-list-v1 .feature-single {
-  background: #4bb0cb;
   min-height: 320px;
   margin: 10px;
   padding: 20px;
   border-radius: 5px;
-  border-bottom: 4px solid #2f93b6;
 }
 .feature-list-v1 .feature-single .feature-icon {
   color: #3b9db7;
