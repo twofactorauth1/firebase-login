@@ -94,7 +94,14 @@ mainApp.service('paymentService', ['$http', 'ENV',
             return $http.get(apiUrl);
         };
 
-        
+        this.validateCoupon = function(couponId, fn) {
+            console.log('validateCoupon');
+            var apiUrl = baseUrl + ['integrations', 'payments', 'coupon', couponId, 'validate'].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
 
     }
 ]);

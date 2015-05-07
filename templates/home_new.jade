@@ -1,20 +1,38 @@
 extends snippets/_layout
 
 block content
-	section
-		.signinpanel
-			img(src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png", style="margin: 25px auto;width: 270px;display: block;")
-			.panel.panel-default.widget-messaging.choose-account-selection
-					.panel-heading(style="background:#4bafca")
-						h3(style="color:#ffffff").panel-title.center Choose An Account
-					.panel-body
-						ul
-							each val in accounts
-								a(href="/reauth/#{val.id}")
-									li(ng-repeat='accountinavaliableAccounts')
-										div(style="width:130px;background: #e7e7e7;padding: 5px;border-radius: 3px;margin-right: 15px;float:left")
-											img(src="#{val.logo}", style="max-width: 120px;max-height: 30px;margin: 0 auto;display: block;")
-										span(style="line-height: 33px;")=val.subdomain
-										i.fa.fa-chevron-right.pull-right(style="line-height: 33px;color:#4bafca")
-								div.clearfix
-			img(src="https://s3.amazonaws.com/indigenous-digital-assets/account_6/brought-by.png" style="width: 220px;margin: 0 auto;display: block;")
+  .row
+    .main-login.col-xs-10.col-xs-offset-1.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3
+      .logo.margin-top-30
+        if account
+          if account.business.logo
+            img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
+          else
+            h1.center.company-title #{account.company.name}
+
+      // start: LOGIN BOX
+      .box-login.choose-account
+        form.form-login
+          fieldset
+            legend
+              | Choose An Account
+            ul
+              each val in accounts
+                li(ng-repeat='accountinavaliableAccounts')
+                  a(href="/reauth/#{val.id}")
+                    div(class="account-logo")
+                      img(src="#{val.logo}")
+                    if val.subdomain && !val.domain
+                      span=val.subdomain+ '.indigenous.io'
+                    if val.domain
+                      span=val.domain
+                    i.fa.fa-chevron-right.pull-right
+                  div.clearfix
+        // start: COPYRIGHT
+        .copyright
+          | &#169;
+          span.current-year
+          span.text-bold.text-uppercase  Indigenous Software, Inc
+          span  All rights reserved
+        // end: COPYRIGHT
+      // end: LOGIN BOX

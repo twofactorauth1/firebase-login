@@ -1,0 +1,140 @@
+<!-- start: PAGE TITLE -->
+<div ng-controller="CommerceSettingsCtrl" class="commerce-settings">
+    <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.commerce.SETTINGS"></h1>
+                <span class="mainDescription">Adjust all settings for the commerce section</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <tabset class="tabbable">
+        <tab heading="Taxes">
+            <form class="col-sm-6 form-horizontal">
+                <div class="form-group">
+                    <label>Enable Taxes</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                    <switch ng-model="taxes.enabled" class="pull-right" ng-change="saveComponent()"></switch>
+                </div>
+                <div class="clearfix"></div>
+                <div ng-if="taxes.enabled">
+                    <div class="form-group">
+                        <label>Calculate Tax Based On:</label>
+                        <select ng-model="taxes.calculated" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions">
+                            <option value="">-- choose --</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix"></div>
+        </tab>
+        <tab heading="Emails">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table" id="emails">
+                        <thead>
+                            <tr>
+                                <th>Email Name</th>
+                                <th>Title</th>
+                                <th>Modified</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>New Order</td>
+                                <td></td>
+                                <td>11 November 2014</td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                        <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Preview">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Cancelled Order</td>
+                                <td></td>
+                                <td>11 November 2014</td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                        <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Preview">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Processing</td>
+                                <td></td>
+                                <td>11 November 2014</td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                        <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Preview">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Completed</td>
+                                <td></td>
+                                <td>11 November 2014</td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                        <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Preview">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Invoice</td>
+                                <td></td>
+                                <td>11 November 2014</td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                        <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Preview">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Order Note</td>
+                                <td></td>
+                                <td>11 November 2014</td>
+                                <td>
+                                    <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                        <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Preview">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </tab>
+    </tabset>

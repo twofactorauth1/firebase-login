@@ -57,7 +57,6 @@ var CKBUILDER_CONFIG = {
 		'entities' : 1,
 		'floatingspace' : 1,
 		'font' : 1,
-		'fontawesome' : 1,
 		'format' : 1,
 		'horizontalrule' : 1,
 		'image' : 1,

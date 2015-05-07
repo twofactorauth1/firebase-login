@@ -52,6 +52,9 @@
         "search": {
             "PLACEHOLDER": "Search..."
         },
+        "settings": {
+            "MAIN": "Settings"
+        },
         "nav": {
             "dashboard": {
                 "MAIN": "Dashboard"
@@ -69,7 +72,8 @@
             "commerce": {
                 "MAIN": "Commerce",
                 "PRODUCTS": "Products",
-                "ORDERS": "Orders"
+                "ORDERS": "Orders",
+                "SETTINGS": "Commerce Settings"
             },
             "marketing": {
                 "MAIN": "Marketing",

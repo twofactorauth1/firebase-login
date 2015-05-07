@@ -1,174 +1,114 @@
 'use strict';
-/**
- * A directive used for "setting up onboarding".
- */
-app.directive('indigOnboarding', function($location, $sce, UserService, toaster) {
-    return {
-        restrict: 'E',
-        template: '<div ng-joy-ride="startJoyRide" config="config" on-finish="onFinish()" on-skip="onFinish()"></div>',
-        link: function(scope, elem, attrs) {
+/*global app, moment, angular*/
+/*jslint unparam:true*/
+app.directive('indigOnboarding', function ($location, $sce, $state, UserService, toaster, ONBOARDINGCONSTANT) {
+  return {
+    restrict: 'E',
+    template: '<div ng-joy-ride="startJoyRide" config="config" on-finish="onFinish()" on-skip="onSkip()"></div>',
+    link: function (scope, elem, attrs) {
 
-            scope.startJoyRide = false;
+      scope.startJoyRide = false;
 
-            UserService.getUserPreferences(function(preferences) {
-                scope.userPreferences = preferences;
-            });
+      var defaultTasks = [];
+      _.each(ONBOARDINGCONSTANT.tasks, function (task) {
+        defaultTasks.push(task.taskKey);
+      });
 
-            scope.onboardingStepMap = {
-                'create_contact': [{
-                    type: "title",
-                    heading: 'Task: Create Contact',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'add_product': [{
-                    type: "title",
-                    heading: 'Task: Add Product',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'basic_info': [{
-                    type: "title",
-                    heading: 'Task: Basic Info',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'select_theme': [{
-                    type: "title",
-                    heading: 'Task: Select Theme',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'create_campaign': [{
-                    type: "title",
-                    heading: 'Task: Create Campaign',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'add_contact': [{
-                    type: "title",
-                    heading: 'Task: Add Contact',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'add_post': [{
-                    type: "title",
-                    heading: 'Task: Add Post',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'edit_home': [{
-                    type: "title",
-                    heading: 'Task: Edit Home Page',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                'add_feed': [{
-                    type: "title",
-                    heading: 'Task: Add Feed',
-                    text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore soluta id dicta fuga? Ullam, magni."
-                }],
-                pages: [{
-                    type: "title",
-                    heading: 'Task: Visit page list',
-                    text: "This view provides you with listing of all the system pages."
-                }],
-                'single-page': [{
-                    type: "title",
-                    heading: 'Task: Add pages',
-                    text: "Add a page here for your site."
-                }],
-                posts: [{
-                    type: "title",
-                    heading: 'Task: Post list',
-                    text: "Here you can see all the posts on your system."
-                }],
-                'single-post': [{
-                    type: "title",
-                    heading: 'Task: Add Posts',
-                    text: "Add a post here for your site."
-                }],
-                commerce: [{
-                    type: "title",
-                    heading: 'Task: List products',
-                    text: "Here you see listing of all products."
-                }],
-                'single-product': [{
-                    type: "title",
-                    heading: 'Task: Add Products',
-                    text: "Here you can add a product for your business."
-                }],
-                'social-feed': [{
-                    type: "title",
-                    heading: 'Task: Add feed',
-                    text: "See your social presence."
-                }],
-                customers: [{
-                    type: "title",
-                    heading: 'Task: List customers',
-                    text: "See your business contacts here."
-                }],
-                'single-customer': [{
-                    type: "title",
-                    heading: 'Task: Add contacts',
-                    text: "Add a contact here."
-                }],
-                'profile-business': [{
-                    type: "title",
-                    heading: 'Task: Add business info',
-                    text: "Here you can add info about your business."
-                }],
-                'profile-personal': [{
-                    type: "title",
-                    heading: 'Task: Add personal info',
-                    text: "Here you can add your personal info."
-                }],
-                billing: [{
-                    type: "title",
-                    heading: 'Task: Add billing info',
-                    text: "Here you can add your social accounts."
-                }],
-                integrations: [{
-                    type: "title",
-                    heading: 'Task: Add social accounts',
-                    text: "Here you can add your social accounts."
-                }],
-                dashboard: [{
-                    type: "title",
-                    heading: 'Task: Dashboard',
-                    text: "Here you can see your site's progress."
-                }],
-                'site-analytics': [{
-                    type: "title",
-                    heading: 'Task: Analytics',
-                    text: "Hee whats happening on your site."
-                }]
-            };
+      UserService.getUserPreferences(function (preferences) {
+        var addedTask = false;
+        _.each(defaultTasks, function (task) {
+          var matchedTask = _.find(preferences.tasks, function (v, k) {
+            return k === task;
+          });
 
-            scope.$on("$stateChangeSuccess", function(event, current, previous) {
-                if ($location.$$search['onboarding']) {
-                    scope.obType = $location.$$search['onboarding'].trim();
-                    if (scope.obType in scope.onboardingStepMap) {
-                        scope.config = [];
-                        scope.config.push(scope.onboardingStepMap[scope.obType][0]);
-                        scope.startJoyRide = true;
-                    }
-                }
-            });
+          if (!matchedTask) {
+            addedTask = true;
+            preferences.tasks[task] = false;
+          }
 
-            scope.onFinish = function() {
-                scope.userPreferences.tasks[scope.obType] = true;
-                UserService.updateUserPreferences(scope.userPreferences, false, function() {
-                    scope.startJoyRide = false;
+          if (task === 'sign_up') {
+            preferences.tasks[task] = true;
+          }
+        });
+        scope.userPreferences = preferences;
 
-                    //get next task
-                    var nextTasks = [];
-                    _.each(scope.userPreferences.tasks, function(val, key) {
-                        if (val == false) {
-                            nextTasks.push(scope.onboardingStepMap[key]);
-                        }
-                    });
-
-                    if (nextTasks.length > 0) {
-                        toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + nextTasks[0][0].link + '">' + nextTasks[0][0].title + '</a>', 15000, 'trustedHtml');
-                    } else {
-                        toaster.pop('success', 'Task Complete. No more tasks to complete.')
-                    }
-
-                });
-            };
+        if (addedTask) {
+          UserService.updateUserPreferences(scope.userPreferences, false, function (newPreferences) {
+            console.log('newPreferences >>> ', newPreferences);
+          });
         }
-    };
+      });
+
+      scope.onboardingStepMap = ONBOARDINGCONSTANT.tasks;
+
+      scope.$on("$locationChangeSuccess", function (event, current, previous) {
+        if ($location.$$search['onboarding'] && $location.$$search['onboarding'] === 'sign_up') {
+          $location.url($location.path());
+        }
+      });
+
+      scope.$on("$stateChangeSuccess", function (event, current, previous) {
+        scope.executeOnboarding();
+      });
+
+      scope.openPageModal = function() {
+        console.log('scope.$parent');
+      };
+
+      scope.executeOnboarding = function () {
+        if ($location.$$search['onboarding'] ) {
+          scope.obType = $location.$$search['onboarding'].trim();
+
+          var matchingStep = _.find(scope.onboardingStepMap, function (step) {
+            return step.pane.taskKey === scope.obType;
+          });
+          if (matchingStep) {
+            scope.config = [];
+            _.each(matchingStep.steps, function (step) {
+              scope.config.push(step);
+            });
+            scope.startJoyRide = true;
+            $location.url($location.path());
+          }
+        }
+      };
+
+      scope.onSkip = function() {
+        toaster.pop('warning', 'Task Skipped. Not completed.');
+      };
+
+      scope.onFinish = function () {
+        scope.userPreferences.tasks[scope.obType] = true;
+        console.log(' scope.userPreferences.tasks[scope.obType] ' + scope.obType + ' ' + scope.userPreferences.tasks[scope.obType]);
+        UserService.updateUserPreferences(scope.userPreferences, false, function (updatedPreferences) {
+          console.log('updatedPreferences >>> ', updatedPreferences.tasks);
+          scope.startJoyRide = false;
+          var tasksRemaining = false;
+          _.each(scope.onboardingStepMap, function (step) {
+            var matchingTask = _.find(scope.userPreferences.tasks, function (v, k) {
+              return k === step.pane.taskKey;
+            });
+            if (!matchingTask) {
+              tasksRemaining = true;
+            }
+            step.pane.completed = matchingTask;
+          });
+
+          if (tasksRemaining) {
+            var nextTask = _.find(scope.onboardingStepMap, function (step) {
+              return !step.pane.completed;
+            });
+            var url = $state.href(nextTask.pane.state, {}, {
+              absolute: false
+            });
+            url += '?onboarding=' + nextTask.pane.taskKey;
+            toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
+          } else {
+            toaster.pop('success', 'Task Complete. No more tasks to complete.');
+          }
+
+        });
+      };
+    }
+  };
 });

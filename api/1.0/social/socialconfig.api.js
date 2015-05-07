@@ -63,6 +63,8 @@ _.extend(api.prototype, baseApi.prototype, {
          * twitter feed
          * twitter followers
          * twitter profile
+         * twitter favorites
+         * twitter follow/unfollow
          */
 
         app.get(this.url('twitter/:socialAccountId/feed'), this.isAuthApi.bind(this), this.getTwitterFeed.bind(this));
@@ -71,6 +73,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('twitter/:socialAccountId/post'), this.isAuthApi.bind(this), this.createTwitterPost.bind(this));
         app.post(this.url('twitter/:socialAccountId/post/:postId/reply'), this.isAuthApi.bind(this), this.createTwitterReply.bind(this));
         app.post(this.url('twitter/:socialAccountId/post/:postId/retweet'), this.isAuthApi.bind(this), this.createTwitterRetweet.bind(this));
+        app.post(this.url('twitter/:socialAccountId/post/:postId/favorite'), this.isAuthApi.bind(this), this.createTwitterFavorite.bind(this));
+        app.delete(this.url('twitter/:socialAccountId/post/:postId/favorite'), this.isAuthApi.bind(this), this.deleteTwitterFavorite.bind(this));
+        app.post(this.url('twitter/:socialAccountId/follow/:twitterId/follow'), this.isAuthApi.bind(this), this.createTwitterFollower.bind(this));
+        app.delete(this.url('twitter/:socialAccountId/follow/:twitterId/unfollow'), this.isAuthApi.bind(this), this.deleteTwitterFollower.bind(this));
         app.post(this.url('twitter/:socialAccountId/user/:userId/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
         app.post(this.url('twitter/:socialAccountId/name/:name/dm'), this.isAuthApi.bind(this), this.createTwitterDM.bind(this));
         app.get(this.url('twitter/:socialAccountId/dm'), this.isAuthApi.bind(this), this.getTwitterDMs.bind(this));
@@ -756,6 +762,92 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< createTwitterRetweet');
                     self.sendResultOrError(resp, err, savedPost, "Error creating twitter retweet");
                     self.createUserActivity(req, 'ADD_TWITTER_RETWEET', null, {socialAccountId: socialAccountId, tweetId:tweetId}, function(){});
+                });
+            }
+        });
+    },
+
+    createTwitterFavorite: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterFavorite');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var tweetId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.favoriteTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
+                    self.log.debug('<< createTwitterFavorite');
+                    self.sendResultOrError(resp, err, savedPost, "Error creating twitter favorite");
+                    self.createUserActivity(req, 'ADD_TWITTER_FAVORITE', null, {socialAccountId: socialAccountId, tweetId:tweetId}, function(){});
+                });
+            }
+        });
+    },
+
+    deleteTwitterFavorite: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteTwitterFavorite');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var tweetId = req.params.postId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.unfavoriteTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
+                    self.log.debug('<< deleteTwitterFavorite');
+                    self.sendResultOrError(resp, err, savedPost, "Error deleting twitter favorite");
+                    self.createUserActivity(req, 'DELETE_TWITTER_FAVORITE', null, {socialAccountId: socialAccountId, tweetId:tweetId}, function(){});
+                });
+            }
+        });
+    },
+
+    createTwitterFollower: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createTwitterFollower');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var userId = req.params.twitterId;
+
+        self.log.debug('>> createTwitterFollower, userId: ' + userId);
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.followTwitterUser(accountId, socialAccountId, userId, function(err, savedPost){
+                    self.log.debug('<< createTwitterFollower');
+                    self.sendResultOrError(resp, err, savedPost, "Error creating twitter favorite");
+                    self.createUserActivity(req, 'ADD_TWITTER_FOLLOWER', null, {socialAccountId: socialAccountId, userId:userId}, function(){});
+                });
+            }
+        });
+    },
+
+    deleteTwitterFollower: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteTwitterFollower');
+
+        var accountId = parseInt(self.accountId(req));
+        var socialAccountId = req.params.socialAccountId;
+        var userId = req.params.twitterId;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                socialConfigManager.unfollowTwitterUser(accountId, socialAccountId, userId, function(err, savedPost){
+                    self.log.debug('<< deleteTwitterFollower');
+                    self.sendResultOrError(resp, err, savedPost, "Error deleting Twitter follower");
+                    self.createUserActivity(req, 'DELETE_TWITTER_FOLLOWER', null, {socialAccountId: socialAccountId, userId:userId}, function(){});
                 });
             }
         });

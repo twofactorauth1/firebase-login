@@ -1,0 +1,265 @@
+<div class="modal fade" id="cart-checkout-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row shopping-cart" ng-hide="checkoutModalState !== 1">
+                    <div class="col-sm-8 order-line-items height-400" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                        <div class="mb15"></div>
+                        <ul>
+                            <li ng-repeat="item in cartDetails track by $index">
+                                <div class="col-sm-12">
+                                    <div class="line-item-header row">
+                                        <h4 class="col-sm-5">{{item.name}}</h4>
+                                        <div class="col-sm-3">
+                                            <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input">
+                                        </div>
+                                        <p class="price col-sm-3">$ {{item.regular_price}}</p>
+                                        <div class="col-sm-1">
+                                            <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(item)">×</button>
+                                        </div>
+                                    </div>
+                                    <p if="item.description">
+                                        {{item.description}}
+                                    </p>
+                                    <div class="col-sm-12 row" ng-if="item.variation">
+                                        <ul class="variations">
+                                            <li style="display:inline-block" ng-repeat="attribute in item.attributes">{{attribute.name}}: {{attribute.option}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </li>
+                        </ul>
+                        <div ng-if="cartDetails.length <= 0">
+                            <div class="empty-cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <h2>No Items Added to the cart</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 gray-bg order-summary">
+                       <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                    </div>
+                </div>
+                <div class="row billing-shipping" ng-hide="checkoutModalState !== 2">
+                    <div class="col-sm-8 information">
+                        <ul class="nav nav-tabs hidden">
+                            <li class="active">
+                                <a href="#billing" data-toggle="tab">
+                                    <strong>Billing</strong>
+                                </a>
+                            </li>
+                            <li class="shipping-tab hidden">
+                                <a href="#shipping" data-toggle="tab">
+                                    <strong>Shipping</strong>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content mb30">
+                            <div class="tab-pane active" id="billing">
+                                <div class="checkbox hidden">
+                                    <label>
+                                        <input type="checkbox" value="true" checked>Shipping same as billing information
+                                    </label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="firstName">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" ng-model="newContact.first">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="lastName">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" ng-model="newContact.last">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="email">Email</label>
+                                            <input type="text" class="form-control" id="email" ng-model="newContact.details[0].emails[0].email">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="address">Address</label>
+                                            <input type="text" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label" for="city">City</label>
+                                            <input type="text" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="control-label" for="state">State</label>
+                                            <input type="text" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="zipCode">Zip Code</label>
+                                            <input type="text" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="phone">Phone</label>
+                                            <input type="text" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane hidden" id="shipping">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="firstName">First Name</label>
+                                            <input type="text" class="form-control" id="firstName">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="lastName">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="address">Address</label>
+                                            <input type="text" class="form-control" id="address">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label class="control-label" for="city">City</label>
+                                            <input type="text" class="form-control" id="city">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label class="control-label" for="state">State</label>
+                                            <input type="text" class="form-control" id="state">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="zipCode">Zip Code</label>
+                                            <input type="text" class="form-control" id="zipCode">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="phone">Phone</label>
+                                            <input type="text" class="form-control" id="phone">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 gray-bg order-summary">
+                        <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                    </div>
+                </div>
+                <div class="row payment" ng-hide="checkoutModalState !== 3">
+                    <div class="col-sm-8 information">
+                        <div class="clearfix margin-bottom-30"></div>
+                        <div class="card-wrapper"></div>
+                        <div class="clearfix margin-bottom-30"></div>
+                        <div class="active col-xs-12">
+                            <form name="product-card-details" action="">
+                                <div class="row">
+                                    <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
+                                        <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control">
+                                        <span class="glyphicon form-control-feedback"></span>
+                                        <span class="error help-block" />
+                                    </div>
+                                    <div class="visible-xs mb20"></div>
+                                    <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
+                                        <input placeholder="Full name" type="text" id="name" name="name" class="form-control">
+                                        <span class="glyphicon form-control-feedback"></span>
+                                        <span class="error help-block" />
+                                    </div>
+                                </div>
+                                <div class="clearfix mb20"></div>
+                                <div class="row">
+                                    <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
+                                        <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
+                                        <span class="glyphicon form-control-feedback"></span>
+                                        <span class="error help-block" />
+                                    </div>
+                                    <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
+                                        <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control">
+                                        <span class="glyphicon form-control-feedback"></span>
+                                        <span class="error help-block" />
+                                    </div>
+                                </div>
+                                <div class="clearfix mb20"></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 gray-bg order-summary">
+                        <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                    </div>
+                </div>
+                <div class="row thank-you" ng-hide="checkoutModalState !== 4">
+                    <h3 class="center mb20">Thank You For you Purchase</h3>
+                    <p class="center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam maiores, iure quo blanditiis alias asperiores. Quis, veniam unde illum adipisci reiciendis qui, libero est facere et vitae perferendis iusto deserunt, animi omnis saepe ipsa placeat quibusdam tenetur sint fuga consequuntur quisquam sapiente! Sapiente repellendus optio, libero quaerat mollitia magnam, voluptatem.</p>
+                    <div class="clearfix mb30"></div>
+                    <div class="col-xs-12">
+                        <button class="btn btn-lg btn-orange">View Order</button>
+                    </div>
+                    <div class="clearfix mb30"></div>
+                    <p class="center">Stay Connected</p>
+                    <div class="clearfix mb30"></div>
+                    <ul class="social-connected">
+                        <li>
+                            <i class="fa fa-facebook"></i>
+                        </li>
+                        <li><i class="fa fa-twitter"></i>
+                        </li>
+                        <li><i class="fa fa-google-plus"></i>
+                        </li>
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
+                <button class="btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                <button class="btn btn-info continue-shopping pull-left" ng-click="checkoutModalState = 2"><i class="fa fa-chevron-left"></i> Back
+                </button>
+            </div>
+            <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
+                <button class="btn btn-success btn-payment pull-right" ng-click="checkoutModalState = 3"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
+                <button class="btn pull-left btn-info back-to-shopping-cart" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Back
+                </button>
+            </div>
+            <div class="modal-footer payment-footer" ng-hide="checkoutModalState !== 1">
+                <button class="btn btn-success btn-confirm-payment pull-right" ng-click="checkoutModalState = 2"> Basic Info <i class="fa fa-chevron-right"></i>
+                </button>
+                <button class="btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Continue Shopping
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

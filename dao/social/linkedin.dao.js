@@ -60,7 +60,7 @@ var dao = {
         } else {
             fn($$.u.errors._401_INVALID_CREDENTIALS, "No LinkedIn credentials found");
             self = fn = user = null;
-            retun;
+            return;
         }
     },
 
@@ -590,9 +590,9 @@ var dao = {
             if (max != null) {
                 path += "&count=" + max;
             }
-            if (updated != null) {
-                path += "&modified-since=" + updated;
-            }
+            //if (updated != null) {
+            //    path += "&modified-since=" + updated;
+            //}
 
             var url = self._generateUrl(path, accessToken);
 
@@ -675,7 +675,7 @@ var dao = {
                 return fn(err, value);
             }
 
-            linkedInBaggage.contacts.updated = new Date().getTime();
+            //linkedInBaggage.contacts.updated = new Date().getTime();
 
             var linkedInId = socialAccountId;
             //filter out any bogus values that LinkedIn returns
@@ -859,21 +859,14 @@ var dao = {
                             } else {
                                 self.log.info("LinkedIn friend import succeed. " + totalImported + " imports");
                                 //Last step, save the user
-                                userDao.saveOrUpdate(user, function(err, value) {
+                                contactDao.mergeDuplicates(null, accountId, function(err, value){
                                     if(err) {
-                                        self.log.error('Error updating user: '  + err);
-                                        return fn(null);
+                                        self.log.error('Error occurred during duplicate merge: ' + err);
+                                        fn(null);
+                                    } else {
+                                        self.log.info('Duplicate merge successful.');
+                                        fn(null);
                                     }
-                                    self.log.info('User updated. Merging duplicates.');
-                                    contactDao.mergeDuplicates(null, accountId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error occurred during duplicate merge: ' + err);
-                                            fn(null);
-                                        } else {
-                                            self.log.info('Duplicate merge successful.');
-                                            fn(null);
-                                        }
-                                    });
                                 });
                             }
                         });

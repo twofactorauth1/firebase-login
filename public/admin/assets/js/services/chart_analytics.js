@@ -519,8 +519,7 @@
         this.runReports = function(date, account, fn) {
 
             var self = this;
-            var hostname = 'indigenous.io';
-            //window.location.hostname
+            var hostname = window.location.hostname;
             if (account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
             }
@@ -554,8 +553,7 @@
         this.runPagedReports = function(date, account, fn) {
             var self = this;
             var filters = [];
-            var hostname = 'www.indigenous.io';
-            //window.location.hostname
+            var hostname = window.location.hostname;
             if (account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
             }

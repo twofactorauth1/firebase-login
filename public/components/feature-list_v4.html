@@ -8,7 +8,7 @@
 
     <div class="row features-wrap">
         <div ng-repeat="feature in component.features track by $index"  class="feature" data-index="{{$index}}">
-            <div class="row row-xs-height" class="feature-single">
+            <div class="row row-xs-height feature-single" ng-style="{&#39;background&#39;: component.blockbgcolor}">
                 <div class="col-sm-3 col-xs-3 col-xs-height">
                     <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
                     </div>

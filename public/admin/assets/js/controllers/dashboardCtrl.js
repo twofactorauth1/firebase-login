@@ -1,243 +1,293 @@
 'use strict';
-/**
- * controllers used for the dashboard
- */
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", function($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService) {
+/*global app, moment*/
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter) {
 
-    $scope.myPagingFunction = function() {
-        console.log('paging');
-    };
+  $scope.myPagingFunction = function () {
+    console.log('paging');
+  };
 
-    /*
-     * @isSameDateAs
-     * - determine if two dates are identical and return boolean
-     */
+  /*
+   * @isSameDateAs
+   * - determine if two dates are identical and return boolean
+   */
 
-    $scope.isSameDateAs = function(oDate, pDate) {
-        return (
-            oDate.getFullYear() === pDate.getFullYear() &&
-            oDate.getMonth() === pDate.getMonth() &&
-            oDate.getDate() === pDate.getDate()
-        );
-    };
+  $scope.isSameDateAs = function (oDate, pDate) {
+    return (
+      oDate.getFullYear() === pDate.getFullYear() &&
+      oDate.getMonth() === pDate.getMonth() &&
+      oDate.getDate() === pDate.getDate()
+    );
+  };
 
-    /*
-     * @getDaysThisMonth
-     * - get an array of days this month for loop purposes
-     */
+  /*
+   * @getDaysThisMonth
+   * - get an array of days this month for loop purposes
+   */
 
-    $scope.getDaysThisMonth = function() {
-        var newDate = new Date();
-        var numOfDays = newDate.getDate();
-        var days = [];
+  $scope.getDaysThisMonth = function () {
+    var newDate = new Date();
+    var numOfDays = newDate.getDate();
+    var days = [];
+    var i = 0;
+    for (i; i <= numOfDays; i++) {
+      days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
+    }
 
-        for (var i = 0; i <= numOfDays; i++) {
-            days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
+    return days;
+  };
+
+  CustomerService.getCustomers(function (customers) {
+    CustomerService.getAllCustomerActivities(function (activities) {
+      $scope.activities = activities.results;
+      _.each($scope.activities, function (activity) {
+        var matchingCustomer = _.findWhere(customers, {
+          _id: activity.contactId
+        });
+        activity.customer = matchingCustomer;
+      });
+    });
+  });
+
+  /*
+   * @getOrders
+   * - get orders for orders widget
+   */
+
+  OrderService.getOrders(function (orders) {
+    $scope.orders = orders;
+    $scope.ordersThisMonth = [];
+    var tempData = [];
+    _.each($scope.getDaysThisMonth(), function (day) {
+      var thisDaysOrders = 0;
+      _.each(orders, function (order) {
+        if (order.created.date) {
+          if ($scope.isSameDateAs(new Date(order.created.date), new Date(day))) {
+            $scope.ordersThisMonth.push(order);
+            thisDaysOrders = thisDaysOrders + 1;
+          }
         }
+      });
 
-        return days;
-    };
+      tempData.push(thisDaysOrders);
+    });
+    $scope.analyticsOrders = tempData;
+  });
 
-    CustomerService.getCustomers(function(customers) {
-        CustomerService.getAllCustomerActivities(function(activities) {
-            $scope.activities = activities.results;
-            _.each($scope.activities, function(activity) {
-                var matchingCustomer = _.findWhere(customers, {
-                    _id: activity.contactId
-                });
-                activity.customer = matchingCustomer;
-            });
-        });
+  /*
+   * @getCompletedOrders
+   * - get the number of compled orders this month
+   */
+
+  $scope.getCompletedOrders = function () {
+    var completedOrders = [];
+    _.each($scope.ordersThisMonth, function (order) {
+      if (order.status === 'completed') {
+        completedOrders.push(order);
+      }
     });
 
-    /*
-     * @getOrders
-     * - get orders for orders widget
-     */
+    return completedOrders.length;
+  };
 
-    OrderService.getOrders(function(orders) {
-        $scope.orders = orders;
-        $scope.ordersThisMonth = [];
-        var tempData = [];
-        _.each($scope.getDaysThisMonth(), function(day, index) {
-            var thisDaysOrders = 0;
-            _.each(orders, function(order) {
-                if (order.created.date) {
-                    if ($scope.isSameDateAs(new Date(order.created.date), new Date(day))) {
-                        $scope.ordersThisMonth.push(order);
-                        thisDaysOrders = thisDaysOrders + 1;
-                    }
-                }
-            });
+  /*
+   * @lastCustomerDate
+   * - get the last customer date that was created
+   */
 
-            tempData.push(thisDaysOrders);
-        });
-        $scope.analyticsOrders = tempData;
+  $scope.lastCustomerDate = function () {
+    if ($scope.customersThisMonth && $scope.customersThisMonth[$scope.customersThisMonth.length - 1] && $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created) {
+      return $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created.date;
+    }
+
+  };
+
+  /*
+   * @getCustomers
+   * - get customer for the customer widget
+   */
+
+  CustomerService.getCustomers(function (customers) {
+    $scope.customers = customers;
+    $scope.customersThisMonth = [];
+    var tempData = [];
+    _.each($scope.getDaysThisMonth(), function (day) {
+      var thisDaysCustomers = 0;
+      _.each(customers, function (customer) {
+        if (customer.created.date) {
+          if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
+            $scope.customersThisMonth.push(customer);
+            thisDaysCustomers = thisDaysCustomers + 1;
+          }
+        }
+      });
+
+      tempData.push(thisDaysCustomers);
+    });
+    $scope.analyticsCustomers = tempData;
+  });
+
+  /*
+   * @getCustomerLeads
+   * - get the number of customers that have a lead tag
+   */
+
+  $scope.getCustomerLeads = function () {
+    var customerLeads = [];
+    _.each($scope.customersThisMonth, function (customer) {
+      if (customer.tags && customer.tags.length > 0) {
+        if (customer.tags.indexOf('ld') > -1) {
+          customerLeads.push(customer);
+        }
+      }
     });
 
-    /*
-     * @getCompletedOrders
-     * - get the number of compled orders this month
-     */
+    return customerLeads.length;
+  };
 
-    $scope.getCompletedOrders = function() {
-        var completedOrders = [];
-        _.each($scope.ordersThisMonth, function(order) {
-            if (order.status == 'completed') {
-                completedOrders.push(order);
-            }
+  /*
+   * @lastOrderDate
+   * - get the date of the last order created
+   */
+
+  $scope.lastOrderDate = function () {
+    if ($scope.ordersThisMonth && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1] && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created) {
+      return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date;
+    }
+  };
+
+  /*
+   * @getAccount
+   * - get user account and then run visitors report
+   */
+
+  UserService.getAccount(function (account) {
+    $scope.analyticsAccount = account;
+    $scope.runVisitorsReport();
+    $scope.runNetRevenueReport();
+  });
+
+  /*
+   * @date
+   * - start and end date for this month
+   */
+
+  $scope.date = {
+    startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
+    endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
+  };
+
+  /*
+   * @runVisitorsReport
+   * - vistor reports recieves Keen data for visitors widget
+   */
+  $scope.analyticsVisitors = [];
+  $scope.runVisitorsReport = function () {
+    ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, 'indigenous.io', function (data) {
+      var returningVisitors = data[0].result;
+      var newVisitors = data[1].result;
+
+      $scope.visitorsThisMonth = 0;
+      $scope.totalNewVisitors = 0;
+      $scope.totalReturningVisitors = 0;
+      $scope.lastVisitorDate = data[2].result[0].keen.created_at;
+      var tempData = [];
+      _.each($scope.getDaysThisMonth(), function (day) {
+        var thisDaysVisitors = 0;
+        _.each(returningVisitors, function (visitor, index) {
+          if ($scope.isSameDateAs(new Date(visitor.timeframe.start), new Date(day))) {
+            $scope.visitorsThisMonth += (visitor.value + newVisitors[index].value);
+            thisDaysVisitors += (visitor.value + newVisitors[index].value);
+            $scope.totalNewVisitors += newVisitors[index].value;
+            $scope.totalReturningVisitors += visitor.value;
+          }
         });
 
-        return completedOrders.length;
-    };
+        tempData.push(thisDaysVisitors);
+      });
 
-    /*
-     * @lastCustomerDate
-     * - get the last customer date that was created
-     */
-
-    $scope.lastCustomerDate = function() {
-        return $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created.date
-    };
-
-    /*
-     * @getCustomers
-     * - get customer for the customer widget
-     */
-
-    CustomerService.getCustomers(function(customers) {
-        $scope.customers = customers;
-        $scope.customersThisMonth = [];
-        var tempData = [];
-        _.each($scope.getDaysThisMonth(), function(day, index) {
-            var thisDaysCustomers = 0;
-            _.each(customers, function(customer) {
-                if (customer.created.date) {
-                    if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
-                        $scope.customersThisMonth.push(customer);
-                        thisDaysCustomers = thisDaysCustomers + 1;
-                    }
-                }
-            });
-
-            tempData.push(thisDaysCustomers);
-        });
-        $scope.analyticsCustomers = tempData;
+      $scope.$apply(function () {
+        $scope.analyticsVisitors = tempData;
+      });
     });
+  };
 
-    /*
-     * @getCustomerLeads
-     * - get the number of customers that have a lead tag
-     */
+  /*
+   * @runNetRevenueReport
+   * - get net revenue data from Keen for dashboard widget
+   */
 
-    $scope.getCustomerLeads = function() {
-        var customerLeads = [];
-        _.each($scope.customersThisMonth, function(customer) {
-            if (customer.tags && customer.tags.length > 0) {
-                if (customer.tags.indexOf('ld')) {
-                    customerLeads.push(customer);
-                }
-            }
+  $scope.runNetRevenueReport = function () {
+    ChartCommerceService.runNetRevenuReport(function (revenueData) {
+      var revenue = revenueData[0].result;
+      $scope.charges = revenueData[1].result;
+      if (revenueData[2].result.length > 0) {
+        $scope.lastChargeDate = revenueData[2].result[0].keen.created_at;
+      }
+      $scope.revenueThisMonth = 0;
+      var tempData = [];
+      _.each($scope.getDaysThisMonth(), function (day) {
+        var thisDaysRevenue = 0;
+        _.each(revenue, function (rev) {
+          if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
+            $scope.revenueThisMonth += rev.value;
+            thisDaysRevenue += rev.value;
+          }
         });
 
-        return customerLeads.length;
-    };
+        tempData.push(thisDaysRevenue);
+      });
 
-    /*
-     * @lastOrderDate
-     * - get the date of the last order created
-     */
-
-    $scope.lastOrderDate = function() {
-        return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date
-    };
-
-    /*
-     * @getAccount
-     * - get user account and then run visitors report
-     */
-
-    UserService.getAccount(function(account) {
-        $scope.analyticsAccount = account;
-        $scope.runVisitorsReport();
-        $scope.runNetRevenueReport();
+      $scope.$apply(function () {
+        $scope.analyticsRevenue = tempData;
+      });
     });
+  };
 
-    /*
-     * @date
-     * - start and end date for this month
-     */
+  /*
+   * @openModal
+   * -
+   */
 
-    $scope.date = {
-        startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
-        endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
-    };
+  $scope.openModal = function (modal) {
+    $scope.modalInstance = $modal.open({
+      templateUrl: modal,
+      scope: $scope
+    });
+  };
 
-    /*
-     * @runVisitorsReport
-     * - vistor reports recieves Keen data for visitors widget
-     */
-    $scope.analyticsVisitors = [];
-    $scope.runVisitorsReport = function() {
-        ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, 'indigenous.io', function(data) {
-            var returningVisitors = data[0].result;
-            var newVisitors = data[1].result;
+  /*
+   * @closeModal
+   * -
+   */
 
-            $scope.visitorsThisMonth = 0;
-            $scope.totalNewVisitors = 0;
-            $scope.totalReturningVisitors = 0;
-            $scope.lastVisitorDate = data[2].result[0].keen.created_at;
-            var tempData = [];
-            _.each($scope.getDaysThisMonth(), function(day, index) {
-                var thisDaysVisitors = 0;
-                _.each(returningVisitors, function(visitor, index) {
-                    if ($scope.isSameDateAs(new Date(visitor.timeframe.start), new Date(day))) {
-                        $scope.visitorsThisMonth += (visitor.value + newVisitors[index].value);
-                        thisDaysVisitors += (visitor.value + newVisitors[index].value);
-                        $scope.totalNewVisitors += newVisitors[index].value;
-                        $scope.totalReturningVisitors += visitor.value;
-                    }
-                });
+  $scope.closeModal = function () {
+    $scope.modalInstance.close();
+  };
 
-                tempData.push(thisDaysVisitors);
-            });
+  $scope.newActivity = {
+    start: new Date(),
+    end: new Date()
+  };
+  //$scope.all_activities = angular.copy($scope.activities);
+  $scope.addActivityFn = function () {
+    CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
+      $scope.activities.push(activity);
+      $scope.activities = _.sortBy($scope.activities, function (o) {
+        return o.start;
+      }).reverse();
+      $scope.newActivity = {
+        start: new Date(),
+        end: new Date()
+      };
+      if (!angular.isDefined($scope.activity_type)) {
+        $scope.activity_type = '';
+      }
+      $scope.activities = $filter('filter')($scope.activities, {
+        activityType: $scope.activity_type
+      });
+      $scope.total = $scope.activities.length;
 
-            $scope.$apply(function() {
-                $scope.analyticsVisitors = tempData;
-            });
-        });
-    };
-
-    /*
-     * @runNetRevenueReport
-     * - get net revenue data from Keen for dashboard widget
-     */
-
-    $scope.runNetRevenueReport = function() {
-        ChartCommerceService.runNetRevenuReport(function(revenueData) {
-            var revenue = revenueData[0].result;
-            $scope.charges = revenueData[1].result;
-            if (revenueData[2].result.length > 0) {
-                $scope.lastChargeDate = revenueData[2].result[0].keen.created_at;
-            }
-            $scope.revenueThisMonth = 0;
-            var tempData = [];
-            _.each($scope.getDaysThisMonth(), function(day, index) {
-                var thisDaysRevenue = 0;
-                _.each(revenue, function(rev) {
-                    if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
-                        $scope.revenueThisMonth += rev.value;
-                        thisDaysRevenue += rev.value;
-                    }
-                });
-
-                tempData.push(thisDaysRevenue);
-            });
-
-            $scope.$apply(function() {
-                $scope.analyticsRevenue = tempData;
-            });
-        });
-    };
-
+      $scope.closeModal('addActivityModal');
+    });
+  };
 }]);

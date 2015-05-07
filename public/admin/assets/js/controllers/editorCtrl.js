@@ -3,7 +3,7 @@
  * controller for editor
  */
 (function(angular) {
-    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService) {
+    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService) {
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -147,11 +147,22 @@
         };
 
         /*
-         * @window:scroll
-         * - when the window is scrolled in the admin, ud
-         */
+         * @window height
+        */
 
-        angular.element(window).scroll(function() {
+        $scope.calculateWindowHeight = function()
+        { 
+           var scrollTop = $(document).scrollTop();
+           var winHeight = $(document).height();
+           return scrollTop//winHeight - scrollTop;
+        }
+
+        /*
+         * @set top of editor and maintoolbar
+        */
+
+        $scope.setToolbarsTop = function()
+        {
             var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
             var mainToolbar = angular.element("#page-actions");
             var scrollTop = $(document).scrollTop();
@@ -159,9 +170,13 @@
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
             if (scrollTop > offsetHeight) {
+
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
+                if($(document).width() <= 990) {
+                    scrollTop = scrollTop + 65;
+                }
                 mainToolbar.css({
                     'top': scrollTop,
                     'position': 'absolute',
@@ -177,7 +192,26 @@
                     'position': 'relative'
                 });
             }
+                var postSettingsModal = angular.element("#iframe-website").contents().find("#component-setting-modal");
+                //var scrollTop = $(document).scrollTop(); 
+                //var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");       
+                //var toolBarTop = editorToolbar.offset().top;
+                if(postSettingsModal.length)
+                    postSettingsModal.css({
+                        'top': editorToolbar.offset().top + editorToolbar.height()
+                    });
+        }
+
+        /*
+         * @window:scroll
+         * - when the window is scrolled in the admin, ud
+         */
+
+        angular.element(window).scroll(function() {
+            $scope.setToolbarsTop();
         });
+
+
 
 
         /*
@@ -520,8 +554,18 @@
                     if (e.currentTarget.attributes['tab-active'] && e.currentTarget.attributes['tab-active'].value === "address")
                         $scope.tabs.address = true;
                     $scope.editComponent(e.currentTarget.attributes['data-id'].value);
-                    if ($(e.currentTarget).hasClass("single-post-settings"))
-                        $("#iframe-website").contents().find('#component-setting-modal').modal('show');
+                    if ($(e.currentTarget).hasClass("single-post-settings"))                       
+                     {
+                        //$("#iframe-website").contents().find('#component-setting-modal').modal('show');
+                        var postSettingsModal = angular.element("#iframe-website").contents().find("#component-setting-modal");
+                        var scrollTop = $(document).scrollTop(); 
+                        var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");       
+                        
+                        postSettingsModal.css({
+                            'top': editorToolbar.offset().top + editorToolbar.height()
+                        });
+                        postSettingsModal.modal('show');
+                    }
                     //iFrame.co .openModal('single-post-settings-modal');
                     else {
                         $scope.openModal('component-settings-modal');
@@ -651,6 +695,7 @@
 
         w.bind('resize', function() {
             $scope.resizeIframe();
+            $scope.setToolbarsTop();
         });
 
         $scope.resizeIframe = function() {
@@ -660,7 +705,10 @@
                 //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70) + "px";
+                        //$scope.iframeHeight = ($("#iframe-website").contents().find("body").height() - 70) + "px";
+                        $scope.iframeHeight = (angular.element(window).height() - 100) + "px";
+                        var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
+                        //$scope.iframeHeight = (angular.element(window).height() - (editorToolbar.offset().top + editorToolbar.height())) + "px"
                     });
                 }, 100);
             }
@@ -1073,6 +1121,7 @@
                         _id: componentId
                     });
 
+                    
                     //get all the editable variables and replace the ones in view with variables in DB
                     var componentEditable = editedPageComponents[i].querySelectorAll('.editable');
                     if (componentEditable.length >= 1) {
@@ -1154,6 +1203,19 @@
                     var matchedComponent = _.findWhere($scope.currentPage.components, {
                         _id: componentIdArr[i]
                     });
+                    if(matchedComponent.type === "single-post")
+                    {
+                        var post_tags = angular.copy($scope.childScope.blog.post.post_tags);
+                        if(post_tags)
+                        {
+                           post_tags.forEach(function(v, i) {
+                            if (v.text)
+                                post_tags[i] = v.text;
+                            });
+                            matchedComponent.post_tags = post_tags;
+                        }
+                        matchedComponent.publish_date = $scope.childScope.blog.post.publish_date;                        
+                    }
                     newComponentOrder.push(matchedComponent);
                 };
 
@@ -1198,7 +1260,14 @@
                         {
                             window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
                         }
-
+                        //Update linked list                        
+                        $scope.website.linkLists.forEach(function(value, index) {
+                          if(value.handle === "head-menu") {
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                console.log('Updated linked list');    
+                            });
+                          }
+                        }); 
                     });
                     var data = {
                         _id: $scope.website._id,
@@ -1251,7 +1320,7 @@
 
             that.originalCurrentPageComponents = $scope.currentPage.components;
             $scope.originalCurrentPage = angular.copy($scope.currentPage);
-
+            
             WebsiteService.getPages(function(pages) {
                 var currentPage = $scope.pageSelected;
                 var parsed = angular.fromJson(pages);
@@ -1294,7 +1363,7 @@
 
         $scope.addFeatureList = function() {
             $scope.componentEditing.features.push({
-                "top": "<div style='text-align:center'><span tabindex=\"-1\" contenteditable=\"false\" data-cke-widget-wrapper=\"1\" data-cke-filter=\"off\" class=\"cke_widget_wrapper cke_widget_inline\" data-cke-display-name=\"span\" data-cke-widget-id=\"0\"><span class=\"fa fa-arrow-right  \" data-cke-widget-keep-attr=\"0\" data-widget=\"FontAwesome\" data-cke-widget-data=\"%7B%22class%22%3A%22fa%20fa-arrow-right%20%20%22%2C%22color%22%3A%22%230061a7%22%2C%22size%22%3A%2296%22%2C%22classes%22%3A%7B%22fa-android%22%3A1%2C%22fa%22%3A1%7D%2C%22flippedRotation%22%3A%22%22%7D\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
+                "top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
                 "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
             });
             $scope.saveComponent();
@@ -1378,6 +1447,15 @@
                 });
                 if (navigationType) {
                     toaster.pop('error', "Navbar header already exists");
+                    return;
+                }
+            }
+            if (addedType.type === 'single-post') {
+                var navigationType = _.findWhere($scope.currentPage.components, {
+                    type: addedType
+                });
+                if (navigationType) {
+                    toaster.pop('error', "Single post component already exists");
                     return;
                 }
             }
@@ -1559,6 +1637,24 @@
                 }
             }
             $scope.currentPage.components = $scope.components;
+            if($scope.componentEditing.type === 'navigation')
+            {
+            $scope.website.linkLists = $scope.backup["website"].linkLists;
+            if ($scope.componentEditing.customnav) {
+                $scope.website.linkLists.forEach(function(value, index) {
+                if (value.handle === "head-menu") {
+                    $scope.saveCustomComponent();
+                }
+                });
+            } else {
+                $scope.website.linkLists.forEach(function(value, index) {
+                if (value.handle === "head-menu") {
+                    $scope.childScope.updateWebsite($scope.website);
+                }
+                });
+            }
+            }
+            
             $scope.updateIframeComponents();
             $scope.activateCKEditor();
             $scope.closeModal();
@@ -2072,10 +2168,7 @@
                             };
                             if (newLinkListOrder.length) {
                                 $scope.website.linkLists[index].links = newLinkListOrder;
-                                WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                    $scope.childScope.updateWebsite($scope.website);
-                                    //toaster.pop('success', "Navigation updated successfully.");
-                                });
+                                $scope.childScope.updateWebsite($scope.website);
                             }
 
                         }
@@ -2095,10 +2188,7 @@
                     $scope.website.linkLists.forEach(function(value, index) {
                         if (value.handle === "head-menu") {
                             $scope.website.linkLists[index].links = [];
-                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                $scope.childScope.updateWebsite($scope.website);
-                                //toaster.pop('success', "Navigation updated successfully.");
-                            });
+                            $scope.childScope.updateWebsite($scope.website);
                         }
                     });
                 }
@@ -2478,13 +2568,16 @@
          * -
          */
 
-        $scope.showToaster = function(value, toast, msg, redirect) {
+        $scope.showToaster = function(value, toast, msg, post, redirect) {
             $scope.saveLoading = value;
             if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
+                    $scope.post_data = $scope.childScope.getPostData();
                     if (redirect)
                         $location.path("/website/posts");
+                    else
+                       $scope.post_data = post;
                 })
         };
 
@@ -2581,6 +2674,71 @@
             //update single component
             return $scope.updateSingleComponent(componentId);
         };
+
+        /*
+         * @Media button click
+         * -
+         */
+
+        $scope.insertMediaOnClick = function(componentId) {
+            var editor = $scope.childScope.getActiveEditor();
+            $scope.clickImageButton(editor, false);
+        };
+
+        /*
+         * @getProducts
+         * - get a list of products
+         */
+
+         $scope.availableProductTags = [];
+
+         ProductService.getProducts(function (products) {
+            _.each(products, function(product) {
+                if (product.tags && product.tags.length > 0) {
+                    _.each(product.tags, function(tag) {
+                        $scope.availableProductTags.push(tag);
+                    });
+                }
+            });
+          $scope.products = products;
+        });
+
+        /*
+         * @numberOfProductOptions
+         * - list of product options for the dropdown in component settings
+         */
+
+        $scope.numberOfProductOptions = [
+          {
+            name: 'All',
+            value: 'Infinity'
+          }, {
+            name: '1',
+            value: 1
+          }, {
+            name: '2',
+            value: 2
+          }, {
+            name: '3',
+            value: 3
+          }, {
+            name: '4',
+            value: 5
+          }, {
+            name: '5',
+            value: 5
+          }, {
+            name: '10',
+            value: 10
+          }, {
+            name: '15',
+            value: 15
+          }, {
+            name: '20',
+            value: 20
+          }
+        ];
+
 
     }]);
 })(angular);

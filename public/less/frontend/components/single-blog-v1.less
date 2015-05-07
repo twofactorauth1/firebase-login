@@ -142,7 +142,8 @@ div[data-class="blog"] {
 }
 
 #component-setting-modal{
-    top: 10%;
+    z-index: 999 !important;
+    
     .nav.nav-tabs
     {
         margin-top:0px !important;
@@ -165,6 +166,8 @@ div[data-class="blog"] {
 }
 .modal-body
     {
+    max-height: 250px;
+    overflow: auto;
      background-color: #fff;
     }  
 

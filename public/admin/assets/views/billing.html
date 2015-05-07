@@ -3,7 +3,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.account.BILLING">{{ mainTitle }}</h1>
+                <h1 class="mainTitle" translate="sidebar.nav.account.BILLING"></h1>
                 <span class="mainDescription">View and Manage Indigenous Software account.</span>
             </div>
             <div ncy-breadcrumb></div>
@@ -242,46 +242,6 @@
             <div class="mb20"></div>
             <div class="card-wrapper-change"></div>
             <div class="indigeweb-skeuocard" user='user' update='updateStripeIdFn' auto-close=true wrapper-div="'card-wrapper-change'"></div>
-            <!-- <div class="mb40">
-                        <div class="card-wrapper"></div>
-                    </div>
-                    <div class="active">
-                        <form name="card-details" action="">
-                            <div>
-                                <div id="card_number" class="form-group small-6 columns col-sm-6">
-                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control input-lg">
-                                    <span class="error help-block" />
-                                </div>
-                                <div class="visible-xs mb20"></div>
-                                <div id="card_name" class="form-group small-6 columns col-sm-6">
-                                    <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
-                                    <span class="error help-block" />
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div>
-                                <div id="card_expiry" class="form-group small-3 columns col-xs-6">
-                                    <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control input-lg">
-                                    <span class="error help-block" />
-                                </div>
-                                <div id="card_cvc" class="form-group small-3 columns col-xs-6">
-                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control input-lg">
-                                    <span class="error help-block" />
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </form>
-                    </div>
-                    <div id="coupon-name" class="form-group col-xs-12">
-                        <input class="form-control input-lg" type="text" ng-model="newAccount.coupon" placeholder="Coupon Code" />
-                        <span class="error" />
-                    </div>
-                    <div class="clearfix"></div>
-                    <div id="coupon-name" class="form-group col-xs-12">
-                        <a type="button" class="btn btn-primary btn-lg btn-block center" ng-click="updateStripeIdFn()"><span ng-show="isFormValid" class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Add Card</a>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="mb10"></div> -->
         </div>
     </script>
     <script type="text/ng-template" id="pay-bill-modal">

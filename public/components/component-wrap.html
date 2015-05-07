@@ -7,7 +7,7 @@
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
-<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead' && component.bg.img.undernav && allowUndernav}">
+<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead' && component.bg.img.undernav}">
 
     <div class="component {{component.type}}{{$index + 1}}" data-id="{{component._id}}" data-type="{{component.type}}">
 
@@ -45,7 +45,7 @@
                     <div class="component-inner">
 
                         <div ng-if="component.bg.color" class="bg"
-                        ng-style="{'background': component.bg.color};"
+                        ng-style="{'background': component.bg.color}"
                             ></div>
 
                         <div ng-if="component.bg.img.show && component.type == 'masthead'"
@@ -54,10 +54,10 @@
                             {{component.bg.img.parallax ? parallax-background : ""}}
                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
-                                background: url("{{component.bg.img.url}}") no-repeat fixed;
+                                background: url("{{component.bg.img.url}}") fixed;
                                 background-size: cover;
-                                background-position: {{component.bg.img.position}} center;
-                                background: {{component.bg.img.url}};'>
+                                background-repeat: no-repeat;
+                                background-position: {{component.bg.img.position}};'>
                         </div>
                         <div ng-if="component.bg.img.show && component.type != 'masthead'"
                             class="bg"
