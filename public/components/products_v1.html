@@ -142,12 +142,14 @@
                                     </div>
                                     <div>
                                         <div class="col-sm-6">
-                                            <div class="form-group" ng-class="{ 'has-error' : newContact.first.$invalid && !newContact.first.$pristine }">
-                                                <label>First Name</label>
-                                                <input type="text" name="firstname" placeholder="First Name" class="form-control" ng-model="newContact.first" required>
-                                                <p ng-show="newContact.first.$invalid && !newContact.first.$pristine" class="help-block">First name is required.</p>
+                                            <div class="form-group has-feedback">
+                                                <label class="control-label" for="firstName">First Name</label>
+                                                <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst()">
+                                                <span class="form-control-feedback"></span>
+                                                <span class="error help-block" />
                                             </div>
                                         </div>
+
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="lastName">Last Name</label>
@@ -325,7 +327,7 @@
                     </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
-                    <button class="btn btn-success btn-payment pull-right" ng-click="validateBasicInfo()"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
+                    <button class="btn btn-success btn-payment pull-right" ng-click="checkoutModalState = 3"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
                     <button class="btn pull-left btn-info back-to-shopping-cart" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>

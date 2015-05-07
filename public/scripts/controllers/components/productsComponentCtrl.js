@@ -183,7 +183,10 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       }
     };
 
-    $scope.validateBasicInfo = function(isValid) {
+    $scope.basicInfo = {};
+
+    $scope.validateBasicInfo = function() {
+      console.log('validateBasicInfo >>> ', $scope.basicInfo);
 
       // check to make sure the form is completely valid
       if (isValid) { 
