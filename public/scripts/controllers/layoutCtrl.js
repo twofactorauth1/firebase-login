@@ -716,7 +716,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
             CKEDITOR.disableAutoInline = true;
             var elements = angular.element('.editable');
-            elements.each(function() {
+            elements.each(function(index) {
                 if (!angular.element(this).parent().hasClass('edit-wrap')) {
                     var dataClass = angular.element(this).data('class').replace('.item.', ' ');
                     angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
@@ -725,6 +725,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     on: {
                         instanceReady: function(ev) {
                             var editor = ev.editor;
+                            if(index === 0)
+                                $scope.activeEditor = editor;
                             editor.setReadOnly(false);
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
