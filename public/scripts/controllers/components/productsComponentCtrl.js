@@ -170,6 +170,31 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       $scope.calculateTotalChargesfn();
     };
 
+    $scope.checkCardNumber = function() {
+      var card_number = angular.element('#number').val();
+      if (!card_number) {
+          angular.element("#card_number .error").html("Card Number Required");
+          angular.element("#card_number").addClass('has-error');
+          angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+      } else {
+          angular.element("#card_number .error").html("");
+          angular.element("#card_number").removeClass('has-error').addClass('has-success');
+          angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+      }
+    };
+
+    $scope.basicInfo = {};
+
+    $scope.validateBasicInfo = function() {
+      console.log('validateBasicInfo >>> ', $scope.basicInfo);
+
+      // check to make sure the form is completely valid
+      if (isValid) { 
+        alert('our form is amazing');
+        checkoutModalState = 3
+      }
+
+    };
     /*
      * @calculateTotalChargesfn
      * - calculate the total based on products in cart

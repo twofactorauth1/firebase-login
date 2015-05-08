@@ -142,11 +142,14 @@
                                     </div>
                                     <div>
                                         <div class="col-sm-6">
-                                            <div class="form-group">
+                                            <div class="form-group has-feedback">
                                                 <label class="control-label" for="firstName">First Name</label>
                                                 <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst()">
+                                                <span class="form-control-feedback"></span>
+                                                <span class="error help-block" />
                                             </div>
                                         </div>
+
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="lastName">Last Name</label>

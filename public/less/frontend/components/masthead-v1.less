@@ -1,86 +1,87 @@
 /********** MastHead **********/
-  .navbar-v2 {
+
+.navbar-v2 {
     div[data-type='masthead'] {
-       .inner-page {
-        margin-top: -210px;
-      }
-      .home-text {
-        margin-top: 200px;
-        min-height: 260px;
-      }
+        .inner-page {
+            margin-top: -210px;
+        }
+        .home-text {
+            margin-top: 200px;
+            min-height: 260px;
+        }
     }
-  }
+}
 
 .masthead .btn .fa {
-  margin-top: 8px;
+    margin-top: 8px;
 }
+
 .mt200 {
-        margin-top: -200px;
-      }
-  .masthead-v1 {
+    margin-top: -200px;
+}
+
+.cover {
+    @media (max-width: 480px) {
+        background-attachment: scroll!important;
+    }
+}
+
+.masthead-v1 {
     margin-top: 0;
-    transition:none;
+    transition: none;
     padding: 0;
     height: 100%;
     overflow: hidden;
     background-size: cover!important;
     position: relative;
-
-      h4  {
+    h4 {
         div {
-          float: left;
-          text-indent: 17px;
-          line-height: 18px;
+            float: left;
+            text-indent: 17px;
+            line-height: 18px;
         }
-      }
-
-      .masthead-subtitle {
+    }
+    .masthead-subtitle {
         max-width: 80%;
         margin: 15px auto;
-      }
-
-      .masthead-title {
+    }
+    .masthead-title {
         font-size: 32px;
         h1 {
-          font-size: 45px;
+            font-size: 45px;
         }
-      }
-
-
-      .btn {
+    }
+    .btn {
         height: 50px;
         max-width: 200px;
         display: block;
         .fa {
-          float: left;
-          margin-right: 10px;
-          margin-top: 2px;
+            float: left;
+            margin-right: 10px;
+            margin-top: 2px;
         }
-      }
-
-      .row {
+    }
+    .row {
         margin: 0;
-      }
-
-      .btn-text {
+    }
+    .btn-text {
         font-weight: bold;
         text-shadow: none;
-      }
-
-      .home-text {
+    }
+    .home-text {
         padding: 50px 30px;
         text-align: center;
-      }
-  }
+    }
+}
 
 @media (max-width: 625px) {
-  .navbar-v2 .masthead-v1 .home-text {
-    margin-top: 140px!important;
-  }
-  .masthead-v1 .masthead-subtitle {
-    max-width: 100%;
-  }
-  .navigation-v2 .navbar ul.navbar-nav li {
-    display: block;
-  }
+    .navbar-v2 .masthead-v1 .home-text {
+        margin-top: 140px!important;
+    }
+    .masthead-v1 .masthead-subtitle {
+        max-width: 100%;
+    }
+    .navigation-v2 .navbar ul.navbar-nav li {
+        display: block;
+    }
 }
