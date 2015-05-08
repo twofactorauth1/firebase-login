@@ -33,28 +33,31 @@ module.exports = {
                 log.debug('validating order');
                 //calculate total amount and number line items
                 var totalAmount = 0;
+                var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 _.each(order.get('line_items'), function(line_item){
-                    totalAmount += line_item.total;
-                    totalLineItemsQuantity += line_item.quantity;
+                    totalAmount += parseInt(line_item.total);
+                    subTotal += parseInt(line_item.total);
+                    totalLineItemsQuantity += parseInt(line_item.quantity);
                 });
                 log.debug('subtotal: ' + totalAmount);
                 if(order.get('cart_discount')) {
-                    totalAmount -= order.get('cart_discount');
+                    totalAmount -= parseInt(order.get('cart_discount'));
                     log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
                 }
                 if(order.get('total_discount')) {
-                    totalAmount -= order.get('total_discount');
+                    totalAmount -= parseInt(order.get('total_discount'));
                     log.debug('subtracting total_discount of ' + order.get('total_discount'));
                 }
                 if(order.get('total_tax')) {
-                    totalAmount += order.get('total_tax');
+                    totalAmount += parseInt(order.get('total_tax'));
                     log.debug('adding tax of ' + order.get('total_tax'));
                 }
                 if(order.get('total_shipping')) {
-                    totalAmount += order.get('total_shipping');
+                    totalAmount += parseInt(order.get('total_shipping'));
                     log.debug('adding shipping of ' + order.get('total_shipping'));
                 }
+                order.set('subTotal', subTotal);
                 order.set('total', totalAmount);
                 log.debug('total is now: ' + order.get('total'));
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
@@ -96,6 +99,7 @@ module.exports = {
                     var card = paymentDetails.card_token;
                     //total is a double but amount needs to be in cents (integer)
                     var amount = savedOrder.get('total') * 100;
+                    log.debug('amount ', savedOrder.get('total'));
                     var currency = savedOrder.get('currency');
                     var customerId = contact.get('stripeId');
                     var contactId = savedOrder.get('customer_id');

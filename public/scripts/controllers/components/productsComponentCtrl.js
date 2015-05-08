@@ -170,26 +170,35 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       $scope.calculateTotalChargesfn();
     };
 
-    $scope.checkCardNumber = function() {
-      var card_number = angular.element('#number').val();
+    $scope.checkCardNumber = function () {
+      var card_number = angular.element('#number')
+        .val();
       if (!card_number) {
-          angular.element("#card_number .error").html("Card Number Required");
-          angular.element("#card_number").addClass('has-error');
-          angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+        angular.element("#card_number .error")
+          .html("Card Number Required");
+        angular.element("#card_number")
+          .addClass('has-error');
+        angular.element("#card_number .glyphicon")
+          .addClass('glyphicon-remove');
       } else {
-          angular.element("#card_number .error").html("");
-          angular.element("#card_number").removeClass('has-error').addClass('has-success');
-          angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        angular.element("#card_number .error")
+          .html("");
+        angular.element("#card_number")
+          .removeClass('has-error')
+          .addClass('has-success');
+        angular.element("#card_number .glyphicon")
+          .removeClass('glyphicon-remove')
+          .addClass('glyphicon-ok');
       }
     };
 
     $scope.basicInfo = {};
 
-    $scope.validateBasicInfo = function() {
+    $scope.validateBasicInfo = function () {
       console.log('validateBasicInfo >>> ', $scope.basicInfo);
 
       // check to make sure the form is completely valid
-      if (isValid) { 
+      if (isValid) {
         alert('our form is amazing');
         checkoutModalState = 3
       }
@@ -265,35 +274,23 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function (data) {
         //     console.log('card details ', data);
         // });
-        console.log('$scope.newContact.first >>> ', $scope.newContact.first);
+
+        console.log('$scope.newContact.first >>> ', $scope.cartDetails);
         // Is this checking to see if the customer already exists
         UserService.postContact($scope.newContact, function (customer, err) {
-          console.log('postContact >>>');
           var order = {
             "customer_id": customer._id,
             "session_id": null,
-            "completed_at": null,
             "status": "processing",
-            "total": 0.0,
-            "cart_discount": 0.0,
-            "total_discount": 0.0,
-            "total_shipping": 0.0,
-            "total_tax": 0.0,
-            "shipping_tax": 0.0,
-            "cart_tax": 0.0,
+            "cart_discount": 0,
+            "total_discount": 0,
+            "total_shipping": 0,
+            "total_tax": parseInt($scope.totalTax).toFixed(2),
+            "shipping_tax": 0,
+            "cart_tax": 0,
             "currency": "usd",
-            "line_items": [{
-              "product_id": 31,
-              "quantity": 1,
-              "variation_id": 7,
-              "subtotal": "20.00",
-              "tax_class": null,
-              "sku": "",
-              "total": "20.00",
-              "name": "Product Name",
-              "total_tax": "0.00"
-            }],
-            "total_line_items_quantity": 0,
+            "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+            "total_line_items_quantity": $scope.cartDetails.length,
             "payment_details": {
               "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
               "method_id": 'cc', //check, cc
@@ -331,6 +328,23 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
             },
             "notes": []
           };
+
+          _.each($scope.cartDetails, function (item) {
+            var totalAmount = (parseInt(item.regular_price) * parseInt(item.quantity)).toFixed(2);
+            console.log('totalAmount >>> ', totalAmount);
+            var _item = {
+              "product_id": item._id,
+              "quantity": parseInt(item.quantity).toFixed(2),
+              "regular_price": parseInt(item.regular_price),
+              "variation_id": '',
+              "tax_class": null,
+              "sku": "",
+              "total": totalAmount,
+              "name": item.name,
+              "total_tax": "0.00"
+            };
+            order.line_items.push(_item);
+          });
 
           OrderService.createOrder(order, function (newOrder) {
             $scope.checkoutModalState = 5;

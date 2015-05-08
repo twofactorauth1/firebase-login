@@ -299,21 +299,21 @@ html
                                           tr
                                             td= val.name
                                             td(class="orderTd")= val.quantity
-                                            td(class="orderTd")= val.total
+                                            td(class="orderTd")= '$' + val.total
                                       tr
                                         td(colspan="3", class="spacer")
                                       tr
                                         td(colspan="2")
                                           strong Subtotal
-                                        td !{order.subtotal}
+                                        td $ !{order.subtotal}
                                       tr
                                         td(colspan="2")
                                           strong Tax
-                                        td !{order.total_tax}
+                                        td $ !{order.total_tax}
                                       tr
                                         td(colspan="2")
                                           strong Total
-                                        td !{order.total}
+                                        td $ !{order.total}
 
                             //- td.footerContent
                             //-   div
