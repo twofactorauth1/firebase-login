@@ -2062,6 +2062,11 @@ div[data-class='image-text'] p {
 .mt200 {
   margin-top: -200px;
 }
+@media (max-width: 480px) {
+  .cover {
+    background-attachment: scroll!important;
+  }
+}
 .masthead-v1 {
   margin-top: 0;
   transition: none;
