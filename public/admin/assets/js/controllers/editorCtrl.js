@@ -153,8 +153,7 @@
         $scope.calculateWindowHeight = function()
         { 
            var scrollTop = $(document).scrollTop();
-           var winHeight = $(document).height();
-           return scrollTop//winHeight - scrollTop;
+           return scrollTop;
         }
 
         /*
@@ -169,14 +168,23 @@
             var navbarCollapse = angular.element('header').outerHeight();
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
+            
             if (scrollTop > offsetHeight) {
 
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
-                if($(document).width() <= 990) {
-                    scrollTop = scrollTop + 65;
+
+                if($(document).width() < 768) {
+                    editorToolbar.css({
+                    'top': scrollTop + 40
+                    });
                 }
+                
+                if($(document).width() <= 990) {
+                    scrollTop = scrollTop + 65 
+                }
+                 
                 mainToolbar.css({
                     'top': scrollTop,
                     'position': 'absolute',
@@ -705,10 +713,15 @@
                 //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        //$scope.iframeHeight = ($("#iframe-website").contents().find("body").height() - 70) + "px";
-                        $scope.iframeHeight = (angular.element(window).height() - 100) + "px";
                         var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
-                        //$scope.iframeHeight = (angular.element(window).height() - (editorToolbar.offset().top + editorToolbar.height())) + "px"
+                        var incrementHeight = 0;
+                        if($(document).width() <= 990) {
+                            incrementHeight = incrementHeight + 65;
+                        }
+                        if(editorToolbar)
+                            incrementHeight = incrementHeight + editorToolbar.height();
+                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
+                        
                     });
                 }, 100);
             }
