@@ -36,29 +36,29 @@ module.exports = {
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 _.each(order.get('line_items'), function(line_item){
-                    totalAmount += parseInt(line_item.total);
-                    subTotal += parseInt(line_item.total);
-                    totalLineItemsQuantity += parseInt(line_item.quantity);
+                    totalAmount += parseFloat(line_item.total);
+                    subTotal += parseFloat(line_item.total);
+                    totalLineItemsQuantity += parseFloat(line_item.quantity);
                 });
                 log.debug('subtotal: ' + totalAmount);
                 if(order.get('cart_discount')) {
-                    totalAmount -= parseInt(order.get('cart_discount'));
+                    totalAmount -= parseFloat(order.get('cart_discount'));
                     log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
                 }
                 if(order.get('total_discount')) {
-                    totalAmount -= parseInt(order.get('total_discount'));
+                    totalAmount -= parseFloat(order.get('total_discount'));
                     log.debug('subtracting total_discount of ' + order.get('total_discount'));
                 }
                 if(order.get('total_tax')) {
-                    totalAmount += parseInt(order.get('total_tax'));
+                    totalAmount += parseFloat(order.get('total_tax'));
                     log.debug('adding tax of ' + order.get('total_tax'));
                 }
                 if(order.get('total_shipping')) {
-                    totalAmount += parseInt(order.get('total_shipping'));
+                    totalAmount += parseFloat(order.get('total_shipping'));
                     log.debug('adding shipping of ' + order.get('total_shipping'));
                 }
-                order.set('subTotal', subTotal);
-                order.set('total', totalAmount);
+                order.set('subtotal', subTotal.toFixed(2));
+                order.set('total', totalAmount.toFixed(2));
                 log.debug('total is now: ' + order.get('total'));
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
                 callback(null, order);
@@ -217,6 +217,12 @@ module.exports = {
                                 app.render('emails/base_email_order', component, function(err, html) {
                                     mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
                                         callback(null, updatedOrder);
+                                    });
+
+                                    //TODO: check for admin notification
+                                    //Send additional details
+                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
+                                        log.debug('Admin Notification Sent');
                                     });
                                 });
 
