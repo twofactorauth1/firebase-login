@@ -786,10 +786,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.deleteBlogPost = function(postId, blogpost) {
+            console.log('delete post');
             PostService.deletePost($scope.currentpage._id, postId, function(data) {
                 if (blogpost) {
                     var index = that.blogposts.indexOf(blogpost);
                     that.blogposts.splice(index, 1);
+                    $scope.parentScope.showToaster(false, true, "Post deleted successfully");
                 }
             });
         };

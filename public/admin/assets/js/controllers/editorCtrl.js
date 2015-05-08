@@ -2586,10 +2586,11 @@
             if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
-                    $scope.post_data = $scope.childScope.getPostData();
+                    if(post)
+                        $scope.post_data = $scope.childScope.getPostData();
                     if (redirect)
                         $location.path("/website/posts");
-                    else
+                    else if(post)
                        $scope.post_data = post;
                 })
         };
