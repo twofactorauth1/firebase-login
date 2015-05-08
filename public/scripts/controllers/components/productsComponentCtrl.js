@@ -283,6 +283,7 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
             "session_id": null,
             "status": "processing",
             "cart_discount": 0,
+            "subtotal": parseInt($scope.subTotal).toFixed(2),
             "total_discount": 0,
             "total_shipping": 0,
             "total_tax": parseInt($scope.totalTax).toFixed(2),
