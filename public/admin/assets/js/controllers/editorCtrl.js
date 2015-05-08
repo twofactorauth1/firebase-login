@@ -986,6 +986,25 @@
             $scope.status.isopen = !$scope.status.isopen;
         };
 
+
+        /*
+         * @checkForDuplicatePage
+         * - Check for duplicate page
+         */
+
+        $scope.checkForDuplicatePage = function()
+        {
+            WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
+            if(data && data._id)
+                {
+                    if(data._id !== $scope.currentPage._id)
+                    {
+                        toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                    }
+                }
+            })
+        }
+
         /*
          * @editPage
          * -
@@ -1271,6 +1290,8 @@
 
             }
         };
+
+        
 
         /*
          * @updatePage
