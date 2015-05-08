@@ -628,15 +628,6 @@
                             };
                         });
                 });
-
-                angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
-                    if (!$scope.activated) {
-                        $scope.activated = true;
-                        setTimeout(function() {
-                            $scope.childScope.activateCKEditor();
-                        }, 1000)
-                    }
-                });
                 angular.element("#iframe-website").contents().find('body').off("click", ".btn-social-link");
                 // Social components
                 angular.element("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
@@ -1224,14 +1215,15 @@
 
                 WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
                     //TODO: Make this check on change of page title or url in the page settings modal
-                    // if(data && data._id)
-                    // {
-                    //     if(data._id !== $scope.currentPage._id)
-                    //     {
-                    //         toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                    //         return false;
-                    //     }
-                    // }
+                    //TODO: Better way to handle this there should be check on server side itself while saving the page
+                    if(data && data._id)
+                    {
+                        if(data._id !== $scope.currentPage._id)
+                        {
+                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                            return false;
+                        }
+                    }
                     if ($scope.templateActive) {
                         $scope.template.config.components = $scope.currentPage.components;
                         WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
