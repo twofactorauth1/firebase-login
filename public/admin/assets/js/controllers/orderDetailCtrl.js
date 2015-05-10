@@ -95,13 +95,14 @@
         } else {
           $scope.order = {
             created: {
-              date: 
+              date: new Date().toISOString()
             },
             order_id: orders.length,
             status: 'pending_payment',
             line_items: [],
             notes: []
           };
+          console.log('$scope.order ', $scope.order);
         }
       });
     };
@@ -632,11 +633,11 @@
       }
 
       if ($stateParams.orderId) {
-        OrderService.updateOrder($scope.order, function(updatedOrder){
+        OrderService.updateOrder($scope.order, function (updatedOrder) {
           console.log('updatedOrder ', updatedOrder);
         });
       } else {
-        OrderService.createOrder($scope.order, function(updatedOrder){
+        OrderService.createOrder($scope.order, function (updatedOrder) {
           console.log('order updated');
         });
       }
