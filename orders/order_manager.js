@@ -547,6 +547,27 @@ module.exports = {
         });
     },
 
+    updateOrderById: function(order, fn) {
+        var self = this;
+        log.debug('>> updateOrderById');
+        dao.getById(order._id, $$.m.Order, function(err, order){
+            if(err) {
+                log.error('Error getting order: ' + err);
+                return fn(err, null);
+            } else {
+                dao.saveOrUpdate(order, function(err, updatedOrder){
+                if(err) {
+                    log.error('Error updating order: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< updateOrderById');
+                return fn(null, updatedOrder);
+            });
+
+            }
+        });
+    },
+
     listOrdersByAccount: function(accountId, fn) {
         log.debug('>> listOrdersByAccount');
         var query = {
