@@ -26,6 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
         app.get(this.url('customer/:customerid'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersByCustomer.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
+        app.post(this.url(':id/update'), this.isAuthAndSubscribedApi.bind(this), this.updateOrder.bind(this));
         app.post(this.url(':id/complete'), this.isAuthAndSubscribedApi.bind(this), this.completeOrder.bind(this));
         app.post(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelOrder.bind(this));
         app.post(this.url(':id/refund'), this.isAuthAndSubscribedApi.bind(this), this.refundOrder.bind(this));
@@ -68,6 +69,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.getOrderById(orderId, function(err, order){
                     self.log.debug('<< getOrder');
                     self.sendResultOrError(res, err, order, 'Error creating order');
+                });
+            }
+        });
+
+
+    },
+
+    updateOrder: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateOrder');
+
+        var order = req.body.order;
+        self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.updateOrderById(order, function(err, order){
+                    self.log.debug('<< updateOrder');
+                    self.sendResultOrError(res, err, order, 'Error updating order');
                 });
             }
         });

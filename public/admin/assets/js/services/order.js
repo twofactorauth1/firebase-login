@@ -45,6 +45,21 @@
                 });
         };
 
+        this.updateOrder = function(order, fn) {
+            var apiUrl = baseUrl + ['update'].join('/');
+            $http({
+                    url: apiUrl,
+                    method: "POST",
+                    data: order
+                })
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                })
+                .error(function(error) {
+                    console.error('OrderService: updateOrder error >>> ', error);
+                });
+        };
+
         this.refundOrder = function(orderId, reasonData, fn) {
             var apiUrl = baseUrl + [orderId, 'refund'].join('/');
             console.log('apiUrl ', apiUrl);

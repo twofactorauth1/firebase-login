@@ -22,10 +22,10 @@ block content
                   a(href="/reauth/#{val.id}")
                     div(class="account-logo")
                       img(src="#{val.logo}")
-                    if val.subdomain && !val.domain
-                      span=val.subdomain+ '.indigenous.io'
                     if val.domain
                       span=val.domain
+                    if !val.domain && val.subdomain
+                      span=val.subdomain+ '.indigenous.io'
                     i.fa.fa-chevron-right.pull-right
                   div.clearfix
         // start: COPYRIGHT

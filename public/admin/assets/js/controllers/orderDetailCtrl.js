@@ -77,19 +77,39 @@
      */
 
     $scope.getOrder = function () {
-      OrderService.getOrder($stateParams.orderId, function (order) {
-        //add customer obj to each note
-        // var notes = order.notes;
-        order.notes = $scope.matchUsers(order);
-        order.line_items = $scope.matchProducts(order);
-        $scope.currentStatus = order.status;
-        $scope.order = order;
-        $scope.selectedCustomer = _.find($scope.customers, function (customer) {
-          return customer._id === $scope.order.customer_id;
-        });
-        $scope.calculateTotals();
+      OrderService.getOrders(function (orders) {
+        if ($stateParams.orderId) {
+          var order = _.find(orders, function (order) {
+            return order._id === $stateParams.orderId;
+          });
+          //add customer obj to each note
+          // var notes = order.notes;
+          order.notes = $scope.matchUsers(order);
+          order.line_items = $scope.matchProducts(order);
+          $scope.currentStatus = order.status;
+          $scope.order = order;
+          $scope.selectedCustomer = _.find($scope.customers, function (customer) {
+            return customer._id === $scope.order.customer_id;
+          });
+          $scope.calculateTotals();
+        } else {
+          $scope.order = {
+            created: {
+              date: 
+            },
+            order_id: orders.length,
+            status: 'pending_payment',
+            line_items: [],
+            notes: []
+          };
+        }
       });
     };
+
+    /*
+     * @calculateTotals
+     * -
+     */
 
     $scope.calculateTotals = function () {
       console.log('calculateTotals >>>');
@@ -120,6 +140,11 @@
       $scope.calculatedTax = _total * $scope.taxPercent;
       $scope.calculatedTotal = _total * ($scope.taxPercent + 1);
     };
+
+    /*
+     * @totalWithDiscount
+     * -
+     */
 
     $scope.totalWithDiscount = function (total, discount) {
       return parseFloat(total) + parseFloat(discount);
@@ -171,7 +196,7 @@
      */
 
     $scope.matchProducts = function (order) {
-      var lineitems = order.line_items;
+      var lineitems = order.line_items || {};
       if (lineitems.length > 0) {
         _.each(lineitems, function (item) {
           var matchProduct = _.find($scope.products, function (product) {
@@ -280,7 +305,7 @@
 
     /*
      * @formatProductInput
-     * 
+     * -
      */
 
     $scope.formatProductInput = function (model) {
@@ -297,10 +322,20 @@
       return '';
     };
 
+    /*
+     * @dateOptions
+     * -
+     */
+
     $scope.dateOptions = {
       formatYear: 'yy',
       startingDay: 1
     };
+
+    /*
+     * @open
+     * -
+     */
 
     $scope.open = function ($event) {
       $event.preventDefault();
@@ -308,12 +343,24 @@
 
       $scope.opened = !$scope.opened;
     };
+
+    /*
+     * @endOpen
+     * -
+     */
+
     $scope.endOpen = function ($event) {
       $event.preventDefault();
       $event.stopPropagation();
       $scope.startOpened = false;
       $scope.endOpened = !$scope.endOpened;
     };
+
+    /*
+     * @startOpen
+     * -
+     */
+
     $scope.startOpen = function ($event) {
       $event.preventDefault();
       $event.stopPropagation();
@@ -569,6 +616,33 @@
       // if (type === 'invoice') {}
       // if (type === 'packing-slip') {}
     };
+
+    /*
+     * @saveOrder
+     * -
+     */
+
+    $scope.saveOrder = function () {
+
+      //validate
+
+      if (!$scope.order.customer_id) {
+        toaster.pop('error', 'Orders must contain a customer.');
+        return;
+      }
+
+      if ($stateParams.orderId) {
+        OrderService.updateOrder($scope.order, function(updatedOrder){
+          console.log('updatedOrder ', updatedOrder);
+        });
+      } else {
+        OrderService.createOrder($scope.order, function(updatedOrder){
+          console.log('order updated');
+        });
+      }
+    };
+
+
 
 
 
