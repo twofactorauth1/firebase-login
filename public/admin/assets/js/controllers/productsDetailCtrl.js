@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$stateParams", "ProductService", "toaster", function ($scope, $modal, $timeout, $stateParams, ProductService, toaster) {
+  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "toaster", function ($scope, $modal, $timeout, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, toaster) {
 
     /*
      * @openModal
@@ -25,10 +25,17 @@
       $scope.modalInstance.close();
     };
 
+    UserService.getUser(function (user) {
+      $scope.user = user;
+    });
+
     /*
      * @getProduct
      * - get single product based on stateparams
      */
+
+    var productPlanStatus = {};
+    var productPlanSignupFee = {};
 
     ProductService.getProduct($stateParams.productId, function (product) {
       $scope.product = product;
@@ -49,6 +56,26 @@
           'name': '',
           'file': ''
         }];
+      }
+
+      var promises = [];
+      if ($scope.product.product_attributes.stripePlans) {
+        $scope.product.product_attributes.stripePlans.forEach(function (value, index) {
+          promises.push(PaymentService.getPlanPromise(value.id));
+          productPlanStatus[value.id] = value.active;
+          productPlanSignupFee[value.id] = value.signup_fee;
+        });
+        $q.all(promises)
+          .then(function (data) {
+            data.forEach(function (value, index) {
+              value.data.active = productPlanStatus[value.data.id];
+              value.data.signup_fee = productPlanSignupFee[value.data.id];
+              $scope.plans.push(value.data);
+            });
+          })
+          .catch(function (err) {
+            console.error(err);
+          });
       }
 
       console.log('$scope.product.variations.length ', $scope.product.variations.length);
@@ -109,18 +136,16 @@
      * @insertMedia
      * - insert media function
      */
-
+    $scope.currentDownloadId = '';
     $scope.insertMedia = function (asset) {
-      $scope.product.icon = asset.url;
-    };
 
-    /*
-     * @insertDownloadFile
-     * - insert media function
-     */
+      if ($scope.currentDownloadId) {
+        console.log('download');
+      } else {
+        console.log('product image');
+        $scope.product.icon = asset.url;
+      }
 
-    $scope.insertDownloadFile = function (asset) {
-      console.log('insertDownloadFile');
     };
 
     /*
@@ -153,6 +178,21 @@
 
       $scope.product.downloads.push(tempDownload);
       toaster.pop('success', 'New download has been added.');
+    };
+
+    /*
+     * @removeDownload
+     * - remove a download
+     */
+
+    $scope.removeDownload = function (downloadId) {
+      console.log('removeDownload');
+      var _downloads = _.filter($scope.product.downloads, function (download) {
+        return download.id !== downloadId;
+      });
+
+      $scope.product.downloads = _downloads;
+      toaster.pop('warning', 'Download has been removed.');
     };
 
     /*
@@ -249,6 +289,109 @@
       cols: 5,
       placement: 'right'
     });
+
+    $scope.newSubscription = {
+      planId: CommonService.generateUniqueAlphaNumericShort()
+    };
+
+    $scope.plans = [];
+
+    $scope.addSubscriptionFn = function (newSubscription, showToaster) {
+      console.log('newSubscription ', newSubscription);
+      if ($scope.user.stripeId === undefined || $scope.user.stripeId === null || $scope.user.stripeId === '') {
+        toaster.pop('error', 'Need to add a stripe account first.');
+        $state.go('account');
+      }
+      $scope.newSubscription = newSubscription;
+
+      $scope.newSubscription.amount = $scope.newSubscription.amount * 100;
+      PaymentService.postCreatePlan($scope.newSubscription, function (subscription) {
+        subscription.signup_fee = $scope.signup_fee;
+        $scope.plans.push(subscription);
+        var price = parseInt(subscription.amount, 10);
+        if ($scope.product.product_attributes.stripePlans) {
+          $scope.product.product_attributes.stripePlans.push({
+            id: subscription.id,
+            active: true,
+            signup_fee: $scope.signup_fee,
+            price: price,
+          });
+        } else {
+          $scope.product.product_attributes.stripePlans = [{
+            id: subscription.id,
+            active: true,
+            signup_fee: $scope.signup_fee,
+            price: price,
+          }];
+        }
+
+
+        productPlanStatus[subscription.id] = true;
+        $scope.saveProductFn();
+
+        $scope.newSubscription = {
+          planId: CommonService.generateUniqueAlphaNumericShort()
+        };
+        $scope.signup_fee = null;
+        $scope.closeModal('add-subscription-modal');
+      }, showToaster);
+    };
+
+    $scope.planEditFn = function (planId) {
+      console.log('planEditFn');
+      $scope.editingPlan = true;
+      $scope.openModal('add-subscription-modal');
+      $scope.plans.forEach(function (value, index) {
+        if (value.id === planId) {
+          $scope.newSubscription = angular.copy(value);
+          $scope.newSubscription.amount = $scope.newSubscription.amount / 100;
+          $scope.newSubscription.planId = value.id;
+          $scope.signup_fee = productPlanSignupFee[value.id];
+        }
+      });
+    };
+
+    $scope.editCancelFn = function () {
+      $scope.editingPlan = false;
+      $scope.newSubscription = {
+        planId: CommonService.generateUniqueAlphaNumericShort()
+      };
+    };
+
+    $scope.planDeleteFn = function (planId, showToast, saveProduct, func) {
+      var fn = func || false;
+      PaymentService.deletePlan(planId, function () {
+        $scope.plans.forEach(function (value, index) {
+          if (value.id === planId) {
+            $scope.plans.splice(index, 1);
+          }
+        });
+
+        $scope.product.product_attributes.stripePlans.forEach(function (value, index) {
+          if (value.id === planId) {
+            $scope.product.product_attributes.stripePlans.splice(index, 1);
+          }
+        });
+
+        if (fn) {
+          fn();
+        }
+
+        if (saveProduct) {
+          $scope.saveProductFn();
+        }
+
+      }, true);
+    };
+
+    $scope.editSubscriptionFn = function (newSubscription) {
+      $scope.editingPlan = false;
+      $scope.planDeleteFn(newSubscription.planId, false, false, function () {
+        $scope.addSubscriptionFn(newSubscription, false);
+        $scope.editCancelFn();
+        toaster.pop('success', 'Plan updated.');
+      });
+    };
 
   }]);
 }(angular));

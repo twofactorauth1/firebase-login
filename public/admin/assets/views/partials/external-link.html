@@ -1,0 +1,35 @@
+<div class="col-sm-12" ng-if="product.type == 'external' && !showVariations">
+    <div class="panel panel-white">
+        <div class="panel-heading border-light">
+            <h4 class="panel-title">External Link</h4>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Link Text</label>
+                    <input class="form-control" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                </div>
+                <div class="form-group">
+                    <label>Link Url</label>
+                    <input indigeweb-validate-form-fields validation-type="url" class="form-control" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Allow Product View</label>
+                    <select class="cs-select cs-skin-elastic" ng-model="product.externalLinkAllowProductView">
+                        <option value=true>Yes</option>
+                        <option value=false>No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Open In</label>
+                    <select class="cs-select cs-skin-elastic" ng-model="product.externalLinkOpenIn">
+                        <option value='new'>New Window</option>
+                        <option value='same'>Same Window</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

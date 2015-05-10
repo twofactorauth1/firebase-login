@@ -1,0 +1,82 @@
+<div class="col-sm-12" ng-if="product.type == 'subscription' && !showVariations">
+    <div class="panel panel-white">
+        <div class="panel-heading border-light">
+            <h4 class="panel-title">Subscriptions</h4>
+            <ul class="panel-heading-tabs border-light">
+                <li>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-wide btn-o btn-info" ng-click="openModal('add-subscription-modal')">Add Subscription</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-body">
+            <table class="table table-primary margin-bottom-0">
+                <thead>
+                    <tr class="ng-scope">
+                        <th>Active</th>
+                        <th>Name</th>
+                        <th class="center">Interval</th>
+                        <th class="center">Amount</th>
+                        <th class="center">Sign Up Fee</th>
+                        <th class="center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr class="ng-scope">
+                        <td>
+                            <div class="checkbox" style="margin:0">
+                                <span class="green switch green checked ng-valid ng-click-active" ng-click="showVariations=!showVariations" ng-class="{ checked:showVariations }" ng-model="showVariations" ng-init="showVariations = true"><small></small><input type="checkbox" ng-model="showVariations" style="display:none" class="ng-pristine ng-untouched ng-valid"><span class="switch-text"> </span></span>
+                            </div>
+                        </td>
+                        <td class="ng-binding">Indigenous Monthly</td>
+                        <td class="center">1</td>
+                        <td class="center">$49.95</td>
+                        <td class="center">500</td>
+                        <td class="center">
+                            <div class="visible-md visible-lg hidden-sm hidden-xs">
+                                <a href="#" class="btn btn-transparent btn-xs" tooltip-placement="top" tooltip="Edit"><i class="fa fa-pencil"></i></a>
+                                <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Share"><i class="fa fa-share"></i></a>
+                                <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                            </div>
+                            <div class="visible-xs visible-sm hidden-md hidden-lg">
+                                <div class="btn-group" dropdown="" is-open="status.isopen">
+                                    <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right dropdown-light" role="menu">
+                                        <li>
+                                            <a href="#">Edit</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Remove</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr> -->
+                    <tr ng-if="!plans || plans.length <= 0">
+                        <td colspan="6">
+                            <h4 class="text-center margin-top-30 margin-bottom-30">No Subscriptions</h4>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="plan in plans">
+                        <td>
+                            <input bs-switch ng-model="plan.active" type="checkbox" ng-change="planToggleActiveFn(plan.id, plan.active)">
+                        </td>
+                        <td>{{plan.name}}</td>
+                        <td>{{plan.interval_count}}</td>
+                        <td>${{(plan.amount/100).toFixed(2)}}</td>
+                        <td>{{plan.signup_fee}}</td>
+                        <td class="table-action">
+                            <a ng-click="planEditFn(plan.id)"><i class="fa fa-pencil"></i></a>
+                            <a ng-click="planDeleteFn(plan.id, true, true)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div data-ng-include=" 'assets/views/partials/add-subscription-modal.html' "></div>
+</div>

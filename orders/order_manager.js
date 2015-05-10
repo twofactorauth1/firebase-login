@@ -87,7 +87,16 @@ module.exports = {
                         log.error('Could not find contact for id: ' + savedOrder.get('customer_id'));
                         callback('contact not found');
                     } else {
-                        callback(null, savedOrder, contact);
+
+                        //set order_id based on orders length for the account
+                        var query = {
+                            account_id: savedOrder.get('account_id')
+                        };
+
+                        dao.findMany(query, $$.m.Order, function(err, orders){
+                            savedOrder.set('order_id', orders.length);
+                            callback(null, savedOrder, contact);
+                        });
                     }
                 });
             },

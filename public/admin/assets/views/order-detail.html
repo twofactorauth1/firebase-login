@@ -3,14 +3,14 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">Order #: {{ order._id }}</h1>
+                <h1 class="mainTitle">Order #{{ order.order_id }}</h1>
                 <span class="mainDescription">This order is currently <span class="label label-default">{{order.status}}</span></span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
-    <div class="container-fluid container-fullw bg-white margin-bottom-15">
+    <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
         <div class="pull-right">
             <div class="btn-group" dropdown is-open="status.isopen">
                 <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -92,7 +92,7 @@
                             Order Date
                         </label>
                         <p class="input-group">
-                            <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyy" ng-model="order.created.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                            <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="order.created.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                             <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open($event)">
                                             <i class="glyphicon glyphicon-calendar"></i>
@@ -198,7 +198,7 @@
                                         <br>
                                         <span ng-if="order.billing_address.email">
                                             <span class="fa fa-envelope-o"></span>
-                                            <a href="mailto:#{{order.billing_address.email}}">
+                                        <a href="mailto:#{{order.billing_address.email}}">
                                                 {{order.billing_address.email}}
                                             </a>
                                         </span>
@@ -373,7 +373,7 @@
                                         <br>
                                         <span ng-if="order.shipping_address.email">
                                             <span class="fa fa-envelope-o"></span>
-                                            <a href="mailto:#{{order.shipping_address.email}}">
+                                        <a href="mailto:#{{order.shipping_address.email}}">
                                                 {{order.shipping_address.email}}
                                             </a>
                                         </span>
@@ -391,36 +391,67 @@
                 </div>
                 <div class="panel-wrapper" collapse="orderItems" ng-init="orderItems=false">
                     <div class="panel-body no-padding">
-                        <table st-table="displayedItems" class="table table-hover margin-bottom-0">
+                        <table st-table="displayedItems" class="table margin-bottom-0">
                             <thead>
                                 <tr>
                                     <th></th>
                                     <th>Sku</th>
                                     <th>Item</th>
-                                    <th class="center">Cost</th>
+                                    <th class="center">Price</th>
                                     <th class="center">Qty</th>
                                     <th class="center">Total</th>
+                                    <th class="center">Discount</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in order.line_items">
                                     <td width="40">
-                                        <img src="{{item.product.icon}}" width="32" class="img-circle">
+                                        <img src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
                                     </td>
                                     <td>
-                                        {{item.sku}}
+                                        {{item.product.sku}}
                                     </td>
                                     <td>
-                                        {{item.name}}
+                                        <span ng-if="!item[$index].editing">{{item.name}}</span>
+                                        <div ng-if="item[$index].editing">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" ng-model="item.name" />
+                                        </div>
                                     </td>
                                     <td class="center">
-                                        <span>{{item.subtotal | currency}}</span>
+                                        <span ng-if="!item[$index].editing">{{item.regular_price | currency}}</span>
+                                        <div ng-if="item[$index].editing">
+                                            <label>Price</label>
+                                            <input type="text" class="form-control" ng-model="item.regular_price" ng-change="calculateTotals()"/>
+                                        </div>
                                     </td>
                                     <td class="center">
-                                        {{item.quantity}}
+                                        <span ng-if="!item[$index].editing">{{item.quantity}}</span>
+                                        <div ng-if="item[$index].editing">
+                                            <label>Quantity</label>
+                                            <input type="text" class="form-control" ng-model="item.quantity" ng-change="calculateTotals()"/>
+                                        </div>
                                     </td>
                                     <td class="center">
-                                        {{item.total | currency}}
+                                        <span ng-if="!item[$index].editing && !item.discount || !item[$index].editing && item.discount <= 0">{{item.total | currency}}</span>
+                                        <span ng-if="!item[$index].editing && item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
+                                        <div ng-if="item[$index].editing">
+                                                <label>Total</label>
+                                                <input type="text" class="form-control" ng-model="item.total" />
+                                        </div>
+                                    </td>
+                                    <td class="center">
+                                        <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
+                                        <div ng-if="item[$index].editing">
+                                            <label>Discount</label>
+                                            <input type="text" class="form-control" ng-model="item.discount" ng-change="calculateTotals()"/>
+                                        </div>
+                                    </td>
+                                    <td class="center" width="100">
+                                        <span class="fa fa-edit fa-lg margin-right-5" ng-click="item[$index].editing = true" ng-show="!item[$index].editing"></span>
+                                        <span class="fa fa-times-circle-o fa-lg text-danger" ng-click="removeLineItem($index)" ng-show="!item[$index].editing"></span>
+                                        <span class="fa fa-check-circle-o fa-lg text-success" ng-click="item[$index].editing = false" ng-show="item[$index].editing"></span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -428,10 +459,11 @@
                         <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
                             <div class="panel panel-default panel-transparent">
                                 <div class="panel-body">
-                                    <p ng-if="order.total_discount"><span class="text-bold">Discount ({{order.cart_discount}}):</span> <span class="pull-right">{{order.total_discount | currency}}</span></p>
+                                    <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{calculatedSubTotal | currency}}</span></p>
+                                    <p><span class="text-bold">Discount ({{calculatedDiscountPercent}}%):</span> <span class="pull-right">{{calculatedDiscount| currency}}</span></p>
                                     <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
-                                    <p ng-if="order.total_tax"><span class="text-bold">Tax:</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
-                                    <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
+                                    <p ng-if="calculatedTax"><span class="text-bold">Tax ({{taxPercent * 100| number :1}}%):</span> <span class="pull-right">{{calculatedTax | currency}}</span></p>
+                                    <p><span class="text-bold">Total:</span> <span class="pull-right">{{calculatedTotal | currency}}</span></p>
                                     <p class="text-danger" ng-if="order.status == 'refunded'">
                                         <span class="text-bold">Refunded:</span>
                                         <span class="pull-right">-$0.00</span>
@@ -442,8 +474,8 @@
                     </div>
                     <div class="panel-footer border-light">
                         <div class="pull-right">
-                            <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addLineItem()">
-                                <span>Add Line Item</span>
+                            <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
+                                <span>Add Product</span>
                             </button>
                             <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
                                 <span>Add Fee</span>
@@ -491,9 +523,45 @@
     </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>
+
+ <script type="text/ng-template" id="productImage.html">
+    <img src="{{item.product.icon}}" width="150"/>
+  </script>
+
 <script type="text/ng-template" id="customTemplate.html">
     <a>
         <img ng-src="{{match.model.photo ? match.model.photo : '/admin/assets/images/default-user.png'}}" width="35">
         <span bind-html-unsafe="match.model.first+' '+match.model.last | typeaheadHighlight:query"></span>
+    </a>
+</script>
+<script type="text/ng-template" id="add-product-lineitem-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">Add Product</h3>
+    </div>
+    <div class="modal-body bg-white">
+        <div class="form-group typeahead">
+            <label for="form-field-select-1">
+                Select Product
+            </label>
+            <span class="input-icon input-icon-right">
+                <input type="text" ng-model="selectedProduct" typeahead="product as product for product in products | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="product-typeahead-template.html" typeahead-input-formatter="formatProductInput($model)" class="form-control">
+                <i class="ti-close" style="color: #a94442" ng-if="selectedProduct" ng-click="clearProduct()"></i>
+            </span>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-o" ng-click="addProductLineItem(selectedProduct)">Add Product</button>
+    </div>
+</script>
+<script type="text/ng-template" id="product-typeahead-template.html">
+    <a>
+        <img ng-src="{{match.model.icon ? match.model.icon : '/admin/assets/images/default-product.png'}}" width="35">
+        <span bind-html-unsafe="match.model.name | typeaheadHighlight:query"></span>
     </a>
 </script>

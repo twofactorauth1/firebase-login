@@ -12126,9 +12126,8 @@ td.small-width {
 /* ---------------------------------------------------------------------- */
 /*  Order Detail
 /* ---------------------------------------------------------------------- */
-.order-detail .dropdown-menu {
-  max-height: 200px;
-  overflow: auto;
+.order-detail .dropdown-menu.ng-valid-date li table:focus {
+  outline: none!important;
 }
 .order-detail .order-notes {
   padding: 0;
@@ -12141,6 +12140,18 @@ td.small-width {
 }
 .order-detail .order-notes li:last-child {
   border-bottom: none;
+}
+.order-detail #orderItems .fa-edit {
+  opacity: .8;
+}
+.order-detail #orderItems .fa-edit:hover {
+  opacity: 1;
+}
+.order-detail #orderItems .fa-times-circle-o {
+  opacity: .8;
+}
+.order-detail #orderItems .fa-times-circle-o:hover {
+  opacity: 1;
 }
 /* ---------------------------------------------------------------------- */
 /*  Site Analytics

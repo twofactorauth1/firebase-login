@@ -135,7 +135,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         cartService.addItem(productMatch);
         $scope.cartDetails.push(productMatch);
       }
-      console.log('cart ', cartService.getCartItems());
       $scope.calculateTotalChargesfn();
     };
 
@@ -170,7 +169,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
 
     $scope.basicInfo = {};
     $scope.validateBasicInfo = function () {
-      console.log('validateBasicInfo >>> ', $scope.basicInfo);
       // check to make sure the form is completely valid
       // if (isValid) {
       //   alert('our form is amazing');
@@ -184,15 +182,18 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
      */
 
     $scope.calculateTotalChargesfn = function () {
-      var subTotal = 0;
-      // var totalTax = 0;
+      var _subTotal = 0;
+      var _totalTax = 0;
       // var total = 0;
       _.each($scope.cartDetails, function (item) {
-        subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity);
+        _subTotal = parseFloat(_subTotal) + (parseFloat(item.regular_price) * item.quantity);
+        if (item.taxable) {
+          _totalTax += parseFloat((item.regular_price * 8) / 100) * item.quantity;
+        }
       });
-      $scope.subTotal = subTotal;
-      $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100);
-      $scope.total = $scope.subTotal + $scope.totalTax;
+      $scope.subTotal = _subTotal;
+      $scope.totalTax = _totalTax;
+      $scope.total = _subTotal + _totalTax;
     };
 
     /*
@@ -210,7 +211,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
 
     $scope.makeCartPayment = function () {
       $scope.checkoutModalState = 4;
-      console.log('makeCartPayment >>> ');
       var expiry = angular.element('#expiry').val().split("/");
       var exp_month = expiry[0].trim();
       var exp_year = "";
@@ -242,11 +242,9 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
 
 
       PaymentService.getStripeCardToken(cardInput, function (token) {
-        console.log('getStripeCardToken >>>');
         // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function (data) {
         //     console.log('card details ', data);
         // });
-        console.log('$scope.newContact.first >>> ', $scope.cartDetails);
         // Is this checking to see if the customer already exists
         UserService.postContact($scope.newContact, function (customer, err) {
           var order = {
@@ -323,7 +321,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
             $scope.subTotal = 0;
             $scope.totalTax = 0;
             $scope.total = 0;
-            console.log('newOrder >>> ', newOrder);
             // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
           });
         });
@@ -331,7 +328,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
     };
 
     angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
-      console.log('checkoutModalState ', $scope.checkoutModalState);
       if ($scope.checkoutModalState === 5) {
         $scope.checkoutModalState = 1;
       }
