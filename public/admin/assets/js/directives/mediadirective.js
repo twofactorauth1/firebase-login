@@ -7,10 +7,11 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
         require: [],
         restrict: 'C',
         transclude: false,
-        replace: true,
+        replace: false,
         scope: {
             insertMediaType: "=",
             onInsertMediacb: "=",
+            downloadData: "=",
             user: '=user'
         },
         controller: function($scope, AssetsService, $compile) {
@@ -266,6 +267,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
             };
 
             $scope.m.onInsertMedia = function() {
+                console.log('$scope ', $scope);
                 if ($scope.batch.length > 0) {
                     $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
                     $scope.type = null;

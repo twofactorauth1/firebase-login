@@ -11,6 +11,29 @@
     // 3. getProducts
     // 4. get Order
 
+    $scope.taxPercent = 0.08;
+
+    /*
+     * @closeModal
+     * -
+     */
+
+    $scope.closeModal = function () {
+      $scope.modalInstance.close();
+    };
+
+    /*
+     * @openModal
+     * -
+     */
+
+    $scope.openModal = function (modal) {
+      $scope.modalInstance = $modal.open({
+        templateUrl: modal,
+        scope: $scope
+      });
+    };
+
     /*
      * @getCustomers
      * get all customers to for customer select
@@ -54,17 +77,77 @@
      */
 
     $scope.getOrder = function () {
-      OrderService.getOrder($stateParams.orderId, function (order) {
-        //add customer obj to each note
-        // var notes = order.notes;
-        order.notes = $scope.matchUsers(order);
-        order.line_items = $scope.matchProducts(order);
-        $scope.currentStatus = order.status;
-        $scope.order = order;
-        $scope.selectedCustomer = _.find($scope.customers, function(customer) {
-          return customer._id = $scope.order.customer_id;
-        });
+      OrderService.getOrders(function (orders) {
+        if ($stateParams.orderId) {
+          var order = _.find(orders, function (order) {
+            return order._id === $stateParams.orderId;
+          });
+          //add customer obj to each note
+          // var notes = order.notes;
+          order.notes = $scope.matchUsers(order);
+          order.line_items = $scope.matchProducts(order);
+          $scope.currentStatus = order.status;
+          $scope.order = order;
+          $scope.selectedCustomer = _.find($scope.customers, function (customer) {
+            return customer._id === $scope.order.customer_id;
+          });
+          $scope.calculateTotals();
+        } else {
+          $scope.order = {
+            created: {
+              date: 
+            },
+            order_id: orders.length,
+            status: 'pending_payment',
+            line_items: [],
+            notes: []
+          };
+        }
       });
+    };
+
+    /*
+     * @calculateTotals
+     * -
+     */
+
+    $scope.calculateTotals = function () {
+      console.log('calculateTotals >>>');
+      var _subtotal = 0;
+      var _total = 0;
+      var _discount = 0;
+      _.each($scope.order.line_items, function (line_item) {
+        if (line_item.quantity) {
+          line_item.total = line_item.regular_price * line_item.quantity;
+        }
+        if (line_item.discount) {
+          var _dc = parseFloat(line_item.discount);
+          line_item.total -= _dc;
+          _discount += _dc;
+          _total -= _dc;
+        }
+        _subtotal += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
+        _total += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
+      });
+      $scope.calculatedSubTotal = _subtotal;
+      $scope.calculatedDiscount = _discount;
+      if (_discount) {
+        $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
+      } else {
+        $scope.calculatedDiscountPercent = '';
+      }
+      //todo add tax selected currently using 0.08 or 1.08
+      $scope.calculatedTax = _total * $scope.taxPercent;
+      $scope.calculatedTotal = _total * ($scope.taxPercent + 1);
+    };
+
+    /*
+     * @totalWithDiscount
+     * -
+     */
+
+    $scope.totalWithDiscount = function (total, discount) {
+      return parseFloat(total) + parseFloat(discount);
     };
 
     /*
@@ -72,8 +155,17 @@
      * - clear the customer
      */
 
-    $scope.clearCustomer = function() {
+    $scope.clearCustomer = function () {
       $scope.selectedCustomer = null;
+    };
+
+    /*
+     * @clearProduct
+     * - clear the product
+     */
+
+    $scope.clearProduct = function () {
+      $scope.selectedProduct = null;
     };
 
     /*
@@ -104,17 +196,15 @@
      */
 
     $scope.matchProducts = function (order) {
-      var lineitems = order.line_items;
+      var lineitems = order.line_items || {};
       if (lineitems.length > 0) {
-        var i = 0;
-        var j = 0;
-        for (i; i < lineitems.length; i++) {
-          for (j; j < $scope.products.length; j++) {
-            if (lineitems[i].product_id === $scope.products[j]._id) {
-              lineitems[i].product = $scope.products[j];
-            }
-          }
-        }
+        _.each(lineitems, function (item) {
+          var matchProduct = _.find($scope.products, function (product) {
+            return product._id === item.product_id;
+          });
+          item.product = matchProduct;
+          item.discount = 0.00;
+        });
       }
 
       return lineitems;
@@ -145,6 +235,55 @@
     };
 
     /*
+     * @addProductLineItem
+     * add a product line item to the order
+     */
+
+
+    $scope.addProductLineItem = function (selected) {
+      console.log('selected ', selected);
+      var _line_item = {
+        "product_id": selected._id,
+        "quantity": 1,
+        "regular_price": selected.regular_price,
+        "sku": selected.sku,
+        "total": selected.regular_price,
+        "name": selected.name,
+        "product": selected
+      };
+      $scope.order.line_items.push(_line_item);
+      $scope.calculateTotals();
+      $scope.closeModal();
+    };
+
+    /*
+     * @removeLineItem
+     * remove a product line item from the order
+     */
+
+    $scope.removeLineItem = function (index) {
+      var lineItems = $scope.order.line_items;
+      var filteredLineItems = [];
+      _.each(lineItems, function (item, i) {
+        if (i !== index) {
+          filteredLineItems.push(item);
+        }
+      });
+      $scope.order.line_items = filteredLineItems;
+      $scope.calculateTotals();
+    };
+
+    /*
+     * @openProductLineItemModal
+     * add a product line item modal
+     */
+
+    $scope.openProductLineItemModal = function () {
+      console.log('openProductLineItemModal');
+      $scope.openModal('add-product-lineitem-modal');
+    };
+
+    /*
      * @formatInput
      * format the customer input to show "First Last (#ID email)"
      */
@@ -162,6 +301,71 @@
       }
 
       return '';
+    };
+
+    /*
+     * @formatProductInput
+     * -
+     */
+
+    $scope.formatProductInput = function (model) {
+      if (model) {
+
+        var email = 'No Email';
+        if (model.email) {
+          email = model.email;
+        }
+
+        return '#' + model.sku + ' ' + model.name + ' ($' + model.regular_price + ') ';
+      }
+
+      return '';
+    };
+
+    /*
+     * @dateOptions
+     * -
+     */
+
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
+
+    /*
+     * @open
+     * -
+     */
+
+    $scope.open = function ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope.opened = !$scope.opened;
+    };
+
+    /*
+     * @endOpen
+     * -
+     */
+
+    $scope.endOpen = function ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.startOpened = false;
+      $scope.endOpened = !$scope.endOpened;
+    };
+
+    /*
+     * @startOpen
+     * -
+     */
+
+    $scope.startOpen = function ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope.endOpened = false;
+      $scope.startOpened = !$scope.startOpened;
     };
 
     /*
@@ -213,11 +417,6 @@
       var email = '';
       if (emails.length > 0) {
         email = emails[0].email;
-      }
-
-      var company = '';
-      if (customer.company) {
-        company = customer.company;
       }
 
       var company = '';
@@ -360,30 +559,30 @@
 
       if (newStatus === 'refunded') {
         SweetAlert.swal({
-            title: "Are you sure?",
-            text: "This order will be refunded and funds will be returned.",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, refund it.",
-            cancelButtonText: "No, cancel!",
-            closeOnConfirm: false,
-            closeOnCancel: false
+          title: "Are you sure?",
+          text: "This order will be refunded and funds will be returned.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, refund it.",
+          cancelButtonText: "No, cancel!",
+          closeOnConfirm: false,
+          closeOnCancel: false
         }, function (isConfirm) {
-            if (isConfirm) {
-                $scope.reasonData = {
-                  note: 'Order has been refunded $42.68',
-                  amount: '$42.68',
-                  reason: "duplicate" //duplicate, fraudulent, requested_by_customer
-                };
+          if (isConfirm) {
+            $scope.reasonData = {
+              note: 'Order has been refunded $42.68',
+              amount: '$42.68',
+              reason: "duplicate" //duplicate, fraudulent, requested_by_customer
+            };
 
-                OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
-                  console.log('data ', data);
-                  SweetAlert.swal("Refunded", "Order has been refunded.", "success");
-                });
-            } else {
-                SweetAlert.swal("Cancelled", "Order refund cancelled.)", "error");
-            }
+            OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
+              console.log('data ', data);
+              SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+            });
+          } else {
+            SweetAlert.swal("Cancelled", "Order refund cancelled.)", "error");
+          }
         });
       }
 
@@ -417,6 +616,33 @@
       // if (type === 'invoice') {}
       // if (type === 'packing-slip') {}
     };
+
+    /*
+     * @saveOrder
+     * -
+     */
+
+    $scope.saveOrder = function () {
+
+      //validate
+
+      if (!$scope.order.customer_id) {
+        toaster.pop('error', 'Orders must contain a customer.');
+        return;
+      }
+
+      if ($stateParams.orderId) {
+        OrderService.updateOrder($scope.order, function(updatedOrder){
+          console.log('updatedOrder ', updatedOrder);
+        });
+      } else {
+        OrderService.createOrder($scope.order, function(updatedOrder){
+          console.log('order updated');
+        });
+      }
+    };
+
+
 
 
 

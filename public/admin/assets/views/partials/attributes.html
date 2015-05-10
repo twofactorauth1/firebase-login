@@ -1,0 +1,32 @@
+<div class="col-sm-12 hidden" ng-if="showVariations">
+    <div class="panel panel-white">
+        <div class="panel-heading border-light">
+            <h5 class="panel-title">Attributes</h5>
+        </div>
+        <div class="panel-body">
+            <div ng-repeat="attribute in product.attributes" class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <div class="form-group margin-bottom-0">
+                        <label for="attributeName">
+                            Attribute Name
+                        </label>
+                        <input type="text" placeholder="Attribute Name" id="attributeName" class="form-control" ng-model="attribute.name">
+                    </div>
+                </div>
+                <div class="col-sm-7 col-xs-12">
+                    <div class="form-group margin-bottom-0">
+                        <label class="margin-bottom-0">
+                            <span ng-if="attribute.name">{{attribute.name + ' Types' }}</span>
+                            <span ng-if="!attribute.name">Attribute Types</span>
+                        </label>
+                        <tags-input ng-model="attribute.values"></tags-input>
+                    </div>
+                </div>
+                <div class="col-sm-1 col-xs-12">
+                    <span ng-if="$index == 0" class="fa fa-plus text-success margin-top-30" ng-click="addAttribute()"></span>
+                    <span ng-if="$index != 0" class="fa fa-minus text-danger margin-top-30" ng-click="removeAttribute($index)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

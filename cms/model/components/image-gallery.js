@@ -82,17 +82,17 @@ var component = $$.m.ModelBase.extend({
                     {
                         label : "Project A",
                         description : "Image Description",
-                        url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                        url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/cub_1425550421494.png"
                     },
                     {
                         label : "Project A",
                         description : "Image Description",
-                        url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                        url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/cub_1425550421494.png"
                     },
                     {
                         label : "Project A",
                         description : "Image Description",
-                        url : "http://www.glassdoor.com/blog/wp-content/uploads/worker2.jpg"
+                        url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/cub_1425550421494.png"
                     }
             ],
 

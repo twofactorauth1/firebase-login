@@ -2,7 +2,12 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "OrderService", "CustomerService", function ($scope, toaster, $modal, $filter, OrderService, CustomerService) {
+  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService) {
+
+    /*
+     * @openModal
+     * -
+     */
 
     $scope.openModal = function (template) {
       $scope.modalInstance = $modal.open({
@@ -10,6 +15,11 @@
         scope: $scope
       });
     };
+
+    /*
+     * @closeModal
+     * -
+     */
 
     $scope.closeModal = function () {
       $scope.modalInstance.close();
@@ -25,15 +35,13 @@
       $scope.customers = customers;
     });
 
-    $scope.createOrder = function (newOrder) {
-      var customer = newOrder.selectedCustomer;
-      var status = newOrder.selectedStatus;
-      var order = {};
-      order.status = status.value;
-      order.customer_id = customer._id;
-      OrderService.createOrder(order, function (returnedOrder) {
-        console.log('returnedOrder ', returnedOrder);
-      });
+    /*
+     * @newOrder
+     * -
+     */
+
+    $scope.newOrder = function () {
+      $state.go('app.commerce.orderdetail');
     };
 
     /*

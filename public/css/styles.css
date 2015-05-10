@@ -4774,6 +4774,21 @@ fieldset[disabled] .btn-vimeo-square.active {
   visibility: visible;
   width: auto;
 }
+@media (max-width: 768px) {
+  #editor-toolbar .cke_chrome a.cke_button {
+    height: 30px;
+    width: 25px;
+  }
+  #editor-toolbar .cke_chrome a.cke_button .cke_button_icon {
+    line-height: 30px;
+  }
+  #editor-toolbar .cke_chrome .cke_combo_button {
+    height: 35px;
+  }
+  #editor-toolbar .cke_toolbar {
+    float: none;
+  }
+}
 .componentActions {
   position: absolute;
   /*

@@ -3,8 +3,8 @@
 /*jslint unparam:true*/
 mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService', 'cartService',
   function ($scope, ProductService, UserService, OrderService, PaymentService, cartService) {
-
     $scope.checkoutModalState = 1;
+
     /*
      * @getAllProducts
      * - get products for products and pricing table components
@@ -24,13 +24,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       $scope.selectedProduct = product;
     };
 
-    // $scope.selectDisabled = function(index) {
-    //     if (index > 0) {
-    //         return true;
-    //     }
-    //     return false;
-    // };
-
     $scope.selectChanged = function (index) {
       var selectedAttributes = $scope.selectedProduct.attributes;
       var allselected = false;
@@ -41,7 +34,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
           allselected = false;
         }
       });
-
       if (allselected) {
         console.log('updating price');
         // $scope.updatePrice();
@@ -90,10 +82,8 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
      */
 
     $scope.updatePrice = function () {
-
       var variations = $scope.selectedProduct.variations;
       var selectedAttributes = $scope.selectedProduct.attributes;
-
       var _matchedVariation = _.find(variations, function (_variation) {
         var match = true;
         _.each(selectedAttributes, function (attr) {
@@ -106,7 +96,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         });
         return match;
       });
-
       if (_matchedVariation) {
         $scope.matchedVariation = _matchedVariation;
       } else {
@@ -131,7 +120,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         });
         productMatch.clicked = true;
       }
-
       if (!$scope.cartDetails) {
         $scope.cartDetails = [];
       }
@@ -147,9 +135,6 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         cartService.addItem(productMatch);
         $scope.cartDetails.push(productMatch);
       }
-
-      console.log('cart ', cartService.getCartItems());
-
       $scope.calculateTotalChargesfn();
     };
 
@@ -169,47 +154,46 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       $scope.cartDetails = filtered;
       $scope.calculateTotalChargesfn();
     };
-
-    $scope.checkCardNumber = function() {
+    $scope.checkCardNumber = function () {
       var card_number = angular.element('#number').val();
       if (!card_number) {
-          angular.element("#card_number .error").html("Card Number Required");
-          angular.element("#card_number").addClass('has-error');
-          angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+        angular.element("#card_number .error").html("Card Number Required");
+        angular.element("#card_number").addClass('has-error');
+        angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
       } else {
-          angular.element("#card_number .error").html("");
-          angular.element("#card_number").removeClass('has-error').addClass('has-success');
-          angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        angular.element("#card_number .error").html("");
+        angular.element("#card_number").removeClass('has-error').addClass('has-success');
+        angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
       }
     };
 
     $scope.basicInfo = {};
-
-    $scope.validateBasicInfo = function() {
-      console.log('validateBasicInfo >>> ', $scope.basicInfo);
-
+    $scope.validateBasicInfo = function () {
       // check to make sure the form is completely valid
-      if (isValid) { 
-        alert('our form is amazing');
-        checkoutModalState = 3
-      }
-
+      // if (isValid) {
+      //   alert('our form is amazing');
+      //   checkoutModalState = 3
+      // }
     };
+
     /*
      * @calculateTotalChargesfn
      * - calculate the total based on products in cart
      */
 
     $scope.calculateTotalChargesfn = function () {
-      var subTotal = 0;
-      // var totalTax = 0;
+      var _subTotal = 0;
+      var _totalTax = 0;
       // var total = 0;
       _.each($scope.cartDetails, function (item) {
-        subTotal = parseFloat(subTotal) + (parseFloat(item.regular_price) * item.quantity);
+        _subTotal = parseFloat(_subTotal) + (parseFloat(item.regular_price) * item.quantity);
+        if (item.taxable) {
+          _totalTax += parseFloat((item.regular_price * 8) / 100) * item.quantity;
+        }
       });
-      $scope.subTotal = subTotal;
-      $scope.totalTax = parseFloat(($scope.subTotal * 8) / 100);
-      $scope.total = $scope.subTotal + $scope.totalTax;
+      $scope.subTotal = _subTotal;
+      $scope.totalTax = _totalTax;
+      $scope.total = _subTotal + _totalTax;
     };
 
     /*
@@ -217,26 +201,28 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
      * - make the final payment for checkout
      */
 
+    function isEmpty(str) {
+      return (!str || 0 === str.length);
+    }
+
+    function formatNum(num) {
+      return parseFloat(Math.round(num * 100) / 100).toFixed(2);
+    }
+
     $scope.makeCartPayment = function () {
       $scope.checkoutModalState = 4;
-      console.log('makeCartPayment >>> ');
-      var expiry = angular.element('#expiry')
-        .val()
-        .split("/");
+      var expiry = angular.element('#expiry').val().split("/");
       var exp_month = expiry[0].trim();
       var exp_year = "";
       if (expiry.length > 1) {
         exp_year = expiry[1].trim();
       }
       var cardInput = {
-        number: angular.element('#number')
-          .val(),
-        cvc: angular.element('#cvc')
-          .val(),
+        number: angular.element('#number').val(),
+        cvc: angular.element('#cvc').val(),
         exp_month: exp_month,
         exp_year: exp_year
       };
-
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         $scope.checkCardNumber();
         $scope.checkCardExpiry();
@@ -244,56 +230,36 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
         $scope.checkoutModalState = 3;
         return;
       }
-
       if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
         $scope.checkoutModalState = 3;
         return;
       }
-
       var contact = $scope.newContact;
       if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email) || isEmpty(contact.details[0].phones[0].number)) {
         $scope.checkoutModalState = 2;
         return;
       }
 
-      function isEmpty(str) {
-        return (!str || 0 === str.length);
-      }
 
       PaymentService.getStripeCardToken(cardInput, function (token) {
-        console.log('getStripeCardToken >>>');
         // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function (data) {
         //     console.log('card details ', data);
         // });
-        console.log('$scope.newContact.first >>> ', $scope.newContact.first);
         // Is this checking to see if the customer already exists
         UserService.postContact($scope.newContact, function (customer, err) {
-          console.log('postContact >>>');
           var order = {
             "customer_id": customer._id,
             "session_id": null,
-            "completed_at": null,
             "status": "processing",
-            "total": 0.0,
-            "cart_discount": 0.0,
-            "total_discount": 0.0,
-            "total_shipping": 0.0,
-            "total_tax": 0.0,
-            "shipping_tax": 0.0,
-            "cart_tax": 0.0,
+            "cart_discount": 0,
+            "total_discount": 0,
+            "total_shipping": 0,
+            "total_tax": formatNum($scope.totalTax),
+            "shipping_tax": 0,
+            "cart_tax": 0,
             "currency": "usd",
-            "line_items": [{
-              "product_id": 31,
-              "quantity": 1,
-              "variation_id": 7,
-              "subtotal": "20.00",
-              "tax_class": null,
-              "sku": "",
-              "total": "20.00",
-              "name": "Product Name",
-              "total_tax": "0.00"
-            }],
-            "total_line_items_quantity": 0,
+            "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+            "total_line_items_quantity": $scope.cartDetails.length,
             "payment_details": {
               "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
               "method_id": 'cc', //check, cc
@@ -331,7 +297,21 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
             },
             "notes": []
           };
-
+          _.each($scope.cartDetails, function (item) {
+            var totalAmount = item.regular_price * item.quantity;
+            var _item = {
+              "product_id": item._id,
+              "quantity": item.quantity,
+              "regular_price": formatNum(item.regular_price),
+              "variation_id": '',
+              "tax_class": null,
+              "sku": "",
+              "total": formatNum(totalAmount),
+              "name": item.name,
+              "total_tax": "0.00"
+            };
+            order.line_items.push(_item);
+          });
           OrderService.createOrder(order, function (newOrder) {
             $scope.checkoutModalState = 5;
             $scope.cartDetails = [];
@@ -341,30 +321,25 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
             $scope.subTotal = 0;
             $scope.totalTax = 0;
             $scope.total = 0;
-            console.log('newOrder >>> ', newOrder);
             // PaymentService.saveCartDetails(token, parseInt($scope.total * 100), function(data) {});
           });
         });
       });
-
     };
 
-    angular.element('#cart-checkout-modal')
-      .on('hidden.bs.modal', function () {
-        console.log('checkoutModalState ', $scope.checkoutModalState);
-        if ($scope.checkoutModalState === 5) {
-          $scope.checkoutModalState = 1;
-        }
-      });
+    angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
+      if ($scope.checkoutModalState === 5) {
+        $scope.checkoutModalState = 1;
+      }
+    });
 
     $scope.currentProductPage = 1;
-
     $scope.setPage = function (pageNo) {
       $scope.currentProductPage = pageNo;
     };
 
     $scope.pageChanged = function () {
-      $log.log('Page changed to: ' + $scope.currentProductPage);
+      console.log('Page changed to: ' + $scope.currentProductPage);
     };
 
     $scope.getProductOffset = function (currentProductPage, numtodisplay) {
@@ -388,20 +363,17 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       });
       return matchedAttribute;
     };
+
   }
 ]);
 
 mainApp.service('cartService', function () {
   var cartData = {};
-
   cartData.items = [];
-
   this.getCartItems = function () {
     return cartData.items;
   };
-
   this.addItem = function (item) {
     cartData.items.push(item);
   };
-
 });

@@ -38,6 +38,9 @@ html
         text-align: center!important;
         margin: 0 auto;
         }
+        .text-right {
+        text-align: right!important;
+        }
         #backgroundTable {
         height: 100% !important;
         margin: 0;
@@ -292,28 +295,30 @@ html
                                     thead
                                       tr
                                         th Product Name
+                                        th(class="orderTd") Price
                                         th(class="orderTd") Quantity
                                         th(class="orderTd") Total
                                     tbody
                                         each val, index in order.line_items
                                           tr
                                             td= val.name
+                                            td(class="orderTd")= '$' + val.regular_price
                                             td(class="orderTd")= val.quantity
-                                            td(class="orderTd")= val.total
+                                            td(class="orderTd")= '$' + val.total
                                       tr
-                                        td(colspan="3", class="spacer")
+                                        td(colspan="4", class="spacer")
                                       tr
-                                        td(colspan="2")
+                                        td(colspan="3", class="text-right")
                                           strong Subtotal
-                                        td !{order.subtotal}
+                                        td $ !{order.subtotal}
                                       tr
-                                        td(colspan="2")
+                                        td(colspan="3", class="text-right")
                                           strong Tax
-                                        td !{order.total_tax}
+                                        td $ !{order.total_tax}
                                       tr
-                                        td(colspan="2")
+                                        td(colspan="3", class="text-right")
                                           strong Total
-                                        td !{order.total}
+                                        td $ !{order.total}
 
                             //- td.footerContent
                             //-   div

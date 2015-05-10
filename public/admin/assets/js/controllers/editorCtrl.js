@@ -153,8 +153,7 @@
         $scope.calculateWindowHeight = function()
         { 
            var scrollTop = $(document).scrollTop();
-           var winHeight = $(document).height();
-           return scrollTop//winHeight - scrollTop;
+           return scrollTop;
         }
 
         /*
@@ -169,14 +168,23 @@
             var navbarCollapse = angular.element('header').outerHeight();
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
+            
             if (scrollTop > offsetHeight) {
 
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
-                if($(document).width() <= 990) {
-                    scrollTop = scrollTop + 65;
+
+                if($(document).width() < 768) {
+                    editorToolbar.css({
+                    'top': scrollTop + 40
+                    });
                 }
+                
+                if($(document).width() <= 990) {
+                    scrollTop = scrollTop + 65 
+                }
+                 
                 mainToolbar.css({
                     'top': scrollTop,
                     'position': 'absolute',
@@ -628,15 +636,6 @@
                             };
                         });
                 });
-
-                angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
-                    if (!$scope.activated) {
-                        $scope.activated = true;
-                        setTimeout(function() {
-                            $scope.childScope.activateCKEditor();
-                        }, 1000)
-                    }
-                });
                 angular.element("#iframe-website").contents().find('body').off("click", ".btn-social-link");
                 // Social components
                 angular.element("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
@@ -705,10 +704,15 @@
                 //var offsetHeight = angular.element('#page-title').height() + angular.element('#page-actions').height();
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        //$scope.iframeHeight = ($("#iframe-website").contents().find("body").height() - 70) + "px";
-                        $scope.iframeHeight = (angular.element(window).height() - 100) + "px";
                         var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
-                        //$scope.iframeHeight = (angular.element(window).height() - (editorToolbar.offset().top + editorToolbar.height())) + "px"
+                        var incrementHeight = 0;
+                        if($(document).width() <= 990) {
+                            incrementHeight = incrementHeight + 65;
+                        }
+                        if(editorToolbar)
+                            incrementHeight = incrementHeight + editorToolbar.height();
+                        $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
+                        
                     });
                 }, 100);
             }
@@ -995,6 +999,25 @@
             $scope.status.isopen = !$scope.status.isopen;
         };
 
+
+        /*
+         * @checkForDuplicatePage
+         * - Check for duplicate page
+         */
+
+        $scope.checkForDuplicatePage = function()
+        {
+            WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
+            if(data && data._id)
+                {
+                    if(data._id !== $scope.currentPage._id)
+                    {
+                        toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                    }
+                }
+            })
+        }
+
         /*
          * @editPage
          * -
@@ -1224,14 +1247,15 @@
 
                 WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
                     //TODO: Make this check on change of page title or url in the page settings modal
-                    // if(data && data._id)
-                    // {
-                    //     if(data._id !== $scope.currentPage._id)
-                    //     {
-                    //         toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                    //         return false;
-                    //     }
-                    // }
+                    //TODO: Better way to handle this there should be check on server side itself while saving the page
+                    if(data && data._id)
+                    {
+                        if(data._id !== $scope.currentPage._id)
+                        {
+                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                            return false;
+                        }
+                    }
                     if ($scope.templateActive) {
                         $scope.template.config.components = $scope.currentPage.components;
                         WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
@@ -1279,6 +1303,8 @@
 
             }
         };
+
+        
 
         /*
          * @updatePage
@@ -2573,10 +2599,11 @@
             if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
-                    $scope.post_data = $scope.childScope.getPostData();
+                    if(post)
+                        $scope.post_data = $scope.childScope.getPostData();
                     if (redirect)
                         $location.path("/website/posts");
-                    else
+                    else if(post)
                        $scope.post_data = post;
                 })
         };
