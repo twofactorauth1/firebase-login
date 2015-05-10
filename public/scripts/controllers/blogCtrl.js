@@ -414,9 +414,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             //if ($scope.activated == false) {
             $scope.isEditing = true;
             for (name in CKEDITOR.instances) {
-                //CKEDITOR.instances[name].destroy()
-                CKEDITOR.instances[name].removeAllListeners();
-                CKEDITOR.remove(CKEDITOR.instances[name]);
+                CKEDITOR.instances[name].destroy()
+                //CKEDITOR.instances[name].removeAllListeners();
+                //CKEDITOR.remove(CKEDITOR.instances[name]);
             }
             CKEDITOR.disableAutoInline = true;
             var elements = angular.element('.editable');

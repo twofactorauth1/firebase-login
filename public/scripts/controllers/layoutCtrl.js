@@ -710,13 +710,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             //if ($scope.activated == false) {
             $scope.isEditing = true;
             for (name in CKEDITOR.instances) {
-                //CKEDITOR.instances[name].destroy()
-                CKEDITOR.instances[name].removeAllListeners();
-                CKEDITOR.remove(CKEDITOR.instances[name]);
+                if(CKEDITOR.instances[name])
+                    CKEDITOR.instances[name].destroy()
             }
             CKEDITOR.disableAutoInline = true;
             var elements = angular.element('.editable');
-            elements.each(function(index) {
+            elements.each(function() {
                 if (!angular.element(this).parent().hasClass('edit-wrap')) {
                     var dataClass = angular.element(this).data('class').replace('.item.', ' ');
                     angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
@@ -725,8 +724,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     on: {
                         instanceReady: function(ev) {
                             var editor = ev.editor;
-                            if(index === 0)
-                                $scope.activeEditor = editor;
                             editor.setReadOnly(false);
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
@@ -789,10 +786,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
         $scope.deleteBlogPost = function(postId, blogpost) {
+            console.log('delete post');
             PostService.deletePost($scope.currentpage._id, postId, function(data) {
                 if (blogpost) {
                     var index = that.blogposts.indexOf(blogpost);
                     that.blogposts.splice(index, 1);
+                    $scope.parentScope.showToaster(false, true, "Post deleted successfully");
                 }
             });
         };
