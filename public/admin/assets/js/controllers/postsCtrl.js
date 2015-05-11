@@ -20,7 +20,7 @@
                 }
             }
             $scope.posts = postsArr;
-
+            $scope.orderByFn();
             //$log.debug($scope.posts);
         });
 
@@ -29,6 +29,11 @@
             $scope.website = website;
         })
 
+        $scope.orderByFn = function()
+        {
+            $scope.posts = $filter('orderBy')($scope.posts, 'modified.date', true);
+        }
+        
         $scope.getters = {
             created: function (value) {
                 return value.created.date;
