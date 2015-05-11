@@ -25,6 +25,7 @@ _.extend(view.prototype, BaseView.prototype, {
             if (!err && value != null) {
                 data.account = value.toJSON()
             }
+            data.message = self.req.session.errorMsg;
             self.resp.render('login', data);
             self.cleanUp();
             data = self = null;
