@@ -23,7 +23,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         var d = new Date();
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
-
+        $scope.allowUndernav = false;
         $scope.$watch(function () { return cartService.getCartItems() }, function (newValue, oldValue) {
             if (newValue !== oldValue) {
                 console.log('cart changed >>> ', newValue);
@@ -860,6 +860,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         var winWidth = w.width();
                         $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
                     }
+
                     if ($scope.currentpage.components[i].type == 'single-post') {  
                         if(!$scope.blog)
                         {
@@ -873,6 +874,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         $scope.blog.post.post_tags = $scope.currentpage.components[i].post_tags;
                         $scope.blog.post.post_author = $scope.currentpage.components[i].post_author || " ";
                     }
+                    if ($scope.currentpage.components[i].type == 'masthead') {
+                        if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                            $scope.allowUndernav = true;
+                        else
+                            $scope.allowUndernav = false;
+                    }
+
                 };
                 setTimeout(function() {
                     angular.element(window).scrollTop(scroll);
@@ -1016,6 +1024,15 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     $scope.activateCKEditor();
                     angular.element(".ui-sortable").removeClass("active");
                 }, 1500);
+
+            for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                if ($scope.currentpage.components[i].type == 'masthead') {
+                    if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                        $scope.allowUndernav = true;
+                    else
+                        $scope.allowUndernav = false;
+                    }
+            };
             }
         };
 
@@ -1099,6 +1116,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         $scope.blog.post.publish_date = value.publish_date;
                         $scope.blog.post.post_tags = value.post_tags;
                         $scope.blog.post.post_author = value.post_author || " ";
+                    }
+                    if (value && value.type === 'masthead') {
+                        if (index != 0 && $scope.currentpage.components[index-1].type == "navigation")
+                            $scope.allowUndernav = true;
+                        else
+                            $scope.allowUndernav = false;
                     }
                 });
             }
