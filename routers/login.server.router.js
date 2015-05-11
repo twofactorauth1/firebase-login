@@ -37,7 +37,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         app.get("/login", this.setup.bind(this), this.showLogin.bind(this));
         app.post("/login",
-            passport.authenticate('local', { failureRedirect: "/login", failureFlash: true }),
+            passport.authenticate('local', { failureRedirect: "/login", failureFlash: 'An incorrect username or password was entered.', successFlash: 'Login success.' }),
             this.onLogin.bind(this));
 
 
@@ -79,7 +79,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     showLogin: function (req, resp) {
         var self = this;
         self.log.debug('>> showLogin')
-        
+
         if (req.isAuthenticated()) {
             self.log.debug('req.isAuthenticated is true.');
             if (self.accountId(req) > 0) {
@@ -104,7 +104,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             }
             return;
         }
-
+        req.session.errorMsg = req.flash('error');
         new LoginView(req, resp).show();
     },
 
@@ -254,7 +254,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var userId = this.userId(req);
 
         req.session.cookie = null;
-        req.session.accountId = null; 
+        req.session.accountId = null;
         req.logout();
         req.session.destroy();
         req.session = null;

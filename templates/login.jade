@@ -46,6 +46,7 @@ block content
                   i.fa.fa-lock
                   a.forgot(href="/forgotpassword")
                     | I forgot my password
+              .error #{message}
               .form-actions
                 .checkbox.clip-check.check-primary
                   input#rememberme(type="checkbox" name="rememberme")
