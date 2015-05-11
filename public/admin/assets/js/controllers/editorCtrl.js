@@ -32,6 +32,7 @@
         $scope.typefilter = 'all';
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
+        $scope.single_post = false;
         var stopInterval;
         
         $scope.$watch('currentPage.handle', function(newValue, oldValue) {
