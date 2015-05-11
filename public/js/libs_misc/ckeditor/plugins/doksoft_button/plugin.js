@@ -45,7 +45,7 @@ CKEDITOR.plugins.add("doksoft_button", {
 		
 		var bindClick = function(instance)
 		{
-			var spans = $(instance.element.$.children).find("a");
+			var spans = $(instance.element.$).find("a");
 			for (var Z = 0; Z < spans.length; Z++) {
 			   spans[Z].onclick = function() {
 			   		var sel = instance.getSelection();
@@ -90,7 +90,7 @@ CKEDITOR.plugins.add("doksoft_button", {
 						h = sel;
 					}
 					else{
-						h = c();
+						h = false;
 					}
 					
 					if (h) {
@@ -120,7 +120,7 @@ CKEDITOR.plugins.add("doksoft_button", {
 						f = sel;
 					}
 					else{
-						f = c();
+						f = false;
 					}
 					//var f = c();
 					if (!f) {
@@ -129,7 +129,7 @@ CKEDITOR.plugins.add("doksoft_button", {
 						var g = CKEDITOR.dom.element.createFromHtml(getResultButton());
 						g.replace(f);
 					}
-					bindClick(e);
+					bindClick(this.getParentEditor());
 				},
 			};
 		});
