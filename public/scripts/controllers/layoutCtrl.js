@@ -213,6 +213,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             if (element)
                                 $document.scrollToElementAnimated(element);
                         }
+                        $scope.setUnderbnavMargin();
                     }, 500);
                 });
 
@@ -1785,7 +1786,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }, 1000)
         });
 
+        angular.element('body').on("click", ".navbar-toggle", function(e) {
+            $scope.setUnderbnavMargin();
+        });
+
         angular.element($window).bind('resize', function() {
+            $scope.setUnderbnavMargin();
             $scope.feature_inserted = false;
             if(!$scope.feature_inserted)
                   {
@@ -1803,6 +1809,17 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     $scope.feature_inserted = true;
                   }
         });
+        $scope.setUnderbnavMargin = function() {
+            setTimeout(function() {
+               var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
+               var margin = 200 + navHeight;
+               if(angular.element(".mt200"))
+                angular.element(".mt200").css("margin-top", -margin);
+               if(angular.element(".mastHeadUndernav"))
+                angular.element(".mastHeadUndernav").css("height", margin);
+            },300);
+
+        };
     }
 
 ]);
