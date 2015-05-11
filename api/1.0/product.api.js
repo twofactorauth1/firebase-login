@@ -82,9 +82,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getTax');
 
-        var postcode = parseInt(req.params.postcode);
+        var postcode = parseFloat(req.params.postcode);
 
         productManager.getTax(postcode, function(err, value){
+            self.log.debug('tax value ', value);
             if(!err && value != null) {
                 return self.sendResult(res, value);
             } else {

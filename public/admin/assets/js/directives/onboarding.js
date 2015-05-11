@@ -34,7 +34,7 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
 
         if (addedTask) {
           UserService.updateUserPreferences(scope.userPreferences, false, function (newPreferences) {
-            console.log('newPreferences >>> ', newPreferences);
+            // console.log('newPreferences >>> ', newPreferences);
           });
         }
       });
@@ -51,12 +51,12 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
         scope.executeOnboarding();
       });
 
-      scope.openPageModal = function() {
+      scope.openPageModal = function () {
         console.log('scope.$parent');
       };
 
       scope.executeOnboarding = function () {
-        if ($location.$$search['onboarding'] ) {
+        if ($location.$$search['onboarding']) {
           scope.obType = $location.$$search['onboarding'].trim();
 
           var matchingStep = _.find(scope.onboardingStepMap, function (step) {
@@ -73,7 +73,7 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
         }
       };
 
-      scope.onSkip = function() {
+      scope.onSkip = function () {
         toaster.pop('warning', 'Task Skipped. Not completed.');
       };
 

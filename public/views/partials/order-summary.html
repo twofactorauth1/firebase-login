@@ -13,7 +13,11 @@
     <div class="clearfix mb30"></div>
     <div class="col-xs-offset-6 col-xs-6">
         <p>Subtotal: {{ subTotal | currency }}</p>
-        <p>Tax (8%): {{ totalTax | currency }}</p>
+        <p>
+            <span ng-if="showTax">Tax ({{taxPercent}}%): {{ totalTax | currency }}</span>
+            <span ng-if="calculatingTax">Tax : <span class="fa fa-spin fa-spinner"></span></span>
+        </p>
+
     </div>
 </div>
 <div class="row">
@@ -23,5 +27,8 @@
     <div class="col-xs-6">
         <h2>{{ total | currency }}</h2>
     </div>
+</div>
+<div ng-if="!showTax">
+    <small ng-if="settings.taxbased === 'customer_shipping' || settings.taxbased === 'customer_billing'">Note: Shipping and taxes are estimated and will be updated during checkout based on your billing and shipping information.</small>
 </div>
 <div class="mb15"></div>

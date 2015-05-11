@@ -58,6 +58,14 @@
                 });
         };
 
+        this.getTax = function(postcode, fn) {
+            var apiUrl = baseUrl + ['tax', postcode].join('/');
+            $http.get(apiUrl)
+                .success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         // this.deleteCustomer = function (id, fn) {
         //     var apiUrl = baseUrl + ['contact', id].join('/');
         //     $http.delete(apiUrl)

@@ -1,8 +1,8 @@
 'use strict';
 /*global mainApp, moment, angular, cartData*/
 /*jslint unparam:true*/
-mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService', 'cartService',
-  function ($scope, ProductService, UserService, OrderService, PaymentService, cartService) {
+mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService', 'cartService', 'accountService',
+  function ($scope, ProductService, UserService, OrderService, PaymentService, cartService, AccountService) {
     $scope.checkoutModalState = 1;
 
     /*
@@ -15,6 +15,85 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
     });
 
     /*
+     * @getTax
+     * -
+     */
+
+    $scope.getTax = function (postcode, fn) {
+      ProductService.getTax(postcode, function (taxdata) {
+        if (taxdata.results[0] && taxdata.results[0].taxSales) {
+          $scope.showTax = true;
+          if (taxdata.results[0].taxSales === 0) {
+            taxdata.results[0].taxSales = 1;
+          }
+          $scope.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(0);
+          if (fn) {
+            fn($scope.taxPercent);
+          }
+        } else {
+          $scope.invalidZipCode = true;
+          $scope.showTax = false;
+        }
+      });
+    };
+
+    /*
+     * @getUserPreferences
+     * -
+     */
+
+    $scope.taxPercent = 1; //set at 1 to not disturb multiplication
+    $scope.showTax = false;
+
+    AccountService(function (err, account) {
+      if (err) {
+        console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
+      } else {
+        console.log('commerceSettings ', account.commerceSettings);
+        $scope.settings = account.commerceSettings;
+        if ($scope.settings.taxes && $scope.settings.taxbased === 'business_location') {
+          if (account.business.addresses[0].zip) {
+            console.log('getting tax ', account.business.addresses[0].zip);
+            if (account.business.addresses[0].zip) {
+              $scope.getTax(account.business.addresses[0].zip);
+            }
+          }
+        }
+      }
+    });
+
+    /*
+     * @shippingPostCodeChanged
+     * - when a shipping zipcode is modified update the taxpercent if customer_shipping is the taxbased
+     */
+
+    //TODO: Add country check
+    function isValidUSZip(sZip) {
+      return /^\d{5}(-\d{4})?$/.test(sZip);
+    }
+
+    $scope.invalidZipCode = false;
+    $scope.shippingPostCodeChanged = function (postcode) {
+      console.log('isValidUSZip(postcode) ', isValidUSZip(postcode));
+      if (isValidUSZip(postcode)) {
+        if (postcode && $scope.settings.taxes && $scope.settings.taxbased !== 'business_location') {
+          $scope.calculatingTax = true;
+          $scope.invalidZipCode = false;
+          $scope.showTax = false;
+          $scope.getTax(postcode, function () {
+            $scope.calculatingTax = false;
+            $scope.showTax = true;
+            $scope.calculateTotalChargesfn();
+          });
+          console.log('shipping postcode changed ', postcode);
+        }
+      } else {
+        $scope.invalidZipCode = true;
+        $scope.showTax = false;
+      }
+    };
+
+    /*
      * @updateSelectedProduct
      * - when product details is clicked update selected product
      */
@@ -23,6 +102,11 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       product.attributes = $scope.selectedProductAttributes(product);
       $scope.selectedProduct = product;
     };
+
+    /*
+     * @selectChanged
+     * -
+     */
 
     $scope.selectChanged = function (index) {
       var selectedAttributes = $scope.selectedProduct.attributes;
@@ -167,6 +251,11 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       }
     };
 
+    /*
+     * @validateBasicInfo
+     * -
+     */
+
     $scope.basicInfo = {};
     $scope.validateBasicInfo = function () {
       // check to make sure the form is completely valid
@@ -187,8 +276,12 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       // var total = 0;
       _.each($scope.cartDetails, function (item) {
         _subTotal = parseFloat(_subTotal) + (parseFloat(item.regular_price) * item.quantity);
-        if (item.taxable) {
-          _totalTax += parseFloat((item.regular_price * 8) / 100) * item.quantity;
+        if (item.taxable && $scope.showTax) {
+          var _tax;
+          if ($scope.taxPercent === 0) {
+            $scope.taxPercent = 1;
+          }
+          _totalTax += parseFloat((item.regular_price * $scope.taxPercent) / 100) * item.quantity;
         }
       });
       $scope.subTotal = _subTotal;
@@ -205,9 +298,19 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       return (!str || 0 === str.length);
     }
 
+    /*
+     * @formatNum
+     * -
+     */
+
     function formatNum(num) {
       return parseFloat(Math.round(num * 100) / 100).toFixed(2);
     }
+
+    /*
+     * @makeCartPayment
+     * -
+     */
 
     $scope.makeCartPayment = function () {
       $scope.checkoutModalState = 4;
@@ -327,20 +430,40 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       });
     };
 
+    /*
+     * @
+     * -
+     */
+
     angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
       if ($scope.checkoutModalState === 5) {
         $scope.checkoutModalState = 1;
       }
     });
 
+    /*
+     * @setPage
+     * -
+     */
+
     $scope.currentProductPage = 1;
     $scope.setPage = function (pageNo) {
       $scope.currentProductPage = pageNo;
     };
 
+    /*
+     * @pageChanged
+     * -
+     */
+
     $scope.pageChanged = function () {
       console.log('Page changed to: ' + $scope.currentProductPage);
     };
+
+    /*
+     * @getProductOffset
+     * -
+     */
 
     $scope.getProductOffset = function (currentProductPage, numtodisplay) {
       return (currentProductPage * numtodisplay) - numtodisplay;
