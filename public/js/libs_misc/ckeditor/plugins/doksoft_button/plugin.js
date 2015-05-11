@@ -47,11 +47,15 @@ CKEDITOR.plugins.add("doksoft_button", {
 		{
 			var spans = $(instance.element.$).find("a");
 			for (var Z = 0; Z < spans.length; Z++) {
-			   spans[Z].onclick = function() {
+			if(!spans[Z].hasAttribute('id'))
+			{
+				spans[Z].onclick = function() {
 			   		var sel = instance.getSelection();
 			   		sel.selectElement(sel.getStartElement());				
 			   	 	instance.openDialog("doksoft_button");
 			   };
+			}	
+			   
 			}
 		};
 		CKEDITOR.dialog.add("doksoft_button", function(e) {
