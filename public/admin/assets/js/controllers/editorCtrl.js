@@ -1306,7 +1306,10 @@
             }
         };
 
-        
+        $scope.updateBlogPost = function(post_data)
+        {
+            $scope.childScope.updateBlogPost(post_data);
+        }
 
         /*
          * @updatePage
