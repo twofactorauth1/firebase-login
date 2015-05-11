@@ -37,7 +37,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //-------------------------------------------------
         app.get("/login", this.setup.bind(this), this.showLogin.bind(this));
         app.post("/login",
-            passport.authenticate('local', { failureRedirect: "/login", failureFlash: 'Invalid username & password.', successFlash: 'Login success.' }),
+            passport.authenticate('local', { failureRedirect: "/login", failureFlash: 'An incorrect username or password was entered.', successFlash: 'Login success.' }),
             this.onLogin.bind(this));
 
 
