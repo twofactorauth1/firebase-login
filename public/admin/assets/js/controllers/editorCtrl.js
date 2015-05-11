@@ -1295,6 +1295,10 @@
                             });
                           }
                         }); 
+
+                        setTimeout(function() {
+                            $scope.activateCKEditor();
+                        }, 500)
                     });
                     var data = {
                         _id: $scope.website._id,
