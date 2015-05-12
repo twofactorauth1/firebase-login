@@ -1030,8 +1030,10 @@
             if ($scope.single_post) {
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
-            }            
-            $scope.activateCKEditor();
+            }
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
