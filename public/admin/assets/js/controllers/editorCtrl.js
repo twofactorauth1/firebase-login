@@ -1030,10 +1030,8 @@
             if ($scope.single_post) {
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
-            }
-            setTimeout(function() {
-                $scope.activateCKEditor();
-            }, 500)
+            }            
+            $scope.activateCKEditor();
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
@@ -1295,10 +1293,6 @@
                             });
                           }
                         }); 
-
-                        setTimeout(function() {
-                            $scope.activateCKEditor();
-                        }, 500)
                     });
                     var data = {
                         _id: $scope.website._id,
