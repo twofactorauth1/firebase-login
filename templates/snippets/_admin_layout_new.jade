@@ -46,6 +46,7 @@ html(lang='en', data-ng-app='clipApp')
     // NG Tags Input
     link(rel='stylesheet', href='../js/libs/ng-tags-input/ng-tags-input.min.css')
     link(rel='stylesheet', href='../js/libs/ng-joyride/ng-joyride.css')
+    link(rel='stylesheet', href='../js/libs/allmighty-autocomplete/style/autocomplete.css')
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
     // jQuery
@@ -90,6 +91,7 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-slugify/angular-slugify.js')
     // Underscore
     script(src='../js/libs/underscore/underscore-min.js')
+    script(src='../js/libs/allmighty-autocomplete/script/autocomplete.js')
     //config
     script(src="../js/scripts/config.js")
     // Keen Library

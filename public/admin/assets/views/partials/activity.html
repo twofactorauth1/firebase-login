@@ -441,7 +441,7 @@
         <form role="form">
             <div class="form-group">
                 <label for="exampleInputEmail1">Type</label>
-                <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
+                <autocomplete ng-model="selectedActivityType" data="activityTypes" on-select="updateActivityTypeFn"></autocomplete>
             </div>
             <div class="form-group">
                 <label>Detail</label>

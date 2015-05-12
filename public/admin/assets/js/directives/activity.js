@@ -1,4 +1,4 @@
-app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', function($filter, CustomerService, $modal) {
+app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'contactConstant', function($filter, CustomerService, $modal, contactConstant) {
 
     return {
         require: [],
@@ -32,6 +32,21 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', funct
                     scope.activity_types = activity_types;
                 });
             }
+
+            scope.activityTypes = [];
+
+            contactConstant.customer_activity_types.dp.forEach(function(value, index) {
+              scope.activityTypes.push(value.label);
+            });
+
+            scope.updateActivityTypeFn = function(selection) {
+              contactConstant.customer_activity_types.dp.forEach(function(value, index) {
+                scope.activityTypes.push(value.label);
+                if (value.label == selection) {
+                  scope.newActivity.activityType = value.data;
+                }
+              });
+            };
 
             scope.openModal = function(modal) {
                 scope.modalInstance = $modal.open({
