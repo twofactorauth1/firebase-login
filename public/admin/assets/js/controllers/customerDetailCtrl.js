@@ -29,8 +29,7 @@
     $scope.ip_geo_address = '';
     $scope.location = {};
     $scope.loadingMap = true;
-    $scope.fullName = '';
-
+    $scope.data = {fullName:''};
     /*
      * @getCustomer
      * -
@@ -108,7 +107,7 @@
         }
       }
 
-      $scope.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
+      $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
       // $scope.contactLabel = CustomerService.contactLabel(customer);
       // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
     });
@@ -297,7 +296,7 @@
      */
 
     $scope.checkContactValidity = function () {
-      var fullName = $scope.fullName;
+      var fullName = $scope.data.fullName;
       var email = _.filter($scope.customer.details[0].emails, function (mail) {
         return mail.email !== "";
       });
@@ -429,7 +428,7 @@
      * -
      */
 
-    $scope.$watch('fullName', function (newValue, oldValue) {
+    $scope.$watch('data.fullName', function (newValue, oldValue) {
       console.log('new value >>> ', newValue);
       console.log('oldValue >>> ', oldValue);
       if (newValue !== undefined) {
