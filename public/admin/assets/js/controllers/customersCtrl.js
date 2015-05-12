@@ -4,7 +4,7 @@
  */
 (function(angular) {
     app.controller('CustomersCtrl', ["$scope", "toaster", "$filter", "$modal", "CustomerService", "SocialConfigService", "userConstant", function($scope, toaster, $filter, $modal, CustomerService, SocialConfigService, userConstant) {
-
+        $scope.tableView = 'list';
         CustomerService.getCustomers(function(customers) {
             console.log('customers >>> ', customers);
             _.each(customers, function(customer) {

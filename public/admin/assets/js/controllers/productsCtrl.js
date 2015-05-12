@@ -3,6 +3,7 @@
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", function ($scope, $modal, ProductService) {
+    $scope.tableView = 'list';
     $scope.newProduct = {
       status: 'Auto Inactive'
     };

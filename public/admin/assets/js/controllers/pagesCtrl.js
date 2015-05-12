@@ -4,7 +4,7 @@
  */
 (function(angular) {
     app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function($scope, $location, toaster, $filter, $modal, WebsiteService) {
-
+        $scope.tableView = 'list';
         WebsiteService.getPages(function(pages) {
             console.log('pages >>> ', pages);
             var pagesArr = $scope.formatPages(pages);

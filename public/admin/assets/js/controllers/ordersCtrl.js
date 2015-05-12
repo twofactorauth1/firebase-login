@@ -3,12 +3,13 @@
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService) {
+    
+    $scope.tableView = 'list';
 
     /*
      * @openModal
      * -
      */
-
     $scope.openModal = function (template) {
       $scope.modalInstance = $modal.open({
         templateUrl: template,

@@ -4,7 +4,7 @@
  */
 (function(angular) {
     app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", function($scope, toaster, $modal, $filter, WebsiteService, $log) {
-
+        $scope.tableView = 'list';
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {

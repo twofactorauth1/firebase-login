@@ -5957,8 +5957,8 @@ fieldset[disabled] .btn-success.btn-o.active {
 .btn-info:active:focus,
 .btn-info:active:hover,
 .btn-info.dropdown-toggle:active:hover {
-  background-color: #31b0d6 !important;
-  border-color: #31b0d6;
+  background-color: #28a1c5 !important;
+  border-color: #28a1c5;
 }
 .btn-info:focus {
   background-color: #86d0e7;
