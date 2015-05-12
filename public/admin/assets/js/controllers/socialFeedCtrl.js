@@ -290,10 +290,13 @@
      * when selecting what account to post to, change the selected social account
      */
 
+    $scope.addCommentAdminPage = null;
+
     $scope.postToChange = function (type) {
       console.log('type ', type);
       $scope.noPostTo = false;
       $scope.selectedSocial = type;
+      $scope.addCommentAdminPage = type;
     };
 
     /*
