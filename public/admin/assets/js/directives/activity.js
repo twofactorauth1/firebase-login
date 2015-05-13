@@ -40,12 +40,11 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             });
 
             scope.updateActivityTypeFn = function(selection) {
-              contactConstant.customer_activity_types.dp.forEach(function(value, index) {
-                scope.activityTypes.push(value.label);
-                if (value.label == selection) {
-                  scope.newActivity.activityType = value.data;
-                }
-              });
+                var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                    label: selection
+                });
+                if(activity_hash)
+                    scope.newActivity.activityType = activity_hash.data;
             };
 
             scope.openModal = function(modal) {
