@@ -97,8 +97,12 @@
             if (data.error === undefined) {
               $scope.location.lat = parseFloat(data.lat);
               $scope.location.lng = parseFloat(data.lon);
-              $scope.markers.mainMarker.lat = parseFloat(data.lat);
-              $scope.markers.mainMarker.lng = parseFloat(data.lon);
+              if($scope.markers && $scope.markers.mainMarker)
+              {
+                $scope.markers.mainMarker.lat = parseFloat(data.lat);
+                $scope.markers.mainMarker.lng = parseFloat(data.lon);
+              }
+              
               $scope.loadingMap = false;
             } else {
               $scope.loadingMap = false;
@@ -139,8 +143,11 @@
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
             $scope.location.lng = parseFloat(data.lon);
-            $scope.markers.mainMarker.lat = parseFloat(data.lat);
-            $scope.markers.mainMarker.lng = parseFloat(data.lon);
+            if($scope.markers && $scope.markers.mainMarker)
+            {
+              $scope.markers.mainMarker.lat = parseFloat(data.lat);
+              $scope.markers.mainMarker.lng = parseFloat(data.lon);
+            }
             $scope.loadingMap = false;
           } else {
             $scope.loadingMap = false;
