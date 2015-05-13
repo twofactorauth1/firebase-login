@@ -3,7 +3,7 @@
  * controller for editor
  */
 (function(angular) {
-    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService) {
+    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService) {
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -104,10 +104,19 @@
          * get the url for the view page/post button
          */
 
+         AccountService.getAccount(function(account) {
+            $scope.account = account;
+         });
+
         $scope.getUrl = function(handle, is_post) {
             if (is_post)
                 handle = "blog/" + handle;
-            return 'http://' + window.location.host + '/' + handle;
+            var _url = 'http://' + window.location.host + '/' + handle;
+            if ($scope.account.domain) {
+                _url = $scope.account.domain + '/' + handle;
+            }
+
+            window.open(_url, '_blank');
         };
 
         /*
