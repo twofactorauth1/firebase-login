@@ -1,10 +1,25 @@
 'use strict';
 /*global app, moment*/
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant) {
 
   $scope.myPagingFunction = function () {
     console.log('paging');
   };
+
+  /*
+   * @getActivityName
+   * - get activity actual name 
+   */
+  $scope.getActivityName = function(activity)
+  {
+    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+        data: activity
+    });
+    if(activity_hash)
+      return activity_hash.label;
+    else
+      activity;
+  }
 
   /*
    * @isSameDateAs

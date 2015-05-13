@@ -190,7 +190,21 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             scope.pageCount = function() {
                 return Math.ceil(scope.total / scope.numPerPage);
             };
-        }
+            /*
+           * @getActivityName
+           * - get activity actual name 
+           */
+            scope.getActivityName = function(activity)
+            {
+                var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                    data: activity
+                });
+                if(activity_hash)
+                    return activity_hash.label;
+                else
+                    activity;
+                }
+            }
     };
 
 }]);
