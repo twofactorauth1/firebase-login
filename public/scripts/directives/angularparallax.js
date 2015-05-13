@@ -44,9 +44,13 @@ angular.module('angular-parallax', [
 
         if(win_width < 750 || iOS)
           $scope.parallaxRatio = 0.02;
-
+        var yoffset = 0;
+        if ($window.pageYOffset == 0){
+          yoffset = 10;
+        }
         var calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
-          elem.css('background-position-y', calcValY + "px");
+        calcValY = calcValY - yoffset;
+        elem.css('background-position-y', calcValY + "px");
       };
 
       var pos = function(obj){

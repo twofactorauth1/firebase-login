@@ -641,7 +641,7 @@
             });
         };
 
-        this.visitorsReport = function(date, account, _hostname, fn) {
+        this.visitorsReport = function(date, account, fn) {
             var self = this;
             //window.location.hostname
             if (account.subdomain === 'main') {

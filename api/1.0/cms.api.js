@@ -1271,7 +1271,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function (err, value) {
                     self.log.debug('<< deleteBlogPost');
-                    self.sendResultOrError(res, err, value, "Error deleting Blog Post");
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting Blog Post");
                     self.createUserActivity(req, 'DELETE_BLOGPOST', null, null, function(){});
                     self = null;
                 });

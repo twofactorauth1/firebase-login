@@ -13,7 +13,11 @@
     <div class="clearfix mb30"></div>
     <div class="col-xs-offset-6 col-xs-6">
         <p>Subtotal: {{ subTotal | currency }}</p>
-        <p>Tax (8%): {{ totalTax | currency }}</p>
+        <p>
+            <span ng-if="showTax">Tax ({{taxPercent}}%): {{ totalTax | currency }}</span>
+            <span ng-if="calculatingTax">Tax : <span class="fa fa-spin fa-spinner"></span></span>
+        </p>
+
     </div>
 </div>
 <div class="row">

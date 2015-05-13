@@ -2420,6 +2420,9 @@ div[data-class='image-text'] p {
   margin-left: -10px;
   margin-right: -10px;
 }
+.shopping-cart .information {
+  border-right: 1px solid #eeeeee;
+}
 .shopping-cart .order-line-items ul {
   padding: 0px;
 }
@@ -4728,11 +4731,14 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_chrome a.cke_button .cke_button__fontawesome_icon:before {
   content: "\f024";
 }
-#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button:before {
-  content: "\f138";
-}
 #editor-toolbar .cke_chrome a.cke_button .cke_button__textcolor_icon:before {
   content: "\f040";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_icon:before {
+  content: "\f0c8";
+}
+#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_font_awesome_icon:before {
+  content: "\f024";
 }
 #editor-toolbar .cke_chrome .cke_combo_button {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0);

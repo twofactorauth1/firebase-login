@@ -1,4 +1,4 @@
-<div ng-controller="ProductsCtrl">
+<div ng-controller="ProductsCtrl" class="products">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}">
+        <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid'}">
             <thead>
                 <tr>
                     <th class="center">Image</th>

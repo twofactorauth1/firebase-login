@@ -1,18 +1,23 @@
-define(['app'], function(app) {
-  app.register.service('AccountService', [function() {
-    this.accountTab = 'account_information';
-    this.socialTab = 'integrations';
-    this.getActiveTab = function () {
-      return this.accountTab;
+(function (angular) {
+  app.service('AccountService', ['$http', function ($http) {
+    var baseUrl = '/api/1.0/account/';
+
+    this.getAccount = function (fn) {
+      var apiUrl = baseUrl;
+      $http.get(apiUrl)
+        .success(function (data, status, headers, config) {
+          fn(data);
+        });
     };
 
-    this.setActiveTab = function (tab) {
-      this.accountTab = tab;
-    };
-
-    this.getSocialTab = function () {
-      return this.socialTab;
+    //:id/setting
+    this.updateAccount = function (account, fn) {
+      var apiUrl = baseUrl + [account._id].join('/');
+          $http.put(apiUrl, account)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
     };
 
   }]);
-});
+}(angular));

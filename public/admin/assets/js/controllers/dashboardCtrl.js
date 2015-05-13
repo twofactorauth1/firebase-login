@@ -182,7 +182,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
    */
   $scope.analyticsVisitors = [];
   $scope.runVisitorsReport = function () {
-    ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, 'indigenous.io', function (data) {
+    ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, function (data) {
       var returningVisitors = data[0].result;
       var newVisitors = data[1].result;
 

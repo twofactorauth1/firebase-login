@@ -551,6 +551,7 @@ app.constant('JS_REQUIRES', {
     'chatCtrl': 'assets/js/controllers/chatCtrl.js',
 
     //*** Services
+    'accountService': 'assets/js/services/account.js',
     'productService': 'assets/js/services/product.js',
     'paymentService': 'assets/js/services/product.js',
     'toasterService': 'assets/js/services/toaster.js',

@@ -1,23 +1,54 @@
 'use strict';
-/** 
- * controller for personal business page
- */
+/*global app, moment, angular, window*/
 (function (angular) {
-  app.controller('CommerceSettingsCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant) {
-    console.log('commercesettings >>> ');
+  app.controller('CommerceSettingsCtrl', ["$scope", "UserService", "AccountService", function ($scope, UserService, AccountService) {
 
-    $scope.calculateTaxOptions = [
-      {
-        name: 'Customer Shipping Address',
-        value: 'customer_shipping'
-      }, {
-        name: 'Customer Billing Address',
-        value: 'customer_billing'
-      }, {
-        name: 'Business Location',
-        value: 'business_location'
+    /*
+     * @calculateTaxOptions
+     * -
+     */
+
+    $scope.calculateTaxOptions = [{
+      name: 'Customer Shipping Address',
+      value: 'customer_shipping'
+    }, {
+      name: 'Customer Billing Address',
+      value: 'customer_billing'
+    }, {
+      name: 'Business Location',
+      value: 'business_location'
+    }];
+
+    /*
+     * @getUserPreferences
+     * -
+     */
+
+    AccountService.getAccount(function (account) {
+      console.log('account ', account);
+      $scope.account = account;
+      if (!account.commerceSettings) {
+        account.commerceSettings = {
+          taxes: true,
+          taxbased: ''
+        };
       }
-    ];
+      $scope.settings = account.commerceSettings;
+    });
+
+    /*
+     * @updateSettings
+     * -
+     */
+
+    $scope.updateSettings = function () {
+      var _account = $scope.account;
+      _account.commerceSettings = $scope.settings;
+      console.log('$scope.settings ', $scope.settings);
+      AccountService.updateAccount(_account, function (updatedAccount) {
+        console.log('updatedAccount ', updatedAccount);
+      });
+    };
 
   }]);
-})(angular);
+}(angular));

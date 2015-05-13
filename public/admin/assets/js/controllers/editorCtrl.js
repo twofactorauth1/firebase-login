@@ -32,6 +32,7 @@
         $scope.typefilter = 'all';
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
+        $scope.single_post = false;
         var stopInterval;
         
         $scope.$watch('currentPage.handle', function(newValue, oldValue) {
@@ -1030,7 +1031,9 @@
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
             }
-            $scope.activateCKEditor();
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
@@ -1292,6 +1295,9 @@
                             });
                           }
                         }); 
+                        setTimeout(function() {
+                            $scope.activateCKEditor();
+                        }, 500)
                     });
                     var data = {
                         _id: $scope.website._id,
@@ -1304,7 +1310,10 @@
             }
         };
 
-        
+        $scope.updateBlogPost = function(post_data)
+        {
+            $scope.childScope.updateBlogPost(post_data);
+        }
 
         /*
          * @updatePage

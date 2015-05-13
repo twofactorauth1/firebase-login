@@ -289,6 +289,18 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             })
         }
 
+
+        /*
+         * @updateBlogPost
+         * -
+         */
+
+        $scope.updateBlogPost = function(post) {
+            $scope.$apply(function() {
+                that.post.post_title = post.post_title;
+            })
+        }
+
         /*
          * @initializePostData
          * -

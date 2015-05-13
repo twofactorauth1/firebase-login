@@ -104,15 +104,15 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCustomers">
+                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid'}" ng-show="displayedCustomers">
                         <thead>
                             <tr>
-                                <th class="center" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
-                                <th st-sort="name" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Name</th>
-                                <th st-sort="handle" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
-                                <th class="hidden-xs" st-sort="email" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
-                                <th class="hidden-xs" st-sort="address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
-                                <th class="hidden-xs center" st-sort="phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
+                                <th class="center" st-sort="hasPhoto" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                <th st-sort="getters.name" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Name</th>
+                                <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
+                                <th class="hidden-xs" st-sort="bestEmail" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
+                                <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
+                                <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
                                 <th class="hidden-xs" st-sort="social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
