@@ -60,7 +60,16 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             };
 
             scope.addActivityFn = function() {
+                // Reinitializing the time to get current time
+                if(scope.singleCustomer) {
+                    scope.newActivity.start = new Date();
+                    scope.newActivity.end = new Date();
+                }
+                
                 CustomerService.postCustomerActivity(scope.newActivity, function(activity) {
+                    if(scope.singleCustomer) {                    
+                        activity.customer = scope.$parent.customer;
+                    }
                     scope.all_activities.push(activity);
                     scope.all_activities = _.sortBy(scope.all_activities, function(o) {
                         return o.start;
