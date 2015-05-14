@@ -10,7 +10,7 @@ var notificaitonToEmail = 'test_operations@indigenous.io';
 
 var welcomeFromEmail = process.env.WELCOME_FROM_EMAIL || 'hello@indigenous.io';
 var welcomeFromName =  process.env.WELCOME_FROM_NAME || 'Indigenous';
-var welcomeHTML = process.env.WELCOME_HTML || 'templates/emails/welcome-aboard.html';
+var welcomeHTML = process.env.WELCOME_HTML || 'public/templates/emails/welcome-aboard.html';
 var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indigenous!';
 
 /*

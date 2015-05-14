@@ -7,7 +7,8 @@
 
 var baseApi = require('../base.api');
 var GeoDao = require('../../dao/geo.dao');
-
+var geoConfig = require('../../configs/geo.config');
+var Lob = require('lob')(geoConfig.lob.key);
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -22,6 +23,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
         //GET
         app.get(this.url('search/address/:address'), this.isAuthApi.bind(this), this.searchAddress.bind(this));
+        app.get(this.url('address/verify'), this.isAuthApi.bind(this), this.verifyAddress.bind(this));
     },
 
 
@@ -33,6 +35,29 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 resp.send(value);
             }
+        });
+    },
+
+    verifyAddress: function(req, resp) {
+        var self = this;
+        self.log.debug('>> verifyAddress');
+        var address1 = req.query.address1;
+        var address2 = req.query.address2;
+        var city = req.query.city;
+        var state = req.query.state;
+        var zip = req.query.zip;
+        var country = req.query.country;
+
+        Lob.verification.verify({
+            address_line1: address1,
+            address_line2: address2,
+            address_city: city,
+            address_state: state,
+            address_zip: zip,
+            address_country: country
+        }, function (err, res) {
+            console.log (err, res);
+            resp.send(res);
         });
     }
 });
