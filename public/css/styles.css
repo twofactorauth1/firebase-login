@@ -2841,6 +2841,12 @@ div[data-type=single-post] .container {
 .single-post-v1 .btn-social-icon {
   border-radius: 50% !important;
 }
+.single-post-v1 tags-input .tags .input {
+  color: #444;
+}
+.single-post-v1 tags-input .tags .tag-item {
+  background: #47b1cc;
+}
 .single-blog .blog-meta {
   margin-top: 15px;
   margin-bottom: 30px;
