@@ -12626,6 +12626,13 @@ fieldset[disabled] .btn-vimeo-square.active {
 .products table.grid thead th {
   width: 20% !important;
 }
+.products table.grid .product-img {
+  height: 80px;
+  text-align: center;
+}
+.products table.grid .product-img h3 {
+  line-height: 50px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Customers
 /* ---------------------------------------------------------------------- */
