@@ -312,7 +312,13 @@ app.constant('contactConstant', {
     PHONECALL: "PHONECALL",
     FACEBOOK_LIKE: "FACEBOOK_LIKE",
     TWEET: "TWEET",
-
+    FORM_SUBMISSION: 'FORM_SUBMISSION',
+    EMAIL_DELIVERED: 'EMAIL_DELIVERED',
+    EMAIL_OPENED: 'EMAIL_OPENED',
+    EMAIL_CLICKED: 'EMAIL_CLICKED',
+    EMAIL_UNSUB: 'EMAIL_UNSUB',
+    SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
+    SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
     dp: [{
       label: "Page View",
       data: "PAGE_VIEW"
@@ -334,6 +340,27 @@ app.constant('contactConstant', {
     }, {
       label: "Tweets",
       data: "TWEET"
+    }, {
+      label: "Form Submission",
+      data: "FORM_SUBMISSION"
+    }, {
+      label: "Email Delivered",
+      data: "EMAIL_DELIVERED"
+    }, {
+      label: "Email Opened",
+      data: "EMAIL_OPENED"
+    }, {
+      label: "Email Clicked",
+      data: "EMAIL_CLICKED"
+    }, {
+      label: "Email UnSubscribe",
+      data: "EMAIL_UNSUB"
+    }, {
+      label: "Subscription Paid",
+      data: "SUBSCRIPTION_PAID"
+    }, {
+      label: "Subscribe Cancel",
+      data: "SUBSCRIBE_CANCEL"
     }]
   }
 });

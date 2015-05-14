@@ -58,7 +58,20 @@
                 {
                    return value.details[0].addresses[0].address
                 }
-            }
+            },
+            social:function(value)
+            {
+                if($scope.checkLinkedInId(value))
+                    return 1
+                if($scope.checkGoogleId(value))
+                    return 2
+                if($scope.checkFacebookId(value))
+                    return 3 
+                if($scope.checkTwitterId(value))
+                    return 4
+                else
+                return 5                  
+            }   
         };
 
         

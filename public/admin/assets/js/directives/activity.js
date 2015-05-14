@@ -40,12 +40,11 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             });
 
             scope.updateActivityTypeFn = function(selection) {
-              contactConstant.customer_activity_types.dp.forEach(function(value, index) {
-                scope.activityTypes.push(value.label);
-                if (value.label == selection) {
-                  scope.newActivity.activityType = value.data;
-                }
-              });
+                var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                    label: selection
+                });
+                if(activity_hash)
+                    scope.newActivity.activityType = activity_hash.data;
             };
 
             scope.openModal = function(modal) {
@@ -60,7 +59,16 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             };
 
             scope.addActivityFn = function() {
+                // Reinitializing the time to get current time
+                if(scope.singleCustomer) {
+                    scope.newActivity.start = new Date();
+                    scope.newActivity.end = new Date();
+                }
+                
                 CustomerService.postCustomerActivity(scope.newActivity, function(activity) {
+                    if(scope.singleCustomer) {                    
+                        activity.customer = scope.$parent.customer;
+                    }
                     scope.all_activities.push(activity);
                     scope.all_activities = _.sortBy(scope.all_activities, function(o) {
                         return o.start;
@@ -190,7 +198,21 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             scope.pageCount = function() {
                 return Math.ceil(scope.total / scope.numPerPage);
             };
-        }
+            /*
+           * @getActivityName
+           * - get activity actual name 
+           */
+            scope.getActivityName = function(activity)
+            {
+                var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                    data: activity
+                });
+                if(activity_hash)
+                    return activity_hash.label;
+                else
+                    activity;
+                }
+            }
     };
 
 }]);
