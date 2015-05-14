@@ -101,8 +101,8 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid'}" ng-show="orders">
-                        <thead>
+                    <table class="table table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="orders">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th class="center column-width" st-sort="status">Status</th>
                                 <th class="column-width" st-sort="getters.customerName">Customer</th>
