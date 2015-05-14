@@ -2,10 +2,6 @@
 /*global app, moment*/
 app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant) {
 
-  $scope.myPagingFunction = function () {
-    console.log('paging');
-  };
-
   /*
    * @getActivityName
    * - get activity actual name 
@@ -204,7 +200,10 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       $scope.visitorsThisMonth = 0;
       $scope.totalNewVisitors = 0;
       $scope.totalReturningVisitors = 0;
-      $scope.lastVisitorDate = data[2].result[0].keen.created_at;
+      $scope.lastVisitorDate = null;
+      if (data[2].result[0]) {
+        $scope.lastVisitorDate = data[2].result[0].keen.created_at;
+      }
       var tempData = [];
       _.each($scope.getDaysThisMonth(), function (day) {
         var thisDaysVisitors = 0;

@@ -412,7 +412,7 @@
                         </tab>
                         <!-- end: TAB EDIT ACCOUNT -->
                         <!-- start: TAB PROJECTS -->
-                        <tab heading="Orders" ng-if="orders">
+                        <tab heading="Orders" ng-if="orders.length > 1">
                             <div st-table="displayedOrders" st-safe-src="orders">
                                 <div class="panel panel-transparent row margin-bottom-0">
                                     <div class="panel-body">
