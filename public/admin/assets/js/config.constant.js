@@ -16,6 +16,19 @@ app.constant('hoursConstant', {
   HOURS: ["5:00 am", "5:30 am", "6:00 am", "6:30 am", "7:00 am", "7:30 am", "8:00 am", "8:30 am", "9:00 am", "9:30 am", "10:00 am", "10:30 am", "11:00 am", "11:30 am", "12:00 pm", "12:30 pm", "1:00 pm", "1:30 pm", "2:00 pm", "2:30 pm", "3:00 pm", "3:30 pm", "4:00 pm", "4:30 pm", "5:00 pm", "5:30 pm", "6:00 pm", "6:30 pm", "7:00 pm", "7:30 pm", "8:00 pm", "8:30 pm", "9:00 pm", "9:30 pm", "10:00 pm", "10:30 pm", "11:00 pm", "11:30 pm", "12:00 am"]
 });
 
+/*
+
+  {
+    type: "element",
+    selector: ".edit-account a",
+    heading: "Edit Account tab.",
+    text: "Click Edit Account tab to upload your logo and enter your information. Remember to click Save in the upper right hand corner, and then review under the Profile tab.",
+    placement: "bottom",
+    scroll: false
+  }
+
+*/
+
 app.constant('ONBOARDINGCONSTANT', {
 
   tasks: [{
@@ -25,11 +38,7 @@ app.constant('ONBOARDINGCONSTANT', {
       taskKey: 'sign_up',
       state: 'app.support.gettingstarted'
     },
-    steps: [{
-      type: 'title',
-      heading: "Sign up for Indigenous",
-      text: "You have taken the first step in growing your business."
-    }]
+    steps: []
   }, {
     pane: {
       heading: "Basic account information",
@@ -40,14 +49,7 @@ app.constant('ONBOARDINGCONSTANT', {
     steps: [{
       type: 'title',
       heading: "Enter your basic information.",
-      text: "Enter your contact information and business hours."
-    }, {
-      type: "element",
-      selector: ".edit-account a",
-      heading: "Edit Account tab.",
-      text: "Click Edit Account tab to upload your logo and enter your information. Remember to click Save in the upper right hand corner, and then review under the Profile tab.",
-      placement: "bottom",
-      scroll: false
+      text: "Enter your contact information and business hours, and upload your logo under the Edit Account tab. Remember to click Save in the upper right hand corner, and then review under the Profile tab."
     }]
   }, {
     pane: {
@@ -72,9 +74,20 @@ app.constant('ONBOARDINGCONSTANT', {
       type: "element",
       selector: "#new-page",
       heading: "Choose a template and customize your site",
-      text: "Click on New Page in the upper right corner and select a template.",
+      text: "Click on New Page in the upper right corner and select a template. Name the page and check the box by Add to Main Menu.",
       placement: "bottom",
       scroll: false
+    },{
+        type: "function",
+        fn: 'openModalForNewPage'
+    },{
+      type: 'title',
+      heading: "Edit Account tab.",
+      text: "Click Add Page in the bottom right corner."
+    },{
+      type: 'title',
+      heading: "Choose a template and customize your site",
+      text: "Select the page you just created and begin entering your copy. You can easily reorder, delete, or add components (content bars). Use the menu bar for editing. Use the buttons above to view the page, change page settings, and save or cancel your edits. Remember, you can always click on the help button in the bottom right corner. Tip: When you have multiple pages, you can search by title, handle, or date; filter by screenshot, title, URL, number of components, and the created or modified date; and select list or grid view for easy management. You can also sort A-Z or ascending/descending using the up/down triangles beside the column names."
     }]
   }, {
     pane: {
@@ -102,172 +115,64 @@ app.constant('ONBOARDINGCONSTANT', {
     }]
   }, {
     pane: {
-      heading: "Add Social Feed",
+      heading: "Social Feed",
       text: "Add social feeds of your friends.",
       taskKey: 'social-feed',
       state: 'app.marketing.socialfeed'
     },
     steps: [{
       type: 'title',
-      heading: "Add Social Feed",
+      heading: "Social Feed",
       text: "Add social feeds of your friends."
     }]
 
   }, {
     pane: {
-      heading: "Create First BlogPost",
+      heading: "Blog",
       text: "Keep everyone up to date and informed with a regular blog.",
       taskKey: 'single-post',
       state: 'app.website.posts'
     },
     steps: [{
       type: 'title',
-      heading: "Create First BlogPost",
+      heading: "Blog",
       text: "Keep everyone up to date and informed with a regular blog."
     }]
   }, {
     pane: {
-      heading: "Import/Create Products",
+      heading: "Commerce",
       text: "Import or create new products to start selling and creating revenue.",
       taskKey: 'commerce',
       state: 'app.commerce'
     },
     steps: [{
       type: 'title',
-      heading: "Import/Create Products",
+      heading: "Commerce",
       text: "Import or create new products to start selling and creating revenue.",
     }]
   }, {
     pane: {
-      heading: "Discover the Dashboard",
-      text: "Now evetything is set up, its time to start trakcing.",
-      taskKey: 'dashboard',
-      state: 'app.dashboard'
-    },
-    steps: [{
-      type: 'title',
-      heading: "Discover the Dashboard",
-      text: "Now evetything is set up, its time to start trakcing."
-    }]
-  }, {
-    pane: {
-      heading: 'View pages',
-      text: 'See all pages',
-      taskKey: 'pages',
-      state: 'app.website.pages'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'View pages',
-      text: 'See all pages'
-    }]
-  }, {
-    pane: {
-      heading: 'View posts',
-      text: 'See all posts',
-      taskKey: 'posts',
-      state: 'app.website.posts'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'View posts',
-      text: 'See all posts'
-    }]
-  }, {
-    pane: {
-      heading: 'Add product',
+      heading: 'Products',
       text: 'Add a product',
       taskKey: 'single-product',
       state: 'app.commerce'
     },
     steps: [{
       type: 'title',
-      heading: 'Add product',
+      heading: 'Products',
       text: 'Add a product'
     }]
   }, {
     pane: {
-      heading: 'Add business info',
-      text: 'Add business info',
-      taskKey: 'profile-business',
-      state: 'app.account'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Add business info',
-      text: 'Add business info'
-    }]
-  }, {
-    pane: {
-      heading: 'Analytics',
-      text: 'Check site status',
-      taskKey: 'site-analytics',
+      heading: "Dashboard",
+      text: "Now evetything is set up, its time to start trakcing.",
+      taskKey: 'dashboard',
       state: 'app.dashboard'
     },
     steps: [{
       type: 'title',
-      heading: 'Analytics',
-      text: 'Check site status'
-    }]
-  }, {
-    pane: {
-      heading: 'Add a Contact',
-      text: 'Learn how to manually add a contact.',
-      taskKey: 'add_contact',
-      state: 'app.'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Add a Contact',
-      text: 'Learn how to manually add a contact.'
-    }]
-  }, {
-    pane: {
-      heading: 'Add Social Feed',
-      text: 'Add a social feed to display with all the other networks.',
-      taskKey: 'add_feed',
-      state: 'app.'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Add Social Feed',
-      text: 'Add a social feed to display with all the other networks.'
-    }]
-  }, {
-    pane: {
-      heading: 'Add a Post',
-      text: 'Add a post that will show up in your blog.',
-      taskKey: 'add_post',
-      state: 'app.'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Add a Post',
-      text: 'Add a post that will show up in your blog.'
-    }]
-  }, {
-    pane: {
-      heading: 'Add a Product',
-      text: 'Add a product to show in your products component.',
-      taskKey: 'add_product',
-      state: 'app.'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Add a Product',
-      text: 'Add a product to show in your products component.'
-    }]
-  }, {
-    pane: {
-      heading: 'Basic Info',
-      text: 'Enter the basic info for your business profile.',
-      taskKey: 'basic_info',
-      state: 'app.'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Basic Info',
-      text: 'Enter the basic info for your business profile.'
+      heading: "Dashboard",
+      text: "Now evetything is set up, its time to start trakcing."
     }]
   }]
 
