@@ -30,40 +30,40 @@
                             </div>
                         </div> -->
                         <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3">
-                            <div class="col-sm-2 col-xs-6 center">
+                            <div class="col-sm-3 col-md-3 col-lg-2 col-xs-6 center">
                                 <a ng-if="!single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(currentPage.handle, false)" target="_blank">
                                     <span>View Page</span>
                                 </a>
                                 <a ng-if="single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(post_data.post_url, true)" target="_blank">
                                     <span>View Post</span>
                                 </a>
-                                <div class="visible-xs margin-bottom-10"></div>
+                                <div class="hidden-lg margin-bottom-10"></div>
                             </div>
-                            <div class="col-sm-2 col-xs-6 center">
+                            <div class="col-sm-3 col-md-3 col-lg-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
                                     <span>{{single_post ? 'Post Settings' :  'Page Settings'}}</span>
                                 </button>
-                                <div class="visible-xs margin-bottom-10"></div>
+                                <div class="hidden-lg margin-bottom-10"></div>
                             </div>
 
-                            <div class="col-sm-2 col-xs-6 center">
+                            <div class="col-sm-3 col-md-3 col-lg-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
                                     <span>Save</span>
                                 </button>
-                                <div class="visible-xs margin-bottom-10"></div>
+                                <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             
-                            <div class="col-sm-2 col-xs-6 center">
+                            <div class="col-sm-3 col-md-3 col-lg-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
                                     <span>Cancel</span>
                                 </button>
-                                <div class="visible-xs margin-bottom-10"></div>
+                                <div class="hidden-lg margin-bottom-10"></div>
                             </div>
-                             <div class="col-sm-2 col-xs-6 center">
+                             <div class="col-sm-3 col-md-3 col-lg-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="insertMediaOnClick()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
                                     <span>Media Manager</span>
                                 </button>
-                                <div class="visible-xs margin-bottom-10"></div>
+                                <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                         </div>
                     </div>

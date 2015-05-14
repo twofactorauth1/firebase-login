@@ -178,21 +178,26 @@
             var navbarCollapse = angular.element('header').outerHeight();
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
-            
+            var doc_width = $(document).width();
             if (scrollTop > offsetHeight) {
 
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
-
-                if($(document).width() < 768) {
-                    editorToolbar.css({
-                    'top': scrollTop + 40
-                    });
+                if(doc_width <= 1183) {
+                     editorToolbar.css({
+                            'top': scrollTop + 25
+                        });
                 }
-                
-                if($(document).width() <= 990) {
-                    scrollTop = scrollTop + 65 
+                if(doc_width <= 974) {                    
+                    scrollTop = scrollTop + 65;
+
+                   
+                }
+                if(doc_width < 760) {
+                    editorToolbar.css({
+                        'top': scrollTop - 25
+                    });
                 }
                  
                 mainToolbar.css({
@@ -716,9 +721,7 @@
                     $scope.$apply(function() {
                         var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
                         var incrementHeight = 0;
-                        if($(document).width() <= 990) {
-                            incrementHeight = incrementHeight + 65;
-                        }
+                        
                         if(editorToolbar)
                             incrementHeight = incrementHeight + editorToolbar.height();
                         $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
