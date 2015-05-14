@@ -249,7 +249,6 @@
         this.queryReports = function(date, _hostname) {
             var queryData = {};
             var hostname = _hostname || window.location.hostname;
-            console.log('>> queryReports ' + hostname);
 
             queryData.visitorLocations = new Keen.Query("count", {
                 eventCollection: "session_data",
@@ -664,7 +663,6 @@
         this.queryVisitorReports = function(date, _hostname) {
             var queryData = {};
             var hostname = _hostname || window.location.hostname;
-            console.log('>> queryReports ' + hostname);
 
             queryData.returningVisitors = new Keen.Query("count_unique", {
                 eventCollection: "session_data",

@@ -2,8 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', function ($scope, $modal, $timeout, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService) {
-
+  app.controller('CustomerDetailCtrl', ["$scope", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', function ($scope, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService) {
 
     /*
      * @openModal
@@ -29,7 +28,9 @@
     $scope.ip_geo_address = '';
     $scope.location = {};
     $scope.loadingMap = true;
-    $scope.data = {fullName:''};
+    $scope.data = {
+      fullName: ''
+    };
     /*
      * @getCustomer
      * -
@@ -59,7 +60,6 @@
               keepGoing = false;
               $scope.loadingMap = false;
             } else if (keepGoing && value.ip_geo_info_gen && value.ip_geo_info_gen.country) {
-              console.log('value.ip_geo_info_gen.city ', value.ip_geo_info_gen.city);
               $scope.ip_geo_address = _.filter([value.ip_geo_info_gen.city, value.ip_geo_info_gen.province, value.ip_geo_info_gen.postal_code], function (str) {
                 $scope.city = value.ip_geo_info_gen.city;
                 return (str !== "" || str !== undefined || str !== null);
@@ -97,12 +97,11 @@
             if (data.error === undefined) {
               $scope.location.lat = parseFloat(data.lat);
               $scope.location.lng = parseFloat(data.lon);
-              if($scope.markers && $scope.markers.mainMarker)
-              {
+              if ($scope.markers && $scope.markers.mainMarker) {
                 $scope.markers.mainMarker.lat = parseFloat(data.lat);
                 $scope.markers.mainMarker.lng = parseFloat(data.lon);
               }
-              
+
               $scope.loadingMap = false;
             } else {
               $scope.loadingMap = false;
@@ -143,8 +142,7 @@
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
             $scope.location.lng = parseFloat(data.lon);
-            if($scope.markers && $scope.markers.mainMarker)
-            {
+            if ($scope.markers && $scope.markers.mainMarker) {
               $scope.markers.mainMarker.lat = parseFloat(data.lat);
               $scope.markers.mainMarker.lng = parseFloat(data.lon);
             }
@@ -436,8 +434,6 @@
      */
 
     $scope.$watch('data.fullName', function (newValue, oldValue) {
-      console.log('new value >>> ', newValue);
-      console.log('oldValue >>> ', oldValue);
       if (newValue !== undefined) {
         var nameSplit = newValue.match(/\S+/g);
         if (nameSplit) {
@@ -768,17 +764,18 @@
      */
 
     OrderService.getCustomerOrders($stateParams.contactId, function (orders) {
-      console.log('orders >>> ', orders);
-      _.each(orders, function (order) {
-        if (order.line_items) {
-          order.line_items_total = order.line_items.length;
-        } else {
-          order.line_items_total = 0;
-        }
+      if (orders) {
+        _.each(orders, function (order) {
+          if (order.line_items) {
+            order.line_items_total = order.line_items.length;
+          } else {
+            order.line_items_total = 0;
+          }
 
-        order.total = order.total;
-      });
-      $scope.orders = orders;
+          order.total = order.total;
+        });
+        $scope.orders = orders;
+      }
     });
 
     /*
@@ -800,7 +797,6 @@
       }, function (isConfirm) {
         if (isConfirm) {
           CustomerService.deleteCustomer(customer._id, function () {
-            console.log('Customer Deleted >>>');
             toaster.pop('warning', 'Customer Deleted.');
             $state.go('app.customers');
           });
