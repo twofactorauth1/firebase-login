@@ -161,11 +161,13 @@
                     var locationExists = _.find(locationData, function(loc){
                         return loc.code === location.code
                     });
-                    if (!locationExists) {
+                    if (!locationExists && subObj.value) {
                         locationData.push(subObj);
                     }
                 }
             });
+
+            console.log('locationData >>> ', locationData);
 
             $scope.$apply(function() {
                 $scope.locationData = locationData;
