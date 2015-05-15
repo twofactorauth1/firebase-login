@@ -30,7 +30,11 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
-
+            /**
+             *
+             *
+             */
+            txtcolor: "#777",
             /**
              * The type of component this is
              */
