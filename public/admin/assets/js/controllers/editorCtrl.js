@@ -2039,7 +2039,8 @@
                         }
                         $scope.changesConfirmed = true;
                         $scope.isDirty = false;
-                        $location.path(newUrl);
+                        //set window location
+                        window.location = newUrl;
                         offFn();
                     });
             } else if ($scope.changesConfirmed) {
