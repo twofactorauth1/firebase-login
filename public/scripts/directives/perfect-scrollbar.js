@@ -1,4 +1,3 @@
-'use strict';
 
 angular.module('mainApp')
   .directive('perfectScrollbar', ['$parse', '$window',

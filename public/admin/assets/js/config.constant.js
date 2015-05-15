@@ -266,6 +266,9 @@ app.constant('contactConstant', {
     }, {
       label: "Subscribe Cancel",
       data: "SUBSCRIBE_CANCEL"
+    }, {
+      label: "Other",
+      data: "OTHER"
     }]
   }
 });
