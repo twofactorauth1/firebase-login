@@ -518,9 +518,14 @@
         this.runReports = function(date, account, fn) {
 
             var self = this;
-            var hostname = window.location.hostname;
+            var hostname = account.subdomain + '.indigenous.io';
+
             if (account.subdomain === 'main') {
                 hostname = hostname.replace('main', 'www');
+            }
+
+            if (account.domain) {
+                hostname = account.domain;
             }
 
             KeenService.keenClient(function(client) {
