@@ -61,6 +61,19 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             scope.addActivityFn = function() {
                 // Reinitializing the time to get current time
                 if(scope.singleCustomer) {
+                    angular.element("#customer_activity_type .error").html("");
+                    angular.element("#customer_activity_type .error").removeClass('has-error');
+                    var activity_type = angular.element("#customer_activity_type input").val();
+                    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                        label: activity_type
+                    });
+                    if(!activity_hash)
+                    {
+                         angular.element("#customer_activity_type .error").html("Valid Activity Type Required");
+                         angular.element("#customer_activity_type .error").addClass('has-error');
+                         return;
+                    }
+                    scope.newActivity.activityType = activity_hash.data;
                     scope.newActivity.start = new Date();
                     scope.newActivity.end = new Date();
                 }
