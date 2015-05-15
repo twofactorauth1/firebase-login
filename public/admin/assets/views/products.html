@@ -1,4 +1,4 @@
-<div ng-controller="ProductsCtrl">
+<div ng-controller="ProductsCtrl" class="products">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -64,8 +64,8 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}">
-            <thead>
+        <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}">
+            <thead ng-class="{'bg-white': tableView == 'grid'}">
                 <tr>
                     <th class="center">Image</th>
                     <th class="hidden-xs" st-sort="status">Status</th>
@@ -120,7 +120,7 @@
             </thead>
             <tbody>
                 <tr ng-repeat="product in displayedProducts" ng-click="viewSingleProduct(product)">
-                    <td class="center">
+                    <td class="center product-img">
                         <img ng-if="product.icon && product.is_image" src="{{product.icon}}" class="img-circle img-thumbnail" alt="image" style="width:50px;height:50px">
                         <h3 ng-if="!product.icon"><span class="fa fa-cube"></span></h3>
                         <h3 ng-if="!product.is_image && product.icon"><span class="fa {{product.icon}}"></span></h3>

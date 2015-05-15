@@ -1454,7 +1454,7 @@ var dao = {
             params.metadata = metadata;
         }
 
-        stripe.charges.createRefund(chargeId, params, apiToken, function(err, refund){
+        stripe.charges.refund(chargeId, params, apiToken, function(err, refund){
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, charges);

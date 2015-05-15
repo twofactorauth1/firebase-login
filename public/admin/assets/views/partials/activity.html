@@ -299,7 +299,7 @@
                 <li class="timeline-item success" ng-repeat="activity in activities | filter:orderBy:activity.start:true">
                     <div class="margin-left-15">
                         <div class="text-muted text-small">
-                            {{activity.start | timeAgoFilter}} {{activity.activityType}}
+                            {{activity.start | timeAgoFilter}} {{getActivityName(activity.activityType)}}
                         </div>
                         <p>
                             <div ng-switch on="activity.activityType">
@@ -441,7 +441,7 @@
         <form role="form">
             <div class="form-group">
                 <label for="exampleInputEmail1">Type</label>
-                <input type="text" class="form-control" placeholder="Enter Activity type" ng-model="newActivity.activityType">
+                <autocomplete ng-model="selectedActivityType" data="activityTypes" on-select="updateActivityTypeFn"></autocomplete>
             </div>
             <div class="form-group">
                 <label>Detail</label>

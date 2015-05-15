@@ -104,16 +104,17 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCustomers">
-                        <thead>
+                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedCustomers">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th class="center" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
-                                <th st-sort="name" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Name</th>
-                                <th st-sort="handle" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
-                                <th class="hidden-xs" st-sort="email" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
-                                <th class="hidden-xs" st-sort="address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
-                                <th class="hidden-xs center" st-sort="phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
-                                <th class="hidden-xs" st-sort="social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>
+                                <th class="center" st-sort="hasPhoto" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
+                                <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
+                                <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
+                                <th class="hidden-xs" st-sort="bestEmail" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
+                                <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
+                                <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
+                                <th class="hidden-xs" st-sort="getters.social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
@@ -171,7 +172,8 @@
                                 <td class="center" ng-show="column.photo">
                                     <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td ng-show="column.name"><strong>Name: </strong> <span ng-text-truncate="customer.first+' '+customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first && !customer.last">--</span></td>
+                                <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
+                                <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>
                                 <td ng-show="column.tags"><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
                                 <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.bestEmail"><a href="mailto:{{customer.bestEmail}}"><span ng-text-truncate="customer.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
                                     </span><span ng-if="!customer.bestEmail">--</span></td>

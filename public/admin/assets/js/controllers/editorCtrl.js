@@ -3,7 +3,7 @@
  * controller for editor
  */
 (function(angular) {
-    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService) {
+    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService) {
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -32,6 +32,7 @@
         $scope.typefilter = 'all';
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
+        $scope.single_post = false;
         var stopInterval;
         
         $scope.$watch('currentPage.handle', function(newValue, oldValue) {
@@ -103,10 +104,19 @@
          * get the url for the view page/post button
          */
 
+         AccountService.getAccount(function(account) {
+            $scope.account = account;
+         });
+
         $scope.getUrl = function(handle, is_post) {
             if (is_post)
                 handle = "blog/" + handle;
-            return 'http://' + window.location.host + '/' + handle;
+            var _url = 'http://' + window.location.host + '/' + handle;
+            if ($scope.account.domain) {
+                _url = $scope.account.domain + '/' + handle;
+            }
+
+            window.open(_url, '_blank');
         };
 
         /*
@@ -168,21 +178,26 @@
             var navbarCollapse = angular.element('header').outerHeight();
             var pageActions = angular.element('#page-actions').outerHeight();
             var offsetHeight = angular.element('#page-title').outerHeight();
-            
+            var doc_width = $(document).width();
             if (scrollTop > offsetHeight) {
 
                 editorToolbar.css({
                     'top': scrollTop - 30
                 });
-
-                if($(document).width() < 768) {
-                    editorToolbar.css({
-                    'top': scrollTop + 40
-                    });
+                if(doc_width <= 1183) {
+                     editorToolbar.css({
+                            'top': scrollTop + 25
+                        });
                 }
-                
-                if($(document).width() <= 990) {
-                    scrollTop = scrollTop + 65 
+                if(doc_width <= 974) {                    
+                    scrollTop = scrollTop + 65;
+
+                   
+                }
+                if(doc_width < 760) {
+                    editorToolbar.css({
+                        'top': scrollTop - 25
+                    });
                 }
                  
                 mainToolbar.css({
@@ -706,9 +721,7 @@
                     $scope.$apply(function() {
                         var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
                         var incrementHeight = 0;
-                        if($(document).width() <= 990) {
-                            incrementHeight = incrementHeight + 65;
-                        }
+                        
                         if(editorToolbar)
                             incrementHeight = incrementHeight + editorToolbar.height();
                         $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
@@ -1030,7 +1043,9 @@
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
             }
-            $scope.activateCKEditor();
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
@@ -1292,6 +1307,9 @@
                             });
                           }
                         }); 
+                        setTimeout(function() {
+                            $scope.activateCKEditor();
+                        }, 500)
                     });
                     var data = {
                         _id: $scope.website._id,
@@ -1304,7 +1322,10 @@
             }
         };
 
-        
+        $scope.updateBlogPost = function(post_data)
+        {
+            $scope.childScope.updateBlogPost(post_data);
+        }
 
         /*
          * @updatePage

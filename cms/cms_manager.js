@@ -348,6 +348,7 @@ module.exports = {
                 log.error('Error creating default page: ' + err);
                 return fn(err, null);
             }
+            fn(null, pageAry[0]);
             log.debug('creating screenshots for default pages');
             _.each(pageAry, function(page){
                 self.updatePageScreenshot(page.id(), function(err, value){
@@ -359,7 +360,7 @@ module.exports = {
                 });
             });
 
-            return fn(null, pageAry[0]);
+            //return fn(null, pageAry[0]);
         });
     },
 

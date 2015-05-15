@@ -46,6 +46,7 @@ html(lang='en', data-ng-app='clipApp')
     // NG Tags Input
     link(rel='stylesheet', href='../js/libs/ng-tags-input/ng-tags-input.min.css')
     link(rel='stylesheet', href='../js/libs/ng-joyride/ng-joyride.css')
+    link(rel='stylesheet', href='../js/libs/allmighty-autocomplete/style/autocomplete.css')
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
     // jQuery
@@ -90,6 +91,7 @@ html(lang='en', data-ng-app='clipApp')
     script(src='../js/libs/angular-slugify/angular-slugify.js')
     // Underscore
     script(src='../js/libs/underscore/underscore-min.js')
+    script(src='../js/libs/allmighty-autocomplete/script/autocomplete.js')
     //config
     script(src="../js/scripts/config.js")
     // Keen Library
@@ -124,9 +126,11 @@ html(lang='en', data-ng-app='clipApp')
     script(src='assets/js/directives/mediadirective.js')
     script(src='assets/js/directives/err-src.js')
     script(src='assets/js/directives/confirm-click.js')
+    script(src='assets/js/directives/modal.js')
     // Controllers
     script(src='assets/js/controllers/mainCtrl.js')
     // Services
+    script(src='assets/js/services/account.js')
     script(src='assets/js/services/product.js')
     script(src='assets/js/services/website.js')
     script(src='assets/js/services/user.js')
@@ -151,8 +155,8 @@ html(lang='en', data-ng-app='clipApp')
     script.
         (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/b3st2skm';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
 
-    script(src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js")
-    script(src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js")
+    script(src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js")
+    script(src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js")
 
     script(type="text/javascript").
         var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");

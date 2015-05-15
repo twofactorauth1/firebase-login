@@ -5957,8 +5957,8 @@ fieldset[disabled] .btn-success.btn-o.active {
 .btn-info:active:focus,
 .btn-info:active:hover,
 .btn-info.dropdown-toggle:active:hover {
-  background-color: #31b0d6 !important;
-  border-color: #31b0d6;
+  background-color: #28a1c5 !important;
+  border-color: #28a1c5;
 }
 .btn-info:focus {
   background-color: #86d0e7;
@@ -10966,6 +10966,9 @@ td.small-width {
     display: inline-block;
   }
 }
+table.grid thead th {
+  vertical-align: bottom;
+}
 /* ---------------------------------------------------------------------- */
 /*  User profile
 /* ---------------------------------------------------------------------- */
@@ -12618,16 +12621,17 @@ fieldset[disabled] .btn-vimeo-square.active {
   margin-bottom: 0px;
 }
 /* ---------------------------------------------------------------------- */
-/*  Product Detail
+/*  Products List
 /* ---------------------------------------------------------------------- */
-.product-detail #variation-manager .ui-select-bootstrap .ui-select-toggle > .caret {
-  margin-right: -4px;
+.products table.grid thead th {
+  width: 20% !important;
 }
-.product-detail #variation-manager .ui-select-toggle {
-  padding-right: 20px;
+.products table.grid .product-img {
+  height: 80px;
+  text-align: center;
 }
-.product-detail #variation-manager #panel4 .panel-body {
-  border-top: 1px solid #eee;
+.products table.grid .product-img h3 {
+  line-height: 50px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Customers
@@ -12637,6 +12641,9 @@ fieldset[disabled] .btn-vimeo-square.active {
   margin-bottom: 0;
 }
 .customers .column-width {
+  width: 12.5%;
+}
+.customers table.grid thead th {
   width: 12.5%;
 }
 /* ---------------------------------------------------------------------- */
@@ -13150,4 +13157,16 @@ tags-input.ti-input-sm .tags .input,
 .input-group-sm tags-input tags-input:last-child {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Product Detail
+/* ---------------------------------------------------------------------- */
+.product-detail #variation-manager .ui-select-bootstrap .ui-select-toggle > .caret {
+  margin-right: -4px;
+}
+.product-detail #variation-manager .ui-select-toggle {
+  padding-right: 20px;
+}
+.product-detail #variation-manager #panel4 .panel-body {
+  border-top: 1px solid #eee;
 }

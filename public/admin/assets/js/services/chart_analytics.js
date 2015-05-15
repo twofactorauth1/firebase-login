@@ -249,7 +249,6 @@
         this.queryReports = function(date, _hostname) {
             var queryData = {};
             var hostname = _hostname || window.location.hostname;
-            console.log('>> queryReports ' + hostname);
 
             queryData.visitorLocations = new Keen.Query("count", {
                 eventCollection: "session_data",
@@ -260,8 +259,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "ip_geo_info",
                     "operator": "ne",
@@ -278,8 +277,8 @@
                 groupBy: "user_agent.device",
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -293,8 +292,8 @@
                 interval: interval,
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -308,8 +307,8 @@
                 interval: interval,
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -351,8 +350,8 @@
                 interval: interval,
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -366,8 +365,8 @@
                 interval: interval,
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -381,8 +380,8 @@
                 interval: interval,
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -395,8 +394,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -410,8 +409,8 @@
                 interval: interval,
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "page_length",
                     "operator": "eq",
@@ -428,8 +427,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "page_length",
                     "operator": "eq",
@@ -447,8 +446,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -461,8 +460,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -479,8 +478,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -498,8 +497,8 @@
                 },
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 
@@ -641,11 +640,12 @@
             });
         };
 
-        this.visitorsReport = function(date, account, _hostname, fn) {
+        this.visitorsReport = function(date, account, fn) {
             var self = this;
+            var _hostname = window.location.hostname;
             //window.location.hostname
             if (account.subdomain === 'main') {
-                _hostname = _hostname.replace('main', 'www') || window.location.hostname;
+                _hostname = _hostname.replace('main', 'www');
             }
 
             KeenService.keenClient(function(client) {
@@ -663,7 +663,6 @@
         this.queryVisitorReports = function(date, _hostname) {
             var queryData = {};
             var hostname = _hostname || window.location.hostname;
-            console.log('>> queryReports ' + hostname);
 
             queryData.returningVisitors = new Keen.Query("count_unique", {
                 eventCollection: "session_data",
@@ -672,8 +671,8 @@
                 interval: "daily",
                 filters: [{
                     "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -687,9 +686,9 @@
                 timeframe: "this_month",
                 interval: "daily",
                 filters: [{
-                    "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                   "property_name": "referrer.domain",
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }, {
                     "property_name": "new_visitor",
                     "operator": "eq",
@@ -702,9 +701,9 @@
                 targetProperty: "permanent_tracker",
                 latest: 1,
                 filters: [{
-                    "property_name": "referrer.domain",
-                    "operator": "eq",
-                    "property_value": hostname
+                   "property_name": "referrer.domain",
+                    "operator": "in",
+                    "property_value": ["www."+hostname,hostname]
                 }]
             });
 

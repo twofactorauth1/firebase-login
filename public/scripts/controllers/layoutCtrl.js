@@ -23,7 +23,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         var d = new Date();
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
-
+        $scope.allowUndernav = false;
         $scope.$watch(function () { return cartService.getCartItems() }, function (newValue, oldValue) {
             if (newValue !== oldValue) {
                 console.log('cart changed >>> ', newValue);
@@ -213,6 +213,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             if (element)
                                 $document.scrollToElementAnimated(element);
                         }
+                        $scope.setUnderbnavMargin();
                     }, 500);
                 });
 
@@ -715,7 +716,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
             CKEDITOR.disableAutoInline = true;
             var elements = angular.element('.editable');
-            elements.each(function() {
+            elements.each(function(index) {
                 if (!angular.element(this).parent().hasClass('edit-wrap')) {
                     var dataClass = angular.element(this).data('class').replace('.item.', ' ');
                     angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
@@ -725,6 +726,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         instanceReady: function(ev) {
                             var editor = ev.editor;
                             editor.setReadOnly(false);
+                            if(index === 0)
+                                $scope.activeEditor = editor;
                             editor.on('change', function() {
                                 $scope.isPageDirty = true;
                             });
@@ -860,6 +863,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         var winWidth = w.width();
                         $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
                     }
+
                     if ($scope.currentpage.components[i].type == 'single-post') {  
                         if(!$scope.blog)
                         {
@@ -873,6 +877,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         $scope.blog.post.post_tags = $scope.currentpage.components[i].post_tags;
                         $scope.blog.post.post_author = $scope.currentpage.components[i].post_author || " ";
                     }
+                    if ($scope.currentpage.components[i].type == 'masthead') {
+                        if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                            $scope.allowUndernav = true;
+                        else
+                            $scope.allowUndernav = false;
+                    }
+
                 };
                 setTimeout(function() {
                     angular.element(window).scrollTop(scroll);
@@ -1016,6 +1027,15 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     $scope.activateCKEditor();
                     angular.element(".ui-sortable").removeClass("active");
                 }, 1500);
+
+            for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                if ($scope.currentpage.components[i].type == 'masthead') {
+                    if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                        $scope.allowUndernav = true;
+                    else
+                        $scope.allowUndernav = false;
+                    }
+            };
             }
         };
 
@@ -1099,6 +1119,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         $scope.blog.post.publish_date = value.publish_date;
                         $scope.blog.post.post_tags = value.post_tags;
                         $scope.blog.post.post_author = value.post_author || " ";
+                    }
+                    if (value && value.type === 'masthead') {
+                        if (index != 0 && $scope.currentpage.components[index-1].type == "navigation")
+                            $scope.allowUndernav = true;
+                        else
+                            $scope.allowUndernav = false;
                     }
                 });
             }
@@ -1762,7 +1788,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }, 1000)
         });
 
+        angular.element('body').on("click", ".navbar-toggle", function(e) {
+            $scope.setUnderbnavMargin();
+        });
+
         angular.element($window).bind('resize', function() {
+            $scope.setUnderbnavMargin();
             $scope.feature_inserted = false;
             if(!$scope.feature_inserted)
                   {
@@ -1780,6 +1811,30 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     $scope.feature_inserted = true;
                   }
         });
+        $scope.setUnderbnavMargin = function() {
+            setTimeout(function() {
+                if($scope.allowUndernav)
+                {
+                    var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
+                    var margin = 200 + navHeight;
+                   if(angular.element(".mt200"))
+                        angular.element(".mt200").css("margin-top", -margin);
+                   if(angular.element(".mastHeadUndernav"))
+                        angular.element(".mastHeadUndernav").css("height", margin);
+                   if(angular.element(".masthead-actions"))
+                        angular.element(".masthead-actions").css("margin-top", margin-4);
+
+                }
+                else
+                {
+                    if(angular.element(".mt200"))
+                        angular.element(".mt200").css("margin-top", 0);
+                    if(angular.element(".masthead-actions"))
+                        angular.element(".masthead-actions").css("margin-top", 0);
+                }
+               
+            },300);
+        };
     }
 
 ]);

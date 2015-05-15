@@ -4,7 +4,7 @@
  */
 (function(angular) {
     app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", function($scope, toaster, $modal, $filter, WebsiteService, $log) {
-
+        $scope.tableView = 'list';
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {
@@ -20,7 +20,7 @@
                 }
             }
             $scope.posts = postsArr;
-
+            $scope.orderByFn();
             //$log.debug($scope.posts);
         });
 
@@ -29,6 +29,11 @@
             $scope.website = website;
         })
 
+        $scope.orderByFn = function()
+        {
+            $scope.posts = $filter('orderBy')($scope.posts, 'modified.date', true);
+        }
+        
         $scope.getters = {
             created: function (value) {
                 return value.created.date;
@@ -73,19 +78,19 @@
         $scope.createPostValidated = false;
           $scope.validateCreatePost = function(post, restrict) {
             console.log('post ', post);
-            if (!post.post_title || post.post_title == '') {
+            if (!post || !post.post_title || post.post_title == '') {
               $scope.postTitleError = true
             } else {
               if(!restrict)  
                 post.post_url = $filter('slugify')(post.post_title);
               $scope.postTitleError = false
             }
-            if (!post.post_author || post.post_author == '') {
+            if (!post || !post.post_author || post.post_author == '') {
               $scope.postAuthorError = true
             } else {
               $scope.postAuthorError = false
             }
-            if (!post.post_url || post.post_url == '') {
+            if (!post || !post.post_url || post.post_url == '') {
               $scope.postUrlError = true
             } else {
               $scope.postUrlError = false

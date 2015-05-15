@@ -10,7 +10,7 @@
     </div>
     <div class="row pricing-table-wrap">
     <div ng-repeat="table in component.tables track by $index">
-        <div class="col-md-8 col-md-offset-2 pricing-table {{isEditing ? 'edit-mode' : ''}}" id="home-box">
+        <div class="col-md-8 col-md-offset-2 pricing-table {{isEditing ? 'edit-mode' : ''}}">
             <div class="pricing_header">
                 <div class="editable" data-class="tables.item.title" data-index="{{$index}}" ng-bind-html="table.title | unsafe"></div>
                 <div class="editable" data-class="tables.item.subtitle" data-index="{{$index}}" ng-bind-html="table.subtitle | unsafe"></div>

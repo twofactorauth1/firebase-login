@@ -4,11 +4,12 @@
  */
 (function(angular) {
     app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function($scope, $location, toaster, $filter, $modal, WebsiteService) {
-
+        $scope.tableView = 'list';
         WebsiteService.getPages(function(pages) {
             console.log('pages >>> ', pages);
             var pagesArr = $scope.formatPages(pages);
             $scope.pages = pagesArr;
+            $scope.orderByFn();
         });
 
         $scope.default_image_url = "/admin/assets/images/default-page.jpg";
@@ -17,6 +18,11 @@
         {
             $scope.showFilter  = !$scope.showFilter;
             $scope.filterScreenshots($scope.pages)
+        }
+
+        $scope.orderByFn = function()
+        {
+            $scope.pages = $filter('orderBy')($scope.pages, 'modified.date', true);
         }
 
         $scope.filterScreenshots = function(pages)
