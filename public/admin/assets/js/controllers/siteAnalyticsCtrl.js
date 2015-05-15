@@ -152,12 +152,21 @@
 
 
             var locationData = [];
-            for (var i = 0; i < result0.length; i++) {
-                var subObj = {};
-                subObj.code = ChartAnalyticsService.stateToAbbr(result0[i]['ip_geo_info.province']);
-                subObj.value = result0[i].result;
-                locationData.push(subObj);
-            };
+            _.each(result0, function(location) {
+                var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                if (_geo_info) {
+                    var subObj = {};
+                    subObj.code = _geo_info;
+                    subObj.value = location.result;
+                    var locationExists = _.find(locationData, function(loc){
+                        return loc.code === location.code
+                    });
+                    if (!locationExists) {
+                        locationData.push(subObj);
+                    }
+                }
+            });
+
             $scope.$apply(function() {
                 $scope.locationData = locationData;
             });
