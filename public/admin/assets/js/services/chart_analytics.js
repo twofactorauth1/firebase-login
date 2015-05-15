@@ -559,23 +559,21 @@
     this.runPagedReports = function (date, account, fn) {
       var self = this;
       var filters = [];
-      var hostname = window.location.hostname;
+      var hostname = account.subdomain + '.indigenous.io';
+
       if (account.subdomain === 'main') {
         hostname = hostname.replace('main', 'www');
       }
+
+      if (account.domain) {
+        hostname = account.domain;
+      }
+
       filters.push({
         "property_name": "url.domain",
         "operator": "eq",
         "property_value": hostname
       });
-
-      if (account && account.domain) {
-        filters.push({
-          "property_name": "url.domain",
-          "operator": "eq",
-          "property_value": account.domain
-        });
-      }
 
       var reportData = {};
       var params2 = {
