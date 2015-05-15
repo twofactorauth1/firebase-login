@@ -55,7 +55,8 @@ var contactActivity = $$.m.ModelBase.extend({
         EMAIL_CLICKED: 'EMAIL_CLICKED',
         EMAIL_UNSUB: 'EMAIL_UNSUB',
         SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
-        SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL'
+        SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
+        OTHER: 'OTHER'
     }
 });
 

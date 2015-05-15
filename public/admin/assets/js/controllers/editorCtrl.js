@@ -1309,7 +1309,7 @@
                         }); 
                         setTimeout(function() {
                             $scope.activateCKEditor();
-                        }, 500)
+                        }, 1000)
                     });
                     var data = {
                         _id: $scope.website._id,
@@ -1552,7 +1552,9 @@
             }
             $scope.updateIframeComponents();
             $scope.componentEditing = null;
-            $scope.activateCKEditor();
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
 
             $scope.$apply(function() {
                 toaster.pop('success', "Component Deleted", "The " + deletedType + " component was deleted successfully.");
@@ -1703,7 +1705,9 @@
             }
             
             $scope.updateIframeComponents();
-            $scope.activateCKEditor();
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
             $scope.closeModal();
         };
 
@@ -1730,7 +1734,7 @@
             $scope.isDirty = true;
             setTimeout(function() {
                 $scope.activateCKEditor();
-            }, 500)
+            }, 1000)
         };
 
         /*
@@ -2039,7 +2043,8 @@
                         }
                         $scope.changesConfirmed = true;
                         $scope.isDirty = false;
-                        $location.path(newUrl);
+                        //set window location
+                        window.location = newUrl;
                         offFn();
                     });
             } else if ($scope.changesConfirmed) {
