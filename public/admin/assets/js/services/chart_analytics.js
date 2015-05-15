@@ -219,7 +219,6 @@
         _.each(arrStates, function (state) {
           if (state.name.toLowerCase() === strInput.toLowerCase()) {
             strOutput = state.abbreviation;
-            break;
           }
         });
       }
