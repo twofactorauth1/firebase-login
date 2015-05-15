@@ -331,6 +331,16 @@ var dao = {
         this.findMany(query, Page, fn);
     },
 
+    getLatestPageForWebsite: function(websiteId, pageName, fn) {
+        var query = {
+            websiteId: websiteId,
+            handle: pageName,
+            latest: true
+        };
+
+        return this.findOne(query, Page, fn);
+    },
+
     getPageForWebsite: function(websiteId, pageName, fn) {
         var query = {
             websiteId: websiteId,

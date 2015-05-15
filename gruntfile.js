@@ -390,7 +390,7 @@ module.exports = function(grunt) {
             // Environment targets
             development: {
                 options: {
-                    dest: 'public/js/scripts/config.js'
+                    dest: 'public/admin/assets/js/config.js'
                 },
                 constants: {
                     ENV: {
