@@ -394,7 +394,7 @@ app.constant('userConstant', {
     EMAIL: "e"
   }
 });
-
+/*
 app.constant('ENV', {
   name: 'development',
   stripeKey: 'pk_test_EuZhZHVourE3RaRxELJaYEya',
@@ -412,6 +412,7 @@ app.constant('ENV', {
   twonetUserGuid: '50f97bb9-a38d-46eb-8e5a-d1716aed1da3',
   twonetTrackGuid: 'b64d7234-2398-021d-2b64-b5999a31aaff'
 });
+*/
 
 app.constant('JS_REQUIRES', {
   //*** Scripts
@@ -513,9 +514,16 @@ app.constant('JS_REQUIRES', {
 
     //*** Utils
     'namespaces': '../js/utils/namespaces.js'
+
+
   },
   //*** angularJS Modules
-  modules: [{
+  modules: [
+      {
+          name: 'config',
+          files: ['assets/js/config.js']
+      },
+  {
     name: 'angularMoment',
     files: ['../js/libs/angular-moment/angular-moment.min.js']
   }, {

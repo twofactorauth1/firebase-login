@@ -17,5 +17,6 @@ angular.module("clip-two", [
     'ncy-angular-breadcrumb',
     'duScroll',
     'pascalprecht.translate',
-    'autocomplete'
+    'autocomplete',
+    'config'
 ]);
