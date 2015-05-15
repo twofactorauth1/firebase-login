@@ -56,8 +56,8 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover margin-bottom-0 bg-white" ng-class="{'grid': tableView == 'grid'}" ng-show="displayedPages">
-                        <thead>
+                    <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedPages">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th class="center">Screenshot</th>
                                 <th st-sort="title">Title</th>
