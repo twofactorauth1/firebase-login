@@ -205,6 +205,13 @@
       value: false
     }];
 
+    $scope.customersLimit = 50;
+
+    $scope.addCustomers = function () {
+      console.log('add customer');
+      $scope.customersLimit += 50;
+    };
+
     $scope.addCustomer = function () {
       var tempTags = [];
       _.each($scope.customer.tags, function (tag) {
