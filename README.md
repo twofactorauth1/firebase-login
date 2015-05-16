@@ -46,6 +46,8 @@ Download and install these dependencies to start developing on the application
 
 • **winsock2.h error** - http://stackoverflow.com/questions/3623129/winsock2-h-no-such-file-or-directory
 
+• **Failed to load c++ bson extension** - On a mac, this may've been caused by a missing (or out-of-date) xcode command line/build tools. At the command line, run "xcode-select --install" followed by "sudo xcodebuild -license" (to agree terms for the command line tools). After, rebuild node-gyp with "npm install -g node-gyp" followed by "npm update." This and various other strategies for solving the c++ bson issue can be found here: http://stackoverflow.com/questions/21656420/failed-to-load-c-bson-extension
+
 ## Set up Local Mongo
 1. Install mongodb locally if it is not already available
 2. Grab a copy of the database from mongohq: 
