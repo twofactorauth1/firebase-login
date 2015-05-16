@@ -133,6 +133,8 @@ app.engine('jade', consolidate.jade);
 app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, 'templates'));
 
+app.use(connect.compress());
+
 app.use(express.favicon());
 app.use(busboy());
 app.use(express.json());
@@ -182,7 +184,7 @@ app.use(function(req, res) {
     res.sendfile('./public/index.html');
 });
 */
-app.use(connect.compress());
+//app.use(connect.compress());
 
 app.configure('development', function () {
     app.use(express.errorHandler());
