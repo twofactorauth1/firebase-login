@@ -126,6 +126,50 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           route = route.replace('/', '');
           that.pages = data[route];
         }
+<<<<<<< HEAD
+=======
+        window.oldScope;
+        $scope.$route = $route;
+        $scope.$location = $location;
+        $scope.$routeParams = $routeParams;
+        $scope.$url = $location.$$url;
+        $scope.tagCloud = [];
+        $scope.isPageDirty = false;
+        $scope.currentcomponents = [];
+        $scope.thumbnailSlider = [];
+        $scope.contactDetails = [];
+        $scope.activeEditor = null;
+        $scope.activated = true;
+
+        //displays the year dynamically for the footer
+        var d = new Date();
+        $scope.currentDate = new Date();
+        $scope.copyrightYear = d.getFullYear();
+        $scope.allowUndernav = false;
+        $scope.addUndernavClasses = false;
+        $scope.$watch(function () { return cartService.getCartItems() }, function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                console.log('cart changed >>> ', newValue);
+            }
+        });
+
+        $scope.parentScope = parent.angular.element('#iframe-website').scope();
+
+        $scope.sortBlogFn = function(component) {
+            return function(blogpost) {
+                if (component.postorder) {
+                    if (component.postorder == 1 || component.postorder == 2) {
+                        return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy"));
+                    } else if (component.postorder == 3 || component.postorder == 4) {
+                        return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy"));
+                    } else if (component.postorder == 5 || component.postorder == 6) {
+                        return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+                    }
+                } else
+                    return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+            };
+        };
+>>>>>>> develop
 
         if ($scope.$location.$$path === '/signup') {
           userService.getTmpAccount(function (data) {
@@ -865,6 +909,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
           }
 
+<<<<<<< HEAD
           if ($scope.currentpage.components[i].type == 'single-post') {
             if (!$scope.blog) {
               $scope.blog = {};
@@ -905,6 +950,69 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         });
       } else {
         $scope.$apply(function () {
+=======
+        $scope.activateCKEditor = function() {
+            if ($scope.activated) {
+                $scope.isEditing = true;
+                for (name in CKEDITOR.instances) {
+                    if(CKEDITOR.instances[name])
+                        CKEDITOR.instances[name].destroy()
+                }
+                CKEDITOR.disableAutoInline = true;
+                var elements = angular.element('.editable');
+                elements.each(function(index) {
+                    if (!angular.element(this).parent().hasClass('edit-wrap')) {
+                        var dataClass = angular.element(this).data('class').replace('.item.', ' ');
+                        angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+                    }
+                    CKEDITOR.inline(this, {
+                        on: {
+                            instanceReady: function(ev) {
+                                var editor = ev.editor;
+                                editor.setReadOnly(false);
+                                if(index === 0)
+                                    $scope.activeEditor = editor;
+                                editor.on('change', function() {
+                                    $scope.isPageDirty = true;
+                                });
+                                editor.on('focus', function() {
+                                    $scope.activeEditor = editor;
+                                });
+                                editor.on('blur', function() {
+                                    $scope.activeEditor = null;
+                                });
+                            }
+                        },
+                        sharedSpaces: {
+                            top: 'editor-toolbar'
+                        }
+                    });
+                });
+                setTimeout(function() {
+                    if (angular.element("div.meet-team-height").length) {
+                        var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
+                            return angular.element(this).height();
+                        }).get());
+                        angular.element(".meet-team-height").css("min-height", maxTeamHeight);
+                    }
+                    for (var i = 1; i <= 3; i++) { 
+                        if($("div.feature-height-"+i).length)
+                        {
+                          var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                          {
+                              return $(this).height();
+                          }).get());
+                          $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                        }
+                    }
+
+                }, 500)
+            }
+            $scope.parentScope.resizeIframe();
+            $scope.activated = true;
+        };
+
+>>>>>>> develop
 
         });
       }
@@ -995,9 +1103,80 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         }
       });
 
+<<<<<<< HEAD
       angular.element('h1,h2,h3,h4,h5,h6,h1 .editable,h2 .editable,h3 .editable,h4 .editable,h5 .editable,h6 .editable ').each(function () {
         this.style.setProperty('font-family', font, 'important');
       });
+=======
+        $scope.updateComponents = function(data) {
+            $scope.$apply(function() {
+                var scroll = angular.element(window).scrollTop();
+                $scope.currentpage.components = data;
+                for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                    if ($scope.currentpage.components[i].type == 'navigation') {
+                        var body = document.getElementsByTagName('body')[0];
+                        body.className = body.className.replace('navbar-v', '');
+                        body.className = body.className + ' navbar-v' + $scope.currentpage.components[i].version;
+                    }
+                    if ($scope.currentpage.components[i].type === 'thumbnail-slider') {
+                        var w = angular.element($window);
+                        var check_if_mobile = mobilecheck();
+                        var thumbnailId = $scope.currentpage.components[i]._id;
+
+                        var matching = _.find($scope.thumbnailSlider, function(item) {
+                            return item.thumbnailId == thumbnailId
+                        })
+
+                        if (!matching) {
+                            $scope.thumbnailSlider.push({
+                                thumbnailId: thumbnailId,
+                                thumbnailSliderCollection: angular.copy($scope.currentpage.components[i].thumbnailCollection)
+                            });
+
+                        } else
+                            matching.thumbnailSliderCollection = angular.copy($scope.currentpage.components[i].thumbnailCollection);
+
+                        var winWidth = w.width();
+                        $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+                    }
+
+                    if ($scope.currentpage.components[i].type == 'single-post') {  
+                        if(!$scope.blog)
+                        {
+                            $scope.blog = {};
+                            $scope.blog.post = {};                      
+                        }
+                        $scope.blog.post.post_title = $scope.currentpage.components[i].post_title;
+                        $scope.blog.post.post_excerpt = $scope.currentpage.components[i].post_excerpt;                    
+                        $scope.blog.post.post_content = $scope.currentpage.components[i].post_content;
+                        $scope.blog.post.publish_date = $scope.currentpage.components[i].publish_date;
+                        $scope.blog.post.post_tags = $scope.currentpage.components[i].post_tags;
+                        $scope.blog.post.post_author = $scope.currentpage.components[i].post_author || " ";
+                    }
+
+                    if ($scope.currentpage.components[i].type == 'masthead') {
+                        if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                        {
+                            $scope.allowUndernav = true;
+                            if($scope.currentpage.components[i].bg && $scope.currentpage.components[i].bg.img && $scope.currentpage.components[i].bg.img.undernav)
+                                $scope.addUndernavClasses = true
+                            else
+                                $scope.addUndernavClasses = false;
+                        }
+                        else {
+                            $scope.addUndernavClasses = false;
+                            $scope.allowUndernav = false;
+                        }
+
+                    }
+
+                };
+                setTimeout(function() {
+                    angular.element(window).scrollTop(scroll);
+                }, 200);
+            });
+        };
+>>>>>>> develop
 
     };
 
@@ -1103,6 +1282,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
               });
             });
+<<<<<<< HEAD
           }
           if (value && value.type == 'contact-us') {
             $scope.updateContactUsMap(value);
@@ -1111,6 +1291,151 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             if (!$scope.blog) {
               $scope.blog = {};
               $scope.blog.post = {};
+=======
+
+        };
+
+        if (!window.oldScope) {
+            window.oldScope = $scope;
+        }
+        $scope.sortingLog = [];
+
+        $scope.wait;
+
+        $scope.sortableOptions = {
+            parentElement: "body",
+            dragStart: function(e, ui) {
+                var componentId = e.source.itemScope.modelValue._id;
+                e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
+                e.source.itemScope.element.addClass(" dragging");
+                clearTimeout($scope.wait);
+                $scope.parentScope.resizeIframe();
+            },
+            dragMove: function(e, ui) {
+                console.log('sorting update');
+            },
+            dragEnd: function(e, ui) {
+                e.dest.sortableScope.element.removeClass("dragging");
+                $scope.wait = setTimeout(function() {
+                    $scope.activateCKEditor();
+                    angular.element(".ui-sortable").removeClass("active");
+                }, 1500);
+
+            for (var i = 0; i < $scope.currentpage.components.length; i++) {
+                if ($scope.currentpage.components[i].type == 'masthead') {
+                    if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                        {
+                            $scope.allowUndernav = true;
+                            if($scope.currentpage.components[i].bg && $scope.currentpage.components[i].bg.img && $scope.currentpage.components[i].bg.img.undernav)
+                                $scope.addUndernavClasses = true
+                            else
+                                $scope.addUndernavClasses = false;
+                        }
+                    else{
+                        $scope.allowUndernav = false;
+                        $scope.addUndernavClasses = false;
+                    }
+
+                    }
+            };
+            }
+        };
+
+        /********** END CMS RELATED **********/
+
+        /********** SIGNUP SECTION **********/
+        $scope.planStatus = {};
+        $scope.$watch('currentpage.components', function(newValue, oldValue) {
+            if (newValue) {
+                
+                $scope.dataLoaded = false;
+                $scope.currentcomponents = newValue;
+                newValue.forEach(function(value, index) {
+                    
+                    if (value.bg && value.bg.img && value.bg.img.url && !value.bg.color)
+                        value.bg.img.show = true;
+                    if (value && value.type === 'payment-form') {
+                        var productId = value.productId;
+                        ProductService.getProduct(productId, function(product) {
+                            $scope.paymentFormProduct = product;
+                            var promises = [];
+                            $scope.subscriptionPlans = [];
+                            if ('stripePlans' in $scope.paymentFormProduct.product_attributes) {
+                                $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value, index) {
+                                    if (value.active)
+                                        $scope.planStatus[value.id] = value;
+                                    promises.push(PaymentService.getPlanPromise(value.id));
+                                });
+                                $q.all(promises)
+                                    .then(function(data) {
+                                        data.forEach(function(value, index) {
+                                            $scope.subscriptionPlans.push(value.data);
+                                            if ($scope.subscriptionPlans.length === 1) {
+                                                var plan = $scope.subscriptionPlans[0];
+                                                $scope.selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, $scope.planStatus[plan.id].signup_fee);
+                                            }
+                                        });
+                                    })
+                                    .catch(function(err) {
+                                        console.error(err);
+                                    });
+                            }
+                        });
+                    }
+                    if (value && value.type === 'thumbnail-slider') {
+                        var w = angular.element($window);
+                        var check_if_mobile = mobilecheck();
+                        var thumbnailId = value._id;
+
+                        var matching = _.find($scope.thumbnailSlider, function(item) {
+                            return item.thumbnailId == thumbnailId
+                        })
+
+                        if (!matching) {
+                            $scope.thumbnailSlider.push({
+                                thumbnailId: thumbnailId,
+                                thumbnailSliderCollection: angular.copy(value.thumbnailCollection)
+                            });
+                        } else
+                            matching.thumbnailSliderCollection = angular.copy(value.thumbnailCollection);
+                        var winWidth = w.width();
+                        $scope.bindThumbnailSlider(winWidth, check_if_mobile, thumbnailId);
+                        w.bind('resize', function() {
+                            $scope.$apply(function() {
+                                $scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+                            });
+                        });
+                    }
+                    if (value && value.type == 'contact-us') {
+                        $scope.updateContactUsMap(value);
+                    }
+                    if (value && value.type == 'single-post') {  
+                        if(!$scope.blog)
+                        {
+                            $scope.blog = {};
+                            $scope.blog.post = {};                      
+                        }                     
+                        $scope.blog.post.post_title = value.post_title;
+                        $scope.blog.post.post_excerpt = value.post_excerpt;
+                        $scope.blog.post.post_content = value.post_content;
+                        $scope.blog.post.publish_date = value.publish_date;
+                        $scope.blog.post.post_tags = value.post_tags;
+                        $scope.blog.post.post_author = value.post_author || " ";
+                    }
+                    if (value && value.type === 'masthead') {
+                        if (index != 0 && $scope.currentpage.components[index-1].type == "navigation")
+                           {
+                            $scope.allowUndernav = true;
+                            if(value.bg && value.bg.img && value.bg.img.undernav)
+                                $scope.addUndernavClasses = true
+                            else
+                                $scope.addUndernavClasses = false
+                            }
+                        else
+                            $scope.allowUndernav = false;
+                    }
+                });
+>>>>>>> develop
             }
             $scope.blog.post.post_title = value.post_title;
             $scope.blog.post.post_excerpt = value.post_excerpt;
@@ -1563,6 +1888,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
               angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
               break;
             }
+<<<<<<< HEAD
           } else {
             newUser.cardToken = token;
             newUser.plan = $scope.newAccount.membership;
@@ -1571,6 +1897,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             newUser.fingerprint = new Fingerprint().get();
             if ($scope.subscriptionPlanOneTimeFee) {
               newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
+=======
+            $scope.checkCoupon();
+            if(!$scope.couponIsValid) {
+                return;
+>>>>>>> develop
             }
             console.log('initializeUser >>>');
             userService.initializeUser(newUser, function (data) {
@@ -1642,6 +1973,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
           }
         });
+<<<<<<< HEAD
       }
     };
 
@@ -1834,6 +2166,20 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           if (angular.element(".masthead-actions"))
             angular.element(".masthead-actions").css("margin-top", 0);
         }
+=======
+        $scope.setUnderbnavMargin = function() {
+            setTimeout(function() {
+                if($scope.addUndernavClasses)
+                {
+                    var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
+                    var margin = 200 + navHeight;
+                   if(angular.element(".mt200"))
+                        angular.element(".mt200").css("margin-top", -margin);
+                   if(angular.element(".mastHeadUndernav"))
+                        angular.element(".mastHeadUndernav").css("height", margin);
+                   if(angular.element(".masthead-actions"))
+                        angular.element(".masthead-actions").css("margin-top", margin-4);
+>>>>>>> develop
 
       }, 300);
     };
