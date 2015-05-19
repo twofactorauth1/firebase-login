@@ -1511,7 +1511,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.checkCardCvv();
                 return;
             }
-
+            $scope.checkCoupon();
             if(!$scope.couponIsValid) {
                 return;
             }
