@@ -19,7 +19,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.thumbnailSlider = [];
         $scope.contactDetails = [];
         $scope.activeEditor = null;
-        $scope.activated = false;
+        $scope.activated = true;
 
         //displays the year dynamically for the footer
         var d = new Date();

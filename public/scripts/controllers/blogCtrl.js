@@ -11,7 +11,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
         $scope.testing = 'hello';
         $scope.activeEditor = null;
-        $scope.activated = false;
+        $scope.activated = true;
 
         /*
          * @back

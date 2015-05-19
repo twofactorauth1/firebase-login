@@ -652,14 +652,14 @@
                             };
                         });
                 });
-                angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
-                    if (!$scope.activated) {
-                      $scope.activated = true;
-                      setTimeout(function() {
-                        $scope.childScope.activateCKEditor();
-                      }, 1000)
-                    }
-                });
+                // angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
+                //     if (!$scope.activated) {
+                //       $scope.activated = true;
+                //       setTimeout(function() {
+                //         $scope.childScope.activateCKEditor();
+                //       }, 1000)
+                //     }
+                // });
                 angular.element("#iframe-website").contents().find('body').off("click", ".btn-social-link");
                 // Social components
                 angular.element("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
@@ -1052,7 +1052,9 @@
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
             }           
-            $scope.activateCKEditor();
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
