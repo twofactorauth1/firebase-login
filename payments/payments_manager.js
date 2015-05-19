@@ -33,6 +33,8 @@ module.exports = {
                     stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
                 }
             });
+        } else {
+            stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
         }
 
     },
