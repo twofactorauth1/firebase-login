@@ -26,6 +26,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.currentDate = new Date();
         $scope.copyrightYear = d.getFullYear();
         $scope.allowUndernav = false;
+        $scope.addUndernavClasses = false;
         $scope.$watch(function () { return cartService.getCartItems() }, function (newValue, oldValue) {
             if (newValue !== oldValue) {
                 console.log('cart changed >>> ', newValue);
@@ -881,11 +882,21 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         $scope.blog.post.post_tags = $scope.currentpage.components[i].post_tags;
                         $scope.blog.post.post_author = $scope.currentpage.components[i].post_author || " ";
                     }
+
                     if ($scope.currentpage.components[i].type == 'masthead') {
                         if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
+                        {
                             $scope.allowUndernav = true;
-                        else
+                            if($scope.currentpage.components[i].bg && $scope.currentpage.components[i].bg.img && $scope.currentpage.components[i].bg.img.undernav)
+                                $scope.addUndernavClasses = true
+                            else
+                                $scope.addUndernavClasses = false;
+                        }
+                        else {
+                            $scope.addUndernavClasses = false;
                             $scope.allowUndernav = false;
+                        }
+
                     }
 
                 };
@@ -1035,9 +1046,18 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             for (var i = 0; i < $scope.currentpage.components.length; i++) {
                 if ($scope.currentpage.components[i].type == 'masthead') {
                     if (i != 0 && $scope.currentpage.components[i-1].type == "navigation")
-                        $scope.allowUndernav = true;
-                    else
+                        {
+                            $scope.allowUndernav = true;
+                            if($scope.currentpage.components[i].bg && $scope.currentpage.components[i].bg.img && $scope.currentpage.components[i].bg.img.undernav)
+                                $scope.addUndernavClasses = true
+                            else
+                                $scope.addUndernavClasses = false;
+                        }
+                    else{
                         $scope.allowUndernav = false;
+                        $scope.addUndernavClasses = false;
+                    }
+
                     }
             };
             }
@@ -1126,7 +1146,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     }
                     if (value && value.type === 'masthead') {
                         if (index != 0 && $scope.currentpage.components[index-1].type == "navigation")
+                           {
                             $scope.allowUndernav = true;
+                            if(value.bg && value.bg.img && value.bg.img.undernav)
+                                $scope.addUndernavClasses = true
+                            else
+                                $scope.addUndernavClasses = false
+                            }
                         else
                             $scope.allowUndernav = false;
                     }
@@ -1817,7 +1843,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         });
         $scope.setUnderbnavMargin = function() {
             setTimeout(function() {
-                if($scope.allowUndernav)
+                if($scope.addUndernavClasses)
                 {
                     var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
                     var margin = 200 + navHeight;

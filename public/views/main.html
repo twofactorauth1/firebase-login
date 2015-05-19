@@ -13,7 +13,7 @@
     <div ng-show="isEditing ? true : isLoaded">
         <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents">
         <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
-            <div class="componentActions" ng-class="{'masthead-actions':component.type == 'masthead' && component.bg.img.undernav}" as-sortable-item-handle>
+            <div class="componentActions" ng-class="{'masthead-actions':component.type == 'masthead'}" as-sortable-item-handle>
                 <span class="reorder fa fa-arrows"><p>Reorder</p></span>
                 <h4 class="pull-left">{{component.type | cleanType}}</h4>
                 <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'single-post'"><p>Delete</p></span>
