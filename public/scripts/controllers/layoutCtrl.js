@@ -1464,33 +1464,38 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     };
 
     $scope.createAccount = function (newAccount) {
+      console.log('createAccount');
       //validate
       //email
       $scope.isFormValid = false;
       $scope.showFooter(true);
       if (!$scope.newAccount.email) {
+        console.warn('email error');
         $scope.checkEmailExists(newAccount);
         return;
       }
 
       //pass
       if (!$scope.newAccount.password && !$scope.newAccount.tempUserId) {
+        console.warn('password error');
         $scope.checkPasswordLength(newAccount);
         return;
       }
 
       //url
       if (!$scope.newAccount.businessName) {
+        console.warn('business error');
         $scope.checkDomainExists(newAccount);
         return;
       }
 
       //membership selection
       if (!$scope.newAccount.membership) {
+        console.warn('membership error');
         $scope.checkMembership(newAccount);
         return;
       }
-
+      console.log('validated >>>');
       //credit card
 
       newAccount.card = {
@@ -1500,9 +1505,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         exp_year: parseInt(angular.element('#expiry').val().split('/')[1])
       };
 
+      console.log('newAccount.card >>> ', newAccount.card);
+
       var cc_name = angular.element('#name').val();
 
       if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year) {
+        console.warn('card error');
         //|| !cc_name
         //hightlight card in red
         $scope.checkCardNumber();
@@ -1511,7 +1519,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         return;
       }
 
-      if (!$scope.couponIsValid) {
+      if ($scope.newAccount.coupon && !$scope.couponIsValid) {
         return;
       }
       //end validate
@@ -1519,7 +1527,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       $scope.showFooter(false);
       var tmpAccount = $scope.tmpAccount;
       tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+      console.log('saveOrUpdateTmpAccount >>> ');
       userService.saveOrUpdateTmpAccount(tmpAccount, function (data) {
+        console.log('data ', data);
         var newUser = {
           username: newAccount.email,
           password: newAccount.password,
@@ -1529,6 +1539,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
         //get the token
         PaymentService.getStripeCardToken(newAccount.card, function (token, error) {
+          console.log('token ', token);
           if (error) {
             console.info(error);
             $scope.$apply(function () {
@@ -1561,7 +1572,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             if ($scope.subscriptionPlanOneTimeFee) {
               newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
             }
+            console.log('initializeUser >>>');
             userService.initializeUser(newUser, function (data) {
+              console.log('data.accountUrl ', data.accountUrl);
               if (data && data.accountUrl) {
                 /*
                  * I'm not sure why these lines were added.  The accountUrl is a string.
