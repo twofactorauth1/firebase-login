@@ -19,6 +19,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.thumbnailSlider = [];
         $scope.contactDetails = [];
         $scope.activeEditor = null;
+        $scope.activated = false;
+
         //displays the year dynamically for the footer
         var d = new Date();
         $scope.currentDate = new Date();
@@ -708,62 +710,64 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
 
         $scope.activateCKEditor = function() {
-            //if ($scope.activated == false) {
-            $scope.isEditing = true;
-            for (name in CKEDITOR.instances) {
-                if(CKEDITOR.instances[name])
-                    CKEDITOR.instances[name].destroy()
-            }
-            CKEDITOR.disableAutoInline = true;
-            var elements = angular.element('.editable');
-            elements.each(function(index) {
-                if (!angular.element(this).parent().hasClass('edit-wrap')) {
-                    var dataClass = angular.element(this).data('class').replace('.item.', ' ');
-                    angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+            if ($scope.activated) {
+                $scope.isEditing = true;
+                for (name in CKEDITOR.instances) {
+                    if(CKEDITOR.instances[name])
+                        CKEDITOR.instances[name].destroy()
                 }
-                CKEDITOR.inline(this, {
-                    on: {
-                        instanceReady: function(ev) {
-                            var editor = ev.editor;
-                            editor.setReadOnly(false);
-                            if(index === 0)
-                                $scope.activeEditor = editor;
-                            editor.on('change', function() {
-                                $scope.isPageDirty = true;
-                            });
-                            editor.on('focus', function() {
-                                $scope.activeEditor = editor;
-                            });
-                            editor.on('blur', function() {
-                                $scope.activeEditor = null;
-                            });
+                CKEDITOR.disableAutoInline = true;
+                var elements = angular.element('.editable');
+                elements.each(function(index) {
+                    if (!angular.element(this).parent().hasClass('edit-wrap')) {
+                        var dataClass = angular.element(this).data('class').replace('.item.', ' ');
+                        angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
+                    }
+                    CKEDITOR.inline(this, {
+                        on: {
+                            instanceReady: function(ev) {
+                                var editor = ev.editor;
+                                editor.setReadOnly(false);
+                                if(index === 0)
+                                    $scope.activeEditor = editor;
+                                editor.on('change', function() {
+                                    $scope.isPageDirty = true;
+                                });
+                                editor.on('focus', function() {
+                                    $scope.activeEditor = editor;
+                                });
+                                editor.on('blur', function() {
+                                    $scope.activeEditor = null;
+                                });
+                            }
+                        },
+                        sharedSpaces: {
+                            top: 'editor-toolbar'
                         }
-                    },
-                    sharedSpaces: {
-                        top: 'editor-toolbar'
-                    }
+                    });
                 });
-            });
-            setTimeout(function() {
-                if (angular.element("div.meet-team-height").length) {
-                    var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
-                        return angular.element(this).height();
-                    }).get());
-                    angular.element(".meet-team-height").css("min-height", maxTeamHeight);
-                }
-                for (var i = 1; i <= 3; i++) { 
-                    if($("div.feature-height-"+i).length)
-                    {
-                      var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
-                      {
-                          return $(this).height();
-                      }).get());
-                      $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                setTimeout(function() {
+                    if (angular.element("div.meet-team-height").length) {
+                        var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
+                            return angular.element(this).height();
+                        }).get());
+                        angular.element(".meet-team-height").css("min-height", maxTeamHeight);
                     }
-                }
+                    for (var i = 1; i <= 3; i++) { 
+                        if($("div.feature-height-"+i).length)
+                        {
+                          var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                          {
+                              return $(this).height();
+                          }).get());
+                          $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                        }
+                    }
 
-            }, 500)
+                }, 500)
+            }
             $scope.parentScope.resizeIframe();
+            $scope.activated = true;
         };
 
 

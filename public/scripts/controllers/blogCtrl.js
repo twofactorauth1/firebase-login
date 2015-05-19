@@ -11,6 +11,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
         $scope.testing = 'hello';
         $scope.activeEditor = null;
+        $scope.activated = false;
 
         /*
          * @back
@@ -423,44 +424,45 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
         $scope.activateCKEditor = function() {
-            //if ($scope.activated == false) {
-            $scope.isEditing = true;
-            for (name in CKEDITOR.instances) {
-                CKEDITOR.instances[name].destroy()
-                //CKEDITOR.instances[name].removeAllListeners();
-                //CKEDITOR.remove(CKEDITOR.instances[name]);
-            }
-            CKEDITOR.disableAutoInline = true;
-            var elements = angular.element('.editable');
-            elements.each(function(index) {
-                if (!angular.element(this).parent().hasClass('edit-wrap')) {
-                    var dataClass = angular.element(this).data('class').replace('.item.', ' ');
-                    angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + $scope.toTitleCase(dataClass) + '</span>');
+            if ($scope.activated) {
+                $scope.isEditing = true;
+                for (name in CKEDITOR.instances) {
+                    if(CKEDITOR.instances[name])
+                        CKEDITOR.instances[name].destroy()
                 }
-                CKEDITOR.inline(this, {
-                    on: {
-                        instanceReady: function(ev) {
-                            var editor = ev.editor;
-                            if(index === 0)
-                                $scope.activeEditor = editor;
-                            editor.setReadOnly(false);
-                            editor.on('change', function() {
-                                $scope.isPageDirty = true;
-                            });
-                            editor.on('focus', function() {
-                                $scope.activeEditor = editor;
-                            });
-                            editor.on('blur', function() {
-                                $scope.activeEditor = null;
-                            });
-                        }
-                    },
-                    sharedSpaces: {
-                        top: 'editor-toolbar'
+                CKEDITOR.disableAutoInline = true;
+                var elements = angular.element('.editable');
+                elements.each(function(index) {
+                    if (!angular.element(this).parent().hasClass('edit-wrap')) {
+                        var dataClass = angular.element(this).data('class').replace('.item.', ' ');
+                        angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
                     }
-                });
-            });
+                    CKEDITOR.inline(this, {
+                        on: {
+                            instanceReady: function(ev) {
+                                var editor = ev.editor;
+                                editor.setReadOnly(false);
+                                if(index === 0)
+                                    $scope.activeEditor = editor;
+                                editor.on('change', function() {
+                                    $scope.isPageDirty = true;
+                                });
+                                editor.on('focus', function() {
+                                    $scope.activeEditor = editor;
+                                });
+                                editor.on('blur', function() {
+                                    $scope.activeEditor = null;
+                                });
+                            }
+                        },
+                        sharedSpaces: {
+                            top: 'editor-toolbar'
+                        }
+                    });
+                });                
+            }
             $scope.parentScope.resizeIframe();
+            $scope.activated = true;
         };
 
         /*
@@ -472,6 +474,16 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             for (name in CKEDITOR.instances) {
                 CKEDITOR.instances[name].destroy()
             }
+        };
+
+        /*
+         * @toTitleCase
+         * -
+         */
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
         };
 
 

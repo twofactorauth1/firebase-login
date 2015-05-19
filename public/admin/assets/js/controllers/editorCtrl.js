@@ -570,6 +570,7 @@
                         e.stopPropagation();
                     }
                 });
+
                 //remove click handler before binding click
                 angular.element("#iframe-website").contents().find('body').off("click", ".componentActions .settings, .map-wrap .settings");
                 //add click events for all the settings buttons
@@ -650,6 +651,14 @@
                                 }, 200)
                             };
                         });
+                });
+                angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
+                    if (!$scope.activated) {
+                      $scope.activated = true;
+                      setTimeout(function() {
+                        $scope.childScope.activateCKEditor();
+                      }, 1000)
+                    }
                 });
                 angular.element("#iframe-website").contents().find('body').off("click", ".btn-social-link");
                 // Social components
@@ -1042,10 +1051,8 @@
             if ($scope.single_post) {
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
-            }
-            setTimeout(function() {
-                $scope.activateCKEditor();
-            }, 1000)
+            }           
+            $scope.activateCKEditor();
             $scope.backup['website'] = angular.copy($scope['website']);
         };
 
