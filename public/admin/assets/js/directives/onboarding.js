@@ -17,16 +17,9 @@ app.directive('indigOnboarding', function ($location, $sce, $state, UserService,
       UserService.getUserPreferences(function (preferences) {
         var addedTask = false;
         _.each(defaultTasks, function (task) {
-          var matchedTask = _.find(preferences.tasks, function (v, k) {
-            return k === task;
-          });
-
-          if (!matchedTask) {
-            addedTask = true;
-            preferences.tasks[task] = false;
-          }
-
+          //ensure sign up task is true
           if (task === 'sign_up') {
+            addedTask = true;
             preferences.tasks[task] = true;
           }
         });

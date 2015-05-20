@@ -43,7 +43,7 @@ app.constant('ONBOARDINGCONSTANT', {
     pane: {
       heading: "Basic account information",
       text: "Enter basic information about your business like your address and logo.",
-      taskKey: 'profile-personal',
+      taskKey: 'profile_personal',
       state: 'app.account.profilebusiness'
     },
     steps: [{
@@ -67,7 +67,7 @@ app.constant('ONBOARDINGCONSTANT', {
     pane: {
       heading: "Homepage",
       text: "Choose a template and begin customizing your site.",
-      taskKey: 'single-page',
+      taskKey: 'single_page',
       state: 'app.website.pages'
     },
     steps: [{
@@ -117,7 +117,7 @@ app.constant('ONBOARDINGCONSTANT', {
     pane: {
       heading: "Social Feed",
       text: "Add social feeds of your friends.",
-      taskKey: 'social-feed',
+      taskKey: 'social_feed',
       state: 'app.marketing.socialfeed'
     },
     steps: [{
@@ -130,7 +130,7 @@ app.constant('ONBOARDINGCONSTANT', {
     pane: {
       heading: "Blog",
       text: "Keep everyone up to date and informed with a regular blog.",
-      taskKey: 'single-post',
+      taskKey: 'single_post',
       state: 'app.website.posts'
     },
     steps: [{
@@ -154,7 +154,7 @@ app.constant('ONBOARDINGCONSTANT', {
     pane: {
       heading: 'Products',
       text: 'Add a product',
-      taskKey: 'single-product',
+      taskKey: 'single_product',
       state: 'app.commerce'
     },
     steps: [{
