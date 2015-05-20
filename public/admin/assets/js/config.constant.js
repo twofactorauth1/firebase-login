@@ -165,14 +165,14 @@ app.constant('ONBOARDINGCONSTANT', {
   }, {
     pane: {
       heading: "Dashboard",
-      text: "Now evetything is set up, its time to start trakcing.",
+      text: "Now everything is set up, its time to start tracking.",
       taskKey: 'dashboard',
       state: 'app.dashboard'
     },
     steps: [{
       type: 'title',
       heading: "Dashboard",
-      text: "Now evetything is set up, its time to start trakcing."
+      text: "Now everything is set up, its time to start tracking."
     }]
   }]
 
