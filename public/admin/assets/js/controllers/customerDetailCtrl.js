@@ -28,6 +28,7 @@
     $scope.ip_geo_address = '';
     $scope.location = {};
     $scope.loadingMap = true;
+
     $scope.data = {
       fullName: ''
     };
@@ -433,8 +434,8 @@
      * -
      */
 
-    $scope.$watch('data.fullName', function (newValue, oldValue) {
-      if (newValue !== undefined) {
+    $scope.setFullName = function () {
+      var newValue = $scope.data.fullName;
         var nameSplit = newValue.match(/\S+/g);
         if (nameSplit) {
           if (nameSplit.length >= 3) {
@@ -456,7 +457,6 @@
           $scope.customer.last = '';
         }
       }
-    }, true);
 
     /*
      * @insertPhoto
@@ -777,6 +777,15 @@
         $scope.orders = orders;
       }
     });
+
+    /*
+     * @updateFullName
+     * -
+     */
+
+    $scope.updateFullName = function () {
+      $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
+    };
 
     /*
      * @deleteCustomerFn

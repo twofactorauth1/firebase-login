@@ -304,7 +304,7 @@
                                             </fieldset>
                                             <div class="form-group">
                                                 <label class="">Contact Name</label>
-                                                <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="full name" type="text" ng-change="enableSaveBtnFn()">
+                                                <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="full name" type="text" ng-change="setFullName()">
                                                 <small>
                                                     <strong>first:</strong>
                                                     <code>
@@ -319,6 +319,25 @@
                                                         <span id="hint-last">{{customer.last}}</span>
                                                     </code>
                                                 </small>
+                                            <span class="links cl-effect-1">
+                                            <a href="" ng-click="showSplitName = true" ng-show="!showSplitName">Modify</a>
+                                            </span>
+                                            <span class="links cl-effect-1">
+                                                <a href="" ng-click="showSplitName = false" ng-show="showSplitName">Cancel</a>
+                                            </span>
+
+                                            </div>
+                                            <div class="form-group" ng-show="showSplitName">
+                                                <label class="">First Name</label>
+                                                <input id="input-first" class="form-control" ng-model="customer.first" placeholder="first name" type="text" ng-change="updateFullName()">
+                                            </div>
+                                            <div class="form-group" ng-show="showSplitName">
+                                                <label class="">Middle Name</label>
+                                                <input id="input-middle" class="form-control" ng-model="customer.middle" placeholder="middle name" type="text" ng-change="updateFullName()">
+                                            </div>
+                                            <div class="form-group" ng-show="showSplitName">
+                                                <label class="">Last Name</label>
+                                                <input id="input-last" class="form-control" ng-model="customer.last" placeholder="last name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group">
                                                 <label class="block">
