@@ -133,7 +133,10 @@
                                     </ui-select>
                                 </th>
                                 <th ng-show="column.name">
-                                    <input st-search="{{first + last}}" placeholder="Name" class="form-control" type="search" />
+                                    <input st-search="{{first}}" placeholder="First Name" class="form-control" type="search" />
+                                </th>
+                                <th ng-show="column.name">
+                                    <input st-search="{{last}}" placeholder="Last Name" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.tags">
                                     <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
