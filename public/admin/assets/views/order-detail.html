@@ -551,7 +551,7 @@
                 Select Product
             </label>
             <span class="input-icon input-icon-right">
-                <input type="text" ng-model="selectedProduct" typeahead="product as product for product in products | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="product-typeahead-template.html" typeahead-input-formatter="formatProductInput($model)" class="form-control">
+                <input type="text" ng-model="$parent.selectedProduct" typeahead="product as product for product in products | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="product-typeahead-template.html" typeahead-input-formatter="formatProductInput($model)" class="form-control">
                 <i class="ti-close" style="color: #a94442" ng-if="selectedProduct" ng-click="clearProduct()"></i>
             </span>
         </div>
