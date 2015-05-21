@@ -30,7 +30,11 @@ mainApp.filter('generateURLforLinks', function () {
                 _url = ""; //Not yet implemented
                 break;
             case "external":
-                _url = linkToObject.data;
+                var value = linkToObject.data;
+                if (value && !/http[s]?/.test(value)) {
+                    value = 'http://' + value;
+                }
+                _url = value;
                 break;    
             default:
                 return "#";
@@ -48,4 +52,5 @@ mainApp.filter('generateURLforLinks', function () {
         }*/
         return _url;
     }
+
 });

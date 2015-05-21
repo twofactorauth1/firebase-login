@@ -70,22 +70,21 @@
                         </div>
                         <div ng-if="component.bg.img.show && component.type != 'masthead' && isEditing"
                             class="bg cover"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            {{component.bg.img.parallax ? parallax-background : ""}}
-                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
-                            style='
-                                background: url("{{component.bg.img.url}}") fixed;
-                                background-size: cover;
-                                background-repeat: no-repeat;
-                                background: {{component.bg.img.url}};'>
-                        </div>
-                         <div ng-if="component.bg.img.show && component.type != 'masthead' && isEditing"
-                            class="bg cover"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
+                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"                            
                             style='
                                 background: url("{{component.bg.img.url}}");
                                 background-size: cover;
                                 background-repeat: no-repeat;
+                                background: {{component.bg.img.url}};'>
+                        </div>
+                        <div ng-if="component.bg.img.show && component.type != 'masthead' && !isEditing" 
+                            class="bg"
+                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
+                            {{component.bg.img.parallax ? parallax-background : ""}}
+                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
+                            style='
+                                background: url("{{component.bg.img.url}}") no-repeat fixed;
+                                background-size: cover;
                                 background: {{component.bg.img.url}};'>
                         </div>
                         <div ng-if="component.bg.img.overlay"

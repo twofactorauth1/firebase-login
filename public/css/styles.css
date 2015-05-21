@@ -899,9 +899,6 @@ ul.nav {
   min-height: 85px;
   min-width: 85px;
 }
-.navigation-v1 .navigation-logo img {
-  max-height: 70px;
-}
 .navigation1 {
   position: relative;
   z-index: 5;
@@ -966,7 +963,6 @@ ul.nav {
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
   display: block;
-  max-height: 110px;
 }
 @media (max-width: 625px) {
   .navigation-v2 .navbar .navbar-brand img {
@@ -1026,9 +1022,6 @@ ul.nav {
   -ms-transition: all 0.4s;
   -o-transition: all 0.4s;
   transition: all 0.4s;
-}
-.navigation-v3 .navigation-logo img {
-  max-height: 105px;
 }
 .navigation1 {
   position: relative;
@@ -4785,20 +4778,9 @@ fieldset[disabled] .btn-vimeo-square.active {
   visibility: visible;
   width: auto;
 }
-@media (max-width: 768px) {
-  #editor-toolbar .cke_chrome a.cke_button {
-    height: 30px;
-    width: 25px;
-  }
-  #editor-toolbar .cke_chrome a.cke_button .cke_button_icon {
-    line-height: 30px;
-  }
-  #editor-toolbar .cke_chrome .cke_combo_button {
-    height: 35px;
-  }
-  #editor-toolbar .cke_toolbar {
-    float: none;
-  }
+#editor-toolbar .cke_inner {
+  display: inline-block;
+  background: #efa022;
 }
 .componentActions {
   position: absolute;
