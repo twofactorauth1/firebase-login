@@ -358,9 +358,9 @@
       };
     };
 
-    $scope.planDeleteFn = function (planId, showToast, saveProduct, func) {
+    $scope.planDeleteFn = function (planId, showToast,, saveProduct, func) {
       var fn = func || false;
-      PaymentService.deletePlan(planId, function () {
+      PaymentService.deletePlan(planId, showToast, function () {
         $scope.plans.forEach(function (value, index) {
           if (value.id === planId) {
             $scope.plans.splice(index, 1);
