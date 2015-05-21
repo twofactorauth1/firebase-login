@@ -178,7 +178,7 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
 
           if (tasksRemaining) {
             var nextTask = _.find($scope.onboardingStepMap, function (step) {
-              return step.pane.status != 'finished';
+              return step.pane.status !== 'finished';
             });
             var url = $state.href(nextTask.pane.state, {}, {
               absolute: false
