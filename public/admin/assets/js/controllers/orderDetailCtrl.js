@@ -413,7 +413,7 @@
 
       var phone = '';
       if (phones.length > 0) {
-        phone = phones[0].phone;
+        phone = phones[0].number;
       }
 
       var email = '';
@@ -435,12 +435,12 @@
 
       if (defaultBilling) {
 
-        if (defaultBilling.address_1) {
-          billingAddress1 = defaultBilling.address_1;
+        if (defaultBilling.address) {
+          billingAddress1 = defaultBilling.address;
         }
 
-        if (defaultBilling.address_2) {
-          billingAddress2 = defaultBilling.address_2;
+        if (defaultBilling.address2) {
+          billingAddress2 = defaultBilling.address2;
         }
 
         if (defaultBilling.city) {
@@ -470,12 +470,12 @@
 
       if (defaultShipping) {
 
-        if (defaultShipping.address_1) {
-          shippingAddress1 = defaultShipping.address_1;
+        if (defaultShipping.address) {
+          shippingAddress1 = defaultShipping.address;
         }
 
-        if (defaultShipping.address_2) {
-          shippingAddress2 = defaultShipping.address_2;
+        if (defaultShipping.address2) {
+          shippingAddress2 = defaultShipping.address2;
         }
 
         if (defaultShipping.city) {
