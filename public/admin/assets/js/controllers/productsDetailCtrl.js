@@ -290,6 +290,12 @@
       placement: 'right'
     });
 
+    $('#convert').on('change', function(e) {
+      if ($scope.product) {
+          $scope.product.icon = e.icon;
+      }
+    });
+
     $scope.newSubscription = {
       planId: CommonService.generateUniqueAlphaNumericShort()
     };
