@@ -441,6 +441,7 @@ app.constant('JS_REQUIRES', {
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
     'commerceSettingsCtrl': 'assets/js/controllers/commerceSettingsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
+    'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
