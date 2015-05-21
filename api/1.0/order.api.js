@@ -40,6 +40,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createOrder');
 
         var order = new $$.m.Order(req.body);
+        self.log.debug('>> Order Details '+ order);
         var accessToken = self.getAccessToken(req);
         var userId = self.userId(req);
         var accountId = self.accountId(req);

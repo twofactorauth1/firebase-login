@@ -76,7 +76,7 @@
      * get order based on the orderId in url
      */
 
-    //$scope.getOrder = function () {
+    $scope.getOrder = function () {
       OrderService.getOrders(function (orders) {
         if ($stateParams.orderId) {
           var order = _.find(orders, function (order) {
@@ -105,7 +105,7 @@
           console.log('$scope.order ', $scope.order);
         }
       });
-    //};
+    };
 
     /*
      * @calculateTotals
@@ -626,6 +626,10 @@
 
     $scope.saveOrder = function () {
 
+      // Set order customer Id
+      if($scope.selectedCustomer)
+        $scope.order.customer_id = $scope.selectedCustomer._id;
+
       //validate
 
       if (!$scope.order.customer_id) {
@@ -636,10 +640,12 @@
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           console.log('updatedOrder ', updatedOrder);
+          toaster.pop('success', 'Order updated successfully.');
         });
       } else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           console.log('order updated');
+          toaster.pop('success', 'Order updated successfully.');
         });
       }
     };
