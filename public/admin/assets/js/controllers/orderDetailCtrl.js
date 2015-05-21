@@ -76,7 +76,7 @@
      * get order based on the orderId in url
      */
 
-    $scope.getOrder = function () {
+    //$scope.getOrder = function () {
       OrderService.getOrders(function (orders) {
         if ($stateParams.orderId) {
           var order = _.find(orders, function (order) {
@@ -105,7 +105,7 @@
           console.log('$scope.order ', $scope.order);
         }
       });
-    };
+    //};
 
     /*
      * @calculateTotals
@@ -180,11 +180,12 @@
         var i = 0;
         var j = 0;
         for (i; i < notes.length; i++) {
-          for (j; j < $scope.users.length; j++) {
-            if (notes[i].user_id === $scope.users[j]._id) {
-              notes[i].user = $scope.users[j];
+          if($scope.users)
+            for (j; j < $scope.users.length; j++) {
+              if (notes[i].user_id === $scope.users[j]._id) {
+                notes[i].user = $scope.users[j];
+              }
             }
-          }
         }
       }
 
