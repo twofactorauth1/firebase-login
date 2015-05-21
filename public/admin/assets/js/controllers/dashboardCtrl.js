@@ -282,6 +282,21 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     start: new Date(),
     end: new Date()
   };
+
+  $scope.activityTypes = [];
+
+  contactConstant.customer_activity_types.dp.forEach(function(value, index) {
+    $scope.activityTypes.push(value.label);
+  });
+
+  $scope.updateActivityTypeFn = function(selection) {
+      var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+          label: selection
+      });
+      if(activity_hash)
+          $scope.newActivity.activityType = activity_hash.data;
+  };
+
   //$scope.all_activities = angular.copy($scope.activities);
   $scope.addActivityFn = function () {
     CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
