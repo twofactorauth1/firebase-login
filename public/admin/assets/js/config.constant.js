@@ -43,7 +43,7 @@ app.constant('ONBOARDINGCONSTANT', {
     pane: {
       heading: "Basic account information",
       text: "Enter basic information about your business like your address and logo.",
-      taskKey: 'profile_personal',
+      taskKey: 'profile_business',
       state: 'app.account.profilebusiness'
     },
     steps: [{
@@ -71,23 +71,9 @@ app.constant('ONBOARDINGCONSTANT', {
       state: 'app.website.pages'
     },
     steps: [{
-      type: "element",
-      selector: "#new-page",
+      type: "title",
       heading: "Choose a template and customize your site",
       text: "Click on New Page in the upper right corner and select a template. Name the page and check the box by Add to Main Menu.",
-      placement: "bottom",
-      scroll: false
-    },{
-        type: "function",
-        fn: 'openModalForNewPage'
-    },{
-      type: 'title',
-      heading: "Edit Account tab.",
-      text: "Click Add Page in the bottom right corner."
-    },{
-      type: 'title',
-      heading: "Choose a template and customize your site",
-      text: "Select the page you just created and begin entering your copy. You can easily reorder, delete, or add components (content bars). Use the menu bar for editing. Use the buttons above to view the page, change page settings, and save or cancel your edits. Remember, you can always click on the help button in the bottom right corner. Tip: When you have multiple pages, you can search by title, handle, or date; filter by screenshot, title, URL, number of components, and the created or modified date; and select list or grid view for easy management. You can also sort A-Z or ascending/descending using the up/down triangles beside the column names."
     }]
   }, {
     pane: {
@@ -143,24 +129,12 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Commerce",
       text: "Import or create new products to start selling and creating revenue.",
       taskKey: 'commerce',
-      state: 'app.commerce'
+      state: 'app.commerce.products'
     },
     steps: [{
       type: 'title',
       heading: "Commerce",
       text: "Import or create new products to start selling and creating revenue.",
-    }]
-  }, {
-    pane: {
-      heading: 'Products',
-      text: 'Add a product',
-      taskKey: 'single_product',
-      state: 'app.commerce'
-    },
-    steps: [{
-      type: 'title',
-      heading: 'Products',
-      text: 'Add a product'
     }]
   }, {
     pane: {
@@ -466,18 +440,19 @@ app.constant('JS_REQUIRES', {
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
     'commerceSettingsCtrl': 'assets/js/controllers/commerceSettingsCtrl.js',
+    'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
     'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',
     'ordersCtrl': 'assets/js/controllers/ordersCtrl.js',
-    'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
-    'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
-    'calendarCtrl': 'assets/js/controllers/calendarCtrl.js',
-    'nestableCtrl': 'assets/js/controllers/nestableCtrl.js',
-    'validationCtrl': ['assets/js/controllers/validationCtrl.js'],
-    'userCtrl': ['assets/js/controllers/userCtrl.js'],
+    'accountService': 'assets/js/services/account.js',
+    'productService': 'assets/js/services/product.js',
+    'paymentService': 'assets/js/services/product.js',
+    'toasterService': 'assets/js/services/toaster.js',
+    'websiteService': 'assets/js/services/webiste.js',
+    'userService': 'assets/js/services/user.js',
     'selectCtrl': 'assets/js/controllers/selectCtrl.js',
     'wizardCtrl': 'assets/js/controllers/wizardCtrl.js',
     'uploadCtrl': 'assets/js/controllers/uploadCtrl.js',
@@ -490,7 +465,6 @@ app.constant('JS_REQUIRES', {
     'accountService': 'assets/js/services/account.js',
     'productService': 'assets/js/services/product.js',
     'paymentService': 'assets/js/services/product.js',
-    'toasterService': 'assets/js/services/toaster.js',
     'websiteService': 'assets/js/services/webiste.js',
     'userService': 'assets/js/services/user.js',
     'customerService': 'assets/js/services/customer.js',

@@ -13,9 +13,7 @@
         });
 
         if (matchedTask) {
-          task.pane.completed = matchedTask;
-        } else {
-          task.pane.completed = false;
+          task.pane.status = matchedTask;
         }
 
         $scope.panes.push(task.pane);
@@ -46,7 +44,7 @@ app.controller('CompletionDonutCtrl', ["$scope", 'UserService', 'ONBOARDINGCONST
     var completedTasks = 0;
 
     taskKeys.forEach(function (value, index) {
-      if (preferences.tasks[value]) {
+      if (preferences.tasks[value] === 'finished') {
         completedTasks += 1;
       }
     });

@@ -120,7 +120,6 @@
     "angular-masonry": "~0.11.0",
     "ng-text-truncate": "https://github.com/lorenooliveira/ng-text-truncate.git",
     "ngInfiniteScroll": "1.0.0",
-    "ng-joyride": "~0.1.12",
     "bootstrap-confirmation": "https://github.com/Tavicu/bootstrap-confirmation.git",
     "allmighty-autocomplete": "*"
   },

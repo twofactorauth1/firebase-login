@@ -158,17 +158,17 @@ var user = $$.m.ModelBase.extend({
         website_default_tab: '',
         indi_default_tab: '',
         tasks: {
-            sign_up: true,
-            profile_personal: false,
-            billing: false,
-            single_page: false,
-            integrations: false,
-            customers: false,
-            social_feed: false,
-            single_post: false,
-            commerce: false,
-            single_product: false,
-            dashboard: false
+            sign_up: 'finished',
+            profile_business: 'not_started',
+            billing: 'not_started',
+            single_page: 'not_started',
+            integrations: 'not_started',
+            customers: 'not_started',
+            social_feed: 'not_started',
+            single_post: 'not_started',
+            commerce: 'not_started',
+            single_product: 'not_started',
+            dashboard: 'not_started'
         },
         welcome_alert: {
           initial: false,
