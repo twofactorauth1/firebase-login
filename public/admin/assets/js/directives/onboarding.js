@@ -105,8 +105,8 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
             toaster.pop('info', null, 'Your almost completed this step. Finish the task or manually complete. <br><div class="margin-top-10"><a class="btn btn-primary margin-right-10" href="' + $scope.getOnboardURL(_matchingTask) + '">Task Info</a><a class="btn btn-warning" href="' + $scope.getOnboardURL(_matchingTask, true) + '">Mark Complete</a></div>', 15000, 'trustedHtml');
           }
 
-          if (status === 'finish' || $scope.manualComplete) {
-            console.log('task finished');
+          if ($scope.manualComplete) {
+            $scope.taskComplete();
           }
         }
 
@@ -122,9 +122,9 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
           absolute: false
         });
         if (complete) {
-          url += '?task=' + task.pane.taskKey + '&complete=true';
+          url += '?completeTask=true';
         } else {
-          url += '?onboarding=' + task.pane.taskKey + '&reset=true';
+          url += '?resetTask=true';
         }
         return url;
       };
@@ -137,20 +137,58 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
       $scope.stateOrLocationChanged = function () {
         //clear any toasters from previous page
         toaster.clear('*');
-        if ($location.$$search['onboarding']) {
-          if ($location.$$search['reset']) {
-            $scope.resetTask = true;
-          }
+        if ($location.$$search['resetTask']) {
+          $scope.resetTask = true;
+        }
 
-          if ($location.$$search['complete']) {
-            $scope.manualComplete = true;
-          }
+        if ($location.$$search['completeTask']) {
+          $scope.manualComplete = true;
+        }
+        if ($location.$$search['onboarding']) {
           $scope.getUserPreferences($scope.checkTaskStatus);
           //remove parameters
           $location.url($location.path());
         } else {
           $scope.getUserPreferences($scope.checkTaskStatus);
         }
+      };
+
+      /*
+       * @taskComplete
+       * - mark task as complete after minimum requirements for task have been met
+       */
+
+      $scope.taskComplete = function () {
+        $scope.userPreferences.tasks[$scope.objType] = 'finished';
+        UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
+
+          //find any remaining tasks
+          $scope.startJoyRide = false;
+
+          var tasksRemaining = false;
+          _.each($scope.onboardingStepMap, function (step) {
+            var matchingTask = _.find($scope.userTasks, function (v, k) {
+              return k === step.pane.taskKey;
+            });
+            if (matchingTask === 'not_started' || matchingTask === 'started') {
+              tasksRemaining = true;
+            }
+            step.pane.status = matchingTask;
+          });
+
+          if (tasksRemaining) {
+            var nextTask = _.find($scope.onboardingStepMap, function (step) {
+              return step.pane.status != 'finished';
+            });
+            var url = $state.href(nextTask.pane.state, {}, {
+              absolute: false
+            });
+            url += '?onboarding=' + nextTask.pane.taskKey;
+            toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
+          } else {
+            toaster.pop('success', 'Task Complete. No more tasks to complete.');
+          }
+        });
       };
 
       /*
