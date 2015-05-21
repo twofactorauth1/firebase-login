@@ -295,10 +295,10 @@
     </div>
     <div class="modal-body bg-white" style="max-height:500px;">
         <form role="form">
-            <div class="form-group">
+            <div class="form-group" id="activity_type">
                 <label for="exampleInputEmail1">Type</label>
                 <autocomplete ng-model="selectedActivityType" data="activityTypes" on-select="updateActivityTypeFn"></autocomplete>
-
+               <span class="error help-block" />
             </div>
             <div class="form-group">
                 <label>Detail</label>
