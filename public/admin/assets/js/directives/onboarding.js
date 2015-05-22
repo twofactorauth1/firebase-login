@@ -33,10 +33,45 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.getUserPreferences = function (fn) {
+
         UserService.getUserPreferences(function (preferences) {
           $scope.userPreferences = preferences;
+
+          //format tasks to match model
+          var _formattedTasks = {};
+          var needsUpdate = false;
+          _.each($scope.onboardingStepMap, function(stepmap) {
+            var _matchingTask = _.find(preferences.tasks , function(v, k) {
+              return k === stepmap.pane.taskKey;
+            });
+
+            if (_matchingTask && _matchingTask === 'not_started' || _matchingTask === 'started' || _matchingTask === 'finished') {
+              //properly formated
+              _formattedTasks[stepmap.pane.taskKey] = _matchingTask;
+            } else {
+              //not formatted or doesnt exist so add
+              needsUpdate = true;
+              _formattedTasks[stepmap.pane.taskKey] = 'not_started';
+            }
+            if (stepmap.pane.taskKey === 'sign_up' && _matchingTask != 'finished') {
+              needsUpdate = true;
+              _formattedTasks[stepmap.pane.taskKey] = 'finished';
+            }
+          });
+
+          if (needsUpdate) {
+
+            $scope.userPreferences.tasks = _formattedTasks;
+            UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
+              console.log('updatedPreferences ', updatedPreferences);
+              if (fn) {
+                fn();
+              }
+            });
+          };
+
           $scope.userTasks = preferences.tasks;
-          if (fn) {
+          if (fn && !needsUpdate) {
             fn();
           }
         });
