@@ -159,7 +159,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                     scope.checkCardName();
                     scope.checkCardNumber();
                     if (scope.cardValidated && scope.expirationValidated && scope.cvvValidated && scope.cardNameValidated) {
-                        $('#changeCardModal').modal('hide');
+
 
                         var parent_div = $("." + scope.wrapper).next();
                         if (parent_div.length && parent_div.attr("wrapper-div")) {
@@ -191,7 +191,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                         }
 
                         PaymentService.getStripeCardToken(cardInput, function(token) {
-
+                            if(scope.$parent.closeModal && token)
+                                scope.$parent.closeModal();
                             if (scope.user && scope.user.stripeId) {
                                 UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                                     scope.updateFn(billing);
