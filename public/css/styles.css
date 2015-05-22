@@ -3749,7 +3749,6 @@ div[data-type=blog] .container {
 .payment-form-v1 .account-info-signup .has-feedback .form-control-feedback,
 .payment-form-v1 .payment-signup .has-feedback .form-control-feedback {
   position: absolute;
-  top: 8px;
   right: 8px;
 }
 .payment-form-v1 .price-signup {

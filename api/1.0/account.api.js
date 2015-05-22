@@ -11,6 +11,7 @@ var cookies = require('../../utils/cookieutil');
 var Account = require('../../models/account');
 var userDao = require('../../dao/user.dao');
 var appConfig = require('../../configs/app.config');
+var paymentManager = require('../../payments/payments_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -108,10 +109,23 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.error('Exception updating billing object on account: ' + err);
                                 return self.wrapError(res, 500, null, err, err);
                             } else {
-                                self.log.debug('<< updateCurrentAccountBilling');
-                                res.send(updatedAccount);
-                                self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
-                                return;
+                                if(billingObj.cardToken && billingObj.stripeCustomerId) {
+                                    //we need to add a cardToken to a customer
+                                    paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, function(err, value){
+                                        self.log.debug('<< updateCurrentAccountBilling');
+                                        res.send(updatedAccount);
+                                        self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                        return;
+                                    });
+                                } else {
+                                    //we're done here.
+                                    self.log.debug('<< updateCurrentAccountBilling');
+                                    res.send(updatedAccount);
+                                    self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                    return;
+                                }
+
+
                             }
                         });
                     }

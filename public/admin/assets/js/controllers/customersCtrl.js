@@ -82,7 +82,8 @@
     $scope.openModal = function (template) {
       $scope.modalInstance = $modal.open({
         templateUrl: template,
-        scope: $scope
+        scope: $scope,
+        backdrop: 'static'
       });
     };
 

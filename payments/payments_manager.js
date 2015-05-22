@@ -82,5 +82,18 @@ module.exports = {
     deleteStripeCoupon: function(couponName, accessToken, fn) {
         log.debug('>> deleteStripeCoupon');
         return stripeDao.deleteCoupon(couponName, accessToken, fn);
+    },
+
+    addCardToCustomer: function(cardToken, customerId, fn) {
+        log.debug('>> addCardToCustomer');
+        stripeDao.createStripeCard(customerId, cardToken, function(err, value){
+            if(err) {
+                log.error('error adding card: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< addCardToCustomer');
+                return fn(null, value);
+            }
+        });
     }
 };

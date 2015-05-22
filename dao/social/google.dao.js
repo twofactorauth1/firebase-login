@@ -28,7 +28,8 @@ var dao = {
     },
 
 
-    REFRESH_TOKEN_URL: "https://accounts.google.com/o/oauth2/token",
+    //REFRESH_TOKEN_URL: "https://accounts.google.com/o/oauth2/token",
+    REFRESH_TOKEN_URL: "https://www.googleapis.com/oauth2/v3/token",
     PROFILE_API_URL: "https://www.googleapis.com/oauth2/v1/userinfo",
     CONTACT_API_URL: "https://www.google.com/m8/feeds/contacts/",
     GROUPS_API_URL: "https://www.google.com/m8/feeds/groups/",
@@ -60,6 +61,28 @@ var dao = {
         } else {
             fn($$.u.errors._401_INVALID_CREDENTIALS, "No refresh token found");
         }
+    },
+
+    refreshAccessTokenWithToken: function(refreshToken, fn) {
+        var self = this;
+        self.log.debug('>> refreshAccessTokenWithToken');
+
+        request.post({
+            url: this.REFRESH_TOKEN_URL,
+            form: {
+                refresh_token: refreshToken,
+                client_id:     googleConfig.CLIENT_ID,
+                client_secret: googleConfig.CLIENT_SECRET,
+                grant_type:    'refresh_token'
+            }
+        }, function(err, response, body){
+            if(err) { return fn(err); }
+            var currentToken = JSON.parse(body);
+            self.log.debug('received token', currentToken);
+            self.log.debug('<< refreshAccessTokenWithToken');
+            return fn(null, currentToken);
+        });
+
     },
 
 
