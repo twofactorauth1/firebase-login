@@ -766,16 +766,15 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                var themeId = req.params.id;
+                var templateId = req.params.id;
                 var accountId = parseInt(self.accountId(req));
-                var themeObj = new $$.m.cms.Theme(req.body);
-                themeObj.attributes.modified.by = self.userId(req);
-                themeObj.attributes.modified.date = new Date();
-                themeObj.set('_id', themeId);
+                var templateObj = new $$.m.cms.Template(req.body);
+                templateObj.attributes.modified.by = self.userId(req);
+                templateObj.attributes.modified.date = new Date();
+                templateObj.set('_id', templateId);
 
-                self.log.debug('themeObj ', themeObj);
-
-                cmsManager.updateTemplate(themeObj, function(err, value){
+                self.log.debug('templateObj ', templateObj);
+                cmsManager.updateTemplate(templateObj, function(err, value){
                     self.log.debug('<< updateTemplate ', value.components);
                     self.sendResultOrError(res, err, value, 'Error updating template.');
 

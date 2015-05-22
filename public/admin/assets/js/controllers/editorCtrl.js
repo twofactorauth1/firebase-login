@@ -2019,7 +2019,7 @@
         var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
-            if ($scope.childScope.checkOrSetPageDirty) {
+            if ($scope.childScope && $scope.childScope.checkOrSetPageDirty) {
                 var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
             }
 

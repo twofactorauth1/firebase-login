@@ -516,7 +516,7 @@
                     <div class="panel-footer border-light">
                         <label for="newNote"> New Note </label>
                         <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
-                        <button type="button" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
+                        <button type="button" ng-disabled="!(newNote && order)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
                             <span>Add</span>
                         </button>
                     </div>
@@ -551,7 +551,7 @@
                 Select Product
             </label>
             <span class="input-icon input-icon-right">
-                <input type="text" ng-model="selectedProduct" typeahead="product as product for product in products | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="product-typeahead-template.html" typeahead-input-formatter="formatProductInput($model)" class="form-control">
+                <input type="text" ng-model="$parent.selectedProduct" typeahead="product as product for product in products | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="product-typeahead-template.html" typeahead-input-formatter="formatProductInput($model)" class="form-control">
                 <i class="ti-close" style="color: #a94442" ng-if="selectedProduct" ng-click="clearProduct()"></i>
             </span>
         </div>

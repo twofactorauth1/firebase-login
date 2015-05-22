@@ -46,11 +46,13 @@
         };
 
         this.updateOrder = function(order, fn) {
-            var apiUrl = baseUrl + ['update'].join('/');
+            var apiUrl = baseUrl +  [order._id, 'update'].join('/');
             $http({
                     url: apiUrl,
                     method: "POST",
-                    data: order
+                    data: {
+                        order: order
+                    }
                 })
                 .success(function(data, status, headers, config) {
                     fn(data);

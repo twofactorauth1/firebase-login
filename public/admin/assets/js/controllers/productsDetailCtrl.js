@@ -290,6 +290,12 @@
       placement: 'right'
     });
 
+    $('#convert').on('change', function(e) {
+      if ($scope.product) {
+          $scope.product.icon = e.icon;
+      }
+    });
+
     $scope.newSubscription = {
       planId: CommonService.generateUniqueAlphaNumericShort()
     };
@@ -360,7 +366,7 @@
 
     $scope.planDeleteFn = function (planId, showToast, saveProduct, func) {
       var fn = func || false;
-      PaymentService.deletePlan(planId, function () {
+      PaymentService.deletePlan(planId, showToast, function () {
         $scope.plans.forEach(function (value, index) {
           if (value.id === planId) {
             $scope.plans.splice(index, 1);

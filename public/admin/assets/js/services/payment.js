@@ -157,7 +157,7 @@
                     });
             };
 
-            this.deletePlan = function(planId, fn, showToast) {
+            this.deletePlan = function(planId, showToast, fn) {
                 var showToast = showToast || false;
                 var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
                 $http.delete(apiUrl)

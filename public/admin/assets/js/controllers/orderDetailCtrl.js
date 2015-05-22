@@ -180,11 +180,12 @@
         var i = 0;
         var j = 0;
         for (i; i < notes.length; i++) {
-          for (j; j < $scope.users.length; j++) {
-            if (notes[i].user_id === $scope.users[j]._id) {
-              notes[i].user = $scope.users[j];
+          if($scope.users)
+            for (j; j < $scope.users.length; j++) {
+              if (notes[i].user_id === $scope.users[j]._id) {
+                notes[i].user = $scope.users[j];
+              }
             }
-          }
         }
       }
 
@@ -412,7 +413,7 @@
 
       var phone = '';
       if (phones.length > 0) {
-        phone = phones[0].phone;
+        phone = phones[0].number;
       }
 
       var email = '';
@@ -434,12 +435,12 @@
 
       if (defaultBilling) {
 
-        if (defaultBilling.address_1) {
-          billingAddress1 = defaultBilling.address_1;
+        if (defaultBilling.address) {
+          billingAddress1 = defaultBilling.address;
         }
 
-        if (defaultBilling.address_2) {
-          billingAddress2 = defaultBilling.address_2;
+        if (defaultBilling.address2) {
+          billingAddress2 = defaultBilling.address2;
         }
 
         if (defaultBilling.city) {
@@ -469,12 +470,12 @@
 
       if (defaultShipping) {
 
-        if (defaultShipping.address_1) {
-          shippingAddress1 = defaultShipping.address_1;
+        if (defaultShipping.address) {
+          shippingAddress1 = defaultShipping.address;
         }
 
-        if (defaultShipping.address_2) {
-          shippingAddress2 = defaultShipping.address_2;
+        if (defaultShipping.address2) {
+          shippingAddress2 = defaultShipping.address2;
         }
 
         if (defaultShipping.city) {
@@ -625,6 +626,10 @@
 
     $scope.saveOrder = function () {
 
+      // Set order customer Id
+      if($scope.selectedCustomer)
+        $scope.order.customer_id = $scope.selectedCustomer._id;
+
       //validate
 
       if (!$scope.order.customer_id) {
@@ -635,10 +640,12 @@
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           console.log('updatedOrder ', updatedOrder);
+          toaster.pop('success', 'Order updated successfully.');
         });
       } else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           console.log('order updated');
+          toaster.pop('success', 'Order updated successfully.');
         });
       }
     };
