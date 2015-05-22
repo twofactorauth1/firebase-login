@@ -204,8 +204,8 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                         });
 
                         $scope.batch = [];
-                        $scope.batch.push(asset);
-
+                        if($scope.singleSelected)
+                            $scope.batch.push(asset);
                         $scope.m.selectAllStatus();
                     }
                 }, 0)
