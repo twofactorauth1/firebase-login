@@ -548,6 +548,11 @@
         toaster.pop('success', toasterMsg + '"On Hold"');
       }
 
+
+      if (newStatus === 'pending_payment') {
+        toaster.pop('success', toasterMsg + '"Pending Payment"');
+      }
+
       if (newStatus === 'completed') {
         OrderService.completeOrder($scope.order._id, note, function (completedOrder) {
           toaster.pop('success', toasterMsg + '"Completed"');
@@ -592,6 +597,7 @@
         toaster.pop('success', toasterMsg + '"Failed"');
       }
       $scope.order.status = newStatus;
+      $scope.currentStatus = newStatus;
     };
 
     /*
