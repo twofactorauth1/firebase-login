@@ -21,6 +21,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                         PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
                             scope.cards = cards;
                             if (scope.cards.data.length) {
+                                scope.defaultCardValue = "XXXX-XXXX-XXXX-" + scope.cards.data[0].last4;
+                                scope.defaultExpiry = scope.cards.data[0].exp_month + '/' + (scope.cards.data[0].exp_year - 2000);
                                 element.find('form').card({
                                     container: '.' + scope.wrapper,
                                     values: {
