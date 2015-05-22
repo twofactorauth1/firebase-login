@@ -1712,6 +1712,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 else if (!exp_year)
                     angular.element("#card_expiry .error").html("Expiry Year Required");
                 angular.element("#card_expiry").addClass('has-error');
+                angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
             } else {
                 angular.element("#card_expiry .error").html("");
                 angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
