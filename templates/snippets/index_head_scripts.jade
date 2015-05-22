@@ -22,7 +22,7 @@ if !includeEditor
                     window.analytics.load('#{segmentIOWriteKey}');
             window.analytics.page('Index', {accountId:#{account._id}});
 
-if account.website.settings.font_family
+if account.website.settings.font_family && account.website.settings.font_family_2
     script(src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js")
     script(type="text/javascript").
         WebFont.load({
