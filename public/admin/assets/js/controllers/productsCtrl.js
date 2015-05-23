@@ -36,6 +36,7 @@
         $scope.displayedProducts.unshift(product);
         $scope.modalInstance.close();
         $scope.newProduct = {};
+        $scope.minRequirements = true;
       });
     };
 

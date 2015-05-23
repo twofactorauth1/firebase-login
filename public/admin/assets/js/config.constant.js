@@ -36,7 +36,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Sign up for Indigenous",
       text: "You have taken the first step in growing your business.",
       taskKey: 'sign_up',
-      state: 'app.support.gettingstarted'
+      state: 'app.support.gettingstarted',
+      minRequire: false
     },
     steps: []
   }, {
@@ -44,19 +45,21 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Basic account information",
       text: "Enter basic information about your business like your address and logo.",
       taskKey: 'profile_business',
-      state: 'app.account.profilebusiness'
+      state: 'app.account.profilebusiness',
+      minRequire: true
     },
     steps: [{
       type: 'title',
-      heading: "Enter your basic information.",
-      text: "Enter your contact information and business hours, and upload your logo under the Edit Account tab. Remember to click Save in the upper right hand corner, and then review under the Profile tab."
+      heading: "Basic account information",
+      text: "Enter basic information about your business like your address and logo."
     }]
   }, {
     pane: {
       heading: "Billing",
       text: "Manage the type of account you have and your method of payment.",
       taskKey: 'billing',
-      state: 'app.account.billing'
+      state: 'app.account.billing',
+      minRequire: false
     },
     steps: [{
       type: 'title',
@@ -68,7 +71,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Homepage",
       text: "Choose a template and begin customizing your site.",
       taskKey: 'single_page',
-      state: 'app.website.pages'
+      state: 'app.website.pages',
+      minRequire: true
     },
     steps: [{
       type: "title",
@@ -80,7 +84,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Social accounts",
       text: "Connect your social accounts so you can import contacts and create targeted marketing campaigns.",
       taskKey: 'integrations',
-      state: 'app.account.integrations'
+      state: 'app.account.integrations',
+      minRequire: true
     },
     steps: [{
       type: 'title',
@@ -92,7 +97,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Contacts",
       text: "Import contacts from various accounts or create them individually.",
       taskKey: 'customers',
-      state: 'app.customers'
+      state: 'app.customers',
+      minRequire: true
     },
     steps: [{
       type: 'title',
@@ -104,7 +110,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Social Feed",
       text: "Add social feeds of your friends.",
       taskKey: 'social_feed',
-      state: 'app.marketing.socialfeed'
+      state: 'app.marketing.socialfeed',
+      minRequire: true
     },
     steps: [{
       type: 'title',
@@ -117,7 +124,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Blog",
       text: "Keep everyone up to date and informed with a regular blog.",
       taskKey: 'single_post',
-      state: 'app.website.posts'
+      state: 'app.website.posts',
+      minRequire: true
     },
     steps: [{
       type: 'title',
@@ -129,7 +137,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Commerce",
       text: "Import or create new products to start selling and creating revenue.",
       taskKey: 'commerce',
-      state: 'app.commerce.products'
+      state: 'app.commerce.products',
+      minRequire: true
     },
     steps: [{
       type: 'title',
@@ -141,7 +150,8 @@ app.constant('ONBOARDINGCONSTANT', {
       heading: "Dashboard",
       text: "Now everything is set up, its time to start tracking.",
       taskKey: 'dashboard',
-      state: 'app.dashboard'
+      state: 'app.dashboard',
+      minRequire: false
     },
     steps: [{
       type: 'title',
