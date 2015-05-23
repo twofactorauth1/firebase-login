@@ -185,6 +185,7 @@
             });
           });
         }
+        $scope.minRequirements = true;
         toaster.pop('success', 'Feed Added');
       });
     };
