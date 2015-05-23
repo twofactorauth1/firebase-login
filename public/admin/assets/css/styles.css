@@ -13228,3 +13228,9 @@ tags-input.ti-input-sm .tags .input,
 .product-detail #variation-manager #panel4 .panel-body {
   border-top: 1px solid #eee;
 }
+/* ---------------------------------------------------------------------- */
+/*  Integrations
+/* ---------------------------------------------------------------------- */
+.integrations .integration-avatar {
+  min-height: 35px;
+}
