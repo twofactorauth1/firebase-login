@@ -170,6 +170,7 @@
             if (!hasHandle) {
                 WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function(newpage) {
                     toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
+                    $scope.minRequirements = true;
                     $scope.closeModal();
 
                     if (newpage.components) {

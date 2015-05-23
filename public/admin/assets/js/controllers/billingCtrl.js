@@ -206,6 +206,11 @@
       }
     });
 
+    $scope.checkOnboardMinRequirements = function() {
+      console.log('checking onboarding requirements');
+        $scope.minRequirements = true;
+    };
+
     /*
      * @getAccount
      * -

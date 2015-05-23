@@ -6,9 +6,44 @@
 
     $scope.panes = [];
     UserService.getUserPreferences(function (preferences) {
+      //format tasks to match model
+      var _formattedTasks = {};
+      var needsUpdate = false;
+      _.each(ONBOARDINGCONSTANT.tasks, function(stepmap) {
+        var _matchingTask = _.find(preferences.tasks , function(v, k) {
+          return k === stepmap.pane.taskKey;
+        });
 
-      _.each(ONBOARDINGCONSTANT.tasks, function (task) {
-        var matchedTask = _.find(preferences.tasks, function (v, k) {
+        if (_matchingTask && _matchingTask === 'not_started' || _matchingTask === 'started' || _matchingTask === 'finished') {
+          //properly formated
+          _formattedTasks[stepmap.pane.taskKey] = _matchingTask;
+        } else {
+          //not formatted or doesnt exist so add
+          needsUpdate = true;
+          _formattedTasks[stepmap.pane.taskKey] = 'not_started';
+        }
+        if (stepmap.pane.taskKey === 'sign_up' && _matchingTask != 'finished') {
+          needsUpdate = true;
+          _formattedTasks[stepmap.pane.taskKey] = 'finished';
+        }
+      });
+
+      if (needsUpdate) {
+
+        preferences.tasks = _formattedTasks;
+        UserService.updateUserPreferences(preferences, false, function (updatedPreferences) {
+          $scope.preferences = updatedPreferences;
+          $scope.pushPanes();
+        });
+      } else {
+        $scope.preferences = preferences;
+        $scope.pushPanes();
+      }
+    });
+
+    $scope.pushPanes = function() {
+       _.each(ONBOARDINGCONSTANT.tasks, function (task) {
+        var matchedTask = _.find($scope.preferences.tasks, function (v, k) {
           return k === task.pane.taskKey;
         });
 
@@ -18,7 +53,7 @@
 
         $scope.panes.push(task.pane);
       });
-    });
+     };
 
     $scope.startOnboardFn = function (pane) {
       var url = $state.href(pane.state, {}, {

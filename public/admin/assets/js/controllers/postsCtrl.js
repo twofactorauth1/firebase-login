@@ -122,7 +122,7 @@
             postData.websiteId = $scope.website._id;
             WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
               toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-              
+              $scope.minRequirements = true;
               $scope.cancel();
               $scope.posts.unshift(data);
               $scope.displayedPosts.unshift(data);

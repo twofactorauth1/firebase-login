@@ -33,10 +33,45 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.getUserPreferences = function (fn) {
+
         UserService.getUserPreferences(function (preferences) {
           $scope.userPreferences = preferences;
+
+          //format tasks to match model
+          var _formattedTasks = {};
+          var needsUpdate = false;
+          _.each($scope.onboardingStepMap, function(stepmap) {
+            var _matchingTask = _.find(preferences.tasks , function(v, k) {
+              return k === stepmap.pane.taskKey;
+            });
+
+            if (_matchingTask && _matchingTask === 'not_started' || _matchingTask === 'started' || _matchingTask === 'finished') {
+              //properly formated
+              _formattedTasks[stepmap.pane.taskKey] = _matchingTask;
+            } else {
+              //not formatted or doesnt exist so add
+              needsUpdate = true;
+              _formattedTasks[stepmap.pane.taskKey] = 'not_started';
+            }
+            if (stepmap.pane.taskKey === 'sign_up' && _matchingTask != 'finished') {
+              needsUpdate = true;
+              _formattedTasks[stepmap.pane.taskKey] = 'finished';
+            }
+          });
+
+          if (needsUpdate) {
+
+            $scope.userPreferences.tasks = _formattedTasks;
+            UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
+              console.log('updatedPreferences ', updatedPreferences);
+              if (fn) {
+                fn();
+              }
+            });
+          };
+
           $scope.userTasks = preferences.tasks;
-          if (fn) {
+          if (fn && !needsUpdate) {
             fn();
           }
         });
@@ -71,10 +106,14 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.onFinish = function () {
+        if (!$scope.userPreferences.tasks[$scope.objType].minRequire) {
+          $scope.taskComplete();
+        } else {
         $scope.userPreferences.tasks[$scope.objType] = 'started';
-        UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
-          console.log('updatedPreferences ', updatedPreferences);
-        });
+          UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
+            console.log('updatedPreferences ', updatedPreferences);
+          });
+        }
       };
 
       /*
@@ -159,36 +198,38 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.taskComplete = function () {
-        $scope.userPreferences.tasks[$scope.objType] = 'finished';
-        UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
+          if ($scope.userPreferences.tasks[$scope.objType] !== 'finished') {
+              $scope.userPreferences.tasks[$scope.objType] = 'finished';
+                UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
 
-          //find any remaining tasks
-          $scope.startJoyRide = false;
+                //find any remaining tasks
+                $scope.startJoyRide = false;
 
-          var tasksRemaining = false;
-          _.each($scope.onboardingStepMap, function (step) {
-            var matchingTask = _.find($scope.userTasks, function (v, k) {
-              return k === step.pane.taskKey;
-            });
-            if (matchingTask === 'not_started' || matchingTask === 'started') {
-              tasksRemaining = true;
-            }
-            step.pane.status = matchingTask;
-          });
+                var tasksRemaining = false;
+                _.each($scope.onboardingStepMap, function (step) {
+                  var matchingTask = _.find($scope.userTasks, function (v, k) {
+                    return k === step.pane.taskKey;
+                  });
+                  if (matchingTask === 'not_started' || matchingTask === 'started') {
+                    tasksRemaining = true;
+                  }
+                  step.pane.status = matchingTask;
+                });
 
-          if (tasksRemaining) {
-            var nextTask = _.find($scope.onboardingStepMap, function (step) {
-              return step.pane.status !== 'finished';
-            });
-            var url = $state.href(nextTask.pane.state, {}, {
-              absolute: false
-            });
-            url += '?onboarding=' + nextTask.pane.taskKey;
-            toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
-          } else {
-            toaster.pop('success', 'Task Complete. No more tasks to complete.');
+                if (tasksRemaining) {
+                  var nextTask = _.find($scope.onboardingStepMap, function (step) {
+                    return step.pane.status !== 'finished';
+                  });
+                  var url = $state.href(nextTask.pane.state, {}, {
+                    absolute: false
+                  });
+                  url += '?onboarding=' + nextTask.pane.taskKey;
+                  toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
+                } else {
+                  toaster.pop('success', 'Task Complete. No more tasks to complete.');
+                }
+              });
           }
-        });
       };
 
       /*
