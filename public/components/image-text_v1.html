@@ -13,16 +13,21 @@
         </div>
     </div>
     <div class="row">
-        <div class="pull-{{component.imagePosition}} col-xs-4 image-text-image">
+        <div ng-if="component.imagePosition == 'left'" class="col-xs-12 col-sm-4 image-text-image">
             <div class="editable" data-class="imgsection" ng-bind-html="component.imgsection | unsafe"></div>
         </div>
 
-        <div class="col-xs-8">
+        <div class="col-sm-8 col-xs-12">
             <div class="image-text-text">
                 <div class="editable" data-class="text" ng-bind-html="component.text | unsafe">
                 </div>
             </div>
         </div>
+
+        <div ng-if="component.imagePosition == 'right'" class="col-xs-12 col-sm-4 image-text-image">
+            <div class="editable" data-class="imgsection" ng-bind-html="component.imgsection | unsafe"></div>
+        </div>
+
     </div>
     <div class="clearfix mb10 visible-xs"></div>
 </div>
