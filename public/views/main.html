@@ -8,7 +8,7 @@
         <!-- This div will handle all toolbars. -->
     </div>
     <div ng-show="isEditing">
-        <div id="editor-toolbar" perfect-scrollbar wheel-propagation="false" suppress-scroll-y="true" ng-class="{'fullyLocaded': isLoaded}"></div>
+        <div id="editor-toolbar" ng-class="{'fullyLocaded': isLoaded}"></div>
     </div>
     <div ng-show="isEditing ? true : isLoaded">
         <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents">
