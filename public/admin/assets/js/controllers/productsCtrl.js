@@ -5,7 +5,7 @@
   app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", "$filter", function ($scope, $modal, ProductService, $filter) {
     $scope.tableView = 'list';
     $scope.newProduct = {
-      status: 'Auto Inactive'
+      status: 'auto_inactive'
     };
     ProductService.getProducts(function (products) {
       $scope.products = products;
