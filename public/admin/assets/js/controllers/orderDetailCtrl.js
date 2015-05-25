@@ -451,8 +451,8 @@
           billingState = defaultBilling.state;
         }
 
-        if (defaultBilling.postcode) {
-          billingPostcode = defaultBilling.postcode;
+        if (defaultBilling.zip) {
+          billingPostcode = defaultBilling.zip;
         }
 
         if (defaultBilling.country) {
@@ -486,8 +486,8 @@
           shippingState = defaultShipping.state;
         }
 
-        if (defaultShipping.postcode) {
-          shippingPostcode = defaultShipping.postcode;
+        if (defaultShipping.zip) {
+          shippingPostcode = defaultShipping.zip;
         }
 
         if (defaultShipping.country) {

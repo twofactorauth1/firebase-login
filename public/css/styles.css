@@ -10,6 +10,54 @@
 
 */
 /* Mixin */
+.mb0 {
+  margin-bottom: 0px!important;
+}
+.mb5 {
+  margin-bottom: 5px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb15 {
+  margin-bottom: 15px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.mb25 {
+  margin-bottom: 25px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.mb35 {
+  margin-bottom: 35px;
+}
+.mb40 {
+  margin-bottom: 40px;
+}
+.mb45 {
+  margin-bottom: 45px;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.mr30 {
+  margin-right: 30px;
+}
+.mt5 {
+  margin-top: 5px;
+}
+.mt10 {
+  margin-top: 10px;
+}
 hr {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -408,7 +456,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .contact-us-v1 .widget-weather .temp {
   background: rgba(0, 0, 0, 0.5);
-  padding: 5px !important;
+  padding: 15px !important;
   height: 218px;
 }
 .contact-us-v1 .widget-weather .temp span {
@@ -578,6 +626,9 @@ div[data-type='campaign'] .inner-page .overlay {
 .feature-list-v1 div[data-class="feature-list"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
+}
+div[data-type="feature-list"] .inner-page {
+  padding: 20px 0;
 }
 @media screen and (max-width: 1024px) {
   div[data-type="feature-list"] .inner-page {
@@ -2237,7 +2288,8 @@ div[data-class='image-text'] p {
   font-size: 28px;
   margin-top: 10px;
 }
-.simple-form-v2 input {
+.simple-form-v2 input,
+.simple-form-v2 textarea {
   width: 100%;
   text-indent: 10px;
 }

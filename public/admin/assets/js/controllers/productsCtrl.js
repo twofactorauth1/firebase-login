@@ -2,10 +2,10 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", function ($scope, $modal, ProductService) {
+  app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", "$filter", function ($scope, $modal, ProductService, $filter) {
     $scope.tableView = 'list';
     $scope.newProduct = {
-      status: 'Auto Inactive'
+      status: 'auto_inactive'
     };
     ProductService.getProducts(function (products) {
       $scope.products = products;
@@ -67,7 +67,7 @@
 
     $scope.clearFilter = function (event, input, filter) {
       $scope.filterProduct[filter] = {};
-      $scope.triggerInput(input);
+      $scope.triggerInput(input,false);
     };
 
     $scope.productImageTypes = [{
@@ -111,8 +111,19 @@
      * - trigger the hidden input to trick smart table into activating filter
      */
 
-    $scope.triggerInput = function (element) {
+    $scope.triggerInput = function (element, custom) {
       angular.element(element).trigger('input');
+      if(element === '#searchStatus' && custom)
+      {
+        setTimeout(function() {
+          $scope.$apply(function() {
+            $scope.displayedProducts = _.where($scope.displayedProducts, {
+                status: angular.element(element).val()
+            });
+          })
+        }, 500)
+       
+      }
     };
 
   }]);

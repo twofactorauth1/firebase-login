@@ -417,8 +417,7 @@ app.constant('JS_REQUIRES', {
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
     'sweet-alert': ['../js/libs/sweetalert/lib/sweet-alert.min.js', '../js/libs/sweetalert/lib/sweet-alert.css'],
     'chartjs': '../js/libs/chartjs/Chart.min.js',
-    'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
-    'ckeditor-plugin': '../js/libs/ckeditor/ckeditor.js',
+    'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',    
     'jquery-nestable-plugin': ['../js/libs/jquery-nestable/jquery.nestable.js'],
     'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
     //'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
@@ -577,9 +576,6 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'uiSwitch',
     files: ['../js/libs/angular-ui-switch/angular-ui-switch.min.js', '../js/libs/angular-ui-switch/angular-ui-switch.min.css']
-  }, {
-    name: 'ckeditor',
-    files: ['../js/libs/angular-ckeditor/angular-ckeditor.min.js']
   }, {
     name: 'mwl.calendar',
     files: ['../js/libs/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar.js', '../js/libs/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js', '../js/libs/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css']
