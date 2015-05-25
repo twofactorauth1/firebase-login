@@ -28,7 +28,7 @@
                                             <input type="text" class="form-control" placeholder="File URL" ng-model="download.file">
                                         </td>
                                         <td width="30%">
-                                            <a type="button" class="btn btn-wide btn-o btn-info media-modal" media-modal-show-insert="true" on-insert-mediacb="insertMedia" download-data="download.id" user='user' insert-media-type='"image"'><span ng-if="!download.file">Choose</span> <span ng-if="download.file">Change</span> File</a>
+                                            <a type="button" ng-click="setDownloadId(download)" class="btn btn-wide btn-o btn-info media-modal" media-modal-show-insert="true" on-insert-mediacb="insertMedia" download-data="download.id" user='user' insert-media-type='"image"'><span ng-if="!download.file">Choose</span> <span ng-if="download.file">Change</span> File</a>
                                             <a type="button" class="btn btn-o btn-danger pull-right" ng-click="removeDownload(download.id)"><span class="fa fa-times"></span></a>
                                         </td>
                                     </tr>

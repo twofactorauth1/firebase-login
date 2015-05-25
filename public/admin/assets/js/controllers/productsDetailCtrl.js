@@ -136,17 +136,24 @@
      * @insertMedia
      * - insert media function
      */
-    $scope.currentDownloadId = '';
+    
     $scope.insertMedia = function (asset) {
 
-      if ($scope.currentDownloadId) {
+      if ($scope.currentDownload) {
         console.log('download');
+        $scope.currentDownload.file = asset.url;
       } else {
         console.log('product image');
         $scope.product.icon = asset.url;
       }
-
+       $scope.setDownloadId();
     };
+
+    $scope.setDownloadId = function(download)
+    {
+      $scope.currentDownload = download;
+    }
+
 
     /*
      * @addAttribute
