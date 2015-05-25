@@ -284,7 +284,7 @@
 
     angular.element('#convert').iconpicker({
       iconset: 'fontawesome',
-      icon: 'fa-credit-card',
+      icon: 'fa-cube',
       rows: 5,
       cols: 5,
       placement: 'right'
