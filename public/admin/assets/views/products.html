@@ -89,7 +89,7 @@
                     </th>
                     <th>
                         <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterProduct.status.selected.data" />
-                        <ui-select ng-model="filterProduct.status.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
+                        <ui-select ng-model="filterProduct.status.selected" on-select="triggerInput('#searchStatus', true)" theme="bootstrap">
                             <ui-select-match placeholder="Select Status">
                                 <small ng-bind-html="$select.selected.label"></small>
                                 <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchStatus', 'status')"></span>
