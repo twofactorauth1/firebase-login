@@ -1488,33 +1488,18 @@
 
         $scope.addComponent = function(addedType) {
             var pageId = $scope.currentPage._id;
-            if (addedType.type === 'footer') {
-                var footerType = _.findWhere($scope.currentPage.components, {
-                    type: addedType
+            var componentType = null;
+            if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post'
+                || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
+                componentType = _.findWhere($scope.currentPage.components, {
+                    type: addedType.type
                 });
-                if (footerType) {
-                    toaster.pop('error', "Footer component already exists");
+                if (componentType) {
+                    toaster.pop('error', componentType.title + " component already exists");
                     return;
                 }
             }
-            if (addedType.type === 'navigation') {
-                var navigationType = _.findWhere($scope.currentPage.components, {
-                    type: addedType
-                });
-                if (navigationType) {
-                    toaster.pop('error', "Navbar header already exists");
-                    return;
-                }
-            }
-            if (addedType.type === 'single-post') {
-                var navigationType = _.findWhere($scope.currentPage.components, {
-                    type: addedType
-                });
-                if (navigationType) {
-                    toaster.pop('error', "Single post component already exists");
-                    return;
-                }
-            }
+            
             $scope.components = $scope.currentPage.components;
 
             var cmpVersion = addedType.version;
