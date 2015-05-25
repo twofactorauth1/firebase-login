@@ -408,7 +408,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .contact-us-v1 .widget-weather .temp {
   background: rgba(0, 0, 0, 0.5);
-  padding: 5px !important;
+  padding: 15px !important;
   height: 218px;
 }
 .contact-us-v1 .widget-weather .temp span {
@@ -2237,7 +2237,8 @@ div[data-class='image-text'] p {
   font-size: 28px;
   margin-top: 10px;
 }
-.simple-form-v2 input {
+.simple-form-v2 input,
+.simple-form-v2 textarea {
   width: 100%;
   text-indent: 10px;
 }
