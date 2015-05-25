@@ -141,7 +141,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var product = new $$.m.Product(req.body);
         var productId = req.params.id;
         product.set('_id', productId);
-
+       
+        product.attributes.modified.date = new Date();
         productManager.getProduct(productId, function(err, savedProduct){
             var accountId = savedProduct.get('accountId');
             self.checkPermissionForAccount(req, self.sc.privs.MODIFY_PRODUCT, accountId, function(err, isAllowed) {
