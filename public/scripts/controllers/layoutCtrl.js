@@ -357,9 +357,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         $scope.stringifyAddress = function(address) {
             if (address) {
-                return _.filter([address.address, address.address2, address.city, address.state, address.zip], function(str) {
+                var _topline = _.filter([address.address, address.address2], function(str) {
                     return str !== "";
-                }).join(", ")
+                }).join(", ");
+                var _bottomline = _.filter([address.city, address.state, address.zip], function(str) {
+                    return str !== "";
+                }).join(", ");
+
+                return _topline + ' <br> ' + _bottomline;
             }
         };
 
