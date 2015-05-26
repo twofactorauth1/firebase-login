@@ -5,6 +5,8 @@
   app.controller('CustomersCtrl', ["$scope", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
 
     $scope.tableView = 'list';
+    $scope.itemPerPage = 100;
+    $scope.showPages = 15;
 
     /*
      * @getCustomers
@@ -14,14 +16,13 @@
     CustomerService.getCustomers(function (customers) {
       _.each(customers, function (customer) {
         customer.bestEmail = $scope.checkBestEmail(customer);
-        customer.bestAddress = $scope.checkAddress(customer);
-
-        customer.hasPhoto = false;
-        if (customer.photo) {
-          customer.hasPhoto = true;
-        }
+        customer.hasFacebookId = $scope.checkFacebookId(customer);
+        customer.hasTwitterId = $scope.checkTwitterId(customer);
+        customer.hasLinkedInId = $scope.checkLinkedInId(customer);
+        customer.hasGoogleId = $scope.checkGoogleId(customer);
       });
       $scope.customers = customers;
+      console.log("customers loaded");
     });
 
     /*
@@ -57,16 +58,16 @@
         }
       },
       social: function (value) {
-        if ($scope.checkLinkedInId(value)) {
+        if (value.hasLinkedInId) {
           return 1;
         }
-        if ($scope.checkGoogleId(value)) {
+        if (value.hasGoogleId) {
           return 2;
         }
-        if ($scope.checkFacebookId(value)) {
+        if (value.hasFacebookId) {
           return 3;
         }
-        if ($scope.checkTwitterId(value)) {
+        if (value.hasTwitterId) {
           return 4;
         } else {
           return 5;
