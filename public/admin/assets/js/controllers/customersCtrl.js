@@ -43,16 +43,16 @@
         return $scope.contactTags(value);
       },
       phone: function (value) {
-        if (value.details[0].phones && value.details[0].phones[0]) {
+        if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
           return value.details[0].phones[0].number.trim();
         } else {
           return "";
         }
       },
       address: function (value) {
-        if (value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
+        if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
           return [value.details[0].addresses[0].city, value.details[0].addresses[0].state].join(' ').trim();
-        } else if (value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
+        } else if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
           return value.details[0].addresses[0].address;
         }
       },
