@@ -101,6 +101,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.setup.bind(this), this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup.bind(this), this.listBlogPosts.bind(this));
+        app.get(this.url('editor/blog'), this.isAuthAndSubscribedApi.bind(this), this.listAllBlogPosts.bind(this));
+        app.get(this.url('editor/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.getEditableBlogPost.bind(this));
         app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
@@ -1330,11 +1332,64 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
         } else{
             cmsManager.listBlogPosts(accountId, limit, statusAry, function (err, value) {
-            self.log.debug('<< listBlogPosts '+ value);
-            self.sendResultOrError(res, err, value, "Error listing Blog Posts");
-            self = null;
-        });
+                self.log.debug('<< listBlogPosts '+ value);
+                self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+                self = null;
+            });
         }
+
+    },
+
+    /**
+     * This method is called by the admin for authenticated users.
+     * @param req
+     * @param res
+     */
+    listAllBlogPosts: function(req, res) {
+        var self = this;
+        self.log.debug('>> listAllBlogPosts');
+        var accountId = parseInt(self.accountId(req));
+        var limit = parseInt(req.query['limit'] || 0);
+        var skip = parseInt(req.query['skip'] || 0);
+        var statusAry = $$.m.BlogPost.allStatus;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.listBlogPostsWithLimit(accountId, limit, skip, statusAry, function (err, value) {
+                    self.log.debug('<< listAllBlogPosts');
+                    self.sendResultOrError(res, err, value, "Error listing All Blog Posts");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    /**
+     * This method is called by the admin for authenticated users.
+     * @param req
+     * @param res
+     */
+    getEditableBlogPost: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> getEditableBlogPost');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostId = req.params.postId;
+        var statusAry = $$.m.BlogPost.allStatus;
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getBlogPost(accountId, blogPostId, statusAry, function (err, value) {
+                    self.log.debug('<< getEditableBlogPost');
+                    self.sendResultOrError(res, err, value, "Error getting Blog Post");
+                    self = null;
+                });
+            }
+        });
 
     },
 
