@@ -305,12 +305,18 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
           label: activity_type
       });
+      if(!activity_type)
+      {
+         angular.element("#activity_type .error").html("Activity Type Required");
+         angular.element("#activity_type .error").addClass('has-error');
+         return;
+      }
       if(!activity_hash)
       {
-           angular.element("#activity_type .error").html("Valid Activity Type Required");
-           angular.element("#activity_type .error").addClass('has-error');
-           return;
-      }
+          $scope.newActivity.activityType = activity_type;
+      }else
+          $scope.newActivity.activityType = activity_hash.data;
+
     CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
       $scope.activities.push(activity);
       $scope.activities = _.sortBy($scope.activities, function (o) {
