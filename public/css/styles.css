@@ -412,6 +412,10 @@ ol.circles-list > li:before {
 .cke_widget_inline img {
   max-width: 100%;
 }
+.editable h1,
+.editable h2 {
+  margin-top: 0px;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -628,7 +632,7 @@ div[data-type='campaign'] .inner-page .overlay {
   background-size: 15% auto;
 }
 div[data-type="feature-list"] .inner-page {
-  padding: 20px 0;
+  padding: 30px 0;
 }
 @media screen and (max-width: 1024px) {
   div[data-type="feature-list"] .inner-page {
