@@ -145,9 +145,8 @@
         });
       }
 
-      console.log('locationData >>> ', locationData);
-
       $scope.$apply(function () {
+        console.log('locationData >>> ', locationData);
         $scope.locationData = locationData;
       });
     };
@@ -366,7 +365,10 @@
     $scope.renderAnalyticsCharts = function () {
       if ($("#visitor_locations").length) {
         setTimeout(function () {
-          ChartAnalyticsService.visitorLocations($scope.locationData, Highcharts.maps['countries/us/us-all']);
+          console.log('locationData >>> ', $scope.locationData);
+          var location_data = angular.copy($scope.locationData);
+          ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all']);
+          console.log('locationData >>> ', $scope.locationData);
         }, 100);
         if (!$scope.displayVisitors) {
           console.log('no visitors');
