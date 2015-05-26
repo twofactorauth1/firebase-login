@@ -1495,7 +1495,7 @@
                     type: addedType.type
                 });
                 if (componentType) {
-                    toaster.pop('error', componentType.title + " component already exists");
+                    toaster.pop('error', componentType.type + " component already exists");
                     return;
                 }
             }
