@@ -51,7 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
         orderManager.createOrder(order, accessToken, userId, function(err, order){
             self.log.debug('<< createOrder');
             self.sendResultOrError(res, err, order, 'Error creating order');
-            if(userId) {
+            if(userId && order) {
                 self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
             }
         });
