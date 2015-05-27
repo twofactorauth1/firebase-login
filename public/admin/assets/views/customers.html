@@ -108,7 +108,7 @@
                     <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedCustomers">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th class="center" st-sort="hasPhoto" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                <th class="center" st-sort="photo" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
                                 <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
@@ -121,7 +121,7 @@
                             </tr>
                             <tr ng-if="showFilter">
                                 <th ng-show="column.photo">
-                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
+                                    <input st-search="{{'photo'}}" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
                                     <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Photo">
                                             <small ng-bind-html="$select.selected.name"></small>
@@ -190,13 +190,13 @@
                                 <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> {{customer.details[0].phones[0].number || '--'}}</td>
                                 <td ng-show="column.social" class="hidden-xs"><strong>Social: </strong>
                                     <ul class="social">
-                                        <li ng-if="checkFacebookId(customer)"><i class="fa fa-facebook-square"></i>
+                                        <li ng-if="customer.hasFacebookId"><i class="fa fa-facebook-square"></i>
                                         </li>
-                                        <li ng-if="checkTwitterId(customer)"><i class="fa fa-twitter-square"></i>
+                                        <li ng-if="customer.hasTwitterId"><i class="fa fa-twitter-square"></i>
                                         </li>
-                                        <li ng-if="checkLinkedInId(customer)"><a ng-href="{{customer.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
+                                        <li ng-if="customer.hasLinkedInId"><a ng-href="{{customer.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
                                         </li>
-                                        <li ng-if="checkGoogleId(customer)"><i class="fa fa-google-plus-square"></i>
+                                        <li ng-if="customer.hasGoogleId"><i class="fa fa-google-plus-square"></i>
                                         </li>
                                     </ul>
                                 </td>
@@ -204,6 +204,12 @@
                                 <!-- <td ng-show="column.modified" class="hidden-xs"><strong>Modified: </strong>{{customer.modified.date | date:'MMM d yy'}}</td> -->
                             </tr>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="9">
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
                     <div class="load1 csspinner height-400" ng-show="!displayedCustomers"></div>
                 </div>
