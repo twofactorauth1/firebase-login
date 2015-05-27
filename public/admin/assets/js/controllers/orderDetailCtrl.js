@@ -537,6 +537,8 @@
      */
 
     $scope.statusUpdated = function (newStatus) {
+      if ($scope.order.status == newStatus)
+        return;
       var toasterMsg = 'Status has been updated to ';
       var note = 'Order status changed from ' + $scope.order.status + ' to ' + newStatus;
       if (newStatus === 'processing') {
