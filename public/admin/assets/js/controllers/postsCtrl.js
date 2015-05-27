@@ -5,6 +5,8 @@
 (function(angular) {
     app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", function($scope, toaster, $modal, $filter, WebsiteService, $log) {
         $scope.tableView = 'list';
+        $scope.itemPerPage = 40;
+        $scope.showPages = 15;
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {
@@ -21,6 +23,7 @@
             }
             $scope.posts = postsArr;
             $scope.orderByFn();
+            $scope.showPosts = true;
             //$log.debug($scope.posts);
         });
 

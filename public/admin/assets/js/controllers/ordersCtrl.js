@@ -5,7 +5,8 @@
   app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService) {
     
     $scope.tableView = 'list';
-
+    $scope.itemPerPage = 100;
+    $scope.showPages = 15;
     /*
      * @openModal
      * -
@@ -80,6 +81,7 @@
         order.total = order.total;
       });
       $scope.orders = orders;
+      $scope.showOrders = true;
     });
 
     /*

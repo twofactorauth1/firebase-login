@@ -5,11 +5,14 @@
 (function(angular) {
     app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function($scope, $location, toaster, $filter, $modal, WebsiteService) {
         $scope.tableView = 'list';
+        $scope.itemPerPage = 40;
+        $scope.showPages = 15;
         WebsiteService.getPages(function(pages) {
             console.log('pages >>> ', pages);
             var pagesArr = $scope.formatPages(pages);
             $scope.pages = pagesArr;
             $scope.orderByFn();
+            $scope.displayPages = true;
         });
 
         $scope.default_image_url = "/admin/assets/images/default-page.jpg";
