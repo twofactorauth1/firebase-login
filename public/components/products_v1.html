@@ -11,7 +11,7 @@
             </div>
         </header>
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true | offset: getProductOffset(currentProductPage, component.numtodisplay) | limitTo: component.numtodisplay">
+            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true | selectedTags:component.productTags | offset: getProductOffset(currentProductPage, component.numtodisplay) | limitTo: component.numtodisplay">
                 <div class="product">
                     <div class="thumbnail">
                         <div class="product-img">

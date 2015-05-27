@@ -33,12 +33,13 @@
      * @getProduct
      * - get single product based on stateparams
      */
-
+    $scope.product_tags = [];
     var productPlanStatus = {};
     var productPlanSignupFee = {};
-
+    
     ProductService.getProduct($stateParams.productId, function (product) {
       $scope.product = product;
+      $scope.getProductTags();
       if (angular.isDefined($scope.product.icon) && !$scope.product.is_image) {
         angular.element(' #convert ').iconpicker('setIcon', $scope.product.icon);
       }
@@ -242,6 +243,7 @@
      */
 
     $scope.saveProductFn = function () {
+      $scope.setProductTags();
       ProductService.saveProduct($scope.product, function (product) {
         //format variation attributes
         $scope.originalProduct = angular.copy(product);
@@ -405,6 +407,22 @@
         toaster.pop('success', 'Plan updated.');
       });
     };
+
+    $scope.getProductTags = function()
+    {  
+        $scope.product.tags.forEach(function(v,i) {
+            $scope.product_tags.push({text:v})
+        });
+    }
+
+    $scope.setProductTags = function()
+    {
+        $scope.product.tags = [];
+        $scope.product_tags.forEach(function(v,i) {
+            if (v.text)
+                    $scope.product.tags.push(v.text);
+        });
+    }
 
   }]);
 }(angular));
