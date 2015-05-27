@@ -265,20 +265,20 @@
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
                                 <div class="col-xs-2">
-                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    <select ng-hide="val.closed" ng-change="validateHours(val)" ng-change="validateHours(val)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
                                 <div class="col-xs-2">
-                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    <select ng-hide="val.closed" ng-change="validateHours(val)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
                                 <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
                                 <div class="col-xs-2">
-                                    <select ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                    <select ng-hide="val.closed" ng-change="validateHours(val)" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
                                 <div class="col-xs-2">
-                                    <select ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                    <select ng-if="val.split" ng-change="validateHours(val)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
                                 <div class="col-xs-5 margin-left-5">
@@ -301,11 +301,12 @@
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
                                 <div class="col-xs-3">
-                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    <select  ng-hide="val.closed" ng-change="validateHours(val)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                     </select>
+                                    <span class="error help-block" />
                                 </div>
                                 <div class="col-xs-3">
-                                    <select ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    <select ng-hide="val.closed" ng-change="validateHours(val)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
                                 <div class="col-xs-5">
