@@ -110,7 +110,9 @@ var blogpost = $$.m.ModelBase.extend({
         DRAFT: 'DRAFT',
         FUTURE: 'FUTURE',
         PRIVATE: 'PRIVATE'
-    }
+    },
+
+    allStatus: ['PUBLISHED', 'DRAFT', 'FUTURE', 'PRIVATE']
 });
 
 $$.m.BlogPost = blogpost;

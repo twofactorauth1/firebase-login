@@ -112,10 +112,10 @@
 		};
 
 		this.getPosts = function (fn) {
-			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
+			var apiUrl = baseUrl + ['cms', 'editor', 'blog'].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
-				fn(data);
+				fn(data.results);
 			})
 			.error(function (err) {
                 console.log('END:Get Posts with ERROR');
@@ -124,7 +124,7 @@
 		};
 
 		this.getPostsWithLimit = function (queryParams, fn) {
-			var apiUrl = baseUrl + ['cms', 'blog'].join('/');
+			var apiUrl = baseUrl + ['cms', 'editor', 'blog'].join('/');
 			$http({
                 url: apiUrl,
                 method: 'GET',
