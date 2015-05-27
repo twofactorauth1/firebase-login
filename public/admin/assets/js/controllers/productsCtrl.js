@@ -4,11 +4,14 @@
 (function (angular) {
   app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", "$filter", function ($scope, $modal, ProductService, $filter) {
     $scope.tableView = 'list';
+    $scope.itemPerPage = 100;
+    $scope.showPages = 15;
     $scope.newProduct = {
       status: 'auto_inactive'
     };
     ProductService.getProducts(function (products) {
       $scope.products = products;
+      $scope.showProducts = true;
     });
 
     $scope.openProductModal = function (size) {

@@ -7,7 +7,7 @@
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
-
+        
         /*
          * @globalvariables
          * -

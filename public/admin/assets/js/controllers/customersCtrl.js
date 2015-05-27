@@ -22,6 +22,7 @@
         customer.hasGoogleId = $scope.checkGoogleId(customer);
       });
       $scope.customers = customers;
+      $scope.showCustomers = true;
       console.log("customers loaded");
     });
 
