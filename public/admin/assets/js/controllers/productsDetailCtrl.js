@@ -342,6 +342,7 @@
 
 
         productPlanStatus[subscription.id] = true;
+        productPlanSignupFee[subscription.id] = $scope.signup_fee;
         $scope.saveProductFn();
 
         $scope.newSubscription = {
