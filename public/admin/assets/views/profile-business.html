@@ -264,12 +264,12 @@
                                 <div class="col-xs-1">
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
-                                <div class="col-xs-2" id="business_hours_start1_{{$index}}">
+                                <div class="col-xs-2" id="business_hours_start_{{$index}}">
                                     <select ng-hide="val.closed" ng-change="validateHours(val, $index)" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                     </select>
                                     <span ng-if="!val.closed" class="error help-block" />
                                 </div>
-                                <div class="col-xs-2 " id="business_hours_end1_{{$index}}">
+                                <div class="col-xs-2 " id="business_hours_end_{{$index}}">
                                     <select ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                     </select>
                                     <span ng-if="!val.closed" class="error help-block" />
