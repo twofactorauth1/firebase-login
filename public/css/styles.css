@@ -964,6 +964,7 @@ ul.nav {
 .navigation-v2 .navbar {
   border: none!important;
   background: none;
+  box-shadow: none;
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
@@ -2222,6 +2223,7 @@ div[data-class='image-text'] p {
   margin: 0;
   padding: 0;
   border: 0;
+  border: 1px solid #eeeeee;
 }
 .simple-form-v1 .btn .fa,
 .simple-form-v1 input .fa {
@@ -2308,7 +2310,6 @@ div[data-class='image-text'] p {
   height: 50px;
   margin: 0;
   padding: 0;
-  border: 0;
 }
 .simple-form-v2 .btn {
   text-transform: uppercase;
@@ -2752,10 +2753,6 @@ div[data-class='image-text'] p {
 }
 .blog-teaser-v1 .label-info {
   margin-right: 5px;
-}
-.blog-teaser-v1 .title {
-  text-align: center;
-  font-weight: bold;
 }
 .blog-teaser-v1 .single-blog {
   min-height: 380px;

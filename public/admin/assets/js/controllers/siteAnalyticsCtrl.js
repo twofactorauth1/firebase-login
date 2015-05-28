@@ -120,7 +120,6 @@
     };
 
     $scope.locationReportData = function (result0) {
-      console.log('result0 ', result0);
       // ======================================
       // Visitor Locations
       // ======================================
@@ -128,8 +127,8 @@
 
       var locationData = [];
       if (result0) {
+        $scope.mostPopularState = _.max(result0, function(o){return o.result});
         _.each(result0, function (location) {
-          console.log('location >>> ', location);
           var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
           if (_geo_info) {
             var subObj = {};
@@ -146,7 +145,6 @@
       }
 
       $scope.$apply(function () {
-        console.log('locationData >>> ', locationData);
         $scope.locationData = locationData;
       });
     };
@@ -166,7 +164,6 @@
       });
 
       $scope.avgSessionData = avgSessionData;
-
 
       // ======================================
       // Bounces
@@ -365,10 +362,8 @@
     $scope.renderAnalyticsCharts = function () {
       if ($("#visitor_locations").length) {
         setTimeout(function () {
-          console.log('locationData >>> ', $scope.locationData);
           var location_data = angular.copy($scope.locationData);
           ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all']);
-          console.log('locationData >>> ', $scope.locationData);
         }, 100);
         if (!$scope.displayVisitors) {
           console.log('no visitors');
