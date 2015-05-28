@@ -412,6 +412,7 @@
 
     $scope.getProductTags = function()
     {  
+      if($scope.product.tags)
         $scope.product.tags.forEach(function(v,i) {
             $scope.product_tags.push({text:v})
         });
