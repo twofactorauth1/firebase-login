@@ -2779,36 +2779,44 @@
             {
                 var startTime = hours.start;
                 var endTime = hours.end;
-                startTime = startTime.split(" ")[1] == 'pm' && startTime.split(":")[0] != '12' ? parseInt(startTime.split(":")[0]) + 12 : parseInt(startTime.split(":")[0])
-                endTime = endTime.split(" ")[1] == 'pm' && endTime.split(":")[0] != '12' ? parseInt(endTime.split(":")[0]) + 12 : parseInt(endTime.split(":")[0])
-                startTime = parseInt(hours.start.split(":")[1]) == 30 ? startTime + 0.5 : startTime;
-                endTime = parseInt(hours.end.split(":")[1]) == 30 ? endTime + 0.5 : endTime;
+                if(startTime && endTime)
+                {
+                    startTime = startTime.split(" ")[1] == 'pm' && startTime.split(":")[0] != '12' ? parseInt(startTime.split(":")[0]) + 12 : parseInt(startTime.split(":")[0])
+                    endTime = endTime.split(" ")[1] == 'pm' && endTime.split(":")[0] != '12' ? parseInt(endTime.split(":")[0]) + 12 : parseInt(endTime.split(":")[0])
+                    startTime = parseInt(hours.start.split(":")[1]) == 30 ? startTime + 0.5 : startTime;
+                    endTime = parseInt(hours.end.split(":")[1]) == 30 ? endTime + 0.5 : endTime;    
+                }
+                
                 if(hours.split && $scope.componentEditing.splitHours)
                 {
-                    angular.element("#business_hours_start1_"+index).removeClass('has-error');
+                    angular.element("#business_hours_start_"+index).removeClass('has-error');
                     angular.element("#business_hours_start2_"+index).removeClass('has-error');
-                    angular.element("#business_hours_end1_"+index).removeClass('has-error');
+                    angular.element("#business_hours_end_"+index).removeClass('has-error');
                     var startTime2 = hours.start2;
                     var endTime2 = hours.end2;
-                    startTime2 = startTime2.split(" ")[1] == 'pm' && startTime2.split(":")[0] != '12' ? parseInt(startTime2.split(":")[0]) + 12 : parseInt(startTime2.split(":")[0])
-                    endTime2 = endTime2.split(" ")[1] == 'pm' && endTime2.split(":")[0] != '12' ? parseInt(endTime2.split(":")[0]) + 12 : parseInt(endTime2.split(":")[0])
-                    startTime2 = parseInt(hours.start2.split(":")[1]) == 30 ? startTime2 + 0.5 : startTime2;
-                    endTime2 = parseInt(hours.end2.split(":")[1]) == 30 ? endTime2 + 0.5 : endTime2;
+                    if(startTime2 && endTime2)
+                    {
+                        startTime2 = startTime2.split(" ")[1] == 'pm' && startTime2.split(":")[0] != '12' ? parseInt(startTime2.split(":")[0]) + 12 : parseInt(startTime2.split(":")[0])
+                        endTime2 = endTime2.split(" ")[1] == 'pm' && endTime2.split(":")[0] != '12' ? parseInt(endTime2.split(":")[0]) + 12 : parseInt(endTime2.split(":")[0])
+                        startTime2 = parseInt(hours.start2.split(":")[1]) == 30 ? startTime2 + 0.5 : startTime2;
+                        endTime2 = parseInt(hours.end2.split(":")[1]) == 30 ? endTime2 + 0.5 : endTime2;    
+                    }
+                    
                     
                     var msg = ""
                     if(startTime > endTime || startTime > startTime2 || startTime > endTime2)
                     {
                         if(startTime > endTime)
                         { 
-                            angular.element("#business_hours_start1_"+index).addClass('has-error');
+                            angular.element("#business_hours_start_"+index).addClass('has-error');
                         }
                         else if(startTime > startTime2)
                         {
-                            angular.element("#business_hours_start1_"+index).addClass('has-error');
+                            angular.element("#business_hours_start_"+index).addClass('has-error');
                         }
                         else if(startTime > endTime2)
                         {
-                            angular.element("#business_hours_start1_"+index).addClass('has-error');
+                            angular.element("#business_hours_start_"+index).addClass('has-error');
                         }
                         $scope.contactHours[index].valid = false;
                     }
@@ -2817,11 +2825,11 @@
                         
                         if(endTime > startTime2)
                         {
-                            angular.element("#business_hours_end1_"+index).addClass('has-error');
+                            angular.element("#business_hours_end_"+index).addClass('has-error');
                         }
                         else if(endTime > endTime2)
                         {
-                            angular.element("#business_hours_end1_"+index).addClass('has-error');
+                            angular.element("#business_hours_end_"+index).addClass('has-error');
                         }
                         $scope.contactHours[index].valid = false;
                     }                        
