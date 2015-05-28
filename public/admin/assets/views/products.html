@@ -66,7 +66,7 @@
             </div>
         </div>
         <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}">
-            <thead ng-class="{'bg-white': tableView == 'grid'}">
+            <thead  ng-class="{'bg-white': tableView == 'grid'}">
                 <tr>
                     <th class="center">Image</th>
                     <th class="hidden-xs" st-sort="status">Status</th>
@@ -132,7 +132,14 @@
                     <td class="hidden-xs">{{product.modified.date | date:'MMM d yy'}}</td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                    </td>
+                </tr>
+                </tfoot>
         </table>
+        <div class="load1 csspinner height-400" ng-show="!showProducts"></div>
     </div>
     <!-- end: CONTENT -->
 </div>

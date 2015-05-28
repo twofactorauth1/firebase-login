@@ -291,12 +291,10 @@
      */
 
     $scope.formatInput = function (model) {
-      console.log('model >>> ', model);
       if (model) {
-
         var email = 'No Email';
-        if (model.email) {
-          email = model.email;
+        if (model.details[0].emails.length > 0) {
+          email = model.details[0].emails[0].email;
         }
 
         return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
@@ -537,6 +535,8 @@
      */
 
     $scope.statusUpdated = function (newStatus) {
+      if ($scope.order.status == newStatus)
+        return;
       var toasterMsg = 'Status has been updated to ';
       var note = 'Order status changed from ' + $scope.order.status + ' to ' + newStatus;
       if (newStatus === 'processing') {

@@ -184,8 +184,14 @@
                                 <td class="hidden-xs"><strong>Modified: </strong>{{order.modified.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
-                    <div class="load1 csspinner height-400" ng-show="!displayedOrders"></div>
+                    <div class="load1 csspinner height-400" ng-show="!showOrders"></div>
                 </div>
             </div>
         </div>

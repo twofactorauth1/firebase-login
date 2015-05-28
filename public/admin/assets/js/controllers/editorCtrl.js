@@ -7,7 +7,7 @@
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
-
+        
         /*
          * @globalvariables
          * -
@@ -2743,7 +2743,8 @@
             _.each(products, function(product) {
                 if (product.tags && product.tags.length > 0) {
                     _.each(product.tags, function(tag) {
-                        $scope.availableProductTags.push(tag);
+                        if($scope.availableProductTags.indexOf(tag) === -1)
+                            $scope.availableProductTags.push(tag);
                     });
                 }
             });

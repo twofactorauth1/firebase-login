@@ -5,7 +5,7 @@
 (function(angular) {
     app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant) {
         console.log('profile business >>> ');
-
+        $scope.isValid = true;
         $scope.hours = hoursConstant;
         //account API call for object population
         //account API call for object population
@@ -133,6 +133,12 @@
 
         $scope.profileSaveFn = function() {
             console.log('profileSaveFn ', $scope.checkProfileValidity());
+            $scope.validateBeforeSave();
+            if(!$scope.isValid)
+            {
+                toaster.pop("error", "Business hours are not valid");
+                return;
+            }
             UserService.putAccount($scope.account, function(account) {
                 $scope.account = account;
                 toaster.pop('success', 'Profile Saved.');
@@ -152,6 +158,101 @@
             else
                 return false;
         };
+
+        $scope.validateBeforeSave = function()
+        {
+            $scope.isValid = true;
+            _.each($scope.account.business.hours, function(element, index) {
+                $scope.validateHours(element,index);
+             });
+        }
+
+        $scope.validateHours = function(hours, index)
+        {
+            if(!hours.closed)
+            {
+                var startTime = hours.start;
+                var endTime = hours.end;
+                startTime = startTime.split(" ")[1] == 'pm' && startTime.split(":")[0] != '12' ? parseInt(startTime.split(":")[0]) + 12 : parseInt(startTime.split(":")[0])
+                endTime = endTime.split(" ")[1] == 'pm' && endTime.split(":")[0] != '12' ? parseInt(endTime.split(":")[0]) + 12 : parseInt(endTime.split(":")[0])
+                startTime = parseInt(hours.start.split(":")[1]) == 30 ? startTime + 0.5 : startTime;
+                endTime = parseInt(hours.end.split(":")[1]) == 30 ? endTime + 0.5 : endTime;
+                if(hours.split && $scope.account.business.splitHours)
+                {
+                    angular.element("#business_hours_start1_"+index+" .error").html("");
+                    angular.element("#business_hours_start1_"+index).removeClass('has-error');
+                    angular.element("#business_hours_start2_"+index+" .error").html("");
+                    angular.element("#business_hours_start2_"+index).removeClass('has-error');
+                    angular.element("#business_hours_end1_"+index+" .error").html("");
+                    angular.element("#business_hours_end1_"+index).removeClass('has-error');
+                    var startTime2 = hours.start2;
+                    var endTime2 = hours.end2;
+                    startTime2 = startTime2.split(" ")[1] == 'pm' && startTime2.split(":")[0] != '12' ? parseInt(startTime2.split(":")[0]) + 12 : parseInt(startTime2.split(":")[0])
+                    endTime2 = endTime2.split(" ")[1] == 'pm' && endTime2.split(":")[0] != '12' ? parseInt(endTime2.split(":")[0]) + 12 : parseInt(endTime2.split(":")[0])
+                    startTime2 = parseInt(hours.start2.split(":")[1]) == 30 ? startTime2 + 0.5 : startTime2;
+                    endTime2 = parseInt(hours.end2.split(":")[1]) == 30 ? endTime2 + 0.5 : endTime2;
+                    
+                    var msg = ""
+                    if(startTime > endTime || startTime > startTime2 || startTime > endTime2)
+                    {
+                        $scope.isValid = false;
+                        if(startTime > endTime)
+                        {
+                            msg = "Start time 1 can not be greater than end time 1";
+                            angular.element("#business_hours_start1_"+index+" .error").html(msg);
+                            angular.element("#business_hours_start1_"+index).addClass('has-error');
+                        }
+                        else if(startTime > startTime2)
+                        {
+                            msg = "Start time 1 can not be greater than start time 2";
+                            angular.element("#business_hours_start1_"+index+" .error").html(msg);
+                            angular.element("#business_hours_start1_"+index).addClass('has-error');
+                        }
+                        else if(startTime > endTime2)
+                        {
+                            msg = "Start time 1 can not be greater than end time 2";
+                            angular.element("#business_hours_start1_"+index+" .error").html(msg);
+                            angular.element("#business_hours_start1_"+index).addClass('has-error');
+                        }
+                    }
+                    if(endTime > startTime2 || endTime > endTime2)
+                    {
+                        $scope.isValid = false;
+                        if(endTime > startTime2)
+                        {
+                            msg = "End time 1 can not be greater than start time 2";
+                            angular.element("#business_hours_end1_"+index+" .error").html(msg);
+                            angular.element("#business_hours_end1_"+index).addClass('has-error');
+                        }
+                        else if(endTime > endTime2)
+                        {
+                            msg = "End time 1 can not be greater than end time 2";
+                            angular.element("#business_hours_end1_"+index+" .error").html(msg);
+                            angular.element("#business_hours_end1_"+index).addClass('has-error');
+                        }
+                    }                        
+                    if(startTime2 > endTime2)
+                    {
+                        $scope.isValid = false;
+                        msg = "Start time 2 can not be greater than end time 2";
+                        angular.element("#business_hours_start2_"+index+" .error").html(msg);
+                        angular.element("#business_hours_start2_"+index).addClass('has-error');
+                    }
+                    
+                }
+                else
+                {                        
+                    angular.element("#business_hours_start_"+index+" .error").html("");
+                    angular.element("#business_hours_start_"+index).removeClass('has-error');            
+                    if(startTime > endTime)
+                    {
+                        $scope.isValid = false;
+                        angular.element("#business_hours_start_"+index+" .error").html("Start time can not be greater than end time");
+                        angular.element("#business_hours_start_"+index).addClass('has-error');
+                    }
+                }
+            }
+        }
 
     }]);
 })(angular);

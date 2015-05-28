@@ -12350,6 +12350,10 @@ table.grid tbody td strong {
     width: 24%!important;
   }
 }
+.table > tfoot > tr > td {
+  padding: 0;
+  border: 0;
+}
 .as-sortable-drag {
   opacity: .8;
   border: 1px solid #cccccc!important;

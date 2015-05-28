@@ -117,7 +117,8 @@ var product = $$.m.ModelBase.extend({
             },
             _v: "0.1",
             is_image: false,
-            starred: false
+            starred: false,
+            tags: null
         }
     },
 
