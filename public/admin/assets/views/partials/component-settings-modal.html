@@ -680,10 +680,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <pre>{{availableProductTags}}</pre>
+                    <pre>{{availableProductTagsString}}</pre>
                     <label>Show Products by Tags</label>
                     <div class="col-sm-6 pull-right">
-                        <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" close-on-select="false">
+                        <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()" close-on-select="false">
                             <ui-select-match placeholder="Select tags...">
                                 {{$item}}
                             </ui-select-match>

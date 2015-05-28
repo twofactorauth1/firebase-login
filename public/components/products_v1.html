@@ -9,9 +9,9 @@
                 <div class="editable" data-class="text" ng-bind-html="component.text | unsafe">
                 </div>
             </div>
-        </header>
+        </header>        
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in products | filter:{status:'active'}:true | selectedTags:component.productTags | offset: getProductOffset(currentProductPage, component.numtodisplay) | limitTo: component.numtodisplay">
+            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in filteredProducts =(products | selectedTags:component.productTags) | offset: getProductOffset(currentProductPage, component.numtodisplay) | limitTo: component.numtodisplay">
                 <div class="product">
                     <div class="thumbnail">
                         <div class="product-img">
@@ -66,7 +66,7 @@
             </div>
             <div class="clearfix mb15"></div>
         </div>
-        <pagination total-items="products.length" ng-model="currentProductPage" max-size="component.numtodisplay" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+        <pagination ng-show="filteredProducts.length" total-items="filteredProducts.length" ng-model="currentProductPage" items-per-page="component.numtodisplay" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
         <!-- </div> -->
     </div>
     <button class="btn btn-primary btn-lg btnLaunchCart" data-toggle="modal" data-target="#cart-checkout-modal">
