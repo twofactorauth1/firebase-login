@@ -286,14 +286,14 @@
                                 </div>
                                 <div class="col-xs-5 margin-left-5">
                                     <div class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="hoursClosed" ng-model="val.closed">
-                                        <label for="hoursClosed">
+                                        <input type="checkbox" id="hoursClosed-{{$index}}" ng-model="val.closed">
+                                        <label for="hoursClosed-{{$index}}">
                                             Closed
                                         </label>
                                     </div>
                                     <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
-                                        <input type="checkbox" id="hoursSplit" ng-model="val.split">
-                                        <label for="hoursSplit">
+                                        <input type="checkbox" id="hoursSplit-{{$index}}" ng-model="val.split">
+                                        <label for="hoursSplit-{{$index}}">
                                             Split
                                         </label>
                                     </div>
