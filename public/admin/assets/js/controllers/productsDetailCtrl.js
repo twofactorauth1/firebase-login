@@ -290,15 +290,14 @@
      * @convert:iconpicker
      * - icon picker for product image replacement
      */
-    setTimeout(function() {
-        angular.element('#convert').iconpicker({
+    
+      angular.element('#convert').iconpicker({
         iconset: 'fontawesome',
         icon: 'fa-cube',
         rows: 5,
         cols: 5,
         placement: 'right'
       });
-    }, 1000)
     
 
     $('#convert').on('change', function(e) {
