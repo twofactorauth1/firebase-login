@@ -372,6 +372,7 @@
       $scope.newSubscription = {
         planId: CommonService.generateUniqueAlphaNumericShort()
       };
+      $scope.closeModal('add-subscription-modal');
     };
 
     $scope.planDeleteFn = function (planId, showToast, saveProduct, func) {
