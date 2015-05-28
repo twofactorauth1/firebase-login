@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'bootstrap-icon-picker'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -94,7 +94,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{breadcrumbTitle}}',
             parent: 'app.website.pages'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService')
     }).state('app.website.singlepost', {
         url: '/posts/:id',
         templateUrl: "assets/views/editor.html",
@@ -104,7 +104,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Post',
             parent: 'app.website.posts'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
+        resolve: loadSequence('editorCtrl', 'userService',  'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
     }).state('app.website.singletemplate', {
         url: '/templates/:id',
         templateUrl: "assets/views/editor.html",
@@ -114,7 +114,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Template',
             parent: 'app.website.templates'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'bootstrap-icon-picker', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
@@ -159,7 +159,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Product'
         },
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'bootstrap-icon-picker')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",
@@ -284,62 +284,62 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('helpTopicsCtrl')
     })
 
-	// Login routes
+    // Login routes
     .state('logout', {
         url: '/logout',
         template: '<div ui-view class="fade-in-right-big smooth"></div>',
         abstract: true
     })
-	.state('login', {
-	    url: '/login',
-	    template: '<div ui-view class="fade-in-right-big smooth"></div>',
-	    abstract: true
-	}).state('login.signin', {
-	    url: '/signin',
-	    templateUrl: "assets/views/login_login.html"
-	}).state('login.forgot', {
-	    url: '/forgot',
-	    templateUrl: "assets/views/login_forgot.html"
-	}).state('login.registration', {
-	    url: '/registration',
-	    templateUrl: "assets/views/login_registration.html"
-	}).state('login.lockscreen', {
-	    url: '/lock',
-	    templateUrl: "assets/views/login_lock_screen.html"
-	});
+    .state('login', {
+        url: '/login',
+        template: '<div ui-view class="fade-in-right-big smooth"></div>',
+        abstract: true
+    }).state('login.signin', {
+        url: '/signin',
+        templateUrl: "assets/views/login_login.html"
+    }).state('login.forgot', {
+        url: '/forgot',
+        templateUrl: "assets/views/login_forgot.html"
+    }).state('login.registration', {
+        url: '/registration',
+        templateUrl: "assets/views/login_registration.html"
+    }).state('login.lockscreen', {
+        url: '/lock',
+        templateUrl: "assets/views/login_lock_screen.html"
+    });
 
     // Generates a resolve object previously configured in constant.JS_REQUIRES (config.constant.js)
     function loadSequence() {
         var _args = arguments;
         return {
             deps: ['$ocLazyLoad', '$q',
-			function ($ocLL, $q) {
-			    var promise = $q.when(1);
-			    for (var i = 0, len = _args.length; i < len; i++) {
-			        promise = promiseThen(_args[i]);
-			    }
-			    return promise;
+            function ($ocLL, $q) {
+                var promise = $q.when(1);
+                for (var i = 0, len = _args.length; i < len; i++) {
+                    promise = promiseThen(_args[i]);
+                }
+                return promise;
 
-			    function promiseThen(_arg) {
-			        if (typeof _arg == 'function')
-			            return promise.then(_arg);
-			        else
-			            return promise.then(function () {
-			                var nowLoad = requiredData(_arg);
-			                if (!nowLoad)
-			                    return $.error('Route resolve: Bad resource name [' + _arg + ']');
-			                return $ocLL.load(nowLoad);
-			            });
-			    }
+                function promiseThen(_arg) {
+                    if (typeof _arg == 'function')
+                        return promise.then(_arg);
+                    else
+                        return promise.then(function () {
+                            var nowLoad = requiredData(_arg);
+                            if (!nowLoad)
+                                return $.error('Route resolve: Bad resource name [' + _arg + ']');
+                            return $ocLL.load(nowLoad);
+                        });
+                }
 
-			    function requiredData(name) {
-			        if (jsRequires.modules)
-			            for (var m in jsRequires.modules)
-			                if (jsRequires.modules[m].name && jsRequires.modules[m].name === name)
-			                    return jsRequires.modules[m];
-			        return jsRequires.scripts && jsRequires.scripts[name];
-			    }
-			}]
+                function requiredData(name) {
+                    if (jsRequires.modules)
+                        for (var m in jsRequires.modules)
+                            if (jsRequires.modules[m].name && jsRequires.modules[m].name === name)
+                                return jsRequires.modules[m];
+                    return jsRequires.scripts && jsRequires.scripts[name];
+                }
+            }]
         };
     }
 }]);

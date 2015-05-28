@@ -290,14 +290,15 @@
      * @convert:iconpicker
      * - icon picker for product image replacement
      */
-
-    angular.element('#convert').iconpicker({
-      iconset: 'fontawesome',
-      icon: 'fa-cube',
-      rows: 5,
-      cols: 5,
-      placement: 'right'
-    });
+    
+      angular.element('#convert').iconpicker({
+        iconset: 'fontawesome',
+        icon: 'fa-cube',
+        rows: 5,
+        cols: 5,
+        placement: 'right'
+      });
+    
 
     $('#convert').on('change', function(e) {
       if ($scope.product) {
@@ -342,6 +343,7 @@
 
 
         productPlanStatus[subscription.id] = true;
+        productPlanSignupFee[subscription.id] = $scope.signup_fee;
         $scope.saveProductFn();
 
         $scope.newSubscription = {
@@ -371,6 +373,7 @@
       $scope.newSubscription = {
         planId: CommonService.generateUniqueAlphaNumericShort()
       };
+      $scope.closeModal('add-subscription-modal');
     };
 
     $scope.planDeleteFn = function (planId, showToast, saveProduct, func) {
@@ -410,6 +413,7 @@
 
     $scope.getProductTags = function()
     {  
+      if($scope.product.tags)
         $scope.product.tags.forEach(function(v,i) {
             $scope.product_tags.push({text:v})
         });
