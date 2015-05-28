@@ -17,7 +17,7 @@ var appConfig = require('../configs/app.config.js');
 var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
-
+var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -37,7 +37,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/tag/*", this.setup.bind(this), this.index.bind(this));
         app.get("/category/*", this.setup.bind(this), this.index.bind(this));
         app.get("/author/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/page/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.index.bind(this));
         app.get("/signup", this.setupForSocialSignup.bind(this), this.index.bind(this));
         app.get("/post", this.setup.bind(this), this.index.bind(this));
 
